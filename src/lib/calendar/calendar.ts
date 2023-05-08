@@ -15,33 +15,7 @@ import createEventObject from './calendarEventObject';
 import createCalendarDescription from './calendarDescription';
 
 // // --------------------------------------------------- Auth related Functions ---------------------------------------------------
-const CLIENT_ID = process.env.GOOGLE_API_CLIENT_ID;
-const CLIENT_SECRET = process.env.GOOGLE_API_CLIENT_SECRET;
-const REDIRECT_URL = "http://localhost:3000/api/google/calendarCallback";
 
-import { auth } from '@googleapis/oauth2';
-
-const oauth2Client = new auth.OAuth2(
-    CLIENT_ID,
-    CLIENT_SECRET,
-    REDIRECT_URL
-);
-
-const CALENDAR_SCOPES = [
-    "https://www.googleapis.com/auth/calendar.readonly",
-    "https://www.googleapis.com/auth/calendar",
-    "https://www.googleapis.com/auth/calendar.events.readonly",
-    "https://www.googleapis.com/auth/calendar.events",
-]
-
-const url = oauth2Client.generateAuthUrl({
-    // 'online' (default) or 'offline' (gets refresh_token)
-    access_type: 'offline',
-    // If you only need one scope you can pass it as a string
-    scope: CALENDAR_SCOPES
-});
-
-const Calendar: calendar_v3.Calendar = calendar({ version: 'v3', auth: oauth2Client })
 // // --------------------------------------------------- Calendar Utils Functions ---------------------------------------------------
 
 // /**

@@ -1,7 +1,6 @@
+import { CLIENT_ID, CLIENT_SECRET, REDIRECT_URL } from '@/lib/auth/auth';
 import { auth } from '@googleapis/oauth2';
-const CLIENT_ID = process.env.GOOGLE_API_CLIENT_ID;
-const CLIENT_SECRET = process.env.GOOGLE_API_CLIENT_SECRET;
-const REDIRECT_URL = "http://localhost:3000/api/google/calendarCallback";
+import { NextApiRequest, NextApiResponse } from 'next';
 
 const oauth2Client = new auth.OAuth2(
     CLIENT_ID,
@@ -9,9 +8,15 @@ const oauth2Client = new auth.OAuth2(
     REDIRECT_URL
 );
 
-export async function GET(request: Request, res: Response) {
-    const { searchParams } = new URL(request.url);
+export async function GET(request: NextApiRequest, res: NextApiResponse) {
+    const url = request.url;
+    if (url === undefined) {
+        res.status(400).send("Bad Request");
+        return;
+    }
+    const { searchParams } = new URL(url);
     const code = searchParams.get('code');
+
     if (code) {
         oauth2Client.getToken(code, (err, tokens) => {
             if (err) {
@@ -19,11 +24,10 @@ export async function GET(request: Request, res: Response) {
                 return;
             }
             if (tokens) {
-                console.log('Access token:', tokens.access_token);
-                console.log('Refresh token:', tokens.refresh_token);
-                console.log('Token type:', tokens.token_type);
                 oauth2Client.setCredentials(tokens);
-                res.redirect('/success');
+                //aqui guardamos el token en la base de datos 
+                //y redirigimos a la pagina de exito
+                // res.redirect('/success');
             }
         });
     }
