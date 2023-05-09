@@ -1,9 +1,16 @@
 import { auth } from '@googleapis/oauth2';
 import NextAuth, { type NextAuthOptions } from 'next-auth';
 import CredentialsPrivider from 'next-auth/providers/credentials';
-
+import GoogleProvider from 'next-auth/providers/google';
 
 export const authIptions: NextAuthOptions = {
+    pages: {
+        signIn: '/auth/lgoin',
+        signOut: '/auth/signout',
+        error: '/auth/error',
+        verifyRequest: '/auth/verify-request',
+        newUser: '/auth/new-user',
+    },
     session: {
         strategy: 'jwt',
     },
@@ -27,8 +34,13 @@ export const authIptions: NextAuthOptions = {
                 // }
                 // return null;
             }
+        }),
+        GoogleProvider({
+            clientId: process.env.CLIENT_ID!,
+            clientSecret: process.env.CLIENT_SECRET!,
         })
     ],
+    secret: process.env.JWT_SECRET!,
     // callbacks: {
     //     async jwt(token, user) {
 

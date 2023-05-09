@@ -1,6 +1,8 @@
 import '@/app/globals.css'
+import { NextAuthProvider } from "./providers";
 import PublicFooter from '@/components/footer/Public';
 import favicon from '@/../public/logo-proexcelencia-cap.png';
+import { SessionProvider } from 'next-auth/react';
 
 export const metadata = {
   title: 'Proexcelencia',
@@ -16,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body>
-        {children}
+        <NextAuthProvider>
+          {children}
+        </NextAuthProvider>
       </body>
     </html>
   )
