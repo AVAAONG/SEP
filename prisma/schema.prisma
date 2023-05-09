@@ -1,6 +1,7 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// take all this prisma code and cover to prisma formating cpde
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,6 +12,7 @@ datasource db {
   relationMode = "foreignKeys"
 }
 
+// ====================================== Admin related shchema  ======================================
 enum AdminRole {
   ADMIN
   COMITE
@@ -18,6 +20,17 @@ enum AdminRole {
   CHAT
 }
 
+model Admin {
+  id            String    @id @default(uuid())
+  name          String
+  email         String
+  password      String
+  access_token  String
+  refresh_token String
+  role          AdminRole
+}
+
+// ====================================== Actvities related shchema  ======================================
 enum Modality {
   PRESENCIAL
   VIRTUAL
@@ -57,49 +70,39 @@ enum Level {
   Avanzado
 }
 
-model Admin {
-  id            Int       @id @default(autoincrement())
-  name          String
-  email         String
-  password      String
-  access_token  String
-  refresh_token String
-  role          AdminRole
-}
-
 model Dates {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(uuid())
   date       DateTime
   start_time DateTime
   end_time   DateTime
   Workshop   Workshop @relation(fields: [workshopId], references: [id])
-  workshopId Int
+  workshopId String
   Chat       Chat     @relation(fields: [chatId], references: [id])
-  chatId     Int
+  chatId     String
 }
 
 model Workshop {
-  id       Int     @id @default(autoincrement())
-  title    String
-  Date     Dates[]
-  speaker  String
-  spots    Int
+  id         String   @id @default(uuid())
+  title      String
+  dates       Dates[]
+  speaker    String
+  spots      Int
   takenSpots Int
-  platform Platform
-  modality Modality
-  status   Status
-  pensum Pensum
+  platform   Platform
+  modality   Modality
+  status     Status
+  pensum     Pensum
 }
 
 model Chat {
-  id       Int     @id @default(autoincrement())
-  title    String
-  Date     Dates[]
-  speaker  String
-  spots    Int
+  id         String   @id @default(uuid())
+  title      String
+  dates       Dates[]
+  speaker    String
+  spots      Int
   takenSpots Int
-  platform Platform
-  modality Modality
-  status  Status
-  level  Level 
+  platform   Platform
+  modality   Modality
+  status     Status
+  level      Level
 }
