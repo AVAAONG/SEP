@@ -28,6 +28,9 @@ model Admin {
   access_token  String
   refresh_token String
   role          AdminRole
+
+  @@unique([email])
+  @@index([email])
 }
 
 // ====================================== Actvities related shchema  ======================================
@@ -70,39 +73,90 @@ enum Level {
   Avanzado
 }
 
+enum AsociatedProject {
+  UMAA
+  OAL
+  ALV
+  UVPLV
+  oficinas_de_avaa
+  Externos
+}
+
 model Dates {
-  id         String   @id @default(uuid())
-  date       DateTime
-  start_time DateTime
-  end_time   DateTime
-  Workshop   Workshop @relation(fields: [workshopId], references: [id])
-  workshopId String
-  Chat       Chat     @relation(fields: [chatId], references: [id])
-  chatId     String
+  id          String    @id @default(uuid())
+  date        DateTime
+  start_time  DateTime
+  end_time    DateTime
+  Workshop    Workshop  @relation(fields: [workshopId], references: [id])
+  workshopId  String
+  Chat        Chat      @relation(fields: [chatId], references: [id])
+  chatId      String
+  Volunteer   Volunteer @relation(fields: [volunteerId], references: [id])
+  volunteerId String
 }
 
 model Workshop {
-  id         String   @id @default(uuid())
+  id         String             @id @default(uuid())
   title      String
-  dates       Dates[]
-  speaker    String
+  dates      Dates[]
+  speaker    WorkshopSpeakers[]
   spots      Int
   takenSpots Int
   platform   Platform
   modality   Modality
   status     Status
   pensum     Pensum
+
+  @@index([title, modality, status, pensum])
 }
 
 model Chat {
-  id         String   @id @default(uuid())
+  id         String         @id @default(uuid())
   title      String
-  dates       Dates[]
-  speaker    String
+  dates      Dates[]
+  speaker    ChatSpeakers[]
   spots      Int
   takenSpots Int
   platform   Platform
   modality   Modality
   status     Status
   level      Level
+
+  @@index([title, modality, status, level])
+}
+
+model Volunteer {
+  id               String           @id @default(uuid())
+  title            String
+  dates            Dates[]
+  inCharge         String
+  spots            Int
+  takenSpots       Int
+  asociatedProject AsociatedProject
+  status           Status
+}
+
+// ====================================== Users related shchema  ======================================
+//ser becaria avaa
+//lider de comite
+//lider de proyectos
+
+model WorkshopSpeakers {
+  id        String     @id @default(uuid())
+  name      String
+  email     String
+  workshops Workshop[]
+
+  @@unique([email])
+  @@index([email])
+}
+
+model ChatSpeakers {
+  id    String @id @default(uuid())
+  name  String
+  email String
+  chats Chat[]
+
+  @@unique([email])
+  @@index([email])
 }
