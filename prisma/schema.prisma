@@ -2,30 +2,104 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider        = "prisma-client-js"
-  // @see link https://www.prisma.io/docs/concepts/components/prisma-schema/relations/referential-integrity
-  previewFeatures = ["referentialIntegrity"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider     = "mysql"
   url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  relationMode = "foreignKeys"
 }
 
-model Staff {
-  id            Int    @id @default(autoincrement())
+enum AdminRole {
+  ADMIN
+  COMITE
+  PROYECTS
+  CHAT
+}
+
+enum Modality {
+  PRESENCIAL
+  VIRTUAL
+  HIBRIDO
+}
+
+enum Platform {
+  zoom
+  google_meet
+  otra
+  padlet
+  oficinas_de_avaa
+  teams
+  discord
+  jitsi
+}
+
+enum Status {
+  PENDIENTE
+  REALIZADO
+  SUSPENDIDO
+  CANCELADO
+}
+
+enum Pensum {
+  Ejercicio_ciudadano
+  Liderazgo
+  Gerencia_de_si_mismo
+  TIC
+  Emprendimiento
+  Trabajo_en_equipo
+}
+
+enum Level {
+  Basico
+  Intermedio
+  Avanzado
+}
+
+model Admin {
+  id            Int       @id @default(autoincrement())
   name          String
   email         String
   password      String
   access_token  String
   refresh_token String
+  role          AdminRole
+}
+
+model Dates {
+  id         Int      @id @default(autoincrement())
+  date       DateTime
+  start_time DateTime
+  end_time   DateTime
+  Workshop   Workshop @relation(fields: [workshopId], references: [id])
+  workshopId Int
+  Chat       Chat     @relation(fields: [chatId], references: [id])
+  chatId     Int
 }
 
 model Workshop {
-  id Int @id @default(autoincrement())
+  id       Int     @id @default(autoincrement())
+  title    String
+  Date     Dates[]
+  speaker  String
+  spots    Int
+  takenSpots Int
+  platform Platform
+  modality Modality
+  status   Status
+  pensum Pensum
 }
 
 model Chat {
-  id Int @id @default(autoincrement())
+  id       Int     @id @default(autoincrement())
+  title    String
+  Date     Dates[]
+  speaker  String
+  spots    Int
+  takenSpots Int
+  platform Platform
+  modality Modality
+  status  Status
+  level  Level 
 }
