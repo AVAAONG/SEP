@@ -3,6 +3,8 @@ import '@/app/globals.css'
 import favicon from '@/../public/logo-proexcelencia-cap.png';
 import Sidebar from '@/components/navigation/sidebar/Sidebar';
 import Navbar from '@/components/navigation/navbar/Navbar';
+
+
 export const metadata = {
   title: 'Proexcelencia',
   description: 'Sistema de Evaluacion del Becario',

@@ -37,3 +37,5 @@ export const getAuthUrl = (scopes: string[]) => {
 // se guarda el token en la base de datos
 // se redirecciona a la pagina de exito
 // en la pagina de exito se obtiene el token de la base de datos
+
+
