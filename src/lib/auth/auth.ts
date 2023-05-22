@@ -1,8 +1,13 @@
 import { auth } from '@googleapis/oauth2';
+import { useRouter } from 'next/router';
 
-export const CLIENT_ID = process.env.GOOGLE_API_CLIENT_ID;
-export const CLIENT_SECRET = process.env.GOOGLE_API_CLIENT_SECRET;
-export const REDIRECT_URL = "http://localhost:3000/api/google/calendarCallback";
+import { CLIENT_ID, CLIENT_SECRET, REDIRECT_URL } from '../constants';
+import { calendar } from '@googleapis/calendar';
+import { drive } from '@googleapis/drive'
+import { gmail } from '@googleapis/gmail'
+import { sheets } from '@googleapis/sheets'
+import { people } from '@googleapis/people'
+
 
 const oauth2Client = new auth.OAuth2(
     CLIENT_ID,
@@ -17,17 +22,16 @@ const oauth2Client = new auth.OAuth2(
  */
 export const getAuthUrl = (scopes: string[]) => {
     const url = oauth2Client.generateAuthUrl({
-        // 'online' (default) or 'offline' (gets refresh_token)
         access_type: 'offline',
-        // If you only need one scope you can pass it as a string
         scope: scopes,
     });
     return url;
 }
 
-// el usuario da click en un Boton 
-// este boton activa la function getAuthUrl 
+// el usuario da click en un Boton
+// este boton activa la function getAuthUrl
 // esta funcion genera un url
+
 // el usuario es redireccionado a la pagina de google
 // el usuario acepta los permisos
 // el usuario es redireccionado a la pagina de exito
@@ -39,3 +43,28 @@ export const getAuthUrl = (scopes: string[]) => {
 // en la pagina de exito se obtiene el token de la base de datos
 
 
+export const redirectToAuthUrl = (url: string) => {
+    const router = useRouter();
+    router.push(url);
+}
+
+export const getAccessToken = async (code: string) => {
+    const { tokens } = await oauth2Client.getToken(code);
+    oauth2Client.setCredentials(tokens);
+    return tokens;
+}
+
+
+
+
+/**
+ * ---------------------------------------- Google API Services ----------------------------------------
+ * 
+ * @description the services are created with the credentials of the user who is logged in
+ * @see link 
+ */
+export const Calendar = calendar({ version: "v3", auth: oauth2Client })
+export const Drive = drive({ version: "v3", auth: oauth2Client })
+export const Gmail = gmail({ version: "v1", auth: oauth2Client })
+export const Sheets = sheets({ version: "v4", auth: oauth2Client })
+export const People = people({ version: "v1", auth: oauth2Client })

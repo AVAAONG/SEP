@@ -1,20 +1,14 @@
 
 import { Chat, ChatLevel } from '@/types/Chat';
-import { KindOfActivity, Platform, activityMode } from '@/types/General';
-import { AsociatedProject, Volunteer } from '@/types/Volunteer';
-import { KindOfWorkshop, Pensum, Workshop } from '@/types/Workshop';
-import { calendar_v3, calendar } from '@googleapis/calendar'
-
+import { calendar_v3, calendar } from '@googleapis/calendar';
 import { getFormatedDate, substractMonths } from '../utils';
-// // import { KindOfWorkshop, Workshop, Platform, Pensum } from '..';
-// // import { CALENDAR_ID } from '../constants';
-// // import { getAccessToken } from './oauth';
-// // import createZoomMeeting from './zoom';
+import { Calendar } from '../auth/auth';
 
 import createEventObject from './calendarEventObject';
 import createCalendarDescription from './calendarDescription';
 
 // // --------------------------------------------------- Auth related Functions ---------------------------------------------------
+
 
 // // --------------------------------------------------- Calendar Utils Functions ---------------------------------------------------
 
