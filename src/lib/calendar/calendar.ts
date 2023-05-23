@@ -1,6 +1,15 @@
+/**
+ * @file Calendar API v3 functions
+ * @author Kevin Bravo (kevinbravo.me)
+ * 
+ * @see link https://developers.google.com/calendar/api/v3/reference for more information about the Calendar v3 REST API
+ * 
+ * @description Functions related to the calendar API v3 main functionalities in the system.
+ */
+
+import { calendar_v3 } from '@googleapis/calendar';
 
 import { Chat } from '@/types/Chat';
-import { calendar_v3 } from '@googleapis/calendar';
 import { Calendar } from '../auth/auth';
 
 import createEventObject from './calendarEventObject';
@@ -9,6 +18,7 @@ import { Workshop } from '@/types/Workshop';
 import { CALENDAR_ID } from '../constants';
 import { KindOfActivity } from '@/types/General';
 import { addHours, getFormatedDate, getMeetEventLink, getPublicEventLink, substractMonths } from './utils';
+import createZoomMeeting from '../zoom/zoom';
 
 
 export const createEvent = async (kindOfActivity: KindOfActivity, values: Workshop | Chat) => {
