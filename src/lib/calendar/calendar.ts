@@ -102,7 +102,7 @@ const createWorkshopEventDetails = async (values: Workshop): Promise<[calendar_v
     }
     else if (kindOfWorkshop === "virtual" || kindOfWorkshop === "hibrida") {
         if (platform === 'zoom') {
-            const [join_url, id, password] = await createZoomMeeting(name, start);
+            const [join_url, id, password] = await createZoomMeeting(name, new Date(start));
             zoomMeetLink = join_url
             zoomMeetId = id
             zoomMetPassword = password

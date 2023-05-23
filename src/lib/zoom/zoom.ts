@@ -19,7 +19,6 @@ type ZoomAuthResponse = {
     scope: string;
 }
 
-
 /**
  * Authenticates with the Zoom API using server-to-server OAuth.
  * @see link https://developers.zoom.us/docs/internal-apps/s2s-oauth/ for more information about server-to-server OAuth 
@@ -38,8 +37,6 @@ const authenticateWithZoom = async (): Promise<ZoomAuthResponse> => {
     return response.data;
 };
 
-
-
 /**
  * Creates a Zoom meeting with the specified name and start time.
  *
@@ -48,12 +45,15 @@ const authenticateWithZoom = async (): Promise<ZoomAuthResponse> => {
  * @see link https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#operation/meetingCreate for more information about the Zoom API
  * @returns A Promise that resolves to an array containing the join URL, ID, and password of the meeting.
  */
-const createZoomMeeting = async (name: string, startTime: string) => {
+const createZoomMeeting = async (name: string, startTime: Date) => {
+
+    const date = startTime.toLocaleString("en-US", { timeZone: "America/Caracas" });
+    
     const { access_token } = await authenticateWithZoom();
     const meetingOptions = {
         topic: name,
         type: 2,
-        start_time: startTime,
+        start_time: date,
         duration: 120,
         timezone: 'America/Caracas',
         default_password: true,
