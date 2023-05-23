@@ -9,6 +9,7 @@ const copySheet = async (spreadsheetId: string) => {
         destinationSpreadsheetId: spreadsheetId,
       },
     })
+    //TODO: fix the name of the sheet
     createSheetName(spreadsheetId, response.data.sheetId!, "Liderazgo")
   } catch (err) {
     console.error(err);
