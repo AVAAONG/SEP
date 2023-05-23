@@ -1,7 +1,7 @@
 import shortUUID from "short-uuid";
 import { Platform } from "./General";
 
-export type KindOfChat = 'Presencial' | 'Virtual';
+export type KindOfChat = 'presencial' | 'virtual';
 
 export type ChatLevel = "Basico" | "Intermedio" | "Avanzado";
 

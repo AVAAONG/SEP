@@ -1,53 +1,151 @@
 
-import { Chat, ChatLevel } from '@/types/Chat';
-import { calendar_v3, calendar } from '@googleapis/calendar';
-import { getFormatedDate, substractMonths } from '../utils';
+import { Chat } from '@/types/Chat';
+import { calendar_v3 } from '@googleapis/calendar';
 import { Calendar } from '../auth/auth';
 
 import createEventObject from './calendarEventObject';
-import createCalendarDescription from './calendarDescription';
-
-// // --------------------------------------------------- Auth related Functions ---------------------------------------------------
-
-
-// // --------------------------------------------------- Calendar Utils Functions ---------------------------------------------------
-
-// /**
-//  * Sets an event in the calendar and gets the meeting created for that event and the 'add to my calendar' link
-//  *
-//  * @param workshop the data of a workshop
-//  * @returns the meeting link and the 'add to my calendar' link
-//  */
-// const calendarMain = async (workshop: Workshop): Promise<string[]> => {
-//     if (workshop.kindOfWorkshop === "Presencial") {
-//         await createEvent(workshop);
-//         const addUrl = await getPublicEventLink(workshop);
-//         return [addUrl];
-//     }
-//     else {
-//         if (workshop.platform === "Google Meet") {
-//             const eventId = await createEvent(workshop) as string;
-//             const [meetLink, meetId] = await getMeetEventLink(eventId);
-//             const addUrl = await getPublicEventLink(workshop, meetLink!, meetId!);
-//             return [addUrl, meetLink!, meetId!];
-//         }
-//         else if (workshop.platform === "Zoom") {
-//             const [, join_url, id, password] = await createEvent(workshop);
-//             const addUrl = await getPublicEventLink(workshop, join_url, id, password);
-//             return [addUrl, join_url, id, password];
-//         }
-//         else if (workshop.platform === "Padlet") {
-//             await createEvent(workshop);
-//             const addUrl = await getPublicEventLink(workshop);
-//             return [addUrl];
-//         }
-//         else {
-//             return ["NONE"];
-//         }
-//     }
-// };
+import { createChatCalendarDescription, createWorkshopCalendarDescription } from './calendarDescription';
+import { Workshop } from '@/types/Workshop';
+import { CALENDAR_ID } from '../constants';
+import { KindOfActivity } from '@/types/General';
+import { addHours, getFormatedDate, getMeetEventLink, getPublicEventLink, substractMonths } from './utils';
 
 
+export const createEvent = async (kindOfActivity: KindOfActivity, values: Workshop | Chat) => {
+    const calendarId = await getCalendarId(CALENDAR_ID);
+    let addUrl: string | null = null;
+    let meetLink: string | null = null
+    let meetId: string | null = null;
+    let meetingPassword: string | null = null
+
+    if (kindOfActivity === "workshop") {
+
+        const { name, platform, date, startHour, endHour } = values as Workshop;
+        const [start, end] = getFormatedDate(date, startHour, endHour);
+        const [eventDetails, eventDescription, zoomMeetLink, zoomMeetId, zoomMetPassword] = await createWorkshopEventDetails(values as Workshop)
+        addUrl = await getPublicEventLink(name, platform, eventDescription, start, end);
+
+        const eventId = await Calendar.events.insert({
+            calendarId,
+            conferenceDataVersion: 1,
+            requestBody: eventDetails,
+        })
+
+        if (platform === "google meet") {
+            const [googleMeetLink, googleMeetId] = await getMeetEventLink(calendarId, eventId.data.id!);
+            meetLink = googleMeetLink;
+            meetId = googleMeetId;
+        }
+
+        else if (platform === "zoom") {
+            meetLink = zoomMeetLink!;
+            meetId = zoomMeetId!;
+            meetingPassword = zoomMetPassword!;
+        }
+        return [eventId, addUrl, meetLink, meetId, meetingPassword]
+
+    }
+
+    else if (kindOfActivity === "chat") {
+
+        const { name, platform, date, startHour } = values as Chat;
+        const endHour = addHours(new Date(startHour), 2);
+        const [start, end] = getFormatedDate(date, startHour, endHour.toLocaleString());
+        const [eventDetails, eventDescription] = await createChatEventDetails(values as Chat)
+        addUrl = await getPublicEventLink(name, platform, eventDescription, start, end);
+
+        const eventId = await Calendar.events.insert({
+            calendarId,
+            conferenceDataVersion: 1,
+            requestBody: eventDetails,
+        })
+
+        return [eventId, addUrl]
+    }
+    else {
+        throw new Error("Invalid kind of activity");
+    }
+}
+
+
+
+// // --------------------------------------------------- Calendar Main function ---------------------------------------------------
+/**
+ * creates an event with the Workshops values passed as parameter using the google calendar API v3
+ *
+ * @param values the information about the workshop
+ * @see {@link https://developers.google.com/calendar/api/v3/reference/events/insert} for reference about the {insert} method
+ * @returns the event id
+ */
+const createWorkshopEventDetails = async (values: Workshop): Promise<[calendar_v3.Schema$Event, string, string?, string?, string?]> => {
+    const { name, pensum, date, startHour, endHour, speaker, kindOfWorkshop, platform, description, avaaYear } = values
+    const [start, end] = getFormatedDate(date, startHour, endHour);
+    let calendarDescription: string;
+    let eventDetails: calendar_v3.Schema$Event;
+    let zoomMeetLink = null;
+    let zoomMeetId = null;
+    let zoomMetPassword = null;
+
+    if (kindOfWorkshop === "presencial" || kindOfWorkshop === "asincrona") {
+        calendarDescription = createWorkshopCalendarDescription(pensum, speaker, kindOfWorkshop, platform, description, avaaYear);
+        eventDetails = createEventObject(name, kindOfWorkshop, platform, calendarDescription, start, end);
+    }
+    else if (kindOfWorkshop === "virtual" || kindOfWorkshop === "hibrida") {
+        if (platform === 'zoom') {
+            const [join_url, id, password] = await createZoomMeeting(name, start);
+            zoomMeetLink = join_url
+            zoomMeetId = id
+            zoomMetPassword = password
+            calendarDescription = createWorkshopCalendarDescription(pensum, speaker, kindOfWorkshop, platform, description, avaaYear, join_url, id, password);
+            eventDetails = createEventObject(name, kindOfWorkshop, zoomMeetLink as any, calendarDescription, start, end);
+        }
+        else {
+            calendarDescription = createWorkshopCalendarDescription(pensum, speaker, kindOfWorkshop, platform, description, avaaYear);
+            eventDetails = createEventObject(name, kindOfWorkshop, platform, calendarDescription, start, end);
+        }
+    }
+    else {
+        calendarDescription = createWorkshopCalendarDescription(pensum, speaker, kindOfWorkshop, platform, description, avaaYear);
+        eventDetails = createEventObject(name, kindOfWorkshop, platform, calendarDescription, start, end);
+    }
+    return [eventDetails, calendarDescription, zoomMeetLink, zoomMeetId, zoomMetPassword];
+};
+
+
+const createChatEventDetails = async (values: Chat): Promise<[calendar_v3.Schema$Event, string]> => {
+    const { name, description, speaker, level, kindOfChat, platform, date, startHour } = values;
+    const endHour = addHours(new Date(startHour), 2);
+    const [start, end] = getFormatedDate(date, startHour, endHour.toLocaleString());
+    let calendarDescription = createChatCalendarDescription(level, speaker, kindOfChat, platform, description);
+    let eventDetails = createEventObject(name, kindOfChat, platform, calendarDescription, start, end);
+    return [eventDetails, calendarDescription];
+};
+
+
+
+/**
+ * Lists the events of a calendar of the last 3 months.
+ * @see link https://developers.google.com/calendar/v3/reference/events/list - for more information about the API
+ * @param calendarId - The ID of the calendar to retrieve events from.
+ */
+export const getCalendarEvent = (calendarId: string = 'primary') => {
+    let events;
+    Calendar.events.list(
+
+        {
+            calendarId: calendarId,
+            timeMin: substractMonths(3),
+            orderBy: 'startTime',
+
+        },
+        (err: any, res: any) => {
+            if (err) return console.error('The API returned an error: ' + err);
+            if (res === null || res === undefined) return console.error('No events found.');
+            events = res.data.items;
+            return events;
+        }
+    );
+}
 
 /**
  * Evaluates wheter the calendar under the id exist or not. If exist returns that id, if not, returns the id of the users default calendar.
@@ -67,115 +165,3 @@ const getCalendarId = async (calendarId: string): Promise<string> => {
     }
     return id;
 };
-
-
-// /**
-//  * it removes the spaces and the points from the string passed as argument
-//  * @param str the string to remove the spaces and the points
-//  * @returns
-//  */
-// const quite = (str: string): string => {
-//     const withNoPoint = str.replace(/\./g, "")
-//     return withNoPoint.replace(/\s/g, '')
-// }
-
-// /**
-//  * it substracts the hours passed as argument to the date passed as argument
-//  * @param date the date to substract the hours
-//  * @param hours the number of hours to substract
-//  * @returns the Date object with the hours substracted
-//  */
-// const subtractHours = (date: Date, hours: number): Date => {
-//     date.setHours(date.getHours() - hours);
-//     return date;
-// }
-
-
-
-
-// // --------------------------------------------------- Calendar Main function ---------------------------------------------------
-/**
- * creates an event with the Workshops values passed as parameter using the google calendar API v3
- *
- * @param values the information about the workshop
- * @see {@link https://developers.google.com/calendar/api/v3/reference/events/insert} for reference about the {insert} method
- * @returns the event id
- */
-const createEvent = async (values: Workshop | Chat | Volunteer): Promise<string[] | string> => {
-
-    //handler the case in where the calendar dosnt exist
-    const { name, description, speaker, pensum, kindOfWorkshop, platform, date, startHour, endHour } = values;
-    
-    const calendarId = CALENDAR_ID;
-    const [start, end] = getFormatedDate(date, startHour, endHour);
-    let calendarDescription: string;
-    let eventDetails: calendar_v3.Schema$Event;
-    if (kindOfWorkshop === "Presencial" || platform === 'Padlet') {
-
-        calendarDescription = createCalendarDescription(pensum, speaker, kindOfWorkshop, platform, description);
-        eventDetails = createEventObject(name, activityMode, platform, calendarDescription, start, end);
-
-        // creates the event
-        await Calendar.events.insert({ calendarId: calendarId, conferenceDataVersion: 1, requestBody: eventDetails, sendUpdates: "all" })
-
-        return "NONE";
-    }
-    else {
-        if (platform === 'Zoom') {
-            const [join_url, id, password] = await createZoomMeeting(name, start);
-            calendarDescription = createCalendarDescription(pensum, speaker, kindOfWorkshop, platform, description, join_url, id, password);
-            eventDetails = createEventObject(name, kindOfWorkshop, platform, calendarDescription, start, end, join_url);
-            // creates the event
-            const event = await Calendar.events.insert({ calendarId: calendarId, conferenceDataVersion: 1, requestBody: eventDetails })
-            return [event.data.id, join_url, id, password];
-        }
-        else if (platform === 'Google Meet') {
-            calendarDescription = createCalendarDescription(pensum, speaker, kindOfWorkshop, platform, description);
-            eventDetails = createEventObject(name, kindOfWorkshop, platform, calendarDescription, start, end);
-            // creates the event
-            const event = await Calendar.events.insert({ calendarId: calendarId, conferenceDataVersion: 1, requestBody: eventDetails })
-            return event.data.id!;
-        }
-        else {
-            return "NONE";
-        }
-    }
-};
-
-
-// /**
-//  * it adds a specific number of `days` to a date
-//  * @param date the date of the event
-//  * @param days the number of days we want to add to the date
-//  * @returns the date with the days added in ISO format
-//  */
-// const addDays = (date: string, days: number) => {
-//     const result = new Date(date);
-//     result.setDate(result.getDate() + days);
-//     return result.toISOString();
-// }
-
-
-
-/**
- * Lists the events of a calendar in the last 3 months.
- * @see link https://developers.google.com/calendar/v3/reference/events/list - for more information about the API
- * @param calendarId - The ID of the calendar to retrieve events from.
- */
-export const getCalendarEvents = async (calendarId: string = 'primary') => {
-    let eventst;
-    Calendar.events.list(
-        {
-            calendarId: calendarId,
-            timeMin: substractMonths(3),
-            orderBy: 'startTime',
-
-        },
-        (err, res) => {
-            if (err) return console.error('The API returned an error: ' + err);
-            if (res === null || res === undefined) return console.error('No events found.');
-            const events = res.data.items;
-            eventst = events;
-        }
-    );
-}

@@ -108,9 +108,7 @@ const createEventObject = (
         attendees
     )
 
-    if (activityMode === "presencial") {
-        event = defaultEvent;
-    }
+    if (activityMode === "presencial") event = defaultEvent;
 
     else if (activityMode === "virtual" || activityMode === "hibrida") {
         if (platform === "google meet") {
@@ -139,10 +137,12 @@ const createEventObject = (
                 timeZone: "America/Caracas"
             }
         }
+        else if (platform === "zoom" || platform === "otra" || platform === "teams" || platform === "discord" || platform === "jitsi") {
+            event = defaultEvent
+        }
     }
-    else {
-        event = defaultEvent;
-    }
+    else event = defaultEvent;
+
     return event
 }
 

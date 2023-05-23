@@ -15,6 +15,11 @@ const oauth2Client = new auth.OAuth2(
     REDIRECT_URL
 );
 
+export const redirectToAuthUrl = (url: string) => {
+    const router = useRouter();
+    router.push(url);
+}
+
 /**
  * @description the refresh token is only returned on the first authorization, so we need to save it in the database
  * @see link https://github.com/googleapis/google-api-nodejs-client#oauth2-client - for more information about the API
@@ -25,37 +30,22 @@ export const getAuthUrl = (scopes: string[]) => {
         access_type: 'offline',
         scope: scopes,
     });
+    redirectToAuthUrl(url);
     return url;
 }
 
-// el usuario da click en un Boton
-// este boton activa la function getAuthUrl
-// esta funcion genera un url
-
-// el usuario es redireccionado a la pagina de google
-// el usuario acepta los permisos
-// el usuario es redireccionado a la pagina de exito
-// en la pagina de exito se obtiene el codigo
-// se obtiene el token
-
-// se guarda el token en la base de datos
-// se redirecciona a la pagina de exito
-// en la pagina de exito se obtiene el token de la base de datos
-
-
-export const redirectToAuthUrl = (url: string) => {
-    const router = useRouter();
-    router.push(url);
+export const setAccessTokens = (code: string) => {
+    oauth2Client.getToken(code, (err, tokens) => {
+        if (err) {
+            console.log('Error retrieving access token', err);
+            return;
+        }
+        if (tokens) {
+            oauth2Client.setCredentials(tokens);
+            return tokens;
+        }
+    });
 }
-
-export const getAccessToken = async (code: string) => {
-    const { tokens } = await oauth2Client.getToken(code);
-    oauth2Client.setCredentials(tokens);
-    return tokens;
-}
-
-
-
 
 /**
  * ---------------------------------------- Google API Services ----------------------------------------
