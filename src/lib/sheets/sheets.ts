@@ -1,6 +1,7 @@
+import { sheets_v4 } from "@googleapis/sheets";
 import { Sheets } from "../auth/auth";
 
-const copySheet = async (spreadsheetId: string) => {
+const copySheet = async (spreadsheetId: string, activityName: string) => {
   try {
     const response = await Sheets.spreadsheets.sheets.copyTo({
       sheetId: 0,
@@ -10,7 +11,7 @@ const copySheet = async (spreadsheetId: string) => {
       },
     })
     //TODO: fix the name of the sheet
-    createSheetName(spreadsheetId, response.data.sheetId!, "Liderazgo")
+    createSheetName(spreadsheetId, response.data.sheetId!, activityName)
   } catch (err) {
     console.error(err);
   }
@@ -36,7 +37,6 @@ const createSheetName = (spreadsheetId: string, sheetId: number, tittle: string,
   let sheetTittle = tittle;
   try {
     updateSheetName(spreadsheetId, sheetId, sheetTittle)
-
   }
   catch (e) {
     num += numb;
@@ -82,4 +82,53 @@ const updateSheetName = async (spreadsheetId: string, sheetId: number, sheetName
   } catch (err) {
     console.error(err);
   }
+}
+
+const createSpreadSheetFormResponse = () => {
+  const myDate = new Date();
+  const currentMonth = Number(myDate.getMonth().toFixed());
+  const { storedMonth, actualSpreadSheet } = getFormData();
+  if (currentMonth === storedMonth) {
+    let ss = SpreadsheetApp.openById(actualSpreadSheet);
+    const source = SpreadsheetApp.openById(SPREADSHEET_TEMPLATE_FOR_FORM_VALIDATION_ID);
+    const sheetToCpy = source.getSheets()[0];
+    sheetToCpy.copyTo(ss);
+    return ss;
+  }
+  else {
+    const ss = createSpreadSheet(MONTHS[currentMonth]);
+    const source = SpreadsheetApp.openById(SPREADSHEET_TEMPLATE_FOR_FORM_VALIDATION_ID);
+    const sheetToCpy = source.getSheets()[0];
+    sheetToCpy.copyTo(ss);
+    updateFormData(ss);
+    return ss;
+  }
+};
+
+import { google } from 'googleapis';
+
+const sheets = google.sheets('v4');
+
+const updateSpreadsheet = async (spreadsheetId: string, updateObject: ) => {
+
+  try {
+    const response = await Sheets.spreadsheets.values.update();
+    console.log(response.data);
+  } catch (err) {
+    console.error(err);
+  }
+
+}
+
+const createSpreadseetUpdateObject = async (spreadsheetId: string, range: string, values: any[]): Promise<sheets_v4.Params$Resource$Spreadsheets$Values$Update> => {
+  const updateObject = {
+    spreadsheetId,
+    range,
+    valueInputOption: "RAW",
+    requestBody: {
+      values
+    }
+  }
+  return updateObject;;
+
 }

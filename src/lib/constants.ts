@@ -12,3 +12,4 @@ export const CALENDAR_SCOPES = [
 ];
 
 export const MONTHS = ["0","Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+

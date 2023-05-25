@@ -34,4 +34,12 @@ export const copyFile = async (fileName: string, fileId: string, folderId: strin
 
 };
 
-    // const fileName = `Talleres de ${month} del ${new Date().getFullYear()}`;
+export const getFile = async (fileId: string) => {
+    try {
+        const res = await Drive.files.get({ fileId });
+        return res.data;
+    } catch (err) {
+        console.error(err);
+    }
+}
+

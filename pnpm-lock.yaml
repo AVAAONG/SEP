@@ -7,6 +7,9 @@ dependencies:
   '@googleapis/drive':
     specifier: ^5.0.2
     version: 5.0.2
+  '@googleapis/forms':
+    specifier: ^2.0.0
+    version: 2.0.0
   '@googleapis/gmail':
     specifier: ^1.2.0
     version: 1.2.0
@@ -173,6 +176,16 @@ packages:
 
   /@googleapis/drive@5.0.2:
     resolution: {integrity: sha512-7FhWlP26dkaUyO7kkRlEe27iPmNZUKM5130+9jOVA2IkJUqnsb4v9K2sI1f2F3LC8hZO0axjkUmkgAcNDstpCw==}
+    engines: {node: '>=12.0.0'}
+    dependencies:
+      googleapis-common: 6.0.4
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+    dev: false
+
+  /@googleapis/forms@2.0.0:
+    resolution: {integrity: sha512-dwG/jO1xQXGSvm1SM2Q9oVug98ZiksGoX5btBzwNzd70W58XZgfWnIQzRUv5ASTmDJU5K1wrVm1ahDnJb1gSPw==}
     engines: {node: '>=12.0.0'}
     dependencies:
       googleapis-common: 6.0.4

@@ -19,6 +19,7 @@
   "dependencies": {
     "@googleapis/calendar": "^4.1.0",
     "@googleapis/drive": "^5.0.2",
+    "@googleapis/forms": "^2.0.0",
     "@googleapis/gmail": "^1.2.0",
     "@googleapis/oauth2": "^1.0.0",
     "@googleapis/people": "^3.0.2",
