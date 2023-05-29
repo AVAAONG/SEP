@@ -8,8 +8,12 @@ import { createEvent, getCalendarEvents, listCalendars } from '@/lib/calendar/ca
 import { Workshop } from '@/types/Workshop';
 import shortUUID from 'short-uuid';
 import { authenticateWithZoom, getUserInfo } from '@/lib/zoom/zoom';
+import { createGoogleForm, updateFormInfo } from '@/lib/form/form';
+import { copyFile } from '@/lib/drive/drive';
+import { createWorkshopCalendarDescription } from '@/lib/calendar/calendarDescription';
+import { getPrimaryEmailsFromContactGroup, getGroupOfContacts } from '@/lib/contacts/contacts';
 
-const workshop: Workshop= {
+const workshop: Workshop = {
     "name": "Funcion surpucasfsdfasdfas",
     "pensum": "Liderazgo",
     "date": "2023-06-25",
@@ -32,7 +36,17 @@ export async function GET(req: NextApiRequest) {
     const token = await getToken({ req });
     //@ts-ignore
     setTokens(token.accessToken)
-    const t = await createEvent('workshop', workshop)
+    // const copyId = await copyFile("Taller para el liderazgo social", "11Ws31Y5yhY34KClYte-QhYOYd9ioqon6E8l9NWSQeLM","1f6JD_QxQzDe1EijDUbpA8zEcKAuEL3tB" )
+    // const cal = createWorkshopCalendarDescription(workshop.pensum,workshop.speaker, workshop.kindOfWorkshop, workshop.platform, workshop.description, workshop.avaaYear)
+    // const t = await updateFormInfo(copyId!, "Taller de prueba", cal)
+    const contactsGroups = await getGroupOfContacts()
+    contactsGroups.forEach(async (contactGroup) => {
+        const g = await getPrimaryEmailsFromContactGroup(contactGroup)
+        console.log(g)
+    })
     // const t = await getUserInfo()
-    console.log(t)
+    // console.log(contactsGroups)
+
+    //se copia el formulario, se acomoda el titulo y la description, se envia a apscript para ponerle el mensaje de confirmacion. y se crea el triger. 
+
 }

@@ -27,7 +27,7 @@ export const copyFile = async (fileName: string, fileId: string, folderId: strin
     try {
         const res = await Drive.files.copy({ fileId, requestBody: { name: fileName, parents: [folderId] } });
         console.log(`File copied successfully with ID: ${res.data.id}`);
-        return res;
+        return res.data.id;
     } catch (err) {
         console.error(err);
     }
