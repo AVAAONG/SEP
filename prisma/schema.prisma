@@ -5,11 +5,13 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
-  provider = "mysql"
-  url = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
+
 // ====================================== Admin related shchema  ======================================
 enum AdminRole {
   ADMIN
@@ -50,7 +52,8 @@ enum Platform {
 }
 
 enum Status {
-  PENDIENTE
+  AGENDADO
+  EN_PROCESO
   REALIZADO
   SUSPENDIDO
   CANCELADO
@@ -94,16 +97,21 @@ model Dates {
 }
 
 model Workshop {
-  id         String             @id @default(uuid())
-  title      String
-  dates      Dates[]
-  speaker    WorkshopSpeakers[]
-  spots      Int
-  takenSpots Int
-  platform   Platform
-  modality   Modality
-  status     Status
-  pensum     Pensum
+  id          String             @id @default(uuid())
+  title       String
+  pensum      Pensum
+  dates       Dates[]
+  speaker     WorkshopSpeakers[]
+  spots       Int
+  takenSpots  Int
+  modality    Modality
+  platform    Platform
+  description String
+  avaaYear    String
+  meetingLink String
+  meetingId   String
+  meetingPass String
+  status      Status
 
   @@index([title, modality, status, pensum])
 }
@@ -140,10 +148,11 @@ model Volunteer {
 //lider de proyectos
 
 model WorkshopSpeakers {
-  id        String     @id @default(uuid())
-  name      String
-  email     String
-  workshops Workshop[]
+  id          String     @id @default(uuid())
+  name        String
+  email       String
+  phoneNumber String
+  workshops   Workshop[]
 
   @@unique([email])
   @@index([email])
@@ -162,18 +171,18 @@ model ChatSpeakers {
 // ============================================================== Auth related shchema  ==============================================================
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
