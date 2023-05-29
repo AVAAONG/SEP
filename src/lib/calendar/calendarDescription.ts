@@ -30,7 +30,7 @@ export const createWorkshopCalendarDescription = (
     let workshopCalendarDescription = ''
 
     const defaultCalendarDescription = `<b>Modalidad:</b> ${activityMode}
-<b>Año del taller:</b> ${avaaYear.toString()}
+<b>Año del taller:</b> ${avaaYear.join(", ")}
 <b>Facilitador:</b> ${speaker}
 ${activityMode === "virtual" ? `<b>Plataforma:</b> ${platform}` : `<b>Lugar:</b> ${platform}`}
 <b>Competencia Asociada:</b> ${pensum}

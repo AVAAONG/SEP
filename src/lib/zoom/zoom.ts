@@ -8,9 +8,9 @@
 
 import axios from "axios";
 
-const ZOOM_API_CLIENT_KEY = process.env.ZOOM_API_KEY;
-const ZOOM_API_CLIENT_SECRET = process.env.ZOOM_API_SECRET;
-const ZOOM_USER_ID = process.env.ZOOM_USER_ID;
+const ZOOM_API_CLIENT_KEY = process.env.ZOOM_CLIENT_ID;
+const ZOOM_API_CLIENT_SECRET = process.env.ZOOM_CLIENT_SECRET;
+const ZOOM_USER_ID = process.env.ZOOM_ACCOUNT_ID;
 
 type ZoomAuthResponse = {
     access_token: string;
@@ -19,22 +19,29 @@ type ZoomAuthResponse = {
     scope: string;
 }
 
+const TOKEN = Buffer.from(`${ZOOM_API_CLIENT_KEY}:${ZOOM_API_CLIENT_SECRET}`).toString('base64')
+
 /**
  * Authenticates with the Zoom API using server-to-server OAuth.
  * @see link https://developers.zoom.us/docs/internal-apps/s2s-oauth/ for more information about server-to-server OAuth 
  * @returns A Promise that resolves to a ZoomAuthResponse object.
  */
-const authenticateWithZoom = async (): Promise<ZoomAuthResponse> => {
-    const url = 'https://zoom.us/oauth/token';
-    const data = {
-        grant_type: 'client_credentials'
-    };
-    const headers = {
-        Authorization: `Basic ${Buffer.from(`${ZOOM_API_CLIENT_KEY}:${ZOOM_API_CLIENT_SECRET}`).toString('base64')}`,
-        'Content-Type': 'application/x-www-form-urlencoded'
-    };
-    const response = await axios.post(url, new URLSearchParams(data).toString(), { headers });
-    return response.data;
+export const authenticateWithZoom = async (): Promise<ZoomAuthResponse> => {
+
+    const respose = await axios.post(
+        'https://zoom.us/oauth/token',
+        {
+            grant_type: 'account_credentials',
+            account_id: ZOOM_USER_ID
+        },
+        {
+            headers: {
+                Authorization: `Basic ${TOKEN}`,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }
+    );
+    return respose.data;
 };
 
 /**
@@ -48,8 +55,8 @@ const authenticateWithZoom = async (): Promise<ZoomAuthResponse> => {
 const createZoomMeeting = async (name: string, startTime: Date) => {
 
     const date = startTime.toLocaleString("en-US", { timeZone: "America/Caracas" });
-    
-    const { access_token } = await authenticateWithZoom();
+
+    // console.log(access_token)
     const meetingOptions = {
         topic: name,
         type: 2,
@@ -68,14 +75,27 @@ const createZoomMeeting = async (name: string, startTime: Date) => {
 
         },
     };
-    const response = await axios.post(`https://api.zoom.us/v2/users/${ZOOM_USER_ID}/meetings`, {
-        method: 'post',
-        contentType: 'application/json',
-        headers: { Authorization: `Bearer ${access_token}` },
-        payload: JSON.stringify(meetingOptions),
+    const { access_token } = await authenticateWithZoom();
+    const response = await axios.post(`https://api.zoom.us/v2/users/w32R3ChJTs22jdwgLHkZzw/meetings`, meetingOptions, {
+        headers: {
+            Authorization: `Bearer ${access_token}`,
+            'Content-Type': 'application/json',
+        },
     });
     const { join_url, id, password } = response.data
     return [join_url, id, password];
 };
+
+
+export async function getUserInfo() {
+    const { access_token } = await authenticateWithZoom();
+
+    const response = await axios.get('https://api.zoom.us/v2/users/w32R3ChJTs22jdwgLHkZzw', {
+        headers: {
+            Authorization: `Bearer ${access_token}`,
+        },
+    });
+    return response.data;
+}
 
 export default createZoomMeeting;

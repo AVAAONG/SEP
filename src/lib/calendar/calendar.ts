@@ -22,7 +22,7 @@ import createZoomMeeting from '../zoom/zoom';
 
 
 export const createEvent = async (kindOfActivity: KindOfActivity, values: Workshop | Chat) => {
-    const calendarId = await getCalendarId(CALENDAR_ID);
+    const calendarId = 'primary'
     let addUrl: string | null = null;
     let meetLink: string | null = null
     let meetId: string | null = null;
@@ -35,14 +35,15 @@ export const createEvent = async (kindOfActivity: KindOfActivity, values: Worksh
         const [eventDetails, eventDescription, zoomMeetLink, zoomMeetId, zoomMetPassword] = await createWorkshopEventDetails(values as Workshop)
         addUrl = await getPublicEventLink(name, platform, eventDescription, start, end);
 
-        const eventId = await Calendar.events.insert({
+        const event = await Calendar.events.insert({
             calendarId,
             conferenceDataVersion: 1,
             requestBody: eventDetails,
         })
+        const eventId = event.data.id!
 
         if (platform === "google meet") {
-            const [googleMeetLink, googleMeetId] = await getMeetEventLink(calendarId, eventId.data.id!);
+            const [googleMeetLink, googleMeetId] = await getMeetEventLink(calendarId, event.data.id!);
             meetLink = googleMeetLink;
             meetId = googleMeetId;
         }
@@ -64,11 +65,13 @@ export const createEvent = async (kindOfActivity: KindOfActivity, values: Worksh
         const [eventDetails, eventDescription] = await createChatEventDetails(values as Chat)
         addUrl = await getPublicEventLink(name, platform, eventDescription, start, end);
 
-        const eventId = await Calendar.events.insert({
+        const event = await Calendar.events.insert({
             calendarId,
             conferenceDataVersion: 1,
             requestBody: eventDetails,
         })
+        const eventId = event.data.id!
+
 
         return [eventId, addUrl]
     }
@@ -107,7 +110,9 @@ const createWorkshopEventDetails = async (values: Workshop): Promise<[calendar_v
             zoomMeetId = id
             zoomMetPassword = password
             calendarDescription = createWorkshopCalendarDescription(pensum, speaker, kindOfWorkshop, platform, description, avaaYear, join_url, id, password);
-            eventDetails = createEventObject(name, kindOfWorkshop, zoomMeetLink as any, calendarDescription, start, end);
+            
+            eventDetails = createEventObject(name,  kindOfWorkshop, zoomMeetLink, calendarDescription, start, end);
+            console.log(eventDetails)
         }
         else {
             calendarDescription = createWorkshopCalendarDescription(pensum, speaker, kindOfWorkshop, platform, description, avaaYear);
@@ -139,27 +144,21 @@ const createChatEventDetails = async (values: Chat): Promise<[calendar_v3.Schema
  * @param calendarId - The ID of the calendar to retrieve events from.
  */
 export const getCalendarEvents = async (calendarId: string = 'primary') => {
-    let events;
-    const e = await Calendar.events.list({
+    const events = await Calendar.events.list({
         calendarId: calendarId,
+        timeMin: substractMonths(3),
     })
-    // Calendar.events.list(
-    //     {
-    //         calendarId: calendarId,
-    //         // timeMin: substractMonths(3),
-    //         // orderBy: 'startTime',
-    //         // singleEvents: true
-
-    //     },
-    //     (err: any, res: any) => {
-    //         if (err) return console.error('The API returned an error: ' + err);
-    //         if (res === null || res === undefined) return console.error('No events found.');
-    //         events = res.data.items;
-    //         return events;
-    //     }
-    // );
-    return e.data.items;
+    if (events.status === 200) {
+        if (events === null || events === undefined) return console.error('No events found.');
+        return events.data.items;
+    }
+    else {
+        console.error('Error retrieving events');
+        return null;
+    }
 }
+
+
 
 /**
  * Evaluates wheter the calendar under the id exist or not. If exist returns that id, if not, returns the id of the users default calendar.
@@ -171,11 +170,38 @@ const getCalendarId = async (calendarId: string): Promise<string> => {
     let id = '';
 
     if (calendar.data.id === null || calendar.data.id === undefined) {
-        calendar = await Calendar.calendars.get({ calendarId: "primary" })
-        id = calendar.data.id!;
+        id = 'primary'
     }
     else {
-        id = calendarId;
+        id = 'primary';
     }
     return id;
 };
+
+/**
+ * Lists all the calendars in the user's Google account and returns an array of calendar IDs.
+ * @returns An array of calendar IDs.
+ * @example
+ * ```
+ * let calendarIds = listCalendars();
+ * console.log(calendarIds);
+ * ```
+ */
+export const listCalendars = async (): Promise<string[] | null> => {
+    const responseObject = await Calendar.calendarList.list()
+    const calendars = responseObject.data.items;
+    if (calendars === null || calendars === undefined) {
+        console.error('No calendars found.')
+        return null;
+    }
+    else {
+        const calendarIds = calendars.map(calendar => {
+            if (calendar.id === null || calendar.id === undefined) {
+                console.error('No calendar id found.');
+                return 'primary'
+            }
+            return calendar.id;
+        });
+        return calendarIds;
+    }
+}

@@ -137,12 +137,11 @@ const createEventObject = (
                 timeZone: "America/Caracas"
             }
         }
-        else if (platform === "zoom" || platform === "otra" || platform === "teams" || platform === "discord" || platform === "jitsi") {
+        else  {
             event = defaultEvent
         }
     }
     else event = defaultEvent;
-
     return event
 }
 
