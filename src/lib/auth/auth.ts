@@ -1,6 +1,5 @@
 import { auth } from '@googleapis/oauth2';
-import { useRouter } from 'next/router';
-
+// import { useRouter } from 'next/router';
 import { CLIENT_ID, CLIENT_SECRET, REDIRECT_URL } from '../constants';
 import { calendar } from '@googleapis/calendar';
 import { drive } from '@googleapis/drive'
@@ -15,24 +14,24 @@ const oauth2Client = new auth.OAuth2(
     REDIRECT_URL
 );
 
-export const redirectToAuthUrl = (url: string) => {
-    const router = useRouter();
-    router.push(url);
-}
+// export const redirectToAuthUrl = (url: string) => {
+//     const router = useRouter();
+//     router.push(url);
+// }
 
 /**
  * @description the refresh token is only returned on the first authorization, so we need to save it in the database
  * @see link https://github.com/googleapis/google-api-nodejs-client#oauth2-client - for more information about the API
  * @returns the url to the conset page to authenticate the user
  */
-export const getAuthUrl = (scopes: string[]) => {
-    const url = oauth2Client.generateAuthUrl({
-        access_type: 'offline',
-        scope: scopes,
-    });
-    redirectToAuthUrl(url);
-    return url;
-}
+// export const getAuthUrl = (scopes: string[]) => {
+//     const url = oauth2Client.generateAuthUrl({
+//         access_type: 'offline',
+//         scope: scopes,
+//     });
+//     redirectToAuthUrl(url);
+//     return url;
+// }
 
 export const setAccessTokens = (code: string) => {
     oauth2Client.getToken(code, (err, tokens) => {
@@ -44,6 +43,13 @@ export const setAccessTokens = (code: string) => {
             oauth2Client.setCredentials(tokens);
             return tokens;
         }
+    });
+}
+
+export const setTokens = (access_token: string) => {
+    oauth2Client.setCredentials({
+        access_token,
+        // refresh_token
     });
 }
 

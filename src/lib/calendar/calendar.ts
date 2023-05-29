@@ -138,23 +138,27 @@ const createChatEventDetails = async (values: Chat): Promise<[calendar_v3.Schema
  * @see link https://developers.google.com/calendar/v3/reference/events/list - for more information about the API
  * @param calendarId - The ID of the calendar to retrieve events from.
  */
-export const getCalendarEvent = (calendarId: string = 'primary') => {
+export const getCalendarEvents = async (calendarId: string = 'primary') => {
     let events;
-    Calendar.events.list(
+    const e = await Calendar.events.list({
+        calendarId: calendarId,
+    })
+    // Calendar.events.list(
+    //     {
+    //         calendarId: calendarId,
+    //         // timeMin: substractMonths(3),
+    //         // orderBy: 'startTime',
+    //         // singleEvents: true
 
-        {
-            calendarId: calendarId,
-            timeMin: substractMonths(3),
-            orderBy: 'startTime',
-
-        },
-        (err: any, res: any) => {
-            if (err) return console.error('The API returned an error: ' + err);
-            if (res === null || res === undefined) return console.error('No events found.');
-            events = res.data.items;
-            return events;
-        }
-    );
+    //     },
+    //     (err: any, res: any) => {
+    //         if (err) return console.error('The API returned an error: ' + err);
+    //         if (res === null || res === undefined) return console.error('No events found.');
+    //         events = res.data.items;
+    //         return events;
+    //     }
+    // );
+    return e.data.items;
 }
 
 /**
