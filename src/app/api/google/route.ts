@@ -12,6 +12,7 @@ import { createGoogleForm, updateFormInfo } from '@/lib/form/form';
 import { copyFile } from '@/lib/drive/drive';
 import { createWorkshopCalendarDescription } from '@/lib/calendar/calendarDescription';
 import { getPrimaryEmailsFromContactGroup, getGroupOfContacts } from '@/lib/contacts/contacts';
+import { getSpreadsheetValues } from '@/lib/sheets/sheets';
 
 const workshop: Workshop = {
     "name": "Funcion surpucasfsdfasdfas",
@@ -38,12 +39,9 @@ export async function GET(req: NextApiRequest) {
     setTokens(token.accessToken)
     // const copyId = await copyFile("Taller para el liderazgo social", "11Ws31Y5yhY34KClYte-QhYOYd9ioqon6E8l9NWSQeLM","1f6JD_QxQzDe1EijDUbpA8zEcKAuEL3tB" )
     // const cal = createWorkshopCalendarDescription(workshop.pensum,workshop.speaker, workshop.kindOfWorkshop, workshop.platform, workshop.description, workshop.avaaYear)
-    // const t = await updateFormInfo(copyId!, "Taller de prueba", cal)
-    const contactsGroups = await getGroupOfContacts()
-    contactsGroups.forEach(async (contactGroup) => {
-        const g = await getPrimaryEmailsFromContactGroup(contactGroup)
-        console.log(g)
-    })
+    // const t = await updateFormInfo(copyId!, "Taller de prueba", cal) 
+    const values = await getSpreadsheetValues("1BVWubj5NIdV5gMEqed9so0CDek-JaRQl1AMFO0Z-Ee4", "C9:T54")
+    console.log(values)
     // const t = await getUserInfo()
     // console.log(contactsGroups)
 

@@ -13,25 +13,14 @@ datasource db {
 }
 
 // ====================================== Admin related shchema  ======================================
-enum AdminRole {
+enum Role {
   ADMIN
-  COMITE
+  COMITEE
   PROYECTS
   CHAT
+  SCHOLAR
 }
 
-model Admin {
-  id            String    @id @default(uuid())
-  name          String
-  email         String
-  password      String
-  access_token  String
-  refresh_token String
-  role          AdminRole
-
-  @@unique([email])
-  @@index([email])
-}
 
 // ====================================== Actvities related shchema  ======================================
 enum Modality {
@@ -83,24 +72,33 @@ enum AsociatedProject {
   Externos
 }
 
-model Dates {
-  id          String    @id @default(uuid())
-  date        DateTime
-  start_time  DateTime
-  end_time    DateTime
-  Workshop    Workshop  @relation(fields: [workshopId], references: [id])
-  workshopId  String
-  Chat        Chat      @relation(fields: [chatId], references: [id])
-  chatId      String
-  Volunteer   Volunteer @relation(fields: [volunteerId], references: [id])
-  volunteerId String
+model WorkshopDates {
+  id         String   @id @default(uuid())
+  date       DateTime
+  start_time DateTime
+  end_time   DateTime
+  workshop   Workshop @relation(fields: [workshopId], references: [id])
+  workshopId String
+
+  @@index([workshopId])
+}
+
+model ChatDates {
+  id         String   @id @default(uuid())
+  date       DateTime
+  start_time DateTime
+  end_time   DateTime
+  chat       Chat     @relation(fields: [chatId], references: [id])
+  chatId     String
+
+  @@index([chatId])
 }
 
 model Workshop {
   id          String             @id @default(uuid())
   title       String
   pensum      Pensum
-  dates       Dates[]
+  dates       WorkshopDates[]
   speaker     WorkshopSpeakers[]
   spots       Int
   takenSpots  Int
@@ -119,7 +117,7 @@ model Workshop {
 model Chat {
   id         String         @id @default(uuid())
   title      String
-  dates      Dates[]
+  dates      ChatDates[]
   speaker    ChatSpeakers[]
   spots      Int
   takenSpots Int
@@ -131,21 +129,7 @@ model Chat {
   @@index([title, modality, status, level])
 }
 
-model Volunteer {
-  id               String           @id @default(uuid())
-  title            String
-  dates            Dates[]
-  inCharge         String
-  spots            Int
-  takenSpots       Int
-  asociatedProject AsociatedProject
-  status           Status
-}
-
 // ====================================== Users related shchema  ======================================
-//ser becaria avaa
-//lider de comite
-//lider de proyectos
 
 model WorkshopSpeakers {
   id          String     @id @default(uuid())
@@ -187,6 +171,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -195,6 +180,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model User {
@@ -205,6 +192,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  role          Role @default(SCHOLAR)
 }
 
 model VerificationToken {

@@ -71,6 +71,9 @@ const authOptions: NextAuthOptions = {
             return token;
         },
     },
+    // pages: {
+    //     signIn: "/auth/register",
+    // }
 
 };
 

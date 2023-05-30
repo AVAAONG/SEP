@@ -84,41 +84,38 @@ const updateSheetName = async (spreadsheetId: string, sheetId: number, sheetName
   }
 }
 
-const createSpreadSheetFormResponse = () => {
-  const myDate = new Date();
-  const currentMonth = Number(myDate.getMonth().toFixed());
-  const { storedMonth, actualSpreadSheet } = getFormData();
-  if (currentMonth === storedMonth) {
-    let ss = SpreadsheetApp.openById(actualSpreadSheet);
-    const source = SpreadsheetApp.openById(SPREADSHEET_TEMPLATE_FOR_FORM_VALIDATION_ID);
-    const sheetToCpy = source.getSheets()[0];
-    sheetToCpy.copyTo(ss);
-    return ss;
-  }
-  else {
-    const ss = createSpreadSheet(MONTHS[currentMonth]);
-    const source = SpreadsheetApp.openById(SPREADSHEET_TEMPLATE_FOR_FORM_VALIDATION_ID);
-    const sheetToCpy = source.getSheets()[0];
-    sheetToCpy.copyTo(ss);
-    updateFormData(ss);
-    return ss;
-  }
-};
+// const createSpreadSheetFormResponse = () => {
+//   const myDate = new Date();
+//   const currentMonth = Number(myDate.getMonth().toFixed());
+//   const { storedMonth, actualSpreadSheet } = getFormData();
+//   if (currentMonth === storedMonth) {
+//     let ss = SpreadsheetApp.openById(actualSpreadSheet);
+//     const source = SpreadsheetApp.openById(SPREADSHEET_TEMPLATE_FOR_FORM_VALIDATION_ID);
+//     const sheetToCpy = source.getSheets()[0];
+//     sheetToCpy.copyTo(ss);
+//     return ss;
+//   }
+//   else {
+//     const ss = createSpreadSheet(MONTHS[currentMonth]);
+//     const source = SpreadsheetApp.openById(SPREADSHEET_TEMPLATE_FOR_FORM_VALIDATION_ID);
+//     const sheetToCpy = source.getSheets()[0];
+//     sheetToCpy.copyTo(ss);
+//     updateFormData(ss);
+//     return ss;
+//   }
+// };
 
-import { google } from 'googleapis';
 
-const sheets = google.sheets('v4');
+// const updateSpreadsheet = async (spreadsheetId: string, updateObject: ) => {
 
-const updateSpreadsheet = async (spreadsheetId: string, updateObject: ) => {
+//   try {
+//     const response = await Sheets.spreadsheets.values.update();
+//     console.log(response.data);
+//   } catch (err) {
+//     console.error(err);
+//   }
 
-  try {
-    const response = await Sheets.spreadsheets.values.update();
-    console.log(response.data);
-  } catch (err) {
-    console.error(err);
-  }
-
-}
+// }
 
 const createSpreadseetUpdateObject = async (spreadsheetId: string, range: string, values: any[]): Promise<sheets_v4.Params$Resource$Spreadsheets$Values$Update> => {
   const updateObject = {
@@ -131,4 +128,16 @@ const createSpreadseetUpdateObject = async (spreadsheetId: string, range: string
   }
   return updateObject;;
 
+}
+
+export const getSpreadsheetValues = async (spreadsheetId: string, range: string) => {
+  try {
+    const response = await Sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range,
+    });
+    return response.data.values;
+  } catch (err) {
+    console.error(err);
+  }
 }
