@@ -1,4 +1,4 @@
-import authOptions from '@/lib/auth/nextAuth/providerConfig';
+import authOptions from '@/lib/auth/nextAuth/authOptions';
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { getToken } from 'next-auth/jwt';

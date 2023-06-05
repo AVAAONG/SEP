@@ -23,24 +23,55 @@ const GOOGLE_ADMIN_SCOPES = [
 
 const prisma = new PrismaClient();
 
+const googleProviderConfig = {
+    clientId: GOOGLE_API_CLIENT_ID,
+    clientSecret: GOOGLE_API_CLIENT_SECRET,
+    authorization: {
+        params: {
+            access_type: "offline",
+            include_granted_scopes: true,
+            scope: GOOGLE_ADMIN_SCOPES.join(" "),
+        }
+    }
+}
+
+const authorize = async (credentials, req) => {
+
+    const user = {
+        id: credentials.username,
+        name: credentials.username,
+        email: credentials.username,
+        image: null,
+        accessToken: null,
+         };
+
+    if (user) {
+        // Any object returned will be saved in `user` property of the JWT
+        return user
+    }
+    else {
+        // If you return null then an error will be displayed advising the user to check their details.
+        return null
+    }
+}
+
+const credentialsProviderConfig = {
+    credentials: {
+        username: { label: "Username", type: "text", placeholder: "Jose Rodriguez" },
+        password: { label: "Password", type: "password" }
+    },
+
+}
+
+
 
 const authOptions: NextAuthOptions = {
-    // adapter: PrismaAdapter(prisma),
     session: {
         strategy: "jwt",
     },
     providers: [
-        GoogleProvider({
-            clientId: GOOGLE_API_CLIENT_ID,
-            clientSecret: GOOGLE_API_CLIENT_SECRET,
-            authorization: {
-                params: {
-                    access_type: "offline",
-                    include_granted_scopes: true,
-                    scope: GOOGLE_ADMIN_SCOPES.join(" "),
-                }
-            }
-        }),
+        GoogleProvider(googleProviderConfig),
+        CredentialsPrivider(credentialsProviderConfig),
     ],
     callbacks: {
         session: ({ session, token }) => {
@@ -71,10 +102,9 @@ const authOptions: NextAuthOptions = {
             return token;
         },
     },
-    // pages: {
-    //     signIn: "/auth/register",
-    // }
-
+    pages: {
+        signIn: "/auth/register",
+    }
 };
 
 export default authOptions; 
