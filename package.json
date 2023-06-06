@@ -26,7 +26,6 @@
     "@googleapis/sheets": "^4.0.2",
     "@microsoft/microsoft-graph-client": "^3.0.5",
     "@next-auth/prisma-adapter": "^1.0.6",
-    "@prisma/client": "^4.14.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/microsoft-graph": "^2.32.0",
     "@types/node": "18.15.11",
@@ -54,8 +53,9 @@
   "devDependencies": {
     "@microsoft/microsoft-graph-types": "^2.33.0",
     "@microsoft/microsoft-graph-types-beta": "0.35.0-preview",
+    "@prisma/client": "^4.15.0",
     "@tailwindcss/forms": "^0.5.3",
     "@types/react-big-calendar": "^1.6.3",
-    "prisma": "^4.14.0"
+    "prisma": "^4.15.0"
   }
 }

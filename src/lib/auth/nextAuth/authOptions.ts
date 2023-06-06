@@ -2,10 +2,7 @@ import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsPrivider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-// import { type TokenSet } from "@next-auth"
-
 import { PrismaClient } from "@prisma/client";
-
 
 const GOOGLE_API_CLIENT_ID = process.env.GOOGLE_API_CLIENT_ID!;
 const GOOGLE_API_CLIENT_SECRET = process.env.GOOGLE_API_CLIENT_SECRET!;
@@ -35,37 +32,45 @@ const googleProviderConfig = {
     }
 }
 
-const authorize = async (credentials, req) => {
-
-    const user = {
-        id: credentials.username,
-        name: credentials.username,
-        email: credentials.username,
-        image: null,
-        accessToken: null,
-         };
-
-    if (user) {
-        // Any object returned will be saved in `user` property of the JWT
-        return user
-    }
-    else {
-        // If you return null then an error will be displayed advising the user to check their details.
-        return null
-    }
-}
 
 const credentialsProviderConfig = {
     credentials: {
         username: { label: "Username", type: "text", placeholder: "Jose Rodriguez" },
         password: { label: "Password", type: "password" }
     },
+    async authorize(credentials, req) {
+        const user = {
+            id: credentials.username,
+            name: credentials.username,
+            email: credentials.username,
+            image: null,
+            accessToken: null,
+        };
+
+        if (user) {
+            // Any object returned will be saved in `user` property of the JWT
+            return user
+        }
+        else {
+            // If you return null then an error will be displayed advising the user to check their details.
+            return null
+        }
+    }
 
 }
 
 
-
+/**
+ * 
+ * @description NextAuth configuration options 
+ * @see https://next-auth.js.org/configuration/options
+ * @see https://next-auth.js.org/configuration/providers
+ * @see https://next-auth.js.org/configuration/callbacks
+ * @see https://next-auth.js.org/configuration/pages
+ * 
+ */
 const authOptions: NextAuthOptions = {
+    adapter: PrismaAdapter(prisma),
     session: {
         strategy: "jwt",
     },
@@ -103,7 +108,7 @@ const authOptions: NextAuthOptions = {
         },
     },
     pages: {
-        signIn: "/auth/register",
+        signIn: "/auth/signIn",
     }
 };
 

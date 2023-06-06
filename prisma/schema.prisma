@@ -4,6 +4,7 @@
 // take all this prisma code and cover to prisma formating cpde
 generator client {
   provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -20,7 +21,6 @@ enum Role {
   CHAT
   SCHOLAR
 }
-
 
 // ====================================== Actvities related shchema  ======================================
 enum Modality {
@@ -192,7 +192,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  role          Role @default(SCHOLAR)
+  role          Role      @default(SCHOLAR)
 }
 
 model VerificationToken {
