@@ -28,21 +28,6 @@ dependencies:
   '@next-auth/prisma-adapter':
     specifier: ^1.0.6
     version: 1.0.6(@prisma/client@4.15.0)(next-auth@4.22.1)
-  '@types/bcryptjs':
-    specifier: ^2.4.2
-    version: 2.4.2
-  '@types/microsoft-graph':
-    specifier: ^2.32.0
-    version: 2.32.0
-  '@types/node':
-    specifier: 18.15.11
-    version: 18.15.11
-  '@types/react':
-    specifier: 18.0.33
-    version: 18.0.33
-  '@types/react-dom':
-    specifier: 18.0.11
-    version: 18.0.11
   autoprefixer:
     specifier: 10.4.14
     version: 10.4.14(postcss@8.4.21)
@@ -111,9 +96,24 @@ devDependencies:
   '@tailwindcss/forms':
     specifier: ^0.5.3
     version: 0.5.3(tailwindcss@3.3.1)
+  '@types/bcryptjs':
+    specifier: ^2.4.2
+    version: 2.4.2
+  '@types/microsoft-graph':
+    specifier: ^2.32.0
+    version: 2.32.0
+  '@types/node':
+    specifier: 18.15.11
+    version: 18.15.11
+  '@types/react':
+    specifier: 18.0.33
+    version: 18.0.33
   '@types/react-big-calendar':
     specifier: ^1.6.3
     version: 1.6.3
+  '@types/react-dom':
+    specifier: 18.0.11
+    version: 18.0.11
   prisma:
     specifier: ^4.15.0
     version: 4.15.0
@@ -491,7 +491,7 @@ packages:
 
   /@types/bcryptjs@2.4.2:
     resolution: {integrity: sha512-LiMQ6EOPob/4yUL66SZzu6Yh77cbzJFYll+ZfaPiPPFswtIlA/Fs1MzdKYA7JApHU49zQTbJGX3PDmCpIdDBRQ==}
-    dev: false
+    dev: true
 
   /@types/date-arithmetic@4.1.1:
     resolution: {integrity: sha512-o9ILUTMSRiOC73o7h30mgLpuDwOJWqMHZfnEIwNQlfZsGY6Kw2gK5Gz6nXAjNt9zm3Qpr12pM4FDqssfdtBzGA==}
@@ -503,11 +503,11 @@ packages:
 
   /@types/microsoft-graph@2.32.0:
     resolution: {integrity: sha512-kiZYL8Cc7yq9IasbkT1XyFMHwOuNLHTE0RdQwZjC4r3k6nf2nobhAlv696P2ed4hY3Vawqu4Aayt24rM1W6hqg==}
-    dev: false
+    dev: true
 
   /@types/node@18.15.11:
     resolution: {integrity: sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==}
-    dev: false
+    dev: true
 
   /@types/prop-types@15.7.5:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
@@ -524,7 +524,7 @@ packages:
     resolution: {integrity: sha512-O38bPbI2CWtgw/OoQoY+BRelw7uysmXbWvw3nLWO21H1HSh+GOlqPuXshJfjmpNlKiiSDG9cc1JZAaMmVdcTlw==}
     dependencies:
       '@types/react': 18.0.33
-    dev: false
+    dev: true
 
   /@types/react@18.0.33:
     resolution: {integrity: sha512-sHxzVxeanvQyQ1lr8NSHaj0kDzcNiGpILEVt69g9S31/7PfMvNCKLKcsHw4lYKjs3cGNJjXSP4mYzX43QlnjNA==}
