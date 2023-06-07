@@ -3,8 +3,8 @@
  * @module lib/auth/nextAuthOptions/authOptions
  * @author Kevin Bravo (kevinbravo.me)
 */
-
 import type { CredentialsConfig } from "next-auth/providers/credentials";
+import shortUUID from "short-uuid";
 
 /**
  * @description Google Client ID  
@@ -84,15 +84,14 @@ export const credentialsProviderConfig: CredentialsConfig = {
     name: "Credentials",
     type: "credentials",
     credentials: {
-        username: { label: "Username", type: "text", placeholder: "Jose Rodriguez" },
+        email: { label: "Correo electronico", type: "text", placeholder: "becario@gmail.com" },
         password: { label: "Password", type: "password" }
     },
     async authorize(credentials, req) {
-        if (credentials === undefined) throw new Error("Credentials are null")
+        if (credentials === undefined) throw new Error("Las credenciales no pueden ser undefined")
         const user = {
-            id: credentials.username,
-            name: credentials.username,
-            email: credentials.username,
+            id: shortUUID.generate(),
+            email: credentials.email,
             image: null,
             accessToken: null,
         };

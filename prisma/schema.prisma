@@ -40,7 +40,7 @@ enum Platform {
   jitsi
 }
 
-enum Status {
+enum activityStatus {
   AGENDADO
   EN_PROCESO
   REALIZADO
@@ -95,38 +95,105 @@ model ChatDates {
 }
 
 model Workshop {
-  id          String             @id @default(uuid())
-  title       String
-  pensum      Pensum
-  dates       WorkshopDates[]
-  speaker     WorkshopSpeakers[]
-  spots       Int
-  takenSpots  Int
-  modality    Modality
-  platform    Platform
-  description String
-  avaaYear    String
-  meetingLink String
-  meetingId   String
-  meetingPass String
-  status      Status
+  id             String             @id @default(uuid())
+  title          String
+  pensum         Pensum
+  dates          WorkshopDates[]
+  speaker        WorkshopSpeakers[]
+  spots          Int
+  takenSpots     Int
+  modality       Modality
+  platform       Platform
+  description    String
+  avaaYear       String
+  meetingLink    String
+  meetingId      String
+  meetingPass    String
+  activityStatus activityStatus
 
-  @@index([title, modality, status, pensum])
+  @@index([title, modality, activityStatus, pensum])
 }
 
 model Chat {
-  id         String         @id @default(uuid())
-  title      String
-  dates      ChatDates[]
-  speaker    ChatSpeakers[]
-  spots      Int
-  takenSpots Int
-  platform   Platform
-  modality   Modality
-  status     Status
-  level      Level
+  id             String         @id @default(uuid())
+  title          String
+  dates          ChatDates[]
+  speaker        ChatSpeakers[]
+  spots          Int
+  takenSpots     Int
+  platform       Platform
+  modality       Modality
+  activityStatus activityStatus
+  level          Level
 
-  @@index([title, modality, status, level])
+  @@index([title, modality, activityStatus, level])
+}
+
+// ====================================== Users related shchema  ======================================
+
+enum Region {
+  Zulia
+  Caracas
+  Carabobo
+}
+
+enum ScholarStatus {
+  Probatorio1
+  Probatorio2
+  Normal
+}
+
+enum ScholarCanAssist {
+  Yes
+  No
+}
+
+model Scholar {
+  // this handle relation 1 - 1 in prisma
+  id                    String           @id @default(uuid())
+  user                  User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                String           @unique
+
+  // this is for store scholar privilege and location
+  region                Region
+  scholarStatus         ScholarStatus
+  canAssistToChats      ScholarCanAssist
+  canAssistToWorkshops  ScholarCanAssist
+  canAssistToVolunteers ScholarCanAssist
+
+  //this is for store scholar information
+  firstName                    String
+  lastName                     String
+  dni                          String
+  gender                       String
+  birthDate                    DateTime
+  //we can obtai the age in the frontend
+  localPhoneNumber             String
+  cellPhoneNumber              String
+  //if whatsapp number is present then we can sset have whatsapp to true
+  whatsAppNumber               String?
+  stateOfOrigin                String
+  currentZone                  String
+  housingType                  String
+  email                        String    @unique
+  collage                      String
+  carrer                       String
+  currentAcademicPeriod        String
+  academicYear                 Int
+  classModality                String
+  cvaLocacion                  String
+  englishLevel                 String
+  notStartedCvareason          String?
+  avaaAdmissionYear            Int?
+  // el ano de avaa lo colocamos nosotros en el frontend
+  // si hace voluntariado permanente o no lo podemos colocar en el frontend
+  volunteeringOrganizationName String?
+  academicLoadCompleted        Boolean?
+  currentStatus                String
+  ceremonyDate                 DateTime?
+  currentlyWorking             Boolean?
+  organizationName             String?
+  positionHeld                 String?
 }
 
 // ====================================== Users related shchema  ======================================
@@ -185,14 +252,14 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  role          Role      @default(SCHOLAR)
+  id       String    @id @default(cuid())
+  name     String?
+  email    String?   @unique
+  image    String?
+  accounts Account[]
+  sessions Session[]
+  role     Role      @default(SCHOLAR)
+  scholar  Scholar?
 }
 
 model VerificationToken {
