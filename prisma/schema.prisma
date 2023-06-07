@@ -94,6 +94,39 @@ model ChatDates {
   @@index([chatId])
 }
 
+// model VolunteerDates {
+//   id           String   @id @default(uuid())
+//   date         DateTime
+//   start_time   DateTime
+//   end_time     DateTime
+//   volunteer    Volunteer @relation(fields: [volunteerId], references: [id])
+//   volunteerId  String
+
+//   @@index([volunteerId])
+// }
+
+model WorkshopTempData {
+  id              String   @id @default(uuid())
+  workshop        Workshop @relation(fields: [workshopId], references: [id])
+  workshopId      String   @unique
+  formLink        String
+  meetingLink     String
+  meetingId       String
+  meetingPassword String
+  calendarID      String
+}
+
+model ChatsTempData {
+  id              String   @id @default(uuid())
+  chat            Chat @relation(fields: [chatId], references: [id])
+  chatId          String   @unique
+  formLink        String
+  meetingLink     String
+  meetingId       String
+  meetingPassword String
+  calendarID      String
+}
+
 model Workshop {
   id             String             @id @default(uuid())
   title          String
@@ -106,10 +139,8 @@ model Workshop {
   platform       Platform
   description    String
   avaaYear       String
-  meetingLink    String
-  meetingId      String
-  meetingPass    String
   activityStatus activityStatus
+  tempData       WorkshopTempData?
 
   @@index([title, modality, activityStatus, pensum])
 }
@@ -125,7 +156,7 @@ model Chat {
   modality       Modality
   activityStatus activityStatus
   level          Level
-
+  tempData       ChatsTempData?
   @@index([title, modality, activityStatus, level])
 }
 
@@ -148,11 +179,12 @@ enum ScholarCanAssist {
   No
 }
 
+// This model is for storing all related Scholar information
 model Scholar {
   // this handle relation 1 - 1 in prisma
-  id                    String           @id @default(uuid())
-  user                  User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId                String           @unique
+  id     String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique
 
   // this is for store scholar privilege and location
   region                Region
