@@ -184,15 +184,15 @@ enum ScholarCanAssist {
 model Scholar {
   // this handle relation 1 - 1 in prisma
   id     String @id @default(uuid())
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @unique
+  // user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // userId String @unique
 
   // this is for store scholar privilege and location
-  region                Region
-  scholarStatus         ScholarStatus
-  canAssistToChats      ScholarCanAssist
-  canAssistToWorkshops  ScholarCanAssist
-  canAssistToVolunteers ScholarCanAssist
+  region                Region           @default(Caracas)
+  scholarStatus         ScholarStatus    @default(CURRENT)
+  canAssistToChats      ScholarCanAssist @default(Yes)
+  canAssistToWorkshops  ScholarCanAssist @default(Yes)
+  canAssistToVolunteers ScholarCanAssist @default(Yes)
 
   //this is for store scholar information
   firstName                    String
@@ -214,9 +214,9 @@ model Scholar {
   currentAcademicPeriod        String
   academicYear                 Int
   classModality                String
-  cvaLocacion                  String
+  cvaLocation                  String
   englishLevel                 String
-  notStartedCvareason          String?
+  notStartedCvRreason          String?
   avaaAdmissionYear            Int?
   // el ano de avaa lo colocamos nosotros en el frontend
   // si hace voluntariado permanente o no lo podemos colocar en el frontend
@@ -227,6 +227,11 @@ model Scholar {
   currentlyWorking             Boolean?
   organizationName             String?
   positionHeld                 String?
+}
+
+//el almuni lo ponemos dentor del modelo de scholar para que sea mas facil de manejar
+model alumni {
+  id String @id @default(uuid())
 }
 
 // ====================================== Users related shchema  ======================================
@@ -292,7 +297,7 @@ model User {
   accounts Account[]
   sessions Session[]
   role     Role      @default(SCHOLAR)
-  scholar  Scholar?
+  // scholar  Scholar?
 }
 
 model VerificationToken {

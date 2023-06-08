@@ -36,7 +36,7 @@ const authOptions: NextAuthOptions = {
      * @see https://authjs.dev/reference/adapters for adapters information
      * @see https://authjs.dev/reference/adapter/prisma for prisma adapter information
     */
-    adapter: PrismaAdapter(prisma),
+    // adapter: PrismaAdapter(prisma),
 
     /**
      * @description it is used to configure how to save the user session 
@@ -85,7 +85,7 @@ const authOptions: NextAuthOptions = {
             return token;
         },
     },
-    pages: PAGES,
+    // pages: PAGES,
 };
 
 export default authOptions;

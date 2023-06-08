@@ -3,7 +3,7 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { PrismaClient, Role, ScholarStatus, User } from "@prisma/client";
+import { PrismaClient, Role, Scholar, ScholarStatus, User } from "@prisma/client";
 import shortUUID from "short-uuid";
 
 const prisma = new PrismaClient();
@@ -31,6 +31,14 @@ export const createUser = async (data: User): Promise<User> => {
     });
     return user;
 }
+
+export const createScholar = async (data: Scholar): Promise<Scholar> => {
+    const scholar = await prisma.scholar.create({
+        data
+    });
+    return scholar;
+}
+
 
 /**
  * @description Find a user by email
@@ -106,13 +114,13 @@ export const getUserByRole = async (role: Role): Promise<User[]> => {
     return users;
 }
 
-export const getScholarStatus = async (scholarStatus: ScholarStatus): Promise<User[]> => {
-    const users = await prisma.user.findMany({
-        where: {
-            scholar: {
-                scholarStatus
-            }
-        }
-    });
-    return users;
-}
+// export const getScholarStatus = async (scholarStatus: ScholarStatus): Promise<User[]> => {
+//     const users = await prisma.user.findMany({
+//         where: {
+//             scholar: {
+//                 scholarStatus
+//             }
+//         }
+//     });
+//     return users;
+// }
