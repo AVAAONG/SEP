@@ -46,10 +46,10 @@ export const setAccessTokens = (code: string) => {
     });
 }
 
-export const setTokens = (access_token: string) => {
+export const setTokens = (access_token: string, refresh_token: string) => {
     oauth2Client.setCredentials({
         access_token,
-        // refresh_token
+        refresh_token
     });
 }
 

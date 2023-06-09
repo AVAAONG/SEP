@@ -14,6 +14,7 @@ import { createWorkshopCalendarDescription } from '@/lib/calendar/calendarDescri
 import { getPrimaryEmailsFromContactGroup, getGroupOfContacts } from '@/lib/contacts/contacts';
 import { getSpreadsheetValues } from '@/lib/sheets/sheets';
 import { createScholar } from '@/lib/database/users';
+import moment from 'moment';
 
 const workshop: Workshop = {
     "name": "Funcion surpucasfsdfasdfas",
@@ -36,13 +37,13 @@ const workshop: Workshop = {
 export async function GET(req: NextApiRequest, res: NextResponse) {
     const token = await getToken({ req });
     //@ts-ignore
-    setTokens(token.accessToken)
+    setTokens(token.accessToken, token.refreshToken)
     // const copyId = await copyFile("Taller para el liderazgo social", "11Ws31Y5yhY34KClYte-QhYOYd9ioqon6E8l9NWSQeLM","1f6JD_QxQzDe1EijDUbpA8zEcKAuEL3tB" )
     // const cal = createWorkshopCalendarDescription(workshop.pensum,workshop.speaker, workshop.kindOfWorkshop, workshop.platform, workshop.description, workshop.avaaYear)
     // const t = await updateFormInfo(copyId!, "Taller de prueba", cal) 
-    const values = await getSpreadsheetValues("1UpTuisAcdb7Gs79cmYAyA4kb7GnXqvNjf8i_enhZqzk", "'Activos '!A1:AI224") as string[][]
-// console.log(values)
-    values.forEach((value) => {
+    const values = await getSpreadsheetValues("1UpTuisAcdb7Gs79cmYAyA4kb7GnXqvNjf8i_enhZqzk", "'Activos '!A2:AH224") as string[][]
+    // console.log(values)
+    values.forEach(async (value) => {
         const scholar = new ScholarOldSpreadshetDatabase(...value)
         scholar.dni = scholar.dni.trim()
         scholar.dni = scholar.dni.replace(/\./g, "")
@@ -50,12 +51,21 @@ export async function GET(req: NextApiRequest, res: NextResponse) {
         scholar.dni = scholar.dni.replace(/v/g, "")
         scholar.dni = scholar.dni.replace(/V/g, "")
         scholar.dni = scholar.dni.replace(/e/g, "")
+        delete scholar.id
         scholar.dni = scholar.dni.replace(/E/g, "")
+
+        scholar.currentlyWorking = null
+        scholar.academicLoadCompleted = null
+
+        scholar.birthDate = null
+        scholar.ceremonyDate = null
+
         delete scholar["haveWatsApp"]
+        delete scholar["age"]
         delete scholar["avaaYear"]
         delete scholar["volunteerInAnother"]
-        createScholar(scholar);
-        console.log("Adding to the database:" + scholar.firstNames)
+        await createScholar(scholar);
+
     })
     return NextResponse.json('Creating')
     // const t = await getUserInfo()
@@ -71,7 +81,7 @@ class ScholarOldSpreadshetDatabase {
         public firstNames: string,
         public dni: string,
         public gender: string,
-        public birthdate: Date,
+        public birthDate: Date,
         public age: number,
         public localPhoneNumber: string,
         public cellPhoneNumber: string,
@@ -88,18 +98,23 @@ class ScholarOldSpreadshetDatabase {
         public classModality: string,
         public cvaLocation: string,
         public englishLevel: string,
-        public notStartedCvaReasion: string,
+        public notStartedCvaRreason: string,
         public avaaAdmissionYear: number,
         public avaaYear: number,
-        public volunteerInAnother: boolean,
+        public volunteerInAnother?: boolean,
         public volunteeringOrganizationName?: string,
-        public academicLoadCompleted?: number,
+        public academicLoadCompleted?: boolean,
         public currentStatus?: string,
-        public ceremonyDane?: Date,
+        public ceremonyDate?: Date,
         public currentlyWorking?: boolean,
         public organizationName?: string,
         public positionHeld?: string,
         public workshopModality?: string,
+        public canAssistToWorkshops?: boolean,
+        public canAssistToChats?: boolean,
+        public canAssistToVolunteers?: boolean,
+        public region?: string,
+
     ) {
     }
 }

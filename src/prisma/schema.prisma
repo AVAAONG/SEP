@@ -72,7 +72,7 @@ enum AsociatedProject {
 }
 
 model WorkshopDates {
-  id         String   @id @default(uuid())
+  id         String   @id @default(nanoid(8))
   date       DateTime
   start_time DateTime
   end_time   DateTime
@@ -83,7 +83,7 @@ model WorkshopDates {
 }
 
 model ChatDates {
-  id         String   @id @default(uuid())
+  id         String   @id @default(nanoid(8))
   date       DateTime
   start_time DateTime
   end_time   DateTime
@@ -93,19 +93,34 @@ model ChatDates {
   @@index([chatId])
 }
 
-// model VolunteerDates {
-//   id           String   @id @default(uuid())
-//   date         DateTime
-//   start_time   DateTime
-//   end_time     DateTime
-//   volunteer    Volunteer @relation(fields: [volunteerId], references: [id])
-//   volunteerId  String
+model VolunteerDates {
+  id          String    @id @default(nanoid(8))
+  date        DateTime
+  start_time  DateTime
+  end_time    DateTime
+  volunteer   Volunteer @relation(fields: [volunteerId], references: [id])
+  volunteerId String
 
-//   @@index([volunteerId])
-// }
+  @@index([volunteerId])
+}
+
+model Volunteer {
+  id             String           @id @default(nanoid(8))
+  title          String
+  dates          VolunteerDates[]
+  spots          Int
+  takenSpots     Int
+  modality       Modality
+  platform       Platform
+  description    String
+  avaaYear       String
+  activityStatus activityStatus
+  scholars       Scholar[]        @relation("ScholarVolunteer")
+  attendance     Attendance[]
+}
 
 model WorkshopTempData {
-  id              String   @id @default(uuid())
+  id              String   @id @default(nanoid(8))
   workshop        Workshop @relation(fields: [workshopId], references: [id])
   workshopId      String   @unique
   formLink        String
@@ -116,7 +131,7 @@ model WorkshopTempData {
 }
 
 model ChatsTempData {
-  id              String @id @default(uuid())
+  id              String @id @default(nanoid(8))
   chat            Chat   @relation(fields: [chatId], references: [id])
   chatId          String @unique
   formLink        String
@@ -127,7 +142,7 @@ model ChatsTempData {
 }
 
 model Workshop {
-  id             String             @id @default(uuid())
+  id             String             @id @default(nanoid(8))
   title          String
   pensum         Pensum
   dates          WorkshopDates[]
@@ -139,13 +154,15 @@ model Workshop {
   description    String
   avaaYear       String
   activityStatus activityStatus
+  attendance     Attendance[]
+  scholars       Scholar[]          @relation("ScholarWorkshop")
   tempData       WorkshopTempData?
 
   @@index([title, modality, activityStatus, pensum])
 }
 
 model Chat {
-  id             String         @id @default(uuid())
+  id             String         @id @default(nanoid(8))
   title          String
   dates          ChatDates[]
   speaker        ChatSpeakers[]
@@ -156,6 +173,9 @@ model Chat {
   activityStatus activityStatus
   level          Level
   tempData       ChatsTempData?
+  attendance     Attendance[]
+  Scholar        Scholar        @relation("ScholarChat", fields: [scholarId], references: [id])
+  scholarId      String
 
   @@index([title, modality, activityStatus, level])
 }
@@ -183,7 +203,7 @@ enum ScholarCanAssist {
 // This model is for storing all related Scholar information
 model Scholar {
   // this handle relation 1 - 1 in prisma
-  id     String @id @default(uuid())
+  id String @id @default(nanoid(8))
   // user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   // userId String @unique
 
@@ -195,49 +215,56 @@ model Scholar {
   canAssistToVolunteers ScholarCanAssist @default(Yes)
 
   //this is for store scholar information
-  firstName                    String
-  lastName                     String
+  firstNames                   String
+  lastNames                    String
   dni                          String
-  gender                       String
-  birthDate                    DateTime
+  gender                       String?
+  birthDate                    DateTime?
   //we can obtai the age in the frontend
-  localPhoneNumber             String
-  cellPhoneNumber              String
+  localPhoneNumber             String?
+  cellPhoneNumber              String?
   //if whatsapp number is present then we can sset have whatsapp to true
   whatsAppNumber               String?
-  stateOfOrigin                String
-  currentZone                  String
-  housingType                  String
-  email                        String    @unique
-  collage                      String
-  carrer                       String
-  currentAcademicPeriod        String
-  academicYear                 Int
-  classModality                String
-  cvaLocation                  String
-  englishLevel                 String
-  notStartedCvRreason          String?
-  avaaAdmissionYear            Int?
+  stateOfOrigin                String?
+  currentZone                  String?
+  email                        String?      @unique
+  collage                      String?
+  carrer                       String?
+  studyArea                    String?
+  currentAcademicPeriod        String?
+  academicYear                 String?
+  classModality                String?
+  cvaLocation                  String?
+  englishLevel                 String?
+  notStartedCvaRreason         String?
+  avaaAdmissionYear            String?
   // el ano de avaa lo colocamos nosotros en el frontend
   // si hace voluntariado permanente o no lo podemos colocar en el frontend
   volunteeringOrganizationName String?
   academicLoadCompleted        Boolean?
-  currentStatus                String
+  currentStatus                String?
   ceremonyDate                 DateTime?
   currentlyWorking             Boolean?
   organizationName             String?
   positionHeld                 String?
+  workshopModality             String?
+  chats                        Chat[]       @relation("ScholarChat")
+  Workshop                     Workshop[]   @relation("ScholarWorkshop")
+  Volunteer                    Volunteer[]  @relation("ScholarVolunteer")
+  Attendance                   Attendance[]
+  workshopId                   String?
+  volunteerId                  String?
 }
 
 //el almuni lo ponemos dentor del modelo de scholar para que sea mas facil de manejar
 model alumni {
-  id String @id @default(uuid())
+  id String @id @default(nanoid(8))
 }
 
 // ====================================== Users related shchema  ======================================
 
 model WorkshopSpeakers {
-  id          String     @id @default(uuid())
+  id          String     @id @default(nanoid(8))
   name        String
   email       String
   phoneNumber String
@@ -248,7 +275,7 @@ model WorkshopSpeakers {
 }
 
 model ChatSpeakers {
-  id    String @id @default(uuid())
+  id    String @id @default(nanoid(8))
   name  String
   email String
   chats Chat[]
@@ -306,4 +333,17 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Attendance {
+  id          String     @id @default(nanoid(8))
+  scholar     Scholar?   @relation(fields: [scholarId], references: [id])
+  scholarId   String?
+  workshop    Workshop?  @relation(fields: [workshopId], references: [id])
+  workshopId  String?
+  chat        Chat?      @relation(fields: [chatId], references: [id])
+  chatId      String?
+  volunteer   Volunteer? @relation(fields: [volunteerId], references: [id])
+  volunteerId String?
+  attend      Boolean
 }

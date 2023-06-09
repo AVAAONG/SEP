@@ -3,7 +3,7 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { PrismaClient, Role, Scholar, ScholarStatus, User } from "@prisma/client";
+import { PrismaClient, Region, Role, Scholar, ScholarStatus, User } from "@prisma/client";
 import shortUUID from "short-uuid";
 
 const prisma = new PrismaClient();
@@ -29,14 +29,26 @@ export const createUser = async (data: User): Promise<User> => {
     const user = await prisma.user.create({
         data
     });
+
     return user;
 }
 
-export const createScholar = async (data: Scholar): Promise<Scholar> => {
-    const scholar = await prisma.scholar.create({
-        data
-    });
-    return scholar;
+export const createScholar = async (data: Scholar): Promise<Scholar | null> => {
+    try {
+        const scholar = await prisma.scholar.create({
+            data
+        });
+        console.log('Se creo a' + data.firstNames + ' ' + data.lastNames)
+        return scholar;
+
+    }
+    catch (error) {
+        console.log('Ocurrio un error al crear a' + data.firstNames + ' ' + data.lastNames + ' ' + error);
+        return null;
+    }
+    finally {
+        // await prisma.$disconnect();
+    }
 }
 
 

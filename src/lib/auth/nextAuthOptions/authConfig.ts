@@ -3,6 +3,7 @@
  * @module lib/auth/nextAuthOptions/authOptions
  * @author Kevin Bravo (kevinbravo.me)
 */
+import { OAuthUserConfig } from "next-auth/providers";
 import type { CredentialsConfig } from "next-auth/providers/credentials";
 import shortUUID from "short-uuid";
 
@@ -57,7 +58,7 @@ export const PAGES = {
  * @see https://next-auth.js.org/providers/google to learn about the google provider in nexth-auth
  * @see https://developers.google.com/identity/protocols/oauth2 to learn about the google oauth2 protocol
  */
-export const googleProviderConfig = {
+export const googleProviderConfig: OAuthUserConfig<any> = {
     clientId: GOOGLE_API_CLIENT_ID,
     clientSecret: GOOGLE_API_CLIENT_SECRET,
     authorization: {
@@ -65,6 +66,7 @@ export const googleProviderConfig = {
             access_type: "offline",
             include_granted_scopes: true,
             scope: GOOGLE_ADMIN_SCOPES.join(" "),
+            max_age: 30660
         }
     }
 }

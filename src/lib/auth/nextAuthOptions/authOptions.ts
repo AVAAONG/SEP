@@ -65,6 +65,7 @@ const authOptions: NextAuthOptions = {
                     id: token,
                     accessToken: token.accessToken,
                     randomKey: token.randomKey,
+                    refreshToken: token.refreshToken,
                 },
             };
         },
