@@ -33,3 +33,11 @@ const getWorkshops = async () => {
     const workshops = await prisma.workshop.findMany();
     return workshops;
 }
+
+const createWorkshopDates = async (data: WorkshopDates) => {
+    const workshopDates = await prisma.workshopDates.create({
+        data
+    });
+
+    return workshopDates;
+}
