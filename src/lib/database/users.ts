@@ -43,11 +43,46 @@ export const createScholar = async (data: Scholar): Promise<Scholar | null> => {
 
     }
     catch (error) {
-        console.log('Ocurrio un error al crear a' + data.firstNames + ' ' + data.lastNames + ' ' + error);
+        console.log(error)
         return null;
     }
     finally {
         // await prisma.$disconnect();
+    }
+}
+
+
+/**
+ * @description add a workshop to a scholar
+ * @param scholarId Scholar id
+ * @param workshopId Workshop id
+ * @returns The scholar updated
+ * @throws Error if the scholar does not exist
+ * @see https://www.prisma.io/docs/concepts/components/prisma-client/crud#update
+ * 
+ */
+
+export const addWorkshopToScholar = async (scholarId: shortUUID.SUUID, workshopId: shortUUID.SUUID): Promise<Scholar | null> => {
+    try {
+        const scholar = await prisma.scholar.update({
+            where: { id: scholarId },
+            data: {
+                Workshop: {
+                    connect: {
+                        id: workshopId
+                    }
+
+                }
+            }
+        });
+        return scholar;
+    }
+    catch (error) {
+        console.log(error)
+        return null;
+    }
+    finally {
+        await prisma.$disconnect();
     }
 }
 

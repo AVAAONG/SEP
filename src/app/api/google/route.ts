@@ -38,11 +38,7 @@ export async function GET(req: NextApiRequest, res: NextResponse) {
     const token = await getToken({ req });
     //@ts-ignore
     setTokens(token.accessToken, token.refreshToken)
-    // const copyId = await copyFile("Taller para el liderazgo social", "11Ws31Y5yhY34KClYte-QhYOYd9ioqon6E8l9NWSQeLM","1f6JD_QxQzDe1EijDUbpA8zEcKAuEL3tB" )
-    // const cal = createWorkshopCalendarDescription(workshop.pensum,workshop.speaker, workshop.kindOfWorkshop, workshop.platform, workshop.description, workshop.avaaYear)
-    // const t = await updateFormInfo(copyId!, "Taller de prueba", cal) 
     const values = await getSpreadsheetValues("1UpTuisAcdb7Gs79cmYAyA4kb7GnXqvNjf8i_enhZqzk", "'Activos '!A2:AH224") as string[][]
-    // console.log(values)
     values.forEach(async (value) => {
         const scholar = new ScholarOldSpreadshetDatabase(...value)
         scholar.dni = scholar.dni.trim()
@@ -64,14 +60,9 @@ export async function GET(req: NextApiRequest, res: NextResponse) {
         delete scholar["age"]
         delete scholar["avaaYear"]
         delete scholar["volunteerInAnother"]
-        await createScholar(scholar);
-
+        await createScholar(scholar)
     })
-    return NextResponse.json('Creating')
-    // const t = await getUserInfo()
-    // console.log(contactsGroups)
-
-    //se copia el formulario, se acomoda el titulo y la description, se envia a apscript para ponerle el mensaje de confirmacion. y se crea el triger. 
+    return NextResponse.json("Se estan creando los usuarios")
 }
 
 class ScholarOldSpreadshetDatabase {

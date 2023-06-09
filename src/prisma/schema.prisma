@@ -203,7 +203,7 @@ enum ScholarCanAssist {
 // This model is for storing all related Scholar information
 model Scholar {
   // this handle relation 1 - 1 in prisma
-  id String @id @default(nanoid(8))
+  id String @id @default(nanoid(12))
   // user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   // userId String @unique
 
@@ -217,7 +217,7 @@ model Scholar {
   //this is for store scholar information
   firstNames                   String
   lastNames                    String
-  dni                          String
+  dni                          String?      @unique
   gender                       String?
   birthDate                    DateTime?
   //we can obtai the age in the frontend
