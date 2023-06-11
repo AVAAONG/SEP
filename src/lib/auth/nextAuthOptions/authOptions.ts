@@ -86,7 +86,7 @@ const authOptions: NextAuthOptions = {
             return token;
         },
     },
-    // pages: PAGES,
+    pages: PAGES,
 };
 
 export default authOptions;

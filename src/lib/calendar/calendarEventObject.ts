@@ -8,7 +8,7 @@ import { calendar_v3 } from "@googleapis/calendar";
  * @param platform - platform where the activity will happen (A place in the case `activityMode` is "presencial" or a link in the case `activityMode` is "virtual" | "hibrida" )
  * @param calendarDescription - decsription with all the details of the activity
  * @param start - the start hour of the activity (in aaaa-mm-dd format)
- * @param end - the end hour of the activity (in aaaa-mm-dd format) (eg. '2015-05-28T17:00:00-07:00')
+ * @param end - the end hour of the activity (in aaaa-mm-dd format) (eg. '2019-10-12T07:20:50.52Z')
  * @returns an event object
  *
  * @see {@link https://developers.google.com/calendar/api/v3/reference/events} for the event schema
@@ -137,7 +137,7 @@ const createEventObject = (
                 timeZone: "America/Caracas"
             }
         }
-        else  {
+        else {
             event = defaultEvent
         }
     }

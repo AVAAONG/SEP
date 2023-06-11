@@ -171,3 +171,13 @@ export const getUserByRole = async (role: Role): Promise<User[]> => {
 //     });
 //     return users;
 // }
+
+/**
+ * @description get the total count of scholars
+ * @returns the total count of scholars
+ * 
+ */
+export const getScholarsCount = async (): Promise<number> => {
+    const count = await prisma.scholar.count();
+    return count;
+}

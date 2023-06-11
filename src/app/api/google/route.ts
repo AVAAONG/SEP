@@ -5,13 +5,51 @@ import { setTokens } from '@/lib/auth/auth';
 import shortUUID from 'short-uuid';
 import { getSpreadsheetValues } from '@/lib/sheets/sheets';
 import { Pensum } from "@/types/Workshop";
-import { Attendance, Modality, Platform, Scholar, WorkshopDates, WorkshopSpeakers, WorkshopTempData, activityStatus } from "@prisma/client";
+import { Attendance, Modality, Platform, WorkshopDates, WorkshopSpeakers, activityStatus } from "@prisma/client";
+import { createWorkshop, createWorkshopSpeaker } from "@/lib/database/Workshops";
+import { getFormatedDate } from "@/lib/calendar/utils";
+import { create } from "domain";
+
+const facilitadores = "'Hoja 2'!B2:C32"
+const talleres = "'Vista principal de talleres'!C10:P55"
 
 export async function GET(req: NextApiRequest, res: NextResponse) {
     const token = await getToken({ req });
     //@ts-ignore
     setTokens(token.accessToken, token.refreshToken)
-    const values = await getSpreadsheetValues("1BVWubj5NIdV5gMEqed9so0CDek-JaRQl1AMFO0Z-Ee4", "'Vista principal de talleres'!D10:P56") as string[][]
+    const values = await getSpreadsheetValues("1BVWubj5NIdV5gMEqed9so0CDek-JaRQl1AMFO0Z-Ee4", talleres) as string[][]
+    // values.forEach(value => {
+    //     createWorkshopSpeaker({
+    //         id: shortUUID.generate(),
+    //         name: value[0],
+    //         email: value[1]
+    //     })
+    // })
+
+    values.forEach(value => {
+        const workshop = new WokshopOldDatabase(...value);
+        delete workshop['startHour']
+        const [speaker1, speaker2] = workshop.speaker.split(" y ")
+        delete workshop['endHour']
+        delete workshop['date']
+        workshop.id = shortUUID.generate();
+        const [startDate, endDate] = getFormatedDate(value[3], value[4], value[5])
+        const datesObj = {
+            id: shortUUID.generate(),
+            start_date: new Date(startDate.replace(/\Z/g, "-04:00")),
+            end_date: new Date(endDate.replace(/\Z/g, "-04:00")),
+        }
+        workshop.title = workshop.title.trim();
+
+        workshop.modality = workshop.modality.toUpperCase() as Modality;
+        workshop.pensum = workshop.pensum.replaceAll(" ", "_").toLocaleUpperCase() as Pensum
+        workshop.spots = parseInt(workshop.spots as any);
+        workshop.takenSpots = parseInt(workshop.spots as any);
+        workshop.activityStatus = "REALIZADO";
+
+        createWorkshop(workshop, datesObj, speaker1);
+
+    })
 
     return NextResponse.json(values)
 }
@@ -64,10 +102,12 @@ class ScholarOldSpreadshetDatabase {
 class WokshopOldDatabase {
     constructor(
         public id: shortUUID.SUUID,
-        public tittle: string,
+        public title: string,
         public pensum: Pensum,
-        public dates: WorkshopDates[],
-        public speaker: WorkshopSpeakers[],
+        public date: string,
+        public startHour: string,
+        public endHour: string,
+        public speaker: String,
         public spots: number,
         public modality: Modality,
         public platform: Platform,
@@ -76,8 +116,10 @@ class WokshopOldDatabase {
         public takenSpots?: number,
         public activityStatus?: activityStatus,
         public attendance?: Attendance[],
+        public dates?: WorkshopDates[]
     ) { }
 }
+
 
 // const createScholarsInbatch = (values: any[][]) => {
 //     values.forEach(async (value) => {

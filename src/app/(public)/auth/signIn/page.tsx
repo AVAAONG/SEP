@@ -12,7 +12,7 @@ const page = () => {
      * Specify to which URL the user will be redirected after signing in. Defaults to the page URL the sign-in is initiated from.
      * @summary The URL to redirect to after a successful sign in or sign up.
      */
-    const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+    const callbackUrl = searchParams.get("callbackUrl") || "/admin/dashboard";
 
     return (
         <main className="flex flex-col md:flex-row-reverse min-h-screen md:h-screen bg-gradient-to-b from-emerald-950 to-slate-950">

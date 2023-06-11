@@ -9,16 +9,16 @@ import Aside from '@/components/auth componets/Aside';
 
 const page = () => {
     const searchParams = useSearchParams();
-    
+
     /**
      * Specify to which URL the user will be redirected after signing in. Defaults to the page URL the sign-in is initiated from.
      * @summary The URL to redirect to after a successful sign in or sign up.
      */
-    const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+    const callbackUrl = searchParams.get("callbackUrl") || "/admin/dashboard";
 
     return (
         <main className="flex flex-col sm:flex-row-reverse min-h-screen sm:h-screen bg-gradient-to-b from-emerald-950 to-slate-950">
-            <Aside/>
+            <Aside />
             <section className="justify-center px-4 md:px-0 md:flex md:w-2/3">
                 <div className="w-full max-w-sm py-4 mx-auto my-auto min-w-min md:py-9 md:w-7/12">
                     <h2 className="text-xl font-semibold md:text-2xl">Registrate</h2>
@@ -57,7 +57,7 @@ const page = () => {
                     </div>
                     <div className="flex mb-4 w-full">
                         <a
-                            onClick={() => signIn('google', { callbackUrl})}
+                            onClick={() => signIn('google', { callbackUrl })}
                             role="button"
                             className="bg-green-600 hover:bg-emerald-950 border-2 border-emerald-950 hover:border-green-600 text-white font-semibold py-2 px-4 rounded-md w-full flex justify-center gap-4"
                         >

@@ -1,18 +1,21 @@
 import Card from '@/components/dashboard/Card'
 import React from 'react'
 import { chatIcon, userIcon, volunterIcon, workshopIcon } from '@/assets/svgs'
+import { getScholarsCount } from '@/lib/database/users'
+import { getWorkshopsCount } from '@/lib/database/Workshops'
+
 const CARD_CONTENT = [
     {
         icon: workshopIcon,
         text: "Talleres realizados",
-        number: 15,
+        number: getWorkshopsCount,
         bg: "bg-gradient-to-r from-blue-700  to-indigo-900",
         cardButtonBg: "bg-indigo-950 active:bg-blue-700 hover:bg-blue-700"
     },
     {
         icon: chatIcon,
         text: "Chats Realizados",
-        number: 20,
+        number: getScholarsCount,
         bg: "bg-gradient-to-r from-red-500  to-red-900",
         cardButtonBg: "bg-indigo-950 active:bg-blue-700"
 
@@ -20,7 +23,7 @@ const CARD_CONTENT = [
     {
         icon: volunterIcon,
         text: "Horas de voluntariado realizadas",
-        number: 70,
+        number: getScholarsCount,
         bg: " from-green-600  to-emerald-800",
         cardButtonBg: "bg-indigo-950 active:bg-blue-700"
 
@@ -28,7 +31,7 @@ const CARD_CONTENT = [
     {
         icon: userIcon,
         text: "Becarios activos",
-        number: 213,
+        number: getScholarsCount,
         bg: "from-yellow-500  to-yellow-700",
         cardButtonBg: "bg-indigo-950 active:bg-blue-700 hover:bg-blue-700"
     },
@@ -39,7 +42,7 @@ const page = () => {
             <div className="flex flex-col md:flex-row gap-4 items-center md:h-1/4">
                 {CARD_CONTENT.map(({ icon, text, number, bg, cardButtonBg }) => {
                     return (
-                        <Card key={text} stat={number} Icon={icon} text={text} bg={bg} cardButtonBg={cardButtonBg} />
+                        <Card key={text} stat={18} Icon={icon} text={text} bg={bg} cardButtonBg={cardButtonBg} />
                     )
                 })}
             </div>

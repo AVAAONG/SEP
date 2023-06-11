@@ -1,6 +1,4 @@
 import { auth } from '@googleapis/oauth2';
-// import { useRouter } from 'next/router';
-import { CLIENT_ID, CLIENT_SECRET, REDIRECT_URL } from '../constants';
 import { calendar } from '@googleapis/calendar';
 import { drive } from '@googleapis/drive'
 import { gmail } from '@googleapis/gmail'
@@ -8,44 +6,20 @@ import { sheets } from '@googleapis/sheets'
 import { people } from '@googleapis/people'
 import { forms } from '@googleapis/forms'
 
+import { CLIENT_ID, CLIENT_SECRET, REDIRECT_URL } from '../constants';
+
 const oauth2Client = new auth.OAuth2(
     CLIENT_ID,
     CLIENT_SECRET,
     REDIRECT_URL
 );
 
-// export const redirectToAuthUrl = (url: string) => {
-//     const router = useRouter();
-//     router.push(url);
-// }
-
 /**
- * @description the refresh token is only returned on the first authorization, so we need to save it in the database
- * @see link https://github.com/googleapis/google-api-nodejs-client#oauth2-client - for more information about the API
- * @returns the url to the conset page to authenticate the user
+ * @description 
+ * @param access_token the access token of the user who is logged in 
+ * @param refresh_token the refresh token of the user who is logged in
+ * @see https://github.com/googleapis/google-api-nodejs-client#retrieve-access-token for more information
  */
-// export const getAuthUrl = (scopes: string[]) => {
-//     const url = oauth2Client.generateAuthUrl({
-//         access_type: 'offline',
-//         scope: scopes,
-//     });
-//     redirectToAuthUrl(url);
-//     return url;
-// }
-
-export const setAccessTokens = (code: string) => {
-    oauth2Client.getToken(code, (err, tokens) => {
-        if (err) {
-            console.log('Error retrieving access token', err);
-            return;
-        }
-        if (tokens) {
-            oauth2Client.setCredentials(tokens);
-            return tokens;
-        }
-    });
-}
-
 export const setTokens = (access_token: string, refresh_token: string) => {
     oauth2Client.setCredentials({
         access_token,

@@ -26,6 +26,7 @@ enum Modality {
   PRESENCIAL
   VIRTUAL
   HIBRIDO
+  ASINCRONO
 }
 
 enum Platform {
@@ -48,12 +49,12 @@ enum activityStatus {
 }
 
 enum Pensum {
-  Ejercicio_ciudadano
-  Liderazgo
-  Gerencia_de_si_mismo
+  EJERCICIO_CIUDADANO
+  LIDERAZGO
+  GERENCIA_EN_SI_MISMO
   TIC
-  Emprendimiento
-  Trabajo_en_equipo
+  EMPRENDIMIENTO
+  TRABAJO_EN_EQUIPO
 }
 
 enum Level {
@@ -73,10 +74,9 @@ enum AsociatedProject {
 
 model WorkshopDates {
   id         String   @id @default(nanoid(8))
-  date       DateTime
-  start_time DateTime
-  end_time   DateTime
-  workshop   Workshop @relation(fields: [workshopId], references: [id])
+  start_date DateTime
+  end_date   DateTime
+  workshop   Workshop @relation(fields: [workshopId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   workshopId String
 
   @@index([workshopId])
@@ -84,9 +84,8 @@ model WorkshopDates {
 
 model ChatDates {
   id         String   @id @default(nanoid(8))
-  date       DateTime
-  start_time DateTime
-  end_time   DateTime
+  start_date DateTime
+  end_date   DateTime
   chat       Chat     @relation(fields: [chatId], references: [id])
   chatId     String
 
@@ -95,9 +94,8 @@ model ChatDates {
 
 model VolunteerDates {
   id          String    @id @default(nanoid(8))
-  date        DateTime
-  start_time  DateTime
-  end_time    DateTime
+  start_date  DateTime
+  end_date    DateTime
   volunteer   Volunteer @relation(fields: [volunteerId], references: [id])
   volunteerId String
 
@@ -121,7 +119,7 @@ model Volunteer {
 
 model WorkshopTempData {
   id              String   @id @default(nanoid(8))
-  workshop        Workshop @relation(fields: [workshopId], references: [id])
+  workshop        Workshop @relation(fields: [workshopId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   workshopId      String   @unique
   formLink        String
   meetingLink     String
@@ -142,20 +140,20 @@ model ChatsTempData {
 }
 
 model Workshop {
-  id             String             @id @default(nanoid(8))
+  id             String            @id @default(nanoid(8))
   title          String
   pensum         Pensum
   dates          WorkshopDates[]
-  speaker        WorkshopSpeakers[]
+  speaker        WorkshopSpeaker[]
   spots          Int
   takenSpots     Int
   modality       Modality
-  platform       Platform
-  description    String
+  platform       String
+  description    String            @db.LongText
   avaaYear       String
   activityStatus activityStatus
   attendance     Attendance[]
-  scholars       Scholar[]          @relation("ScholarWorkshop")
+  scholars       Scholar[]         @relation("ScholarWorkshop")
   tempData       WorkshopTempData?
 
   @@index([title, modality, activityStatus, pensum])
@@ -263,14 +261,20 @@ model alumni {
 
 // ====================================== Users related shchema  ======================================
 
-model WorkshopSpeakers {
-  id          String     @id @default(nanoid(8))
-  name        String
-  email       String
-  phoneNumber String
-  workshops   Workshop[]
+model WorkshopSpeaker {
+  id            String     @id @default(nanoid(8))
+  name          String
+  email         String?
+  age           Int?
+  image         String?
+  description   String?
+  instagramUser String?
+  twitterUser   String?
+  linkedinUser  String?
+  phoneNumber   String?
+  workshops     Workshop[]
 
-  @@unique([email])
+  @@unique([email, name])
   @@index([email])
 }
 

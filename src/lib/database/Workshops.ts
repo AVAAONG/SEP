@@ -1,13 +1,33 @@
-import { PrismaClient, Workshop, WorkshopDates } from '@prisma/client';
+import { PrismaClient, Workshop, WorkshopDates, WorkshopSpeaker } from '@prisma/client';
 import shortUUID from 'short-uuid';
 
 const prisma = new PrismaClient();
 
-const createWorkshop = async (data: Workshop) => {
-    const workshop = await prisma.workshop.create({
-        data
-    });
+export const createWorkshop = async (data: Workshop, dates: WorkshopDates, speakerName: string) => {
+    try {
+        const workshop = await prisma.workshop.create({
+            data: {
+                ...data,
+                dates: {
+                    create: [
+                        dates
+                    ]
+                },
+                speaker: {
+                    connect: {
+                        id: speakerName
+                    }
+                }
+            }
+        });
+        console.log(`${workshop.title} created`)
+        return workshop;
+    }
+    catch (err) {
+        console.log(err);
+    }
 }
+
 
 const updateWorkshop = async (id: shortUUID.SUUID, data: Workshop) => {
     const workshop = await prisma.workshop.update({
@@ -34,10 +54,15 @@ const getWorkshops = async () => {
     return workshops;
 }
 
-const createWorkshopDates = async (data: WorkshopDates) => {
-    const workshopDates = await prisma.workshopDates.create({
-        data
-    });
 
-    return workshopDates;
+
+export const createWorkshopSpeaker = async (data: WorkshopSpeaker) => {
+    await prisma.workshopSpeaker.create({
+        data
+    })
+}
+
+
+export const getWorkshopsCount = async (): Promise<number> => {
+    return await prisma.workshop.count();
 }
