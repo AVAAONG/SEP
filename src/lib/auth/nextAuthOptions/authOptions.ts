@@ -12,7 +12,7 @@ import { PrismaClient } from "@prisma/client";
 
 import { googleProviderConfig, credentialsProviderConfig, PAGES } from "./authConfig";
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 
 /**
  * 

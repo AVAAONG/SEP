@@ -110,8 +110,8 @@ const createWorkshopEventDetails = async (values: Workshop): Promise<[calendar_v
             zoomMeetId = id
             zoomMetPassword = password
             calendarDescription = createWorkshopCalendarDescription(pensum, speaker, kindOfWorkshop, platform, description, avaaYear, join_url, id, password);
-            
-            eventDetails = createEventObject(name,  kindOfWorkshop, zoomMeetLink, calendarDescription, start, end);
+
+            eventDetails = createEventObject(name, kindOfWorkshop, zoomMeetLink, calendarDescription, start, end);
             console.log(eventDetails)
         }
         else {
@@ -140,7 +140,7 @@ const createChatEventDetails = async (values: Chat): Promise<[calendar_v3.Schema
 
 /**
  * Lists the events of a calendar of the last 3 months.
- * @see link https://developers.google.com/calendar/v3/reference/events/list - for more information about the API
+ * @see https://developers.google.com/calendar/v3/reference/events/list - for more information about the API
  * @param calendarId - The ID of the calendar to retrieve events from.
  */
 export const getCalendarEvents = async (calendarId: string = 'primary') => {

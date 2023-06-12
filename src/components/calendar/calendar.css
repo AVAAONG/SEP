@@ -1,0 +1,63 @@
+.rbc-today {
+    background-color: transparent !important;
+}
+
+.rbc-off-range-bg {
+    background-color: transparent !important;
+}
+
+.rbc-now>button {
+    background-color: blue;
+    padding: 8px;
+    border-radius: 100%;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+}
+
+.rbc-date-cell {
+    text-align: center;
+}
+
+.rbc-month-row {
+    border-color: rgb(255, 255, 255, 0.2) !important;
+}
+
+/* Toolbar button styles */
+.rbc-btn-group>button {
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+
+}
+
+.rbc-btn-group>button::selection {
+    background-color: #16a34a !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+
+}
+
+.rbc-btn-group>button:hover {
+    background-color: #16a34a !important;
+
+}
+
+.rbc-button-link:hover {
+    background-color: rgb(55, 172, 26) !important;
+    padding: 8px;
+    border-radius: 100%;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+}
+
+.rbc-timeslot-group>* {
+    border-color: rgb(50, 216, 0, 0.2) !important;
+}
+
+.rbc-timeslot-group {
+    border-bottom-color: rgb(50, 216, 0, 0.8) !important;
+}
+
+.rbc-day-bg {
+    border-color: rgb(255, 255, 255, 0.2) !important;
+}
