@@ -61,3 +61,9 @@
 .rbc-day-bg {
     border-color: rgb(255, 255, 255, 0.2) !important;
 }
+
+.rbc-active {
+    background-color: #16a34a !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+
+}

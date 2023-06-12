@@ -1,10 +1,13 @@
 "use client";
-import { Calendar as BigCalendar, momentLocalizer, Views } from 'react-big-calendar'
-import moment from 'moment'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './calendar.css'
+
+import { Calendar as BigCalendar, momentLocalizer, Views } from 'react-big-calendar'
+import moment from 'moment'
 import { Fragment, useMemo } from 'react';
+
+import { BigCalendarEventType } from '@/types/Calendar';
 
 const styleEvent = (event: BigCalendarEventType) => {
     const style = {
@@ -19,13 +22,9 @@ const styleEvent = (event: BigCalendarEventType) => {
     };
 }
 
-
-const Calendar = ({ events }) => {
+const Calendar = ({ events }: { events: BigCalendarEventType[] }) => {
     const { defaultDate, views } = useMemo(
         () => ({
-            // components: {
-            //     timeSlotWrapper: ColoredDateCellWrapper,
-            // },
             defaultDate: new Date(),
             views: Object.keys(Views).map((k) => Views[k]),
         }),
@@ -34,7 +33,7 @@ const Calendar = ({ events }) => {
     const localizer = momentLocalizer(moment)
     return (
         <Fragment>
-            <div className='h-full'>
+            <div className='h-full w-full'>
                 <BigCalendar
                     localizer={localizer}
                     events={events}
