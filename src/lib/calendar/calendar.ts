@@ -28,7 +28,7 @@ export const createEvent = async (kindOfActivity: KindOfActivity, values: Worksh
     let meetId: string | null = null;
     let meetingPassword: string | null = null
 
-    if (kindOfActivity === "workshop") {
+    if (kindOfActivity.toLocaleLowerCase().trim() === "workshop") {
 
         const { name, platform, date, startHour, endHour } = values as Workshop;
         const [start, end] = getFormatedDate(date, startHour, endHour);
@@ -42,13 +42,13 @@ export const createEvent = async (kindOfActivity: KindOfActivity, values: Worksh
         })
         const eventId = event.data.id!
 
-        if (platform === "google meet") {
+        if (platform.toLowerCase().trim() === "google meet") {
             const [googleMeetLink, googleMeetId] = await getMeetEventLink(calendarId, event.data.id!);
             meetLink = googleMeetLink;
             meetId = googleMeetId;
         }
 
-        else if (platform === "zoom") {
+        else if (platform.toLowerCase().trim() === "zoom") {
             meetLink = zoomMeetLink!;
             meetId = zoomMeetId!;
             meetingPassword = zoomMetPassword!;
@@ -57,7 +57,7 @@ export const createEvent = async (kindOfActivity: KindOfActivity, values: Worksh
 
     }
 
-    else if (kindOfActivity === "chat") {
+    else if (kindOfActivity.toLowerCase().trim() === "chat") {
 
         const { name, platform, date, startHour } = values as Chat;
         const endHour = addHours(new Date(startHour), 2);
@@ -99,11 +99,11 @@ const createWorkshopEventDetails = async (values: Workshop): Promise<[calendar_v
     let zoomMeetId = null;
     let zoomMetPassword = null;
 
-    if (kindOfWorkshop === "presencial" || kindOfWorkshop === "asincrona") {
+    if (kindOfWorkshop.toLowerCase().trim() === "presencial" || kindOfWorkshop.toLowerCase().trim() === "asincrona") {
         calendarDescription = createWorkshopCalendarDescription(pensum, speaker, kindOfWorkshop, platform, description, avaaYear);
         eventDetails = createEventObject(name, kindOfWorkshop, platform, calendarDescription, start, end);
     }
-    else if (kindOfWorkshop === "virtual" || kindOfWorkshop === "hibrida") {
+    else if (kindOfWorkshop.toLowerCase().trim() === "virtual" || kindOfWorkshop.toLowerCase().trim() === "hibrida") {
         if (platform === 'zoom') {
             const [join_url, id, password] = await createZoomMeeting(name, new Date(start));
             zoomMeetLink = join_url

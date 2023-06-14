@@ -32,10 +32,10 @@ export const createWorkshopCalendarDescription = (
     const defaultCalendarDescription = `<b>Modalidad:</b> ${activityMode}
 <b>Año del taller:</b> ${avaaYear.join(", ")}
 <b>Facilitador:</b> ${speaker}
-${activityMode === "virtual" ? `<b>Plataforma:</b> ${platform}` : `<b>Lugar:</b> ${platform}`}
+${activityMode.toLowerCase().trim() === "virtual" ? `<b>Plataforma:</b> ${platform}` : `<b>Lugar:</b> ${platform}`}
 <b>Competencia Asociada:</b> ${pensum}
 `
-    switch (activityMode) {
+    switch (activityMode.toLowerCase().trim()) {
         case "presencial":
             workshopCalendarDescription = `${defaultCalendarDescription}
 
@@ -72,7 +72,7 @@ export const createChatCalendarDescription = (level: ChatLevel, speaker: string,
     let calendarDescription = `<b>Nivel:</b> ${level} 
   <b>Facilitador:</b> ${speaker} 
   <b>Modalidad:</b> ${kindOfChat}
-  ${kindOfChat === "virtual" ? `<b>Plataforma:</b> ${platform}` : `<b>Lugar:</b> ${platform}`}
+  ${kindOfChat.toLowerCase().trim() === "virtual" ? `<b>Plataforma:</b> ${platform}` : `<b>Lugar:</b> ${platform}`}
   
   ${description}`
 

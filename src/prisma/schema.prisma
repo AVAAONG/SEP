@@ -146,12 +146,12 @@ model Workshop {
   dates          WorkshopDates[]
   speaker        WorkshopSpeaker[]
   spots          Int
-  takenSpots     Int
+  takenSpots     Int               @default(0)
   modality       Modality
   platform       String
   description    String            @db.LongText
   avaaYear       String
-  activityStatus activityStatus
+  activityStatus activityStatus    @default(AGENDADO)
   attendance     Attendance[]
   scholars       Scholar[]         @relation("ScholarWorkshop")
   tempData       WorkshopTempData?

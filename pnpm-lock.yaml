@@ -31,9 +31,6 @@ dependencies:
   '@prisma/client':
     specifier: ^4.15.0
     version: 4.15.0(prisma@4.15.0)
-  '@tanstack/react-query':
-    specifier: ^4.29.12
-    version: 4.29.12(react-dom@18.2.0)(react@18.2.0)
   autoprefixer:
     specifier: 10.4.14
     version: 10.4.14(postcss@8.4.21)
@@ -88,6 +85,9 @@ dependencies:
   short-uuid:
     specifier: ^4.2.2
     version: 4.2.2
+  swr:
+    specifier: ^2.1.5
+    version: 2.1.5(react@18.2.0)
   tailwindcss:
     specifier: 3.3.1
     version: 3.3.1(postcss@8.4.21)
@@ -497,28 +497,6 @@ packages:
       mini-svg-data-uri: 1.4.4
       tailwindcss: 3.3.1(postcss@8.4.21)
     dev: true
-
-  /@tanstack/query-core@4.29.11:
-    resolution: {integrity: sha512-8C+hF6SFAb/TlFZyS9FItgNwrw4PMa7YeX+KQYe2ZAiEz6uzg6yIr+QBzPkUwZ/L0bXvGd1sufTm3wotoz+GwQ==}
-    dev: false
-
-  /@tanstack/react-query@4.29.12(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-zhcN6+zF6cxprxhTHQajHGlvxgK8npnp9uLe9yaWhGc6sYcPWXzyO4raL4HomUzQOPzu3jLvkriJQ7BOrDM8vA==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-native: '*'
-    peerDependenciesMeta:
-      react-dom:
-        optional: true
-      react-native:
-        optional: true
-    dependencies:
-      '@tanstack/query-core': 4.29.11
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      use-sync-external-store: 1.2.0(react@18.2.0)
-    dev: false
 
   /@types/bcryptjs@2.4.2:
     resolution: {integrity: sha512-LiMQ6EOPob/4yUL66SZzu6Yh77cbzJFYll+ZfaPiPPFswtIlA/Fs1MzdKYA7JApHU49zQTbJGX3PDmCpIdDBRQ==}
@@ -3185,6 +3163,15 @@ packages:
   /supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
+
+  /swr@2.1.5(react@18.2.0):
+    resolution: {integrity: sha512-/OhfZMcEpuz77KavXST5q6XE9nrOBOVcBLWjMT+oAE/kQHyE3PASrevXCtQDZ8aamntOfFkbVJp7Il9tNBQWrw==}
+    peerDependencies:
+      react: ^16.11.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+      use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: false
 
   /synckit@0.8.5:
     resolution: {integrity: sha512-L1dapNV6vu2s/4Sputv8xGsCdAVlb5nRDMFU/E27D44l5U6cw1g0dGd45uLc+OXjNMmF4ntiMdCimzcjFKQI8Q==}

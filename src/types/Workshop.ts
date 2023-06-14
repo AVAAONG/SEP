@@ -7,14 +7,14 @@ export type KindOfWorkshop = 'presencial' | 'virtual' | 'asincrona' | 'hibrida';
 
 export type Workshop = {
     id: shortUUID.SUUID;
-    name: string;
+    title: string;
     pensum: Pensum;
     date: string;
     startHour: string;
     endHour: string;
     speaker: string
-    numberOfParticipants: number;
-    kindOfWorkshop: KindOfWorkshop;
+    spots: number;
+    modality: KindOfWorkshop;
     platform: Platform;
     description: string;
     avaaYear: string[];

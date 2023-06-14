@@ -1,9 +1,9 @@
-import { PrismaClient, Workshop, WorkshopDates, WorkshopSpeaker } from '@prisma/client';
+import { PrismaClient, Workshop, WorkshopDates, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
 import shortUUID from 'short-uuid';
 
 const prisma = new PrismaClient();
 
-export const createWorkshop = async (data: Workshop, dates: WorkshopDates, speakerName: string) => {
+export const createWorkshop = async (data: Workshop, dates: WorkshopDates, speakerId: string, tempData: WorkshopTempData) => {
     try {
         const workshop = await prisma.workshop.create({
             data: {
@@ -15,8 +15,11 @@ export const createWorkshop = async (data: Workshop, dates: WorkshopDates, speak
                 },
                 speaker: {
                     connect: {
-                        id: speakerName
+                        id: speakerId
                     }
+                },
+                tempData: {
+                    create: tempData
                 }
             }
         });
@@ -25,6 +28,9 @@ export const createWorkshop = async (data: Workshop, dates: WorkshopDates, speak
     }
     catch (err) {
         console.log(err);
+    }
+    finally {
+        await prisma.$disconnect();
     }
 }
 
@@ -66,3 +72,4 @@ export const createWorkshopSpeaker = async (data: WorkshopSpeaker) => {
 export const getWorkshopsCount = async (): Promise<number> => {
     return await prisma.workshop.count();
 }
+

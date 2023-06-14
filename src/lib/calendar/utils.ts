@@ -134,8 +134,6 @@ export const getFormatedDate = (date: string, startingHour: string, endHour?: st
  */
 export const getMeetEventLink = async (calendarId: string, eventId: string): Promise<string[]> => {
     const event = await Calendar.events.get({ calendarId, eventId });
-    const meetLink = event.data.hangoutLink!;
-    const index = meetLink.lastIndexOf('/');
-    const meetId = meetLink.slice(index + 1);
-    return [meetLink, meetId];
+    const meetLink = event.data.hangoutLink;
+    return [meetLink];
 };
