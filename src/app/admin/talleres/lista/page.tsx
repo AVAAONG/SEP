@@ -1,7 +1,7 @@
 import WorkshopsAloneList from "@/components/lists/WorkshopAloneList"
 import { Workshop, WorkshopDates, WorkshopSpeaker, WorkshopTempData } from "@prisma/client";
 const page = async () => {
-    const data = await fetch('http://localhost:3000/api/workshop/schedule', {
+    const data = await fetch('http://seb-git-adddb-mustafinho.vercel.app/api/workshop/schedule', {
         cache: "no-cache"
     })
 
