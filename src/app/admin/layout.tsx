@@ -21,7 +21,7 @@ export default function RootLayout({
       <body>
         <main className='flex bg-gradient-to-b from-emerald-950 to-slate-950'>
           <Sidebar />
-          <section className='flex flex-col z-10 rounded-2xl  bg-slate-950 p-4 m-3 h-screen w-screen'>
+          <section className='flex flex-col z-10 rounded-2xl  bg-slate-950 p-4 m-3 min-h-screen w-screen'>
             <Navbar />
             <NextAuthProvider>{children}</NextAuthProvider>
           </section>

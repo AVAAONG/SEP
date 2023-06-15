@@ -9,6 +9,7 @@ import { getCalendarEvents } from '@/lib/calendar/calendar'
 import { calendar_v3 } from '@googleapis/calendar'
 import { BigCalendarEventType } from '@/types/Calendar';
 import { getWorkshopsCount } from '@/lib/database/Workshops'
+import { getScholarsCount } from '@/lib/database/users'
 const VOLUNTEER_CALENDAR_EVENT_COLORS = "linear-gradient(to right, #34D399, #059669)"
 
 const CALENDAR_IDS = [
@@ -70,6 +71,7 @@ const page = async () => {
     const accessToken = session?.user?.accessToken;
     const refreshToken = session?.user?.refreshToken;
     const workshopCount = await getWorkshopsCount()
+    const scholarsCount = await getScholarsCount()
     setTokens(accessToken as string, refreshToken as string);
     let calendarEvents: BigCalendarEventType[] = []
     // CALENDAR_IDS.forEach(async ({ calendarId, eventColor }) => {
@@ -89,7 +91,7 @@ const page = async () => {
         {
             icon: chatIcon,
             text: "Chats Realizados",
-            number: 9,
+            number: 72,
             bg: "bg-gradient-to-r from-red-500  to-red-900",
             cardButtonBg: "bg-indigo-950 active:bg-blue-700"
 
@@ -97,7 +99,7 @@ const page = async () => {
         {
             icon: volunterIcon,
             text: "Horas de voluntariado realizadas",
-            number: 7,
+            number: 0,
             bg: " from-green-600  to-emerald-800",
             cardButtonBg: "bg-indigo-950 active:bg-blue-700"
 
@@ -105,7 +107,7 @@ const page = async () => {
         {
             icon: userIcon,
             text: "Becarios activos",
-            number: 5,
+            number: scholarsCount,
             bg: "from-yellow-500  to-yellow-700",
             cardButtonBg: "bg-indigo-950 active:bg-blue-700 hover:bg-blue-700"
         },

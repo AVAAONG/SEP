@@ -9,6 +9,7 @@ import { Attendance, Modality, Platform, WorkshopDates, WorkshopSpeakers, activi
 import { createWorkshop, createWorkshopSpeaker } from "@/lib/database/Workshops";
 import { getFormatedDate } from "@/lib/calendar/utils";
 import { create } from "domain";
+import { createScholar } from "@/lib/database/users";
 
 const facilitadores = "'Hoja 2'!B2:C32"
 const talleres = "'Vista principal de talleres'!C10:P55"
@@ -17,7 +18,8 @@ export async function GET(req: NextApiRequest, res: NextResponse) {
     const token = await getToken({ req });
     //@ts-ignore
     setTokens(token.accessToken, token.refreshToken)
-    const values = await getSpreadsheetValues("1BVWubj5NIdV5gMEqed9so0CDek-JaRQl1AMFO0Z-Ee4", talleres) as string[][]
+    const values = await getSpreadsheetValues("1UpTuisAcdb7Gs79cmYAyA4kb7GnXqvNjf8i_enhZqzk", "'Hoja 4'!A1:AH2") as string[][]
+    await createScholarsInbatch(values)
     // values.forEach(value => {
     //     createWorkshopSpeaker
     //         id: shortUUID.generate(),
@@ -121,28 +123,28 @@ class WokshopOldDatabase {
 }
 
 
-// const createScholarsInbatch = (values: any[][]) => {
-//     values.forEach(async (value) => {
-//         const scholar = new ScholarOldSpreadshetDatabase(...value)
-//         scholar.dni = scholar.dni.trim()
-//         scholar.dni = scholar.dni.replace(/\./g, "")
-//         scholar.dni = scholar.dni.replace(/-/g, "")
-//         scholar.dni = scholar.dni.replace(/v/g, "")
-//         scholar.dni = scholar.dni.replace(/V/g, "")
-//         scholar.dni = scholar.dni.replace(/e/g, "")
-//         delete scholar.id
-//         scholar.dni = scholar.dni.replace(/E/g, "")
+const createScholarsInbatch = async (values: any[][]) => {
+    values.forEach(async (value) => {
+        const scholar = new ScholarOldSpreadshetDatabase(...value)
+        scholar.dni = scholar.dni.trim()
+        scholar.dni = scholar.dni.replace(/\./g, "")
+        scholar.dni = scholar.dni.replace(/-/g, "")
+        scholar.dni = scholar.dni.replace(/v/g, "")
+        scholar.dni = scholar.dni.replace(/V/g, "")
+        scholar.dni = scholar.dni.replace(/e/g, "")
+        delete scholar.id
+        scholar.dni = scholar.dni.replace(/E/g, "")
 
-//         scholar.currentlyWorking = null
-//         scholar.academicLoadCompleted = null
+        scholar.currentlyWorking = null
+        scholar.academicLoadCompleted = null
 
-//         scholar.birthDate = null
-//         scholar.ceremonyDate = null
+        scholar.birthDate = null
+        scholar.ceremonyDate = null
 
-//         delete scholar["haveWatsApp"]
-//         delete scholar["age"]
-//         delete scholar["avaaYear"]
-//         delete scholar["volunteerInAnother"]
-//         await createScholar(scholar)
-//     })
-// }
+        delete scholar["haveWatsApp"]
+        delete scholar["age"]
+        delete scholar["avaaYear"]
+        delete scholar["volunteerInAnother"]
+        await createScholar(scholar)
+    })
+}

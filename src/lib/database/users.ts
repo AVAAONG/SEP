@@ -3,7 +3,7 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { PrismaClient, Region, Role, Scholar, ScholarStatus, User } from "@prisma/client";
+import { PrismaClient, Region, Role, Scholar, ScholarAttendance, ScholarStatus, User } from "@prisma/client";
 import shortUUID from "short-uuid";
 
 const prisma = new PrismaClient();
@@ -43,6 +43,8 @@ export const createScholar = async (data: Scholar): Promise<Scholar | null> => {
 
     }
     catch (error) {
+        console.log(' No se creo a' + data.firstNames + ' ' + data.lastNames)
+
         console.log(error)
         return null;
     }
@@ -62,23 +64,28 @@ export const createScholar = async (data: Scholar): Promise<Scholar | null> => {
  * 
  */
 
-export const addWorkshopToScholar = async (scholarId: shortUUID.SUUID, workshopId: shortUUID.SUUID): Promise<Scholar | null> => {
+export const addWorkshopToScholar = async (scholarId: shortUUID.SUUID, workshopId: shortUUID.SUUID, attendance: ScholarAttendance): Promise<Scholar | null> => {
     try {
         const scholar = await prisma.scholar.update({
-            where: { id: scholarId },
+            where: { dni: scholarId },
             data: {
                 Workshop: {
                     connect: {
                         id: workshopId
+                    },
+                },
+                WorkshopAttendance: {
+                    create: {
+                        attend: attendance,
                     }
-
                 }
             }
         });
+        console.log("se coloco a " + scholarId + " en el taller " + workshopId)
         return scholar;
     }
     catch (error) {
-        console.log(error)
+        console.log(" NO se pudo colocar a " + scholarId + " en el taller " + workshopId)
         return null;
     }
     finally {
@@ -181,3 +188,89 @@ export const getScholarsCount = async (): Promise<number> => {
     const count = await prisma.scholar.count();
     return count;
 }
+
+
+///+============== Personas de febrero
+// NO se pudo colocar a 27488394 en el taller pjvjjStiRNDib8WMJqtyu7
+// NO se pudo colocar a 29677853 en el taller pjvjjStiRNDib8WMJqtyu7
+// NO se pudo colocar a 26435596 en el taller wxnMqPAzCLfXSRSAWZ7X2i
+// NO se pudo colocar a 27687150 en el taller wxnMqPAzCLfXSRSAWZ7X2i
+// NO se pudo colocar a 27023827 en el taller oJZeTZdnV5trcyE9AVJQ8s
+// NO se pudo colocar a 29678819 en el taller 4ZkVXTQgHaqUU4P4UVuSG4
+// NO se pudo colocar a 28469196 en el taller i8Y8Yj6ay83Aom7Tx3iE62
+//  NO se pudo colocar a 26435596 en el taller uXBz5cd1iLJqJfzJ3J4fwX
+//  NO se pudo colocar a 20201110248 en el taller inoqJ593bHGb3e5TbogeyJ
+//  NO se pudo colocar a 27023827 en el taller inoqJ593bHGb3e5TbogeyJ
+//  NO se pudo colocar a 27108385 en el taller inoqJ593bHGb3e5TbogeyJ
+//  NO se pudo colocar a 29595628 en el taller inoqJ593bHGb3e5TbogeyJ
+//  NO se pudo colocar a 26435596 en el taller inoqJ593bHGb3e5TbogeyJ
+//  NO se pudo colocar a 26435596 en el taller gfKTYasHHjxVRkafMV8Khq
+//  NO se pudo colocar a 27746001 en el taller gfKTYasHHjxVRkafMV8Khq
+//  NO se pudo colocar a 26435596 en el taller oBHZkib5XHDXY32NFsesRW
+//  NO se pudo colocar a 27755868 en el taller eEm7GvVNTozLnhMvnYHz1Q
+//  NO se pudo colocar a v - 28496177 en el taller eEm7GvVNTozLnhMvnYHz1Q
+//  NO se pudo colocar a 26995018 en el taller eEm7GvVNTozLnhMvnYHz1Q
+//  NO se pudo colocar a 28015383 en el taller iKoEAPmaiQn6VoY9QDXXaJ
+//  NO se pudo colocar a 27488394 en el taller iKoEAPmaiQn6VoY9QDXXaJ
+//  NO se pudo colocar a 27023827 en el taller iKoEAPmaiQn6VoY9QDXXaJ
+
+
+
+/// +============== Personas de marzo
+// NO se pudo colocar a 27687150 en el taller wxnMqPAzCLfXSRSAWZ7X2i
+// NO se pudo colocar a 26435596 en el taller wxnMqPAzCLfXSRSAWZ7X2i
+//  NO se pudo colocar a 20201110248 en el taller inoqJ593bHGb3e5TbogeyJ
+
+//  NO se pudo colocar a 27023827 en el taller inoqJ593bHGb3e5TbogeyJ
+//  NO se pudo colocar a 27108385 en el taller inoqJ593bHGb3e5TbogeyJ
+//  NO se pudo colocar a 29595628 en el taller inoqJ593bHGb3e5TbogeyJ
+//  NO se pudo colocar a 26435596 en el taller inoqJ593bHGb3e5TbogeyJ
+//  NO se pudo colocar a 27344118 en el taller i8Y8Yj6ay83Aom7Tx3iE62
+//  NO se pudo colocar a 28469196 en el taller i8Y8Yj6ay83Aom7Tx3iE62
+//  NO se pudo colocar a 27344118 en el taller pjvjjStiRNDib8WMJqtyu7
+//   NO se pudo colocar a 27488394 en el taller pjvjjStiRNDib8WMJqtyu7
+//   NO se pudo colocar a 29677853 en el taller pjvjjStiRNDib8WMJqtyu7
+//   NO se pudo colocar a 28015383 en el taller iKoEAPmaiQn6VoY9QDXXaJ
+//   NO se pudo colocar a 27488394 en el taller iKoEAPmaiQn6VoY9QDXXaJ
+//   NO se pudo colocar a 27023827 en el taller iKoEAPmaiQn6VoY9QDXXaJ
+//    NO se pudo colocar a 26435596 en el taller uXBz5cd1iLJqJfzJ3J4fwX
+//    NO se pudo colocar a 27344118 en el taller uXBz5cd1iLJqJfzJ3J4fwX
+//    NO se pudo colocar a 26435596 en el taller wxnMqPAzCLfXSRSAWZ7X2i
+//    NO se pudo colocar a 27687150 en el taller wxnMqPAzCLfXSRSAWZ7X2i
+//    NO se pudo colocar a 27344118 en el taller eEm7GvVNTozLnhMvnYHz1Q
+//    NO se pudo colocar a 27344118 en el taller wxnMqPAzCLfXSRSAWZ7X2i
+//     NO se pudo colocar a 27755868 en el taller eEm7GvVNTozLnhMvnYHz1Q
+//      NO se pudo colocar a v - 28496177 en el taller eEm7GvVNTozLnhMvnYHz1Q
+//       NO se pudo colocar a 26995018 en el taller eEm7GvVNTozLnhMvnYHz1Q
+//        NO se pudo colocar a 27023827 en el taller oJZeTZdnV5trcyE9AVJQ8s
+//        NO se pudo colocar a 29678819 en el taller 4ZkVXTQgHaqUU4P4UVuSG4
+//        NO se pudo colocar a 26435596 en el taller gfKTYasHHjxVRkafMV8Khq
+//         NO se pudo colocar a 27746001 en el taller gfKTYasHHjxVRkafMV8Khq
+//         NO se pudo colocar a 20201110248 en el taller inoqJ593bHGb3e5TbogeyJ
+//          NO se pudo colocar a 27023827 en el taller inoqJ593bHGb3e5TbogeyJ
+//           NO se pudo colocar a 27108385 en el taller inoqJ593bHGb3e5TbogeyJ
+//            NO se pudo colocar a 29595628 en el taller inoqJ593bHGb3e5TbogeyJ
+//            NO se pudo colocar a 26435596 en el taller inoqJ593bHGb3e5TbogeyJ
+//            NO se pudo colocar a 26435596 en el taller gfKTYasHHjxVRkafMV8Khq
+//            NO se pudo colocar a 27746001 en el taller gfKTYasHHjxVRkafMV8Khq
+//            NO se pudo colocar a 29678819 en el taller 4ZkVXTQgHaqUU4P4UVuSG4
+//             NO se pudo colocar a 27344118 en el taller oBHZkib5XHDXY32NFsesRW
+//             NO se pudo colocar a 26435596 en el taller oBHZkib5XHDXY32NFsesRW
+//              NO se pudo colocar a 27344118 en el taller i8Y8Yj6ay83Aom7Tx3iE62
+//              NO se pudo colocar a 28469196 en el taller i8Y8Yj6ay83Aom7Tx3iE62
+//              NO se pudo colocar a 26435596 en el taller uXBz5cd1iLJqJfzJ3J4fwX
+//               NO se pudo colocar a 27344118 en el taller uXBz5cd1iLJqJfzJ3J4fwX
+//                NO se pudo colocar a 27344118 en el taller eEm7GvVNTozLnhMvnYHz1Q
+//                 NO se pudo colocar a 27755868 en el taller eEm7GvVNTozLnhMvnYHz1Q
+//                  NO se pudo colocar a v - 28496177 en el taller eEm7GvVNTozLnhMvnYHz1Q
+
+//                  NO se pudo colocar a 27344118 en el taller pjvjjStiRNDib8WMJqtyu7
+//                   NO se pudo colocar a 29677853 en el taller pjvjjStiRNDib8WMJqtyu7
+//                    NO se pudo colocar a 27488394 en el taller pjvjjStiRNDib8WMJqtyu7
+//                     NO se pudo colocar a 27023827 en el taller oJZeTZdnV5trcyE9AVJQ8s
+//                     NO se pudo colocar a 26995018 en el taller eEm7GvVNTozLnhMvnYHz1Q
+//                     NO se pudo colocar a 28015383 en el taller iKoEAPmaiQn6VoY9QDXXaJ
+//                      NO se pudo colocar a 27488394 en el taller iKoEAPmaiQn6VoY9QDXXaJ
+//                       NO se pudo colocar a 27023827 en el taller iKoEAPmaiQn6VoY9QDXXaJ
+//                       NO se pudo colocar a 27344118 en el taller oBHZkib5XHDXY32NFsesRW
+//                       NO se pudo colocar a 26435596 en el taller oBHZkib5XHDXY32NFsesRW

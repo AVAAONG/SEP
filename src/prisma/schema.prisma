@@ -140,21 +140,21 @@ model ChatsTempData {
 }
 
 model Workshop {
-  id             String            @id @default(nanoid(8))
-  title          String
-  pensum         Pensum
-  dates          WorkshopDates[]
-  speaker        WorkshopSpeaker[]
-  spots          Int
-  takenSpots     Int               @default(0)
-  modality       Modality
-  platform       String
-  description    String            @db.LongText
-  avaaYear       String
-  activityStatus activityStatus    @default(AGENDADO)
-  attendance     Attendance[]
-  scholars       Scholar[]         @relation("ScholarWorkshop")
-  tempData       WorkshopTempData?
+  id                 String               @id @default(nanoid(8))
+  title              String
+  pensum             Pensum
+  dates              WorkshopDates[]
+  speaker            WorkshopSpeaker[]
+  spots              Int
+  takenSpots         Int                  @default(0)
+  modality           Modality
+  platform           String
+  description        String               @db.LongText
+  avaaYear           String
+  activityStatus     activityStatus       @default(AGENDADO)
+  scholars           Scholar[]            @relation("ScholarWorkshop")
+  tempData           WorkshopTempData?
+  WorkshopAttendance WorkshopAttendance[]
 
   @@index([title, modality, activityStatus, pensum])
 }
@@ -215,7 +215,7 @@ model Scholar {
   //this is for store scholar information
   firstNames                   String
   lastNames                    String
-  dni                          String?      @unique
+  dni                          String?              @unique
   gender                       String?
   birthDate                    DateTime?
   //we can obtai the age in the frontend
@@ -225,7 +225,7 @@ model Scholar {
   whatsAppNumber               String?
   stateOfOrigin                String?
   currentZone                  String?
-  email                        String?      @unique
+  email                        String?              @unique
   collage                      String?
   carrer                       String?
   studyArea                    String?
@@ -246,12 +246,13 @@ model Scholar {
   organizationName             String?
   positionHeld                 String?
   workshopModality             String?
-  chats                        Chat[]       @relation("ScholarChat")
-  Workshop                     Workshop[]   @relation("ScholarWorkshop")
-  Volunteer                    Volunteer[]  @relation("ScholarVolunteer")
+  chats                        Chat[]               @relation("ScholarChat")
+  Workshop                     Workshop[]           @relation("ScholarWorkshop")
+  Volunteer                    Volunteer[]          @relation("ScholarVolunteer")
   Attendance                   Attendance[]
   workshopId                   String?
   volunteerId                  String?
+  WorkshopAttendance           WorkshopAttendance[]
 }
 
 //el almuni lo ponemos dentor del modelo de scholar para que sea mas facil de manejar
@@ -340,11 +341,24 @@ model Attendance {
   id          String     @id @default(nanoid(8))
   scholar     Scholar?   @relation(fields: [scholarId], references: [id])
   scholarId   String?
-  workshop    Workshop?  @relation(fields: [workshopId], references: [id])
-  workshopId  String?
   chat        Chat?      @relation(fields: [chatId], references: [id])
   chatId      String?
   volunteer   Volunteer? @relation(fields: [volunteerId], references: [id])
   volunteerId String?
   attend      Boolean
+}
+
+model WorkshopAttendance {
+  id         String            @id @default(nanoid(8))
+  scholar    Scholar?          @relation(fields: [scholarId], references: [id])
+  scholarId  String?
+  workshop   Workshop?         @relation(fields: [workshopId], references: [id])
+  workshopId String?
+  attend     ScholarAttendance
+}
+
+enum ScholarAttendance {
+  ATTENDED
+  CANCELED
+  NOT_ATTENDED
 }
