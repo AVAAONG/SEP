@@ -10,7 +10,7 @@ export const createChat = async (data) => {
                 ...data,
                 dates: {
                     create: [
-                        dates
+
                     ]
                 },
             }

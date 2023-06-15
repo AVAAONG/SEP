@@ -204,3 +204,10 @@ export const listCalendars = async (): Promise<string[] | null> => {
         return calendarIds;
     }
 }
+
+export const deleteCalendarEvent = (calendarId: string, eventId: string) => {
+    Calendar.events.delete({
+        calendarId,
+        eventId
+    })
+}

@@ -18,75 +18,24 @@ const Page = () => {
     const fetcher = (...args: any) => fetch(...args).then(res => res.json())
 
     const { data, error, isLoading } = useSWR('/api/speakers', fetcher)
-
+    const { scheduledWorkshops, errorwith, isLoadingWorkshops } = useSWR('/api/workshop/delete', fetcher)
+    console.log(scheduledWorkshops)
     const [modalopen, setModalOpen] = useState(false)
     const [loading, setLoading] = useState("not");
     const { register, handleSubmit, formState: { errors }, reset, } = useForm<WorkshopForm>();
     const [subjectAndGroup, setSubjectAndGroup] = useState({ subject: "", group: "" })
-    const [workshopData, setWorkshopData] = useState<Workshop[]>([
-        {
-            "title": "Empoderamiento femenino",
-            "pensum": "Liderazgo",
-            "date": "2023-04-25",
-            "startHour": "18:33",
-            "endHour": "22:30",
-            "speaker": "Luis Lopéz",
-            "spots": 20,
-            "modality": "virtual",
-            "platform": "google meet",
-            "avaaYear": [
-                "V",
-                "+V"
-            ],
-            "description": "Este taller...",
-            "id": "guy2a9Z8oo7Nb45z343teEyBNAq" as shortUUID.SUUID
-        },
-        {
-            "title": "Liderazgo para el futuro",
-            "pensum": "Liderazgo",
-            "date": "2023-04-26",
-            "startHour": "18:33",
-            "endHour": "22:30",
-            "speaker": "Luis Lopéz",
-            "spots": 20,
-            "modality": "presencial",
-            "platform": "oficinas de avaa",
-            "avaaYear": [
-                "V",
-                "+V"
-            ],
-            "description": "Este taller...",
-            "id": "guy2a9Z8oo7Nb43786778435zEyBNAq" as shortUUID.SUUID
-        },
-        {
-            "title": "Como crear un vision board",
-            "pensum": "Liderazgo",
-            "date": "2023-04-27",
-            "startHour": "18:33",
-            "endHour": "22:30",
-            "speaker": "Luis Lopéz",
-            "spots": 20,
-            "modality": "presencial",
-            "platform": "oficinas de avaa",
-            "avaaYear": [
-                "V",
-                "+V"
-            ],
-            "description": "Este taller...",
-            "id": "guy2a9Z8oo7Nb43435zEyBNAq" as shortUUID.SUUID
-        }
-    ]);
+    const f = scheduledWorkshops === undefined ? [] : scheduledWorkshops.length < 1 ? [] : scheduledWorkshops;
+    const [workshopData, setWorkshopData] = useState<Workshop[]>(f);
 
-    const deleteEntry = (inputId: shortUUID.SUUID) => {
-        fetch('/api/workshop/schedule', {
-            method: "DELETE",
+    const deleteEntry = async (inputId: shortUUID.SUUID) => {
+        await fetch('/api/workshop/delete', {
+            method: "POST",
             body: JSON.stringify({ id: inputId })
         })
-            .then(() => {
-                setWorkshopData((oldValues: Workshop[]) => {
-                    return oldValues.filter((workshop: Workshop) => workshop.id !== inputId)
-                })
-            })
+
+        setWorkshopData((oldValues: Workshop[]) => {
+            return oldValues.filter((workshop: Workshop) => workshop.id !== inputId)
+        })
     }
 
     const editEntry = (inputId: shortUUID.SUUID) => {
@@ -114,7 +63,7 @@ const Page = () => {
         data.id = shortUUID.generate();
         delete data['subject'];
         delete data['group'];
-        setWorkshopData([...workshopData, data])
+        // setWorkshopData([...workshopData, data])
         const respin = await fetch('/api/workshop/schedule', {
             method: "POST",
             headers: {
@@ -171,7 +120,7 @@ const Page = () => {
                     workshopData.length >= 1 ?
                         <>
                             <text className='font-semibold text-3xl text-green-500 mb-6'>
-                                Talleres para enviar
+                                Talleres Agendados
                             </text>
                             <WorkshopsList workshopData={workshopData} deleteEntry={deleteEntry} editEntry={editEntry} />
                             <button onClick={showModal} className='bg-green-600 text-white rounded-lg col-span-2 max-w-fit px-5 py-2 self-center mt-4' >

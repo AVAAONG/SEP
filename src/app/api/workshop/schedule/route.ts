@@ -27,9 +27,10 @@ export const UPDATE = async (req: NextRequest, res: NextResponse) => {
 export const DELETE = async (req: NextRequest, res: NextResponse) => {
     const token = await getToken({ req });
     const reqData = await req.json()
+    console.log("deleting " + reqData)
     if (token) setTokens(token.accessToken as string, token.refreshToken as string);
     else return NextResponse
-    deleteWorkshopFromDatabase(reqData.id)
+    await deleteWorkshopFromDatabase(reqData.id)
     return NextResponse.json({ message: "ok" })
 
 }
@@ -70,7 +71,7 @@ const ScheduleWorkshops = async (workshop: Workshop) => {
             addUrl: addUrl
         })
     })
-    const formUrl = response.json()
+    const data = await response.json()
     const [startDate, endDate] = getFormatedDate(date, startHour, endHour)
 
     const datesObj = {
@@ -84,21 +85,20 @@ const ScheduleWorkshops = async (workshop: Workshop) => {
         meetingPassword,
         meetingLink: meetLink,
         meetingId: meetId,
-        formLink: formUrl,
+        formLink: data.formUrl,
     }
-    console.log('=============')
     delete workshop.date
     delete workshop.startHour
     delete workshop.endHour
     workshop.pensum = workshop.pensum.toUpperCase().replaceAll(" ", "_")
     workshop.modality = workshop.modality.toUpperCase().replaceAll(" ", "_")
     workshop.avaaYear = workshop.avaaYear.toString().replaceAll(',', ' y ')
-
+    workshop.spots = parseInt(workshop.spots)
     await createWorkshop(workshop, datesObj, workshop.speaker, tempDataObj)
 }
 
 
 export const GET = async () => {
-    const data = await getWorkshops()
-    return NextResponse.json(data)
+    // const data = await getWorkshops()
+    // return NextResponse.json(data)
 }

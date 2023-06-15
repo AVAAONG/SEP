@@ -122,9 +122,9 @@ model WorkshopTempData {
   workshop        Workshop @relation(fields: [workshopId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   workshopId      String   @unique
   formLink        String
-  meetingLink     String
-  meetingId       String
-  meetingPassword String
+  meetingLink     String?
+  meetingId       String?
+  meetingPassword String?
   calendarID      String
 }
 
