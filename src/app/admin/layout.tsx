@@ -1,10 +1,10 @@
 import '@/app/globals.css'
 //@ts-ignore
 import favicon from '@/../public/logo-proexcelencia-cap.png';
-import Sidebar from '@/components/navigation/sideBar/Sidebar';
 import Navbar from '@/components/navigation/navbar/Navbar';
 import NextAuthProvider from '@/components/providers';
 
+import Sidebar from '@/components/navigation/sidebar/Sidebar';
 export const metadata = {
   title: 'Proexcelencia',
   description: 'Sistema de Evaluacion del Becario',
