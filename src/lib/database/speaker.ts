@@ -3,8 +3,7 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { PrismaClient, Region, Role, Scholar, ScholarStatus, User } from "@prisma/client";
-import shortUUID from "short-uuid";
+import { PrismaClient, WorkshopSpeaker } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -14,17 +13,11 @@ const prisma = new PrismaClient();
  */
 
 export const getSpeakerNames = async () => {
-    const speakers = await prisma.workshopSpeaker.findMany()
-    const speakersNamesAndId: string[] = []
-    speakers.forEach(element => {
-        speakersNamesAndId.push(element.name)
-
-    });
-    // const speakersNamesAndId = speakers.map(speaker => {
-    //     return {
-    //         id: speaker.id,
-    //         name: speaker.name
-    //     }
-    // })
-    return speakersNamesAndId
+    const speakers = await prisma.workshopSpeaker.findMany({
+        select: {
+            name: true,
+            id: true
+        }
+    })
+    return speakers
 }

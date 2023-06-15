@@ -17,15 +17,12 @@ interface WorkshopForm extends Workshop {
 const Page = () => {
     const fetcher = (...args: any) => fetch(...args).then(res => res.json())
 
-    const { data, error, isLoading } = useSWR('/api/speakers', fetcher)
-    const { scheduledWorkshops, errorwith, isLoadingWorkshops } = useSWR('/api/workshop/delete', fetcher)
-    console.log(scheduledWorkshops)
+    const speakerResponse = ["useSWR('/api/speakers', fetcher)"]
+    const workshopResponse = useSWR('/api/workshop/schedule', fetcher, { fallbackData: [{}, {}], refreshInterval: 1000 })
     const [modalopen, setModalOpen] = useState(false)
     const [loading, setLoading] = useState("not");
     const { register, handleSubmit, formState: { errors }, reset, } = useForm<WorkshopForm>();
     const [subjectAndGroup, setSubjectAndGroup] = useState({ subject: "", group: "" })
-    const f = scheduledWorkshops === undefined ? [] : scheduledWorkshops.length < 1 ? [] : scheduledWorkshops;
-    const [workshopData, setWorkshopData] = useState<Workshop[]>(f);
 
     const deleteEntry = async (inputId: shortUUID.SUUID) => {
         await fetch('/api/workshop/delete', {
@@ -33,13 +30,10 @@ const Page = () => {
             body: JSON.stringify({ id: inputId })
         })
 
-        setWorkshopData((oldValues: Workshop[]) => {
-            return oldValues.filter((workshop: Workshop) => workshop.id !== inputId)
-        })
     }
 
     const editEntry = (inputId: shortUUID.SUUID) => {
-        const data = workshopData.filter((workshop: Workshop) => workshop.id === inputId)
+        const data = workshopResponse.data.filter((workshop: Workshop) => workshop.id === inputId)
         const { title, pensum, date, startHour, endHour, speaker, spots, modality, platform, avaaYear, description } = data[0];
         reset({
             title,
@@ -57,13 +51,11 @@ const Page = () => {
         deleteEntry(inputId);
     }
     const createWorkshop = async (data: WorkshopForm, event: BaseSyntheticEvent<object, any, any> | undefined) => {
-        console.log(data)
         if (event === undefined) return;
         event.preventDefault();
         data.id = shortUUID.generate();
         delete data['subject'];
         delete data['group'];
-        // setWorkshopData([...workshopData, data])
         const respin = await fetch('/api/workshop/schedule', {
             method: "POST",
             headers: {
@@ -93,7 +85,7 @@ const Page = () => {
         const payload = {
             subject: data.subject,
             group: data.group,
-            workshops: workshopData
+            workshops: workshopResponse.data
         }
         const respin = await fetch('/api/google/form', {
             method: "POST",
@@ -103,7 +95,6 @@ const Page = () => {
             body: JSON.stringify(payload)
         })
         setLoading("seing");
-        setWorkshopData([])
         setLoading("not")
         setModalOpen(false)
     }
@@ -117,18 +108,16 @@ const Page = () => {
         <div className="flex flex-col-reverse md:flex-row gap-8">
             <div className='w-screen md:w-1/2 p-4 flex flex-col items-center'>
                 {
-                    workshopData.length >= 1 ?
+                    workshopResponse.isLoading ? <></> : 
                         <>
                             <text className='font-semibold text-3xl text-green-500 mb-6'>
                                 Talleres Agendados
                             </text>
-                            <WorkshopsList workshopData={workshopData} deleteEntry={deleteEntry} editEntry={editEntry} />
+                            <WorkshopsList workshopData={workshopResponse.data} deleteEntry={deleteEntry} editEntry={editEntry} />
                             <button onClick={showModal} className='bg-green-600 text-white rounded-lg col-span-2 max-w-fit px-5 py-2 self-center mt-4' >
                                 Enviar Talleres
                             </button>
                         </>
-                        :
-                        <></>
                 }
             </div>
             <div className=' w-full md:w-1/2 p-4 flex flex-col items-center gap-4'>
@@ -136,13 +125,13 @@ const Page = () => {
                     Crea un taller
                 </text>
                 <form onSubmit={handleSubmit(async (data, event) => await createWorkshop(data, event!))} className="grid gap-6 md:grid-cols-2 md:grid-rows-2 caret-green-500 text-slate-300 w-full">
-                    {WORKSHOP_INPUT_ELEMENTS(data === undefined ? [] : data).map((field) => {
+                    {WORKSHOP_INPUT_ELEMENTS(speakerResponse.data === undefined ? [] : speakerResponse.data).map((field) => {
                         return (
                             <Input {...field} key={field.title} register={register as unknown as UseFormRegister<FieldValues>} />
                         )
                     })}
                     <button type="submit" className='w-1/2 justify-self-center col-span-2 text-white bg-gradient-to-br from-emerald-500 to-lime-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none  focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2' >
-                        Crear Taller
+                        Agendar Taller
                     </button>
                 </form>
             </div>

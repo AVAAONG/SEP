@@ -80,6 +80,11 @@ export const getWorkshopsCount = async (): Promise<number> => {
 
 export const getScheduledWorkshops = async (): Promise<Workshop[]> => {
     const workshops = await prisma.workshop.findMany({
+        include: {
+            speaker: true,
+            dates: true,
+            tempData: true,
+        },
         where: {
             activityStatus: 'AGENDADO'
         }

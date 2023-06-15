@@ -4,7 +4,7 @@ import { getToken } from "next-auth/jwt";
 import { Workshop } from "@/types/Workshop";
 import { NextRequest, NextResponse } from "next/server";
 import shortUUID from "short-uuid";
-import { createWorkshop, deleteWorkshopFromDatabase, getWorkshops } from "@/lib/database/Workshops";
+import { createWorkshop, deleteWorkshopFromDatabase, getScheduledWorkshops, getWorkshops } from "@/lib/database/Workshops";
 import { getFormatedDate } from "@/lib/calendar/utils";
 
 export async function POST(req: NextRequest, res: NextResponse) {
@@ -98,7 +98,7 @@ const ScheduleWorkshops = async (workshop: Workshop) => {
 }
 
 
-export const GET = async () => {
-    // const data = await getWorkshops()
-    // return NextResponse.json(data)
+export async function GET(req: NextRequest, res: NextResponse)  {
+    const workshops = await getScheduledWorkshops()
+    return NextResponse.json(workshops)
 }
