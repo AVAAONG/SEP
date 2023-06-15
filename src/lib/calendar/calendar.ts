@@ -30,10 +30,10 @@ export const createEvent = async (kindOfActivity: KindOfActivity, values: Worksh
 
     if (kindOfActivity.toLocaleLowerCase().trim() === "workshop") {
 
-        const { name, platform, date, startHour, endHour } = values as Workshop;
+        const { title, platform, date, startHour, endHour } = values as Workshop;
         const [start, end] = getFormatedDate(date, startHour, endHour);
         const [eventDetails, eventDescription, zoomMeetLink, zoomMeetId, zoomMetPassword] = await createWorkshopEventDetails(values as Workshop)
-        addUrl = await getPublicEventLink(name, platform, eventDescription, start, end);
+        addUrl = await getPublicEventLink(title, platform, eventDescription, start, end);
 
         const event = await Calendar.events.insert({
             calendarId,
@@ -91,7 +91,7 @@ export const createEvent = async (kindOfActivity: KindOfActivity, values: Worksh
  * @returns the event id
  */
 const createWorkshopEventDetails = async (values: Workshop): Promise<[calendar_v3.Schema$Event, string, string?, string?, string?]> => {
-    const { name, pensum, date, startHour, endHour, speaker, kindOfWorkshop, platform, description, avaaYear } = values
+    const { title, pensum, date, startHour, endHour, speaker, modality, platform, description, avaaYear } = values
     const [start, end] = getFormatedDate(date, startHour, endHour);
     let calendarDescription: string;
     let eventDetails: calendar_v3.Schema$Event;
@@ -99,29 +99,28 @@ const createWorkshopEventDetails = async (values: Workshop): Promise<[calendar_v
     let zoomMeetId = null;
     let zoomMetPassword = null;
 
-    if (kindOfWorkshop.toLowerCase().trim() === "presencial" || kindOfWorkshop.toLowerCase().trim() === "asincrona") {
-        calendarDescription = createWorkshopCalendarDescription(pensum, speaker, kindOfWorkshop, platform, description, avaaYear);
-        eventDetails = createEventObject(name, kindOfWorkshop, platform, calendarDescription, start, end);
+    if (modality.toLowerCase().trim() === "presencial" || modality.toLowerCase().trim() === "asincrona") {
+        calendarDescription = createWorkshopCalendarDescription(pensum, speaker, modality, platform, description, avaaYear);
+        eventDetails = createEventObject(title, modality, platform, calendarDescription, start, end);
     }
-    else if (kindOfWorkshop.toLowerCase().trim() === "virtual" || kindOfWorkshop.toLowerCase().trim() === "hibrida") {
+    else if (modality.toLowerCase().trim() === "virtual" || modality.toLowerCase().trim() === "hibrida") {
         if (platform === 'zoom') {
-            const [join_url, id, password] = await createZoomMeeting(name, new Date(start));
+            const [join_url, id, password] = await createZoomMeeting(title, new Date(start));
             zoomMeetLink = join_url
             zoomMeetId = id
             zoomMetPassword = password
-            calendarDescription = createWorkshopCalendarDescription(pensum, speaker, kindOfWorkshop, platform, description, avaaYear, join_url, id, password);
+            calendarDescription = createWorkshopCalendarDescription(pensum, speaker, modality, platform, description, avaaYear, join_url, id, password);
 
-            eventDetails = createEventObject(name, kindOfWorkshop, zoomMeetLink, calendarDescription, start, end);
-            console.log(eventDetails)
+            eventDetails = createEventObject(title, modality, zoomMeetLink, calendarDescription, start, end);
         }
         else {
-            calendarDescription = createWorkshopCalendarDescription(pensum, speaker, kindOfWorkshop, platform, description, avaaYear);
-            eventDetails = createEventObject(name, kindOfWorkshop, platform, calendarDescription, start, end);
+            calendarDescription = createWorkshopCalendarDescription(pensum, speaker, modality, platform, description, avaaYear);
+            eventDetails = createEventObject(title, modality, platform, calendarDescription, start, end);
         }
     }
     else {
-        calendarDescription = createWorkshopCalendarDescription(pensum, speaker, kindOfWorkshop, platform, description, avaaYear);
-        eventDetails = createEventObject(name, kindOfWorkshop, platform, calendarDescription, start, end);
+        calendarDescription = createWorkshopCalendarDescription(pensum, speaker, modality, platform, description, avaaYear);
+        eventDetails = createEventObject(title, modality, platform, calendarDescription, start, end);
     }
     return [eventDetails, calendarDescription, zoomMeetLink, zoomMeetId, zoomMetPassword];
 };

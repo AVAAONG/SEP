@@ -7,6 +7,7 @@ import WORKSHOP_INPUT_ELEMENTS from '@/components/forms/data/workshopInputs';
 import WorkshopsList from '@/components/lists/WorkshopList';
 import shortUUID from 'short-uuid';
 import { CheckIcon } from '@/assets/svgs';
+import useSWR from 'swr'
 
 interface WorkshopForm extends Workshop {
     subject?: string,
@@ -14,6 +15,11 @@ interface WorkshopForm extends Workshop {
 }
 
 const Page = () => {
+    const fetcher = (...args: any) => fetch(...args).then(res => res.json())
+
+    const { data, error, isLoading } = useSWR('/api/speakers', fetcher)
+    console.log(data)
+
     const [modalopen, setModalOpen] = useState(false)
     const [loading, setLoading] = useState("not");
     const { register, handleSubmit, formState: { errors }, reset, } = useForm<WorkshopForm>();
@@ -73,9 +79,15 @@ const Page = () => {
     ]);
 
     const deleteEntry = (inputId: shortUUID.SUUID) => {
-        setWorkshopData((oldValues: Workshop[]) => {
-            return oldValues.filter((workshop: Workshop) => workshop.id !== inputId)
+        fetch('/api/workshop/schedule', {
+            method: "DELETE",
+            body: JSON.stringify({ id: inputId })
         })
+            .then(() => {
+                setWorkshopData((oldValues: Workshop[]) => {
+                    return oldValues.filter((workshop: Workshop) => workshop.id !== inputId)
+                })
+            })
     }
 
     const editEntry = (inputId: shortUUID.SUUID) => {
@@ -96,14 +108,21 @@ const Page = () => {
         })
         deleteEntry(inputId);
     }
-    const createWorkshop = (data: WorkshopForm, event: BaseSyntheticEvent<object, any, any> | undefined) => {
-
+    const createWorkshop = async (data: WorkshopForm, event: BaseSyntheticEvent<object, any, any> | undefined) => {
+        console.log(data)
         if (event === undefined) return;
         event.preventDefault();
         data.id = shortUUID.generate();
         delete data['subject'];
         delete data['group'];
         setWorkshopData([...workshopData, data])
+        const respin = await fetch('/api/workshop/schedule', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
         reset({
             title: "",
             pensum: "Liderazgo",
@@ -168,8 +187,8 @@ const Page = () => {
                 <text className='font-semibold text-3xl text-green-500 mx-auto'>
                     Crea un taller
                 </text>
-                <form onSubmit={handleSubmit(createWorkshop)} className="grid gap-6 md:grid-cols-2 md:grid-rows-2 caret-green-500 text-slate-300 w-full">
-                    {WORKSHOP_INPUT_ELEMENTS.map((field) => {
+                <form onSubmit={handleSubmit(async (data, event) => await createWorkshop(data, event!))} className="grid gap-6 md:grid-cols-2 md:grid-rows-2 caret-green-500 text-slate-300 w-full">
+                    {WORKSHOP_INPUT_ELEMENTS(data === undefined ? [] : data).map((field) => {
                         return (
                             <Input {...field} key={field.title} register={register as unknown as UseFormRegister<FieldValues>} />
                         )

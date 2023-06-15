@@ -43,3 +43,15 @@ export const getFile = async (fileId: string) => {
     }
 }
 
+export const getAllFilesInFolder = async (folderId: string) => {
+    const res = await Drive.files.list({
+        q: `'${folderId}' in parents and mimeType='application/vnd.google-apps.spreadsheet'`,
+        fields: 'nextPageToken, files(id, name)',
+    });
+    const files = res.data.files;
+    if (files?.length) {
+        return files;
+    } else {
+        console.log('No files found.');
+    }
+}

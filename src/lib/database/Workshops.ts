@@ -15,7 +15,7 @@ export const createWorkshop = async (data: Workshop, dates: WorkshopDates, speak
                 },
                 speaker: {
                     connect: {
-                        id: speakerId
+                        name: speakerId
                     }
                 },
                 tempData: {
@@ -42,7 +42,7 @@ const updateWorkshop = async (id: shortUUID.SUUID, data: Workshop) => {
     });
 }
 
-const deleteWorkshop = async (id: shortUUID.SUUID) => {
+export const deleteWorkshopFromDatabase = async (id: shortUUID.SUUID) => {
     const workshop = await prisma.workshop.delete({
         where: { id }
     });

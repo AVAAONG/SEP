@@ -40,19 +40,30 @@ const Input = ({ inputType, title, inputOptions, type, placeHolder, register, in
     }
     else if (inputType === "selection") {
         /**  * Return a selection input type. */
-        return (
-            <div key={inputId}>
-                <label htmlFor="countries" className="block mb-2 text-sm font-medium  text-slate-400">{title}</label>
-                <select defaultValue={placeHolder} {...register(inputId)} id="countries" className="focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md w-full bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600 ">
-                    {inputOptions!.map((option) => {
-                        return (
-                            <option key={option}>{option}</option>
+        if (inputOptions === undefined || inputOptions === null) {
+            return (
+                <div key={inputId}>
+                    <label htmlFor="countries" className="block mb-2 text-sm font-medium  text-slate-400">{title}</label>
+                    <input defaultValue={"Cargando facilitadores ..."} id="countries" className="focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md w-full bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600" />
+                </div>
+            )
+        }
+        else {
+            return (
+                <div key={inputId}>
+                    <label htmlFor="countries" className="block mb-2 text-sm font-medium  text-slate-400">{title}</label>
+                    <select defaultValue={placeHolder} {...register(inputId)} id="countries" className="focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md w-full bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600 ">
+                        {inputOptions!.map((option) => {
+                            return (
+                                <option key={option} >{option}</option>
+                            )
 
-                        )
-                    })}
-                </select>
-            </div>
-        )
+                        })}
+                    </select>
+                </div>
+            )
+        }
+
     }
     else if (inputType === "allowedSelection") {
         return (

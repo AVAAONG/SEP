@@ -50,13 +50,15 @@ const createSheetName = (spreadsheetId: string, sheetId: number, tittle: string,
 
 }
 
-export const getSheets = async (spreadsheetId: string) => {
+export const getSheetsName = async (spreadsheetId: string) => {
   try {
     const response = await Sheets.spreadsheets.get({
       spreadsheetId: spreadsheetId,
     });
     const sheets = response.data.sheets
-    return sheets;
+    const sheetsName = sheets?.map((sheet) => sheet.properties?.title);
+
+    return sheetsName;
   } catch (err) {
     console.error(err);
   }
@@ -133,7 +135,6 @@ const createSpreadseetUpdateObject = async (spreadsheetId: string, range: string
 export const getSpreadsheetValues = async (spreadsheetId: string, range: string) => {
   try {
     const response = await Sheets.spreadsheets.values.get({
-           
       spreadsheetId,
       range,
     });
