@@ -1,9 +1,7 @@
 'use client'
-
-import Image from 'next/image'
 import React from 'react'
-import { useSearchParams, useRouter } from "next/navigation";
-import { useSession, signIn } from 'next-auth/react'
+import { useSearchParams } from "next/navigation";
+import { signIn } from 'next-auth/react'
 
 import Aside from '@/components/auth componets/Aside';
 
@@ -33,11 +31,11 @@ const page = () => {
                                 <input className='focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md w-full bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600 ' autoFocus={true} autoComplete="email" required={true} type="email" name="user[email]" id="user_email" />
                             </div>
                             <div className="mb-3 flex flex-col gap-2">
-                                <label htmlFor="user_password" className='text-sm text-slate-400'>Contrasena</label>
+                                <label htmlFor="user_password" className='text-sm text-slate-400'>Contraseña</label>
                                 <input autoComplete="current-password" className='focus:outline-none focus:outline-offset-0  focus:outline-emerald-600  py-1 px-3 rounded-md w-full bg-emerald-950 ring-1 ring-emerald-900 border-emerald-700' required={true} type="password" name="user[password]" id="user_password" />
                             </div>
                             <div className="mb-3 flex flex-col gap-2">
-                                <label htmlFor="user_password" className='text-sm text-slate-400'>Confirmar contrasena</label>
+                                <label htmlFor="user_password" className='text-sm text-slate-400'>Confirmar contraseña</label>
                                 <input autoComplete="current-password" className='focus:outline-none focus:outline-offset-0  focus:outline-emerald-600  py-1 px-3 rounded-md w-full bg-emerald-950 ring-1 ring-emerald-900 border-emerald-700' required={true} type="password" name="user[password]" id="user_password" />
                             </div>
                             <p className="mb-3 text-xs text-slate-400 ">
