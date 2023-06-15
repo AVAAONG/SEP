@@ -9,7 +9,6 @@ import { SIDEBAR_ACTIVITIES_ACTIONS } from '../data'
 import DropdownButton from '../DropdownButton'
 import SidebarSeparator from './SidebarSeparator'
 import { sidebarAtom } from '@/state/mainState'
-// 
 const Sidebar = () => {
     const [isOpen,] = useAtom(sidebarAtom)
     return (
