@@ -6,4 +6,5 @@ export type BigCalendarEventType = {
     bgColor?: string,
     location?: string,
     allDay: boolean
+    textColor?: string,
 }

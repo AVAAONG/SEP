@@ -6,6 +6,7 @@ import './calendar.css'
 import { Calendar as BigCalendar, momentLocalizer, Views } from 'react-big-calendar'
 import moment from 'moment'
 import { Fragment, useMemo } from 'react';
+import 'moment/locale/es'
 
 import { BigCalendarEventType } from '@/types/Calendar';
 
@@ -13,9 +14,10 @@ const styleEvent = (event: BigCalendarEventType) => {
     const style = {
         background: event.bgColor,
         borderRadius: '4px',
-        color: 'white',
         border: '0px',
-        display: 'block'
+        display: 'block',
+        fontSize: "13px",
+        color: "#ffffff",
     };
     return {
         style: style
@@ -23,14 +25,15 @@ const styleEvent = (event: BigCalendarEventType) => {
 }
 
 const Calendar = ({ events }: { events: BigCalendarEventType[] }) => {
+    type T = keyof typeof Views
+    const localizer = momentLocalizer(moment)
     const { defaultDate, views } = useMemo(
         () => ({
             defaultDate: new Date(),
-            views: Object.keys(Views).map((k) => Views[k]),
+            views: Object.keys(Views).map((value: string) => Views[value as T]),
         }),
         []
     )
-    const localizer = momentLocalizer(moment)
     return (
         <Fragment>
             <div className='h-full w-full'>

@@ -14,7 +14,7 @@ import { CALENDAR_IDS } from '@/lib/constants'
 
 
 
-const createEventObject = (calendarEvents: calendar_v3.Schema$Event[], bgColor: string): BigCalendarEventType[] => {
+const createEventObject = (calendarEvents: calendar_v3.Schema$Event[], bgColor: string, textColor: string): BigCalendarEventType[] => {
 
     const formatedEvents: BigCalendarEventType[] = []
     calendarEvents.forEach((event) => {
@@ -27,6 +27,7 @@ const createEventObject = (calendarEvents: calendar_v3.Schema$Event[], bgColor: 
             description: description as string,
             bgColor,
             location: location as string,
+            textColor
         }
         formatedEvents.push(obj)
     })
@@ -42,15 +43,15 @@ const fetchEvents = async () => {
     setTokens(accessToken as string, refreshToken as string);
     let calendarEvents: BigCalendarEventType[] = []
     const volunteerEvents = await getCalendarEvents(CALENDAR_IDS[0].calendarId);
-    const formatedVolunteerEvents = createEventObject(volunteerEvents!, CALENDAR_IDS[0].eventColor);
+    const formatedVolunteerEvents = createEventObject(volunteerEvents!, CALENDAR_IDS[0].eventColor, CALENDAR_IDS[0].textColor);
     calendarEvents.push(...formatedVolunteerEvents)
 
     const chatsEvents = await getCalendarEvents(CALENDAR_IDS[1].calendarId);
-    const formatedChatsEvents = createEventObject(chatsEvents!, CALENDAR_IDS[1].eventColor);
+    const formatedChatsEvents = createEventObject(chatsEvents!, CALENDAR_IDS[1].eventColor, CALENDAR_IDS[1].textColor);
     calendarEvents.push(...formatedChatsEvents)
 
     const workshopsEvents = await getCalendarEvents(CALENDAR_IDS[2].calendarId);
-    const formatedWorkshopsEvents = createEventObject(workshopsEvents!, CALENDAR_IDS[2].eventColor);
+    const formatedWorkshopsEvents = createEventObject(workshopsEvents!, CALENDAR_IDS[2].eventColor, CALENDAR_IDS[2].textColor);
     calendarEvents.push(...formatedWorkshopsEvents)
 
     return calendarEvents;
@@ -104,7 +105,7 @@ const page = async () => {
                     )
                 })}
             </div>
-            <div className='h-full w-full bg-slate-900 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 border border-gray-100 p-2'>
+            <div className='h-full max-h-[680px] min-h-screen overflow-x-clip w-full bg-slate-900 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 border-2 border-green-950 p-2'>
                 <Calendar events={events} />
             </div>
         </div>
