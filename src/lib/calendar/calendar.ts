@@ -36,7 +36,7 @@ export const createEvent = async (kindOfActivity: KindOfActivity, values: Worksh
         addUrl = await getPublicEventLink(title, platform, eventDescription, start, end);
 
         const event = await Calendar.events.insert({
-            calendarId,
+            calendarId: "3bd2458b588a28274518ba4e7a45f44db6a04c33377cc8c008c986a72dc36cdb@group.calendar.google.com",
             conferenceDataVersion: 1,
             requestBody: eventDetails,
         })

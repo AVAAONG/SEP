@@ -18,7 +18,6 @@ const Page = () => {
     const fetcher = (...args: any) => fetch(...args).then(res => res.json())
 
     const { data, error, isLoading } = useSWR('/api/speakers', fetcher)
-    console.log(data)
 
     const [modalopen, setModalOpen] = useState(false)
     const [loading, setLoading] = useState("not");

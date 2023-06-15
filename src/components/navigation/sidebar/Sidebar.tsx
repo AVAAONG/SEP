@@ -20,7 +20,7 @@ const Sidebar = () => {
                 </Link>
             </div>
             <div className='w-full flex flex-col justify-between'>
-                <DropdownButton buttonName="Panel general" itemList={[{ link: '/dashboard', name: 'Estadisticas generales' }]} Icon={dashboardComponent} />
+                <DropdownButton buttonName="Panel general" itemList={[{ link: '/admin/dashboard', name: 'Estadisticas generales' }]} Icon={dashboardComponent} />
             </div>
             <SidebarSeparator text='Actividades' />
             <div className='w-full flex flex-col justify-between'>

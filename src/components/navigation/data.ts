@@ -5,16 +5,16 @@ export const SIDEBAR_ACTIVITIES_ACTIONS = [
         icon: workshopIcon,
         buttonName: "Talleres",
         itemList: [
-            { name: "Crear Taller", link: "/talleres/crear" },
+            { name: "Crear Taller", link: "/admin/talleres/crear" },
             // { name: "Estadísticas de talleres", link: "/talleres/estadisticas" },
-            // { name: "Lista de talleres", link: "/talleres/lista" },
+            { name: "Lista de talleres", link: "/admin/talleres/lista" },
         ]
     },
     {
         icon: chatIcon,
         buttonName: "Chats",
         itemList: [
-            { name: "Crear Chat", link: "/chats/crear" },
+            { name: "Crear Chat", link: "/admin/chats/crear" },
             // { name: "Estadísticas de chats", link: "/chats/estadisticas" },
             // { name: "Lista de chats", link: "/chats/lista" },
 

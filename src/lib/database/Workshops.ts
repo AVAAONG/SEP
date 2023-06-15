@@ -55,8 +55,14 @@ const getWorkshop = async (id: shortUUID.SUUID) => {
     return workshop;
 }
 
-const getWorkshops = async () => {
-    const workshops = await prisma.workshop.findMany();
+export const getWorkshops = async () => {
+    const workshops = await prisma.workshop.findMany({
+        include: {
+            speaker: true,
+            dates: true,
+            tempData: true,
+        }
+    });
     return workshops;
 }
 
