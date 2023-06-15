@@ -17,7 +17,7 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
     // const sheetNames = await getSheetsName(files[0].id!)
 
 
-    return NextResponse.json({ sheetNames })
+    return NextResponse.json({ message: "ok" })
 
     // sheetNames?.forEach(async (sheetName) => {
     //     const range = `${sheetName}!A8:G`;
