@@ -15,19 +15,20 @@ interface WorkshopForm extends Workshop {
 }
 
 const Page = () => {
-    const fetcher = (...args: any) => fetch(...args).then(res => res.json())
+    const fetcher = (...args: RequestInfo[] | URL[]) => fetch([...args]).then(res => res.json())
 
-    const speakerResponse = ["useSWR('/api/speakers', fetcher)"]
+    const speakerResponse = ["Andrés Della"]
     const workshopResponse = useSWR('/api/workshop/schedule', fetcher, { fallbackData: [{}, {}], refreshInterval: 1000 })
     const [modalopen, setModalOpen] = useState(false)
     const [loading, setLoading] = useState("not");
     const { register, handleSubmit, formState: { errors }, reset, } = useForm<WorkshopForm>();
     const [subjectAndGroup, setSubjectAndGroup] = useState({ subject: "", group: "" })
 
-    const deleteEntry = async (inputId: shortUUID.SUUID) => {
+    const deleteEntry = async (inputId: shortUUID.SUUID, calendarId: string) => {
+        console.log(inputId, calendarId)
         await fetch('/api/workshop/delete', {
             method: "POST",
-            body: JSON.stringify({ id: inputId })
+            body: JSON.stringify({ id: inputId, calendarId })
         })
 
     }
@@ -76,7 +77,6 @@ const Page = () => {
             avaaYear: ["I"],
             description: ""
         });
-        // setSubmit(true)
     }
 
     const sendWorkshops = async (data: any, event: BaseSyntheticEvent) => {
@@ -108,7 +108,7 @@ const Page = () => {
         <div className="flex flex-col-reverse md:flex-row gap-8">
             <div className='w-screen md:w-1/2 p-4 flex flex-col items-center'>
                 {
-                    workshopResponse.isLoading ? <></> : 
+                    workshopResponse.isLoading ? <></> :
                         <>
                             <text className='font-semibold text-3xl text-green-500 mb-6'>
                                 Talleres Agendados
@@ -125,7 +125,7 @@ const Page = () => {
                     Crea un taller
                 </text>
                 <form onSubmit={handleSubmit(async (data, event) => await createWorkshop(data, event!))} className="grid gap-6 md:grid-cols-2 md:grid-rows-2 caret-green-500 text-slate-300 w-full">
-                    {WORKSHOP_INPUT_ELEMENTS(speakerResponse.data === undefined ? [] : speakerResponse.data).map((field) => {
+                    {WORKSHOP_INPUT_ELEMENTS(speakerResponse === undefined ? [] : speakerResponse).map((field) => {
                         return (
                             <Input {...field} key={field.title} register={register as unknown as UseFormRegister<FieldValues>} />
                         )
@@ -161,9 +161,7 @@ const Page = () => {
                                     </div>
                                     <div className="justify-between items-center pt-0 space-y-4 sm:flex sm:space-y-0 mt-4">
                                         <div className="items-center space-y-4 sm:space-x-4 sm:flex sm:space-y-0">
-                                            <button onClick={showModal} type="button" className="py-2 px-4 w-full text-sm font-medium  rounded-lg border  sm:w-auto focus:ring-4 focus:outline-none focus:ring-primary-300  focus:z-10 bg-gray-700 text-gray-300 border-gray-500 hover:text-white hover:bg-gray-600 focus:ring-gray-600">Cancelar</button>
-                                            {/* <button type="submit" className="py-2 px-4 w-full text-sm font-medium text-white bg-green-500 rounded-lg border border-transparent sm:w-auto hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-primary-300 focus:z-10">Enviar</button> */}
-                                            <button type="submit" className="py-2 px-4 w-full text-sm font-medium text-center text-white rounded-lg bg-green-500 sm:w-auto hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 bg-primary-600 hover:bg-primary-700 focus:ring-primary-800">Enviar</button>
+                                            <button onClick={showModal} type="button" className="py-2 px-4 w-full text-sm font-medium  rounded-lg border  sm:w-auto focus:ring-4 focus:outline-none focus:ring-primary-300  focus:z-10 bg-gray-700 text-gray-300 border-gray-500 hover:text-white hover:bg-gray-600 focus:ring-gray-600">Cancelar</button>                                            <button type="submit" className="py-2 px-4 w-full text-sm font-medium text-center text-white rounded-lg bg-green-500 sm:w-auto hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 bg-primary-600 hover:bg-primary-700 focus:ring-primary-800">Enviar</button>
                                         </div>
                                     </div>
                                 </form>

@@ -2,11 +2,11 @@ import React from 'react'
 import { Workshop, WorkshopDates, WorkshopSpeaker, WorkshopTempData } from '@prisma/client'
 
 interface WorkshopsListProps {
-    workshopData: Workshop & {
+    workshopData: (Workshop & {
         speaker: WorkshopSpeaker[];
         dates: WorkshopDates[];
         tempData: WorkshopTempData | null;
-    }[],
+    })[],
 }
 
 const WorkshopsAloneList: React.FC<WorkshopsListProps> = (props) => {
@@ -14,7 +14,8 @@ const WorkshopsAloneList: React.FC<WorkshopsListProps> = (props) => {
     return (
         <div className="flow-root w-full overflow-y-scroll h-full">
             <ul role="list" className='flex flex-col gap-2'>
-                {workshopData.map(({ title, dates, pensum, modality, speaker, id, spots, avaaYear, platform }: Workshop) => {
+                {workshopData.map((workshop) => {
+                    const { speaker, dates, title, id, pensum, spots, avaaYear, platform, modality, tempData } = workshop
                     return (
                         <li key={title} className="flex py-2 focus:outline-none focus:outline-offset-0 px-3 rounded-md w-full bg-emerald-950  items-center justify-center gap-4">
                             <div className="flex-1 w-1/4 ">

@@ -27,7 +27,6 @@ export const UPDATE = async (req: NextRequest, res: NextResponse) => {
 export const DELETE = async (req: NextRequest, res: NextResponse) => {
     const token = await getToken({ req });
     const reqData = await req.json()
-    console.log("deleting " + reqData)
     if (token) setTokens(token.accessToken as string, token.refreshToken as string);
     else return NextResponse
     await deleteWorkshopFromDatabase(reqData.id)
@@ -98,7 +97,7 @@ const ScheduleWorkshops = async (workshop: Workshop) => {
 }
 
 
-export async function GET(req: NextRequest, res: NextResponse)  {
+export async function GET(req: NextRequest, res: NextResponse) {
     const workshops = await getScheduledWorkshops()
     return NextResponse.json(workshops)
 }

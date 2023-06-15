@@ -10,25 +10,7 @@ import { calendar_v3 } from '@googleapis/calendar'
 import { BigCalendarEventType } from '@/types/Calendar';
 import { getWorkshopsCount } from '@/lib/database/Workshops'
 import { getScholarsCount } from '@/lib/database/users'
-const VOLUNTEER_CALENDAR_EVENT_COLORS = "linear-gradient(to right, #34D399, #059669)"
-
-const CALENDAR_IDS = [
-    {
-        // Calendar for volunteer activities
-        calendarId: "66c8bfc0379b164b2d4104d235933b8507228ea39a0f6301f7f3a1a7e878e204@group.calendar.google.com",
-        eventColor: VOLUNTEER_CALENDAR_EVENT_COLORS
-    },
-    {
-        // Calendar for english chats clubs
-        calendarId: "e8e9c5e4d30d349b75f6061c8641fa2577ed9928403c4bd12b6bd6687291e7a9@group.calendar.google.com",
-        eventColor: VOLUNTEER_CALENDAR_EVENT_COLORS
-    },
-    {
-        // Calendar for workshops
-        calendarId: "3bd2458b588a28274518ba4e7a45f44db6a04c33377cc8c008c986a72dc36cdb@group.calendar.google.com",
-        eventColor: VOLUNTEER_CALENDAR_EVENT_COLORS
-    }
-]
+import { CALENDAR_IDS } from '@/lib/constants'
 
 
 
@@ -53,32 +35,33 @@ const createEventObject = (calendarEvents: calendar_v3.Schema$Event[], bgColor: 
 
 const fetchEvents = async () => {
     const session = await getServerSession(authOptions);
+
     const accessToken = session?.user?.accessToken;
     const refreshToken = session?.user?.refreshToken;
+
     setTokens(accessToken as string, refreshToken as string);
     let calendarEvents: BigCalendarEventType[] = []
-    CALENDAR_IDS.forEach(async ({ calendarId, eventColor }) => {
-        const events = await getCalendarEvents(calendarId);
-        const formatedEvents = createEventObject(events!, eventColor);
-        calendarEvents.push(...formatedEvents)
-    })
-    console.log(calendarEvents)
+    const volunteerEvents = await getCalendarEvents(CALENDAR_IDS[0].calendarId);
+    const formatedVolunteerEvents = createEventObject(volunteerEvents!, CALENDAR_IDS[0].eventColor);
+    calendarEvents.push(...formatedVolunteerEvents)
+
+    const chatsEvents = await getCalendarEvents(CALENDAR_IDS[1].calendarId);
+    const formatedChatsEvents = createEventObject(chatsEvents!, CALENDAR_IDS[1].eventColor);
+    calendarEvents.push(...formatedChatsEvents)
+
+    const workshopsEvents = await getCalendarEvents(CALENDAR_IDS[2].calendarId);
+    const formatedWorkshopsEvents = createEventObject(workshopsEvents!, CALENDAR_IDS[2].eventColor);
+    calendarEvents.push(...formatedWorkshopsEvents)
+
     return calendarEvents;
 }
 
 const page = async () => {
-    const session = await getServerSession(authOptions);
-    const accessToken = session?.user?.accessToken;
-    const refreshToken = session?.user?.refreshToken;
-    const workshopCount = await getWorkshopsCount()
-    const scholarsCount = await getScholarsCount()
-    setTokens(accessToken as string, refreshToken as string);
-    let calendarEvents: BigCalendarEventType[] = []
-    // CALENDAR_IDS.forEach(async ({ calendarId, eventColor }) => {
-    const events = await getCalendarEvents(CALENDAR_IDS[0].calendarId);
-    const formatedEvents = createEventObject(events!, CALENDAR_IDS[0].eventColor);
-    //     calendarEvents.push(...formatedEvents)
-    // })
+    const workshopCount = await getWorkshopsCount();
+    const scholarsCount = await getScholarsCount();
+
+
+    const events = await fetchEvents();
 
     const CARD_CONTENT = [
         {
@@ -112,7 +95,6 @@ const page = async () => {
             cardButtonBg: "bg-indigo-950 active:bg-blue-700 hover:bg-blue-700"
         },
     ]
-
     return (
         <div className='flex flex-col gap-4 h-full w-full'>
             <div className="flex flex-col md:flex-row gap-4 items-center md:h-1/4">
@@ -123,7 +105,7 @@ const page = async () => {
                 })}
             </div>
             <div className='h-full w-full bg-slate-900 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 border border-gray-100 p-2'>
-                <Calendar events={formatedEvents} />
+                <Calendar events={events} />
             </div>
         </div>
     )

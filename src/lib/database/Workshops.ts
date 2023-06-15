@@ -78,7 +78,7 @@ export const getWorkshopsCount = async (): Promise<number> => {
 }
 
 
-export const getScheduledWorkshops = async (): Promise<Workshop[]> => {
+export const getScheduledWorkshops = async () => {
     const workshops = await prisma.workshop.findMany({
         include: {
             speaker: true,

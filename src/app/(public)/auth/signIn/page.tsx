@@ -1,13 +1,10 @@
 'use client'
-import { getProviders, signIn } from "next-auth/react"
-import { getServerSession } from "next-auth/next"
-
+import { signIn } from "next-auth/react"
 import Aside from "@/components/auth componets/Aside"
 import { useSearchParams } from "next/navigation"
 
 const page = () => {
     const searchParams = useSearchParams();
-
     /**
      * Specify to which URL the user will be redirected after signing in. Defaults to the page URL the sign-in is initiated from.
      * @summary The URL to redirect to after a successful sign in or sign up.
