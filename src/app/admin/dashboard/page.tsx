@@ -95,7 +95,7 @@ const page = async () => {
             bg: "from-yellow-500  to-yellow-700",
             cardButtonBg: "bg-indigo-950 active:bg-blue-700 hover:bg-blue-700"
         },
-    ]
+    ]  
     return (
         <div className='flex flex-col gap-4 h-full w-full'>
             <div className="flex flex-col md:flex-row gap-4 items-center md:h-1/4">
@@ -113,3 +113,5 @@ const page = async () => {
 }
 
 export default page;
+
+// 4V44yELPr0gr4m4Pr03xc3l3nci4
