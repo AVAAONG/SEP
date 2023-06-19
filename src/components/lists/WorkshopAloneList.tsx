@@ -1,5 +1,7 @@
-import React from 'react'
+'use client'
+import React, { useMemo } from 'react'
 import { Workshop, WorkshopDates, WorkshopSpeaker, WorkshopTempData } from '@prisma/client'
+import { useTable } from 'react-table'
 
 interface WorkshopsListProps {
     workshopData: (Workshop & {
@@ -11,9 +13,51 @@ interface WorkshopsListProps {
 
 const WorkshopsAloneList: React.FC<WorkshopsListProps> = (props) => {
     const { workshopData } = props
+    const data = useMemo(() => workshopData, [])
+    const columns = useMemo(() => [
+        {
+            Header: 'Taller',
+            accessor: 'title'
+        },
+        {
+            Header: 'Facilitador',
+            accessor: 'speaker[0].name'
+        },
+        {
+            Header: 'Fecha de inicio',
+            accessor: 'dates[0].start_date'
+        },
+        {
+            Header: 'Fecha de finalización',
+            accessor: 'dates[0].end_date'
+        },
+        {
+            Header: 'Pensum',
+            accessor: 'pensum'
+        },
+        {
+            Header: 'Modalidad',
+            accessor: 'modality'
+        },
+        {
+            Header: 'Plataforma/Lugar',
+            accessor: 'platform'
+        },
+        {
+            Header: 'Cupos',
+            accessor: 'spots'
+        },
+        {
+            Header: 'Año',
+            accessor: 'avaaYear'
+        },
+
+    ], [])
+    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data })
+
     return (
-        <div className="flow-root w-full overflow-y-scroll h-full">
-            <ul role="list" className='flex flex-col gap-2'>
+        <div className="flow-root w-[1300px] overflow-y-scroll h-[600px]">
+            {/* <ul role="list" className='flex flex-col gap-2'>
                 {workshopData.map((workshop) => {
                     const { speaker, dates, title, id, pensum, spots, avaaYear, platform, modality, tempData } = workshop
                     return (
@@ -56,7 +100,41 @@ const WorkshopsAloneList: React.FC<WorkshopsListProps> = (props) => {
                         </li>
                     )
                 })}
-            </ul>
+            </ul> */}
+
+            <table {...getTableProps()} className="w-full text-sm text-left text-gray-300 bg-gradient-to-b from-emerald-950 to-slate-950">
+
+                <thead className="text-xs text-green-500 uppercase bg-transparent text-center border-b-2 border-green-600 text-ellipsis">
+                    {headerGroups.map((headerGroup) => (
+                        <tr {...headerGroup.getHeaderGroupProps()} className="text-xs font-medium text-green-500 uppercase tracking-wider">
+                            {headerGroup.headers.map((column) => (
+                                <th {...column.getHeaderProps()} scope="col" className="px-6 py-3 text-center">
+                                    {column.render('Header')}
+                                </th>
+                            ))}
+                        </tr>
+                    ))}
+                </thead>
+
+                <tbody {...getTableBodyProps()} className="divide-y divide-gray-200">
+                    {rows.map((row) => {
+                        prepareRow(row)
+                        return (
+                            <tr {...row.getRowProps()} className="text-sm hover:bg-green-700 hover:text-white text-center">
+                                {row.cells.map((cell) => {
+                                    return (
+                                        <td {...cell.getCellProps()} className="px-6 py-4 whitespace-nowrap lowecase capitalize">
+                                            {cell.render('Cell')}
+                                        </td>
+                                    )
+                                })}
+                            </tr>
+                        )
+                    })}
+                </tbody>
+
+            </table>
+
         </div >
     )
 }

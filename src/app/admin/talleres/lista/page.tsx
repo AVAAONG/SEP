@@ -2,6 +2,7 @@ import { Workshop, WorkshopDates, WorkshopSpeaker, WorkshopTempData } from "@pri
 import { headers } from "next/headers";
 import WorkshopsAloneList from "@/components/lists/WorkshopAloneList"
 
+
 const page = async () => {
     const host = headers().get("host");
     const data = await fetch(`http://${host}/api/workshop`, {
