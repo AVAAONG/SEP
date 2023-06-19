@@ -10,7 +10,7 @@ import CredentialsPrivider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 
-import { googleProviderConfig, credentialsProviderConfig, PAGES } from "./authConfig";
+import { googleProviderConfig, credentialsProviderConfig, PAGES, NEXT_SECRET } from "./authConfig";
 
 // const prisma = new PrismaClient();
 
@@ -50,6 +50,7 @@ const authOptions: NextAuthOptions = {
     session: {
         strategy: "jwt",
     },
+    secret: NEXT_SECRET,
 
     /**
      * @description Callbacks are functions that are called **async** during the execution of NextAuth.js, 

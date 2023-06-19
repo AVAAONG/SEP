@@ -13,7 +13,6 @@ const page = async () => {
         dates: WorkshopDates[];
         tempData: WorkshopTempData | null;
     })[] = await data.json()
-    console.log(workshopsData)
 
     return (
         <div className="">

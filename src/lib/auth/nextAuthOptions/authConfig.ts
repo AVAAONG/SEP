@@ -36,6 +36,8 @@ export const GOOGLE_ADMIN_SCOPES = [
     'https://www.googleapis.com/auth/userinfo.email',
 ];
 
+export const NEXT_SECRET = process.env.NEXTAUTH_SECRET || shortUUID.generate();
+
 /** 
  * @description NextAuth pages
  * @summary By default, NextAuth.js will render a generic page for handilg sign in, sign out, email verification and displating error messages.
