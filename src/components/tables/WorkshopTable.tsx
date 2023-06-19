@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import { Workshop, WorkshopDates, WorkshopSpeaker, WorkshopTempData } from '@prisma/client'
 import { useTable } from 'react-table'
 
-interface WorkshopsListProps {
+interface WorkshopTableProps {
     workshopData: (Workshop & {
         speaker: WorkshopSpeaker[];
         dates: WorkshopDates[];
@@ -11,7 +11,7 @@ interface WorkshopsListProps {
     })[],
 }
 
-const WorkshopsAloneList: React.FC<WorkshopsListProps> = (props) => {
+const WorkshopTable: React.FC<WorkshopTableProps> = (props) => {
     const { workshopData } = props
     const data = useMemo(() => workshopData, [])
     const columns = useMemo(() => [
@@ -139,4 +139,4 @@ const WorkshopsAloneList: React.FC<WorkshopsListProps> = (props) => {
     )
 }
 
-export default WorkshopsAloneList;
+export default WorkshopTable;
