@@ -46,9 +46,8 @@ export const NEXT_SECRET = process.env.NEXTAUTH_SECRET || shortUUID.generate();
  *  
  */
 export const PAGES = {
-    signIn: "/auth/signIn",
-    newUser: "/auth/signUp",
-    error: "/auth/signUp",
+    signIn: "/auth/signin",
+    newUser: "/auth/signup",
 }
 
 
