@@ -1,6 +1,6 @@
 import { Workshop, WorkshopDates, WorkshopSpeaker, WorkshopTempData } from "@prisma/client";
 import { headers } from "next/headers";
-import WorkshopTable from "@/components/tables/WorkshopTable";
+import Table from "@/components/table/Table";
 
 
 const page = async () => {
@@ -19,7 +19,7 @@ const page = async () => {
         <div className="">
             <h1 className="font-semibold text-3xl text-green-500 mb-6 text-center">Listado de talleres</h1>
             <div className="h-[680px]">
-                <WorkshopTable workshopData={workshopsData} />
+                <Table workshopData={workshopsData} />
             </div>
         </div>
 
