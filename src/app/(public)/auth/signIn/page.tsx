@@ -18,7 +18,7 @@ const page = () => {
                 <div className="w-full max-w-sm py-4 mx-auto my-auto min-w-min md:py-9 md:w-7/12">
                     <h2 className="text-xl font-semibold md:text-2xl">Entra</h2>
                     <p className="text-xs md:text-sm text-slate-400">¿Nuevo en el programa? {' '}
-                        <a className="text-green-600 text-xs md:text-sm font-semibold" href="/auth/register">Registrate.</a>
+                        <a className="text-green-600 text-xs md:text-sm font-semibold" href="/auth/signup">Registrate.</a>
                     </p>
                     <div className="my-4">
                         <form className="new_user" id="new_user" action="/register" acceptCharset="UTF-8" method="post">

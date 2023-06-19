@@ -40,7 +40,7 @@ export default function Home() {
 
       <div className="mb-32 grid text-center lg:grid-cols-2 lg:text-left gap-6">
         <a
-          href="/auth/register"
+          href="/auth/signup"
           className="fifi relative bg-black group rounded-lg border  px-5 py-4 transition-colors"
           rel="noopener noreferrer"
         >
@@ -60,7 +60,7 @@ export default function Home() {
         </a>
 
         <a
-          href="/auth/login"
+          href="/auth/signin"
           className="fifi relative bg-black group rounded-lg border  px-5 py-4 transition-colors"
           rel="noopener noreferrer"
         >
