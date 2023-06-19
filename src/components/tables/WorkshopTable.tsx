@@ -1,9 +1,8 @@
 'use client'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Workshop, WorkshopDates, WorkshopSpeaker, WorkshopTempData } from '@prisma/client'
-import { useTable, useSortBy, useGlobalFilter } from 'react-table'
-import { FilterIcon, SortIcon, SortIconReverse} from '@/assets/svgs';
-import moment from 'moment';
+import { useTable, useSortBy, useGlobalFilter, useAsyncDebounce } from 'react-table'
+import { FilterIcon, SortIcon, SortIconReverse } from '@/assets/svgs';
 
 interface WorkshopTableProps {
     workshopData: (Workshop & {
@@ -14,6 +13,7 @@ interface WorkshopTableProps {
 }
 
 const WorkshopTable: React.FC<WorkshopTableProps> = (props) => {
+
     const { workshopData } = props
     const data = useMemo(() => workshopData, [])
     const columns = useMemo(() => [
@@ -73,11 +73,16 @@ const WorkshopTable: React.FC<WorkshopTableProps> = (props) => {
         headerGroups,
         rows,
         prepareRow,
-        state, 
+        state,
         setGlobalFilter
     } = useTable({ columns, data }, useGlobalFilter, useSortBy)
 
     const { globalFilter } = state
+    const [value, setValue] = useState(globalFilter)
+    const onChange = useAsyncDebounce((value) => {
+        setGlobalFilter(value || undefined)
+    }, 200)
+
 
     return (
         <div>
@@ -87,7 +92,12 @@ const WorkshopTable: React.FC<WorkshopTableProps> = (props) => {
                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                         <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
                     </div>
-                    <input value={globalFilter || ''} onChange={e => setGlobalFilter(e.target.value)}  type="text" id="table-search" className="w-72 block p-2 pl-10 focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600" placeholder="Buscar taller" />
+                    <input value={value || ''} 
+                    onChange={(e) => {
+                        setValue(e.target.value)
+                        onChange(e.target.value)
+                    }} 
+                    type="text" id="table-search" className="w-72 block p-2 pl-10 focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600" placeholder="Buscar taller" />
                 </div>
             </div>
             <div className="flow-root w-[1300px] overflow-y-scroll h-[600px]">
