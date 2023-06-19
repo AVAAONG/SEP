@@ -3,6 +3,7 @@ import React, { useMemo } from 'react'
 import { Workshop, WorkshopDates, WorkshopSpeaker, WorkshopTempData } from '@prisma/client'
 import { useTable, useSortBy } from 'react-table'
 import { FilterIcon, SortIcon, SortIconReverse } from '@/assets/svgs';
+import moment from 'moment';
 
 interface WorkshopTableProps {
     workshopData: (Workshop & {
@@ -25,12 +26,24 @@ const WorkshopTable: React.FC<WorkshopTableProps> = (props) => {
             accessor: 'speaker[0].name'
         },
         {
-            Header: 'Fecha de inicio',
-            accessor: 'dates[0].start_date'
+            id: 'date',
+            Header: 'Fecha',
+            accessor: 'dates[0].start_date',
+            Cell: ({ value }: {value: string}) => { return new Date(value).toLocaleString('es-ES', { month: 'numeric', day: 'numeric', year: 'numeric' }) }
         },
         {
-            Header: 'Fecha de finalización',
-            accessor: 'dates[0].end_date'
+            id: 'startHour',
+            Header: 'Hora de inicio',
+            accessor: 'dates[0].start_date',
+            Cell: ({ value }: {value: string}) => { return new Date(value).toLocaleString('es-ES', { hour: 'numeric', minute: 'numeric', hourCycle:'h12' }) }
+
+        },
+        {
+            id: 'endHour',
+            Header: 'Hora de finalización',
+            accessor: 'dates[0].end_date',
+            Cell: ({ value }: {value: string}) => { return new Date(value).toLocaleString('es-ES', { hour: 'numeric', minute: 'numeric', hourCycle:'h12'  }) }
+
         },
         {
             Header: 'Pensum',
