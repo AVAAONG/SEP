@@ -4,7 +4,7 @@ import favicon from '@/../public/logo-proexcelencia-cap.png';
 import Navbar from '@/components/navigation/navbar/Navbar';
 import NextAuthProvider from '@/components/providers';
 
-import Sidebar from '@/components/navigation/sidebar/Sidebar';
+import Sidebar from '@/components/navigation/sideBar/Sidebar';
 export const metadata = {
   title: 'Proexcelencia',
   description: 'Sistema de Evaluacion del Becario',
