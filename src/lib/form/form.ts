@@ -1,4 +1,6 @@
+import { Workshop } from "@/types/Workshop";
 import { Form } from "../auth/auth";
+import { addDays } from "../calendar/calendar";
 
 export const createGoogleForm = async (title: string, description: string) => {
 
@@ -7,8 +9,8 @@ export const createGoogleForm = async (title: string, description: string) => {
             info: {
                 title,
                 description,
-                documentTitle: title, 
-                
+                documentTitle: title,
+
             },
             items: [
                 {
@@ -38,7 +40,7 @@ const getForm = async (formId: string) => {
     return res.data;
 }
 
-export const updateFormInfo = async (formId: string , title: string, description: string) => {
+export const updateFormInfo = async (formId: string, title: string, description: string) => {
     const res = await Form.forms.batchUpdate({
         formId,
         requestBody: {
@@ -49,8 +51,8 @@ export const updateFormInfo = async (formId: string , title: string, description
                         info: {
                             title,
                             description,
-                            documentTitle: title,                        
-                         }
+                            documentTitle: title,
+                        }
                     }
                 }
             ]
@@ -60,3 +62,17 @@ export const updateFormInfo = async (formId: string , title: string, description
     return res.data.form?.formId;
 }
 
+
+export const createFormDescription = (workshop: Workshop) => {
+    const { title, pensum, date, startHour, endHour, speaker, modality, platform, description } = workshop;
+    const formDescription = `Taller: ${title}
+Competencia Asociada: ${pensum}
+${modality === "asincrona" ? `Fecha: De ${new Date(date).toLocaleDateString()} hasta ${new Date(addDays(new Date(date), 3)).toLocaleDateString()}` : `Fecha: ${date}`}
+${modality === "asincrona" ? `` : `Horario: de ${startHour} hasta las ${endHour}`}
+Facilitador: ${speaker}
+Modalidad: ${modality}
+${modality === "presencial" ? `Lugar: ${platform}` : `Plataforma: ${platform}`}
+${description === ' ' ? '' : `\n ${description}`}`;
+    return formDescription;
+
+};

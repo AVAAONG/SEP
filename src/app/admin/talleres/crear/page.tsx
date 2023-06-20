@@ -51,13 +51,13 @@ const Page = () => {
         })
         deleteEntry(inputId);
     }
-    const createWorkshop = async (data: WorkshopForm, event: BaseSyntheticEvent<object, any, any> | undefined) => {
+    const scheduleWorkshop = async (data: WorkshopForm, event: BaseSyntheticEvent<object, any, any> | undefined) => {
         if (event === undefined) return;
         event.preventDefault();
         data.id = shortUUID.generate();
         delete data['subject'];
         delete data['group'];
-        const respin = await fetch('/api/workshop/schedule', {
+        const respin = await fetch('/api/workshop', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -124,7 +124,7 @@ const Page = () => {
                 <text className='font-semibold text-3xl text-green-500 mx-auto'>
                     Crea un taller
                 </text>
-                <form onSubmit={handleSubmit(async (data, event) => await createWorkshop(data, event!))} className="grid gap-6 md:grid-cols-2 md:grid-rows-2 caret-green-500 text-slate-300 w-full">
+                <form onSubmit={handleSubmit(async (data, event) => await scheduleWorkshop(data, event!))} className="grid gap-6 md:grid-cols-2 md:grid-rows-2 caret-green-500 text-slate-300 w-full">
                     {WORKSHOP_INPUT_ELEMENTS(speakerResponse === undefined ? [] : speakerResponse).map((field) => {
                         return (
                             <Input {...field} key={field.title} register={register as unknown as UseFormRegister<FieldValues>} />
