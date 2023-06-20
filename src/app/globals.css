@@ -54,9 +54,12 @@ body {
   }
 }
 
-@layer base {
+@layer components {
   input {
-    @apply p-4
+    @apply focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md w-full bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600;
+  }
+  textarea {
+    @apply min-h-[4rem] focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md w-full bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600;
   }
 }
 
@@ -83,4 +86,8 @@ html::-webkit-scrollbar-thumb:hover {
 html::-webkit-scrollbar-thumb:active {
   background: #15803D;
   border-radius: 10px;
+}
+
+input {
+
 }
