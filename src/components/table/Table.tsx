@@ -57,9 +57,9 @@ const WorkshopTable: React.FC<WorkshopTableProps> = (props) => {
                         type="text" id="table-search" className="w-72 block p-2 pl-10 focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600" placeholder="Buscar taller" />
                 </div>
             </div>
-            <div className="flow-root w-full overflow-scroll  rounded-lg  h-[600px]">
-                <table {...getTableProps()} className="w-full text-sm text-left text-gray-300 bg-gradient-to-b from-emerald-950 to-slate-950">
-                    <thead className="text-xs text-green-500 uppercase bg-transparent text-center border-b-2 border-green-600 text-ellipsis">
+            <div className="flow-root w-full overflow-x-scroll  rounded-lg  h-[600px]">
+                <table {...getTableProps()} className="w-full text-sm text-left text-gray-300 ">
+                    <thead className="text-xs text-green-500 uppercase text-center border-b-2 border-green-600 text-ellipsis  bg-emerald-950">
                         {headerGroups.map((headerGroup) => (
                             <tr {...headerGroup.getHeaderGroupProps()} className="text-xs font-medium text-green-500 uppercase tracking-wider">
                                 {headerGroup.headers.map((column) => {
