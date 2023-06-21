@@ -1,7 +1,7 @@
 {
   "name": "sep",
   "author": "Kevin Bravo (@_bravok)",
-  "description": "Sistema para evaluar el progreso del becario durante su estadia en el Programa Excelencia",
+"description": "Sistema para evaluar el progreso del becario durante su estadia en el Programa Excelencia",
   "version": "0.1.0",
   "private": true,
   "homepage": "https://github.com/mustafinho/seb",
@@ -9,7 +9,7 @@
     "node": ">=16.6.0",
     "pnpm": ">=7.27.0",
     "npm": "please-use-pnpm"
-  },
+},
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -66,3 +66,5 @@
     "@types/react-table": "^7.7.14"
   }
 }
+
+

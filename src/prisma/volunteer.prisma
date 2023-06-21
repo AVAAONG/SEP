@@ -1,0 +1,24 @@
+model VolunteerDates {
+  id          String    @id @default(nanoid(8))
+  start_date  DateTime
+  end_date    DateTime
+  volunteer   Volunteer @relation(fields: [volunteerId], references: [id])
+  volunteerId String
+
+  @@index([volunteerId])
+}
+
+model Volunteer {
+  id             String           @id @default(nanoid(8))
+  title          String
+  dates          VolunteerDates[]
+  spots          Int
+  takenSpots     Int
+  modality       Modality
+  platform       Platform
+  description    String
+  avaaYear       String
+  activityStatus activityStatus
+  scholars       Scholar[]        @relation("ScholarVolunteer")
+  attendance     Attendance[]
+}

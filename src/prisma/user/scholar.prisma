@@ -1,0 +1,48 @@
+import { User } from "auth"
+
+model Scholar {
+    id String @id @default(nanoid(12))
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String @unique
+    region                       Region               @default(Caracas)
+    scholarStatus                ScholarStatus        @default(CURRENT)
+    canAssistToChats             ScholarCanAssist     @default(Yes)
+    canAssistToWorkshops         ScholarCanAssist     @default(Yes)
+    canAssistToVolunteers        ScholarCanAssist     @default(Yes)
+    firstNames                   String
+    lastNames                    String
+    dni                          String?              @unique
+    gender                       String?
+    birthDate                    DateTime?
+    localPhoneNumber             String?
+    cellPhoneNumber              String?
+    whatsAppNumber               String?
+    stateOfOrigin                String?
+    currentZone                  String?
+    email                        String?              @unique
+    collage                      String?
+    carrer                       String?
+    studyArea                    String?
+    currentAcademicPeriod        String?
+    academicYear                 String?
+    classModality                String?
+    cvaLocation                  String?
+    englishLevel                 String?
+    notStartedCvaRreason         String?
+    avaaAdmissionYear            String?
+    volunteeringOrganizationName String?
+    academicLoadCompleted        Boolean?
+    currentStatus                String?
+    ceremonyDate                 DateTime?
+    currentlyWorking             Boolean?
+    organizationName             String?
+    positionHeld                 String?
+    workshopModality             String?
+    chats                        Chat[]               @relation("ScholarChat")
+    Workshop                     Workshop[]           @relation("ScholarWorkshop")
+    Volunteer                    Volunteer[]          @relation("ScholarVolunteer")
+    Attendance                   Attendance[]
+    workshopId                   String?
+    volunteerId                  String?
+    WorkshopAttendance           WorkshopAttendance[]
+}
