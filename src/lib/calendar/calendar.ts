@@ -211,3 +211,9 @@ export const deleteCalendarEvent = (calendarId: string, eventId: string) => {
         eventId
     })
 }
+
+export const addDays = (date: Date, days: number) => {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result.toISOString();
+}
