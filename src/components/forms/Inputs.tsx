@@ -1,4 +1,3 @@
-import { Workshop } from '@/types/Workshop';
 import { FieldValues, UseFormRegister } from 'react-hook-form';
 type InputProps = {
     inputType: string,
