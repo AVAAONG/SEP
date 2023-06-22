@@ -16,9 +16,9 @@ const page = async () => {
     })[] = await data.json()
 
     return (
-        <div className="">
+        <div className="flex flex-col items-center">
             <h1 className="font-semibold text-3xl text-green-500 mb-6 text-center">Listado de talleres</h1>
-            <div className="h-[680px]">
+            <div className="h-[680px] max-w-7xl ">
                 <Table workshopData={workshopsData} />
             </div>
         </div>

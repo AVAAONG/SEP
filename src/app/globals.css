@@ -25,7 +25,7 @@ body {
       rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
 
-.fifi::before {
+.fifi::after {
   content: "";
   position: absolute;
   top: 0;
@@ -65,7 +65,7 @@ body {
 
 /* Scrollbar css related */
 html::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 html::-webkit-scrollbar-track {

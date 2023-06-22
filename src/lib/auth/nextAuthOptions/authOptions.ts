@@ -32,6 +32,7 @@ const authOptions: NextAuthOptions = {
         GoogleProvider(googleProviderConfig),
         CredentialsPrivider(credentialsProviderConfig),
     ],
+
     /**
      * @see https://authjs.dev/reference/adapters for adapters information
      * @see https://authjs.dev/reference/adapter/prisma for prisma adapter information
