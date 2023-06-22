@@ -217,3 +217,10 @@ export const addDays = (date: Date, days: number) => {
     result.setDate(result.getDate() + days);
     return result.toISOString();
 }
+
+export const getDate = () => {
+    let date = new Date().toISOString();
+    let search = date.indexOf(':')
+    date = date.slice(0, search - 3)
+    return date
+}
