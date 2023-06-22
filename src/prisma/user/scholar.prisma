@@ -1,14 +1,12 @@
 import { User } from "auth"
+import { Region, ScholarCanAssist, ScholarStatus } from "..\types"
+import { WorkshopAttendance } from "..\workshop"
 
 model Scholar {
-    id String @id @default(nanoid(12))
-    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String @unique
-    region                       Region               @default(Caracas)
-    scholarStatus                ScholarStatus        @default(CURRENT)
-    canAssistToChats             ScholarCanAssist     @default(Yes)
-    canAssistToWorkshops         ScholarCanAssist     @default(Yes)
-    canAssistToVolunteers        ScholarCanAssist     @default(Yes)
+    id                           String               @id @default(nanoid(12))
+    user                         User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+    region                       Region               @default(CARACAS)
+    userId                       String               @unique
     firstNames                   String
     lastNames                    String
     dni                          String?              @unique
@@ -34,15 +32,13 @@ model Scholar {
     academicLoadCompleted        Boolean?
     currentStatus                String?
     ceremonyDate                 DateTime?
-    currentlyWorking             Boolean?
+    isCurrentlyWorking           Boolean?
     organizationName             String?
     positionHeld                 String?
-    workshopModality             String?
-    chats                        Chat[]               @relation("ScholarChat")
-    Workshop                     Workshop[]           @relation("ScholarWorkshop")
-    Volunteer                    Volunteer[]          @relation("ScholarVolunteer")
-    Attendance                   Attendance[]
-    workshopId                   String?
-    volunteerId                  String?
+    workModality                 String?
     WorkshopAttendance           WorkshopAttendance[]
+    scholarStatus                ScholarStatus        @default(CURRENT)
+    canAssistToChats             ScholarCanAssist     @default(Yes)
+    canAssistToWorkshops         ScholarCanAssist     @default(Yes)
+    canAssistToVolunteers        ScholarCanAssist     @default(Yes)
 }

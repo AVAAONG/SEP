@@ -58,9 +58,9 @@ enum AsociatedProject {
 }
 
 enum Region {
-  Zulia
-  Caracas
-  Carabobo
+  ZULIA
+  CARABOBO
+  CARACAS
 }
 
 enum ScholarStatus {
@@ -79,4 +79,5 @@ enum ScholarAttendance {
   ATTENDED
   CANCELED
   NOT_ATTENDED
+  JUSTIFY
 }
