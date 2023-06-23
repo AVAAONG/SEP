@@ -3,6 +3,7 @@
  * @module lib/auth/nextAuthOptions/authOptions
  * @author Kevin Bravo (kevinbravo.me)
 */
+import { PagesOptions } from "next-auth";
 import { OAuthUserConfig } from "next-auth/providers";
 import type { CredentialsConfig } from "next-auth/providers/credentials";
 import shortUUID from "short-uuid";
@@ -45,9 +46,10 @@ export const NEXT_SECRET = process.env.NEXTAUTH_SECRET || shortUUID.generate();
  * @see https://next-auth.js.org/configuration/pages
  *  
  */
-export const PAGES = {
+export const PAGES: Partial<PagesOptions> = {
     signIn: "/auth/signin",
     newUser: "/auth/signup",
+    
 }
 
 
