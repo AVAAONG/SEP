@@ -1,3 +1,6 @@
+// Base types prisma file for Workshop model.
+/// @author Kevin Bravo (kevinbravo.me)
+
 enum Pensum {
     EJERCICIO_CIUDADANO
     LIDERAZGO
@@ -6,4 +9,3 @@ enum Pensum {
     EMPRENDIMIENTO
     TRABAJO_EN_EQUIPO
 }
-

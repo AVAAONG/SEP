@@ -1,18 +1,23 @@
+/// Prisma schema model for `Scholar` table in database.
+/// Here we model all the necesary data and information wee need for the scholars.
+/// @author Kevin Bravo (kevinbravo.me)
+
 import { WorkshopAttendance } from "..\..\activities\workshop\workshop"
 import { ChatAttendance } from "..\..\activities\chat\chat"
 import { Region, ScholarCanAssist, ScholarStatus } from "types-scholar"
 import { User } from "..\auth"
 import { ChatSpeaker } from "..\..\activities\chat\chat"
 import { InternalProjects } from "..\project\project"
+import { volunteerAttendance } from "..\..\activities\volunteer\volunteer"
 
 model Scholar {
-    id                           String    @id @default(nanoid(12))
-    user                         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-    region                       Region    @default(CARACAS)
-    userId                       String    @unique
+    id                           String                @id @default(nanoid(12))
+    user                         User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+    region                       Region                @default(CARACAS)
+    userId                       String                @unique
     firstNames                   String
     lastNames                    String
-    dni                          String?   @unique
+    dni                          String?               @unique
     gender                       String?
     birthDate                    DateTime?
     localPhoneNumber             String?
@@ -20,7 +25,7 @@ model Scholar {
     whatsAppNumber               String?
     stateOfOrigin                String?
     currentZone                  String?
-    email                        String?   @unique
+    email                        String?               @unique
     collage                      String?
     carrer                       String?
     studyArea                    String?
@@ -43,15 +48,16 @@ model Scholar {
     twitterUser                  String?
     facebookUser                 String?
     linkedinUser                 String?
-    attendedWorkshpos     WorkshopAttendance[]
-    attendedChats         ChatAttendance[]
-    scholarStatus         ScholarStatus        @default(CURRENT)
-    canAssistToChats      ScholarCanAssist     @default(YES)
-    canAssistToWorkshops  ScholarCanAssist     @default(YES)
-    canAssistToVolunteers ScholarCanAssist     @default(YES)
-    ChatSpeaker           ChatSpeaker[]
-    InternalProjects      InternalProjects?    @relation(fields: [internalProjectsId], references: [id])
-    internalProjectsId    String?
+    attendedWorkshpos            WorkshopAttendance[]
+    attendedChats                ChatAttendance[]
+    scholarStatus                ScholarStatus         @default(CURRENT)
+    canAssistToChats             ScholarCanAssist      @default(YES)
+    canAssistToWorkshops         ScholarCanAssist      @default(YES)
+    canAssistToVolunteers        ScholarCanAssist      @default(YES)
+    chatSpeaker                  ChatSpeaker[]
+    InternalProjects             InternalProjects?     @relation(fields: [internalProjectsId], references: [id])
+    internalProjectsId           String?
+    volunteerAttendance          volunteerAttendance[]
 
     @@index([internalProjectsId])
 }

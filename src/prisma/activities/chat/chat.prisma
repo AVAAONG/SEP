@@ -1,3 +1,7 @@
+/// Prisma schema model for `Chat` table in database.
+/// Here we model all the necesary data and information wee need for the English Chat clubs, and related tables (tempData, attendance, speaker)
+/// @author Kevin Bravo (kevinbravo.me)
+
 import { ActivityStatus, Modality } from "..\type-activities"
 import { Level } from "types-chat"
 import { ScholarAttendance } from "..\type-activities"

@@ -1,3 +1,6 @@
+/// Prisma schema model for `Workshop` table in database.
+/// Here we model all the necesary data and information wee need for the Workshop activities, and related tables (tempData, attendance, speaker)
+/// @author Kevin Bravo (kevinbravo.me)
 import { AvaaYear } from "..\..\types"
 import { Pensum } from "types-workshop"
 import { ActivityStatus, Modality } from "..\type-activities"

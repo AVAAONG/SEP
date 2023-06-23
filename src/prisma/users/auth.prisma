@@ -1,3 +1,8 @@
+//  Prisma schema for the next -auth related config.
+//@see https://next-auth.js.org/v3/adapters/prisma#setup for more information
+// Here we model all the necesary data and information for the next-auth to work
+/// @author Kevin Bravo (kevinbravo.me)
+
 import { Role } from "types-users"
 import { Scholar } from "scholar\scholar"
 

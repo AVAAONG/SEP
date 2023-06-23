@@ -1,7 +1,10 @@
+// Base types prisma file for general user types. Types that are share between users. 
+/// @author Kevin Bravo (kevinbravo.me)
+
 enum Role {
   ADMIN
   COMITEE
-  PROYECTS
+  PROYECT
   CHAT
   SCHOLAR
 }

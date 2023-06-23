@@ -7,6 +7,10 @@
 // chat.prisma
 //
 
+/// Prisma schema model for `Chat` table in database.
+/// Here we model all the necesary data and information wee need for the English Chat clubs, and related tables (tempData, attendance, speaker)
+/// @author Kevin Bravo (kevinbravo.me)
+
 model Chat {
   id             String           @id @default(nanoid(8))
   title          String
@@ -64,6 +68,9 @@ model ChatSpeaker {
 // types-chat.prisma
 //
 
+// Base types prisma file for chat models. Types that are only used for chat related models. 
+/// @author Kevin Bravo (kevinbravo.me)
+
 enum Level {
   BASICO
   INTERMEDIO
@@ -73,6 +80,9 @@ enum Level {
 //
 // type-activities.prisma
 //
+
+// Base types prisma file for activities models. Types that are only used for actiities related models.
+/// @author Kevin Bravo (kevinbravo.me)
 
 enum Modality {
   PRESENCIAL
@@ -99,29 +109,54 @@ enum ScholarAttendance {
 // types-volunteer.prisma
 //
 
+// Base types prisma file for Volunteer model. Types that are only used for  volunteer related models. 
+/// @author Kevin Bravo (kevinbravo.me)
+
 //
 // volunteer.prisma
 //
 
+/// Prisma schema model for `Volunteer` table in database.
+/// Here we model all the necesary data and information wee need for the Volunteer activities, and related tables (tempData, attendance)
+/// @author Kevin Bravo (kevinbravo.me)
+
 model Volunteer {
-  id                 String            @id @default(nanoid(8))
-  Projects           InternalProjects? @relation(fields: [InternalProjectId], references: [id])
+  id                 String                @id @default(nanoid(8))
+  Projects           InternalProjects?     @relation(fields: [InternalProjectId], references: [id])
   InternalProjectId  String?
   title              String
   description        String
   hours              Float
-  ExternalProjects   ExternalProjects? @relation(fields: [externalProjectsId], references: [id])
+  ExternalProjects   ExternalProjects?     @relation(fields: [externalProjectsId], references: [id])
   externalProjectsId String?
   raiting            Float?
   photoAlbum         String?
+  CalendarId         String?
+  VolunteerAtt       volunteerAttendance[]
 
   @@index([InternalProjectId])
   @@index([externalProjectsId])
 }
 
+model volunteerAttendance {
+  id            String            @id @default(nanoid(8))
+  scholar       Scholar           @relation(fields: [scholarId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  scholarId     String
+  volunteerId   String
+  volnuteer     Volunteer         @relation(fields: [volunteerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  attendance    ScholarAttendance
+  justification String?
+
+  @@index([volunteerId])
+  @@index([scholarId])
+}
+
 //
 // types-workshop.prisma
 //
+
+// Base types prisma file for Workshop model.
+/// @author Kevin Bravo (kevinbravo.me)
 
 enum Pensum {
   EJERCICIO_CIUDADANO
@@ -135,6 +170,10 @@ enum Pensum {
 //
 // workshop.prisma
 //
+
+/// Prisma schema model for `Workshop` table in database.
+/// Here we model all the necesary data and information wee need for the Workshop activities, and related tables (tempData, attendance, speaker)
+/// @author Kevin Bravo (kevinbravo.me)
 
 model Workshop {
   id                String               @id @default(nanoid(8))
@@ -204,14 +243,17 @@ model WorkshopAttendance {
 // base.prisma
 //
 
-// Base file for the prisma schema modelation of the database
+// Base prisma file, Here we specified each of the configuration for make prisma work correctly
+///@see 
 /// @author Kevin Bravo (kevinbravo.me)
 
+///@see https://www.prisma.io/docs/concepts/components/prisma-schema/generators
 generator client {
   provider = "prisma-client-js"
 }
 
 // ignore this error
+///@see https://www.prisma.io/docs/concepts/components/prisma-schema/data-sources
 datasource db {
   provider     = "postgresql"
   url          = env("DATABASE_URL")
@@ -221,6 +263,9 @@ datasource db {
 //
 // types.prisma
 //
+
+// Base  type prisma file, in this file we define the base types for all the prisma schema
+/// @author Kevin Bravo (kevinbravo.me)
 
 enum AvaaYear {
   I
@@ -235,6 +280,11 @@ enum AvaaYear {
 //
 // auth.prisma
 //
+
+//  Prisma schema for the next -auth related config.
+//@see https://next-auth.js.org/v3/adapters/prisma#setup for more information
+// Here we model all the necesary data and information for the next-auth to work
+/// @author Kevin Bravo (kevinbravo.me)
 
 model User {
   id       String    @id @default(cuid())
@@ -289,6 +339,10 @@ model VerificationToken {
 // project.prisma
 //
 
+/// Prisma schema model for all the projects related table in database.
+/// Here we model all the necesary data and information we need for the different kind of projects we have to make volunteer activities. 
+/// @author Kevin Bravo (kevinbravo.me)
+
 model ExternalProjects {
   id             String  @id @default(nanoid(8))
   name           String
@@ -327,14 +381,18 @@ model InternalProjects {
 // scholar.prisma
 //
 
+/// Prisma schema model for `Scholar` table in database.
+/// Here we model all the necesary data and information wee need for the scholars.
+/// @author Kevin Bravo (kevinbravo.me)
+
 model Scholar {
-  id                           String               @id @default(nanoid(12))
-  user                         User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
-  region                       Region               @default(CARACAS)
-  userId                       String               @unique
+  id                           String                @id @default(nanoid(12))
+  user                         User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  region                       Region                @default(CARACAS)
+  userId                       String                @unique
   firstNames                   String
   lastNames                    String
-  dni                          String?              @unique
+  dni                          String?               @unique
   gender                       String?
   birthDate                    DateTime?
   localPhoneNumber             String?
@@ -342,7 +400,7 @@ model Scholar {
   whatsAppNumber               String?
   stateOfOrigin                String?
   currentZone                  String?
-  email                        String?              @unique
+  email                        String?               @unique
   collage                      String?
   carrer                       String?
   studyArea                    String?
@@ -367,13 +425,14 @@ model Scholar {
   linkedinUser                 String?
   attendedWorkshpos            WorkshopAttendance[]
   attendedChats                ChatAttendance[]
-  scholarStatus                ScholarStatus        @default(CURRENT)
-  canAssistToChats             ScholarCanAssist     @default(YES)
-  canAssistToWorkshops         ScholarCanAssist     @default(YES)
-  canAssistToVolunteers        ScholarCanAssist     @default(YES)
-  ChatSpeaker                  ChatSpeaker[]
-  InternalProjects             InternalProjects?    @relation(fields: [internalProjectsId], references: [id])
+  scholarStatus                ScholarStatus         @default(CURRENT)
+  canAssistToChats             ScholarCanAssist      @default(YES)
+  canAssistToWorkshops         ScholarCanAssist      @default(YES)
+  canAssistToVolunteers        ScholarCanAssist      @default(YES)
+  chatSpeaker                  ChatSpeaker[]
+  InternalProjects             InternalProjects?     @relation(fields: [internalProjectsId], references: [id])
   internalProjectsId           String?
+  volunteerAttendance          volunteerAttendance[]
 
   @@index([internalProjectsId])
 }
@@ -381,6 +440,9 @@ model Scholar {
 //
 // types-scholar.prisma
 //
+
+// Base types prisma file for scholar types. Types that are only used for scholars.
+/// @author Kevin Bravo (kevinbravo.me)
 
 enum Region {
   ZULIA
@@ -404,10 +466,13 @@ enum ScholarCanAssist {
 // types-users.prisma
 //
 
+// Base types prisma file for general user types. Types that are share between users. 
+/// @author Kevin Bravo (kevinbravo.me)
+
 enum Role {
   ADMIN
   COMITEE
-  PROYECTS
+  PROYECT
   CHAT
   SCHOLAR
 }

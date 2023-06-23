@@ -1,3 +1,7 @@
+/// Prisma schema model for all the projects related table in database.
+/// Here we model all the necesary data and information we need for the different kind of projects we have to make volunteer activities. 
+/// @author Kevin Bravo (kevinbravo.me)
+
 import { Volunteer } from "..\..\activities\volunteer\volunteer"
 import { Scholar } from "..\scholar\scholar"
 

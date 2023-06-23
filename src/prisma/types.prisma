@@ -1,3 +1,6 @@
+// Base  type prisma file, in this file we define the base types for all the prisma schema
+/// @author Kevin Bravo (kevinbravo.me)
+
 enum AvaaYear {
     I
     II
@@ -7,4 +10,3 @@ enum AvaaYear {
     V0
     TODOS
 }
-
