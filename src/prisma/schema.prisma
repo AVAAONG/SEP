@@ -104,14 +104,19 @@ enum ScholarAttendance {
 //
 
 model Volunteer {
-  id          String    @id @default(nanoid(8))
-  Projects    Projects? @relation(fields: [projectsId], references: [id])
-  projectsId  String?
-  title       String
-  description String
-  hours       Float
+  id                 String            @id @default(nanoid(8))
+  Projects           InternalProjects? @relation(fields: [InternalProjectId], references: [id])
+  InternalProjectId  String?
+  title              String
+  description        String
+  hours              Float
+  ExternalProjects   ExternalProjects? @relation(fields: [externalProjectsId], references: [id])
+  externalProjectsId String?
+  raiting            Float?
+  photoAlbum         String?
 
-  @@index([projectsId])
+  @@index([InternalProjectId])
+  @@index([externalProjectsId])
 }
 
 //
@@ -284,16 +289,38 @@ model VerificationToken {
 // project.prisma
 //
 
-model Projects {
+model ExternalProjects {
+  id             String  @id @default(nanoid(8))
+  name           String
+  username       String
+  description    String?
+  image          String?
+  instagramUser  String?
+  location       String?
+  website        String?
+  phoneNumer     String?
+  email          String?
+  personInCharge String?
+  goal           String?
+
+  volunteerActivities Volunteer[]
+  createdAt           DateTime
+}
+
+model InternalProjects {
   id                  String      @id @default(nanoid(8))
   name                String
   username            String
   description         String?
   image               String?
   instagramUser       String?
-  location            String?
+  ScholarLeaders      Scholar[]
+  KPI                 Json
   volunteerActivities Volunteer[]
   createdAt           DateTime
+  goal                String?
+  ods                 String?
+  bagdes              String[]
 }
 
 //
@@ -301,13 +328,13 @@ model Projects {
 //
 
 model Scholar {
-  id                           String    @id @default(nanoid(12))
-  user                         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  region                       Region    @default(CARACAS)
-  userId                       String    @unique
+  id                           String               @id @default(nanoid(12))
+  user                         User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  region                       Region               @default(CARACAS)
+  userId                       String               @unique
   firstNames                   String
   lastNames                    String
-  dni                          String?   @unique
+  dni                          String?              @unique
   gender                       String?
   birthDate                    DateTime?
   localPhoneNumber             String?
@@ -315,7 +342,7 @@ model Scholar {
   whatsAppNumber               String?
   stateOfOrigin                String?
   currentZone                  String?
-  email                        String?   @unique
+  email                        String?              @unique
   collage                      String?
   carrer                       String?
   studyArea                    String?
@@ -338,14 +365,17 @@ model Scholar {
   twitterUser                  String?
   facebookUser                 String?
   linkedinUser                 String?
+  attendedWorkshpos            WorkshopAttendance[]
+  attendedChats                ChatAttendance[]
+  scholarStatus                ScholarStatus        @default(CURRENT)
+  canAssistToChats             ScholarCanAssist     @default(YES)
+  canAssistToWorkshops         ScholarCanAssist     @default(YES)
+  canAssistToVolunteers        ScholarCanAssist     @default(YES)
+  ChatSpeaker                  ChatSpeaker[]
+  InternalProjects             InternalProjects?    @relation(fields: [internalProjectsId], references: [id])
+  internalProjectsId           String?
 
-  attendedWorkshpos     WorkshopAttendance[]
-  attendedChats         ChatAttendance[]
-  scholarStatus         ScholarStatus        @default(CURRENT)
-  canAssistToChats      ScholarCanAssist     @default(YES)
-  canAssistToWorkshops  ScholarCanAssist     @default(YES)
-  canAssistToVolunteers ScholarCanAssist     @default(YES)
-  ChatSpeaker           ChatSpeaker[]
+  @@index([internalProjectsId])
 }
 
 //

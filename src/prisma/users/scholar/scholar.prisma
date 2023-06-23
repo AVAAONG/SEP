@@ -3,6 +3,7 @@ import { ChatAttendance } from "..\..\activities\chat\chat"
 import { Region, ScholarCanAssist, ScholarStatus } from "types-scholar"
 import { User } from "..\auth"
 import { ChatSpeaker } from "..\..\activities\chat\chat"
+import { InternalProjects } from "..\project\project"
 
 model Scholar {
     id                           String    @id @default(nanoid(12))
@@ -42,7 +43,6 @@ model Scholar {
     twitterUser                  String?
     facebookUser                 String?
     linkedinUser                 String?
-
     attendedWorkshpos     WorkshopAttendance[]
     attendedChats         ChatAttendance[]
     scholarStatus         ScholarStatus        @default(CURRENT)
@@ -50,6 +50,8 @@ model Scholar {
     canAssistToWorkshops  ScholarCanAssist     @default(YES)
     canAssistToVolunteers ScholarCanAssist     @default(YES)
     ChatSpeaker           ChatSpeaker[]
+    InternalProjects      InternalProjects?    @relation(fields: [internalProjectsId], references: [id])
+    internalProjectsId    String?
+
+    @@index([internalProjectsId])
 }
-
-
