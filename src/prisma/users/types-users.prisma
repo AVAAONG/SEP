@@ -1,0 +1,7 @@
+enum Role {
+  ADMIN
+  COMITEE
+  PROYECTS
+  CHAT
+  SCHOLAR
+}

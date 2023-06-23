@@ -1,0 +1,20 @@
+enum Modality {
+    PRESENCIAL
+    VIRTUAL
+    HIBRIDO
+    ASINCRONO
+}
+
+enum ActivityStatus {
+    AGENDADO
+    EN_PROCESO
+    REALIZADO
+    SUSPENDIDO
+}
+
+enum ScholarAttendance {
+    ATTENDED
+    CANCELED
+    NOT_ATTENDED
+    JUSTIFY
+}

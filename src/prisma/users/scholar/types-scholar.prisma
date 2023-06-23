@@ -1,0 +1,17 @@
+enum Region {
+    ZULIA
+    CARABOBO
+    CARACAS
+}
+
+enum ScholarStatus {
+    PROBATORIO_1
+    PROBATORIO_2
+    CURRENT
+    ALUMNI
+}
+
+enum ScholarCanAssist {
+    YES
+    NO
+}

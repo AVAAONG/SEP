@@ -1,0 +1,55 @@
+import { WorkshopAttendance } from "..\..\activities\workshop\workshop"
+import { ChatAttendance } from "..\..\activities\chat\chat"
+import { Region, ScholarCanAssist, ScholarStatus } from "types-scholar"
+import { User } from "..\auth"
+import { ChatSpeaker } from "..\..\activities\chat\chat"
+
+model Scholar {
+    id                           String    @id @default(nanoid(12))
+    user                         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    region                       Region    @default(CARACAS)
+    userId                       String    @unique
+    firstNames                   String
+    lastNames                    String
+    dni                          String?   @unique
+    gender                       String?
+    birthDate                    DateTime?
+    localPhoneNumber             String?
+    cellPhoneNumber              String?
+    whatsAppNumber               String?
+    stateOfOrigin                String?
+    currentZone                  String?
+    email                        String?   @unique
+    collage                      String?
+    carrer                       String?
+    studyArea                    String?
+    currentAcademicPeriod        String?
+    academicYear                 String?
+    classModality                String?
+    cvaLocation                  String?
+    englishLevel                 String?
+    notStartedCvaRreason         String?
+    avaaAdmissionYear            String?
+    volunteeringOrganizationName String?
+    academicLoadCompleted        Boolean?
+    currentStatus                String?
+    ceremonyDate                 DateTime?
+    isCurrentlyWorking           Boolean?
+    organizationName             String?
+    positionHeld                 String?
+    workModality                 String?
+    instagramUser                String?
+    twitterUser                  String?
+    facebookUser                 String?
+    linkedinUser                 String?
+
+    attendedWorkshpos     WorkshopAttendance[]
+    attendedChats         ChatAttendance[]
+    scholarStatus         ScholarStatus        @default(CURRENT)
+    canAssistToChats      ScholarCanAssist     @default(YES)
+    canAssistToWorkshops  ScholarCanAssist     @default(YES)
+    canAssistToVolunteers ScholarCanAssist     @default(YES)
+    ChatSpeaker           ChatSpeaker[]
+}
+
+

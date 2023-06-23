@@ -1,83 +1,10 @@
-// ====================================== Admin related shchema  ======================================
-enum Role {
-  ADMIN
-  COMITEE
-  PROYECTS
-  CHAT
-  SCHOLAR
+enum AvaaYear {
+    I
+    II
+    III
+    IV
+    V
+    V0
+    TODOS
 }
 
-// ====================================== Actvities related shchema  ======================================
-enum Modality {
-  PRESENCIAL
-  VIRTUAL
-  HIBRIDO
-  ASINCRONO
-}
-
-enum Platform {
-  zoom
-  google_meet
-  otra
-  padlet
-  oficinas_de_avaa
-  teams
-  discord
-  jitsi
-}
-
-enum ActivityStatus {
-  AGENDADO
-  EN_PROCESO
-  REALIZADO
-  SUSPENDIDO
-}
-
-enum Pensum {
-  EJERCICIO_CIUDADANO
-  LIDERAZGO
-  GERENCIA_EN_SI_MISMO
-  TIC
-  EMPRENDIMIENTO
-  TRABAJO_EN_EQUIPO
-}
-
-enum Level {
-  Basico
-  Intermedio
-  Avanzado
-}
-
-enum AsociatedProject {
-  UMAA
-  OAL
-  ALV
-  UVPLV
-  oficinas_de_avaa
-  Externos
-}
-
-enum Region {
-  ZULIA
-  CARABOBO
-  CARACAS
-}
-
-enum ScholarStatus {
-  PROBATORIO_1
-  PROBATORIO_2
-  CURRENT
-  ALUMNI
-}
-
-enum ScholarCanAssist {
-  Yes
-  No
-}
-
-enum ScholarAttendance {
-  ATTENDED
-  CANCELED
-  NOT_ATTENDED
-  JUSTIFY
-}

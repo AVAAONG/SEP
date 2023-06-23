@@ -1,5 +1,5 @@
-import { Role } from "..\types"
-import { Scholar } from "scholar"
+import { Role } from "types-users"
+import { Scholar } from "scholar\scholar"
 
 model User {
     id       String    @id @default(cuid())

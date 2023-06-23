@@ -1,0 +1,13 @@
+import { Volunteer } from "..\..\activities\volunteer\volunteer"
+
+model Projects {
+    id                  String      @id @default(nanoid(8))
+    name                String
+    username            String
+    description         String?
+    image               String?
+    instagramUser       String?
+    location            String?
+    volunteerActivities Volunteer[]
+    createdAt           DateTime
+}

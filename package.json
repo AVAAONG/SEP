@@ -1,7 +1,7 @@
 {
   "name": "sep",
   "author": "Kevin Bravo (@_bravok)",
-"description": "Sistema para evaluar el progreso del becario durante su estadia en el Programa Excelencia",
+  "description": "Sistema para evaluar el progreso del becario durante su estadia en el Programa Excelencia",
   "version": "0.1.0",
   "private": true,
   "homepage": "https://github.com/mustafinho/seb",
@@ -9,16 +9,18 @@
     "node": ">=16.6.0",
     "pnpm": ">=7.27.0",
     "npm": "please-use-pnpm"
-},
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prisma:generate": "prisma generate --schema=./src/prisma/schema.prisma",
+    "prisma:delete": "rm C:/Users/kevin/Documents/work/seb/node_modules/.pnpm/@prisma+client@4.15.0_prisma@4.15.0/node_modules/.prisma/client/query_engine-windows.dll.node",
+    "prisma:generate": "pnpm run prisma:import && pnpm run prisma:delete && prisma generate --schema=./src/prisma/schema.prisma",
     "prisma:studio": "prisma studio --schema=./src/prisma/schema.prisma",
     "prisma:push": "prisma db push dev --schema=./src/prisma/schema.prisma",
-    "prisma:format": "prisma format --schema=./src/prisma/schema.prisma"
+    "prisma:format": "prisma format --schema=./src/prisma/schema.prisma",
+    "prisma:import": "rm ./src/prisma/schema.prisma && pnpm prisma-import --schemas=./src/prisma/**/*.prisma --output=./src/prisma/schema.prisma && pnpm prisma:format"
   },
   "dependencies": {
     "@googleapis/calendar": "^4.1.0",
@@ -43,6 +45,7 @@
     "next-auth": "0.0.0-pr.6777.c5550344",
     "postcss": "8.4.21",
     "prisma": "^4.15.0",
+    "prisma-import": "^1.0.4",
     "react": "18.2.0",
     "react-big-calendar": "^1.6.9",
     "react-dom": "18.2.0",
@@ -66,5 +69,3 @@
     "@types/react-table": "^7.7.14"
   }
 }
-
-
