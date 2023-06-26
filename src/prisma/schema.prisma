@@ -387,9 +387,9 @@ model InternalProjects {
 
 model Scholar {
   id                           String                @id @default(nanoid(12))
-  user                         User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                         User?                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   region                       Region                @default(CARACAS)
-  userId                       String                @unique
+  userId                       String?               @unique
   firstNames                   String
   lastNames                    String
   dni                          String?               @unique

@@ -5,21 +5,52 @@ import { setTokens } from '@/lib/auth/auth';
 import shortUUID from 'short-uuid';
 import { getSpreadsheetValues } from '@/lib/sheets/sheets';
 import { Pensum } from "@/types/Workshop";
-import { Attendance, Modality, Platform, WorkshopDates, WorkshopSpeakers, activityStatus } from "@prisma/client";
+import { Attendance, Modality, Platform, WorkshopDates, activityStatus } from "@prisma/client";
 import { createWorkshop, createWorkshopSpeaker } from "@/lib/database/Workshops";
 import { getFormatedDate } from "@/lib/calendar/utils";
 import { create } from "domain";
-import { createScholar } from "@/lib/database/users";
+import { createScholar, deleteAllScholars, getScholarsCount } from "@/lib/database/users";
 
 const facilitadores = "'Hoja 2'!B2:C32"
 const talleres = "'Vista principal de talleres'!C10:P55"
+
+
+const createScholarsInbatch = async (values: any[][]) => {
+    values.forEach(async (value) => {
+        const scholar = new ScholarOldSpreadshetDatabase(...value)
+        scholar.dni = scholar.dni.trim()
+        scholar.dni = scholar.dni.replace(/\./g, "")
+        scholar.dni = scholar.dni.replace(/-/g, "")
+        scholar.dni = scholar.dni.replace(/v/g, "")
+        scholar.dni = scholar.dni.replace(/V/g, "")
+        scholar.dni = scholar.dni.replace(/e/g, "")
+        scholar.dni = scholar.dni.replace(/E/g, "")
+        scholar.scholarStatus = "ALUMNI"
+
+        scholar.isCurrentlyWorking = null
+        scholar.academicLoadCompleted = null
+        scholar.birthDate = null
+        scholar.ceremonyDate = null
+        scholar.birthDate = new Date(scholar.birthDate)
+
+        delete scholar["haveWatsApp"]
+        delete scholar["age"]
+        delete scholar["avaaYear"]
+        delete scholar.id
+        delete scholar["volunteerInAnother"]
+        await createScholar(scholar)
+
+    })
+}
 
 export async function GET(req: NextApiRequest, res: NextResponse) {
     const token = await getToken({ req });
     //@ts-ignore
     setTokens(token.accessToken, token.refreshToken)
-    const values = await getSpreadsheetValues("1UpTuisAcdb7Gs79cmYAyA4kb7GnXqvNjf8i_enhZqzk", "'Hoja 4'!A1:AH2") as string[][]
+    const values = await getSpreadsheetValues("1hGxwp8LEIyf3SJQOT3KpN8P9XaaQk0qrHXZV682SWws", "'Activos'!A255:AH256") as string[][]
     await createScholarsInbatch(values)
+    // const count = await getScholarsCount()
+    // await deleteAllScholars()
     // values.forEach(value => {
     //     createWorkshopSpeaker
     //         id: shortUUID.generate(),
@@ -53,7 +84,7 @@ export async function GET(req: NextApiRequest, res: NextResponse) {
 
     // })
 
-    return NextResponse.json(values)
+    return NextResponse.json({ total: "total"})
 }
 
 class ScholarOldSpreadshetDatabase {
@@ -88,14 +119,16 @@ class ScholarOldSpreadshetDatabase {
         public academicLoadCompleted?: boolean,
         public currentStatus?: string,
         public ceremonyDate?: Date,
-        public currentlyWorking?: boolean,
+        public isCurrentlyWorking?: boolean,
         public organizationName?: string,
         public positionHeld?: string,
-        public workshopModality?: string,
+        public workModality?: string,
         public canAssistToWorkshops?: boolean,
         public canAssistToChats?: boolean,
         public canAssistToVolunteers?: boolean,
         public region?: string,
+        public userId?: null,
+        public scholarStatus?: string,   
 
     ) {
     }
@@ -120,31 +153,4 @@ class WokshopOldDatabase {
         public attendance?: Attendance[],
         public dates?: WorkshopDates[]
     ) { }
-}
-
-
-const createScholarsInbatch = async (values: any[][]) => {
-    values.forEach(async (value) => {
-        const scholar = new ScholarOldSpreadshetDatabase(...value)
-        scholar.dni = scholar.dni.trim()
-        scholar.dni = scholar.dni.replace(/\./g, "")
-        scholar.dni = scholar.dni.replace(/-/g, "")
-        scholar.dni = scholar.dni.replace(/v/g, "")
-        scholar.dni = scholar.dni.replace(/V/g, "")
-        scholar.dni = scholar.dni.replace(/e/g, "")
-        delete scholar.id
-        scholar.dni = scholar.dni.replace(/E/g, "")
-
-        scholar.currentlyWorking = null
-        scholar.academicLoadCompleted = null
-
-        scholar.birthDate = null
-        scholar.ceremonyDate = null
-
-        delete scholar["haveWatsApp"]
-        delete scholar["age"]
-        delete scholar["avaaYear"]
-        delete scholar["volunteerInAnother"]
-        await createScholar(scholar)
-    })
 }

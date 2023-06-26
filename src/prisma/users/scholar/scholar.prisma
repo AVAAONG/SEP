@@ -12,9 +12,9 @@ import { volunteerAttendance } from "..\..\activities\volunteer\volunteer"
 
 model Scholar {
     id                           String                @id @default(nanoid(12))
-    user                         User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+    user                         User?                 @relation(fields: [userId], references: [id], onDelete: Cascade)
     region                       Region                @default(CARACAS)
-    userId                       String                @unique
+    userId                       String?               @unique
     firstNames                   String
     lastNames                    String
     dni                          String?               @unique
@@ -50,7 +50,7 @@ model Scholar {
     linkedinUser                 String?
     attendedWorkshpos            WorkshopAttendance[]
     attendedChats                ChatAttendance[]
-    scholarStatus                ScholarStatus         @default(CURRENT)
+    scholarStatus                ScholarStatus
     canAssistToChats             ScholarCanAssist      @default(YES)
     canAssistToWorkshops         ScholarCanAssist      @default(YES)
     canAssistToVolunteers        ScholarCanAssist      @default(YES)

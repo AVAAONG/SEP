@@ -33,6 +33,19 @@ export const createUser = async (data: User): Promise<User> => {
     return user;
 }
 
+
+/**
+ * Delete all scholars from the database
+ * @param dat
+ * @returns 
+ */
+
+export const deleteAllScholars = async (): Promise<Scholar[]> => {
+    const scholars = await prisma.scholar.deleteMany();
+}
+
+
+
 export const createScholar = async (data: Scholar): Promise<Scholar | null> => {
     try {
         const scholar = await prisma.scholar.create({
