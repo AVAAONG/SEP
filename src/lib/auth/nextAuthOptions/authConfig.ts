@@ -48,8 +48,6 @@ export const NEXT_SECRET = process.env.NEXTAUTH_SECRET || shortUUID.generate();
  */
 export const PAGES: Partial<PagesOptions> = {
     signIn: "/auth/signin",
-    newUser: "/auth/signup",
-    
 }
 
 
