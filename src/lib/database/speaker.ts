@@ -21,3 +21,23 @@ export const getSpeakerNames = async () => {
     })
     return speakers
 }
+
+export const getSpeakers = async () => {
+    const speakers = await prisma.workshopSpeaker.findMany()
+    return speakers
+}
+
+/**
+ * get only speakers id, speakers name and speaker email
+ */
+
+export const getSpeakersIdNameEmail = async () => {
+    const speakers = await prisma.workshopSpeaker.findMany({
+        select: {
+            name: true,
+            id: true,
+            email: true
+        }
+    })
+    return speakers
+}

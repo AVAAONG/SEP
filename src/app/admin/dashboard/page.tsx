@@ -11,6 +11,7 @@ import { BigCalendarEventType } from '@/types/Calendar';
 import { getWorkshopsCount } from '@/lib/database/Workshops'
 import { getScholarsCount } from '@/lib/database/users'
 import { CALENDAR_IDS } from '@/lib/constants'
+import { getChatsCount, getChatsDone } from '@/lib/database/chats'
 
 
 
@@ -60,6 +61,7 @@ const fetchEvents = async () => {
 const page = async () => {
     const workshopCount = await getWorkshopsCount();
     const scholarsCount = await getScholarsCount();
+    const chatsCount = await getChatsCount()
 
 
     const events = await fetchEvents();
@@ -75,7 +77,7 @@ const page = async () => {
         {
             icon: chatIcon,
             text: "Chats Realizados",
-            number: 72,
+            number: chatsCount,
             bg: "bg-gradient-to-r from-red-500  to-red-900",
             cardButtonBg: "bg-indigo-950 active:bg-blue-700"
 

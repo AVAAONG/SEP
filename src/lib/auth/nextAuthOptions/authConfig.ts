@@ -37,6 +37,7 @@ export const GOOGLE_ADMIN_SCOPES = [
     'https://www.googleapis.com/auth/userinfo.email',
 ];
 
+
 export const NEXT_SECRET = process.env.NEXTAUTH_SECRET || shortUUID.generate();
 
 /** 

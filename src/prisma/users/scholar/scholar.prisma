@@ -54,7 +54,6 @@ model Scholar {
     canAssistToChats             ScholarCanAssist      @default(YES)
     canAssistToWorkshops         ScholarCanAssist      @default(YES)
     canAssistToVolunteers        ScholarCanAssist      @default(YES)
-    chatSpeaker                  ChatSpeaker[]
     InternalProjects             InternalProjects?     @relation(fields: [internalProjectsId], references: [id])
     internalProjectsId           String?
     volunteerAttendance          volunteerAttendance[]

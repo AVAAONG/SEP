@@ -40,7 +40,7 @@ export const createUser = async (data: User): Promise<User> => {
  * @returns 
  */
 
-export const deleteAllScholars = async (): Promise<Scholar[]> => {
+export const deleteAllScholars = async () => {
     const scholars = await prisma.scholar.deleteMany();
 }
 
@@ -198,10 +198,18 @@ export const getUserByRole = async (role: Role): Promise<User[]> => {
  * 
  */
 export const getScholarsCount = async (): Promise<number> => {
-    const count = await prisma.scholar.count();
+    const count = await prisma.scholar.count({
+        where: {
+            scholarStatus: ScholarStatus.CURRENT
+        }
+    });
     return count;
 }
 
+export const getScholars = async () => {
+    const scholar = await prisma.scholar.findMany();
+    return scholar
+}
 
 ///+============== Personas de febrero
 // NO se pudo colocar a 27488394 en el taller pjvjjStiRNDib8WMJqtyu7

@@ -5,14 +5,15 @@ import { setTokens } from '@/lib/auth/auth';
 import shortUUID from 'short-uuid';
 import { getSpreadsheetValues } from '@/lib/sheets/sheets';
 import { Pensum } from "@/types/Workshop";
-import { Attendance, Modality, Platform, WorkshopDates, activityStatus } from "@prisma/client";
+import { Attendance, Level, Modality, Platform, WorkshopDates, activityStatus } from "@prisma/client";
 import { createWorkshop, createWorkshopSpeaker } from "@/lib/database/Workshops";
-import { getFormatedDate } from "@/lib/calendar/utils";
+import { addHours, getFormatedDate } from "@/lib/calendar/utils";
 import { create } from "domain";
-import { createScholar, deleteAllScholars, getScholarsCount } from "@/lib/database/users";
+import { createScholar, deleteAllScholars, getScholars, getScholarsCount } from "@/lib/database/users";
+import { convertScholarToSpeaker, countChatSpeakers, createChat, createChatSpeaker, deleteAllChatSpeakers, deleteAllChats } from "@/lib/database/chats";
 
-const facilitadores = "'Hoja 2'!B2:C32"
-const talleres = "'Vista principal de talleres'!C10:P55"
+const facilitadores = "'Hoja 2'!C3:D34"
+const talleres = "'Vista principal de talleres'!C10:P57"
 
 
 const createScholarsInbatch = async (values: any[][]) => {
@@ -43,48 +44,87 @@ const createScholarsInbatch = async (values: any[][]) => {
     })
 }
 
+// values.forEach(async(value) => {
+//     await createWorkshopSpeaker({
+//         id: shortUUID.generate(),
+//         name: value[0],
+//         email: value[1]
+//     })
+// })
+
+// values.forEach(value => {
+//     const workshop = new WokshopOldDatabase(...value);
+//     workshop.id = shortUUID.generate();
+
+//     delete workshop['startHour']
+//     delete workshop['endHour']
+//     delete workshop['date']
+//     delete workshop['takenSpots']
+
+//     const [speaker1, speaker2] = splitSpeakers(workshop.speaker)
+
+//     const [startDate, endDate] = getFormatedDate(value[3], value[4], value[5])
+//     const datesObj = [{
+//         start_date: new Date(startDate),
+//         end_date: new Date(endDate),
+//     }]
+//     workshop.title = workshop.title.trim();
+
+//     workshop.modality = workshop.modality.toUpperCase() as Modality;
+//     workshop.pensum = workshop.pensum.replaceAll(" ", "_").toLocaleUpperCase() as Pensum
+//     workshop.spots = parseInt(workshop.spots as any);
+//     // workshop.takenSpots = parseInt(workshop.spots as any);
+
+//     workshop.activityStatus = workshop.activityStatus.toUpperCase() as activityStatus
+
+//     createWorkshop(workshop, datesObj, speaker1);
+// })
+
+const chats = "Sheet1!A2:H104"
+const chatsSpeakers = "Sheet2!E2:E27"
+
 export async function GET(req: NextApiRequest, res: NextResponse) {
     const token = await getToken({ req });
     //@ts-ignore
     setTokens(token.accessToken, token.refreshToken)
-    const values = await getSpreadsheetValues("1hGxwp8LEIyf3SJQOT3KpN8P9XaaQk0qrHXZV682SWws", "'Activos'!A255:AH256") as string[][]
-    await createScholarsInbatch(values)
-    // const count = await getScholarsCount()
-    // await deleteAllScholars()
-    // values.forEach(value => {
-    //     createWorkshopSpeaker
-    //         id: shortUUID.generate(),
-    //         name: value[0],
-    //         email: value[1]
-    //     })
-    // })
+    await deleteAllChats()
+    const values = await getSpreadsheetValues("1y4lTjgqSQvBNtoWF_v6G2UR3a4eS-Et_dDD9XoQcYlM", chats) as string[][]
+    values.forEach(async (value) => {
+        const chat = new ChatOldDatabase(...value);
+        chat.id = shortUUID.generate();
+        const [startDate, s] = getFormatedDate(chat.date, chat.hour, chat.hour)
+        const endDate = addHours(new Date(startDate), 2)
+        chat.modality = chat.modality.toUpperCase() as Modality;
+        chat.activityStatus = chat.activityStatus === "TRUE" ? "REALIZADO" : "SUSPENDIDO"
+        chat.level = chat.level.toUpperCase() as Level
 
-    // values.forEach(value => {
-    //     const workshop = new WokshopOldDatabase(...value);
-    //     delete workshop['startHour']
-    //     const [speaker1, speaker2] = workshop.speaker.split(" y ")
-    //     delete workshop['endHour']
-    //     delete workshop['date']
-    //     workshop.id = shortUUID.generate();
-    //     const [startDate, endDate] = getFormatedDate(value[3], value[4], value[5])
-    //     const datesObj = {
-    //         id: shortUUID.generate(),
-    //         start_date: new Date(startDate.replace(/\Z/g, "-04:00")),
-    //         end_date: new Date(endDate.replace(/\Z/g, "-04:00")),
-    //     }
-    //     workshop.title = workshop.title.trim();
+        delete chat["hour"]
+        delete chat["date"]
 
-    //     workshop.modality = workshop.modality.toUpperCase() as Modality;
-    //     workshop.pensum = workshop.pensum.replaceAll(" ", "_").toLocaleUpperCase() as Pensum
-    //     workshop.spots = parseInt(workshop.spots as any);
-    //     workshop.takenSpots = parseInt(workshop.spots as any);
-    //     workshop.activityStatus = "REALIZADO";
+        const datesObj = [{
+            startDate,
+            endDate,
+        }]
+        chat.dates = datesObj
+        chat.spots = 15
 
-    //     createWorkshop(workshop, datesObj, speaker1);
 
-    // })
+        await createChat(chat)
+    })
 
-    return NextResponse.json({ total: "total"})
+    return NextResponse.json({ message: "ok" })
+}
+
+const splitSpeakers = (speakerId: string) => {
+
+    if (speakerId.includes(",")) {
+        const [speaker1, speaker2] = speakerId.split(",")
+        return [speaker1, speaker2]
+    }
+    else {
+        return [speakerId]
+    }
+
 }
 
 class ScholarOldSpreadshetDatabase {
@@ -128,7 +168,7 @@ class ScholarOldSpreadshetDatabase {
         public canAssistToVolunteers?: boolean,
         public region?: string,
         public userId?: null,
-        public scholarStatus?: string,   
+        public scholarStatus?: string,
 
     ) {
     }
@@ -147,10 +187,27 @@ class WokshopOldDatabase {
         public modality: Modality,
         public platform: Platform,
         public description?: string,
-        public avaaYear?: string,
+        public year?: string,
         public takenSpots?: number,
         public activityStatus?: activityStatus,
         public attendance?: Attendance[],
         public dates?: WorkshopDates[]
+    ) { }
+}
+
+class ChatOldDatabase {
+    constructor(
+        public activityStatus: activityStatus,
+        public date: string,
+        public hour: string,
+        public level: Level,
+        public title: string,
+        public speaker: string,
+        public platform: Platform,
+        public modality: Modality,
+        public id: string,
+        public spots: number,
+        public calendarID: string,
+
     ) { }
 }

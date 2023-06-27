@@ -6,9 +6,10 @@ import { ActivityStatus, Modality } from "..\type-activities"
 import { Level } from "types-chat"
 import { ScholarAttendance } from "..\type-activities"
 import { Scholar } from "..\..\users\scholar\scholar"
+import { Chat } from "..\..\schema"
 
 model Chat {
-    id             String           @id @default(nanoid(8))
+    id             String           @id @default(nanoid(22))
     title          String
     dates          Json
     speaker        ChatSpeaker[]
@@ -25,10 +26,10 @@ model Chat {
 }
 
 model ChatAttendance {
-    id            String            @id @default(nanoid(8))
+    id            String            @id @default(nanoid(22))
     scholar       Scholar           @relation(fields: [scholarId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     scholarId     String
-    workshop      Chat              @relation(fields: [chatId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    chat          Chat              @relation(fields: [chatId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     chatId        String
     attendance    ScholarAttendance
     justification String?
@@ -38,7 +39,7 @@ model ChatAttendance {
 }
 
 model ChatsTempData {
-    id              String  @id @default(nanoid(8))
+    id              String  @id @default(nanoid(22))
     chat            Chat    @relation(fields: [chatId], references: [id])
     chatId          String  @unique
     formLink        String?
@@ -49,13 +50,23 @@ model ChatsTempData {
 }
 
 model ChatSpeaker {
-    id        String  @id @default(nanoid(8))
-    scholar   Scholar @relation(fields: [scholarId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    scholarId String
-    chat      Chat    @relation(fields: [chatId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    chatId    String
-    raiting   Int?
-
-    @@index([chatId])
-    @@index([scholarId])
+    id            String    @id @default(nanoid(22))
+    name          String
+    email         String?   @unique
+    birthDate     DateTime?
+    yearsOfExp    Int?
+    yearsInAvaa   Int?
+    jobTitle      String?
+    jobCompany    String?
+    actualCity    String?
+    actualCountry String?
+    image         String?
+    description   String?
+    instagramUser String?
+    twitterUser   String?
+    linkedinUser  String?
+    facebookUser  String?
+    phoneNumber   String?
+    raiting       Int?
+    Chat          Chat[]
 }

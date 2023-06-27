@@ -12,7 +12,7 @@
 /// @author Kevin Bravo (kevinbravo.me)
 
 model Chat {
-  id             String           @id @default(nanoid(8))
+  id             String           @id @default(nanoid(22))
   title          String
   dates          Json
   speaker        ChatSpeaker[]
@@ -29,10 +29,10 @@ model Chat {
 }
 
 model ChatAttendance {
-  id            String            @id @default(nanoid(8))
+  id            String            @id @default(nanoid(22))
   scholar       Scholar           @relation(fields: [scholarId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   scholarId     String
-  workshop      Chat              @relation(fields: [chatId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  chat          Chat              @relation(fields: [chatId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   chatId        String
   attendance    ScholarAttendance
   justification String?
@@ -42,7 +42,7 @@ model ChatAttendance {
 }
 
 model ChatsTempData {
-  id              String  @id @default(nanoid(8))
+  id              String  @id @default(nanoid(22))
   chat            Chat    @relation(fields: [chatId], references: [id])
   chatId          String  @unique
   formLink        String?
@@ -53,15 +53,25 @@ model ChatsTempData {
 }
 
 model ChatSpeaker {
-  id        String  @id @default(nanoid(8))
-  scholar   Scholar @relation(fields: [scholarId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  scholarId String
-  chat      Chat    @relation(fields: [chatId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  chatId    String
-  raiting   Int?
-
-  @@index([chatId])
-  @@index([scholarId])
+  id            String    @id @default(nanoid(22))
+  name          String
+  email         String?   @unique
+  birthDate     DateTime?
+  yearsOfExp    Int?
+  yearsInAvaa   Int?
+  jobTitle      String?
+  jobCompany    String?
+  actualCity    String?
+  actualCountry String?
+  image         String?
+  description   String?
+  instagramUser String?
+  twitterUser   String?
+  linkedinUser  String?
+  facebookUser  String?
+  phoneNumber   String?
+  raiting       Int?
+  Chat          Chat[]
 }
 
 //
@@ -121,7 +131,7 @@ enum ScholarAttendance {
 /// @author Kevin Bravo (kevinbravo.me)
 
 model Volunteer {
-  id                 String                @id @default(nanoid(8))
+  id                 String                @id @default(nanoid(22))
   Projects           InternalProjects?     @relation(fields: [InternalProjectId], references: [id])
   InternalProjectId  String?
   title              String
@@ -139,7 +149,7 @@ model Volunteer {
 }
 
 model volunteerAttendance {
-  id            String            @id @default(nanoid(8))
+  id            String            @id @default(nanoid(22))
   scholar       Scholar           @relation(fields: [scholarId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   scholarId     String
   volunteerId   String
@@ -161,7 +171,7 @@ model volunteerAttendance {
 enum Pensum {
   EJERCICIO_CIUDADANO
   LIDERAZGO
-  GERENCIA_EN_SI_MISMO
+  GERENCIA_DE_SI_MISMO
   TIC
   EMPRENDIMIENTO
   TRABAJO_EN_EQUIPO
@@ -176,12 +186,13 @@ enum Pensum {
 /// @author Kevin Bravo (kevinbravo.me)
 
 model Workshop {
-  id                String               @id @default(nanoid(8))
+  id                String               @id @default(nanoid(22))
   title             String
   spots             Int
   platform          String
   description       String
-  calendarID        String
+  calendarID        String?
+  year              String
   workshopYear      AvaaYear[]
   modality          Modality
   pensum            Pensum
@@ -195,7 +206,7 @@ model Workshop {
 }
 
 model WorkshopTempData {
-  id              String   @id @default(nanoid(8))
+  id              String   @id @default(nanoid(22))
   workshop        Workshop @relation(fields: [workshopId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   workshopId      String   @unique
   formLink        String
@@ -205,9 +216,9 @@ model WorkshopTempData {
 }
 
 model WorkshopSpeaker {
-  id            String     @id @default(nanoid(8))
-  name          String     @unique
-  email         String     @unique
+  id            String     @id @default(nanoid(22))
+  name          String
+  email         String?    @unique
   birthdate     DateTime?
   yearsOfExp    Int?
   yearsInAvaa   Int?
@@ -227,7 +238,7 @@ model WorkshopSpeaker {
 }
 
 model WorkshopAttendance {
-  id            String            @id @default(nanoid(8))
+  id            String            @id @default(nanoid(22))
   scholar       Scholar           @relation(fields: [scholarId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   scholarId     String
   workshopId    String
@@ -344,7 +355,7 @@ model VerificationToken {
 /// @author Kevin Bravo (kevinbravo.me)
 
 model ExternalProjects {
-  id             String  @id @default(nanoid(8))
+  id             String  @id @default(nanoid(22))
   name           String
   username       String
   description    String?
@@ -362,7 +373,7 @@ model ExternalProjects {
 }
 
 model InternalProjects {
-  id                  String      @id @default(nanoid(8))
+  id                  String      @id @default(nanoid(22))
   name                String
   username            String
   description         String?
@@ -425,11 +436,10 @@ model Scholar {
   linkedinUser                 String?
   attendedWorkshpos            WorkshopAttendance[]
   attendedChats                ChatAttendance[]
-  scholarStatus                ScholarStatus         @default(CURRENT)
+  scholarStatus                ScholarStatus
   canAssistToChats             ScholarCanAssist      @default(YES)
   canAssistToWorkshops         ScholarCanAssist      @default(YES)
   canAssistToVolunteers        ScholarCanAssist      @default(YES)
-  chatSpeaker                  ChatSpeaker[]
   InternalProjects             InternalProjects?     @relation(fields: [internalProjectsId], references: [id])
   internalProjectsId           String?
   volunteerAttendance          volunteerAttendance[]
