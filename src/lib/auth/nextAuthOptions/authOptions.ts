@@ -24,7 +24,6 @@ import { googleProviderConfig, credentialsProviderConfig, PAGES, NEXT_SECRET } f
  * 
  */
 const authOptions: NextAuthOptions = {
-
     /**
      * @description NextAuth providers, those are services in next auth that can be used to authenticate users.
      * @see https://next-auth.js.org/providers/ to see the complete list of options to authenticate users.
@@ -33,13 +32,11 @@ const authOptions: NextAuthOptions = {
         GoogleProvider(googleProviderConfig),
         CredentialsPrivider(credentialsProviderConfig),
     ],
-
     /**
      * @see https://authjs.dev/reference/adapters for adapters information
-     * @see https://authjs.dev/reference/adapter/prisma for prisma adapter information
+     * @see https://authjs.dev/reference/adapter/pri sma for prisma adapter information
     */
     // adapter: PrismaAdapter(prisma),
-
     /**
      * @description it is used to configure how to save the user session 
      * it sets default to "jwt" which is a cookie based session. THis is override when using a database adapter,
@@ -83,7 +80,6 @@ const authOptions: NextAuthOptions = {
                     accessToken,
                     refreshToken,
                     randomKey: u.randomKey,
-
                 };
             }
             return token;
