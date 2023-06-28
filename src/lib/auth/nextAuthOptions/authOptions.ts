@@ -24,6 +24,7 @@ import { googleProviderConfig, credentialsProviderConfig, PAGES, NEXT_SECRET } f
  * 
  */
 const authOptions: NextAuthOptions = {
+
     /**
      * @description NextAuth providers, those are services in next auth that can be used to authenticate users.
      * @see https://next-auth.js.org/providers/ to see the complete list of options to authenticate users.
