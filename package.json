@@ -42,7 +42,7 @@
     "jotai": "^2.0.4",
     "moment": "^2.29.4",
     "next": "13.4.5",
-    "next-auth": "0.0.0-pr.6777.c5550344",
+    "next-auth": "4.22.1",
     "postcss": "8.4.21",
     "prisma": "^4.15.0",
     "prisma-import": "^1.0.4",
