@@ -1,6 +1,7 @@
 
 import shortUUID from "short-uuid";
 import { Platform } from "./General";
+import { AvaaYear } from "@prisma/client";
 
 export type Pensum = 'Liderazgo' | 'Ejercicio Ciudadano' | 'Gerencia de si mismo' | 'TICs' | 'Emprendimiento';
 export type KindOfWorkshop = 'presencial' | 'virtual' | 'asincrona' | 'hibrida';
@@ -17,5 +18,5 @@ export type Workshop = {
     modality: KindOfWorkshop;
     platform: Platform;
     description: string;
-    avaaYear: string[];
+    workshopYear: AvaaYear[];
 }

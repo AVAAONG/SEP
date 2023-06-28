@@ -2,8 +2,10 @@ import { setTokens } from "@/lib/auth/auth"
 import { createEvent } from "@/lib/calendar/calendar"
 import { getFormatedDate } from "@/lib/calendar/utils"
 import { createWorkshop, getScheduledWorkshops, getWorkshops, getWorkshopsCount } from "@/lib/database/Workshops"
+import { getSpeakerName, getSpeakerNames } from "@/lib/database/speaker"
 import { createFormDescription } from "@/lib/form/form"
 import { Workshop } from "@/types/Workshop"
+import { ActivityStatus, Prisma } from "@prisma/client"
 import { getToken } from "next-auth/jwt"
 import { NextRequest, NextResponse } from "next/server"
 import shortUUID from "short-uuid"
@@ -13,23 +15,31 @@ export async function GET(req: NextRequest, res: NextResponse) {
     return NextResponse.json(workshops)
 }
 
+interface WorkshopPrismaObj extends Workshop{
+    calendarID: string,
+    activityStatus: ActivityStatus,
+    dates: Prisma.JsonArray
+}
+
 export async function POST(req: NextRequest, res: NextResponse) {
     const data = await req.json()
     const BASE_URL = 'https://script.google.com/macros/s/AKfycbypXIh8iD-Pbf7gEKHEDrjxTj7EB_DHbWoOO53KgukwDDgaB6PO42xQqeNUReFo4jty/exec'
     const token = await getToken({ req });
-    const { workshops, group, subject } = data;
+    setTokens(token?.accessToken as string, token?.refreshToken as string)
 
-    setTokens(token.accessToken, token.refreshToken)
+    data.forEach(async (workshop: WorkshopPrismaObj) => {
 
-    workshops.forEach(async (workshop: Workshop) => {
+        const { title, date, startHour, endHour, modality, spots, id, speaker } = workshop;
 
-        const { title, date, startHour, endHour, modality, spots, id } = workshop;
+        const speakerId = speaker
+        const speakerName = await getSpeakerName(speakerId)
+        workshop.speaker = speakerName?.name || ''
 
         const [calendarEventId, addToCalendarUrl, meetingLink, meetingId, meetingPassword] = await createEvent('workshop', workshop)
 
         const formDescription = createFormDescription(workshop)
 
-        const respon = await fetch(BASE_URL, {
+        const response = await fetch(BASE_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -47,29 +57,30 @@ export async function POST(req: NextRequest, res: NextResponse) {
                 formDescription
             })
         })
+                const [startDate, endDate] = getFormatedDate(date, startHour, endHour)
 
-        const speakerId = ''
-        const [startDate, endDate] = getFormatedDate(date, startHour, endHour)
+            const datesObj = {
+                id: shortUUID.generate(),
+                start_date: new Date(startDate),
+                end_date: new Date(endDate),
+            }
 
-        const datesObj = {
-            id: shortUUID.generate(),
-            start_date: new Date(startDate.replace(/\Z/g, "-04:00")),
-            end_date: new Date(endDate.replace(/\Z/g, "-04:00")),
-        }
+            const tempDataObj = {
+                id: shortUUID.generate(),
+                workshop,
+                workshopId: workshop.id,
+                calendaID: calendarEventId,
+                meetingPassword,
+                meetingLink,
+                meetingId
+            }
+            workshop.calendarID = calendarEventId!;
+            workshop.activityStatus = 'AGENDADO';
 
-        const tempDataObj = {
-            id: shortUUID.generate(),
-            workshop,
-            workshopId: workshop.id,
-            calendaID: calendarEventId,
-            meetingPassword,
-            meetingLink,
-            meetingId
-        }
+            createWorkshop(workshop, datesObj, speakerId, tempDataObj)
 
-        createWorkshop(workshop, datesObj, speakerId, tempDataObj)
-
-        const data = await respon.json()
-    })
-    return NextResponse.json({ messagge: "ok", })
-}
+            const data = await response.json()
+        })
+        console.log(data)
+        return NextResponse.json(data)
+    }

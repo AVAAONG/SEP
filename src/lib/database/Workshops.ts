@@ -14,7 +14,8 @@ export const createWorkshop = async (data: Workshop, dates: Prisma.JsonArray, sp
                 },
                 tempData: {
                     create: tempData
-                }
+                },
+                activityStatus: 'AGENDADO'
             }
         });
         console.log(`${workshop.title} created`)
@@ -53,7 +54,6 @@ export const getWorkshops = async () => {
     const workshops = await prisma.workshop.findMany({
         include: {
             speaker: true,
-            dates: true,
             tempData: true,
         }
     });
@@ -82,7 +82,6 @@ export const getScheduledWorkshops = async () => {
     const workshops = await prisma.workshop.findMany({
         include: {
             speaker: true,
-            dates: true,
             tempData: true,
         },
         where: {

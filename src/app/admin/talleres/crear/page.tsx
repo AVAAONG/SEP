@@ -1,13 +1,12 @@
 'use client'
-import Input from '@/components/forms/Inputs';
 import { Workshop } from '@/types/Workshop';
 import React, { BaseSyntheticEvent, useState } from 'react'
-import { FieldValues, UseFormRegister, useForm } from 'react-hook-form';
-import WORKSHOP_INPUT_ELEMENTS from '@/components/forms/data/workshopInputs';
+import {  useForm } from 'react-hook-form';
 import WorkshopsList from '@/components/lists/WorkshopList';
 import shortUUID from 'short-uuid';
 import { CheckIcon } from '@/assets/svgs';
 import useSWR from 'swr'
+import WorkshopForm from '@/components/forms/WorkshopForm';
 
 interface WorkshopForm extends Workshop {
     subject?: string,
@@ -18,11 +17,13 @@ const Page = () => {
     const fetcher = (...args: RequestInfo[] | URL[]) => fetch([...args]).then(res => res.json())
 
     const speakerResponse = ["Andrés Della"]
-    const workshopResponse = useSWR('/api/workshop/schedule', fetcher, { fallbackData: [{}, {}], refreshInterval: 1000 })
     const [modalopen, setModalOpen] = useState(false)
     const [loading, setLoading] = useState("not");
     const { register, handleSubmit, formState: { errors }, reset, } = useForm<WorkshopForm>();
     const [subjectAndGroup, setSubjectAndGroup] = useState({ subject: "", group: "" })
+
+    const workshopResponse = useSWR('/api/workshop/schedule', fetcher, { fallbackData: [{}, {}], refreshInterval: 1000 })
+
 
     const deleteEntry = async (inputId: shortUUID.SUUID, calendarId: string) => {
         console.log(inputId, calendarId)
@@ -34,8 +35,8 @@ const Page = () => {
     }
 
     const editEntry = (inputId: shortUUID.SUUID) => {
-        const data = workshopResponse.data.filter((workshop: Workshop) => workshop.id === inputId)
-        const { title, pensum, date, startHour, endHour, speaker, spots, modality, platform, avaaYear, description } = data[0];
+        const workshops = workshopResponse.data.filter((workshop: Workshop) => workshop.id === inputId)
+        const { title, pensum, date, startHour, endHour, speaker, spots, modality, platform, avaaYear, description } = workshops[0];
         reset({
             title,
             pensum,
@@ -108,7 +109,7 @@ const Page = () => {
         <div className="flex flex-col-reverse md:flex-row gap-8">
             <div className='w-screen md:w-1/2 p-4 flex flex-col items-center'>
                 {
-                    workshopResponse.isLoading ? <></> :
+                    workshopResponse.isLoading || !workshopResponse.data.content ? <></> :
                         <>
                             <text className='font-semibold text-3xl text-green-500 mb-6'>
                                 Talleres Agendados
@@ -122,18 +123,9 @@ const Page = () => {
             </div>
             <div className=' w-full md:w-1/2 p-4 flex flex-col items-center gap-4'>
                 <text className='font-semibold text-3xl text-green-500 mx-auto'>
-                    Crea un taller
+                    Crear taller
                 </text>
-                <form onSubmit={handleSubmit(async (data, event) => await scheduleWorkshop(data, event!))} className="grid gap-6 md:grid-cols-2 md:grid-rows-2 caret-green-500 text-slate-300 w-full">
-                    {WORKSHOP_INPUT_ELEMENTS(speakerResponse === undefined ? [] : speakerResponse).map((field) => {
-                        return (
-                            <Input {...field} key={field.title} register={register as unknown as UseFormRegister<FieldValues>} />
-                        )
-                    })}
-                    <button type="submit" className='w-1/2 justify-self-center col-span-2 text-white bg-gradient-to-br from-emerald-500 to-lime-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none  focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2' >
-                        Agendar Taller
-                    </button>
-                </form>
+                <WorkshopForm />
             </div>
             <div id="info-popup" tabIndex={-1} className={`${modalopen ? 'flex' : "hidden"}  items-center justify-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full`}>
                 <div className="relative p-4 w-full max-w-lg h-full md:h-auto">
