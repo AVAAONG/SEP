@@ -5,7 +5,7 @@ const nextConfig = {
     appDir: true,
   },
   images: {
-    domains: ['avaa.org'],
+    domains: ['avaa.org', 'media.licdn.com', 'i.imgur.com'],
   },
   eslint: {
     // Warning: This allows production builds to successfully complete even if
