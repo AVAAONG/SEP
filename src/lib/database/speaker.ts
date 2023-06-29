@@ -72,3 +72,30 @@ export const getSpeakerName = async (id: string) => {
     })
     return speaker
 }
+
+
+export const getSpeaker = async (speakerId: string) => {
+    const speaker = await prisma.workshopSpeaker.findUnique({
+        where: { id: speakerId },
+        select: {
+            workshops: {}
+        }
+    })
+    return speaker
+}
+
+/**
+ * get all the information of a chat speaker and the chatrooms he is in
+ * 
+ *
+ */
+
+export const getChatSpeaker = async (speakerId: string) => {
+    const speaker = await prisma.chatSpeaker.findUnique({
+        where: { id: speakerId },
+        include:{
+            Chat: true
+        }
+    })
+    return speaker
+}

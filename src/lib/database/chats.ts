@@ -122,7 +122,10 @@ export const getChatSpeakers = async () => {
  */
 export const getChatSpeaker = async (id: string) => {
     const speaker = await prisma.chatSpeaker.findUnique({
-        where: { id }
+        where: { id },
+        include:{
+            Chat: true
+        }
     });
     return speaker;
 }

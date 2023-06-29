@@ -43,9 +43,12 @@ export const deleteWorkshopFromDatabase = async (id: shortUUID.SUUID) => {
     });
 }
 
-const getWorkshop = async (id: shortUUID.SUUID) => {
+export const getWorkshop = async (id: shortUUID.SUUID) => {
     const workshop = await prisma.workshop.findUnique({
-        where: { id }
+        where: { id },
+        include: {
+            speaker: true
+        }
     });
     return workshop;
 }
