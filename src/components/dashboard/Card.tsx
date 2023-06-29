@@ -21,14 +21,14 @@ const Card = ({ stat, text, bg, Icon, cardButtonBg }: CardProps) => {
                         {text}
                     </p>
                 </div>
-                <div className="inline-flex justify-between max-w-[190px] justify-self-end gap-1">
+                {/* <div className="inline-flex justify-between max-w-[190px] justify-self-end gap-1">
                     <button className={`${cardButtonBg} flex items-center justify-center px-1 py-2 font-semibold rounded-lg text-sm w-16 h-8 capitalize pointer m-auto`}>
                         Mes
                     </button>
                     <button className={`${cardButtonBg} flex items-center justify-center px-1 py-2 font-semibold rounded-lg text-sm w-16 h-8 capitalize pointer m-auto`}>
                         Año
                     </button>
-                </div>
+                </div> */}
             </div>
             <div className='absolute opacity-20 text-[190px] -z-10 w-48 -ml-9'>
                 <Icon />

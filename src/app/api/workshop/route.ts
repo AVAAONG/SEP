@@ -5,7 +5,7 @@ import { createWorkshop, getScheduledWorkshops, getWorkshops, getWorkshopsCount 
 import { getSpeakerName, getSpeakerNames } from "@/lib/database/speaker"
 import { createFormDescription } from "@/lib/form/form"
 import { Workshop } from "@/types/Workshop"
-import { ActivityStatus, Prisma } from "@prisma/client"
+import { activityStatus, Prisma, WorkshopTempData } from "@prisma/client"
 import { getToken } from "next-auth/jwt"
 import { NextRequest, NextResponse } from "next/server"
 import shortUUID from "short-uuid"
@@ -15,9 +15,9 @@ export async function GET(req: NextRequest, res: NextResponse) {
     return NextResponse.json(workshops)
 }
 
-interface WorkshopPrismaObj extends Workshop{
+interface WorkshopPrismaObj extends Workshop {
     calendarID: string,
-    activityStatus: ActivityStatus,
+    activityStatus: activityStatus,
     dates: Prisma.JsonArray
 }
 
@@ -27,60 +27,63 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const token = await getToken({ req });
     setTokens(token?.accessToken as string, token?.refreshToken as string)
 
-    data.forEach(async (workshop: WorkshopPrismaObj) => {
+    const { title, date, startHour, endHour, modality, spots, id, speaker } = data;
 
-        const { title, date, startHour, endHour, modality, spots, id, speaker } = workshop;
+    const speakerId = speaker
+    const speakerName = await getSpeakerName(speakerId)
+    data.speaker = speakerName?.name || ''
 
-        const speakerId = speaker
-        const speakerName = await getSpeakerName(speakerId)
-        workshop.speaker = speakerName?.name || ''
+    const [calendarEventId, addToCalendarUrl, meetingLink, meetingId, meetingPassword] = await createEvent('workshop', data)
 
-        const [calendarEventId, addToCalendarUrl, meetingLink, meetingId, meetingPassword] = await createEvent('workshop', workshop)
+    const formDescription = createFormDescription(data)
 
-        const formDescription = createFormDescription(workshop)
-
-        const response = await fetch(BASE_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                kindOfActivity: 'workshop',
-                modality,
-                activityName: title,
-                activityId: id,
-                meetingId,
-                meetingPassword,
-                meetingLink,
-                addToCalendarUrl,
-                limit: spots,
-                formDescription
-            })
+    const response = await fetch(BASE_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            kindOfActivity: 'workshop',
+            modality,
+            activityName: title,
+            activityId: id,
+            meetingId,
+            meetingPassword,
+            meetingLink,
+            addToCalendarUrl,
+            limit: spots,
+            formDescription
         })
-                const [startDate, endDate] = getFormatedDate(date, startHour, endHour)
+    })
+    const [startDate, endDate] = getFormatedDate(date, startHour, endHour)
 
-            const datesObj = {
-                id: shortUUID.generate(),
-                start_date: new Date(startDate),
-                end_date: new Date(endDate),
-            }
-
-            const tempDataObj = {
-                id: shortUUID.generate(),
-                workshop,
-                workshopId: workshop.id,
-                calendaID: calendarEventId,
-                meetingPassword,
-                meetingLink,
-                meetingId
-            }
-            workshop.calendarID = calendarEventId!;
-            workshop.activityStatus = 'AGENDADO';
-
-            createWorkshop(workshop, datesObj, speakerId, tempDataObj)
-
-            const data = await response.json()
-        })
-        console.log(data)
-        return NextResponse.json(data)
+    const datesObj = {
+        start_date: new Date(startDate),
+        end_date: new Date(endDate),
     }
+    const { formUrl } = await response.json()
+
+    delete data['startHour']
+    delete data['endHour']
+    delete data['date']
+    data.modality = data.modality.toUpperCase()
+    data.spots = parseInt(data.spots)
+    data.pensum = data.pensum.toUpperCase().replace(' ', '_')
+
+    const tempDataObj: WorkshopTempData = {
+        id: shortUUID.generate(),
+        meetingPassword,
+        meetingLink,
+        meetingId,
+        formLink: formUrl
+    }
+    data.calendarID = calendarEventId!;
+    data.activityStatus = 'AGENDADO';
+    data.year = data.workshopYear[0]
+    console.log(data)
+    console.log(speakerId)
+
+    createWorkshop(data, datesObj, speakerId, tempDataObj)
+
+    return NextResponse.json({ message: "ok" })
+}

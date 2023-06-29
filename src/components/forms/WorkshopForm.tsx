@@ -8,7 +8,7 @@ import useSWR, { Fetcher } from 'swr';
 const PROGRAM_PENSUM = ['Liderazgo', 'Ejercicio Ciudadano', 'Gerencia de sí mismo', 'TIC', 'Emprendimiento']
 const MODALITY = ['Presencial', 'Virtual', 'Asincrono', 'Hibrido']
 const PLATFORMS = ['Zoom', 'Google Meet', 'Otra', 'Padlet']
-const WORKSHOP_YEAR = ['I', 'II', 'III', 'IV', 'V', '+V', 'Todos']
+const WORKSHOP_YEAR = ['I', 'II', 'III', 'IV', 'V', 'V0', 'Todos']
 
 
 const WorkshopForm = () => {
@@ -17,6 +17,7 @@ const WorkshopForm = () => {
         id: true,
         name: true,
     }
+    ///@ts-ignore
     const fetcher: Fetcher<WorkshopSpeaker[] | {}[], string> = (...args) => fetch([...args]).then(res => res.json())
 
     const { data, error, isLoading } = useSWR('/api/workshop/speakers', fetcher, { fallbackData: [{}, {}], })
@@ -62,24 +63,22 @@ const WorkshopForm = () => {
                         return (
                             <option key={option} >{option}</option>
                         )
-
                     })}
                 </select>
             </div>
-
             <div >
                 <label className="block mb-2 text-sm m-l-1 font-medium  text-slate-400"> Fecha</label>
-                <input  {...register("endHour")} type={'date'} id={"Fecha"} required={true} />
+                <input  {...register("date")} type={'date'} id={"Fecha"} required={true} />
             </div>
 
             <div >
                 <label className="block mb-2 text-sm m-l-1 font-medium  text-slate-400"> Hora de inicio</label>
-                <input  {...register("date")} type={'date'} id={"Hora de inicio"} required={true} />
+                <input  {...register("startHour")} type={'time'} id={"Hora de inicio"} required={true} />
             </div>
 
             <div >
                 <label className="block mb-2 text-sm m-l-1 font-medium  text-slate-400"> Hora de cierre</label>
-                <input  {...register("startHour")} type={'date'} id={"Hora de cierre"} required={true} />
+                <input  {...register("endHour")} type={'time'} id={"Hora de cierre"} required={true} />
             </div>
 
             <div >
@@ -94,16 +93,13 @@ const WorkshopForm = () => {
                                 return (
                                     <option key={id} value={id} >{name}</option>
                                 )
-
                             })}
                 </select>
             </div>
-
             <div >
                 <label className="block mb-2 text-sm font-medium  text-slate-400">Cupos disponibles</label>
                 <input {...register("spots")} type={"number"} id="first_name" required min={0} max={300} />
             </div>
-
             <div >
                 <label className="block mb-2 text-sm font-medium  text-slate-400">Modalidad</label>
                 <select  {...register("modality")} id="Modalidad" className="focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md w-full bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600" required={true}>
@@ -114,7 +110,6 @@ const WorkshopForm = () => {
                     })}
                 </select>
             </div>
-
             <div>
                 <label className="block mb-2 text-sm font-medium text-slate-400">Platafomra/Lugar</label>
                 <input list="allowedSelection"  {...register("platform")} id={"Platafomra/Lugar"} ></input>
@@ -140,7 +135,6 @@ const WorkshopForm = () => {
                     })}
                 </div>
             </div >
-
             <div className='col-span-2 h-fit' >
                 <label className="block mb-2 text-sm m-l-1 font-medium max-h-10 text-slate-400">Descripción</label>
                 <textarea {...register("description")} className="min-h-[4rem] focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md w-full bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600" />

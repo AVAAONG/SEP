@@ -38,6 +38,7 @@ const Calendar = ({ events }: { events: BigCalendarEventType[] }) => {
         <Fragment>
             <div className='h-full w-full'>
                 <BigCalendar
+                    className=''
                     localizer={localizer}
                     events={events}
                     startAccessor="start"

@@ -15,12 +15,15 @@ interface WorkshopsListProps {
 
 const WorkshopsList: React.FC<WorkshopsListProps> = (props) => {
     const { workshopData, deleteEntry, editEntry } = props
+    console.log(workshopData)
+
     return (
         <div className="flow-root w-full">
             <ul role="list" className='flex flex-col gap-2'>
                 {workshopData.map(
                     (workshop) => {
-                        const { speaker, dates, title, id, pensum, spots, avaaYear, platform, modality, tempData } = workshop
+                        const { speaker, dates, title, id, pensum, spots, workshopYear, platform, modality, tempData } = workshop
+                        console.log(dates)
                         return (
                             <li key={title} className="py-2 focus:outline-none focus:outline-offset-0 px-3 rounded-md w-full bg-emerald-950 flex items-center justify-center gap-2">
                                 <div className='w-4'>
@@ -42,10 +45,11 @@ const WorkshopsList: React.FC<WorkshopsListProps> = (props) => {
                                 </div>
                                 <div className="flex-1 min-w-0 text-center">
                                     <p className="text-sm font-medium truncate text-white">
-                                        {new Date(dates[0].start_date).toLocaleString('es-ES', { month: 'long', day: 'numeric' })}
+
+                                        {new Date(dates.start_date).toLocaleString('es-ES', { month: 'long', day: 'numeric' })}
                                     </p>
                                     <p className="text-xs text-gray-500 truncate ">
-                                        De {new Date(dates[0].start_date).toLocaleString('es-ES', { hour:'2-digit', minute: '2-digit' })} a {new Date(dates[0].end_date).toLocaleString('es-ES', { hour:'2-digit', minute: '2-digit' })}
+                                        De {new Date(dates.start_date).toLocaleString('es-ES', { hour: '2-digit', minute: '2-digit' })} a {new Date(dates.end_date).toLocaleString('es-ES', { hour: '2-digit', minute: '2-digit' })}
 
                                     </p>
                                 </div>
@@ -57,7 +61,7 @@ const WorkshopsList: React.FC<WorkshopsListProps> = (props) => {
                                         {spots} cupos
                                     </p>
                                     <p className="text-xs text-gray-500 truncate ">
-                                        {avaaYear.toString().replaceAll(',', ' y ')} Año
+                                        {workshopYear.toString().replaceAll(',', ' y ')} Año
                                     </p>
                                 </div>
                                 <div className="flex-1 min-w-0 text-center">

@@ -16,7 +16,6 @@ import { getChatsCount, getChatsDone } from '@/lib/database/chats'
 
 
 const createEventObject = (calendarEvents: calendar_v3.Schema$Event[], bgColor: string, textColor: string): BigCalendarEventType[] => {
-
     const formatedEvents: BigCalendarEventType[] = []
     calendarEvents.forEach((event) => {
         const { summary, start, end, description, location } = event;
@@ -54,6 +53,10 @@ const fetchEvents = async () => {
     const workshopsEvents = await getCalendarEvents(CALENDAR_IDS[2].calendarId);
     const formatedWorkshopsEvents = createEventObject(workshopsEvents!, CALENDAR_IDS[2].eventColor, CALENDAR_IDS[2].textColor);
     calendarEvents.push(...formatedWorkshopsEvents)
+
+    // const userEvents = await getCalendarEvents();
+    // const formatedUserEvents = createEventObject(userEvents!, CALENDAR_IDS[2].eventColor, CALENDAR_IDS[2].textColor);
+    // calendarEvents.push(...formatedUserEvents)
 
     return calendarEvents;
 }
@@ -97,7 +100,7 @@ const page = async () => {
             bg: "from-yellow-500  to-yellow-700",
             cardButtonBg: "bg-indigo-950 active:bg-blue-700 hover:bg-blue-700"
         },
-    ]  
+    ]
     return (
         <div className='flex flex-col gap-4 h-full w-full'>
             <div className="flex flex-col md:flex-row gap-4 items-center md:h-1/4">

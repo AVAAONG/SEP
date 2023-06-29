@@ -15,7 +15,6 @@ import { Calendar } from '../auth/auth';
 import createEventObject from './calendarEventObject';
 import { createChatCalendarDescription, createWorkshopCalendarDescription } from './calendarDescription';
 import { Workshop } from '@/types/Workshop';
-import { CALENDAR_ID } from '../constants';
 import { KindOfActivity } from '@/types/General';
 import { addHours, getFormatedDate, getMeetEventLink, getPublicEventLink, substractMonths } from './utils';
 import createZoomMeeting from '../zoom/zoom';
@@ -91,7 +90,7 @@ export const createEvent = async (kindOfActivity: KindOfActivity, values: Worksh
  * @returns the event id
  */
 const createWorkshopEventDetails = async (values: Workshop): Promise<[calendar_v3.Schema$Event, string, string?, string?, string?]> => {
-    const { title, pensum, date, startHour, endHour, speaker, modality, platform, description, avaaYear } = values
+    const { title, pensum, date, startHour, endHour, speaker, modality, platform, description, workshopYear } = values
     const [start, end] = getFormatedDate(date, startHour, endHour);
     let calendarDescription: string;
     let eventDetails: calendar_v3.Schema$Event;
@@ -100,7 +99,7 @@ const createWorkshopEventDetails = async (values: Workshop): Promise<[calendar_v
     let zoomMetPassword = null;
 
     if (modality.toLowerCase().trim() === "presencial" || modality.toLowerCase().trim() === "asincrona") {
-        calendarDescription = createWorkshopCalendarDescription(pensum, speaker, modality, platform, description, avaaYear);
+        calendarDescription = createWorkshopCalendarDescription(pensum, speaker, modality, platform, description, workshopYear);
         eventDetails = createEventObject(title, modality, platform, calendarDescription, start, end);
     }
     else if (modality.toLowerCase().trim() === "virtual" || modality.toLowerCase().trim() === "hibrida") {
@@ -109,17 +108,17 @@ const createWorkshopEventDetails = async (values: Workshop): Promise<[calendar_v
             zoomMeetLink = join_url
             zoomMeetId = id
             zoomMetPassword = password
-            calendarDescription = createWorkshopCalendarDescription(pensum, speaker, modality, platform, description, avaaYear, join_url, id, password);
+            calendarDescription = createWorkshopCalendarDescription(pensum, speaker, modality, platform, description, workshopYear, join_url, id, password);
 
             eventDetails = createEventObject(title, modality, zoomMeetLink, calendarDescription, start, end);
         }
         else {
-            calendarDescription = createWorkshopCalendarDescription(pensum, speaker, modality, platform, description, avaaYear);
+            calendarDescription = createWorkshopCalendarDescription(pensum, speaker, modality, platform, description, workshopYear);
             eventDetails = createEventObject(title, modality, platform, calendarDescription, start, end);
         }
     }
     else {
-        calendarDescription = createWorkshopCalendarDescription(pensum, speaker, modality, platform, description, avaaYear);
+        calendarDescription = createWorkshopCalendarDescription(pensum, speaker, modality, platform, description, workshopYear);
         eventDetails = createEventObject(title, modality, platform, calendarDescription, start, end);
     }
     return [eventDetails, calendarDescription, zoomMeetLink, zoomMeetId, zoomMetPassword];
@@ -162,7 +161,6 @@ export const getCalendarEvents = async (calendarId: string = 'primary') => {
 /**
  * Evaluates wheter the calendar under the id exist or not. If exist returns that id, if not, returns the id of the users default calendar.
  *
- * @returns the deafults calendar id or {@linkcode CALENDAR_ID}
  */
 const getCalendarId = async (calendarId: string): Promise<string> => {
     let calendar = await Calendar.calendars.get({ calendarId })

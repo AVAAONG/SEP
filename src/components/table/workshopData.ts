@@ -55,7 +55,7 @@ const workshopHeaders: TableOptions<WorkshopTableProps> = [
     },
     {
         Header: 'Año',
-        accessor: 'avaaYear'
+        accessor: 'year'
     },
 ]
 

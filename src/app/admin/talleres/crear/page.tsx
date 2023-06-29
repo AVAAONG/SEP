@@ -1,7 +1,7 @@
 'use client'
 import { Workshop } from '@/types/Workshop';
 import React, { BaseSyntheticEvent, useState } from 'react'
-import {  useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import WorkshopsList from '@/components/lists/WorkshopList';
 import shortUUID from 'short-uuid';
 import { CheckIcon } from '@/assets/svgs';
@@ -22,8 +22,7 @@ const Page = () => {
     const { register, handleSubmit, formState: { errors }, reset, } = useForm<WorkshopForm>();
     const [subjectAndGroup, setSubjectAndGroup] = useState({ subject: "", group: "" })
 
-    const workshopResponse = useSWR('/api/workshop/schedule', fetcher, { fallbackData: [{}, {}], refreshInterval: 1000 })
-
+    const workshopResponse = useSWR('/api/workshop/schedule', fetcher, { fallbackData: [], refreshInterval: 1000 })
 
     const deleteEntry = async (inputId: shortUUID.SUUID, calendarId: string) => {
         console.log(inputId, calendarId)
@@ -36,7 +35,7 @@ const Page = () => {
 
     const editEntry = (inputId: shortUUID.SUUID) => {
         const workshops = workshopResponse.data.filter((workshop: Workshop) => workshop.id === inputId)
-        const { title, pensum, date, startHour, endHour, speaker, spots, modality, platform, avaaYear, description } = workshops[0];
+        const { title, pensum, date, startHour, endHour, speaker, spots, modality, platform, workshopYear, description } = workshops[0];
         reset({
             title,
             pensum,
@@ -47,7 +46,7 @@ const Page = () => {
             spots,
             modality,
             platform,
-            avaaYear,
+            workshopYear,
             description
         })
         deleteEntry(inputId);
@@ -75,7 +74,7 @@ const Page = () => {
             spots: 0,
             modality: "presencial",
             platform: "zoom",
-            avaaYear: ["I"],
+            workshopYear: ["I"],
             description: ""
         });
     }
@@ -109,7 +108,7 @@ const Page = () => {
         <div className="flex flex-col-reverse md:flex-row gap-8">
             <div className='w-screen md:w-1/2 p-4 flex flex-col items-center'>
                 {
-                    workshopResponse.isLoading || !workshopResponse.data.content ? <></> :
+                    workshopResponse.isLoading || workshopResponse.data.length > 1 ? <></> :
                         <>
                             <text className='font-semibold text-3xl text-green-500 mb-6'>
                                 Talleres Agendados
