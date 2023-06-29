@@ -18,17 +18,17 @@ const page = () => {
                 <div className="w-full max-w-sm py-4 mx-auto my-auto min-w-min md:py-9 md:w-7/12">
                     <h2 className="text-xl font-semibold md:text-2xl">Entra</h2>
                     <p className="text-xs md:text-sm text-slate-400">¿Nuevo en el programa? {' '}
-                        <a className="text-green-600 text-xs md:text-sm font-semibold" href="/auth/signup">Registrate.</a>
+                        <a className="text-green-600 text-xs md:text-sm font-semibold" href="/auth/signup">Regístrate.</a>
                     </p>
                     <div className="my-4">
                         <form className="new_user" id="new_user" action="/register" acceptCharset="UTF-8" method="post">
                             <input type="hidden" name="authenticity_token" value="" autoComplete="off" />
                             <div className="mb-3 flex flex-col gap-2">
-                                <label htmlFor="user_email" className='text-sm text-slate-400'>Correo electronico</label>
+                                <label htmlFor="user_email" className='text-sm text-slate-400'>Correo electrónico</label>
                                 <input className='focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md w-full bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600 ' autoFocus={true} autoComplete="email" required={true} type="email" name="user[email]" id="user_email" />
                             </div>
                             <div className="mb-3 flex flex-col gap-2">
-                                <label htmlFor="user_password" className='text-sm text-slate-400'>Contrasena</label>
+                                <label htmlFor="user_password" className='text-sm text-slate-400'>Contraseña</label>
                                 <input autoComplete="current-password" className='focus:outline-none focus:outline-offset-0  focus:outline-emerald-600  py-1 px-3 rounded-md w-full  bg-emerald-950 ring-1 ring-emerald-900 border-emerald-700' required={true} type="password" name="user[password]" id="user_password" />
                             </div>
                             <div className="flex justify-between mb-4">
