@@ -1,3 +1,4 @@
+import { type } from 'os'
 import React from 'react'
 
 // label: 'Nombre Completo',
@@ -6,7 +7,6 @@ import React from 'react'
 // required: true,
 // type: 'text',
 // value: '',
-// name: 'first-name',
 // autoComplete: 'given-name',
 // className: 'col-span-6 sm:col-span-3',
 // onChange: () => { },
@@ -25,6 +25,19 @@ import React from 'react'
 // inputMode: 'text',
 // list: '',
 // size: 0,
+// user input types
+
+type UserInputType = {
+    label: string,
+    id: string,
+    placeholder: string,
+    required: boolean,
+    type: string,
+    autoComplete: string,
+    spellCheck?: boolean,
+    tabIndex?: number,
+}
+
 
 const USER_INPUT_VALUES = [
     {
@@ -33,7 +46,6 @@ const USER_INPUT_VALUES = [
         placeholder: 'Kevin José',
         required: true,
         type: 'text',
-        name: 'first-name',
         autoComplete: 'given-name',
         spellCheck: false,
         tabIndex: 0,
@@ -44,7 +56,6 @@ const USER_INPUT_VALUES = [
         placeholder: 'Bravo Mota',
         required: true,
         type: 'text',
-        name: 'last-name',
         autoComplete: 'family-name',
     },
     {
@@ -53,25 +64,23 @@ const USER_INPUT_VALUES = [
         placeholder: 'V-12345678',
         required: true,
         type: 'text',
-        name: 'cedula',
         autoComplete: 'cedula',
     },
     {
-        label: 'Sexo',
+        label: 'Género',
         id: 'genre',
         placeholder: 'dd/mm/aaaa',
         required: true,
         type: 'select',
-        name: 'genre',
         autoComplete: 'genre',
+
     },
     {
         label: 'Fecha de nacimiento',
         id: 'birthDate',
-        placeholder: 'dd/mm/aaaa',
+        placeholder: 'Femenino',
         required: true,
         type: 'date',
-        name: 'birthDate',
         autoComplete: 'birthDate',
     },
     {
@@ -80,7 +89,6 @@ const USER_INPUT_VALUES = [
         placeholder: '0212-1234567',
         required: true,
         type: 'text',
-        name: 'localPhone',
         autoComplete: 'localPhone',
     },
     {
@@ -89,7 +97,6 @@ const USER_INPUT_VALUES = [
         placeholder: '0412-1234567',
         required: true,
         type: 'text',
-        name: 'cellPhone',
         autoComplete: 'cellPhone',
     },
     {
@@ -98,7 +105,6 @@ const USER_INPUT_VALUES = [
         placeholder: '',
         required: true,
         type: 'email',
-        name: 'email',
         autoComplete: 'email',
     },
     {
@@ -106,8 +112,7 @@ const USER_INPUT_VALUES = [
         id: 'avaaStartedDate',
         placeholder: '',
         required: true,
-        type: 'avaaStartedDate',
-        name: 'avaaStartedDate',
+        type: 'date',
         autoComplete: 'avaaStartedDate',
     }
 ]
@@ -116,12 +121,18 @@ const GeneralInformation = () => {
     return (
         <form action="#">
             <div className="grid grid-cols-6 gap-6">
-                {USER_INPUT_VALUES.map((input, index) => (
-                    <div className="col-span-6 sm:col-span-3">
-                        <label htmlFor="first-name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{input.label}</label>
-                        <input type="text" name="first-name" id="first-name" placeholder="Bonnie" required />
-                    </div>
-                ))}
+                {USER_INPUT_VALUES.map((input, index) => {
+                    const { label, id, placeholder, required, type, } = input
+                    return (
+                        <div className="col-span-6 sm:col-span-3">
+                            <label htmlFor={id} className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{label}</label>
+                            <input type={type} name={id} id={id} placeholder={placeholder} required={required} />
+                        </div>
+                    )
+                })}
+                <div className="col-span-6 sm:col-full">
+                    <button className="text-white bg-[#008000] hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" type="submit">Guardar</button>
+                </div>
             </div>
         </form>
     )

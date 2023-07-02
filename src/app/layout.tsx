@@ -1,6 +1,7 @@
 import '@/app/globals.css'
 import PublicFooter from '@/components/footer/Public';
 import favicon from '@/../public/logo-proexcelencia-cap.png';
+import NextAuthProvider from '../components/providers';
 
 export const metadata = {
   title: 'Proexcelencia',
@@ -8,17 +9,19 @@ export const metadata = {
   icons: favicon.src,
 }
 
-export default function RootLayout({
-  children,
+export default async function RootLayout({
+  children
 }: {
-  children: React.ReactNode
+  children: React.ReactNode,
 }) {
+
   return (
     <html lang="es">
       <body>
-        {children}
-        <PublicFooter />
+        <NextAuthProvider>{children}</NextAuthProvider>
+        < PublicFooter />
       </body>
     </html>
+
   )
 }

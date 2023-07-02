@@ -53,16 +53,24 @@ body {
     background-position: 0% 0;
   }
 }
-/* sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 */
 
 
+
+/* Get rid of the bg color when autofill */
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+
+/*  focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 */
 
 @layer components {
   input {
-    @apply shadow-sm bg-gray-50 border border-gray-300 text-gray-900 focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md w-full dark:bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600;
+    @apply sm:text-sm shadow-sm bg-gray-50 text-gray-900 focus:outline-none focus:outline-offset-0 p-2 rounded-md w-full dark:bg-slate-700 dark:placeholder-slate-500 dark:text-gray-300 ring-1 ring-emerald-950 active:border-zinc-950 focus:outline-emerald-800;
   }
+
   textarea {
-    @apply min-h-[4rem] focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md w-full bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600;
+    @apply min-h-[4rem] focus:outline-none focus:outline-offset-0 py-1 px-3 rounded-md w-full bg-emerald-950 ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600;
   }
 }
 
@@ -89,8 +97,4 @@ html::-webkit-scrollbar-thumb:hover {
 html::-webkit-scrollbar-thumb:active {
   background: #15803D;
   border-radius: 10px;
-}
-
-input {
-
 }
