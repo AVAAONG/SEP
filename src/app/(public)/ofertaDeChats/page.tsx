@@ -11,7 +11,7 @@ interface ChatQuery extends Chat {
 
 const page = () => {
   const searchParams = useSearchParams()
-  const chats = searchParams.get('chats')
+  const chats = searchParams.get('chats');
   const f = JSON.parse(chats);
 
   return (
