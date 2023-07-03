@@ -16,8 +16,8 @@ export default async function RootLayout({
 }) {
 
   return (
-    <html lang="es">
-      <body>
+    <html lang="es " className='h-full'>
+      <body className='h-full'>
         <NextAuthProvider>{children}</NextAuthProvider>
         < PublicFooter />
       </body>
