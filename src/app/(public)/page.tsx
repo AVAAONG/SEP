@@ -18,7 +18,7 @@ export default function Home() {
             By{' '}
             <Image
               src="/avaa.png"
-              alt="Vercel Logo"
+              alt="AVAA Logo"
               width={100}
               height={24}
               priority
