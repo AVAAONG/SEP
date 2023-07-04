@@ -5,7 +5,7 @@ import DropdownButton from './DropdownButton'
 
 export const SCHOLAR_SIDEBAR_ITEMS = [
     {
-        icon: workshopIcon,
+        // icon: workshopIcon,
         buttonName: "Talleres",
         itemList: [
             { name: "Talleres segun el año", link: "" },
@@ -15,19 +15,19 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
         link: ""
     },
     {
-        icon: chatIcon,
+        // icon: chatIcon,
         buttonName: "Chats",
         itemList: [],
         link: ""
     },
     {
-        icon: volunterIcon,
+        // icon: volunterIcon,
         buttonName: "Voluntariado",
         itemList: [],
         link: ""
     },
     {
-        icon: volunterIcon,
+        // icon: volunterIcon,
         buttonName: "Calendario de Actividades",
         itemList: [],
         link: ""
