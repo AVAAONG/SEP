@@ -16,9 +16,7 @@ export default async function RootLayout({
         <html lang="es">
             <body>
                 {children}
-                {/* < PublicFooter /> */}
             </body>
-        </html>
-
+    </html
     )
 }
