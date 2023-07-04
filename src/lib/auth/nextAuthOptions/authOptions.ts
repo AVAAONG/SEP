@@ -10,7 +10,7 @@ import CredentialsPrivider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 
-import { googleProviderConfig, credentialsProviderConfig, PAGES, NEXT_SECRET } from "./authConfig";
+import { googleAdminProviderConfig, googleUserProviderConfig, credentialsProviderConfig, PAGES, NEXT_SECRET } from "./authConfig";
 
 // const prisma = new PrismaClient();
 
@@ -29,7 +29,8 @@ const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/ to see the complete list of options to authenticate users.
      */
     providers: [
-        GoogleProvider(googleProviderConfig),
+        GoogleProvider(googleAdminProviderConfig),
+        GoogleProvider(googleUserProviderConfig),
         CredentialsPrivider(credentialsProviderConfig),
     ],
     /**
@@ -63,9 +64,9 @@ const authOptions: NextAuthOptions = {
                 user: {
                     ...session.user,
                     id: token,
-                    accessToken: token.accessToken,
+                    // accessToken: token.accessToken,
                     randomKey: token.randomKey,
-                    refreshToken: token.refreshToken,
+                    // refreshToken: token.refreshToken,
                 },
             };
         },
@@ -77,8 +78,8 @@ const authOptions: NextAuthOptions = {
                 return {
                     ...token,
                     id: u.id,
-                    accessToken,
-                    refreshToken,
+                    // accessToken,
+                    // refreshToken,
                     randomKey: u.randomKey,
                 };
             }

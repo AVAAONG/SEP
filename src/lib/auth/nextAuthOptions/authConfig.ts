@@ -8,36 +8,6 @@ import { OAuthUserConfig } from "next-auth/providers";
 import type { CredentialsConfig } from "next-auth/providers/credentials";
 import shortUUID from "short-uuid";
 
-/**
- * @description Google Client ID  
- * @summary Client ID for using the google user resources trough the Google API
- * @see https://developers.google.com/identity/oauth2/web/guides/get-google-api-clientid to get the client id 
- */
-export const GOOGLE_API_CLIENT_ID = process.env.GOOGLE_API_CLIENT_ID!;
-/**
- * @description Google Client Secret
- * @summary Client Secret for using the google user resources trough the Google API
- * @see https://developers.google.com/identity/protocols/oauth2/web-server#creatingcred to get the client secret
-*/
-export const GOOGLE_API_CLIENT_SECRET = process.env.GOOGLE_API_CLIENT_SECRET!;
-
-/**
- * @description Google Admin Scopes
- * @summary Scopes for using the google user resources trough the Google API
- * @see https://developers.google.com/identity/protocols/oauth2/scopes
- */
-export const GOOGLE_ADMIN_SCOPES = [
-    'https://www.googleapis.com/auth/calendar',
-    'https://www.googleapis.com/auth/contacts',
-    'https://mail.google.com/',
-    'https://www.googleapis.com/auth/drive',
-    'https://www.googleapis.com/auth/spreadsheets',
-    'https://www.googleapis.com/auth/forms',
-    'https://www.googleapis.com/auth/userinfo.profile',
-    'https://www.googleapis.com/auth/userinfo.email',
-];
-
-
 export const NEXT_SECRET = process.env.NEXTAUTH_SECRET || shortUUID.generate();
 
 /** 
@@ -51,28 +21,41 @@ export const PAGES: Partial<PagesOptions> = {
     signIn: "/auth/signin",
 }
 
+/// ==================================== NEXT AUTH CONFIGURATION FOR USERS ==================================== ///
 
 /**
- * @description NextAuth Google Provider Options object
- * @summary The Google provider allows you to sign in with a Google account using OAuth 2.0.
+ * @description Google USER Client ID  
+ * @summary Client ID for using the google user resources trough the Google API
+ * @see https://developers.google.com/identity/oauth2/web/guides/get-google-api-clientid to get the client id 
+ */
+export const GOOGLE_USER_API_CLIENT_ID = process.env.GOOGLE_USER_API_CLIENT_ID!;
+/**
+ * @description Google USER Client Secret
+ * @summary Client Secret for using the google user resources trough the Google API
+ * @see https://developers.google.com/identity/protocols/oauth2/web-server#creatingcred to get the client secret
+*/
+export const GOOGLE_USER_API_CLIENT_SECRET = process.env.GOOGLE_USER_API_CLIENT_SECRET!;
+
+
+/**
+ * @description NextAuth Google Provider Options object for USERS
+ * @summary This provider allows users to sign in in the app using their google account.
+ * 
+ * The difference between this provider and the google provider for admins is that this provider only request the user profile information, 
+ * whereas the google provider for admins request a lot of scopes to access the google apis.
+ * 
  * @see https://next-auth.js.org/configuration/providers/oauth to learn about the oauth 2.0 protocol
  * 
  * @see https://next-auth.js.org/providers/google to learn about the google provider in nexth-auth
  * @see https://developers.google.com/identity/protocols/oauth2 to learn about the google oauth2 protocol
+ * @see https://next-auth.js.org/configuration/providers/oauth#options to learn about the options for the oauth providers
  */
-export const googleProviderConfig: OAuthUserConfig<any> = {
-    clientId: GOOGLE_API_CLIENT_ID,
-    clientSecret: GOOGLE_API_CLIENT_SECRET,
-    authorization: {
-        params: {
-            access_type: "offline",
-            include_granted_scopes: true,
-            scope: GOOGLE_ADMIN_SCOPES.join(" "),
-            max_age: 30660
-        }
-    }
+export const googleUserProviderConfig: OAuthUserConfig<any> = {
+    // the id should match with the redirect url final path in the google console
+    id: "userGoogle",
+    clientId: GOOGLE_USER_API_CLIENT_ID,
+    clientSecret: GOOGLE_USER_API_CLIENT_SECRET,
 }
-
 
 /**
  * @description NextAuth Credentials Provider Options object
@@ -110,4 +93,60 @@ export const credentialsProviderConfig: CredentialsConfig = {
         }
     }
 
+}
+
+/// ==================================== NEXT AUTH CONFIGURATION FOR ADMINS ==================================== ///
+
+/**
+ * @description Google ADMIN Client ID  
+ * @summary Client ID for using the google user resources trough the Google API
+ * @see https://developers.google.com/identity/oauth2/web/guides/get-google-api-clientid to get the client id 
+ */
+export const GOOGLE_ADMIN_API_CLIENT_ID = process.env.GOOGLE_ADMIN_API_CLIENT_ID!;
+/**
+ * @description Google ADMIN Client Secret
+ * @summary Client Secret for using the google user resources trough the Google API
+ * @see https://developers.google.com/identity/protocols/oauth2/web-server#creatingcred to get the client secret
+*/
+export const GOOGLE_ADMIN_API_CLIENT_SECRET = process.env.GOOGLE_ADMIN_API_CLIENT_SECRET!;
+
+/**
+ * @description Google ADMIN Scopes
+ * @summary Scopes for using the google user resources trough the Google API
+ * @see https://developers.google.com/identity/protocols/oauth2/scopes
+ */
+export const GOOGLE_ADMIN_SCOPES = [
+    'https://www.googleapis.com/auth/calendar',
+    'https://www.googleapis.com/auth/contacts',
+    'https://mail.google.com/',
+    'https://www.googleapis.com/auth/drive',
+    'https://www.googleapis.com/auth/spreadsheets',
+    'https://www.googleapis.com/auth/forms',
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'https://www.googleapis.com/auth/userinfo.email',
+];
+
+/**
+ * @description NextAuth Google Provider Options object for ADMINS
+ * @summary This provider allows admin to sign in in the app using their google account.
+ * 
+ * It is important to notice that this provider is only for admin users, so it is not available for the public, 
+ * cause have a lot of googke scopes that are not necesary for the public.
+ * @see https://next-auth.js.org/configuration/providers/oauth to learn about the oauth 2.0 protocol
+ * 
+ * @see https://next-auth.js.org/providers/google to learn about the google provider in nexth-auth
+ * @see https://developers.google.com/identity/protocols/oauth2 to learn about the google oauth2 protocol
+ */
+export const googleAdminProviderConfig: OAuthUserConfig<any> = {
+    id: "AdminGoogle",
+    clientId: GOOGLE_ADMIN_API_CLIENT_ID,
+    clientSecret: GOOGLE_ADMIN_API_CLIENT_SECRET,
+    authorization: {
+        params: {
+            access_type: "offline",
+            include_granted_scopes: true,
+            scope: GOOGLE_ADMIN_SCOPES.join(" "),
+            max_age: 30660
+        }
+    }
 }
