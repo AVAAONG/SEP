@@ -96,8 +96,10 @@ const UniversityInformation = () => {
                     <label htmlFor="collage" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Periodo academico actual</label>
                     <input type='text' name='career' id='career' placeholder='' required />
                 </div>
-                <div className="col-span-6 sm:col-full">
+
+                <div className="col-span-6 sm:col-full content-around">
                     <button className="text-white bg-[#008000] hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" type="submit">Save all</button>
+                    <button className="text-white bg-[#008000] hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" type="submit">Culmine carga academica</button>
                 </div>
             </div>
         </form>

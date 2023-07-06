@@ -32,7 +32,7 @@ const DropdownButton = (props: DropdownButtonProps) => {
                         <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
                         <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                     </svg>
-                    <span className="ml-3">Panel General</span>
+                    <span className="ml-3">{buttonName}</span>
                 </a>
             </li>
         )
@@ -59,7 +59,7 @@ const DropdownButton = (props: DropdownButtonProps) => {
                         ></path>
                     </svg>
                     <span className="flex-1 ml-3 text-left whitespace-nowrap"
-                    >Talleres</span>
+                    >{buttonName}</span>
 
                     <svg
                         aria-hidden="true"
@@ -75,14 +75,15 @@ const DropdownButton = (props: DropdownButtonProps) => {
                         ></path>
                     </svg>
                 </button>
-                <ul id="dropdown-pages" className="hidden py-2 space-y-2">
-
+                <ul id="dropdown-pages" className={`${isDropdownOpen ? 'flex flex-col' : "hidden"} py-2 space-y-2`}>
                     {itemList.map((item) => (
-                        <li>
+                        <li className='flex justify-center items-center'>
                             <a
                                 href="#"
-                                className="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                            >{item.name}</a >
+                                className="flex items-center gap-4 p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                            >
+                                <div className='rounded-full bg-green-700 w-2 h-2'></div>
+                                {item.name}</a >
                         </li>
                     ))}
                 </ul>

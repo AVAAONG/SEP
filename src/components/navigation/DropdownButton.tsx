@@ -23,7 +23,7 @@ const DropdownButton = ({ buttonName, itemList, Icon }: DropdownButtonProps) => 
                     </path>
                 </svg>
             </button>
-            <ul className={` ${isDropdownOpen ? '' : "hidden"} py-2 space-y-2 `}>
+            <ul className={` ${isDropdownOpen ? 'flex' : "flex"} py-2 space-y-2 `}>
                 {itemList.map(({ name, link }) => {
                     return (
                         <li key={link}>

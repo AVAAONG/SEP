@@ -1,14 +1,13 @@
 import { TableOptions } from 'react-table'
-import { Workshop, WorkshopDates, WorkshopSpeaker, WorkshopTempData } from '@prisma/client'
+import { Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client'
 
 interface WorkshopTableProps {
     workshopData: (Workshop & {
         speaker: WorkshopSpeaker[];
-        dates: WorkshopDates[];
         tempData: WorkshopTempData | null;
     })[],
 }
-const workshopHeaders: TableOptions<WorkshopTableProps> = [
+const workshopScholarFormat: TableOptions<WorkshopTableProps> = [
     {
         Header: 'Taller',
         accessor: 'title'
@@ -38,7 +37,7 @@ const workshopHeaders: TableOptions<WorkshopTableProps> = [
 
     },
     {
-        Header: 'Pensum',
+        Header: 'Componente',
         accessor: 'pensum',
         Cell: ({ value }: { value: string }) => { return value.toLowerCase().replaceAll("_", " ") }
 
@@ -54,13 +53,9 @@ const workshopHeaders: TableOptions<WorkshopTableProps> = [
         accessor: 'platform'
     },
     {
-        Header: 'Cupos',
-        accessor: 'spots'
-    },
-    {
         Header: 'Año',
         accessor: 'year'
     },
 ]
 
-export default workshopHeaders;
+export default workshopScholarFormat;
