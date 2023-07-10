@@ -1,31 +1,6 @@
-import { type } from 'os'
-import React from 'react'
-
-// label: 'Nombre Completo',
-// id: 'first-name',
-// placeholder: 'Javier Jose',
-// required: true,
-// type: 'text',
-// value: '',
-// autoComplete: 'given-name',
-// className: 'col-span-6 sm:col-span-3',
-// onChange: () => { },
-// onBlur: () => { },
-// onFocus: () => { },
-// error: '',
-// helpText: '',
-// disabled: false,
-// readOnly: false,
-// autoFocus: false,
-// maxLength: 50,
-// minLength: 2,
-// pattern: '',
-// spellCheck: false,
-// tabIndex: 0,
-// inputMode: 'text',
-// list: '',
-// size: 0,
-// user input types
+"use client";
+import { BaseSyntheticEvent } from "react";
+import { useForm } from "react-hook-form";
 
 type UserInputType = {
     label: string,
@@ -42,7 +17,7 @@ type UserInputType = {
 const USER_INPUT_VALUES = [
     {
         label: 'Nombres',
-        id: 'first-name',
+        id: 'firstNames',
         placeholder: 'Kevin José',
         required: true,
         type: 'text',
@@ -52,7 +27,7 @@ const USER_INPUT_VALUES = [
     },
     {
         label: 'Apellidos',
-        id: 'last-name',
+        id: 'lastNames',
         placeholder: 'Bravo Mota',
         required: true,
         type: 'text',
@@ -60,7 +35,7 @@ const USER_INPUT_VALUES = [
     },
     {
         label: 'Cédula de identidad',
-        id: 'cedula',
+        id: 'dni',
         placeholder: 'V-12345678',
         required: true,
         type: 'text',
@@ -68,8 +43,8 @@ const USER_INPUT_VALUES = [
     },
     {
         label: 'Género',
-        id: 'genre',
-        placeholder: 'dd/mm/aaaa',
+        id: 'gender',
+        placeholder: 'Masculino',
         required: true,
         type: 'select',
         autoComplete: 'genre',
@@ -85,7 +60,7 @@ const USER_INPUT_VALUES = [
     },
     {
         label: 'Número de telefono local',
-        id: 'localPhone',
+        id: 'localPhoneNumber',
         placeholder: '0212-1234567',
         required: true,
         type: 'text',
@@ -93,7 +68,7 @@ const USER_INPUT_VALUES = [
     },
     {
         label: 'Número de telefono celular',
-        id: 'cellPhone',
+        id: 'cellPhoneNumber',
         placeholder: '0412-1234567',
         required: true,
         type: 'text',
@@ -109,15 +84,53 @@ const USER_INPUT_VALUES = [
     },
     {
         label: 'Año de ingreso en AVAA',
-        id: 'avaaStartedDate',
+        id: 'avaaAdmissionYear',
         placeholder: '',
         required: true,
         type: 'date',
-        autoComplete: 'avaaStartedDate',
+        autoComplete: 'avaaAdmissionYear',
     }
 ]
 
-const GeneralInformation = () => {
+interface GeneralInformationProps {
+    scholarGeneralInfo: {
+        firstNames: string,
+        lastNames: string,
+        dni: string,
+        gender: string,
+        birthDate: string,
+        cellPhoneNumber: string,
+        avaaAdmissionYear: string,
+        localPhoneNumber: string,
+        email: string,
+    },
+    id: string;
+}
+
+
+
+const GeneralInformation = ({ scholarGeneralInfo, id }: GeneralInformationProps) => {
+    const { register, handleSubmit, setValue } = useForm({
+        defaultValues: {
+            ...scholarGeneralInfo
+        }
+    });
+
+    const saveData = async (data: any, event: BaseSyntheticEvent) => {
+        // event.preventDefault();
+        // data.birthDate = new Date(data.birthDate)
+        // data.avaaAdmissionYear = new Date(data.avaaAdmissionYear)
+        // await fetch(`/becario/api/scholar`, {
+        //     method: 'PATCH',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({data, id})
+        // })
+        console.log(data)
+
+    }
+
     return (
         <form action="#">
             <div className="grid grid-cols-6 gap-6">
@@ -126,12 +139,14 @@ const GeneralInformation = () => {
                     return (
                         <div className="col-span-6 sm:col-span-3">
                             <label htmlFor={id} className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{label}</label>
-                            <input type={type} name={id} id={id} placeholder={placeholder} required={required} />
+                            <input type={type} placeholder={placeholder} required={required} {...register(id)} />
                         </div>
                     )
                 })}
                 <div className="col-span-6 sm:col-full">
-                    <button className="text-white bg-[#008000] hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" type="submit">Guardar</button>
+                    <button
+                        onClick={handleSubmit((data, event) => saveData(data, event))}
+                        className="text-white bg-[#008000] hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" type="submit">Guardar</button>
                 </div>
             </div>
         </form>

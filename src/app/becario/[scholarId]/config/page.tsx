@@ -7,17 +7,51 @@ import UniversityInformation from '@/components/forms/userSetings/UniversityInfo
 import WorkInformation from '@/components/forms/userSetings/WorkInformation'
 import React from 'react'
 import VolunteeringInformation from '@/components/forms/userSetings/VolunteeringInformation'
+import { PrismaClient } from "@prisma/client";
 
-const page = ({
+const formatDate = (date: string) => {
+    const rawDate = new Date(date) ;
+    let day = rawDate.getDate() < 10 ? `0${rawDate.getMonth() + 1}` : rawDate.getMonth() + 1;
+    let month = rawDate.getMonth() + 1 < 10 ? `0${rawDate.getMonth() + 1}` : rawDate.getMonth() + 1 ;
+    let fullYear = rawDate.getFullYear();
+    const formatedDate = `${fullYear}-${month}-${day}`;
+    console.log(formatedDate);
+    return formatedDate;
+}
+
+const page = async ({
     params,
     searchParams,
-  }: {
+}: {
     params: { scholarId: string };
     searchParams?: { [key: string]: string | string[] | undefined };
-  })  => {
+}) => {
 
-    console.log(params.scholarId)
-    
+    const prisma = new PrismaClient();
+
+    const scholarId = params.scholarId;
+
+    const scholar = await prisma.user.findUnique({
+        where: {
+            id: scholarId
+        },
+        include: {
+            scholar: true,
+        }
+    });
+
+    const scholarGeneralInfo = {
+        firstNames: scholar?.scholar?.firstNames,
+        lastNames: scholar?.scholar?.lastNames,
+        dni: scholar?.scholar?.dni,
+        gender: scholar?.scholar?.gender,
+        birthDate: formatDate(scholar?.scholar?.birthDate),
+        cellPhoneNumber: scholar?.scholar?.cellPhoneNumber,
+        localPhoneNumber: scholar?.scholar?.localPhoneNumber,
+        avaaAdmissionYear: formatDate(scholar?.scholar?.avaaAdmissionYear),
+        email: scholar?.scholar?.email,
+    }
+
     return (
         <div>
             <div className="grid grid-cols-1 px-2 pt-6 xl:grid-cols-3 xl:gap-4">
@@ -26,7 +60,7 @@ const page = ({
                 </div>
                 <div className="col-span-full xl:col-auto">
                     <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-green-950 sm:p-6 dark:bg-slate-900">
-                        <ProfilePic image={null} />
+                        <ProfilePic image={scholar!.image} />
                     </div>
 
                     <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-green-950 sm:p-6 dark:bg-slate-900">
@@ -39,12 +73,12 @@ const page = ({
                     <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                         <VolunteeringInformation />
                     </div>
-                    
+
                 </div>
                 <div className="col-span-2">
                     <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-green-950 sm:p-6 dark:bg-slate-900">
                         <h3 className="mb-4 text-xl font-semibold dark:text-white">Información General</h3>
-                        <GeneralInformation />
+                        <GeneralInformation scholarGeneralInfo={scholarGeneralInfo} id={scholarId} />
                     </div>
                     <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                         <AddressInformation />
