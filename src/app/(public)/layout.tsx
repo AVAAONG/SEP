@@ -14,6 +14,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {children}
         <PublicFooter />
       </body>
+      <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
     </html>
   );
 }
