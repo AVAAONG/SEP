@@ -18,7 +18,8 @@ export const NEXT_SECRET = process.env.NEXTAUTH_SECRET || shortUUID.generate();
  *  
  */
 export const PAGES: Partial<PagesOptions> = {
-    signIn: "/auth/signin",
+    signIn: "/becario/auth/signin",
+    error: "/becario/auth/signin",
 }
 
 /// ==================================== NEXT AUTH CONFIGURATION FOR USERS ==================================== ///
@@ -57,43 +58,6 @@ export const googleUserProviderConfig: OAuthUserConfig<any> = {
     clientSecret: GOOGLE_USER_API_CLIENT_SECRET,
 }
 
-/**
- * @description NextAuth Credentials Provider Options object
- * @summary The credentials provider allows you to accept arbitrary credentials from users.
- * This is useful if you want to allow users to sign in with a username/password or any other type of credentials.
- * 
- * This object allow you to configure all the necesary options for the credentials provider.
- * @see https://next-auth.js.org/providers/credentials
- * @see https://next-auth.js.org/configuration/providers/credentials to learn more about credentials
- */
-export const credentialsProviderConfig: CredentialsConfig = {
-    id: "credentials",
-    name: "Credentials",
-    type: "credentials",
-    credentials: {
-        email: { label: "Correo electronico", type: "text", placeholder: "becario@gmail.com" },
-        password: { label: "Password", type: "password" }
-    },
-    async authorize(credentials, req) {
-        if (credentials === undefined) throw new Error("Las credenciales no pueden ser undefined")
-        const user = {
-            id: shortUUID.generate(),
-            email: credentials.email,
-            image: null,
-            accessToken: null,
-        };
-
-        if (user) {
-            // Any object returned will be saved in `user` property of the JWT
-            return user
-        }
-        else {
-            // If you return null then an error will be displayed advising the user to check their details.
-            return null
-        }
-    }
-
-}
 
 /// ==================================== NEXT AUTH CONFIGURATION FOR ADMINS ==================================== ///
 
