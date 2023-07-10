@@ -20,9 +20,9 @@ const page = async ({
    * @summary The URL to redirect to after a successful sign in or sign up.
    */
   //   const scholarCallbackUrl = searchParams.get("callbackUrl") || "/becario/dsafadsfas/config";
-
   //if the session exist redirects to /becario/asdfasd/config
   if (session) {
+    console.log(session);
     redirect("/becario/asdfasd/config/");
   }
   return (

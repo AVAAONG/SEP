@@ -15,7 +15,7 @@ model User {
     sessions      Session[]
     role          Role      @default(SCHOLAR)
     scholar       Scholar?
-    emailVerified Boolean   @default(false)
+    emailVerified Boolean? 
 }
 
 model Account {

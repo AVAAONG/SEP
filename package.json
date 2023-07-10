@@ -17,6 +17,7 @@
     "lint": "next lint",
     "prisma:delete": "rm ./node_modules/.pnpm/@prisma+client@4.15.0_prisma@4.15.0/node_modules/.prisma/client/query_engine-windows.dll.node",
     "prisma:generate": "pnpm run prisma:import && prisma generate --schema=./src/prisma/schema.prisma",
+    "prisma:migrate": "prisma migrate --schema=./src/prisma/schema.prisma",
     "prisma:studio": "prisma studio --schema=./src/prisma/schema.prisma",
     "prisma:push": "prisma db push dev --schema=./src/prisma/schema.prisma",
     "prisma:format": "prisma format --schema=./src/prisma/schema.prisma",
