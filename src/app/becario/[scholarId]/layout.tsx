@@ -21,7 +21,7 @@ export default async function RootLayout({
 
     return (
         <>
-            <div className="antialiased bg-gray-50 dark:bg-slate-950">
+            <div className="antialiased bg-gray-100 dark:bg-slate-800">
                 <NavigationBar />
                 <Sidebar />
                 <main className="p-4 md:ml-64 h-auto pt-16">
