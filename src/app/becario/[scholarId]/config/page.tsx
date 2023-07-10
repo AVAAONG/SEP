@@ -8,7 +8,16 @@ import WorkInformation from '@/components/forms/userSetings/WorkInformation'
 import React from 'react'
 import VolunteeringInformation from '@/components/forms/userSetings/VolunteeringInformation'
 
-const page = () => {
+const page = ({
+    params,
+    searchParams,
+  }: {
+    params: { scholarId: string };
+    searchParams?: { [key: string]: string | string[] | undefined };
+  })  => {
+
+    console.log(params.scholarId)
+    
     return (
         <div>
             <div className="grid grid-cols-1 px-2 pt-6 xl:grid-cols-3 xl:gap-4">

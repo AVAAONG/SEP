@@ -19,11 +19,9 @@ const page = async ({
    * Specify to which URL the user will be redirected after signing in. Defaults to the page URL the sign-in is initiated from.
    * @summary The URL to redirect to after a successful sign in or sign up.
    */
-  //   const scholarCallbackUrl = searchParams.get("callbackUrl") || "/becario/dsafadsfas/config";
-  //if the session exist redirects to /becario/asdfasd/config
+    const scholarCallbackUrl = searchParams!.callbackUrl || "/becario/dsafadsfas/config";
   if (session) {
-    console.log(session);
-    redirect("/becario/asdfasd/config/");
+    redirect(scholarCallbackUrl);
   }
   return (
     <main className="flex flex-col md:flex-row-reverse min-h-screen md:h-screen bg-gradient-to-b from-emerald-950 to-slate-950">
@@ -38,7 +36,6 @@ const page = async ({
               }
             />
           )}
-
           <h2 className="text-xl font-semibold md:text-2xl">Entra</h2>
           <div className="my-4">
             <SigninForm />
@@ -49,7 +46,7 @@ const page = async ({
             <hr className="w-40 h-px my-8 border-0 bg-emerald-700 opacity-40" />
           </div>
           <div className="flex">
-            <GoogleSignInButton callbackUrl="/becario/dsafadsfas/config" providerId="userGoogle" />
+            <GoogleSignInButton callbackUrl="/becario/api/signinRedirect" providerId="userGoogle" />
           </div>
         </div>
       </section>
