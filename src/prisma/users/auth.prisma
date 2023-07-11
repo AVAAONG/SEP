@@ -15,8 +15,9 @@ model User {
     sessions      Session[]
     role          Role      @default(SCHOLAR)
     scholar       Scholar?
-    emailVerified Boolean? 
+    emailVerified DateTime?
 }
+
 
 model Account {
     id                String  @id @default(cuid())

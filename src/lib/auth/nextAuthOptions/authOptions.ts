@@ -7,12 +7,13 @@ import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaClient } from "@prisma/client";
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import Email from "./EmailProvider";
 
-
-import { googleUserProviderConfig, PAGES, NEXT_SECRET, } from "./authConfig";
-import Email from "next-auth/providers/email";
-
+import { googleUserProviderConfig, PAGES, NEXT_SECRET, emailUserProviderConfig, } from "./authConfig";
 const prisma = new PrismaClient();
+const adapter = PrismaAdapter(prisma);
+
+
 
 /**
  * 
@@ -31,23 +32,13 @@ const authOptions: NextAuthOptions = {
   providers: [
     // GoogleProvider(googleAdminProviderConfig),
     GoogleProvider(googleUserProviderConfig),
-    Email({
-      server: {
-        host: process.env.SMTP_HOST,
-        port: Number(process.env.SMTP_PORT),
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASSWORD,
-        },
-      },
-      from: process.env.EMAIL_FROM,
-    }),
+    Email(emailUserProviderConfig),
   ],
   /**
    * @see https://authjs.dev/reference/adapters for adapters information
    * @see https://authjs.dev/reference/adapter/pri sma for prisma adapter information
   */
-  adapter: PrismaAdapter(prisma),
+  adapter,
   /**
    * @description it is used to configure how to save the user session 
    * it sets default to "jwt" which is a cookie based session. THis is override when using a database adapter,
@@ -69,7 +60,16 @@ const authOptions: NextAuthOptions = {
    */
   callbacks: {
     signIn: async ({ user, account, profile }) => {
-      const email = profile!.email
+      console.log('user', user)
+      console.log('account', account)
+      console.log('profile', profile)
+      let email = ''
+      if(account.provider === 'email'){
+        email = account.providerAccountId
+      }
+      else {
+        email = profile!.email
+      }
       // const name = profile.name
 
       // const SUBJECT_MESSAGE =  encodeURIComponent(`Problemas al ingresar al SEP - ${name}`)
@@ -96,6 +96,7 @@ const authOptions: NextAuthOptions = {
   },
   events: {
     createUser: async (data) => {
+      console.log(data)
       await prisma.user.update({
         where: {
           id: data.user.id,
@@ -111,10 +112,7 @@ const authOptions: NextAuthOptions = {
       })
     }
   },
-
-
-
-  pages: PAGES,
+    pages: PAGES,
 };
 
 export default authOptions;

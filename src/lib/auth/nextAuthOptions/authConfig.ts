@@ -5,7 +5,6 @@
 */
 import { PagesOptions } from "next-auth";
 import { OAuthUserConfig } from "next-auth/providers";
-import type { CredentialsConfig } from "next-auth/providers/credentials";
 import shortUUID from "short-uuid";
 
 export const NEXT_SECRET = process.env.NEXTAUTH_SECRET || shortUUID.generate();
@@ -20,6 +19,8 @@ export const NEXT_SECRET = process.env.NEXTAUTH_SECRET || shortUUID.generate();
 export const PAGES: Partial<PagesOptions> = {
     signIn: "/becario/auth/signin",
     error: "/becario/auth/signin",
+    verifyRequest: '/becario/auth/verify-email'
+
 }
 
 /// ==================================== NEXT AUTH CONFIGURATION FOR USERS ==================================== ///
@@ -58,6 +59,17 @@ export const googleUserProviderConfig: OAuthUserConfig<any> = {
     clientSecret: GOOGLE_USER_API_CLIENT_SECRET,
 }
 
+export const emailUserProviderConfig = {
+    server: {
+      host: process.env.EMAIL_SERVER_HOST,
+      port: Number(process.env.EMAIL_SERVER_PORT),
+      auth: {
+        user: process.env.EMAIL_SERVER_USER,
+        pass: process.env.EMAIL_SERVER_PASSWORD,
+      },
+    },
+    from: process.env.EMAIL_FROM,
+  }
 
 /// ==================================== NEXT AUTH CONFIGURATION FOR ADMINS ==================================== ///
 

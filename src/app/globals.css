@@ -66,7 +66,7 @@ input:-webkit-autofill:focus {
 
 @layer components {
   input {
-    @apply sm:text-sm shadow-sm bg-gray-50 text-gray-900 focus:outline-none focus:outline-offset-0 p-2 rounded-md w-full dark:bg-slate-700 dark:placeholder-slate-500 dark:text-gray-300 ring-1 ring-emerald-950 active:border-zinc-950 focus:outline-emerald-800;
+    @apply sm:text-sm shadow-sm bg-gray-50 text-gray-300 focus:outline-none focus:outline-offset-0 p-2 rounded-md w-full dark:bg-slate-700 dark:placeholder-slate-500 dark:text-gray-300 ring-1 ring-emerald-950 active:border-zinc-950 focus:outline-emerald-800;
   }
 
   textarea {

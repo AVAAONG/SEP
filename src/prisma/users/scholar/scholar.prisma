@@ -57,6 +57,8 @@ model Scholar {
     InternalProjects             InternalProjects?     @relation(fields: [internalProjectsId], references: [id])
     internalProjectsId           String?
     volunteerAttendance          volunteerAttendance[]
+    updatedAt                    DateTime              @default(now())
+    createdAt                    DateTime              @default(now())
 
     @@index([internalProjectsId])
 }

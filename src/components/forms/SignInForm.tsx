@@ -1,12 +1,35 @@
 "use client";
 import { signIn } from "next-auth/react";
+import { BaseSyntheticEvent } from "react";
 import { useForm } from "react-hook-form";
+import useSWR from 'swr'
 
-const SigninForm = () => {
+interface SigninFormProps {
+  callbackUrl: string;
+}
+
+
+const SigninForm = ({ callbackUrl }: SigninFormProps) => {
   const { register, handleSubmit } = useForm();
+  const fetcher = (...args: RequestInfo[] | URL[]) => fetch([...args]).then(res => res.json())
+
+  const crsfToken = useSWR('../api/crfToken', fetcher, { fallbackData: "" })
+
+  const onSubmit = async (data: { email: string }, event: BaseSyntheticEvent) => {
+    event.preventDefault();
+    console.log(data)
+
+    await signIn("email", {
+      callbackUrl,
+      email: data.email,
+    });
+  };
+
+
   return (
-    <form onSubmit={handleSubmit(async () => await signIn("email", { callbackUrl: "/becario/dsfasd/config" }))}>
+    <form onSubmit={handleSubmit(async (data, event) => await onSubmit(data, event!))}>
       <div className="mb-3 flex flex-col gap-2">
+        {/* <input type="hidden" name="csrfToken" value={crsfToken.data.csrfToken} /> */}
         <label htmlFor="user_email" className="text-sm text-slate-400">
           Correo electrónico
         </label>
@@ -14,9 +37,10 @@ const SigninForm = () => {
           className="focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md w-full bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600 "
           autoFocus={true}
           autoComplete="email"
+          type="email"
           required={true}
           {...register("email", { required: true })}
-          placeholder="kevin@gmail.com"
+          placeholder="kevinbravo@gmail.com"
         />
       </div>
       <button
@@ -30,4 +54,5 @@ const SigninForm = () => {
   );
 };
 
-export default SigninForm;
+
+export default SigninForm
