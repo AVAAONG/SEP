@@ -9,7 +9,7 @@ const Warning = ({ title, subtitle }: WarningProps) => {
   return (
     <div
       id="alert-additional-content-4"
-      className="p-4 mb-4 text-yellow-800 border border-yellow-300 rounded-lg bg-transparent dark:bg-transparent dark:text-yellow-400 dark:border-yellow-800"
+      className="p-4 mb-4 text-yellow-600 border border-yellow-300 rounded-lg bg-transparent dark:bg-transparent dark:text-yellow-400 dark:border-yellow-800"
       role="alert"
     >
       <div className="flex items-center ">
@@ -29,7 +29,7 @@ const Warning = ({ title, subtitle }: WarningProps) => {
       <div className="flex">
         <button
           type="button"
-          className="text-white bg-yellow-800 hover:bg-yellow-900 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 text-center inline-flex items-center dark:bg-yellow-300 dark:text-gray-800 dark:hover:bg-yellow-400 dark:focus:ring-yellow-800"
+          className="text-white bg-yellow-600 hover:bg-yellow-500 hover:text-yellow-900 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 text-center inline-flex items-center dark:hover:bg-yellow-400 dark:focus:ring-yellow-800"
         >
           <svg
             className="-ml-0.5 mr-2 h-3 w-3"
@@ -44,7 +44,7 @@ const Warning = ({ title, subtitle }: WarningProps) => {
         </button>
         <button
           type="button"
-          className="text-yellow-800 bg-transparent border border-yellow-800 hover:bg-yellow-900 hover:text-white focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-xs px-3 py-1.5 text-center dark:hover:bg-yellow-300 dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-gray-800 dark:focus:ring-yellow-800"
+          className="text-yellow-600 bg-transparent border border-yellow-600 hover:bg-yellow-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-xs px-3 py-1.5 text-center dark:hover:bg-yellow-300 dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-gray-800 dark:focus:ring-yellow-600"
           data-dismiss-target="#alert-additional-content-4"
           aria-label="Close"
         >

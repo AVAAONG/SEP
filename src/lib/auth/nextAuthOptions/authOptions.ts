@@ -63,7 +63,9 @@ const authOptions: NextAuthOptions = {
       console.log('user', user)
       console.log('account', account)
       console.log('profile', profile)
+
       let email = ''
+
       if(account.provider === 'email'){
         email = account.providerAccountId
       }
@@ -79,8 +81,9 @@ const authOptions: NextAuthOptions = {
       const userExists = await prisma.scholar.findUnique({
         where: { email },
       })
+
       if (!userExists) {
-        throw new Error('notAllowed')
+       throw 'notAllowed'
       }
 
       return true
