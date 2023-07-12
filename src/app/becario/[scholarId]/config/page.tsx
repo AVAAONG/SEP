@@ -52,28 +52,28 @@ const page = async ({
     }
 
     const scholarAddressInfo = {
-        currentZone: scholar?.scholar?.currentZone ,
-        stateOfOrigin: scholar?.scholar?.stateOfOrigin ,
+        currentZone: scholar?.scholar?.currentZone,
+        stateOfOrigin: scholar?.scholar?.stateOfOrigin,
     }
 
 
     const scholarCollageInfo = {
-        collage: scholar?.scholar?.collage ,
-        carrer: scholar?.scholar?.carrer ,
-        studyArea: scholar?.scholar?.studyArea ,
-        currentAcademicPeriod: scholar?.scholar?.currentAcademicPeriod ,
-        grade: scholar?.scholar?.grade ,
-        gradeKind: scholar?.scholar?.gradeKind ,
-        classModality: scholar?.scholar?.classModality ,
-        academicPeriodType: scholar?.scholar?.academicPeriodType ,
+        collage: scholar?.scholar?.collage,
+        carrer: scholar?.scholar?.carrer,
+        studyArea: scholar?.scholar?.studyArea,
+        currentAcademicPeriod: scholar?.scholar?.currentAcademicPeriod,
+        grade: scholar?.scholar?.grade,
+        gradeKind: scholar?.scholar?.gradeKind,
+        classModality: scholar?.scholar?.classModality,
+        academicPeriodType: scholar?.scholar?.academicPeriodType,
     }
 
     const workScholarInformation = {
-        isCurrentlyWorking: scholar?.scholar?.isCurrentlyWorking ,
-        organizationName: scholar?.scholar?.organizationName ,
-        positionHeld: scholar?.scholar?.positionHeld ,
-        workModality: scholar?.scholar?.workModality ,
-        weeklyHours: scholar?.scholar?.weeklyHours ,
+        isCurrentlyWorking: scholar?.scholar?.isCurrentlyWorking ? "Sí" : "No",
+        organizationName: scholar?.scholar?.organizationName,
+        positionHeld: scholar?.scholar?.positionHeld,
+        workModality: scholar?.scholar?.workModality,
+        weeklyHours: scholar?.scholar?.weeklyHours,
     }
 
 
@@ -96,9 +96,9 @@ const page = async ({
                         <h3 className="mb-4 text-xl font-semibold dark:text-white">Respecto al CVA</h3>
                         <CVAInformation />
                     </div>
-                    <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2 dark:border-gray-900 sm:p-6 dark:bg-slate-950">
+                    {/* <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2 dark:border-gray-900 sm:p-6 dark:bg-slate-950">
                         <SocialMedia />
-                    </div>
+                    </div> */}
                     <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2 dark:border-gray-900 sm:p-6 dark:bg-slate-950">
                         <VolunteeringInformation />
                     </div>
