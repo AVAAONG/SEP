@@ -11,11 +11,10 @@ import { PrismaClient } from "@prisma/client";
 
 const formatDate = (date: string) => {
     const rawDate = new Date(date);
-    let day = rawDate.getDate() < 10 ? `0${rawDate.getMonth() + 1}` : rawDate.getMonth() + 1;
+    let day = rawDate.getDay() + 1 < 10 ? `0${rawDate.getMonth() + 1}` : rawDate.getMonth() + 1;
     let month = rawDate.getMonth() + 1 < 10 ? `0${rawDate.getMonth() + 1}` : rawDate.getMonth() + 1;
     let fullYear = rawDate.getFullYear();
     const formatedDate = `${fullYear}-${month}-${day}`;
-    console.log(formatedDate);
     return formatedDate;
 }
 
@@ -81,8 +80,7 @@ const page = async ({
                 </div>
                 <div className="col-span-2 ">
                     <div className="bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-40 p-4 mb-4  shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2  sm:p-6 dark:bg-slate-950">
-                        <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">Información General</h3>
-                        <GeneralInformation scholarGeneralInfo={scholarGeneralInfo} id={scholarId} />
+                        <GeneralInformation scholarGeneralInfo={scholarGeneralInfo} id={scholarId} title='Informacion General' />
                     </div>
                     <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2 dark:border-gray-900 sm:p-6 dark:bg-slate-950">
                         <AddressInformation />

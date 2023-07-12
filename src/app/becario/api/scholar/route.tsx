@@ -6,13 +6,18 @@ const prisma = new PrismaClient();
 export async function PATCH(req: NextRequest, res: NextResponse) {
     const body = await req.json()
     const { id, data } = body;
-    await prisma.scholar.update({
-        where: {
-            userId: id
-        },
-        data: {
-            ...data
-        }
-    })
-    return NextResponse.json({ message: "ok" })
+    try {
+        await prisma.scholar.update({
+            where: {
+                userId: id
+            },
+            data: {
+                ...data
+            }
+        })
+        return NextResponse.json({ message: "success" }, { status: 200 } )
+    }
+    catch (error) {
+        return NextResponse.json({ error: error }, { status: 500 })
+    }
 }
