@@ -52,21 +52,30 @@ const page = async ({
     }
 
     const scholarAddressInfo = {
-        currentZone: scholar?.scholar?.currentZone ?? "N/A",
-        stateOfOrigin: scholar?.scholar?.stateOfOrigin ?? "N/A",
+        currentZone: scholar?.scholar?.currentZone ,
+        stateOfOrigin: scholar?.scholar?.stateOfOrigin ,
     }
 
 
     const scholarCollageInfo = {
-        collage: scholar?.scholar?.collage ?? "N/A",
-        carrer: scholar?.scholar?.carrer ?? "N/A",
-        studyArea: scholar?.scholar?.studyArea ?? "N/A",
-        currentAcademicPeriod: scholar?.scholar?.currentAcademicPeriod ?? "N/A",
-        grade: scholar?.scholar?.grade ?? "N/A",
-        gradeKind: scholar?.scholar?.gradeKind ?? "N/A",
-        classModality: scholar?.scholar?.classModality ?? "N/A",
-        academicPeriodType: scholar?.scholar?.academicPeriodType ?? "N/A",
+        collage: scholar?.scholar?.collage ,
+        carrer: scholar?.scholar?.carrer ,
+        studyArea: scholar?.scholar?.studyArea ,
+        currentAcademicPeriod: scholar?.scholar?.currentAcademicPeriod ,
+        grade: scholar?.scholar?.grade ,
+        gradeKind: scholar?.scholar?.gradeKind ,
+        classModality: scholar?.scholar?.classModality ,
+        academicPeriodType: scholar?.scholar?.academicPeriodType ,
     }
+
+    const workScholarInformation = {
+        isCurrentlyWorking: scholar?.scholar?.isCurrentlyWorking ,
+        organizationName: scholar?.scholar?.organizationName ,
+        positionHeld: scholar?.scholar?.positionHeld ,
+        workModality: scholar?.scholar?.workModality ,
+        weeklyHours: scholar?.scholar?.weeklyHours ,
+    }
+
 
     return (
         <div>
@@ -106,7 +115,7 @@ const page = async ({
                         <UniversityInformation id={scholarId} title='Universidad' scholarCollageInfo={scholarCollageInfo} />
                     </div>
                     <div className="bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-40 p-4 mb-4  shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2  sm:p-6 dark:bg-slate-950">
-                        <WorkInformation />
+                        <WorkInformation id={scholarId} title='Trabajo' workScholarInformation={workScholarInformation} />
                     </div>
                 </div>
             </div>

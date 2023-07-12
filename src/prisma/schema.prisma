@@ -433,6 +433,7 @@ model Scholar {
   organizationName             String?
   positionHeld                 String?
   workModality                 String?
+  weeklyHours                  Float?
   instagramUser                String?
   twitterUser                  String?
   facebookUser                 String?
