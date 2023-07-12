@@ -40,8 +40,6 @@ const UniversityInformation = ({ scholarCollageInfo, id, title }: UniversityInfo
     const saveData = async (data: any, event: BaseSyntheticEvent) => {
         event.preventDefault();
         changeUpdatingState("updating")
-        data.birthDate = new Date(data.birthDate)
-        data.avaaAdmissionYear = new Date(data.avaaAdmissionYear)
         const response = await fetch(`/becario/api/scholar`, {
             method: 'PATCH',
             headers: {
