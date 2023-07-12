@@ -421,7 +421,9 @@ model Scholar {
   gradeKind                    String?
   classModality                String?
   academicPeriodType           String?
+  isInCVA                      Boolean?              @default(false)
   cvaLocation                  String?
+  cvaModality                  String?
   englishLevel                 String?
   notStartedCvaRreason         String?
   avaaAdmissionYear            String?
