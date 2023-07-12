@@ -8,7 +8,6 @@ interface WarningProps {
 const Warning = ({ title, subtitle }: WarningProps) => {
   return (
     <div
-      id="alert-additional-content-4"
       className="p-4 mb-4 text-yellow-600 border border-yellow-300 rounded-lg bg-transparent dark:bg-transparent dark:text-yellow-400 dark:border-yellow-800"
       role="alert"
     >
