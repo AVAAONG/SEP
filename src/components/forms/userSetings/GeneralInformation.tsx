@@ -80,7 +80,7 @@ const GeneralInformation = ({ scholarGeneralInfo, id, title }: GeneralInformatio
                         })}
                         <div className="col-span-6 sm:col-full">
                             <button
-                                onClick={handleSubmit((data, event) => saveData(data, event))}
+                                onClick={handleSubmit((data, event) => saveData(data, event!))}
                                 className="text-white bg-green-600 hover:bg-green-500 hover:text-green-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center" type="submit">Guardar cambios</button>
                         </div>
                     </div>

@@ -1,4 +1,16 @@
-const GENERAL_INFORMATION_INPUT_DATA = [
+type GeneralInformationInputData = {
+    label: string;
+    id: "firstNames" | "lastNames" | "dni" | "gender" | "birthDate" | "cellPhoneNumber" | "avaaAdmissionYear" | "localPhoneNumber" | "email";
+    placeholder: string;
+    required?: boolean;
+    type: string;
+    autoComplete: string;
+    spellCheck?: boolean;
+    tabIndex?: number;
+}
+
+
+const GENERAL_INFORMATION_INPUT_DATA: GeneralInformationInputData[] = [
     {
         label: 'Nombres',
         id: 'firstNames',
