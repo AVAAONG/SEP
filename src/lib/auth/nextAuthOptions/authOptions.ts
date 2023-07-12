@@ -13,8 +13,6 @@ import { googleUserProviderConfig, PAGES, NEXT_SECRET, emailUserProviderConfig, 
 const prisma = new PrismaClient();
 const adapter = PrismaAdapter(prisma);
 
-
-
 /**
  * 
  * @description NextAuth configuration options 
