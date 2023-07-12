@@ -52,8 +52,20 @@ const page = async ({
     }
 
     const scholarAddressInfo = {
-        currentZone: scholar?.scholar?.stateOfOrigin ?? "N/A",
+        currentZone: scholar?.scholar?.currentZone ?? "N/A",
         stateOfOrigin: scholar?.scholar?.stateOfOrigin ?? "N/A",
+    }
+
+
+    const scholarCollageInfo = {
+        collage: scholar?.scholar?.collage ?? "N/A",
+        carrer: scholar?.scholar?.carrer ?? "N/A",
+        studyArea: scholar?.scholar?.studyArea ?? "N/A",
+        currentAcademicPeriod: scholar?.scholar?.currentAcademicPeriod ?? "N/A",
+        grade: scholar?.scholar?.grade ?? "N/A",
+        gradeKind: scholar?.scholar?.gradeKind ?? "N/A",
+        classModality: scholar?.scholar?.classModality ?? "N/A",
+        academicPeriodType: scholar?.scholar?.academicPeriodType ?? "N/A",
     }
 
     return (
@@ -91,11 +103,9 @@ const page = async ({
                         <AddressInformation id={scholarId} title='Dirección' scholarAddressInfo={scholarAddressInfo} />
                     </div>
                     <div className="bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-40 p-4 mb-4  shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2  sm:p-6 dark:bg-slate-950">
-                        <h3 className=" text-green-900 mb-4 text-xl font-bold dark:text-white">Informacion de universidad</h3>
-                        <UniversityInformation />
+                        <UniversityInformation id={scholarId} title='Universidad' scholarCollageInfo={scholarCollageInfo} />
                     </div>
                     <div className="bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-40 p-4 mb-4  shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2  sm:p-6 dark:bg-slate-950">
-                        <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">Dirección</h3>
                         <WorkInformation />
                     </div>
                 </div>

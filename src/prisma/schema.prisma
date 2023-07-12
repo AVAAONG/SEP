@@ -417,8 +417,10 @@ model Scholar {
   carrer                       String?
   studyArea                    String?
   currentAcademicPeriod        String?
-  academicYear                 String?
+  grade                        String?
+  gradeKind                    String?
   classModality                String?
+  academicPeriodType           String?
   cvaLocation                  String?
   englishLevel                 String?
   notStartedCvaRreason         String?
