@@ -51,6 +51,11 @@ const page = async ({
         email: scholar?.scholar?.email,
     }
 
+    const scholarAddressInfo = {
+        currentZone: scholar?.scholar?.stateOfOrigin ?? "N/A",
+        stateOfOrigin: scholar?.scholar?.stateOfOrigin ?? "N/A",
+    }
+
     return (
         <div>
             {/* <div aria-hidden="true" className="absolute inset-0 grid grid-cols-2 -space-x-52  opacity-40 dark:opacity-30">
@@ -83,7 +88,7 @@ const page = async ({
                         <GeneralInformation scholarGeneralInfo={scholarGeneralInfo} id={scholarId} title='Informacion General' />
                     </div>
                     <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2 dark:border-gray-900 sm:p-6 dark:bg-slate-950">
-                        <AddressInformation />
+                        <AddressInformation id={scholarId} title='Dirección' scholarAddressInfo={scholarAddressInfo} />
                     </div>
                     <div className="bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-40 p-4 mb-4  shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2  sm:p-6 dark:bg-slate-950">
                         <h3 className=" text-green-900 mb-4 text-xl font-bold dark:text-white">Informacion de universidad</h3>
