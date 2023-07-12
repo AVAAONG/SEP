@@ -76,6 +76,14 @@ const page = async ({
         weeklyHours: scholar?.scholar?.weeklyHours,
     }
 
+    const scholarCVAInfo = {
+        isInCVA: scholar?.scholar?.isInCVA ? "TRUE" : "FALSE",
+        cvaLocation: scholar?.scholar?.cvaLocation,
+        cvaModality: scholar?.scholar?.cvaModality,
+        englishLevel: scholar?.scholar?.englishLevel,
+        notStartedCvaRreason: scholar?.scholar?.notStartedCvaRreason,
+    }
+    console.log(scholarCVAInfo)
 
     return (
         <div>
@@ -93,7 +101,7 @@ const page = async ({
                     </div>
 
                     <div className="bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-40 p-4 mb-4  shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2  sm:p-6 dark:bg-slate-950">
-                        <CVAInformation id={scholarId} title='CVA' />
+                        <CVAInformation id={scholarId} title='CVA' scholarCVAInfo={scholarCVAInfo} />
                     </div>
                     {/* <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2 dark:border-gray-900 sm:p-6 dark:bg-slate-950">
                         <SocialMedia />
