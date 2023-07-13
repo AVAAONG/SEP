@@ -12,6 +12,7 @@ import { getWorkshopsCount } from '@/lib/database/Workshops'
 import { getScholarsCount } from '@/lib/database/users'
 import { CALENDAR_IDS } from '@/lib/constants'
 import { getChatsCount, getChatsDone } from '@/lib/database/chats'
+import adminAuthOptions from '@/lib/auth/nextAuthAdminOptions/authAdminOptions'
 
 
 
@@ -35,7 +36,7 @@ const createEventObject = (calendarEvents: calendar_v3.Schema$Event[], bgColor: 
 }
 
 const fetchEvents = async () => {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(adminAuthOptions);
 
     const accessToken = session?.user?.accessToken;
     const refreshToken = session?.user?.refreshToken;
