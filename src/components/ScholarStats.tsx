@@ -12,12 +12,12 @@ const Stats = () => {
 
     return (
         <div>
-            <dl className="mt-5 grid grid-cols-1 rounded-lg bg-gradient-to-t from-green-600  to-emerald-900 overflow-hidden shadow divide-y divide-emerald-950 md:grid-cols-3 md:divide-y-0 md:divide-x border border-emerald-950">
+            <dl className="mt-5 grid grid-cols-1 rounded-lg bg-gradient-to-t from-green-600  dark:to-emerald-900  to-emerald-400 overflow-hidden shadow divide-y divide-emerald-600 dark:divide-emerald-950 md:grid-cols-3 md:divide-y-0 md:divide-x border border-emerald-600 dark:border-emerald-950">
                 {stats.map((item) => (
                     <div key={item.name} className="px-4 py-5 sm:p-6  ">
-                        <dt className="text-base font-semibold text-gray-900 dark:text-white">{item.name}</dt>
+                        <dt className="text-base font-semibold text-white">{item.name}</dt>
                         <dd className="mt-1 flex justify-between items-baseline md:block lg:flex">
-                            <div className="flex items-baseline text-5xl font-bold text-slate-950">
+                            <div className="flex items-baseline text-5xl font-bold dark:text-slate-950 text-white">
                                 {item.stat}
                                 <span className="ml-2 text-sm font-medium text-gray-200">de {item.previousStat}</span>
                             </div>

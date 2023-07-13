@@ -51,8 +51,6 @@ const page = async ({
         currentZone: scholar?.scholar?.currentZone,
         stateOfOrigin: scholar?.scholar?.stateOfOrigin,
     }
-
-
     const scholarCollageInfo = {
         collage: scholar?.scholar?.collage,
         carrer: scholar?.scholar?.carrer,
@@ -71,8 +69,6 @@ const page = async ({
         workModality: scholar?.scholar?.workModality,
         weeklyHours: scholar?.scholar?.weeklyHours,
     }
-    console.log(workScholarInformation)
-
     const scholarCVAInfo = {
         isInCVA: scholar?.scholar?.isInCVA ? "TRUE" : "FALSE",
         cvaLocation: scholar?.scholar?.cvaLocation,
