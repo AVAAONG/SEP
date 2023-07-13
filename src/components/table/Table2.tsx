@@ -41,16 +41,16 @@ const ChatTable: React.FC<WorkshopTableProps> = (props) => {
     }, 200)
 
     return (
-        <div className='relative overflow-hidden bg-white shadow-md dark:bg-slate-900 sm:rounded-lg'>
+        <div className='relative overflow-hidden bg-white shadow-md shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg'>
             <div className="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4">
                 <div className="flex items-center flex-1 space-x-4">
                     <h5>
-                        <span className="text-gray-400">Hasta la fecha, ProExcelencia ah realizado un total de:</span>{' '}
-                        <span className="dark:text-white">{workshopData.length}</span>{' '}
-                        <span className="text-gray-400">chats clubs</span>
+                        <span className="text-gray-800 dark:text-gray-400">Hasta la fecha, ProExcelencia ah realizado un total de:</span>{' '}
+                        <span className="text-gray-900 dark:text-white font-semibold ">{workshopData.length}</span>{' '}
+                        <span className="text-gray-800 dark:text-gray-400">chats clubs</span>
                     </h5>
                 </div>
-                <button id="filterDropdownButton" data-dropdown-toggle="filterDropdown" className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" type="button">
+                <button id="filterDropdownButton" data-dropdown-toggle="filterDropdown" className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10  dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" type="button">
                     <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className="h-4 w-4 mr-2 text-green-500" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
                     </svg>
@@ -84,9 +84,9 @@ const ChatTable: React.FC<WorkshopTableProps> = (props) => {
             </div>
             <div className="flow-root w-full overflow-x-scroll  h-[600px]">
                 <table {...getTableProps()} className="w-full text-sm text-left text-gray-300 ">
-                    <thead className="text-xs text-green-500 uppercase text-center border-b-[1px] border-green-700 text-ellipsis  dark:bg-slate-950">
+                    <thead className="text-xs text-green-500 uppercase text-center border-b-[1px] border-green-700 text-ellipsis bg-gray-100 dark:bg-slate-950">
                         {headerGroups.map((headerGroup) => (
-                            <tr {...headerGroup.getHeaderGroupProps()} className="text-xs font-medium text-green-500 uppercase tracking-wider">
+                            <tr {...headerGroup.getHeaderGroupProps()} className="text-xs font-medium text-green-700 dark:text-green-500 uppercase tracking-wider">
                                 {headerGroup.headers.map((column) => {
                                     return (
                                         <th {...column.getHeaderProps(column.getSortByToggleProps())} scope="col" className="px-6 py-3">
@@ -102,11 +102,11 @@ const ChatTable: React.FC<WorkshopTableProps> = (props) => {
                         ))}
                     </thead>
 
-                    <tbody {...getTableBodyProps()} className="divide-y divide-gray-700">
+                    <tbody {...getTableBodyProps()} className="divide-y divide-gray-500 dark:divide-gray-700">
                         {page.map((row) => {
                             prepareRow(row)
                             return (
-                                <tr {...row.getRowProps()} className="text-sm hover:bg-green-700 hover:text-white text-center">
+                                <tr {...row.getRowProps()} className="text-sm hover:bg-green-500 dark:hover:bg-green-700 dark:hover:text-white text-center text-gray-800 dark:text-gray-300">
                                     {row.cells.map((cell) => {
                                         return (
                                             <td {...cell.getCellProps()} className="px-6 py-4 whitespace-nowrap lowecase capitalize">
