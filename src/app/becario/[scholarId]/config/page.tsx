@@ -8,14 +8,10 @@ import WorkInformation from '@/components/forms/userSetings/WorkInformation'
 import React from 'react'
 import VolunteeringInformation from '@/components/forms/userSetings/VolunteeringInformation'
 import { PrismaClient } from "@prisma/client";
+import moment from 'moment'
 
 const formatDate = (date: string) => {
-    const rawDate = new Date(date);
-    let day = rawDate.getDay() + 1 < 10 ? `0${rawDate.getMonth() + 1}` : rawDate.getMonth() + 1;
-    let month = rawDate.getMonth() + 1 < 10 ? `0${rawDate.getMonth() + 1}` : rawDate.getMonth() + 1;
-    let fullYear = rawDate.getFullYear();
-    const formatedDate = `${fullYear}-${month}-${day}`;
-    return formatedDate;
+    return moment(date).format('YYYY-MM-DD')
 }
 
 const page = async ({
@@ -69,12 +65,13 @@ const page = async ({
     }
 
     const workScholarInformation = {
-        isCurrentlyWorking: scholar?.scholar?.isCurrentlyWorking ? "Sí" : "No",
+        isCurrentlyWorking: scholar?.scholar?.isCurrentlyWorking ? "TRUE" : "FALSE",
         organizationName: scholar?.scholar?.organizationName,
         positionHeld: scholar?.scholar?.positionHeld,
         workModality: scholar?.scholar?.workModality,
         weeklyHours: scholar?.scholar?.weeklyHours,
     }
+    console.log(workScholarInformation)
 
     const scholarCVAInfo = {
         isInCVA: scholar?.scholar?.isInCVA ? "TRUE" : "FALSE",
@@ -83,7 +80,6 @@ const page = async ({
         englishLevel: scholar?.scholar?.englishLevel,
         notStartedCvaRreason: scholar?.scholar?.notStartedCvaRreason,
     }
-    console.log(scholarCVAInfo)
 
     return (
         <div>
@@ -99,7 +95,6 @@ const page = async ({
                     <div className="bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-40 p-4 mb-4  shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2  sm:p-6 dark:bg-slate-950">
                         <ProfilePic image={scholar!.image} />
                     </div>
-
                     <div className="bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-40 p-4 mb-4  shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2  sm:p-6 dark:bg-slate-950">
                         <CVAInformation id={scholarId} title='CVA' scholarCVAInfo={scholarCVAInfo} />
                     </div>
@@ -109,7 +104,6 @@ const page = async ({
                     <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2 dark:border-gray-900 sm:p-6 dark:bg-slate-950">
                         <VolunteeringInformation />
                     </div>
-
                 </div>
                 <div className="col-span-2 ">
                     <div className="bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-40 p-4 mb-4  shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2  sm:p-6 dark:bg-slate-950">

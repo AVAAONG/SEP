@@ -15,7 +15,6 @@ const deleteProfilePic = async () => {
 
 
 const ProfilePic = (props: ProfilePicProps) => {
-    console.log(props.image)
 
     return (
         <div className="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
