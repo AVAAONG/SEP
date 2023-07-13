@@ -1,25 +1,29 @@
 import { chatIcon, volunterIcon, workshopIcon } from '@/assets/svgs'
 import Card from '@/components/dashboard/Card'
 import ActivityList from '@/components/scholar/dashboard/ActivityList'
-import { Calendar, setTokens } from '@/lib/auth/auth'
-import { getCalendarEvents } from '@/lib/calendar/calendar'
-import createEventObject from '@/lib/calendar/calendarEventObject'
-import { CALENDAR_IDS } from '@/lib/constants'
-import { BigCalendarEventType } from '@/types/Calendar'
-import { getServerSession } from 'next-auth'
-import React from 'react'
 import { SUUID } from 'short-uuid'
-
+import Calendar from '@/components/calendar/Calendar'
+import { BigCalendarEventType } from '@/types/Calendar'
 
 const examples = [
   {
     title: 'All Day Event very long title',
     startHour: "4:00PM",
-    date: "25/05/2023",
+    date: "13/07/2023",
     kindOfActivity: "volunteering",
     speaker: "Kevin Bravo",
   }
 ]
+
+const ExampleEvents: BigCalendarEventType[] = [
+  {
+    title: 'All Day Event very long title',
+    start: new Date(2023, 7, 13),
+    end: new Date(2023, 7, 13),
+    allDay: true,
+  }
+]
+
 
 
 const page = async ({ params }: { params: { scholarId: SUUID } }) => {
@@ -60,8 +64,8 @@ const page = async ({ params }: { params: { scholarId: SUUID } }) => {
           })}
         </div>
         <div className='flex flex-col lg:flex-row gap-4'>
-          <div className='h-full max-h-[680px] min-h-screen shadow-sm overflow-x-clip w-full bg-white border border-gray-200  shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 p-2'>
-            {/* <Calendar events={events} /> */}
+          <div className='h-full min-h-[600px] text-gray-800 capitalize dark:text-gray-300 shadow-sm overflow-x-clip w-full bg-white border border-gray-200  shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 p-2'>
+            <Calendar events={ExampleEvents}  />
           </div>
           <div className="w-full lg:w-2/5 p-4 sm:p-6 bg-white border border-gray-200 rounded-lg shadow-sm shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950">
             <ActivityList activityList={examples} />
