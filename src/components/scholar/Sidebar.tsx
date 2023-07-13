@@ -45,8 +45,8 @@ const Sidebar = () => {
             <div className="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-slate-900">
 
                 <ul className="space-y-2">
-                    {SCHOLAR_SIDEBAR_ITEMS.map((item) => (
-                        <DropdownButton {...item} />
+                    {SCHOLAR_SIDEBAR_ITEMS.map((item, index) => (
+                        <DropdownButton {...item} key={index} />
                     ))}
                 </ul>
             </div>
