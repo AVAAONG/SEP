@@ -63,7 +63,7 @@ model WorkshopAttendance {
     id            String            @id @default(nanoid(22))
     scholar       Scholar           @relation(fields: [scholarId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     scholarId     String
-    workshopId    String
+    workshopId    String           @unique
     workshop      Workshop          @relation(fields: [workshopId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     attendance    ScholarAttendance
     justification String?

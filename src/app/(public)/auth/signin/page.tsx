@@ -23,10 +23,6 @@ const AdminSignInPage = () => {
           <p className="text-green-500 text-xs md:text-sm font-semibold">
             Solo los administradores tienen acceso por este medio.
           </p>
-          {/* <p className="text-xs md:text-sm text-slate-400 mt-3">¿Eres becario del Programa Excelencia Academica?</p>
-          <Link className="text-green-500 text-xs md:text-sm font-semibold animate-bounce" href="/becario/auth/signin">
-            ¡Ingresa aqui!
-          </Link> */}
           <div className="w-full">
             <hr className="h-px my-6 border-0 bg-emerald-700 opacity-40" />
           </div>

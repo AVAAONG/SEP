@@ -3,7 +3,7 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { PrismaClient, Region, Role, Scholar, ScholarAttendance, ScholarStatus, User } from "@prisma/client";
+import { PrismaClient, Region, Role, Scholar, ScholarAttendance, ScholarStatus, User, WorkshopAttendance } from "@prisma/client";
 import shortUUID from "short-uuid";
 
 const prisma = new PrismaClient();
@@ -82,23 +82,36 @@ export const addWorkshopToScholar = async (scholarId: shortUUID.SUUID, workshopI
         const scholar = await prisma.scholar.update({
             where: { dni: scholarId },
             data: {
-                Workshop: {
-                    connect: {
-                        id: workshopId
-                    },
-                },
-                WorkshopAttendance: {
+                attendedWorkshpos: {
                     create: {
-                        attend: attendance,
+                        workshopId: workshopId,
+                        attendance: attendance,
                     }
-                }
+                },
             }
         });
         console.log("se coloco a " + scholarId + " en el taller " + workshopId)
         return scholar;
     }
     catch (error) {
-        console.log(" NO se pudo colocar a " + scholarId + " en el taller " + workshopId)
+        console.log(error)
+        // console.log(" NO se pudo colocar a " + scholarId + " en el taller " + workshopId)
+        return null;
+    }
+    finally {
+        await prisma.$disconnect();
+    }
+}
+
+const createScholarAttendance = async (data: WorkshopAttendance): Promise<WorkshopAttendance | null> => {
+    try {
+        const scholarAttendance = await prisma.workshopAttendance.create({
+            data
+        });
+        return scholarAttendance;
+    }
+    catch (error) {
+        console.log(error)
         return null;
     }
     finally {
