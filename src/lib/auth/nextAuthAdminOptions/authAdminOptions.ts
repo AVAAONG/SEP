@@ -5,12 +5,8 @@
 */
 import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { PrismaClient } from "@prisma/client";
-import { PrismaAdapter } from "@auth/prisma-adapter";
 
 import { PAGES, NEXT_SECRET, googleAdminProviderConfig, } from "./authAdminConfig";
-const prisma = new PrismaClient();
-const adapter = PrismaAdapter(prisma);
 
 /**
  * 
