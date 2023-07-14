@@ -11,7 +11,6 @@ const AdminSignInPage = () => {
    * @summary The URL to redirect to after a successful sign in or sign up.
    */
   const adminCallbackUrl = searchParams.get("callbackUrl") || "/admin/dashboard";
-
   return (
     <main className="flex flex-col md:flex-row-reverse min-h-screen md:h-screen bg-gradient-to-b from-emerald-950 to-slate-950">
       <Aside />
@@ -33,7 +32,7 @@ const AdminSignInPage = () => {
           </div>
           <div className="flex">
             <a
-              onClick={() => signIn("google", { adminCallbackUrl })}
+              onClick={() => signIn("google", { callbackUrl: adminCallbackUrl })}
               role="button"
               className="bg-green-600 hover:bg-emerald-950 border-2 border-emerald-950 hover:border-green-600 text-white font-semibold py-2 px-4 rounded-md w-full flex justify-center gap-4"
             >

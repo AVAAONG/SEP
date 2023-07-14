@@ -51,7 +51,6 @@ const adminAuthOptions: NextAuthOptions = {
 
   callbacks: {
     session: ({ session, token }) => {
-
       return {
         ...session,
         user: {
