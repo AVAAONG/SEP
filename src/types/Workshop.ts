@@ -1,10 +1,10 @@
 
 import shortUUID from "short-uuid";
 import { Platform } from "./General";
-import { AvaaYear } from "@prisma/client";
 
-export type Pensum = 'Liderazgo' | 'Ejercicio Ciudadano' | 'Gerencia de si mismo' | 'TICs' | 'Emprendimiento';
-export type KindOfWorkshop = 'presencial' | 'virtual' | 'asincrona' | 'hibrida';
+
+export type Pensum = 'Liderazgo' | 'Ejercicio Ciudadano' | 'Gerencia de si mismo' | 'TICs' | 'Emprendimiento' | '';
+export type KindOfWorkshop = 'presencial' | 'virtual' | 'asincrona' | 'hibrida' | '';
 
 export type Workshop = {
     id: shortUUID.SUUID;
@@ -14,9 +14,9 @@ export type Workshop = {
     startHour: string;
     endHour: string;
     speaker: string
-    spots: number;
+    spots: string;
     modality: KindOfWorkshop;
     platform: Platform;
     description: string;
-    workshopYear: AvaaYear[];
+    workshopYear: string;
 }

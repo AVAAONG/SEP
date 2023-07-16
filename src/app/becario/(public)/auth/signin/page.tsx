@@ -19,6 +19,7 @@ const page = async ({
    * @summary The URL to redirect to after a successful sign in or sign up.
    */
     const scholarCallbackUrl = searchParams!.callbackUrl as string || "/becario/dsafadsfas/config";
+    
   if (session) {
     redirect(scholarCallbackUrl);
   }

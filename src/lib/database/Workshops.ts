@@ -1,6 +1,7 @@
 import { Prisma, PrismaClient, Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
 import shortUUID from 'short-uuid';
 const prisma = new PrismaClient();
+
 export const createWorkshop = async (data: Workshop, dates: Prisma.JsonArray, speakerId: string, tempData?: WorkshopTempData) => {
     try {
         const workshop = await prisma.workshop.create({
@@ -15,7 +16,6 @@ export const createWorkshop = async (data: Workshop, dates: Prisma.JsonArray, sp
                 tempData: {
                     create: tempData
                 },
-                activityStatus: 'AGENDADO'
             }
         });
         console.log(`${workshop.title} created`)
