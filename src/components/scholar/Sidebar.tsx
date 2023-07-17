@@ -49,7 +49,7 @@ const Sidebar = () => {
             className="fixed top-0 left-0 z-50 w-64 h-screen pt-4 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-slate-900 dark:border-gray-700 "
             aria-label="Sidenav"
         >
-            <div className='flex items-center py-5 px-3 mr-4 '>
+            <div className='flex items-center mt-2 ml-6'>
                 <Link href="/becario/dashboard" >
                     <Image src={logo} width={180} alt="Logo Proexcelencia" />
                 </Link>
@@ -60,11 +60,6 @@ const Sidebar = () => {
                         <DropdownButton {...item} key={index} />
                     ))}
                 </ul>
-                <button className="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
-                    <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                        Registra tus higlights
-                    </span>
-                </button>
                 <div className="p-4 mt-6 rounded-lg bg-emerald-100 dark:bg-emerald-900 dark:border-emerald-950 border-green-600" >
                     <div className="flex items-center mb-3">
                         <span className=" text-emerald-800 text-sm font-bold rounded  dark:text-emerald-200">¡Danos tu feedback!</span>

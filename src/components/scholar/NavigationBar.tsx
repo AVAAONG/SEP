@@ -8,12 +8,13 @@ const NavigationBar = () => {
     const [isDropdownOpen, setDropdown] = useState(false);
     const toggleDropdown = () => setDropdown(!isDropdownOpen);
 
-    
+
 
     return (
         <nav className="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-slate-900 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
             <div className="flex flex-wrap justify-between items-center">
                 <div className="flex justify-start items-center">
+
                     {/* sidebar button */}
                     <button
                         onClick={toggleDropdown}
@@ -59,10 +60,14 @@ const NavigationBar = () => {
 
                 </div>
 
-                <div className="flex items-center lg:order-2">
-
-                <ThemeToggleButton/>
-                    <ProfileDropdown name='Kevin Bravo' email='bravokevinto@gmail.com' scholarId='adfadskfma;lds' image=''/>
+                <div className="flex items-center lg:order-2 gap-2">
+                    <button className="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
+                        <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                            Registra tus higlights
+                        </span>
+                    </button>
+                    <ThemeToggleButton />
+                    <ProfileDropdown name='Kevin Bravo' email='bravokevinto@gmail.com' scholarId='adfadskfma;lds' image='' />
                 </div>
             </div>
         </nav>
