@@ -1,6 +1,5 @@
 'use client'
 import React, { useState } from 'react'
-import Apps from './NavigationBar/Apps'
 import ProfileDropdown from './ProfileDropdown'
 import Image from 'next/image'
 import ThemeToggleButton from './NavigationBar/ThemeToggleButton'
@@ -9,6 +8,7 @@ const NavigationBar = () => {
     const [isDropdownOpen, setDropdown] = useState(false);
     const toggleDropdown = () => setDropdown(!isDropdownOpen);
 
+    
 
     return (
         <nav className="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-slate-900 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
@@ -51,7 +51,7 @@ const NavigationBar = () => {
                     <a href="https://flowbite.com" className="flex items-center justify-between mr-4">
                         <Image
                             src="/proexcelencia.png"
-                            alt="Logo Proexcelencia"
+                            alt="Foto de perfil"
                             width={180}
                             height={50}
                         />

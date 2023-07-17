@@ -20,7 +20,7 @@ const DropdownButton = (props: DropdownButtonProps) => {
             <li>
                 <a
                     href={link}
-                    className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                    className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-green-300 dark:hover:bg-green-700 group"
                 >
                     <div className="w-6 h-6">
                         {Icon}
@@ -35,7 +35,7 @@ const DropdownButton = (props: DropdownButtonProps) => {
             <li>
                 <button
                     type="button"
-                    className="flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                    className="flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-green-300 dark:text-white dark:hover:bg-green-700"
                     onClick={toggleDropdown}
                 >
                     <div className="w-6 h-6">
@@ -62,8 +62,8 @@ const DropdownButton = (props: DropdownButtonProps) => {
                     {itemList.map((item) => (
                         <li className='flex justify-center items-center'>
                             <a
-                                href="#"
-                                className="flex items-center gap-4 p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                                href={item.link}
+                                className="flex items-center gap-4 p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-green-200 dark:text-white dark:hover:bg-green-700"
                             >
                                 <div className='rounded-full bg-green-700 w-2 h-2'></div>
                                 {item.name}</a >
