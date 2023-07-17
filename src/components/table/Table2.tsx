@@ -1,14 +1,17 @@
 'use client'
 import React, { useMemo, useState } from 'react'
-import { Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client'
+import { ScholarAttendance, Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client'
 import { useTable, useSortBy, useGlobalFilter, useAsyncDebounce, usePagination } from 'react-table'
 import { FilterIcon, SortIcon, SortIconReverse } from '@/assets/svgs';
 import workshopScholarFormat from '../tableData/scholars/workshopTableData';
+
 interface WorkshopTableProps {
     workshopData: (Workshop & {
         speaker: WorkshopSpeaker[];
-        tempData: WorkshopTempData | null;
-    })[],
+        scholarAttendance: {
+            attendance: ScholarAttendance;
+        }[];
+    })[] | undefined
 }
 
 const ChatTable: React.FC<WorkshopTableProps> = (props) => {
