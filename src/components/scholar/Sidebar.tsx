@@ -38,7 +38,7 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
         Icon: CalendarIcon(),
         buttonName: "Calendario de Actividades",
         itemList: [],
-        link: ""
+        link: "/becario/cljwyi8hl0008uwmkjo6dktty/calendar"
     }
 
 ]
