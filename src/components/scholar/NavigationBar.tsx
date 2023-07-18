@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import ProfileDropdown from './ProfileDropdown'
 import Image from 'next/image'
 import ThemeToggleButton from './NavigationBar/ThemeToggleButton'
+import SolicitudeDropdown from './SolicitudeDropdown'
 
 const NavigationBar = () => {
     const [isDropdownOpen, setDropdown] = useState(false);
@@ -12,13 +13,11 @@ const NavigationBar = () => {
 
     return (
         <nav className="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-slate-900 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
-            <div className="flex flex-wrap justify-between items-center">
+            <div className="flex items-center justify-between md:ml-64 gap-4">
                 <div className="flex justify-start items-center">
-
-                    {/* sidebar button */}
                     <button
                         onClick={toggleDropdown}
-                        className="p-2 mr-2 text-gray-600 rounded-lg cursor-pointer  hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        className="p-2 mr-2 text-green-600 rounded-lg cursor-pointer  hover:text-green-900 hover:bg-green-100 focus:bg-green-100 dark:focus:bg-green-700 focus:ring-2 focus:ring-green-100 dark:focus:ring-green-700 dark:text-green-700 dark:hover:bg-green-700 dark:hover:text-emerald-950"
                     >
                         <svg
                             aria-hidden="true"
@@ -48,19 +47,10 @@ const NavigationBar = () => {
                         </svg>
                         <span className="sr-only">Toggle sidebar</span>
                     </button>
-
-                    <a href="https://flowbite.com" className="flex items-center justify-between mr-4">
-                        <Image
-                            src="/proexcelencia.png"
-                            alt="Foto de perfil"
-                            width={180}
-                            height={50}
-                        />
-                    </a>
-
                 </div>
-                <div className="flex items-center lg:order-2 gap-2">
-                    <button className="relative inline-flex items-center justify-center p-0.5  overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
+                <div className="flex gap-8 items-center justify-start">
+                    <SolicitudeDropdown />
+                    <button className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-xs md:text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
                         <span className="relative px-4 py-2 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                             Registra tus higlights
                         </span>
