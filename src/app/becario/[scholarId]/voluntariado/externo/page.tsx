@@ -4,8 +4,8 @@ const page = () => {
     return (
         <section className='flex flex-col px-2 pt-6  justify-start items-center w-full gap-4 h-screen'>
             <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white mb-4">¡Sube tu voluntariado externo!</h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 ">
-                <div className='grid grid-cols-7 gap-4'>
+            <div className="flex justify-center">
+                <div className='grid grid-cols-7 gap-4 w-full justify-center'>
                     <div className="col-span-6 ">
                         <label htmlFor="studyArea" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Lugar donde realizó la actividad</label>
                         <input type='text' placeholder='' required />
