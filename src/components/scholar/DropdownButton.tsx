@@ -52,15 +52,15 @@ const DropdownButton = (props: DropdownButtonProps) => {
                         xmlns="http://www.w3.org/2000/svg"
                     >
                         <path
-                            fill-rule="evenodd"
+                            fillRule="evenodd"
                             d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                            clip-rule="evenodd"
+                            clipRule="evenodd"
                         ></path>
                     </svg>
                 </button>
                 <ul id="dropdown-pages" className={`${isDropdownOpen ? 'flex flex-col' : "hidden"} py-2 space-y-2`}>
-                    {itemList.map((item) => (
-                        <li className='flex justify-center items-center'>
+                    {itemList.map((item, index) => (
+                        <li className='flex justify-center items-center' key={index}>
                             <a
                                 href={item.link}
                                 className="flex items-center gap-4 p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-green-200 dark:text-white dark:hover:bg-green-700"

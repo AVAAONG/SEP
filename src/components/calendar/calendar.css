@@ -72,6 +72,10 @@
     border-radius: 6px !important;
 }
 
+.rbc-month-view{
+    @apply dark:!border-gray-600 dark:!border-t-transparent;
+}
+
 .rbc-header {
     border-color: #014b1d !important;
     border-width: 0.5px !important;

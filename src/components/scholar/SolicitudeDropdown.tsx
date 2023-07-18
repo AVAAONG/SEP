@@ -14,7 +14,7 @@ const SolicitudeDropdown = () => {
                 className="flex items-center justify-between w-full py-2 pl-3 pr-4  text-emerald-700 rounded hover:bg-green-100 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0 md:w-auto dark:text-emerald-700 dark:hover:text-emerald-500 dark:focus:text-green-500 dark:border-green-700 dark:hover:bg-green-700 md:dark:hover:bg-transparent ">
                 Solicitudes
                 <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
                 </svg>
             </button>
             <div className={`${isDropdownOpen ? "absolute translate-y-5 -translate-x-9" : "hidden"} z-auto font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-slate-900 dark:divide-gray-600`}>
