@@ -1,34 +1,37 @@
-import React from 'react'
+"use client";
+import { useForm } from 'react-hook-form';
+
 
 const page = () => {
+    const { register, handleSubmit } = useForm();
     return (
         <section className='flex flex-col px-2 pt-6  justify-start items-center w-full gap-4 h-screen'>
             <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white mb-4">¡Sube tu voluntariado externo!</h1>
-            <div className="flex justify-center">
+            <form className="flex justify-center">
                 <div className='grid grid-cols-7 gap-4 w-full justify-center'>
                     <div className="col-span-6 ">
                         <label htmlFor="studyArea" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Lugar donde realizó la actividad</label>
-                        <input type='text' placeholder='' required />
+                        <input type='text' placeholder='' required  className='bg-white'/>
                     </div>
                     <div className="col-span-6 ">
                         <label htmlFor="currentAcademicPeriod" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de la actividad </label>
-                        <input type='date' required />
+                        <input type='date' required   className='bg-white'/>
                     </div>
                     <div className="col-span-6 ">
                         <label htmlFor="grade" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Indique el número de horas dedicadas a la actividad.</label>
-                        <input type='number' required />
+                        <input type='number' required  className='bg-white' />
                     </div>
                     <div className="col-span-6 ">
                         <label htmlFor="grade" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre de la organización, empresa o institución beneficiada</label>
-                        <input type='text' required />
+                        <input type='text' required  className='bg-white' />
                     </div>
                     <div className="col-span-6 ">
                         <label htmlFor="grade" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre del beneficiario o supervisor responsable</label>
-                        <input type='text' required />
+                        <input type='text' required  className='bg-white' />
                     </div>
                     <div className="col-span-6 ">
                         <label htmlFor="carrer" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Describa brevemente la actividad realizada</label>
-                        <textarea required />
+                        <textarea required  className='bg-white' />
                     </div>
                 </div>
                 <div className="flex w-full h-full">
@@ -45,7 +48,7 @@ const page = () => {
                         <input id="dropzone-file" type="file" className="hidden" />
                     </label>
                 </div>
-            </div>
+            </form>
             <button
                 className="text-white bg-green-600 hover:bg-green-500 hover:text-green-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center" type="submit">Subir voluntariado
             </button>
