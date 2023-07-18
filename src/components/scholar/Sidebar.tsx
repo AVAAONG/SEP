@@ -1,7 +1,7 @@
 import { CalendarIcon, chatIcon, volunterIcon, workshopIcon, dashboardComponent } from '@/assets/svgs'
 import React from 'react'
 import DropdownButton from './DropdownButton'
-import logo from '@/../public/proexcelencia.png'
+import logo from '@/../public/proexcelencia-color.png'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -57,7 +57,7 @@ const Sidebar = () => {
         >
             <div className='flex items-center mt-2 ml-6'>
                 <Link href="/becario/dashboard" >
-                    <Image src={logo} width={180} alt="Logo Proexcelencia" />
+                    <Image src={logo} width={190} alt="Logo Proexcelencia" />
                 </Link>
             </div>
             <div className="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-slate-900 mt-4">

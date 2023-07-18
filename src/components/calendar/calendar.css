@@ -1,45 +1,19 @@
-.rbc-today {
-    background-color: transparent !important;
-}
-
-.rbc-off-range-bg {
-    background-color: transparent !important;
-}
-
-.rbc-now>button {
-    background-color: #16a34a;
-    padding: 8px;
-    border-radius: 100%;
-    width: 35px;
-    height: 35px;
-    text-align: center;
-}
-
-.rbc-button-link{
-    margin-bottom: 6px;
-}
-.rbc-date-cell {
-    text-align: center;
-}
-
-.rbc-month-row {
-    border-color: rgb(255, 255, 255, 0.2) !important;
-}
-
 /* Toolbar button styles */
 .rbc-btn-group>button {
-    color: white !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
+    color:rgb(126, 126, 126) !important;
+    border-color: rgba(156, 149, 149, 0.2) 2px solid !important;
 
 }
 
 .rbc-btn-group>button::selection {
     background-color: #16a34a !important;
     border-color: rgba(255, 255, 255, 0.2) !important;
+    color:white !important;
 
 }
 
 .rbc-btn-group>button:hover {
+    color:white !important;
     background-color: #16a34a !important;
 
 }
@@ -51,6 +25,10 @@
     width: 35px;
     height: 35px;
     text-align: center;
+}
+
+.rbc-button-link:hover {
+    @apply !text-white dark:!bg-emerald-700;
 }
 
 .rbc-timeslot-group>* {
@@ -67,7 +45,8 @@
 
 .rbc-active {
     background-color: #16a34a !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgb(99, 202, 3) 2px solid !important;
+    color: white !important;
 }
 
 .rbc-event::before {
@@ -87,11 +66,44 @@
     margin-left: 13px;
 }
 
-.rbc-month-view{
-    border-color: #004018 !important;
+.rbc-month-view {
+    border-color: #ffffff !important;
+    border-top-color: transparent !important;
     border-radius: 6px !important;
 }
-.rbc-header{
+
+.rbc-header {
     border-color: #014b1d !important;
     border-width: 0.5px !important;
+}
+
+.rbc-calendar {
+    min-height: 600px !important;
+}
+.rbc-day-bg{
+    border-right: rgba(0, 0, 0, 0.2) 1px solid !important;
+}
+
+.rbc-off-range-bg{
+    @apply dark:!bg-slate-900;
+}
+
+.rbc-off-range{
+    @apply  dark:!text-emerald-800;
+
+}
+
+.rbc-today {
+    @apply !bg-green-300 dark:!text-emerald-800 dark:!bg-emerald-700 dark:!bg-opacity-30;
+}
+.rbc-row-content{
+    @apply dark:!border-t-gray-700;
+}
+
+.rbc-month-row {
+    @apply dark:!border-gray-700;
+}
+
+.rbc-btn-group>button {
+    @apply dark:!border-gray-700 dark:!text-gray-300;
 }
