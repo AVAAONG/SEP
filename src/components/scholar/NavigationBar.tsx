@@ -17,7 +17,7 @@ const NavigationBar = () => {
                 <div className="flex justify-start items-center">
                     <button
                         onClick={toggleDropdown}
-                        className="p-2 mr-2 text-green-600 rounded-lg cursor-pointer  hover:text-green-900 hover:bg-green-100 focus:bg-green-100 dark:focus:bg-green-700 focus:ring-2 focus:ring-green-100 dark:focus:ring-green-700 dark:text-green-700 dark:hover:bg-green-700 dark:hover:text-emerald-950"
+                        className="p-2 mr-2 text-green-600 rounded-lg cursor-pointer  hover:text-green-900 hover:bg-green-100 focus:bg-green-100 dark:focus:bg-emerald-950  dark:focus:ring-green-700 dark:text-green-700 dark:hover:bg-green-700 dark:hover:text-emerald-950 dark:focus:text-emerald-700"
                     >
                         <svg
                             aria-hidden="true"
