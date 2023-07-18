@@ -1,11 +1,13 @@
 'use client'
 import React, { useState } from 'react'
+import SolicitudeModal from './SolicitudeModal';
 
 const SolicitudeDropdown = () => {
     const [isDropdownOpen, setDrowpdown] = useState(false);
     const toggleDropdown = () => setDrowpdown(!isDropdownOpen);
 
     return (
+        <>
         <div className=''>
             <button
                 onClick={toggleDropdown}
@@ -21,11 +23,14 @@ const SolicitudeDropdown = () => {
                         <a href="#" className="block px-4 py-2 hover:bg-emerald-100 dark:hover:bg-emerald-700 dark:hover:text-white">Carta de ingreso CVA</a>
                     </li>
                     <li>
-                        <a href="#" className="block px-4 py-2 hover:bg-emerald-100 dark:hover:bg-emerald-700 dark:hover:text-white">Constancia de becario</a>
+                        {/* <a href="#" className="block px-4 py-2 hover:bg-emerald-100 dark:hover:bg-emerald-700 dark:hover:text-white">Constancia de becario</a> */}
                     </li>
                 </ul>
             </div>
         </div>
+        {/* <SolicitudeModal></SolicitudeModal> */}
+        </>
+
     )
 }
 

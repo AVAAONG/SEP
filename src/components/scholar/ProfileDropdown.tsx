@@ -33,7 +33,7 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
                 />
             </button>
             <div
-                className={`${isDrowpdownProfileOpen ? "absolute  transform translate-x-40 md:translate-x-48   lg:translate-x-52 translate-y-[128px]" : "hidden"} z-50 my-4 w-56 text-base list-none bg-white  divide-y divide-gray-100 shadow dark:bg-slate-900 dark:divide-gray-600 rounded-xl`}
+                className={`${isDrowpdownProfileOpen ? "absolute  transform translate-x-40 md:translate-x-48  lg:translate-x-52 translate-y-[128px]" : "hidden"} z-50 my-4 w-56 text-base list-none bg-white  divide-y divide-gray-100 shadow dark:bg-slate-900 dark:divide-gray-600 rounded-xl`}
             >
                 <div className="py-3 px-4">
                     <span

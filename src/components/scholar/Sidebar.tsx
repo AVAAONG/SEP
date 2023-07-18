@@ -52,7 +52,7 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
 const Sidebar = () => {
     return (
         <aside
-            className="fixed top-0 left-0 z-50 w-64 h-screen pt-4 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-slate-900 dark:border-gray-700 "
+            className="fixed top-0 left-0 z-40 w-64 h-screen pt-4 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-slate-900 dark:border-gray-700 "
             aria-label="Sidenav"
         >
             <div className='flex items-center mt-2 ml-6'>
