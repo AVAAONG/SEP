@@ -58,10 +58,6 @@ const authOptions: NextAuthOptions = {
    */
   callbacks: {
     signIn: async ({ user, account, profile }) => {
-      console.log('user', user)
-      console.log('account', account)
-      console.log('profile', profile)
-
       let email = ''
 
       if(account.provider === 'email'){
@@ -97,7 +93,6 @@ const authOptions: NextAuthOptions = {
   },
   events: {
     createUser: async (data) => {
-      console.log(data)
       await prisma.user.update({
         where: {
           id: data.user.id,
