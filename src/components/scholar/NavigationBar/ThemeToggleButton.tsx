@@ -13,7 +13,7 @@ const ThemeToggleButton = () => {
     return (
         <button type="button"
             onClick={toggle}
-            className="p-2 mr-1 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+            className=" text-emerald-700 rounded-lg hover:text-emerald-500  dark:text-emerald-700 dark:hover:text-emerald-500 "
         >
             {!isDark &&
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>

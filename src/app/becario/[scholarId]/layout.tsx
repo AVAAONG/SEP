@@ -1,6 +1,7 @@
 import ScholarFooter from "@/components/footer/ScholarFooter"
 import NavigationBar from "@/components/scholar/NavigationBar"
 import Sidebar from "@/components/scholar/Sidebar"
+import SolicitudeModal from "@/components/scholar/SolicitudeModal"
 
 export default async function RootLayout({
     children

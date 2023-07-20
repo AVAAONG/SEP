@@ -29,13 +29,7 @@ const workshopScholarFormat: TableOptions<WorkshopTableProps> = [
         Cell: ({ value }: { value: string }) => { return new Date(value).toLocaleString('es-ES', { hour: 'numeric', minute: 'numeric', hourCycle: 'h12' }) }
 
     },
-    {
-        id: 'endHour',
-        Header: 'Cierre',
-        accessor: 'dates[0].end_date',
-        Cell: ({ value }: { value: string }) => { return new Date(value).toLocaleString('es-ES', { hour: 'numeric', minute: 'numeric', hourCycle: 'h12' }) }
 
-    },
     {
         Header: 'Componente',
         accessor: 'pensum',
@@ -55,6 +49,13 @@ const workshopScholarFormat: TableOptions<WorkshopTableProps> = [
     {
         Header: 'Año',
         accessor: 'year'
+    },
+    {
+        Header: 'Asistencia',
+        accessor: 'scholarAttendance[0].attendance',
+        Cell: ({ value }: { value: string }) => { return value === "ATTENDED" ? "Asistió" : "No asistió" }
+
+
     },
 ]
 

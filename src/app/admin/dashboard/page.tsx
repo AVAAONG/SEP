@@ -3,7 +3,6 @@ import React from 'react'
 import { chatIcon, userIcon, volunterIcon, workshopIcon } from '@/assets/svgs'
 import Calendar from '@/components/calendar/Calendar'
 import { getServerSession } from 'next-auth'
-import authOptions from '@/lib/auth/nextAuthOptions/authOptions'
 import { setTokens } from '@/lib/auth/auth'
 import { getCalendarEvents } from '@/lib/calendar/calendar'
 import { calendar_v3 } from '@googleapis/calendar'
@@ -11,7 +10,7 @@ import { BigCalendarEventType } from '@/types/Calendar';
 import { getWorkshopsCount } from '@/lib/database/Workshops'
 import { getScholarsCount } from '@/lib/database/users'
 import { CALENDAR_IDS } from '@/lib/constants'
-import { getChatsCount, getChatsDone } from '@/lib/database/chats'
+import { getChatsCount} from '@/lib/database/chats'
 import adminAuthOptions from '@/lib/auth/nextAuthAdminOptions/authAdminOptions'
 
 

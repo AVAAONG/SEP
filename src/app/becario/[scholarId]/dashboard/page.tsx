@@ -63,8 +63,8 @@ const page = async ({ params }: { params: { scholarId: SUUID } }) => {
             )
           })}
         </div>
-        <div className='flex flex-col lg:flex-row gap-4'>
-          <div className='h-full min-h-[600px] text-gray-800 capitalize dark:text-gray-300 shadow-sm overflow-x-clip w-full bg-white border border-gray-200  shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 p-2'>
+        <div className='flex flex-col lg:flex-row gap-4 '>
+          <div className='h-full max-h-[600px] min-h-screen text-gray-800 capitalize dark:text-gray-300 shadow-sm overflow-x-clip w-full bg-white border border-gray-200  shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 p-2'>
             <Calendar events={ExampleEvents}  />
           </div>
           <div className="w-full lg:w-2/5 p-4 sm:p-6 bg-white border border-gray-200 rounded-lg shadow-sm shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950">

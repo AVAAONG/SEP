@@ -36,9 +36,9 @@ const Calendar = ({ events }: { events: BigCalendarEventType[] }) => {
     )
     return (
         <Fragment>
-            <div className='h-full w-full'>
+            <div className=''>
                 <BigCalendar
-                    className=''
+                    className='h-96'
                     localizer={localizer}
                     events={events}
                     startAccessor="start"
@@ -47,6 +47,16 @@ const Calendar = ({ events }: { events: BigCalendarEventType[] }) => {
                     views={views}
                     showMultiDayTimes
                     eventPropGetter={(styleEvent)}
+                    messages={{
+                        month: 'Mes',
+                        day: 'Día',
+                        today: 'Hoy',
+                        week: 'Semana',
+                        work_week: 'Semana Laboral',
+                        previous: 'Atrás',
+                        next: 'Siguiente',
+                      }}
+                    
                 />
             </div>
         </Fragment>
