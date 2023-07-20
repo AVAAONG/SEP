@@ -2,12 +2,11 @@ import { Prisma, PrismaClient, Workshop, WorkshopSpeaker, WorkshopTempData } fro
 import shortUUID from 'short-uuid';
 const prisma = new PrismaClient();
 
-export const createWorkshop = async (data: Workshop, dates: Prisma.JsonArray, speakerId: string, tempData?: WorkshopTempData) => {
+export const createWorkshop = async (data: Workshop, speakerId: string, tempData?: WorkshopTempData) => {
     try {
         const workshop = await prisma.workshop.create({
             data: {
                 ...data,
-                dates,
                 speaker: {
                     connect: {
                         id: speakerId
