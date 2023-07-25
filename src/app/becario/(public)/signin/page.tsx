@@ -11,15 +11,12 @@ const page = async ({
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
 }) => {
-
-
   const session = await getServerSession(authOptions);
-
   /**
    * Specify to which URL the user will be redirected after signing in. Defaults to the page URL the sign-in is initiated from.
    * @summary The URL to redirect to after a successful sign in or sign up.
    */
-  const scholarCallbackUrl = searchParams!.callbackUrl as string || "/becario/dsafadsfas/config";
+  const scholarCallbackUrl = searchParams!.callbackUrl as string || "/becario/config";
   if (session) {
     redirect(scholarCallbackUrl);
   }
