@@ -19,6 +19,7 @@ export const NEXT_SECRET = process.env.NEXTAUTH_SECRET || shortUUID.generate();
 export const PAGES: Partial<PagesOptions> = {
     signIn: "/becario/signin",
     error: "/becario/signin",
+    newUser: "/becario/config",
     verifyRequest: '/becario/verify-email'
 
 }
