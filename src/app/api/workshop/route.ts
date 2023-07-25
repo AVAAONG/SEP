@@ -29,46 +29,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     const { title, date, startHour, endHour, modality, spots, id, speaker } = data;
 
-    const speakerId = speaker
-    const speakerName = await getSpeakerName(speakerId)
-    data.speaker = speakerName?.name || ''
-
-    const [calendarEventId, addToCalendarUrl, meetingLink, meetingId, meetingPassword] = await createEvent('workshop', data)
-
-    const formDescription = createFormDescription(data)
-
-    const response = await fetch(BASE_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            kindOfActivity: 'workshop',
-            modality,
-            activityName: title,
-            activityId: id,
-            meetingId,
-            meetingPassword,
-            meetingLink,
-            addToCalendarUrl,
-            limit: spots,
-            formDescription
-        })
-    })
-    const [startDate, endDate] = getFormatedDate(date, startHour, endHour)
-
-    const datesObj = {
-        start_date: new Date(startDate),
-        end_date: new Date(endDate),
-    }
-    const { formUrl } = await response.json()
-
-    delete data['startHour']
-    delete data['endHour']
-    delete data['date']
-    data.modality = data.modality.toUpperCase()
-    data.spots = parseInt(data.spots)
-    data.pensum = data.pensum.toUpperCase().replace(' ', '_')
 
     const tempDataObj: WorkshopTempData = {
         id: shortUUID.generate(),
@@ -78,10 +38,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         formLink: formUrl
     }
     data.calendarID = calendarEventId!;
-    data.activityStatus = 'AGENDADO';
     data.year = data.workshopYear[0]
-    console.log(data)
-    console.log(speakerId)
 
     createWorkshop(data, datesObj, speakerId, tempDataObj)
 

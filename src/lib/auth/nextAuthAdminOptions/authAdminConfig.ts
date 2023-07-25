@@ -71,7 +71,6 @@ export const googleAdminProviderConfig: OAuthUserConfig<any> = {
             access_type: "offline",
             include_granted_scopes: true,
             scope: GOOGLE_ADMIN_SCOPES.join(" "),
-            max_age: 30660
         }
     }
 }
