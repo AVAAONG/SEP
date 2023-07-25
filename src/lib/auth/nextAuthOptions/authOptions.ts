@@ -74,11 +74,9 @@ const authOptions: NextAuthOptions = {
         where: { email },
       })
 
-      if (!userExists) {
-        throw 'notAllowed'
-      }
-
-      return true
+      if (!userExists) throw 'notAllowed'
+      
+      else return true
     },
     session: ({ session, token }) => ({
       ...session,
