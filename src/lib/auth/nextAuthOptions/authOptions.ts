@@ -6,12 +6,12 @@
 import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaClient } from "@prisma/client";
-import { PrismaAdapter } from "@auth/prisma-adapter";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import Email from "./EmailProvider";
-
 import { googleUserProviderConfig, PAGES, NEXT_SECRET, emailUserProviderConfig, } from "./authConfig";
+
 const prisma = new PrismaClient();
-const adapter = PrismaAdapter(prisma);
+const adapter  = PrismaAdapter(prisma) 
 
 /**
  * 
@@ -58,14 +58,12 @@ const authOptions: NextAuthOptions = {
    */
   callbacks: {
     signIn: async ({ user, account, profile }) => {
-      let email = ''
+      let email: string | undefined = ''
 
-      if(account.provider === 'email'){
-        email = account.providerAccountId
-      }
-      else {
-        email = profile!.email
-      }
+      if (account?.provider === 'email') email = account.providerAccountId
+
+      else email = profile!.email
+
       // const name = profile.name
 
       // const SUBJECT_MESSAGE =  encodeURIComponent(`Problemas al ingresar al SEP - ${name}`)
@@ -77,7 +75,7 @@ const authOptions: NextAuthOptions = {
       })
 
       if (!userExists) {
-       throw 'notAllowed'
+        throw 'notAllowed'
       }
 
       return true
@@ -108,7 +106,7 @@ const authOptions: NextAuthOptions = {
       })
     }
   },
-    pages: PAGES,
+  pages: PAGES,
 };
 
 export default authOptions;
