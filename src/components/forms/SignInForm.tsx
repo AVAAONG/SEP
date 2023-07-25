@@ -1,4 +1,5 @@
 "use client";
+import handler from "@/lib/auth/serverAction";
 import { signIn } from "next-auth/react";
 import { BaseSyntheticEvent } from "react";
 import { useForm } from "react-hook-form";
@@ -6,10 +7,11 @@ import useSWR from 'swr'
 
 interface SigninFormProps {
   callbackUrl: string;
+  cookieValue: string;
 }
 
 
-const SigninForm = ({ callbackUrl }: SigninFormProps) => {
+const SigninForm = ({ callbackUrl, cookieValue }: SigninFormProps) => {
   const { register, handleSubmit } = useForm();
   const fetcher = (...args: RequestInfo[] | URL[]) => fetch([...args]).then(res => res.json())
 
@@ -18,6 +20,7 @@ const SigninForm = ({ callbackUrl }: SigninFormProps) => {
   const onSubmit = async (data: { email: string }, event: BaseSyntheticEvent) => {
     event.preventDefault();
     console.log(data)
+    await handler(cookieValue)
 
     await signIn("email", {
       callbackUrl,

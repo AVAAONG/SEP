@@ -3,6 +3,7 @@ const nextConfig = {
   experimental: {
 
     appDir: true,
+    serverActions: true,
   },
   images: {
     domains: ['avaa.org', 'media.licdn.com', 'i.imgur.com', 'lh3.googleusercontent.com'],
