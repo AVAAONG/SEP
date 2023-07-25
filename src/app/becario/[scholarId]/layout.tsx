@@ -10,7 +10,6 @@ export default async function RootLayout({
     children: React.ReactNode,
 }) {
     const session = await getServerSession(authOptions)
-    console.log(session)
     return (
         <>
             <div className="antialiased bg-gray-100 dark:bg-slate-800">
