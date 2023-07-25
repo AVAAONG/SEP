@@ -33,7 +33,7 @@ const page = async ({
               }
             />
           )}
-          <h2 className="text-xl font-semibold md:text-2xl">Entra</h2>
+          <h2 className="text-xl font-semibold md:text-2xl">¡Entra!</h2>
           <div className="my-4">
             <SigninForm callbackUrl="/becario/api/signinRedirect" cookieValue="scholar" />
           </div>

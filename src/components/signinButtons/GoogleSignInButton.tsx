@@ -41,7 +41,7 @@ const GoogleSignInButton = ({ providerId, callbackUrl, cookieValue }: GoogleSign
           <path d="M436 188l-82 63v-98l30-23c27-21 52 0 52 26" fill="#fbbc04"></path>
         </g>
       </svg>
-      Entra con Google
+      Entrar con Google
     </a>
   );
 };

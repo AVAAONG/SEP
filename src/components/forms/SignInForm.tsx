@@ -51,7 +51,7 @@ const SigninForm = ({ callbackUrl, cookieValue }: SigninFormProps) => {
         type="submit"
         className="bg-transparent border-2 border-emerald-900 hover:bg-green-600 hover:border-green-600 text-white font-semibold py-1 px-3 rounded-md w-full flex justify-center gap-4"
       >
-        Entra con email
+        Entrar con email
       </button>
     </form>
   );
