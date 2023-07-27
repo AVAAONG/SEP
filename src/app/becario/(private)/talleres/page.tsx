@@ -5,12 +5,8 @@ import {  Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
 import { headers } from 'next/headers';
 import React from 'react'
 
-const page = async ({
-  params,
-}: {
-  params: { scholarId: string };
-}) => {
-  const scholarId = params.scholarId;
+const page = async () => {
+  const scholarId = "cljwyi8hl0008uwmkjo6dktty"
 
   const workshops = await getWorkshopsByScholar2(scholarId)
   return (
