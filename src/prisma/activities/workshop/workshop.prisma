@@ -14,7 +14,7 @@ model Workshop {
     platform          String
     description       String
     calendarID        String?
-    workshopYear      AvaaYear[]
+    year              String
     modality          Modality
     pensum            Pensum
     dates             Json
@@ -38,11 +38,11 @@ model WorkshopTempData {
 
 model WorkshopSpeaker {
     id            String     @id @default(nanoid(22))
-    name          String
+    firstName     String
+    lastNames     String
     email         String?    @unique
     birthdate     DateTime?
     yearsOfExp    Int?
-    yearsInAvaa   Int?
     jobTitle      String?
     jobCompany    String?
     actualCity    String?
@@ -55,6 +55,7 @@ model WorkshopSpeaker {
     facebookUser  String?
     phoneNumber   String?
     raiting       Float?
+    curriculum    String?
     workshops     Workshop[]
 }
 
