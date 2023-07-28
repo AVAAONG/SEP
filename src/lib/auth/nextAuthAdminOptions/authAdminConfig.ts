@@ -17,7 +17,7 @@ export const NEXT_SECRET = process.env.NEXTAUTH_SECRET || shortUUID.generate();
  *  
  */
 export const PAGES: Partial<PagesOptions> = {
-    signIn: "/admin/signin",
+    signIn: "/signin/admin",
 
 }
 /// ==================================== NEXT AUTH CONFIGURATION FOR ADMINS ==================================== ///

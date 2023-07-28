@@ -41,7 +41,7 @@ export default function Home() {
 
       <div className="mb-32 grid text-center lg:grid-cols-2 lg:text-left gap-6">
         <Link
-          href="/becario/signin"
+          href="/signin/becario"
           className="relative bg-black group rounded-lg  px-5 py-4  border-emerald-900 border-2"
           rel="noopener noreferrer"
         >
@@ -61,7 +61,7 @@ export default function Home() {
         </Link>
 
         <Link
-          href="/admin/signin"
+          href="/signin/admin"
           className="relative bg-black group rounded-lg px-5 py-4 border-emerald-900 border-2"
           rel="noopener noreferrer"
         >
