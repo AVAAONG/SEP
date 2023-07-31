@@ -15,7 +15,7 @@ const AdminSignInPage = () => {
 
   const handleSignIn = async () => {
     await handler("admin")
-    return signIn("google", { adminCallbackUrl });
+    return await signIn("google", { callbackUrl: adminCallbackUrl });
   }
 
   return (
@@ -35,7 +35,7 @@ const AdminSignInPage = () => {
           </div>
           <div className="flex">
             <a
-              onClick={() => handleSignIn()}
+              onClick={async () => await handleSignIn()}
               role="button"
               className="bg-green-600 hover:bg-emerald-950 border-2 border-emerald-950 hover:border-green-600 text-white font-semibold py-2 px-4 rounded-md w-full flex justify-center gap-4"
             >
