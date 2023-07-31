@@ -3,9 +3,8 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { Chat, ChatSpeaker, ChatsTempData, Prisma, PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
-
+import { Chat, ChatSpeaker, ChatsTempData, Prisma } from '@prisma/client';
+import { prisma } from './prisma';
 
 /**
  * Creates a chat.

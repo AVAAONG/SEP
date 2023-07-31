@@ -1,6 +1,7 @@
-import { Prisma, PrismaClient, Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
+import { Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
 import shortUUID from 'short-uuid';
-const prisma = new PrismaClient();
+import { prisma } from './prisma';
+
 
 export const createWorkshop = async (data: Workshop, speakerId: string, tempData?: WorkshopTempData) => {
     try {

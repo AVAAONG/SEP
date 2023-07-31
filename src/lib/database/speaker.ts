@@ -3,9 +3,8 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { ChatSpeaker, Prisma, PrismaClient, WorkshopSpeaker } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { ChatSpeaker, Prisma, , WorkshopSpeaker } from "@prisma/client";
+import { prisma } from "./prisma";
 
 /**
  * 
