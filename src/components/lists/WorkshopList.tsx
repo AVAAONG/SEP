@@ -25,7 +25,7 @@ const WorkshopsList: React.FC<WorkshopsListProps> = (props) => {
                         const { speaker, dates, title, id, pensum, spots, workshopYear, platform, modality, tempData } = workshop
                         console.log(dates)
                         return (
-                            <li key={title} className="py-2 focus:outline-none focus:outline-offset-0 px-3 rounded-md w-full bg-emerald-950 flex items-center justify-center gap-2">
+                            <li key={title} className="py-2 focus:outline-none focus:outline-offset-0 px-3 rounded-md w-full bg-slate-900 flex items-center justify-center gap-2">
                                 <div className='w-4'>
                                     <span className="sr-only">Enviar Taller</span>
                                     <input type="checkbox" className='w-3 h-3 bg-emerald-900 accent-green-500 text-emerald-600 border-gray-300 focus:ring-0 ' />
