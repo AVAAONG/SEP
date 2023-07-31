@@ -2,6 +2,7 @@ import '@/app/globals.css'
 import PublicFooter from '@/components/footer/Public';
 import favicon from '@/../public/logo-proexcelencia-cap.png';
 import NextAuthProvider from '../components/providers';
+import { ThemeProviderC } from '@/components/ThemeProvider';
 
 export const metadata = {
   title: 'Proexcelencia',
@@ -18,7 +19,11 @@ export default async function RootLayout({
   return (
     <html lang="es " className='h-full'>
       <body className='h-full'>
-        <NextAuthProvider>{children}</NextAuthProvider>
+        <NextAuthProvider>
+          <ThemeProviderC >
+            {children}
+          </ThemeProviderC >
+        </NextAuthProvider>
       </body>
     </html>
 
