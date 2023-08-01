@@ -12,21 +12,32 @@
 /// @author Kevin Bravo (kevinbravo.me)
 
 model Chat {
-  id             String           @id @default(nanoid(22))
-  title          String
-  dates          Json
-  speaker        ChatSpeaker[]
-  spots          Int
-  platform       String
-  calendarID     String?
-  modality       Modality
-  activityStatus ActivityStatus
-  level          Level
-  tempData       ChatsTempData?
-  attendance     ChatAttendance[]
+    id                 String           @id @default(nanoid())
+    title              String
+    avalible_spots     Int
+    platform           String
+    description        String
+    calendar_id        String?
+    start_dates        DateTime[]
+    end_dates          DateTime[]
+    modality           Modality
+    level              Level
+    speaker            ChatSpeaker[]
+    activity_status    ActivityStatus
+    temp_data          ChatsTempData?
+    scholar_attendance ChatAttendance[]
 
-  @@index([title, modality, activityStatus, level])
+    @@index([title, modality, activity_status, level])
 }
+
+
+   @@index([title, modality, activityStatus, level])
+}
+
+
+
+
+
 
 model ChatAttendance {
   id            String            @id @default(nanoid(22))
