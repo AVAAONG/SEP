@@ -24,23 +24,41 @@ const Page = () => {
 
     // const workshopResponse = useSWR('/api/workshop/schedule', fetcher, { fallbackData: [], refreshInterval: 1000 })
     const workshopResponse = {
-        data: [{
-            "id": "1",
-            "title": "Taller de liderazgo",
-            "pensum": "Liderazgo",
-            "dates": {
-                "start": "2021-10-01",
-                "end": "2021-10-01"
+        data: [
+            {
+                "id": "1",
+                "title": "Taller de liderazgo",
+                "pensum": "Liderazgo",
+                "dates": {
+                    "start": "2021-10-01",
+                    "end": "2021-10-01"
+                },
+                "speaker": "Andrés Della",
+                "spots": 20,
+                "modality": "presencial",
+                "platform": "zoom",
+                "workshopYear": "I",
+                "description": "Taller de liderazgo",
+                "subject": "liderazgo",
+                "group": "1"
             },
-            "speaker": "Andrés Della",
-            "spots": 20,
-            "modality": "presencial",
-            "platform": "zoom",
-            "workshopYear": "I",
-            "description": "Taller de liderazgo",
-            "subject": "liderazgo",
-            "group": "1"
-        },
+            {
+                "id": "221",
+                "title": "Taller de liderazgo",
+                "pensum": "Liderazgo",
+                "dates": {
+                    "start": "2021-10-01",
+                    "end": "2021-10-01"
+                },
+                "speaker": "Andrés Della",
+                "spots": 20,
+                "modality": "presencial",
+                "platform": "zoom",
+                "workshopYear": "I",
+                "description": "Taller de liderazgo",
+                "subject": "liderazgo",
+                "group": "1"
+            },
         ]
     }
 
@@ -133,7 +151,7 @@ const Page = () => {
                 </text>
                 <WorkshopForm />
             </div>
-            <div className='w-screen md:w-1/2 p-4 pt-0 flex flex-col items-center'>
+            <div className='w-full md:w-1/2 p-4 pt-0 flex flex-col items-center'>
                 {
                     workshopResponse.isLoading || workshopResponse.data.length === 0 ? <></> :
                         <>
@@ -141,9 +159,6 @@ const Page = () => {
                                 talleres agendados
                             </text>
                             <WorkshopsList workshopData={workshopResponse.data} deleteEntry={deleteEntry} editEntry={editEntry} />
-                            <button onClick={showModal} className='bg-green-600 text-white rounded-lg col-span-2 max-w-fit px-5 py-2 self-center mt-4' >
-                                Enviar Talleres
-                            </button>
                         </>
                 }
             </div>
