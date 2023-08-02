@@ -7,6 +7,7 @@ import { Level } from "types-chat"
 import { ScholarAttendance } from "..\type-activities"
 import { Scholar } from "..\..\users\scholar\scholar"
 import { Chat } from "..\..\schema"
+import { Gender } from "..\type-activities"
 
 model Chat {
     id                 String           @id @default(nanoid())
@@ -56,6 +57,7 @@ model ChatSpeaker {
     id             String    @id @default(nanoid())
     first_names    String
     last_names     String
+    gender         Gender?
     email          String?   @unique
     birthdate      DateTime?
     image          String?

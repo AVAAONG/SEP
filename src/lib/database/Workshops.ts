@@ -83,14 +83,14 @@ export const getWorkshopsByScholar = async (scholarId: string) => {
 
 export const getWorkshopsByScholar2 = async (userId: string) => {
 
-    try{
+    try {
         const scholarId = await prisma.user.findUnique({
             where: { id: userId },
             select: {
                 scholar: {
                     select: {
                         id: true
-    
+
                     }
                 }
             }
@@ -111,27 +111,51 @@ export const getWorkshopsByScholar2 = async (userId: string) => {
                     },
                     select: {
                         attendance: true,
-                        
+
                     }
                 }
             }
         })
         return workshops;
     }
-    catch(err){
+    catch (err) {
         console.log(err);
     }
-    finally{
+    finally {
         await prisma.$disconnect();
     }
- 
+
 }
 
 
 export const createWorkshopSpeaker = async (data: WorkshopSpeaker) => {
-    await prisma.workshopSpeaker.create({
-        data
-    })
+    console.log('\x1b[36m%s\x1b[0m', `Creating speaker ${data.first_names} ${data.last_names}`)
+    try {
+        await prisma.workshopSpeaker.create({
+            data
+        })
+        console.log('\x1b[32m%s\x1b[0m', `Speaker ${data.first_names} ${data.last_names}, created successfully`)
+    }
+    catch (err) {
+        console.log('\x1b[31m%s\x1b[0m', err);
+    }
+    finally {
+        await prisma.$disconnect();
+    }
+}
+
+export const deleteWorkshopSpeakers = async () => {
+
+    try {
+        await prisma.workshopSpeaker.deleteMany({});
+        console.log('\x1b[32m%s\x1b[0m', `Speakers deleted successfully`)
+    }
+    catch (err) {
+        console.log('\x1b[31m%s\x1b[0m', err);
+    }
+    finally {
+        await prisma.$disconnect();
+    }
 }
 
 

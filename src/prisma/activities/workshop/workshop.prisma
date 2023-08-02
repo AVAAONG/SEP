@@ -7,6 +7,7 @@ import { ActivityStatus, Modality } from "..\type-activities"
 import { ScholarAttendance } from "..\type-activities"
 import { Scholar } from "..\..\users\scholar\scholar"
 import { Skill, WorkshopYear} from "types-workshop"
+import { Gender } from "..\type-activities"
 
 model Workshop {
     id                 String               @id @default(nanoid())
@@ -43,7 +44,7 @@ model WorkshopSpeaker {
     id             String     @id @default(nanoid())
     first_names    String
     last_names     String
-    email          String?    @unique
+    email          String?  
     birthdate      DateTime?
     years_of_exp   Int?
     job_title      String?
@@ -58,6 +59,7 @@ model WorkshopSpeaker {
     facebook_user  String?
     phone_number   String?
     curriculum     String?
+    gender         Gender?
     workshops      Workshop[]
 }
 

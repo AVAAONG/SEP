@@ -59,6 +59,7 @@ model ChatSpeaker {
   id             String    @id @default(nanoid())
   first_names    String
   last_names     String
+  gender         Gender?
   email          String?   @unique
   birthdate      DateTime?
   image          String?
@@ -113,6 +114,11 @@ enum ScholarAttendance {
   ATTENDED
   NOT_ATTENDED
   JUSTIFY
+}
+
+enum Gender {
+  M
+  F
 }
 
 //
@@ -227,7 +233,7 @@ model WorkshopSpeaker {
   id             String     @id @default(nanoid())
   first_names    String
   last_names     String
-  email          String?    @unique
+  email          String?
   birthdate      DateTime?
   years_of_exp   Int?
   job_title      String?
@@ -242,6 +248,7 @@ model WorkshopSpeaker {
   facebook_user  String?
   phone_number   String?
   curriculum     String?
+  gender         Gender?
   workshops      Workshop[]
 }
 

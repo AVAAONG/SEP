@@ -19,3 +19,8 @@ enum ScholarAttendance {
     NOT_ATTENDED
     JUSTIFY
 }
+
+enum Gender {
+    M
+    F
+}
