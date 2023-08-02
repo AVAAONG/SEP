@@ -21,7 +21,7 @@ const WorkshopForm = () => {
     ///@ts-ignore
     const fetcher: Fetcher<WorkshopSpeaker[] | {}[], string> = (...args) => fetch([...args]).then(res => res.json())
 
-    const { data, isLoading } = useSWR('/api/workshop/speakers', fetcher, { fallbackData: [{}, {}], })
+    const { data, isLoading } = useSWR('/admin/api/speakers/workshops', fetcher, { fallbackData: [{}, {}], })
 
     const scheduleWorkshop = async (formWorkshopData: FormTypeWorkshop, event: BaseSyntheticEvent<object, any, any> | undefined) => {
         if (event === undefined) return;
@@ -91,9 +91,10 @@ const WorkshopForm = () => {
                             <option>Cargando facilitadores ...</option>
                             :
                             data.map((value) => {
-                                const { id, name } = value as WorkshopSpeaker;
+                                const { id, first_names, last_names, email } = value as WorkshopSpeaker;
+                                const fullName = `${first_names} ${last_names}`;
                                 return (
-                                    <option key={id} value={id} >{name}</option>
+                                    <option key={id} value={`${id}+/+${first_names}+/+${email}`} >{fullName}</option>
                                 )
                             })}
                 </select>
