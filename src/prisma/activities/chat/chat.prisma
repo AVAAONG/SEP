@@ -66,4 +66,9 @@ model ChatSpeaker {
     facebook_user  String?
     phone_number   String?
     chat           Chat[]
+    is_scholar     Boolean   @default(false)
+    scholar        Scholar?  @relation(fields: [scholar_id], references: [id])
+    scholar_id     String?
+
+    @@index([scholar_id])
 }
