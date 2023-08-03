@@ -14,14 +14,13 @@ import { withAuth, NextRequestWithAuth } from "next-auth/middleware"
 import { NextResponse } from "next/server"
 
 export default function wrapMiddlewareFunction(req: NextRequestWithAuth) {
-    let coockieValue = ""
+    let signinPath = ""
     if (req.nextUrl.pathname.startsWith("/becario")) {
-        coockieValue = "becario"
+        signinPath = "becario"
     }
     else if (req.nextUrl.pathname.startsWith("/admin")) {
-        coockieValue = "admin"
+        signinPath = "admin"
     }
-    console.log('coockieValue', coockieValue)
     ///@ts-expect-error
     return withAuth(async (request: NextRequestWithAuth) => {
         if (request.nextUrl.pathname.startsWith("/becario")
@@ -40,7 +39,7 @@ export default function wrapMiddlewareFunction(req: NextRequestWithAuth) {
         }
     }, {
         pages: {
-            signIn: `/signin/${coockieValue}`
+            signIn: `/signin/${signinPath}`
         }
     })(req);
 }
