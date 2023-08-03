@@ -1,26 +1,27 @@
 'use client'
-import React, { useState } from 'react'
 import ProfileDropdown from './ProfileDropdown'
 import ThemeToggleButton from './NavigationBar/ThemeToggleButton'
 import SolicitudeDropdown from './SolicitudeDropdown'
-
+import { useAtom } from 'jotai'
+import { scholarSidebarAtom } from '@/state/mainState'
 interface NavigationBarProps {
     image: string | null | undefined;
-    name: string| null | undefined;
-    email: string| null | undefined;
+    name: string | null | undefined;
+    email: string | null | undefined;
 
 }
 
-const NavigationBar = ({image, name, email}: NavigationBarProps) => {
-    const [isDropdownOpen, setDropdown] = useState(false);
-    const toggleDropdown = () => setDropdown(!isDropdownOpen);
+const NavigationBar = ({ image, name, email }: NavigationBarProps) => {
+    const [isSidebarOpen, setSidebarOpen] = useAtom(scholarSidebarAtom);
+    const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
+
 
     return (
         <nav className="bg-white px-4 py-2.5 dark:bg-slate-900 dark:border-gray-700 fixed left-0 right-0 top-0 z-30">
-            <div className="flex items-center justify-between md:ml-64 gap-4">
+            <div className={`${isSidebarOpen ? "md:ml-64" : ""} flex items-center justify-between gap-4 `}>
                 <div className="flex justify-start items-center">
                     <button
-                        onClick={toggleDropdown}
+                        onClick={toggleSidebar}
                         className="p-2 mr-2 text-green-600 rounded-lg cursor-pointer  hover:text-green-900 hover:bg-green-100 focus:bg-green-100 dark:focus:bg-emerald-950  dark:focus:ring-green-700 dark:text-green-700 dark:hover:bg-green-700 dark:hover:text-emerald-950 dark:focus:text-emerald-700"
                     >
                         <svg

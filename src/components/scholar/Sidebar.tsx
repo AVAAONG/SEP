@@ -1,9 +1,12 @@
+"use client"
 import { CalendarIcon, chatIcon, volunterIcon, workshopIcon, dashboardComponent } from '@/assets/svgs'
 import React from 'react'
 import DropdownButton from './DropdownButton'
 import logo from '@/../public/proexcelencia-color.png'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useAtom } from 'jotai'
+import { scholarSidebarAtom } from '@/state/mainState'
 
 const SCHOLAR_PREFIX = "becario"
 
@@ -52,15 +55,50 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
 ]
 
 const Sidebar = () => {
+    const [isSidebarOpen, setSidebarOpen] = useAtom(scholarSidebarAtom);
+    const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
     return (
         <aside
-            className="fixed top-0 left-0 z-40 w-64 h-screen pt-4 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-slate-900 dark:border-gray-700 "
-            aria-label="Sidenav"
+            className={`${isSidebarOpen ? "fixed  w-full md:w-64" : "hidden"} top-0 left-0 z-40 h-screen pt-4  bg-white border-r border-gray-200 md:translate-x-0 dark:bg-slate-900 dark:border-gray-700`}
         >
-            <div className='flex items-center mt-2 ml-6'>
+            <div className={`flex items-center mt-2 ml-6 ${isSidebarOpen ? "justify-between" : ""} `}>
                 <Link href="/becario/dashboard" >
                     <Image src={logo} width={190} alt="Logo Proexcelencia" />
                 </Link>
+                <div className="flex justify-start items-center">
+                    <button
+                        onClick={toggleSidebar}
+                        className="p-2 mr-2 text-green-600 rounded-lg cursor-pointer  hover:text-green-900 hover:bg-green-100 focus:bg-green-100 dark:focus:bg-emerald-950  dark:focus:ring-green-700 dark:text-green-700 dark:hover:bg-green-700 dark:hover:text-emerald-950 dark:focus:text-emerald-700"
+                    >
+                        <svg
+                            aria-hidden="true"
+                            className="w-6 h-6"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                                clipRule="evenodd"
+                            ></path>
+                        </svg>
+                        <svg
+                            aria-hidden="true"
+                            className="hidden w-6 h-6"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clipRule="evenodd"
+                            ></path>
+                        </svg>
+                        <span className="sr-only">Toggle sidebar</span>
+                    </button>
+                </div>
             </div>
             <div className="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-slate-900 mt-4">
                 <ul className="space-y-2">
