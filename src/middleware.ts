@@ -23,20 +23,20 @@ export default function wrapMiddlewareFunction(req: NextRequestWithAuth) {
     }
     ///@ts-expect-error
     return withAuth(async (request: NextRequestWithAuth) => {
-        if (request.nextUrl.pathname.startsWith("/becario")
-            && request.nextauth.token?.role !== "scholar") {
-            return NextResponse.rewrite(
-                new URL("/accessDenied", request.url)
-            );
-        }
+        // if (request.nextUrl.pathname.startsWith("/becario")
+        //     && request.nextauth.token?.role !== "scholar") {
+        //     return NextResponse.rewrite(
+        //         new URL("/accessDenied", request.url)
+        //     );
+        // }
 
-        if (request.nextUrl.pathname.startsWith("/admin")
-            && request.nextauth.token?.role !== "admin"
-            && request.nextauth.token?.role !== "comitee") {
-            return NextResponse.rewrite(
-                new URL("/accessDenied", request.url)
-            )
-        }
+        // if (request.nextUrl.pathname.startsWith("/admin")
+        //     && request.nextauth.token?.role !== "admin"
+        //     && request.nextauth.token?.role !== "comitee") {
+        //     return NextResponse.rewrite(
+        //         new URL("/accessDenied", request.url)
+        //     )
+        // }
     }, {
         pages: {
             signIn: `/signin/${signinPath}`

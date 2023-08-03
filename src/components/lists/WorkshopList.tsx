@@ -8,7 +8,6 @@ import { BaseSyntheticEvent } from 'react';
 interface WorkshopsListProps {
     workshopData: (Workshop & {
         speaker: WorkshopSpeaker[];
-        dates: Prisma.JsonArray;
         tempData: WorkshopTempData | null;
     })[],
     deleteEntry: (id: SUUID, calendarId: string) => void,
@@ -40,7 +39,7 @@ const WorkshopsList: React.FC<WorkshopsListProps> = (props) => {
                 <ul role="list" className='flex flex-col gap-2'>
                     {workshopData.map(
                         (workshop) => {
-                            const { speaker, dates, title, id, pensum, spots, workshopYear, platform, modality, calendarID } = workshop
+                            const { speaker, start_dates, end_dates, title, id, skill, avalible_spots, year, platform, modality, calendar_id } = workshop
                             return (
                                 <li key={id} className="py-2 focus:outline-none focus:outline-offset-0 px-3 rounded-md w-full bg-slate-900 flex items-center justify-center gap-2">
                                     <div className='w-4'>
@@ -57,28 +56,28 @@ const WorkshopsList: React.FC<WorkshopsListProps> = (props) => {
                                             {title}
                                         </p>
                                         <p className="text-xs text-gray-500 truncate ">
-                                            Por: {speaker[0].name}
+                                            Por: {speaker[0].first_names + ' ' + speaker[0].last_names}
                                         </p>
                                     </div>
                                     <div className="flex-1 min-w-0 text-center">
                                         <p className="text-sm font-medium truncate text-white">
 
-                                            {new Date(dates.start_date).toLocaleString('es-ES', { month: 'long', day: 'numeric' })}
+                                            {new Date(start_dates[0]).toLocaleString('es-ES', { month: 'long', day: 'numeric' })}
                                         </p>
                                         <p className="text-xs text-gray-500 truncate ">
-                                            De {new Date(dates.start_date).toLocaleString('es-ES', { hour: '2-digit', minute: '2-digit' })} a {new Date(dates.end_date).toLocaleString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+                                            De {new Date(end_dates[0]).toLocaleString('es-ES', { hour: '2-digit', minute: '2-digit' })} a {new Date(end_dates[0]).toLocaleString('es-ES', { hour: '2-digit', minute: '2-digit' })}
 
                                         </p>
                                     </div>
                                     <div className="flex-1 min-w-0 text-center">
                                         <p className="text-sm font-medium truncate text-white">
-                                            {pensum}
+                                            {skill}
                                         </p>
                                         <p className="text-xs text-gray-500 truncate ">
-                                            {spots} cupos
+                                            {avalible_spots} cupos
                                         </p>
                                         <p className="text-xs text-gray-500 truncate ">
-                                            {workshopYear.toString().replaceAll(',', ' y ')} Año
+                                            {year.toString().replaceAll(',', ' y ')} Año
                                         </p>
                                     </div>
                                     <div className="flex-1 min-w-0 text-center">
@@ -89,7 +88,7 @@ const WorkshopsList: React.FC<WorkshopsListProps> = (props) => {
                                             {platform}
                                         </p>
                                     </div>
-                                    <button onClick={() => { deleteEntry(id as SUUID, calendarID!) }} type="button" className='w-4'  >
+                                    <button onClick={() => { deleteEntry(id as SUUID, calendar_id!) }} type="button" className='w-4'  >
                                         <XIcon />
                                         <span className="sr-only">Eliminar taller</span>
                                     </button>

@@ -13,7 +13,7 @@ export const createWorkshop = async (data: Workshop, speakerId: string, tempData
                         id: speakerId
                     }
                 },
-                tempData: {
+                temp_data: {
                     create: tempData
                 },
             }
@@ -172,10 +172,10 @@ export const getScheduledWorkshops = async () => {
     const workshops = await prisma.workshop.findMany({
         include: {
             speaker: true,
-            tempData: true,
+            temp_data: true,
         },
         where: {
-            activityStatus: 'AGENDADO'
+            activity_status: 'SCHEDULED'
         }
     });
     return workshops;

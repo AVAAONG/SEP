@@ -19,6 +19,23 @@ import { KindOfActivity } from '@/types/General';
 import { addHours, getFormatedDate, getMeetEventLink, getPublicEventLink, substractMonths } from './utils';
 import createZoomMeeting from '../zoom/zoom';
 
+const WORKSHOP_CALENDAR_ID = "3bd2458b588a28274518ba4e7a45f44db6a04c33377cc8c008c986a72dc36cdb@group.calendar.google.com";
+const CHAT_CALENDAR_ID = "e8e9c5e4d30d349b75f6061c8641fa2577ed9928403c4bd12b6bd6687291e7a9@group.calendar.google.com"
+const VOLUNTEERS_CALENDAR_ID = "66c8bfc0379b164b2d4104d235933b8507228ea39a0f6301f7f3a1a7e878e204@group.calendar.google.com"
+
+// {
+//     title: 'Empakdsflkdsamf',
+//         pensum: 'LEADERSHIP',
+//             date: '2023-08-10',
+//                 startHour: '11:27',
+//                     endHour: '15:26',
+//                         speaker: 'a7CUTUCTMKPXp8P7Wf8JQ1+/+Tibaire Labrador+/+tibairelabrador@gmail.com',
+//                             spots: '2',
+//                                 modality: 'IN_PERSON',
+//                                     platform: '212113221',
+//                                         workshopYear: ['III', 'IV'],
+//                                             description: 'asfasfdd'
+// }
 
 export const createEvent = async (kindOfActivity: KindOfActivity, values: Workshop | Chat) => {
     const calendarId = 'primary'
@@ -29,13 +46,16 @@ export const createEvent = async (kindOfActivity: KindOfActivity, values: Worksh
 
     if (kindOfActivity.toLocaleLowerCase().trim() === "workshop") {
 
-        const { title, platform, date, startHour, endHour } = values as Workshop;
+        const { title, date, startHour, endHour, platform, } = values as Workshop;
+
         const [start, end] = getFormatedDate(date, startHour, endHour);
         const [eventDetails, eventDescription, zoomMeetLink, zoomMeetId, zoomMetPassword] = await createWorkshopEventDetails(values as Workshop)
         addUrl = await getPublicEventLink(title, platform, eventDescription, start, end);
+        console.log(addUrl)
+        console.log(eventDescription)
 
         const event = await Calendar.events.insert({
-            calendarId: "3bd2458b588a28274518ba4e7a45f44db6a04c33377cc8c008c986a72dc36cdb@group.calendar.google.com",
+            calendarId: WORKSHOP_CALENDAR_ID,
             conferenceDataVersion: 1,
             requestBody: eventDetails,
         })
@@ -91,6 +111,7 @@ export const createEvent = async (kindOfActivity: KindOfActivity, values: Worksh
  */
 const createWorkshopEventDetails = async (values: Workshop): Promise<[calendar_v3.Schema$Event, string, string?, string?, string?]> => {
     const { title, pensum, date, startHour, endHour, speaker, modality, platform, description, workshopYear } = values
+
     const [start, end] = getFormatedDate(date, startHour, endHour);
     let calendarDescription: string;
     let eventDetails: calendar_v3.Schema$Event;
@@ -98,27 +119,27 @@ const createWorkshopEventDetails = async (values: Workshop): Promise<[calendar_v
     let zoomMeetId = null;
     let zoomMetPassword = null;
 
-    if (modality.toLowerCase().trim() === "presencial" || modality.toLowerCase().trim() === "asincrona") {
-        calendarDescription = createWorkshopCalendarDescription(pensum, speaker, modality, platform, description, workshopYear);
+    if (modality === "IN_PERSON" || platform.toLowerCase().trim() === "padlet") {
+        calendarDescription = createWorkshopCalendarDescription(pensum, splitSpeakerValues(speaker).speakerName, modality, platform, description, workshopYear);
         eventDetails = createEventObject(title, modality, platform, calendarDescription, start, end);
     }
-    else if (modality.toLowerCase().trim() === "virtual" || modality.toLowerCase().trim() === "hibrida") {
-        if (platform === 'zoom') {
+    else if (modality === "VIRTUAL" || modality === "HIBRID") {
+        if (platform.toLowerCase().trim() === 'zoom') {
             const [join_url, id, password] = await createZoomMeeting(title, new Date(start));
             zoomMeetLink = join_url
             zoomMeetId = id
             zoomMetPassword = password
-            calendarDescription = createWorkshopCalendarDescription(pensum, speaker, modality, platform, description, workshopYear, join_url, id, password);
+            calendarDescription = createWorkshopCalendarDescription(pensum, splitSpeakerValues(speaker).speakerName, modality, platform, description, workshopYear, join_url, id, password);
 
             eventDetails = createEventObject(title, modality, zoomMeetLink, calendarDescription, start, end);
         }
         else {
-            calendarDescription = createWorkshopCalendarDescription(pensum, speaker, modality, platform, description, workshopYear);
+            calendarDescription = createWorkshopCalendarDescription(pensum, splitSpeakerValues(speaker).speakerName, modality, platform, description, workshopYear);
             eventDetails = createEventObject(title, modality, platform, calendarDescription, start, end);
         }
     }
     else {
-        calendarDescription = createWorkshopCalendarDescription(pensum, speaker, modality, platform, description, workshopYear);
+        calendarDescription = createWorkshopCalendarDescription(pensum, splitSpeakerValues(speaker).speakerName, modality, platform, description, workshopYear);
         eventDetails = createEventObject(title, modality, platform, calendarDescription, start, end);
     }
     return [eventDetails, calendarDescription, zoomMeetLink, zoomMeetId, zoomMetPassword];
@@ -221,4 +242,12 @@ export const getDate = () => {
     let search = date.indexOf(':')
     date = date.slice(0, search - 3)
     return date
+}
+
+const splitSpeakerValues = (value: string) => {
+    const speakerValues = value.split('+/+');
+    const speakerId = speakerValues[0];
+    const speakerName = speakerValues[1];
+    const speakerEmail = speakerValues[2];
+    return { speakerId, speakerName, speakerEmail };
 }

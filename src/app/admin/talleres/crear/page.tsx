@@ -22,45 +22,8 @@ const Page = () => {
     const { register, handleSubmit, formState: { errors }, reset, } = useForm<WorkshopForm>();
     const [subjectAndGroup, setSubjectAndGroup] = useState({ subject: "", group: "" })
 
-    // const workshopResponse = useSWR('/api/workshop/schedule', fetcher, { fallbackData: [], refreshInterval: 1000 })
-    const workshopResponse = {
-        data: [
-            {
-                "id": "1",
-                "title": "Taller de liderazgo",
-                "pensum": "Liderazgo",
-                "dates": {
-                    "start": "2021-10-01",
-                    "end": "2021-10-01"
-                },
-                "speaker": "Andrés Della",
-                "spots": 20,
-                "modality": "presencial",
-                "platform": "zoom",
-                "workshopYear": "I",
-                "description": "Taller de liderazgo",
-                "subject": "liderazgo",
-                "group": "1"
-            },
-            {
-                "id": "221",
-                "title": "Taller de liderazgo",
-                "pensum": "Liderazgo",
-                "dates": {
-                    "start": "2021-10-01",
-                    "end": "2021-10-01"
-                },
-                "speaker": "Andrés Della",
-                "spots": 20,
-                "modality": "presencial",
-                "platform": "zoom",
-                "workshopYear": "I",
-                "description": "Taller de liderazgo",
-                "subject": "liderazgo",
-                "group": "1"
-            },
-        ]
-    }
+    const workshopResponse = useSWR('/admin/api/workshops', fetcher, { fallbackData: [], refreshInterval: 1000 })
+
 
     const deleteEntry = async (inputId: shortUUID.SUUID, calendarId: string) => {
         console.log(inputId, calendarId)
@@ -102,19 +65,7 @@ const Page = () => {
             },
             body: JSON.stringify(data)
         })
-        reset({
-            title: "",
-            pensum: "Liderazgo",
-            date: "",
-            startHour: "",
-            endHour: "",
-            speaker: "",
-            spots: 0,
-            modality: "presencial",
-            platform: "zoom",
-            workshopYear: ["I"],
-            description: ""
-        });
+        reset();
     }
 
     const sendWorkshops = async (data: any, event: BaseSyntheticEvent) => {

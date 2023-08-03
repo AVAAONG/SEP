@@ -2,6 +2,7 @@ import { Chat, ChatLevel, KindOfChat } from "@/types/Chat"
 import { KindOfActivity, Platform, activityMode } from "@/types/General"
 import { AsociatedProject } from "@/types/Volunteer"
 import { Pensum } from "@/types/Workshop"
+import { Skill } from "@prisma/client"
 
 /**
  * Creates the description for a workshop event 
@@ -32,17 +33,17 @@ export const createWorkshopCalendarDescription = (
     const defaultCalendarDescription = `<b>Modalidad:</b> ${activityMode}
 <b>Año del taller:</b> ${avaaYear.join(", ")}
 <b>Facilitador:</b> ${speaker}
-${activityMode.toLowerCase().trim() === "virtual" ? `<b>Plataforma:</b> ${platform}` : `<b>Lugar:</b> ${platform}`}
+${activityMode === "VIRTUAL" ? `<b>Plataforma:</b> ${platform}` : `<b>Lugar:</b> ${platform}`}
 <b>Competencia Asociada:</b> ${pensum}
 `
-    switch (activityMode.toLowerCase().trim()) {
-        case "presencial":
+    switch (activityMode) {
+        case "IN_PERSON":
             workshopCalendarDescription = `${defaultCalendarDescription}
 
 ${description}`
             break
 
-        case "virtual":
+        case "VIRTUAL":
             workshopCalendarDescription = `${defaultCalendarDescription}
 <b>Link de la reunion:</b> ${meetingLink}
 <b>Id de la reunion:</b> ${meetingId}
@@ -50,14 +51,14 @@ ${platform === 'zoom' ? `<b>Contraseña de la reunion:</b> ${meetingPassword}` :
 
 ${description}`
             break
-        case "asincrona":
-            workshopCalendarDescription = `${defaultCalendarDescription}
-<b>Link de Padlet:</b> ${meetingLink} 
+        //         case "asincrona":
+        //             workshopCalendarDescription = `${defaultCalendarDescription}
+        // <b>Link de Padlet:</b> ${meetingLink} 
 
-Recuerda que: <b>a partir de la fecha del taller, solo tienes 3 dias para completar los contenidos del mismo.</b>
+        // Recuerda que: <b>a partir de la fecha del taller, solo tienes 3 dias para completar los contenidos del mismo.</b>
 
-${description}`
-            break;
+        // ${description}`
+        //             break;
     }
     return workshopCalendarDescription;
 }

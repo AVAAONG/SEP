@@ -1,6 +1,6 @@
 
 import shortUUID from "short-uuid";
-import { Platform } from "./General";
+import { Platform, activityMode } from "./General";
 
 
 export type Pensum = 'Liderazgo' | 'Ejercicio Ciudadano' | 'Gerencia de si mismo' | 'TICs' | 'Emprendimiento' | '';
@@ -15,8 +15,8 @@ export type Workshop = {
     endHour: string;
     speaker: string
     spots: string;
-    modality: KindOfWorkshop;
+    modality: activityMode;
     platform: Platform;
     description: string;
-    workshopYear: string;
+    workshopYear: string[];
 }
