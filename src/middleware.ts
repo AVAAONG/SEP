@@ -11,8 +11,9 @@
  */
 
 import { withAuth, NextRequestWithAuth } from "next-auth/middleware"
+import { NextResponse } from "next/server"
 
-export default function wrapMiddlewareFunction(req) {
+export default function wrapMiddlewareFunction(req: NextRequestWithAuth) {
     let coockieValue = ""
     if (req.nextUrl.pathname.startsWith("/becario")) {
         coockieValue = "becario"
@@ -21,7 +22,23 @@ export default function wrapMiddlewareFunction(req) {
         coockieValue = "admin"
     }
     console.log('coockieValue', coockieValue)
-    return withAuth({
+    ///@ts-expect-error
+    return withAuth(async (request: NextRequestWithAuth) => {
+        if (request.nextUrl.pathname.startsWith("/becario")
+            && request.nextauth.token?.role !== "scholar") {
+            return NextResponse.rewrite(
+                new URL("/accessDenied", request.url)
+            );
+        }
+
+        if (request.nextUrl.pathname.startsWith("/admin")
+            && request.nextauth.token?.role !== "admin"
+            && request.nextauth.token?.role !== "comitee") {
+            return NextResponse.rewrite(
+                new URL("/accessDenied", request.url)
+            )
+        }
+    }, {
         pages: {
             signIn: `/signin/${coockieValue}`
         }
