@@ -10,12 +10,25 @@
  * 
  */
 
-/**
- * @description it export the defalt middleware function from next-auth/middleware
- * 
- */
-export { default } from "next-auth/middleware";
+import { withAuth, NextRequestWithAuth } from "next-auth/middleware"
 
+export default function wrapMiddlewareFunction(req) {
+    let coockieValue = ""
+    if (req.nextUrl.pathname.startsWith("/becario")) {
+        coockieValue = "becario"
+    }
+    else if (req.nextUrl.pathname.startsWith("/admin")) {
+        coockieValue = "admin"
+    }
+    console.log('coockieValue', coockieValue)
+    return withAuth({
+        pages: {
+            signIn: `/signin/${coockieValue}`
+        }
+    })(req);
+}
+
+6
 /**
  * @description it export the config object to be used by the middleware function 
  * @see https://nextjs.org/docs/pages/building-your-application/routing/middleware for more information
