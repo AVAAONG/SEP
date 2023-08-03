@@ -24,14 +24,13 @@ const WorkshopsList: React.FC<WorkshopsListProps> = (props) => {
         const { selectedWorkshopsToSend } = data;
         if (event === undefined) return;
         event.preventDefault();
-        // await fetch('/admin/api/workshops', {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     },
-        //     body: JSON.stringify(formWorkshopData)
-        // })
-        console.log(selectedWorkshopsToSend);
+        await fetch('/admin/api/workshops', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(selectedWorkshopsToSend)
+        })
         reset();
     }
 

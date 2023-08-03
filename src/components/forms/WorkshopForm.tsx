@@ -5,12 +5,24 @@ import { WorkshopSpeaker } from '@prisma/client';
 import useSWR, { Fetcher } from 'swr';
 import { Platform } from '@/types/General';
 
-const PROGRAM_COMPONENTS = ['liderazgo', 'ejercicio ciudadano', 'gerencia de sí mismo', 'tic', 'emprendimiento'];
-const MODALITY = ['presencial', 'virtual', 'asincrono', 'hibrido'];
+const PROGRAM_COMPONENTS = [
+    { option: 'liderazgo', value: "LEADERSHIP" },
+    { option: 'ejercicio ciudadano', value: "CITIZEN_EXERCISE" },
+    { option: 'gerencia de sí mismo', value: "SELF_MANAGEMENT" },
+    { option: 'tic', value: "ICT" },
+    { option: 'emprendimiento', value: "ENTREPRENEURSHIP" }
+];
+
+const MODALITY = [
+    { option: 'presencial', value: "IN_PERSON" },
+    { option: 'virtual', value: "ONLINE" }, ,
+    { option: 'hibrido', value: "HYBRID" }
+];
+
 const PLATFORMS = ['zoom', 'google meet', 'otra', 'padlet'];
 const WORKSHOP_YEAR = ['I', 'II', 'III', 'IV', 'V', 'TODOS'];
 
-const normalizeStringInputs = (data: string) =>{
+const normalizeStringInputs = (data: string) => {
     const normalizedData = data.trim().toUpperCase().replaceAll(' ', '_')
     return normalizedData;
 }
@@ -26,28 +38,15 @@ const WorkshopForm = () => {
     const scheduleWorkshop = async (formWorkshopData: FormTypeWorkshop, event: BaseSyntheticEvent<object, any, any> | undefined) => {
         if (event === undefined) return;
         event.preventDefault();
-        // await fetch('/admin/api/workshops', {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     },
-        //     body: JSON.stringify(formWorkshopData)
-        // })
-        formWorkshopData.platform = normalizeStringInputs(formWorkshopData.platform) as Platform;
-        console.log(formWorkshopData);
-        // reset({
-        //     title: "",
-        //     pensum: "",
-        //     date: "",
-        //     startHour: "",
-        //     endHour: "",
-        //     speaker: "",
-        //     spots: "",
-        //     modality: "",
-        //     platform: "",
-        //     workshopYear: "",
-        //     description: ""
-        // });
+        formWorkshopData.platform = formWorkshopData.modality === "VIRTUAL" ? normalizeStringInputs(formWorkshopData.platform) as Platform : formWorkshopData.platform
+        await fetch('/admin/api/workshops/schedule', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formWorkshopData)
+        })
+        // reset();
     }
 
     return (
@@ -59,10 +58,10 @@ const WorkshopForm = () => {
 
             <div >
                 <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">Competencia asociada</label>
-                <select  {...register("pensum")} id="Competencia asociada"  required={true} className='capitalize'>
+                <select  {...register("pensum")} id="Competencia asociada" required={true} className='capitalize'>
                     {PROGRAM_COMPONENTS.map((option) => {
                         return (
-                            <option value={normalizeStringInputs(option)}  key={option} >{option}</option>
+                            <option value={normalizeStringInputs(option)} key={option} >{option}</option>
                         )
                     })}
                 </select>
@@ -94,7 +93,7 @@ const WorkshopForm = () => {
                                 const { id, first_names, last_names, email } = value as WorkshopSpeaker;
                                 const fullName = `${first_names} ${last_names}`;
                                 return (
-                                    <option key={id} value={`${id}+/+${first_names}+/+${email}`} >{fullName}</option>
+                                    <option key={id} value={`${id}+/+${fullName}+/+${email}`} >{fullName}</option>
                                 )
                             })}
                 </select>
@@ -105,7 +104,7 @@ const WorkshopForm = () => {
             </div>
             <div >
                 <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">modalidad</label>
-                <select  {...register("modality")} id="Modalidad"  required={true} className='capitalize'>
+                <select  {...register("modality")} id="Modalidad" required={true} className='capitalize'>
                     {MODALITY.map((option) => {
                         return (
                             <option value={normalizeStringInputs(option)} key={option} >{option}</option>
