@@ -27,7 +27,7 @@ const Page = () => {
 
     const deleteEntry = async (inputId: shortUUID.SUUID, calendarId: string) => {
         console.log(inputId, calendarId)
-        await fetch('/api/workshop/delete', {
+        await fetch('/admin/api/workshops/delete', {
             method: "POST",
             body: JSON.stringify({ id: inputId, calendarId })
         })

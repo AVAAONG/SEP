@@ -12,12 +12,6 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
     if (token) setTokens(token.accessToken as string, token.refreshToken as string);
     else return NextResponse
     await deleteWorkshopFromDatabase(reqData.id)
-    deleteCalendarEvent(CALENDAR_IDS[2].calendarId, reqData.calendarId)
+    // deleteCalendarEvent(CALENDAR_IDS[2].calendarId, reqData.calendarId)
     return NextResponse.json({ message: "ok" })
 }
-
-export const GET = async (req: NextRequest, res: NextResponse) => {
-    const workshops = await getScheduledWorkshops()
-    return NextResponse.json(workshops)
-}
-

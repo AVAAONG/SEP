@@ -18,6 +18,7 @@ import { Workshop } from '@/types/Workshop';
 import { KindOfActivity } from '@/types/General';
 import { addHours, getFormatedDate, getMeetEventLink, getPublicEventLink, substractMonths } from './utils';
 import createZoomMeeting from '../zoom/zoom';
+import { Modality, Skill } from '@prisma/client';
 
 const WORKSHOP_CALENDAR_ID = "3bd2458b588a28274518ba4e7a45f44db6a04c33377cc8c008c986a72dc36cdb@group.calendar.google.com";
 const CHAT_CALENDAR_ID = "e8e9c5e4d30d349b75f6061c8641fa2577ed9928403c4bd12b6bd6687291e7a9@group.calendar.google.com"
@@ -120,7 +121,7 @@ const createWorkshopEventDetails = async (values: Workshop): Promise<[calendar_v
     let zoomMetPassword = null;
 
     if (modality === "IN_PERSON" || platform.toLowerCase().trim() === "padlet") {
-        calendarDescription = createWorkshopCalendarDescription(pensum, splitSpeakerValues(speaker).speakerName, modality, platform, description, workshopYear);
+        calendarDescription = createWorkshopCalendarDescription(mapWorkshopSkill(pensum), splitSpeakerValues(speaker).speakerName, mapWorkshopModality(modality), platform, description, workshopYear);
         eventDetails = createEventObject(title, modality, platform, calendarDescription, start, end);
     }
     else if (modality === "VIRTUAL" || modality === "HIBRID") {
@@ -250,4 +251,34 @@ const splitSpeakerValues = (value: string) => {
     const speakerName = speakerValues[1];
     const speakerEmail = speakerValues[2];
     return { speakerId, speakerName, speakerEmail };
+}
+
+const mapWorkshopSkill = (skill: Skill): string => {
+    switch (skill) {
+        case "CITIZEN_EXERCISE":
+            return 'Ejercicio Ciudadano'
+        case "ENTREPRENEURSHIP":
+            return 'Emprendimiento'
+        case "ICT":
+            return 'TIC'
+        case "LEADERSHIP":
+            return 'Liderazgo'
+        case "SELF_MANAGEMENT":
+            return 'Gerencia de si mismo'
+        default:
+            return 'N/A'
+    }
+}
+
+const mapWorkshopModality = (modality: Modality) => {
+    switch (modality) {
+        case "HYBRID":
+            return 'Híbrido'
+        case "VIRTUAL":
+            return 'Virutual'
+        case "IN_PERSON":
+            return 'Presencial'
+        default:
+            return 'N/A'
+    }
 }

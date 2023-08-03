@@ -1,9 +1,10 @@
 'use client';
 import { XIcon, EditIcon } from '@/assets/svgs'
 import { SUUID } from 'short-uuid'
-import { Prisma, Workshop, WorkshopSpeaker, WorkshopTempData, } from '@prisma/client';
+import { Modality, Skill, Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
 import { useForm } from 'react-hook-form';
-import { BaseSyntheticEvent } from 'react';
+import { BaseSyntheticEvent, useState } from 'react';
+import WorkshopTooltip from '../WorkshopTooltip';
 
 interface WorkshopsListProps {
     workshopData: (Workshop & {
@@ -14,9 +15,39 @@ interface WorkshopsListProps {
     editEntry: (id: SUUID) => void
 }
 
+const mapWorkshopSkill = (skill: Skill): string => {
+    switch (skill) {
+        case "CITIZEN_EXERCISE":
+            return 'Ejercicio Ciudadano'
+        case "ENTREPRENEURSHIP":
+            return 'Emprendimiento'
+        case "ICT":
+            return 'TIC'
+        case "LEADERSHIP":
+            return 'Liderazgo'
+        case "SELF_MANAGEMENT":
+            return 'Gerencia de si mismo'
+        default:
+            return 'N/A'
+    }
+}
+
+const mapWorkshopModality = (modality: Modality) => {
+    switch (modality) {
+        case "HYBRID":
+            return 'Híbrido'
+        case "VIRTUAL":
+            return 'Virutual'
+        case "IN_PERSON":
+            return 'Presencial'
+        default:
+            return 'N/A'
+    }
+}
+
+
 const WorkshopsList: React.FC<WorkshopsListProps> = (props) => {
     const { register, handleSubmit, formState: { errors }, reset, } = useForm<{ selectedWorkshopsToSend: string[] }>();
-
     const { workshopData, deleteEntry, editEntry } = props
 
     const sendWorkshops = async (data: { selectedWorkshopsToSend: string[] }, event: BaseSyntheticEvent<object, any, any> | undefined) => {
@@ -40,6 +71,7 @@ const WorkshopsList: React.FC<WorkshopsListProps> = (props) => {
                     {workshopData.map(
                         (workshop) => {
                             const { speaker, start_dates, end_dates, title, id, skill, avalible_spots, year, platform, modality, calendar_id } = workshop
+                            console.log(id)
                             return (
                                 <li key={id} className="py-2 focus:outline-none focus:outline-offset-0 px-3 rounded-md w-full bg-slate-900 flex items-center justify-center gap-2">
                                     <div className='w-4'>
@@ -51,17 +83,9 @@ const WorkshopsList: React.FC<WorkshopsListProps> = (props) => {
                                         <span className="sr-only">Editar taller</span>
                                     </button>
 
-                                    <div className="flex-1 min-w-fit">
-                                        <p className="text-sm font-medium  truncate text-white">
-                                            {title}
-                                        </p>
-                                        <p className="text-xs text-gray-500 truncate ">
-                                            Por: {speaker[0].first_names + ' ' + speaker[0].last_names}
-                                        </p>
-                                    </div>
+                                    <WorkshopTooltip speaker={speaker} title={title} />
                                     <div className="flex-1 min-w-0 text-center">
                                         <p className="text-sm font-medium truncate text-white">
-
                                             {new Date(start_dates[0]).toLocaleString('es-ES', { month: 'long', day: 'numeric' })}
                                         </p>
                                         <p className="text-xs text-gray-500 truncate ">
@@ -71,7 +95,7 @@ const WorkshopsList: React.FC<WorkshopsListProps> = (props) => {
                                     </div>
                                     <div className="flex-1 min-w-0 text-center">
                                         <p className="text-sm font-medium truncate text-white">
-                                            {skill}
+                                            {mapWorkshopSkill(skill)}
                                         </p>
                                         <p className="text-xs text-gray-500 truncate ">
                                             {avalible_spots} cupos
@@ -82,7 +106,7 @@ const WorkshopsList: React.FC<WorkshopsListProps> = (props) => {
                                     </div>
                                     <div className="flex-1 min-w-0 text-center">
                                         <p className="text-sm font-medium truncate text-white">
-                                            {modality}
+                                            {mapWorkshopModality(modality)}
                                         </p>
                                         <p className="text-xs text-gray-500 truncate ">
                                             {platform}

@@ -2,11 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { setTokens } from "@/lib/auth/auth";
 import { createFormDescription } from "@/lib/form/form";
-import { getSpeakerName } from "@/lib/database/speaker";
-import { Modality, Pensum, Skill, Workshop, WorkshopTempData, WorkshopYear } from "@prisma/client";
-import shortUUID from "short-uuid";
+import { Modality, Skill, Workshop, WorkshopTempData, WorkshopYear } from "@prisma/client";
 import { createEvent } from "@/lib/calendar/calendar";
-import { Platform } from "@/types/General";
 import { getFormatedDate } from "@/lib/calendar/utils";
 import { createWorkshop } from "@/lib/database/Workshops";
 import { Workshop as FormTypeWorkshop } from '@/types/Workshop';
@@ -98,7 +95,7 @@ const normalizeWorkshopData = (workshop: FormTypeWorkshop, id: string, calendarE
         id,
         title: title,
         avalible_spots: parseInt(spots),
-        platform: platform.trim().toUpperCase().replace(' ', '_') as Platform,
+        platform,
         description,
         year: workshopYear as WorkshopYear[],
         modality: modality.toUpperCase() as Modality,
@@ -107,6 +104,7 @@ const normalizeWorkshopData = (workshop: FormTypeWorkshop, id: string, calendarE
         end_dates: [new Date(endDate)],
         activity_status: "SCHEDULED",
         calendar_id: calendarEventId,
+        rating: 0
     }
     return normalizeWorkshopObject;
 }
