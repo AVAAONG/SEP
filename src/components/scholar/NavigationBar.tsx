@@ -4,6 +4,7 @@ import ThemeToggleButton from './NavigationBar/ThemeToggleButton'
 import SolicitudeDropdown from './SolicitudeDropdown'
 import { useAtom } from 'jotai'
 import { scholarSidebarAtom } from '@/state/mainState'
+import HighlightsForm from '../forms/highlightsForm'
 interface NavigationBarProps {
     image: string | null | undefined;
     name: string | null | undefined;
@@ -59,6 +60,7 @@ const NavigationBar = ({ image, name, email }: NavigationBarProps) => {
                         <span className="relative px-4 py-2 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                             Registra tus higlights
                         </span>
+                        <HighlightsForm />
                     </button>
                     <ThemeToggleButton />
                     <ProfileDropdown name={name} email={email} scholarId='adfadskfma;lds' image={image} />
