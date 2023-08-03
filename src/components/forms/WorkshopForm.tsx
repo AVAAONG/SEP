@@ -38,7 +38,7 @@ const WorkshopForm = () => {
     const scheduleWorkshop = async (formWorkshopData: FormTypeWorkshop, event: BaseSyntheticEvent<object, any, any> | undefined) => {
         if (event === undefined) return;
         event.preventDefault();
-        formWorkshopData.platform = formWorkshopData.modality === "VIRTUAL" ? normalizeStringInputs(formWorkshopData.platform) as Platform : formWorkshopData.platform
+        formWorkshopData.platform = formWorkshopData.modality.toLowerCase() === "virtual" ? normalizeStringInputs(formWorkshopData.platform) as Platform : formWorkshopData.platform
         await fetch('/admin/api/workshops/schedule', {
             method: "POST",
             headers: {
@@ -59,9 +59,9 @@ const WorkshopForm = () => {
             <div >
                 <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">Competencia asociada</label>
                 <select  {...register("pensum")} id="Competencia asociada" required={true} className='capitalize'>
-                    {PROGRAM_COMPONENTS.map((option) => {
+                    {PROGRAM_COMPONENTS.map((option, index) => {
                         return (
-                            <option value={normalizeStringInputs(option)} key={option} >{option}</option>
+                            <option value={option.value} key={index} >{option.option}</option>
                         )
                     })}
                 </select>
@@ -105,9 +105,9 @@ const WorkshopForm = () => {
             <div >
                 <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">modalidad</label>
                 <select  {...register("modality")} id="Modalidad" required={true} className='capitalize'>
-                    {MODALITY.map((option) => {
+                    {MODALITY.map((option, index) => {
                         return (
-                            <option value={normalizeStringInputs(option)} key={option} >{option}</option>
+                            <option value={option?.value} key={index} >{option?.option}</option>
                         )
                     })}
                 </select>
