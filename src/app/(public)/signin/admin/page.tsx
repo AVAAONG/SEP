@@ -2,15 +2,22 @@
 import { signIn } from "next-auth/react";
 import Aside from "@/components/auth componets/Aside";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
+import handler from "@/lib/auth/serverAction";
 
 const AdminSignInPage = () => {
   const searchParams = useSearchParams();
+
   /**
    * Specify to which URL the user will be redirected after signing in. Defaults to the page URL the sign-in is initiated from.
    * @summary The URL to redirect to after a successful sign in or sign up.
    */
   const adminCallbackUrl = searchParams.get("callbackUrl") || "/admin/dashboard";
+
+  const handleSignIn = async () => {
+    await handler("admin")
+    return await signIn("google", { callbackUrl: adminCallbackUrl });
+  }
+
   return (
     <main className="flex flex-col md:flex-row-reverse min-h-screen md:h-screen bg-gradient-to-b from-emerald-950 to-slate-950">
       <Aside />
@@ -28,7 +35,7 @@ const AdminSignInPage = () => {
           </div>
           <div className="flex">
             <a
-              onClick={() => signIn("google", { callbackUrl: adminCallbackUrl })}
+              onClick={async () => await handleSignIn()}
               role="button"
               className="bg-green-600 hover:bg-emerald-950 border-2 border-emerald-950 hover:border-green-600 text-white font-semibold py-2 px-4 rounded-md w-full flex justify-center gap-4"
             >

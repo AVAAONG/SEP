@@ -1,16 +1,24 @@
 "use client";
+import handler from "@/lib/auth/serverAction";
 import { signIn } from "next-auth/react";
 import React from "react";
 
 interface GoogleSignInButtonProps {
   providerId: string;
   callbackUrl: string;
+  cookieValue: string;
 }
 
-const GoogleSignInButton = ({ providerId, callbackUrl }: GoogleSignInButtonProps) => {
+
+const GoogleSignInButton = ({ providerId, callbackUrl, cookieValue }: GoogleSignInButtonProps) => {
+  const handleSignIn = async () => {
+    await handler(cookieValue)
+    return signIn(providerId, { callbackUrl });
+  }
+
   return (
     <a
-      onClick={() => signIn(providerId, { callbackUrl })}
+      onClick={() => handleSignIn()}
       role="button"
       className="bg-green-600 hover:bg-green-500 border-2 border-emerald-950 hover:border-green-600 text-white font-semibold py-2 px-4 rounded-md w-full flex justify-center gap-4"
     >
@@ -33,7 +41,7 @@ const GoogleSignInButton = ({ providerId, callbackUrl }: GoogleSignInButtonProps
           <path d="M436 188l-82 63v-98l30-23c27-21 52 0 52 26" fill="#fbbc04"></path>
         </g>
       </svg>
-      Entra con Google
+      Entrar con Google
     </a>
   );
 };

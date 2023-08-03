@@ -1,11 +1,13 @@
 'use client'
 import { useState } from "react";
 import Image from "next/image";
+import defailProfilePic from "@/../public/defaultProfilePic.png";
+import { signOut } from "next-auth/react";
 interface ProfileDropdownProps {
-    name: string;
-    email: string;
+    name: string | null | undefined;
+    email: string | null | undefined;
     scholarId: string;
-    image: string;
+    image: string | null | undefined;
 }
 
 const ProfileDropdown = (props: ProfileDropdownProps) => {
@@ -13,7 +15,7 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
     const [isDrowpdownProfileOpen, setDropdownProfile] = useState(false);
     const toggleDropdownProfile = () => setDropdownProfile(!isDrowpdownProfileOpen);
 
-    const { name, email, scholarId, image} = props;
+    const { name, email, scholarId, image } = props;
 
     return (
         <>
@@ -25,7 +27,7 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
                 <span className="sr-only">Abrir menu de usuario</span>
                 <Image
                     className="w-8 h-8 rounded-full border border-green-800"
-                    src={image}
+                    src={image ? image : defailProfilePic}
                     alt="user photo"
                     width={32}
                     height={32}
@@ -61,14 +63,14 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
                     </li>
                 </ul>
                 <ul
-                    className="py-1 text-gray-700 dark:text-gray-300 bg-red-700 hover:bg-red-500 dark:hover:bg-red-600 rounded-b-xl"
+                    className="py-1 text-gray-300 bg-red-700 hover:bg-red-600  rounded-b-xl"
                     aria-labelledby="dropdown"
                 >
                     <li >
-                        <a
-                            href="#"
-                            className="block py-2 px-4 text-sm  dark:hover:text-white"
-                        >Sign out</a>
+                        <button
+                            onClick={() => signOut({ callbackUrl: "/becario/signin" })}
+                            className="block py-2 px-4 text-sm "
+                        >Sign out</button>
                     </li>
                 </ul>
             </div>

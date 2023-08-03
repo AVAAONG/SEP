@@ -63,7 +63,6 @@ const adminAuthOptions: NextAuthOptions = {
       };
     },
     jwt: ({ token, user, account, profile }) => {
-  
       if (user) {
         const u = user as unknown as any;
         const accessToken = account?.access_token;

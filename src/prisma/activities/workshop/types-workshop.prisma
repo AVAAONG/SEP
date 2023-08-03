@@ -1,11 +1,18 @@
 // Base types prisma file for Workshop model.
 /// @author Kevin Bravo (kevinbravo.me)
 
-enum Pensum {
-    EJERCICIO_CIUDADANO
-    LIDERAZGO
-    GERENCIA_DE_SI_MISMO
-    TIC
-    EMPRENDIMIENTO
-    TRABAJO_EN_EQUIPO
+enum Skill {
+    CITIZEN_EXERCISE
+    LEADERSHIP
+    SELF_MANAGEMENT
+    ICT
+    ENTREPRENEURSHIP
+}
+
+enum WorkshopYear {
+    I
+    II
+    III
+    IV
+    V
 }

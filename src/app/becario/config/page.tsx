@@ -2,29 +2,25 @@ import AddressInformation from '@/components/forms/userSetings/AddressInformatio
 import CVAInformation from '@/components/forms/userSetings/CVAInformation'
 import GeneralInformation from '@/components/forms/userSetings/GeneralInformation'
 import ProfilePic from '@/components/forms/userSetings/ProfilePic'
-import SocialMedia from '@/components/forms/userSetings/SocialMedia'
 import UniversityInformation from '@/components/forms/userSetings/UniversityInformation'
 import WorkInformation from '@/components/forms/userSetings/WorkInformation'
 import React from 'react'
 import VolunteeringInformation from '@/components/forms/userSetings/VolunteeringInformation'
 import { PrismaClient } from "@prisma/client";
 import moment from 'moment'
+import { getServerSession } from 'next-auth'
+import authOptions from '@/lib/auth/nextAuthOptions/authOptions'
 
 const formatDate = (date: string) => {
     return moment(date).format('YYYY-MM-DD')
 }
 
-const page = async ({
-    params,
-    searchParams,
-}: {
-    params: { scholarId: string };
-    searchParams?: { [key: string]: string | string[] | undefined };
-}) => {
+const page = async () => {
+    const session = await getServerSession(authOptions);
 
     const prisma = new PrismaClient();
 
-    const scholarId = params.scholarId;
+    const scholarId = "cljwyi8hl0008uwmkjo6dktty"
 
     const scholar = await prisma.user.findUnique({
         where: {

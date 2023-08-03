@@ -7,66 +7,70 @@ import { Level } from "types-chat"
 import { ScholarAttendance } from "..\type-activities"
 import { Scholar } from "..\..\users\scholar\scholar"
 import { Chat } from "..\..\schema"
+import { Gender } from "..\type-activities"
 
 model Chat {
-    id             String           @id @default(nanoid(22))
-    title          String
-    dates          Json
-    speaker        ChatSpeaker[]
-    spots          Int
-    platform       String
-    calendarID     String?
-    modality       Modality
-    activityStatus ActivityStatus
-    level          Level
-    tempData       ChatsTempData?
-    attendance     ChatAttendance[]
+    id                 String           @id @default(nanoid())
+    title              String
+    avalible_spots     Int
+    platform           String
+    description        String
+    calendar_id        String?
+    start_dates        DateTime[]
+    end_dates          DateTime[]
+    rating             Float?
+    modality           Modality
+    level              Level
+    speaker            ChatSpeaker[]
+    activity_status    ActivityStatus
+    temp_data          ChatsTempData?
+    scholar_attendance ChatAttendance[]
 
-    @@index([title, modality, activityStatus, level])
+    @@index([title, modality, activity_status, level])
 }
 
 model ChatAttendance {
-    id            String            @id @default(nanoid(22))
-    scholar       Scholar           @relation(fields: [scholarId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    scholarId     String
-    chat          Chat              @relation(fields: [chatId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    chatId        String
+    id            String            @id @default(nanoid())
+    scholar       Scholar           @relation(fields: [scholar_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    scholar_id    String
+    chat          Chat              @relation(fields: [chat_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    chat_id       String
     attendance    ScholarAttendance
     justification String?
 
-    @@index([scholarId])
-    @@index([chatId])
+    @@index([scholar_id])
+    @@index([chat_id])
 }
 
 model ChatsTempData {
-    id              String  @id @default(nanoid(22))
-    chat            Chat    @relation(fields: [chatId], references: [id])
-    chatId          String  @unique
-    formLink        String?
-    meetingLink     String?
-    meetingId       String?
-    meetingPassword String?
-    whatsappLink    String?
+    id               String  @id @default(nanoid())
+    chat             Chat    @relation(fields: [chat_id], references: [id])
+    chat_id          String  @unique
+    form_link        String?
+    meeting_link     String?
+    meeting_id       String?
+    meeting_password String?
+    whatsapp_link    String?
 }
 
 model ChatSpeaker {
-    id            String    @id @default(nanoid(22))
-    name          String
-    email         String?   @unique
-    birthDate     DateTime?
-    yearsOfExp    Int?
-    yearsInAvaa   Int?
-    jobTitle      String?
-    jobCompany    String?
-    actualCity    String?
-    actualCountry String?
-    image         String?
-    description   String?
-    instagramUser String?
-    twitterUser   String?
-    linkedinUser  String?
-    facebookUser  String?
-    phoneNumber   String?
-    raiting       Int?
-    Chat          Chat[]
+    id             String    @id @default(nanoid())
+    first_names    String
+    last_names     String
+    gender         Gender?
+    email          String?   @unique
+    birthdate      DateTime?
+    image          String?
+    description    String?
+    instagram_user String?
+    twitter_user   String?
+    linkedin_user  String?
+    facebook_user  String?
+    phone_number   String?
+    chat           Chat[]
+    is_scholar     Boolean   @default(false)
+    scholar        Scholar?  @relation(fields: [scholar_id], references: [id])
+    scholar_id     String?
+
+    @@index([scholar_id])
 }

@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { Roboto } from 'next/font/google'
+import Link from 'next/link'
 
 
 const roboto = Roboto({ subsets: ["latin"], weight: ["400", "700"] })
@@ -39,13 +40,13 @@ export default function Home() {
       </div>
 
       <div className="mb-32 grid text-center lg:grid-cols-2 lg:text-left gap-6">
-        <a
-          href="/auth/signin"
+        <Link
+          href="/signin/becario"
           className="relative bg-black group rounded-lg  px-5 py-4  border-emerald-900 border-2"
           rel="noopener noreferrer"
         >
           <h2 className={`${roboto.className} mb-3 text-2xl font-semibold`}>
-            Registrate{' '}
+            Becarios{' '}
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
               <svg fill="none" stroke="currentColor" strokeWidth="1.5" width="50" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"></path>
@@ -55,17 +56,17 @@ export default function Home() {
           <p
             className={`${roboto.className} m-0 max-w-[30ch] text-xs lg:text-sm opacity-50`}
           >
-            Empieza tu camino en el Programa Excelencia
+            Ingresa para ver tu progreso en el programa.
           </p>
-        </a>
+        </Link>
 
-        <a
-          href="/auth/signin"
+        <Link
+          href="/signin/admin"
           className="relative bg-black group rounded-lg px-5 py-4 border-emerald-900 border-2"
           rel="noopener noreferrer"
         >
           <h2 className={`${roboto.className} mb-3 text-2xl font-semibold`}>
-            Inicia Sesion{' '}
+            Administradores{' '}
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
               <svg fill="none" stroke="currentColor" strokeWidth="1.5" width="50" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"></path>
@@ -73,9 +74,9 @@ export default function Home() {
             </span>
           </h2>
           <p className={`${roboto.className} m-0 max-w-[30ch] text-xs lg:text-sm opacity-50`}>
-            Inicia sesion para ver tu progreso
+            Administra el SEP
           </p>
-        </a>
+        </Link>
       </div>
     </main>
   )

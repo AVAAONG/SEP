@@ -2,22 +2,25 @@
 /// @author Kevin Bravo (kevinbravo.me)
 
 enum Modality {
-    PRESENCIAL
+    IN_PERSON
     VIRTUAL
-    HIBRIDO
-    ASINCRONO
+    HYBRID
 }
 
 enum ActivityStatus {
-    AGENDADO
-    EN_PROCESO
-    REALIZADO
-    SUSPENDIDO
+    SCHEDULED
+    IN_PROGRESS
+    DONE
+    SUSPENDED
 }
 
 enum ScholarAttendance {
     ATTENDED
-    CANCELED
     NOT_ATTENDED
     JUSTIFY
+}
+
+enum Gender {
+    M
+    F
 }

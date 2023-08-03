@@ -5,19 +5,21 @@ import logo from '@/../public/proexcelencia-color.png'
 import Link from 'next/link'
 import Image from 'next/image'
 
+const SCHOLAR_PREFIX = "becario"
+
 export const SCHOLAR_SIDEBAR_ITEMS = [
     {
         Icon: dashboardComponent(),
         buttonName: "Panel general",
         itemList: [],
-        link: ""
+        link: `/${SCHOLAR_PREFIX}/dashboard`
     },
     {
         Icon: workshopIcon(),
         buttonName: "Actividades formativas",
         itemList: [
-            { name: "Reporte de actividades", link: "/" },
-            { name: "Lista de talleres", link: "/talleres" },
+            { name: "Reporte de actividades", link: `/${SCHOLAR_PREFIX}/talleres/reporte` },
+            { name: "Lista de talleres", link: `/${SCHOLAR_PREFIX}/talleres` },
         ],
         link: ""
     },
@@ -25,8 +27,8 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
         Icon: chatIcon(),
         buttonName: "Chats",
         itemList: [
-            { name: "Lista de chats", link: "" },
-            { name: "Reporte de chats Clubs", link: "" },
+            { name: "Lista de chats", link: `/${SCHOLAR_PREFIX}/chats` },
+            { name: "Reporte de chats Clubs", link: `/${SCHOLAR_PREFIX}/chats/reporte` },
         ],
         link: ""
     },
@@ -34,9 +36,9 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
         Icon: volunterIcon(),
         buttonName: "Voluntariado",
         itemList: [
-            { name: "Lista de voluntariado", link: "" },
-            { name: "Reporte de horas de voluntariado", link: "" },
-            { name: "Subir voluntariado externo", link: "" },
+            { name: "Lista de voluntariado", link: `/${SCHOLAR_PREFIX}/voluntariado` },
+            { name: "Reporte de horas de voluntariado", link: `/${SCHOLAR_PREFIX}/voluntariado/reporte` },
+            { name: "Subir voluntariado externo", link: `/${SCHOLAR_PREFIX}/voluntariado/externo` },
         ],
         link: ""
     },
@@ -44,7 +46,7 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
         Icon: CalendarIcon(),
         buttonName: "Calendario de Actividades",
         itemList: [],
-        link: "/becario/cljwyi8hl0008uwmkjo6dktty/calendar"
+        link: `/${SCHOLAR_PREFIX}/calendario`
     }
 
 ]

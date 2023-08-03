@@ -22,7 +22,45 @@ const Page = () => {
     const { register, handleSubmit, formState: { errors }, reset, } = useForm<WorkshopForm>();
     const [subjectAndGroup, setSubjectAndGroup] = useState({ subject: "", group: "" })
 
-    const workshopResponse = useSWR('/api/workshop/schedule', fetcher, { fallbackData: [], refreshInterval: 1000 })
+    // const workshopResponse = useSWR('/api/workshop/schedule', fetcher, { fallbackData: [], refreshInterval: 1000 })
+    const workshopResponse = {
+        data: [
+            {
+                "id": "1",
+                "title": "Taller de liderazgo",
+                "pensum": "Liderazgo",
+                "dates": {
+                    "start": "2021-10-01",
+                    "end": "2021-10-01"
+                },
+                "speaker": "Andrés Della",
+                "spots": 20,
+                "modality": "presencial",
+                "platform": "zoom",
+                "workshopYear": "I",
+                "description": "Taller de liderazgo",
+                "subject": "liderazgo",
+                "group": "1"
+            },
+            {
+                "id": "221",
+                "title": "Taller de liderazgo",
+                "pensum": "Liderazgo",
+                "dates": {
+                    "start": "2021-10-01",
+                    "end": "2021-10-01"
+                },
+                "speaker": "Andrés Della",
+                "spots": 20,
+                "modality": "presencial",
+                "platform": "zoom",
+                "workshopYear": "I",
+                "description": "Taller de liderazgo",
+                "subject": "liderazgo",
+                "group": "1"
+            },
+        ]
+    }
 
     const deleteEntry = async (inputId: shortUUID.SUUID, calendarId: string) => {
         console.log(inputId, calendarId)
@@ -105,26 +143,24 @@ const Page = () => {
     }
 
     return (
-        <div className="flex flex-col-reverse md:flex-row gap-8">
-            <div className='w-screen md:w-1/2 p-4 flex flex-col items-center'>
-                {
-                    workshopResponse.isLoading || workshopResponse.data.length > 1 ? <></> :
-                        <>
-                            <text className='font-semibold text-3xl text-green-500 mb-6'>
-                                Talleres Agendados
-                            </text>
-                            <WorkshopsList workshopData={workshopResponse.data} deleteEntry={deleteEntry} editEntry={editEntry} />
-                            <button onClick={showModal} className='bg-green-600 text-white rounded-lg col-span-2 max-w-fit px-5 py-2 self-center mt-4' >
-                                Enviar Talleres
-                            </button>
-                        </>
-                }
-            </div>
-            <div className=' w-full md:w-1/2 p-4 flex flex-col items-center gap-4'>
-                <text className='font-semibold text-3xl text-green-500 mx-auto'>
-                    Crear taller
+        <div className="flex flex-col md:flex-row gap-8">
+
+            <div className=' w-full md:w-1/2 p-4 pt-0  flex flex-col items-center gap-4'>
+                <text className='font-bold text-2xl text-green-500 mx-auto uppercase tracking-widest'>
+                    crear taller
                 </text>
                 <WorkshopForm />
+            </div>
+            <div className='w-full md:w-1/2 p-4 pt-0 flex flex-col items-center'>
+                {
+                    workshopResponse.isLoading || workshopResponse.data.length === 0 ? <></> :
+                        <>
+                            <text className='font-bold text-3xl text-green-500 mb-6 uppercase tracking-widest'>
+                                talleres agendados
+                            </text>
+                            <WorkshopsList workshopData={workshopResponse.data} deleteEntry={deleteEntry} editEntry={editEntry} />
+                        </>
+                }
             </div>
             <div id="info-popup" tabIndex={-1} className={`${modalopen ? 'flex' : "hidden"}  items-center justify-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full`}>
                 <div className="relative p-4 w-full max-w-lg h-full md:h-auto">

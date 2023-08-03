@@ -3,11 +3,9 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { PrismaClient, Region, Role, Scholar, ScholarAttendance, ScholarStatus, User, WorkshopAttendance } from "@prisma/client";
+import { Region, Role, Scholar, ScholarAttendance, ScholarStatus, User, WorkshopAttendance } from "@prisma/client";
 import shortUUID from "short-uuid";
-
-const prisma = new PrismaClient();
-
+import { prisma } from "./prisma";
 /**
  * @description Create a new user in the database
  * @param data User data

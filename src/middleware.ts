@@ -21,5 +21,5 @@ export { default } from "next-auth/middleware";
  * @see https://nextjs.org/docs/pages/building-your-application/routing/middleware for more information
  */
 export const config = {
-    matcher: ['/admin/:path*']
+    matcher: ['/admin/:path*', '/becario/:path*']
 }

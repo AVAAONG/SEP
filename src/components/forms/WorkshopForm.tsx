@@ -3,11 +3,17 @@ import { Workshop as FormTypeWorkshop } from '@/types/Workshop';
 import { useForm } from 'react-hook-form';
 import { WorkshopSpeaker } from '@prisma/client';
 import useSWR, { Fetcher } from 'swr';
+import { Platform } from '@/types/General';
 
 const PROGRAM_COMPONENTS = ['liderazgo', 'ejercicio ciudadano', 'gerencia de sí mismo', 'tic', 'emprendimiento'];
 const MODALITY = ['presencial', 'virtual', 'asincrono', 'hibrido'];
 const PLATFORMS = ['zoom', 'google meet', 'otra', 'padlet'];
 const WORKSHOP_YEAR = ['I', 'II', 'III', 'IV', 'V', 'TODOS'];
+
+const normalizeStringInputs = (data: string) =>{
+    const normalizedData = data.trim().toUpperCase().replaceAll(' ', '_')
+    return normalizedData;
+}
 
 const WorkshopForm = () => {
 
@@ -15,110 +21,112 @@ const WorkshopForm = () => {
     ///@ts-ignore
     const fetcher: Fetcher<WorkshopSpeaker[] | {}[], string> = (...args) => fetch([...args]).then(res => res.json())
 
-    const { data, isLoading } = useSWR('/api/workshop/speakers', fetcher, { fallbackData: [{}, {}], })
+    const { data, isLoading } = useSWR('/admin/api/speakers/workshops', fetcher, { fallbackData: [{}, {}], })
 
     const scheduleWorkshop = async (formWorkshopData: FormTypeWorkshop, event: BaseSyntheticEvent<object, any, any> | undefined) => {
         if (event === undefined) return;
         event.preventDefault();
-        await fetch('/admin/api/workshops', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(formWorkshopData)
-        })
-        reset({
-            title: "",
-            pensum: "",
-            date: "",
-            startHour: "",
-            endHour: "",
-            speaker: "",
-            spots: "",
-            modality: "",
-            platform: "",
-            workshopYear: "",
-            description: ""
-        });
+        // await fetch('/admin/api/workshops', {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //     },
+        //     body: JSON.stringify(formWorkshopData)
+        // })
+        formWorkshopData.platform = normalizeStringInputs(formWorkshopData.platform) as Platform;
+        console.log(formWorkshopData);
+        // reset({
+        //     title: "",
+        //     pensum: "",
+        //     date: "",
+        //     startHour: "",
+        //     endHour: "",
+        //     speaker: "",
+        //     spots: "",
+        //     modality: "",
+        //     platform: "",
+        //     workshopYear: "",
+        //     description: ""
+        // });
     }
 
     return (
-        <form onSubmit={handleSubmit(async (data, event) => await scheduleWorkshop(data, event!))} className="grid gap-6 md:grid-cols-2 md:grid-rows-2 caret-green-500 text-slate-300 w-full uppercase">
-
+        <form onSubmit={handleSubmit(async (data, event) => await scheduleWorkshop(data, event!))} className="grid gap-6 md:grid-cols-2 md:grid-rows-2 caret-green-500 text-slate-300 w-full">
             <div className='col-span-2 h-fit'>
-                <label className="block mb-2 text-xs m-l-1 font-semibold text-slate-400 ">titulo del taller</label>
+                <label className="block mb-2 text-xs m-l-1 font-semibold text-slate-400 uppercase">titulo del taller</label>
                 <input {...register("title")} type={"text"} id={"Titulo del taller"} required={true} />
             </div>
 
             <div >
-                <label className="block mb-2 text-xs font-semibold  text-slate-400 ">Competencia asociada</label>
-                <select  {...register("pensum")} id="Competencia asociada" className="focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md w-full bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600 uppercase" required={true}>
+                <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">Competencia asociada</label>
+                <select  {...register("pensum")} id="Competencia asociada"  required={true} className='capitalize'>
                     {PROGRAM_COMPONENTS.map((option) => {
                         return (
-                            <option className='uppercase' key={option} >{option}</option>
+                            <option value={normalizeStringInputs(option)}  key={option} >{option}</option>
                         )
                     })}
                 </select>
             </div>
 
             <div >
-                <label className="block mb-2 text-xs m-l-1 font-semibold  text-slate-400 ">fecha</label>
+                <label className="block mb-2 text-xs m-l-1 font-semibold  text-slate-400 uppercase">fecha</label>
                 <input  {...register("date")} type={'date'} id={"Fecha"} required={true} />
             </div>
 
             <div >
-                <label className="block mb-2 text-xs m-l-1 font-semibold  text-slate-400 ">hora de inicio</label>
+                <label className="block mb-2 text-xs m-l-1 font-semibold  text-slate-400 uppercase">hora de inicio</label>
                 <input  {...register("startHour")} type={'time'} id={"Hora de inicio"} required={true} />
             </div>
 
             <div >
-                <label className="block mb-2 text-xs m-l-1 font-semibold  text-slate-400 ">hora de cierre</label>
+                <label className="block mb-2 text-xs m-l-1 font-semibold  text-slate-400 uppercase">hora de cierre</label>
                 <input  {...register("endHour")} type={'time'} id={"Hora de cierre"} required={true} />
             </div>
 
             <div >
-                <label className="block mb-2 text-xs font-semibold  text-slate-400 ">facilitador</label>
-                <select  {...register("speaker")} id="Facilitador" className="focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md w-full bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600 uppercase" required={true}>
+                <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">facilitador</label>
+                <select  {...register("speaker")} id="Facilitador" required={true} >
                     {
                         isLoading || data.length < 1 ?
                             <option>Cargando facilitadores ...</option>
                             :
                             data.map((value) => {
-                                const { id, name } = value as WorkshopSpeaker;
+                                const { id, first_names, last_names, email } = value as WorkshopSpeaker;
+                                const fullName = `${first_names} ${last_names}`;
                                 return (
-                                    <option className='uppercase' key={id} value={id} >{name}</option>
+                                    <option key={id} value={`${id}+/+${first_names}+/+${email}`} >{fullName}</option>
                                 )
                             })}
                 </select>
             </div>
             <div >
-                <label className="block mb-2 text-xs font-semibold  text-slate-400 ">cupos disponibles</label>
+                <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">cupos disponibles</label>
                 <input {...register("spots")} type={"number"} id="first_name" required min={0} max={300} />
             </div>
             <div >
-                <label className="block mb-2 text-xs font-semibold  text-slate-400 ">modalidad</label>
-                <select  {...register("modality")} id="Modalidad" className="focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md w-full bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600 uppercase" required={true}>
+                <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">modalidad</label>
+                <select  {...register("modality")} id="Modalidad"  required={true} className='capitalize'>
                     {MODALITY.map((option) => {
                         return (
-                            <option className='uppercase' key={option} >{option}</option>
+                            <option value={normalizeStringInputs(option)} key={option} >{option}</option>
                         )
                     })}
                 </select>
             </div>
             <div>
-                <label className="block mb-2 text-xs font-semibold text-slate-400 ">platafomra/lugar</label>
+                <label className="block mb-2 text-xs font-semibold text-slate-400 uppercase">platafomra/lugar</label>
                 <input list="allowedSelection"  {...register("platform")} id={"Platafomra/Lugar"} ></input>
                 <datalist id="allowedSelection">
                     {PLATFORMS.map((option) => {
                         return (
-                            <option className='uppercase' key={option}>{option}</option>
+                            <option className='capitalize' key={option}>{option}</option>
 
                         )
                     })}
                 </datalist>
             </div>
             <div className="col-span-2 h-fit flex flex-col" >
-                <p className="block mb-2 text-xs font-semibold  text-slate-400 ">año del taller</p>
+                <p className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">año del taller</p>
                 <div className="flex">
                     {WORKSHOP_YEAR.map((input) => {
                         return (
@@ -131,13 +139,19 @@ const WorkshopForm = () => {
                 </div>
             </div >
             <div className='col-span-2 h-fit' >
-                <label className="block mb-2 text-xs m-l-1 font-semibold max-h-10 text-slate-400 ">descripción</label>
-                <textarea {...register("description")} className="min-h-[4rem] focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md w-full bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600 uppercase" />
+                <label className="block mb-2 text-xs m-l-1 font-semibold max-h-10 text-slate-400 uppercase">descripción</label>
+                <textarea {...register("description")} />
             </div>
-
-            <button type="submit" className='w-1/2 justify-self-center col-span-2 text-white bg-gradient-to-br from-emerald-500 to-lime-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none  focus:ring-green-800 font-semibold rounded-lg text-xs px-5 py-2.5 text-center mr-2 mb-2' >
-                Agendar Taller
-            </button>
+            <div className='col-span-2 h-fit flex flex-col md:flex-row gap-4' >
+                <button type="submit" className='w-1/2 justify-self-center  text-white bg-gradient-to-br from-emerald-500 to-lime-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none  focus:ring-green-800 font-semibold rounded-lg text-xs px-5 py-2.5 text-center mr-2 mb-2' >
+                    Agendar Taller
+                </button>
+                <button className="relative w-1/2 inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-emerald-800 group-hover:from-green-400 group-hover:to-green-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
+                    <span className="relative w-full px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-slate-950 rounded-md group-hover:bg-opacity-0">
+                        Enviar taller
+                    </span>
+                </button>
+            </div>
         </form >
     )
 }
