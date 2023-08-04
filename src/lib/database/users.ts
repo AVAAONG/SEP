@@ -49,18 +49,16 @@ export const createScholar = async (data: Scholar): Promise<Scholar | null> => {
         const scholar = await prisma.scholar.create({
             data
         });
-        console.log('Se creo a' + data.firstNames + ' ' + data.lastNames)
+        console.log('Se creo a' + data.first_names + ' ' + data.last_names)
         return scholar;
 
     }
     catch (error) {
-        console.log(' No se creo a' + data.firstNames + ' ' + data.lastNames)
-
-        console.log(error)
+        console.log(' No se creo a' + data.first_names + ' ' + data.last_names)
         return null;
     }
     finally {
-        // await prisma.$disconnect();
+        await prisma.$disconnect();
     }
 }
 

@@ -67,32 +67,32 @@ export const createChatSpeaker = async (data: ChatSpeaker) => {
  * Converts a scholar to a speaker.
  * @param scholarId - Scholar ID.
  * @returns ChatSpeaker object.
- */
-export const convertScholarToSpeaker = async (scholarId: string) => {
-    const scholar = await prisma.scholar.findUnique({
-        where: { id: scholarId }
-    });
+//  */
+// export const convertScholarToSpeaker = async (scholarId: string) => {
+//     const scholar = await prisma.scholar.findUnique({
+//         where: { id: scholarId }
+//     });
 
-    try {
-        const speaker = await prisma.chatSpeaker.create({
-            data: {
-                id: scholar?.id,
-                name: scholar?.firstNames + ' ' + scholar?.lastNames,
-                birthDate: scholar?.birthDate,
-                email: scholar?.email,
-                image: scholar?.image,
-                phone: scholar?.phoneNumber,
-            }
-        });
-        console.log(`${speaker?.name} created`)
-        return speaker;
-    }
+//     try {
+//         const speaker = await prisma.chatSpeaker.create({
+//             data: {
+//                 id: scholar?.id,
+//                 name: scholar?.firstNames + ' ' + scholar?.lastNames,
+//                 birthDate: scholar?.birthDate,
+//                 email: scholar?.email,
+//                 image: scholar?.image,
+//                 phone: scholar?.phoneNumber,
+//             }
+//         });
+//         console.log(`${speaker?.name} created`)
+//         return speaker;
+//     }
 
-    catch (err) {
-        console.log(err);
-        console.log(`${scholar?.firstNames} not created`)
-    }
-}
+//     catch (err) {
+//         console.log(err);
+//         console.log(`${scholar?.firstNames} not created`)
+//     }
+// }
 
 
 

@@ -98,7 +98,7 @@ export default function Email(options: EmailUserConfig): EmailConfig {
             const result = await transport.sendMail({
                 to: identifier,
                 from: "ProExcelencia <avaatecnologia@gmail.com>",
-                subject: `¡Bienvenido al SEP!`,
+                subject: `🔑 Enlace seguro de inicio de sesión para el SEP`,
                 text: text({ url, host }),
                 html: html({ url, host, theme }),
             })
