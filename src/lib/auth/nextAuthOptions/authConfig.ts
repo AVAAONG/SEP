@@ -20,7 +20,7 @@ export const PAGES: Partial<PagesOptions> = {
     signIn: "/signin/becario",
     error: "/signin/becario",
     newUser: "/becario/config",
-    verifyRequest: '/signin/becario/verify-email'
+    verifyRequest: '/signin/becario/checkEmail'
 
 }
 
