@@ -1,4 +1,4 @@
-import Card from '@/components/dashboard/Card'
+import Card from '@/components/admin/dashboard/Card'
 import React from 'react'
 import { chatIcon, userIcon, volunterIcon, workshopIcon } from '@/assets/svgs'
 import Calendar from '@/components/calendar/Calendar'

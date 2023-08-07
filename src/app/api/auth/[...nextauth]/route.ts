@@ -1,5 +1,5 @@
 import NextAuth from 'next-auth';
-import authOptions from '@/lib/auth/nextAuthOptions/authOptions';
+import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import adminAuthOptions from '@/lib/auth/nextAuthAdminOptions/authAdminOptions';
 import { cookies } from 'next/headers'
 import { NextApiRequest, NextApiResponse } from 'next';

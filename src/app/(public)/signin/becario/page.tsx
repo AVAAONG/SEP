@@ -2,7 +2,7 @@ import Warning from "@/components/alerts/Warning";
 import Aside from "@/components/auth componets/Aside";
 import SigninForm from "@/components/forms/SignInForm";
 import GoogleSignInButton from "@/components/signinButtons/GoogleSignInButton";
-import authOptions from "@/lib/auth/nextAuthOptions/authOptions";
+import authOptions from "@/lib/auth/nextAuthScholarOptions/authOptions";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation"
 

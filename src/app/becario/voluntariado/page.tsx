@@ -1,4 +1,4 @@
-import Stats from '@/components/ScholarStats';
+import Stats from '@/components/scholar/ScholarStats';
 import ChatTable from '@/components/table/Table2';
 import { Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
 import { headers } from 'next/headers';

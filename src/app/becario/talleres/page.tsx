@@ -1,4 +1,4 @@
-import Stats from '@/components/ScholarStats';
+import Stats from '@/components/scholar/ScholarStats';
 import ChatTable from '@/components/table/Table2';
 import { getWorkshopsByScholar2 } from '@/lib/database/Workshops';
 import React from 'react'

@@ -5,7 +5,7 @@ import { FieldValues, UseFormRegister, useForm } from 'react-hook-form';
 import VOLUNTEER_INPUT_ELEMENTS from '@/components/forms/data/volunteerInputs';
 import shortUUID from 'short-uuid';
 import { Volunteer } from '@/types/Volunteer';
-import VolunteerList from '@/components/lists/VolunteerList';
+import VolunteerList from '@/components/admin/lists/VolunteerList';
 
 const page = () => {
 

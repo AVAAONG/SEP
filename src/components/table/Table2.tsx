@@ -3,7 +3,7 @@ import React, { useMemo, useState } from 'react'
 import { ScholarAttendance, Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client'
 import { useTable, useSortBy, useGlobalFilter, useAsyncDebounce, usePagination } from 'react-table'
 import { FilterIcon, SortIcon, SortIconReverse } from '@/assets/svgs';
-import workshopScholarFormat from '../tableData/scholars/workshopTableData';
+import workshopScholarFormat from '../scholar/scholars/workshopTableData';
 
 interface WorkshopTableProps {
     workshopData: (Workshop & {

@@ -1,9 +1,9 @@
 import { createTransport } from "nodemailer"
 
-import type { CommonProviderOptions } from "../../../../node_modules/.pnpm/next-auth@4.22.1_next@13.4.5_nodemailer@6.9.3_react-dom@18.2.0_react@18.2.0/node_modules/next-auth/src/providers/index"
+import type { CommonProviderOptions } from "next-auth/src/providers"
 import type { Options as SMTPTransportOptions } from "nodemailer/lib/smtp-transport"
-import type { Awaitable } from "../../../../node_modules/.pnpm/next-auth@4.22.1_next@13.4.5_nodemailer@6.9.3_react-dom@18.2.0_react@18.2.0/node_modules/next-auth/src/"
-import type { Theme } from "../../../../node_modules/.pnpm/next-auth@4.22.1_next@13.4.5_nodemailer@6.9.3_react-dom@18.2.0_react@18.2.0/node_modules/next-auth/src/core/types"
+import type { Awaitable } from "next-auth/src"
+import type { Theme } from "next-auth/src/core/types"
 
 export interface SendVerificationRequestParams {
     identifier: string

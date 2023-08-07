@@ -2,7 +2,7 @@
 import { Workshop } from '@/types/Workshop';
 import React, { BaseSyntheticEvent, useState } from 'react'
 import { useForm } from 'react-hook-form';
-import WorkshopsList from '@/components/lists/WorkshopList';
+import WorkshopsList from '@/components/admin/lists/WorkshopList';
 import shortUUID from 'short-uuid';
 import { CheckIcon } from '@/assets/svgs';
 import useSWR from 'swr'

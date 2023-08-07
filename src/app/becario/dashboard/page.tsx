@@ -1,5 +1,5 @@
 import { chatIcon, volunterIcon, workshopIcon } from '@/assets/svgs'
-import Card from '@/components/dashboard/Card'
+import Card from '@/components/admin/dashboard/Card'
 import ActivityList from '@/components/scholar/dashboard/ActivityList'
 import { SUUID } from 'short-uuid'
 import Calendar from '@/components/calendar/Calendar'

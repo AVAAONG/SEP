@@ -1,5 +1,5 @@
 import "@/app/globals.css";
-import PublicFooter from "@/components/footer/Public";
+import PublicFooter from "@/components/public/footer/Public";
 import favicon from "@/../public/logo-proexcelencia-cap.png";
 export const metadata = {
   title: "Proexcelencia",

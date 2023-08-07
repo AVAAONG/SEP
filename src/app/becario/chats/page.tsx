@@ -2,7 +2,7 @@
  * @file This is the chats page, here the scholar can see all the chats that he has registered and asisted
  * 
  */
-import Stats from '@/components/ScholarStats';
+import Stats from '@/components/scholar/ScholarStats';
 import ChatTable from '@/components/table/Table2';
 import { Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
 import { headers } from 'next/headers';

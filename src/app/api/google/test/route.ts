@@ -1,5 +1,5 @@
 import { setTokens } from "@/lib/auth/auth";
-import authOptions from "@/lib/auth/nextAuthOptions/authOptions";
+import authOptions from "@/lib/auth/nextAuthScholarOptions/authOptions";
 import { getAllFilesInFolder } from "@/lib/drive/drive";
 import { getSheetsName, getSpreadsheetValues } from "@/lib/sheets/sheets";
 import { NextApiRequest, NextApiResponse } from "next";

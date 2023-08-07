@@ -1,7 +1,7 @@
 import MainLayout from "@/components/scholar/MainLayout"
 import NavigationBar from "@/components/scholar/NavigationBar"
 import Sidebar from "@/components/scholar/Sidebar"
-import authOptions from "@/lib/auth/nextAuthOptions/authOptions"
+import authOptions from "@/lib/auth/nextAuthScholarOptions/authOptions"
 import { getServerSession } from "next-auth"
 
 export default async function RootLayout({

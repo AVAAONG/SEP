@@ -6,7 +6,7 @@
 */
 
 import { NotFoundImage } from "@/assets/svgs";
-import BackButton from "@/components/BackButton";
+import BackButton from "@/components/public/BackButton";
 
 
 /**

@@ -25,7 +25,7 @@ const AddressInformation = ({ scholarAddressInfo, title, id }: AddressInformatio
         }
     }, [updatinState])
 
-    const { register, handleSubmit, setValue } = useForm({
+    const { register, handleSubmit } = useForm({
         defaultValues: {
             ...scholarAddressInfo
         }

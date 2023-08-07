@@ -1,6 +1,6 @@
 'use client'
 import { scholarSidebarAtom } from "@/state/mainState";
-import ScholarFooter from "../footer/ScholarFooter";
+import ScholarFooter from "./ScholarFooter";
 import { useAtom } from "jotai";
 
 const MainLayout = ({ children }: {
