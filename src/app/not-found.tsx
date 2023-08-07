@@ -1,7 +1,20 @@
+/**
+ * @file This file renders a custom 404 error page.
+ * @remarks This custom 404 error page is rendered when a user navigates to a route that does not exist in the application.
+ * @author Kevin Bravo (kevinbravo.me)
+ * @see {@link https://nextjs.org/docs/app/api-reference/file-conventions/not-found} for more information about the Next.js custom 404 error page.
+*/
+
 import { NotFoundImage } from "@/assets/svgs";
 import BackButton from "@/components/BackButton";
 
 
+/**
+ * The NotFound component renders a custom 404 error page.
+ * The page includes a white background with a green header that displays the error code "404" in a large font.
+ * Below the header, there is a message that informs the user that the page was not found and suggests that they check the URL and try again.
+ * The page also includes two buttons: a "Back" button that allows the user to go back to the previous page, and a "Contact Support" button that opens the user's email client with a pre-filled email address.
+ */
 const NotFound = () => {
   return (
     <>

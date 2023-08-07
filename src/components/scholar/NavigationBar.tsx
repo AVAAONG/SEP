@@ -60,7 +60,7 @@ const NavigationBar = ({ image, name, email }: NavigationBarProps) => {
                         <span className="relative px-4 py-2 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                             Registra tus higlights
                         </span>
-                        <HighlightsForm />
+                        {/* <HighlightsForm /> */}
                     </button>
                     <ThemeToggleButton />
                     <ProfileDropdown name={name} email={email} scholarId='adfadskfma;lds' image={image} />

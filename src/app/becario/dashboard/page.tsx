@@ -55,7 +55,7 @@ const page = async ({ params }: { params: { scholarId: SUUID } }) => {
   return (
     <div>
       <div className="flex flex-col px-2 pt-6 gap-4">
-        <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Hola, Kevin! 💚</h1>
+        <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">¡Hola, Kevin! 💚</h1>
         <div className="mb-4 flex flex-col sm:flex-row  gap-4 xl:mb-2">
           {CARD_CONTENT.map(({ icon, text, number, bg, cardButtonBg }) => {
             return (

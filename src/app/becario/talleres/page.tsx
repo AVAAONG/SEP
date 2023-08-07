@@ -1,14 +1,16 @@
 import Stats from '@/components/ScholarStats';
 import ChatTable from '@/components/table/Table2';
-import { getWorkshopsByScholar, getWorkshopsByScholar2 } from '@/lib/database/Workshops';
-import {  Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
-import { headers } from 'next/headers';
+import { getWorkshopsByScholar2 } from '@/lib/database/Workshops';
 import React from 'react'
 
+/**
+ * Renders the page component with a list of workshops for a specific scholar.
+ * @returns The HTML document with the rendered page component.
+ */
 const page = async () => {
-  const scholarId = "cljwyi8hl0008uwmkjo6dktty"
+  const scholarId = "cljwyi8hl0008uwmkjo6dktty";
+  const workshops = await getWorkshopsByScholar2(scholarId);
 
-  const workshops = await getWorkshopsByScholar2(scholarId)
   return (
     <div>
       <div className="flex flex-col px-2 pt-6 xl:gap-4">

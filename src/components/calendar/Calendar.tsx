@@ -10,6 +10,11 @@ import 'moment/locale/es'
 
 import { BigCalendarEventType } from '@/types/Calendar';
 
+/**
+ * Defines the style for each event in the calendar.
+ * @param event The event to style.
+ * @returns The style object for the event.
+ */
 const styleEvent = (event: BigCalendarEventType) => {
     const style = {
         background: event.bgColor,
@@ -24,6 +29,12 @@ const styleEvent = (event: BigCalendarEventType) => {
     };
 }
 
+/**
+ * The Calendar component.
+ * @param events The events to display in the calendar.
+ * @see {@link https://github.com/jquense/react-big-calendar} for more information about the react-big-calendar component.
+ * @returns The Calendar component.
+ */
 const Calendar = ({ events }: { events: BigCalendarEventType[] }) => {
     type T = keyof typeof Views
     const localizer = momentLocalizer(moment)
@@ -55,8 +66,8 @@ const Calendar = ({ events }: { events: BigCalendarEventType[] }) => {
                         work_week: 'Semana Laboral',
                         previous: 'Atrás',
                         next: 'Siguiente',
-                      }}
-                    
+                    }}
+
                 />
             </div>
         </Fragment>

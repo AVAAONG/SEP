@@ -2,6 +2,11 @@ import Calendar from '@/components/calendar/Calendar'
 import { BigCalendarEventType } from '@/types/Calendar'
 import React from 'react'
 
+
+/**
+ * The ExampleEvents constant is an array of BigCalendarEventType objects that represent the events to be displayed in the calendar.
+ * @remarks The BigCalendarEventType type is defined in the src/types/Calendar.ts file.
+ */
 const ExampleEvents: BigCalendarEventType[] = [
     {
         title: 'All Day Event very long title',
@@ -11,6 +16,11 @@ const ExampleEvents: BigCalendarEventType[] = [
     }
 ]
 
+/**
+ * Renders the page component with the calendar of activities
+ * @remarks this page is willing to show the calendar of activities that proexcelencia will offer to the students. All of them, no matter if the scholar is registered or not in activities.
+ * @returns The HTML document with the rendered page component.
+ */
 const page = () => {
     return (
         <div className="flex flex-col px-2 pt-6 justify-center items-center w-full text-center gap-2 sm:gap-0">

@@ -1,10 +1,22 @@
+/**
+ * @file This is the chats page, here the scholar can see all the chats that he has registered and asisted
+ * 
+ */
 import Stats from '@/components/ScholarStats';
 import ChatTable from '@/components/table/Table2';
 import { Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
 import { headers } from 'next/headers';
 import React from 'react'
 
+
+/**
+ * Renders the chats page with the scholar stats and the table with the chats that the scholar has registered and asisted.
+ * @returns The chats page
+ */
 const page = async () => {
+  /**
+   * Fetches the chat data from the api
+   */
   const host = headers().get("host");
   const data = await fetch(`http://${host}/api/workshop`, {
     cache: "no-cache"
