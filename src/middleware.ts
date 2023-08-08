@@ -2,16 +2,15 @@
  * @file Middleware function to check if user is authenticated or not for admin routes and scholar routes
  * @author Kevin Bravo (kevinbravo.me)
  *
- * @summary This file export a middleware function to allow access to admin routes and scholar routes only if the user is authenticated,
- * when a request is made to a route that starts with /admin or /scholar the middleware function is called
+ * @summary This file export a middleware function to allow access to admin routes and scholar routes only if the user is authenticated.
+ * @remarks When a request is made to a route that starts with /admin or /scholar the middleware function is called
  * and it checks if the user is authenticated or not,
  * if the user is authenticated then the request is allowed to continue to the route handler,
- * if the user is not authenticated then the request is redirected to the login page.
- *
+ * if the user is not authenticated then the request is redirected to the login page
+ * @remarks depending on the rute that was used to make the request the user is redirected to the corresponding login page
  */
 
-import { withAuth, NextRequestWithAuth } from 'next-auth/middleware';
-import { NextResponse } from 'next/server';
+import { NextRequestWithAuth, withAuth } from 'next-auth/middleware';
 
 export default function wrapMiddlewareFunction(req: NextRequestWithAuth) {
   let signinPath = '';
