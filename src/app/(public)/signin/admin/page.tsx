@@ -6,18 +6,25 @@
  */
 
 import Aside from "@/components/public/signin/Aside";
-import { useSearchParams } from "next/navigation";
 import GoogleSignInButton from "@/components/public/signin/signinButtons/GoogleSignInButton";
 
-
-const AdminSignInPage = () => {
-  const searchParams = useSearchParams();
+/**
+ * Renders the sign-in page for the admin role.
+ * @param searchParams - The search params of the URL.
+ * @returns The sign-in page for the admin role.
+ * @see {@link https://nextjs.org/docs/app/api-reference/file-conventions/page#searchparams-optional} for more information about Next.js search params argument
+ */
+const page = ({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) => {
 
   /**
    * Specify to which URL the user will be redirected after signing in. Defaults to the page URL the sign-in is initiated from.
    * @summary The URL to redirect to after a successful sign in or sign up.
    */
-  const adminCallbackUrl = searchParams.get("callbackUrl") || "/admin/dashboard";
+  const adminCallbackUrl = searchParams!.callbackUrl as string || "/admin/dashboard";
 
   return (
     <main className="flex flex-col md:flex-row-reverse min-h-screen md:h-screen bg-gradient-to-b from-emerald-950 to-slate-950">
@@ -43,4 +50,4 @@ const AdminSignInPage = () => {
   );
 };
 
-export default AdminSignInPage;
+export default page;
