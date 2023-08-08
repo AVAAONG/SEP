@@ -1,5 +1,5 @@
 'use client';
-import handler from '@/lib/auth/serverAction';
+import handler from '@/lib/serverAction';
 import { signIn } from 'next-auth/react';
 import { BaseSyntheticEvent } from 'react';
 import { useForm } from 'react-hook-form';
@@ -12,15 +12,11 @@ interface SigninFormProps {
 
 const SigninForm = ({ callbackUrl, cookieValue }: SigninFormProps) => {
   const { register, handleSubmit } = useForm();
-  const fetcher = (...args: RequestInfo[] | URL[]) =>
-    fetch([...args]).then((res) => res.json());
+  const fetcher = (...args: RequestInfo[] | URL[]) => fetch([...args]).then((res) => res.json());
 
   const crsfToken = useSWR('../api/crfToken', fetcher, { fallbackData: '' });
 
-  const onSubmit = async (
-    data: { email: string },
-    event: BaseSyntheticEvent
-  ) => {
+  const onSubmit = async (data: { email: string }, event: BaseSyntheticEvent) => {
     event.preventDefault();
     console.log(data);
     await handler(cookieValue);
@@ -32,11 +28,7 @@ const SigninForm = ({ callbackUrl, cookieValue }: SigninFormProps) => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(
-        async (data, event) => await onSubmit(data, event!)
-      )}
-    >
+    <form onSubmit={handleSubmit(async (data, event) => await onSubmit(data, event!))}>
       <div className="mb-3 flex flex-col gap-2">
         {/* <input type="hidden" name="csrfToken" value={crsfToken.data.csrfToken} /> */}
         <label htmlFor="user_email" className="text-sm text-slate-400">

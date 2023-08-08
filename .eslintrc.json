@@ -4,6 +4,7 @@
     "React": "readonly"
   },
   "rules": {
+    "max-len": [0, 100, 2],
     // allows you to prefix variables with an underscore _ if you have declared them but not used them in the code.
     // @example const _myVar = 1;
     "no-unused-vars": [

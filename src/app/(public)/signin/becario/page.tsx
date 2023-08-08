@@ -7,7 +7,7 @@
 
 import Warning from '@/components/alerts/Warning';
 import Aside from '@/components/public/signin/Aside';
-import SigninForm from '@/components/public/signin/forms/SignInForm';
+import SigninForm from '@/components/public/signin/SignInForm';
 import GoogleSignInButton from '@/components/public/signin/signinButtons/GoogleSignInButton';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { getServerSession } from 'next-auth';
@@ -19,18 +19,13 @@ import { redirect } from 'next/navigation';
  * @returns The sign-in page for the scholar role.
  * @see {@link https://nextjs.org/docs/app/api-reference/file-conventions/page#searchparams-optional} for more information about Next.js search params argument
  */
-const page = async ({
-  searchParams,
-}: {
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) => {
+const page = async ({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }) => {
   const session = await getServerSession(authOptions);
   /**
    * Specify to which URL the user will be redirected after signing in. Defaults to the page URL the sign-in is initiated from.
    * @summary The URL to redirect to after a successful sign in or sign up.
    */
-  const scholarCallbackUrl =
-    (searchParams!.callbackUrl as string) || '/becario/config';
+  const scholarCallbackUrl = (searchParams!.callbackUrl as string) || '/becario/config';
   if (session) {
     redirect(scholarCallbackUrl);
   }
@@ -42,9 +37,7 @@ const page = async ({
           {searchParams?.error === 'notAllowed' && (
             <Warning
               title={`El correo no tiene permitido el acceso al SEP.`}
-              subtitle={
-                'Solo los correos de los becarios que se encuentran registrado en la base de datos de ProExcelencia pueden acceder al SEP'
-              }
+              subtitle={'Solo los correos de los becarios que se encuentran registrado en la base de datos de ProExcelencia pueden acceder al SEP'}
             />
           )}
           <h2 className="text-xl font-semibold md:text-2xl">¡Entra!</h2>
@@ -58,11 +51,7 @@ const page = async ({
           </div>
 
           <div className="flex">
-            <GoogleSignInButton
-              callbackUrl="/becario/config"
-              providerId="userGoogle"
-              cookieValue="scholar"
-            />
+            <GoogleSignInButton callbackUrl="/becario/config" providerId="userGoogle" cookieValue="scholar" />
           </div>
         </div>
       </section>

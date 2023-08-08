@@ -1,7 +1,6 @@
 'use client';
-import handler from '@/lib/auth/serverAction';
+import handler from '@/lib/serverAction';
 import { signIn } from 'next-auth/react';
-import React from 'react';
 
 interface GoogleSignInButtonProps {
   providerId: string;
@@ -20,7 +19,7 @@ const GoogleSignInButton = ({
   };
 
   return (
-    <a
+    <button
       onClick={() => handleSignIn()}
       role="button"
       className="bg-green-600 hover:bg-green-500 border-2 border-emerald-950 hover:border-green-600 text-white font-semibold py-2 px-4 rounded-md w-full flex justify-center gap-4"
@@ -58,7 +57,7 @@ const GoogleSignInButton = ({
         </g>
       </svg>
       Entrar con Google
-    </a>
+    </button>
   );
 };
 
