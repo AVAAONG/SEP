@@ -19,14 +19,10 @@ interface UniversityInformationProps {
   title: string;
 }
 
-const UniversityInformation = ({
-  scholarCollageInfo,
-  id,
-  title,
-}: UniversityInformationProps) => {
-  const [updatinState, changeUpdatingState] = useState<
-    'updating' | 'updated' | 'error' | 'none'
-  >('none');
+const UniversityInformation = ({ scholarCollageInfo, id, title }: UniversityInformationProps) => {
+  const [updatinState, changeUpdatingState] = useState<'updating' | 'updated' | 'error' | 'none'>(
+    'none'
+  );
 
   useEffect(() => {
     if (updatinState === 'updated') {
@@ -60,15 +56,11 @@ const UniversityInformation = ({
   };
 
   if (updatinState !== 'none') {
-    return (
-      <LoadingModal state={updatinState} changeState={changeUpdatingState} />
-    );
+    return <LoadingModal state={updatinState} changeState={changeUpdatingState} />;
   } else {
     return (
       <>
-        <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">
-          {title}
-        </h3>
+        <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">{title}</h3>
         <form action="#">
           <div className="grid grid-cols-6 gap-6">
             <div className="col-span-6 sm:col-span-3">
@@ -128,12 +120,7 @@ const UniversityInformation = ({
               >
                 Area de estudio
               </label>
-              <input
-                type="text"
-                {...register('studyArea')}
-                placeholder=""
-                required
-              />
+              <input type="text" {...register('studyArea')} placeholder="" required />
             </div>
             <div className="col-span-6 sm:col-span-3">
               <label
@@ -190,12 +177,7 @@ const UniversityInformation = ({
               >
                 Periodo academico actual
               </label>
-              <input
-                type="number"
-                {...register('grade')}
-                placeholder="19"
-                required
-              />
+              <input type="number" {...register('grade')} placeholder="19" required />
             </div>
 
             <div className="col-span-6 sm:col-full">

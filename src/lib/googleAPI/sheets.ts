@@ -32,12 +32,7 @@ const copySheet = async (spreadsheetId: string, activityName: string) => {
  * @param tittle The tittle of the sheet (The workshop's tittle)
  * @param numb a param that allows us to set an increment if there are two sheets with the same name
  */
-const createSheetName = (
-  spreadsheetId: string,
-  sheetId: number,
-  tittle: string,
-  numb = 0
-) => {
+const createSheetName = (spreadsheetId: string, sheetId: number, tittle: string, numb = 0) => {
   let num = numb === 0 ? 1 : 0;
   let sheetTittle = tittle;
   try {
@@ -48,9 +43,7 @@ const createSheetName = (
      * substract the `(num)` part of the string to avoid the tittle have multiple parenteses. eg. `tittle(num)(num)(num)`
      */
     sheetTittle =
-      numb === 0
-        ? `${tittle}(${num})`
-        : `${tittle.slice(0, tittle.length - 3)}(${num})`;
+      numb === 0 ? `${tittle}(${num})` : `${tittle.slice(0, tittle.length - 3)}(${num})`;
     createSheetName(spreadsheetId, sheetId, sheetTittle, num + 1);
   }
   return sheetTittle;
@@ -70,11 +63,7 @@ export const getSheetsName = async (spreadsheetId: string) => {
   }
 };
 
-const updateSheetName = async (
-  spreadsheetId: string,
-  sheetId: number,
-  sheetName: string
-) => {
+const updateSheetName = async (spreadsheetId: string, sheetId: number, sheetName: string) => {
   try {
     const response = await Sheets.spreadsheets.batchUpdate({
       spreadsheetId: spreadsheetId,
@@ -146,10 +135,7 @@ const createSpreadseetUpdateObject = async (
   return updateObject;
 };
 
-export const getSpreadsheetValues = async (
-  spreadsheetId: string,
-  range: string
-) => {
+export const getSpreadsheetValues = async (spreadsheetId: string, range: string) => {
   try {
     const response = await Sheets.spreadsheets.values.get({
       spreadsheetId,

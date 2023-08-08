@@ -104,10 +104,7 @@ const page = () => {
     });
     deleteEntry(inputId);
   };
-  const createChat = (
-    data: Chat,
-    event: BaseSyntheticEvent<object, any, any> | undefined
-  ) => {
+  const createChat = (data: Chat, event: BaseSyntheticEvent<object, any, any> | undefined) => {
     if (event === undefined) return;
     event.preventDefault();
     data.id = shortUUID.generate();
@@ -137,14 +134,8 @@ const page = () => {
         {
           chatData.length >= 1 ? (
             <>
-              <text className="font-semibold text-3xl text-green-500 mb-6">
-                Chats para enviar
-              </text>
-              <ChatsList
-                chatsData={chatData}
-                deleteEntry={deleteEntry}
-                editEntry={editEntry}
-              />
+              <text className="font-semibold text-3xl text-green-500 mb-6">Chats para enviar</text>
+              <ChatsList chatsData={chatData} deleteEntry={deleteEntry} editEntry={editEntry} />
               <button className="bg-green-600 text-white rounded-lg col-span-2 max-w-fit px-5 py-2 self-center mt-4">
                 Enviar chats
               </button>
@@ -158,9 +149,7 @@ const page = () => {
         }
       </div>
       <div className=" w-full md:w-1/2 p-4 flex flex-col items-center gap-4">
-        <text className="font-semibold text-3xl text-green-500 mx-auto">
-          Crea un chat
-        </text>
+        <text className="font-semibold text-3xl text-green-500 mx-auto">Crea un chat</text>
         <form
           onSubmit={handleSubmit(createChat)}
           className="grid gap-6 md:grid-cols-2 md:grid-rows-2 caret-green-500 text-slate-300 w-full"

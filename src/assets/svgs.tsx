@@ -15,12 +15,7 @@ export const workshopIcon = () => {
 
 export const dashboardComponent = () => {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className=""
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="">
       <path d="M6 3a3 3 0 00-3 3v2.25a3 3 0 003 3h2.25a3 3 0 003-3V6a3 3 0 00-3-3H6zM15.75 3a3 3 0 00-3 3v2.25a3 3 0 003 3H18a3 3 0 003-3V6a3 3 0 00-3-3h-2.25zM6 12.75a3 3 0 00-3 3V18a3 3 0 003 3h2.25a3 3 0 003-3v-2.25a3 3 0 00-3-3H6zM17.625 13.5a.75.75 0 00-1.5 0v2.625H13.5a.75.75 0 000 1.5h2.625v2.625a.75.75 0 001.5 0v-2.625h2.625a.75.75 0 000-1.5h-2.625V13.5z" />
     </svg>
   );
@@ -58,11 +53,7 @@ export const volunterIcon = () => {
       stroke="#ffffff"
     >
       <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-      <g
-        id="SVGRepo_tracerCarrier"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      ></g>
+      <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
       <g id="SVGRepo_iconCarrier">
         {' '}
         <g>
@@ -90,17 +81,9 @@ export const volunterIcon = () => {
 
 export const chatIcon = () => {
   return (
-    <svg
-      fill="currentColor"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-      <g
-        id="SVGRepo_tracerCarrier"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      ></g>
+      <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
       <g id="SVGRepo_iconCarrier">
         <path d="M9,14a4,4,0,1,0-4-4A4,4,0,0,0,9,14ZM9,8a2,2,0,1,1-2,2A2,2,0,0,1,9,8ZM6,15h6a4,4,0,0,1,4,4v2a1,1,0,0,1-2,0V19a2,2,0,0,0-2-2H6a2,2,0,0,0-2,2v2a1,1,0,0,1-2,0V19A4,4,0,0,1,6,15Zm11.462-5A5.977,5.977,0,0,1,15.7,14.253a1,1,0,0,1-1.414-1.414,4.015,4.015,0,0,0,0-5.678A1,1,0,1,1,15.7,5.747,5.977,5.977,0,0,1,17.462,10Zm-.181,7.7a1,1,0,0,1,.024-1.414,8.667,8.667,0,0,0,0-12.562A1,1,0,0,1,18.7,2.281a10.667,10.667,0,0,1,0,15.438,1,1,0,0,1-1.414-.024Z"></path>
       </g>
@@ -110,12 +93,7 @@ export const chatIcon = () => {
 
 export const Star = ({ color }: { color: string }) => {
   return (
-    <svg
-      fill={color}
-      viewBox="0 0 20 20"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
+    <svg fill={color} viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path
         clipRule="evenodd"
         fill="currentColor"
@@ -242,12 +220,7 @@ export const FilterIcon = () => {
 
 export const SortIcon = () => {
   return (
-    <svg
-      className="w-6 "
-      viewBox="0 0 24 24"
-      fill="#16A34A"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className="w-6 " viewBox="0 0 24 24" fill="#16A34A" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M10.22 15.97L9 17.19V5C9 4.59 8.66 4.25 8.25 4.25C7.84 4.25 7.5 4.59 7.5 5V17.19L6.28 15.97C5.99 15.68 5.51 15.68 5.22 15.97C4.93 16.26 4.93 16.74 5.22 17.03L7.72 19.53C7.79 19.6 7.87 19.65 7.96 19.69C8.05 19.73 8.15 19.75 8.25 19.75C8.35 19.75 8.45 19.73 8.54 19.69C8.63 19.65 8.71 19.6 8.78 19.53L11.28 17.03C11.57 16.74 11.57 16.26 11.28 15.97C10.99 15.68 10.51 15.68 10.22 15.97Z"
         fill="#16A34A"
@@ -265,12 +238,7 @@ export const SortIcon = () => {
 };
 export const SortIconReverse = () => {
   return (
-    <svg
-      className="w-6 "
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className="w-6 " viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M8.78 4.47C8.71 4.4 8.63 4.35 8.54 4.31C8.36 4.23 8.15 4.23 7.97 4.31C7.88 4.35 7.8 4.4 7.73 4.47L5.23 6.97C4.94 7.26 4.94 7.74 5.23 8.03C5.52 8.32 6 8.32 6.29 8.03L7.51 6.81V19C7.51 19.41 7.85 19.75 8.26 19.75C8.67 19.75 9.01 19.41 9.01 19V6.81L10.23 8.03C10.38 8.18 10.57 8.25 10.76 8.25C10.95 8.25 11.14 8.18 11.29 8.03C11.58 7.74 11.58 7.26 11.29 6.97L8.79 4.47H8.78Z"
         fill="#16A34A"
@@ -290,11 +258,7 @@ export const SortIconReverse = () => {
 export const ProfileAvatarPlaceholder = () => {
   return (
     <span className="inline-block h-full w-full rounded-full overflow-hidden bg-gray-100">
-      <svg
-        className="h-full w-full text-gray-300 "
-        fill="currentColor"
-        viewBox="0 0 24 24"
-      >
+      <svg className="h-full w-full text-gray-300 " fill="currentColor" viewBox="0 0 24 24">
         <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
       </svg>
     </span>
@@ -310,21 +274,10 @@ export const NotFoundImage = () => {
       xlinkHref="http://www.w3.org/1999/xlink"
     >
       <g clip-path="url(#clip0)">
-        <rect
-          x="-173.95"
-          y="-197.494"
-          width="978.479"
-          height="903.212"
-          fill="url(#pattern0)"
-        />
+        <rect x="-173.95" y="-197.494" width="978.479" height="903.212" fill="url(#pattern0)" />
       </g>
       <defs>
-        <pattern
-          id="pattern0"
-          patternContentUnits="objectBoundingBox"
-          width="1"
-          height="1"
-        >
+        <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
           <use xlinkHref="#image0" transform="scale(0.001)" />
         </pattern>
         <clipPath id="clip0">

@@ -1,13 +1,6 @@
 import shortUUID from 'short-uuid';
 
-export type AsociatedProject =
-  | 'UMAA'
-  | 'OAL'
-  | 'ALV'
-  | 'UVPLV'
-  | 'GA'
-  | 'Oficinas'
-  | 'Externo';
+export type AsociatedProject = 'UMAA' | 'OAL' | 'ALV' | 'UVPLV' | 'GA' | 'Oficinas' | 'Externo';
 
 export type kindOfVolunteer = 'Presencial' | 'Virtual';
 

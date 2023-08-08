@@ -18,9 +18,7 @@ const NavigationBar = ({ image, name, email }: NavigationBarProps) => {
   return (
     <nav className="bg-white px-4 py-2.5 dark:bg-slate-900 dark:border-gray-700 fixed left-0 right-0 top-0 z-30">
       <div
-        className={`${
-          isSidebarOpen ? 'md:ml-64' : ''
-        } flex items-center justify-between gap-4 `}
+        className={`${isSidebarOpen ? 'md:ml-64' : ''} flex items-center justify-between gap-4 `}
       >
         <div className="flex justify-start items-center">
           <button
@@ -65,12 +63,7 @@ const NavigationBar = ({ image, name, email }: NavigationBarProps) => {
             {/* <HighlightsForm /> */}
           </button>
           <ThemeToggleButton />
-          <ProfileDropdown
-            name={name}
-            email={email}
-            scholarId="adfadskfma;lds"
-            image={image}
-          />
+          <ProfileDropdown name={name} email={email} scholarId="adfadskfma;lds" image={image} />
         </div>
       </div>
     </nav>

@@ -1,9 +1,4 @@
-import {
-  Workshop,
-  WorkshopDates,
-  WorkshopSpeaker,
-  WorkshopTempData,
-} from '@prisma/client';
+import { Workshop, WorkshopDates, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
 import { headers } from 'next/headers';
 import Table from '@/components/table/Table';
 

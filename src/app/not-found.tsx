@@ -23,17 +23,14 @@ const NotFound = () => {
             <NotFoundImage />
           </div>
           <main className="sm:flex">
-            <p className="text-4xl font-extrabold text-[#008000] sm:text-5xl">
-              404
-            </p>
+            <p className="text-4xl font-extrabold text-[#008000] sm:text-5xl">404</p>
             <div className="sm:ml-6">
               <div className="sm:border-l sm:border-gray-200 sm:pl-6">
                 <h1 className="text-4xl font-extrabold text-gray-900 dark:text-gray-200 tracking-tight sm:text-5xl">
                   Página no encontrada.
                 </h1>
                 <p className="mt-1 text-base text-gray-500">
-                  Verifique la URL en la barra de direcciones y vuelva a
-                  intentarlo.
+                  Verifique la URL en la barra de direcciones y vuelva a intentarlo.
                 </p>
               </div>
               <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">

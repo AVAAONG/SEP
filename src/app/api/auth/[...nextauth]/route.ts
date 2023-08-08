@@ -8,8 +8,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const cookieStore = cookies();
   const cookieValue = cookieStore.get('fromWhereYouCome')?.value;
   if (cookieValue === 'scholar') return await NextAuth(req, res, authOptions);
-  else if (cookieValue === 'admin')
-    return await NextAuth(req, res, adminAuthOptions);
+  else if (cookieValue === 'admin') return await NextAuth(req, res, adminAuthOptions);
   else throw new Error('cookieValue is not defined');
 };
 

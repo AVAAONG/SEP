@@ -64,9 +64,7 @@ const Stats = ({ workshops, kindOfActivity }: WorkshopTableProps) => {
           </dd>
         </div>
         <div className="px-4 py-5 sm:p-6  ">
-          <dt className="text-base font-semibold text-white">
-            Total de {activityName} faltantes.
-          </dt>
+          <dt className="text-base font-semibold text-white">Total de {activityName} faltantes.</dt>
           <dd className="mt-1 flex justify-between items-baseline md:block lg:flex">
             <div className="flex items-baseline text-5xl font-bold dark:text-slate-950 text-white">
               {pendingWorkshops}

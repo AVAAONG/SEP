@@ -22,14 +22,7 @@ const page = () => (
           target="_blank"
           rel="noopener noreferrer"
         >
-          By{' '}
-          <Image
-            src="/avaa.png"
-            alt="AVAA Logo"
-            width={100}
-            height={24}
-            priority
-          />
+          By <Image src="/avaa.png" alt="AVAA Logo" width={100} height={24} priority />
         </Link>
       </div>
     </div>
@@ -103,9 +96,7 @@ const page = () => (
             </svg>
           </span>
         </h2>
-        <p className={`m-0 max-w-[30ch] text-xs lg:text-sm opacity-50`}>
-          Administra el SEP
-        </p>
+        <p className={`m-0 max-w-[30ch] text-xs lg:text-sm opacity-50`}>Administra el SEP</p>
       </Link>
     </div>
   </main>

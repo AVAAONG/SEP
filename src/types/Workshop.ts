@@ -8,12 +8,7 @@ export type Pensum =
   | 'TICs'
   | 'Emprendimiento'
   | '';
-export type KindOfWorkshop =
-  | 'presencial'
-  | 'virtual'
-  | 'asincrona'
-  | 'hibrida'
-  | '';
+export type KindOfWorkshop = 'presencial' | 'virtual' | 'asincrona' | 'hibrida' | '';
 
 export type Workshop = {
   id: shortUUID.SUUID;

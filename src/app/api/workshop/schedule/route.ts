@@ -24,16 +24,14 @@ import { getFormatedDate } from '@/lib/calendar/utils';
 
 export const UPDATE = async (req: NextRequest, res: NextResponse) => {
   const token = await getToken({ req });
-  if (token)
-    setTokens(token.accessToken as string, token.refreshToken as string);
+  if (token) setTokens(token.accessToken as string, token.refreshToken as string);
   else return NextResponse;
 };
 
 export const DELETE = async (req: NextRequest, res: NextResponse) => {
   const token = await getToken({ req });
   const reqData = await req.json();
-  if (token)
-    setTokens(token.accessToken as string, token.refreshToken as string);
+  if (token) setTokens(token.accessToken as string, token.refreshToken as string);
   else return NextResponse;
   await deleteWorkshopFromDatabase(reqData.id);
   return NextResponse.json({ message: 'ok' });

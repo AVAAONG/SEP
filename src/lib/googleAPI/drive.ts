@@ -21,11 +21,7 @@ export const deleteFile = (fileId: string) => {
  * @see {@link https://developers.google.com/apps-script/reference/drive} for reference about app-script rive
  * @see {@link https://developers.google.com/apps-script/reference/drive/file} for reference about DriveApp 'File' Class
  */
-export const copyFile = async (
-  fileName: string,
-  fileId: string,
-  folderId: string
-) => {
+export const copyFile = async (fileName: string, fileId: string, folderId: string) => {
   try {
     const res = await Drive.files.copy({
       fileId,

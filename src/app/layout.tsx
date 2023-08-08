@@ -30,11 +30,7 @@ export const metadata = {
  * @returns The HTML document with the rendered children components.
  */
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className="h-full">
       <body className="h-full">

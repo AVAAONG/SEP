@@ -38,11 +38,7 @@ const getForm = async (formId: string) => {
   return res.data;
 };
 
-export const updateFormInfo = async (
-  formId: string,
-  title: string,
-  description: string
-) => {
+export const updateFormInfo = async (formId: string, title: string, description: string) => {
   const res = await Form.forms.batchUpdate({
     formId,
     requestBody: {
@@ -64,17 +60,8 @@ export const updateFormInfo = async (
 };
 
 export const createFormDescription = (workshop: Workshop) => {
-  const {
-    title,
-    pensum,
-    date,
-    startHour,
-    endHour,
-    speaker,
-    modality,
-    platform,
-    description,
-  } = workshop;
+  const { title, pensum, date, startHour, endHour, speaker, modality, platform, description } =
+    workshop;
   const formDescription = `Taller: ${title}
 Competencia Asociada: ${pensum}
 ${

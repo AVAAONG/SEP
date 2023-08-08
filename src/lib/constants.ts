@@ -26,12 +26,9 @@ export const MONTHS = [
   'Diciembre',
 ];
 
-const VOLUNTEER_CALENDAR_EVENT_COLORS =
-  'linear-gradient(to right, #16a34a, #059669)';
-const WORKSHOP_CALENDAR_EVENT_COLORS =
-  'linear-gradient(to right, #1D4ED8, #312E81)';
-const CHATS_CALENDAR_EVENT_COLORS =
-  'linear-gradient(to right, #4b0082, #059669)';
+const VOLUNTEER_CALENDAR_EVENT_COLORS = 'linear-gradient(to right, #16a34a, #059669)';
+const WORKSHOP_CALENDAR_EVENT_COLORS = 'linear-gradient(to right, #1D4ED8, #312E81)';
+const CHATS_CALENDAR_EVENT_COLORS = 'linear-gradient(to right, #4b0082, #059669)';
 
 export const CALENDAR_IDS = [
   {

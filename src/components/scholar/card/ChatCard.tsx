@@ -11,14 +11,7 @@ interface ChatCardProps {
   inscriptionLink: string;
 }
 
-const ChatCard = ({
-  chatName,
-  speaker,
-  level,
-  date,
-  hour,
-  inscriptionLink,
-}: ChatCardProps) => {
+const ChatCard = ({ chatName, speaker, level, date, hour, inscriptionLink }: ChatCardProps) => {
   const formatedDate = new Date(date);
   console.log(inscriptionLink);
   return (

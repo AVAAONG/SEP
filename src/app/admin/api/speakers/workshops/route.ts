@@ -1,16 +1,12 @@
 import { setTokens } from '@/lib/auth/auth';
-import {
-  createWorkshopSpeaker,
-  deleteWorkshopSpeakers,
-} from '@/lib/database/Workshops';
+import { createWorkshopSpeaker, deleteWorkshopSpeakers } from '@/lib/database/Workshops';
 import { getSpreadsheetValues } from '@/lib/sheets/sheets';
 import { WorkshopSpeaker } from '@prisma/client';
 import { NextApiRequest } from 'next';
 import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
 
-const WORKSHOP_SPEAKERS_SPREADSHEET =
-  '1uGrF-GNSILOXVOy3SLZUvx47HXzcJMv4TaJHJ26aBLc';
+const WORKSHOP_SPEAKERS_SPREADSHEET = '1uGrF-GNSILOXVOy3SLZUvx47HXzcJMv4TaJHJ26aBLc';
 const WORKSHOP_SPEAKER_SHEET = 'Facilitadores de talleres';
 const WORKSHOP_SPEAKERS_RANGE = `'${WORKSHOP_SPEAKER_SHEET}'!B3:I81`;
 
@@ -36,16 +32,7 @@ const createWorkshopSpeakerFromSheet = async () => {
   )) as string[][];
 
   const workshopSpeakers = values.map(async (value) => {
-    const [
-      first_names,
-      last_names,
-      ,
-      id,
-      email,
-      phone_number,
-      job_company,
-      speakerGender,
-    ] = value;
+    const [first_names, last_names, , id, email, phone_number, job_company, speakerGender] = value;
     const gender = speakerGender.toLowerCase() === 'masculino' ? 'M' : 'F';
     const workshopSpeaker: WorkshopSpeaker = {
       id,

@@ -159,10 +159,7 @@ export const findUserByEmail = async (where: any): Promise<User | null> => {
  * ```
  *
  */
-export const updateUser = async (
-  id: shortUUID.SUUID,
-  data: User
-): Promise<User> => {
+export const updateUser = async (id: shortUUID.SUUID, data: User): Promise<User> => {
   const user = await prisma.user.update({
     where: { id },
     data,

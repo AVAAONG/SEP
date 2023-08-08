@@ -16,9 +16,9 @@ interface CVAInformationProps {
 }
 
 const CVAInformation = ({ scholarCVAInfo, id, title }: CVAInformationProps) => {
-  const [updatinState, changeUpdatingState] = useState<
-    'updating' | 'updated' | 'error' | 'none'
-  >('none');
+  const [updatinState, changeUpdatingState] = useState<'updating' | 'updated' | 'error' | 'none'>(
+    'none'
+  );
 
   useEffect(() => {
     if (updatinState === 'updated') {
@@ -54,15 +54,11 @@ const CVAInformation = ({ scholarCVAInfo, id, title }: CVAInformationProps) => {
   };
 
   if (updatinState !== 'none') {
-    return (
-      <LoadingModal state={updatinState} changeState={changeUpdatingState} />
-    );
+    return <LoadingModal state={updatinState} changeState={changeUpdatingState} />;
   } else {
     return (
       <>
-        <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">
-          {title}
-        </h3>
+        <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">{title}</h3>
         <form action="#">
           <div className="grid grid-cols-2 gap-2">
             <div className="col-span-2 sm:col-span-1">
@@ -119,12 +115,7 @@ const CVAInformation = ({ scholarCVAInfo, id, title }: CVAInformationProps) => {
               >
                 Modulo en el que te encuentras
               </label>
-              <input
-                type="number"
-                {...register('englishLevel')}
-                placeholder="3"
-                required
-              />
+              <input type="number" {...register('englishLevel')} placeholder="3" required />
             </div>
             <div className="col-span-2 sm:col-span-2">
               <label

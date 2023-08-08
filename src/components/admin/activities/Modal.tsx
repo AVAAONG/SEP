@@ -64,10 +64,7 @@ const Modal = ({ kindOfActivity, state, color }: ModalProps) => {
             </div>
 
             <div className="flex flex-col mt-4">
-              <label
-                htmlFor="group"
-                className="mb-1 text-lg font-bold text-gray-700 text-gray-200"
-              >
+              <label htmlFor="group" className="mb-1 text-lg font-bold text-gray-700 text-gray-200">
                 Grupo de contacto
               </label>
               <select
@@ -82,11 +79,7 @@ const Modal = ({ kindOfActivity, state, color }: ModalProps) => {
               >
                 {CONTACTS_GROUP_OPTIONS.map((c) => {
                   return (
-                    <option
-                      value={c.value}
-                      key={c.value}
-                      className="text-gray-700 text-gray-300"
-                    >
+                    <option value={c.value} key={c.value} className="text-gray-700 text-gray-300">
                       {c.inputName}
                     </option>
                   );

@@ -57,10 +57,7 @@ const createDefaultEvent = (
 /** TODO: should be fixed
  * create a recurrent event
  */
-const createRecurrentEvent = (
-  event: calendar_v3.Schema$Event,
-  days: Date[]
-) => {
+const createRecurrentEvent = (event: calendar_v3.Schema$Event, days: Date[]) => {
   const recurrentEvent = {
     ...event,
     recurrence: [`RRULE:`],

@@ -2,13 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 import { setTokens } from '@/lib/auth/auth';
 import { createFormDescription } from '@/lib/form/form';
-import {
-  Modality,
-  Skill,
-  Workshop,
-  WorkshopTempData,
-  WorkshopYear,
-} from '@prisma/client';
+import { Modality, Skill, Workshop, WorkshopTempData, WorkshopYear } from '@prisma/client';
 import { createEvent } from '@/lib/calendar/calendar';
 import { getFormatedDate } from '@/lib/calendar/utils';
 import { createWorkshop } from '@/lib/database/Workshops';
@@ -24,13 +18,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
   const workshop = await req.json();
   const { speaker, title, modality, spots } = workshop;
   //creamos el calendario
-  const [
-    calendarEventId,
-    addToCalendarUrl,
-    meetingLink,
-    meetingId,
-    meetingPassword,
-  ] = await createEvent('workshop', workshop);
+  const [calendarEventId, addToCalendarUrl, meetingLink, meetingId, meetingPassword] =
+    await createEvent('workshop', workshop);
   //creamos el formulario
   const formDescription = createFormDescription(workshop);
   console.log(formDescription);
@@ -56,16 +45,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
     meeting_id: meetingId,
     form_link: formUrl,
   };
-  const normalizedWorkshop = normalizeWorkshopData(
-    workshop,
-    workshopId,
-    calendarEventId!
-  );
-  const workshopCreated = await createWorkshop(
-    normalizedWorkshop,
-    speakerId,
-    tempDataObj
-  );
+  const normalizedWorkshop = normalizeWorkshopData(workshop, workshopId, calendarEventId!);
+  const workshopCreated = await createWorkshop(normalizedWorkshop, speakerId, tempDataObj);
   //guardamos en la base de datos
   return NextResponse.json({ messagge: 'ok' });
 }

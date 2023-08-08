@@ -28,11 +28,7 @@ export const metadata = {
  * @see {@link https://react.dev/reference/react/Children} for more information about the React.Children utility.
  * @returns The HTML document with the rendered children components.
  */
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       {children}

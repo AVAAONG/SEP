@@ -13,10 +13,7 @@ import {
   WorkshopDates,
   activityStatus,
 } from '@prisma/client';
-import {
-  createWorkshop,
-  createWorkshopSpeaker,
-} from '@/lib/database/Workshops';
+import { createWorkshop, createWorkshopSpeaker } from '@/lib/database/Workshops';
 import { addHours, getFormatedDate } from '@/lib/calendar/utils';
 import { create } from 'domain';
 import {
@@ -118,8 +115,7 @@ export async function GET(req: NextApiRequest, res: NextResponse) {
     const [startDate, s] = getFormatedDate(chat.date, chat.hour, chat.hour);
     const endDate = addHours(new Date(startDate), 2);
     chat.modality = chat.modality.toUpperCase() as Modality;
-    chat.activityStatus =
-      chat.activityStatus === 'TRUE' ? 'REALIZADO' : 'SUSPENDIDO';
+    chat.activityStatus = chat.activityStatus === 'TRUE' ? 'REALIZADO' : 'SUSPENDIDO';
     chat.level = chat.level.toUpperCase() as Level;
 
     delete chat['hour'];

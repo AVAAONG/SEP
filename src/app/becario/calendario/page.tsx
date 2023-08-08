@@ -31,13 +31,12 @@ const page = () => {
         !
       </h1>
       <h2 className="text-xs font-semibold text-gray-900 sm:text-base dark:text-gray-400 italic">
-        En esta pagina podras visualizar todas las actividades que proexcelencia
-        oferto y estara ofertando
+        En esta pagina podras visualizar todas las actividades que proexcelencia oferto y estara
+        ofertando
       </h2>
       <h3 className="text-xs font-semibold text-emerald-700 sm:text-sm dark:text-emerald-500">
         {' '}
-        Ten en consideracion que laas fechas y horarios de estas actividades
-        estan sujeto a cambio.
+        Ten en consideracion que laas fechas y horarios de estas actividades estan sujeto a cambio.
       </h3>
       <div className="w-full mt-6">
         <div className="h-full min-h-[600px] text-gray-800 capitalize dark:text-gray-300 shadow-sm overflow-x-clip w-full bg-white border border-gray-200  shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 p-2">

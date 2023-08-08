@@ -15,14 +15,10 @@ interface WorkInformationProps {
   };
 }
 
-const WorkInformation = ({
-  workScholarInformation,
-  id,
-  title,
-}: WorkInformationProps) => {
-  const [updatinState, changeUpdatingState] = useState<
-    'updating' | 'updated' | 'error' | 'none'
-  >('none');
+const WorkInformation = ({ workScholarInformation, id, title }: WorkInformationProps) => {
+  const [updatinState, changeUpdatingState] = useState<'updating' | 'updated' | 'error' | 'none'>(
+    'none'
+  );
 
   useEffect(() => {
     if (updatinState === 'updated') {
@@ -59,15 +55,11 @@ const WorkInformation = ({
   };
 
   if (updatinState !== 'none') {
-    return (
-      <LoadingModal state={updatinState} changeState={changeUpdatingState} />
-    );
+    return <LoadingModal state={updatinState} changeState={changeUpdatingState} />;
   } else {
     return (
       <>
-        <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">
-          {title}
-        </h3>
+        <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">{title}</h3>
         <form action="#">
           <div className="grid grid-cols-2 gap-6">
             <div className="col-span-2 sm:col-span-1">
@@ -110,12 +102,7 @@ const WorkInformation = ({
               >
                 ¿Nombre de la organizacion / Empresa?
               </label>
-              <input
-                type="text"
-                {...register('organizationName')}
-                placeholder="AVAA"
-                required
-              />
+              <input type="text" {...register('organizationName')} placeholder="AVAA" required />
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label
@@ -139,12 +126,7 @@ const WorkInformation = ({
               >
                 Horas de trabajo Semanales
               </label>
-              <input
-                type="number"
-                {...register('weeklyHours')}
-                min={0}
-                required
-              />
+              <input type="number" {...register('weeklyHours')} min={0} required />
             </div>
             <div className="col-span-full">
               <button

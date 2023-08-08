@@ -46,9 +46,7 @@ export const getSpeakersIdNameEmail = async () => {
  * @param data - The data to select from the workshopSpeaker table
  * @returns The selected speakers
  */
-export const getWorkshopSpeakersWithParams = async (
-  data: Prisma.WorkshopSpeakerSelect
-) => {
+export const getWorkshopSpeakersWithParams = async (data: Prisma.WorkshopSpeakerSelect) => {
   try {
     const speakers = await prisma.workshopSpeaker.findMany({
       select: data,

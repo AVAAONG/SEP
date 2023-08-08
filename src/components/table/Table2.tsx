@@ -1,18 +1,7 @@
 'use client';
 import React, { useMemo, useState } from 'react';
-import {
-  ScholarAttendance,
-  Workshop,
-  WorkshopSpeaker,
-  WorkshopTempData,
-} from '@prisma/client';
-import {
-  useTable,
-  useSortBy,
-  useGlobalFilter,
-  useAsyncDebounce,
-  usePagination,
-} from 'react-table';
+import { ScholarAttendance, Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
+import { useTable, useSortBy, useGlobalFilter, useAsyncDebounce, usePagination } from 'react-table';
 import { FilterIcon, SortIcon, SortIconReverse } from '@/assets/svgs';
 import workshopScholarFormat from '../scholar/scholars/workshopTableData';
 
@@ -121,10 +110,7 @@ const ChatTable: React.FC<WorkshopTableProps> = (props) => {
         </button>
       </div>
       <div className="flow-root w-full overflow-x-scroll  h-[600px]">
-        <table
-          {...getTableProps()}
-          className="w-full text-sm text-left text-gray-300 "
-        >
+        <table {...getTableProps()} className="w-full text-sm text-left text-gray-300 ">
           <thead className="text-xs text-green-500 uppercase text-center border-b-[1px] border-green-700 text-ellipsis bg-gray-100 dark:bg-slate-950">
             {headerGroups.map((headerGroup) => (
               <tr
@@ -157,10 +143,7 @@ const ChatTable: React.FC<WorkshopTableProps> = (props) => {
             ))}
           </thead>
 
-          <tbody
-            {...getTableBodyProps()}
-            className="divide-y divide-gray-500 dark:divide-gray-700"
-          >
+          <tbody {...getTableBodyProps()} className="divide-y divide-gray-500 dark:divide-gray-700">
             {page.map((row) => {
               prepareRow(row);
               return (
@@ -190,13 +173,9 @@ const ChatTable: React.FC<WorkshopTableProps> = (props) => {
       >
         <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
           Pagina{' '}
-          <span className="font-semibold text-gray-900 dark:text-white">
-            {pageIndex + 1}{' '}
-          </span>
+          <span className="font-semibold text-gray-900 dark:text-white">{pageIndex + 1} </span>
           de{' '}
-          <span className="font-semibold text-gray-900 dark:text-white">
-            {pageOptions.length}{' '}
-          </span>
+          <span className="font-semibold text-gray-900 dark:text-white">{pageOptions.length} </span>
         </span>
         <ul className="inline-flex items-center -space-x-px">
           <li>

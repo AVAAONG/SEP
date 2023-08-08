@@ -45,12 +45,8 @@ const ChatsList: React.FC<ChatsListProps> = (props) => {
                 </button>
 
                 <div className="flex-1 min-w-fit">
-                  <p className="text-sm font-medium text-gray-900 truncate text-white">
-                    {name}
-                  </p>
-                  <p className="text-xs text-gray-500 truncate text-gray-400">
-                    Por: {speaker}
-                  </p>
+                  <p className="text-sm font-medium text-gray-900 truncate text-white">{name}</p>
+                  <p className="text-xs text-gray-500 truncate text-gray-400">Por: {speaker}</p>
                 </div>
                 <div className="flex-1 min-w-0 text-center">
                   <p className="text-sm font-medium text-gray-900 truncate text-white">
@@ -61,9 +57,7 @@ const ChatsList: React.FC<ChatsListProps> = (props) => {
                   </p>
                 </div>
                 <div className="flex-1 min-w-0 text-center">
-                  <p className="text-sm font-medium text-gray-900 truncate text-white">
-                    {level}
-                  </p>
+                  <p className="text-sm font-medium text-gray-900 truncate text-white">{level}</p>
                   <p className="text-xs text-gray-500 truncate text-gray-400">
                     {numberOfParticipants} cupos
                   </p>
@@ -75,9 +69,7 @@ const ChatsList: React.FC<ChatsListProps> = (props) => {
                   <p className="text-sm font-medium text-gray-900 truncate text-white">
                     {kindOfChat}
                   </p>
-                  <p className="text-xs text-gray-500 truncate text-gray-400">
-                    {platform}
-                  </p>
+                  <p className="text-xs text-gray-500 truncate text-gray-400">{platform}</p>
                 </div>
                 <button
                   onClick={() => {

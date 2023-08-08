@@ -27,15 +27,13 @@ export const PAGES: Partial<PagesOptions> = {
  * @summary Client ID for using the google user resources trough the Google API
  * @see https://developers.google.com/identity/oauth2/web/guides/get-google-api-clientid to get the client id
  */
-export const GOOGLE_ADMIN_API_CLIENT_ID =
-  process.env.GOOGLE_ADMIN_API_CLIENT_ID!;
+export const GOOGLE_ADMIN_API_CLIENT_ID = process.env.GOOGLE_ADMIN_API_CLIENT_ID!;
 /**
  * @description Google ADMIN Client Secret
  * @summary Client Secret for using the google user resources trough the Google API
  * @see https://developers.google.com/identity/protocols/oauth2/web-server#creatingcred to get the client secret
  */
-export const GOOGLE_ADMIN_API_CLIENT_SECRET =
-  process.env.GOOGLE_ADMIN_API_CLIENT_SECRET!;
+export const GOOGLE_ADMIN_API_CLIENT_SECRET = process.env.GOOGLE_ADMIN_API_CLIENT_SECRET!;
 
 /**
  * @description Google ADMIN Scopes

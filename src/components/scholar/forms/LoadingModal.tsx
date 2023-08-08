@@ -39,9 +39,7 @@ const LoadingModal = ({ state, changeState }: LoadingModalProps) => {
       <div className="p-4 w-full h-full animate-pulse">
         <div className="p-4 rounded-lg shadow bg-gray-100 md:p-8">
           <div className="flex flex-col justify-center items-center">
-            <h3 className="mb-3 text-lg font-bold  text-emerald-800">
-              Actualizando tus datos
-            </h3>
+            <h3 className="mb-3 text-lg font-bold  text-emerald-800">Actualizando tus datos</h3>
             <div className="w-1/3">
               <svg
                 className="animate-spin w-full text-emerald-600 transition-all duration-500"

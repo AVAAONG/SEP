@@ -20,8 +20,7 @@ export const userNavigation = [
  * @param classes
  * @returns
  */
-export const classNames = (...classes: string[]) =>
-  classes.filter(Boolean).join(' ');
+export const classNames = (...classes: string[]) => classes.filter(Boolean).join(' ');
 
 export const navigation = [
   { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },

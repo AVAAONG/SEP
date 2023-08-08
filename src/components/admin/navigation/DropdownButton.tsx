@@ -8,11 +8,7 @@ type DropdownButtonProps = {
   Icon: any;
 };
 
-const DropdownButton = ({
-  buttonName,
-  itemList,
-  Icon,
-}: DropdownButtonProps) => {
+const DropdownButton = ({ buttonName, itemList, Icon }: DropdownButtonProps) => {
   const [isDropdownOpen, setDropdown] = useState(false);
   const toggleDropdown = () => setDropdown(!isDropdownOpen);
   return (
@@ -25,9 +21,7 @@ const DropdownButton = ({
         <i className={` w-6 h-6`}>
           <Icon />
         </i>
-        <span className="flex-1 ml-3 text-left whitespace-nowrap">
-          {buttonName}
-        </span>
+        <span className="flex-1 ml-3 text-left whitespace-nowrap">{buttonName}</span>
         <svg
           aria-hidden="true"
           className="w-6 h-6"
@@ -42,11 +36,7 @@ const DropdownButton = ({
           ></path>
         </svg>
       </button>
-      <ul
-        className={` ${
-          isDropdownOpen ? 'flex flex-col' : 'hidden'
-        } py-2 space-y-2 `}
-      >
+      <ul className={` ${isDropdownOpen ? 'flex flex-col' : 'hidden'} py-2 space-y-2 `}>
         {itemList.map(({ name, link }) => {
           return (
             <li key={link}>
@@ -61,10 +51,7 @@ const DropdownButton = ({
                 >
                   <circle cx="12" cy="12" r="8"></circle>
                 </svg>
-                <Link
-                  href={link}
-                  className="flex items-center w-full text-xs font-normal"
-                >
+                <Link href={link} className="flex items-center w-full text-xs font-normal">
                   {name}
                 </Link>
               </div>

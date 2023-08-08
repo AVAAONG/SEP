@@ -20,14 +20,10 @@ interface GeneralInformationProps {
   title: string;
 }
 
-const GeneralInformation = ({
-  scholarGeneralInfo,
-  id,
-  title,
-}: GeneralInformationProps) => {
-  const [updatinState, changeUpdatingState] = useState<
-    'updating' | 'updated' | 'error' | 'none'
-  >('none');
+const GeneralInformation = ({ scholarGeneralInfo, id, title }: GeneralInformationProps) => {
+  const [updatinState, changeUpdatingState] = useState<'updating' | 'updated' | 'error' | 'none'>(
+    'none'
+  );
 
   useEffect(() => {
     if (updatinState === 'updated') {
@@ -63,15 +59,11 @@ const GeneralInformation = ({
   };
 
   if (updatinState !== 'none') {
-    return (
-      <LoadingModal state={updatinState} changeState={changeUpdatingState} />
-    );
+    return <LoadingModal state={updatinState} changeState={changeUpdatingState} />;
   } else {
     return (
       <>
-        <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">
-          {title}
-        </h3>
+        <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">{title}</h3>
         <form action="#">
           <div className="grid grid-cols-6 gap-6">
             {GENERAL_INFORMATION_INPUT_DATA.map((input, index) => {

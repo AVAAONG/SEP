@@ -1,13 +1,7 @@
 'use client';
 import { XIcon, EditIcon } from '@/assets/svgs';
 import { SUUID } from 'short-uuid';
-import {
-  Modality,
-  Skill,
-  Workshop,
-  WorkshopSpeaker,
-  WorkshopTempData,
-} from '@prisma/client';
+import { Modality, Skill, Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
 import { useForm } from 'react-hook-form';
 import { BaseSyntheticEvent, useState } from 'react';
 import WorkshopTooltip from '../WorkshopTooltip';
@@ -80,9 +74,7 @@ const WorkshopsList: React.FC<WorkshopsListProps> = (props) => {
   return (
     <>
       <form
-        onSubmit={handleSubmit(
-          async (data, event) => await sendWorkshops(data, event!)
-        )}
+        onSubmit={handleSubmit(async (data, event) => await sendWorkshops(data, event!))}
         className="flow-root w-full "
       >
         <ul role="list" className="flex flex-col gap-2">
@@ -151,9 +143,7 @@ const WorkshopsList: React.FC<WorkshopsListProps> = (props) => {
                   <p className="text-sm font-medium truncate text-white">
                     {mapWorkshopSkill(skill)}
                   </p>
-                  <p className="text-xs text-gray-500 truncate ">
-                    {avalible_spots} cupos
-                  </p>
+                  <p className="text-xs text-gray-500 truncate ">{avalible_spots} cupos</p>
                   <p className="text-xs text-gray-500 truncate ">
                     {year.toString().replaceAll(',', ' y ')} Año
                   </p>

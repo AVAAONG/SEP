@@ -33,8 +33,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   const token = await getToken({ req });
   setTokens(token?.accessToken as string, token?.refreshToken as string);
 
-  const { title, date, startHour, endHour, modality, spots, id, speaker } =
-    data;
+  const { title, date, startHour, endHour, modality, spots, id, speaker } = data;
 
   const tempDataObj: WorkshopTempData = {
     id: shortUUID.generate(),

@@ -8,10 +8,7 @@ import shortUUID from 'short-uuid';
 import { createEvent } from '@/lib/calendar/calendar';
 import { Platform } from '@/types/General';
 import { getFormatedDate } from '@/lib/calendar/utils';
-import {
-  createWorkshop,
-  getScheduledWorkshops,
-} from '@/lib/database/Workshops';
+import { createWorkshop, getScheduledWorkshops } from '@/lib/database/Workshops';
 import { Workshop as FormTypeWorkshop } from '@/types/Workshop';
 
 const FORM_CREATION_APPSCRIPT_URL =

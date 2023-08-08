@@ -27,9 +27,7 @@ export interface EmailConfig extends CommonProviderOptions {
    */
   maxAge?: number;
   /** [Documentation](https://next-auth.js.org/providers/email#customizing-emails) */
-  sendVerificationRequest: (
-    params: SendVerificationRequestParams
-  ) => Awaitable<void>;
+  sendVerificationRequest: (params: SendVerificationRequestParams) => Awaitable<void>;
   /**
    * By default, we are generating a random verification token.
    * You can make it predictable or modify it as you like with this method.

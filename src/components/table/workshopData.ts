@@ -1,10 +1,5 @@
 import { TableOptions } from 'react-table';
-import {
-  Workshop,
-  WorkshopDates,
-  WorkshopSpeaker,
-  WorkshopTempData,
-} from '@prisma/client';
+import { Workshop, WorkshopDates, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
 
 interface WorkshopTableProps {
   workshopData: (Workshop & {

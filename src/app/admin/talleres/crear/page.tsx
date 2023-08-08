@@ -14,8 +14,7 @@ interface WorkshopForm extends Workshop {
 }
 
 const Page = () => {
-  const fetcher = (...args: RequestInfo[] | URL[]) =>
-    fetch([...args]).then((res) => res.json());
+  const fetcher = (...args: RequestInfo[] | URL[]) => fetch([...args]).then((res) => res.json());
 
   const speakerResponse = ['Andrés Della'];
   const [modalopen, setModalOpen] = useState(false);
@@ -45,9 +44,7 @@ const Page = () => {
   };
 
   const editEntry = (inputId: shortUUID.SUUID) => {
-    const workshops = workshopResponse.data.filter(
-      (workshop: Workshop) => workshop.id === inputId
-    );
+    const workshops = workshopResponse.data.filter((workshop: Workshop) => workshop.id === inputId);
     const {
       title,
       pensum,
@@ -159,15 +156,10 @@ const Page = () => {
                   Coloca el Asusto y selecciona los contactos
                 </h3>
                 <form
-                  onSubmit={handleSubmit(
-                    async (data, event) => await sendWorkshops(data, event!)
-                  )}
+                  onSubmit={handleSubmit(async (data, event) => await sendWorkshops(data, event!))}
                 >
                   <div className="flex flex-col">
-                    <label
-                      htmlFor="subject"
-                      className="mb-1 text-lg font-bold  text-gray-200"
-                    >
+                    <label htmlFor="subject" className="mb-1 text-lg font-bold  text-gray-200">
                       Asunto
                     </label>
                     <input
@@ -185,10 +177,7 @@ const Page = () => {
                     />
                   </div>
                   <div className="flex flex-col mt-4">
-                    <label
-                      htmlFor="group"
-                      className="mb-1 text-lg font-bold text-gray-200"
-                    >
+                    <label htmlFor="group" className="mb-1 text-lg font-bold text-gray-200">
                       Grupo
                     </label>
                     <select
@@ -202,9 +191,7 @@ const Page = () => {
                       }
                     >
                       <option value="SOLO KEVIN">SOLO KEVIN</option>
-                      <option value="Todos los Becarios">
-                        Todos los Becarios
-                      </option>
+                      <option value="Todos los Becarios">Todos los Becarios</option>
                       <option value="Becarios I">Becarios I</option>
                       <option value="Becarios II">Becarios II</option>
                       <option value="Becarios III">Becarios III</option>
@@ -234,9 +221,7 @@ const Page = () => {
               </div>
             ) : loading === 'sending' ? (
               <div className="flex flex-col justify-center items-center">
-                <h3 className="mb-3 text-sm opacity-50 font-bold  text-white">
-                  Enviando talleres
-                </h3>
+                <h3 className="mb-3 text-sm opacity-50 font-bold  text-white">Enviando talleres</h3>
                 <div className="">
                   <svg
                     className="animate-spin h-20 w-20 text-green-500 transition-all duration-500"

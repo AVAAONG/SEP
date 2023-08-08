@@ -50,10 +50,7 @@ const VOLUNTEERS_CALENDAR_ID =
 //                                             description: 'asfasfdd'
 // }
 
-export const createEvent = async (
-  kindOfActivity: KindOfActivity,
-  values: Workshop | Chat
-) => {
+export const createEvent = async (kindOfActivity: KindOfActivity, values: Workshop | Chat) => {
   const calendarId = 'primary';
   let addUrl: string | null = null;
   let meetLink: string | null = null;
@@ -64,20 +61,9 @@ export const createEvent = async (
     const { title, date, startHour, endHour, platform } = values as Workshop;
 
     const [start, end] = getFormatedDate(date, startHour, endHour);
-    const [
-      eventDetails,
-      eventDescription,
-      zoomMeetLink,
-      zoomMeetId,
-      zoomMetPassword,
-    ] = await createWorkshopEventDetails(values as Workshop);
-    addUrl = await getPublicEventLink(
-      title,
-      platform,
-      eventDescription,
-      start,
-      end
-    );
+    const [eventDetails, eventDescription, zoomMeetLink, zoomMeetId, zoomMetPassword] =
+      await createWorkshopEventDetails(values as Workshop);
+    addUrl = await getPublicEventLink(title, platform, eventDescription, start, end);
     console.log(addUrl);
     console.log(eventDescription);
 
@@ -89,10 +75,7 @@ export const createEvent = async (
     const eventId = event.data.id!;
 
     if (platform.toLowerCase().trim() === 'google meet') {
-      const [googleMeetLink, googleMeetId] = await getMeetEventLink(
-        calendarId,
-        event.data.id!
-      );
+      const [googleMeetLink, googleMeetId] = await getMeetEventLink(calendarId, event.data.id!);
       meetLink = googleMeetLink;
       meetId = googleMeetId;
     } else if (platform.toLowerCase().trim() === 'zoom') {
@@ -104,21 +87,9 @@ export const createEvent = async (
   } else if (kindOfActivity.toLowerCase().trim() === 'chat') {
     const { name, platform, date, startHour } = values as Chat;
     const endHour = addHours(new Date(startHour), 2);
-    const [start, end] = getFormatedDate(
-      date,
-      startHour,
-      endHour.toLocaleString()
-    );
-    const [eventDetails, eventDescription] = await createChatEventDetails(
-      values as Chat
-    );
-    addUrl = await getPublicEventLink(
-      name,
-      platform,
-      eventDescription,
-      start,
-      end
-    );
+    const [start, end] = getFormatedDate(date, startHour, endHour.toLocaleString());
+    const [eventDetails, eventDescription] = await createChatEventDetails(values as Chat);
+    addUrl = await getPublicEventLink(name, platform, eventDescription, start, end);
 
     const event = await Calendar.events.insert({
       calendarId,
@@ -173,20 +144,10 @@ const createWorkshopEventDetails = async (
       description,
       workshopYear
     );
-    eventDetails = createEventObject(
-      title,
-      modality,
-      platform,
-      calendarDescription,
-      start,
-      end
-    );
+    eventDetails = createEventObject(title, modality, platform, calendarDescription, start, end);
   } else if (modality === 'VIRTUAL' || modality === 'HIBRID') {
     if (platform.toLowerCase().trim() === 'zoom') {
-      const [join_url, id, password] = await createZoomMeeting(
-        title,
-        new Date(start)
-      );
+      const [join_url, id, password] = await createZoomMeeting(title, new Date(start));
       zoomMeetLink = join_url;
       zoomMeetId = id;
       zoomMetPassword = password;
@@ -219,14 +180,7 @@ const createWorkshopEventDetails = async (
         description,
         workshopYear
       );
-      eventDetails = createEventObject(
-        title,
-        modality,
-        platform,
-        calendarDescription,
-        start,
-        end
-      );
+      eventDetails = createEventObject(title, modality, platform, calendarDescription, start, end);
     }
   } else {
     calendarDescription = createWorkshopCalendarDescription(
@@ -237,43 +191,17 @@ const createWorkshopEventDetails = async (
       description,
       workshopYear
     );
-    eventDetails = createEventObject(
-      title,
-      modality,
-      platform,
-      calendarDescription,
-      start,
-      end
-    );
+    eventDetails = createEventObject(title, modality, platform, calendarDescription, start, end);
   }
-  return [
-    eventDetails,
-    calendarDescription,
-    zoomMeetLink,
-    zoomMeetId,
-    zoomMetPassword,
-  ];
+  return [eventDetails, calendarDescription, zoomMeetLink, zoomMeetId, zoomMetPassword];
 };
 
 const createChatEventDetails = async (
   values: Chat
 ): Promise<[calendar_v3.Schema$Event, string]> => {
-  const {
-    name,
-    description,
-    speaker,
-    level,
-    kindOfChat,
-    platform,
-    date,
-    startHour,
-  } = values;
+  const { name, description, speaker, level, kindOfChat, platform, date, startHour } = values;
   const endHour = addHours(new Date(startHour), 2);
-  const [start, end] = getFormatedDate(
-    date,
-    startHour,
-    endHour.toLocaleString()
-  );
+  const [start, end] = getFormatedDate(date, startHour, endHour.toLocaleString());
   let calendarDescription = createChatCalendarDescription(
     level,
     speaker,
@@ -281,14 +209,7 @@ const createChatEventDetails = async (
     platform,
     description
   );
-  let eventDetails = createEventObject(
-    name,
-    kindOfChat,
-    platform,
-    calendarDescription,
-    start,
-    end
-  );
+  let eventDetails = createEventObject(name, kindOfChat, platform, calendarDescription, start, end);
   return [eventDetails, calendarDescription];
 };
 
@@ -303,8 +224,7 @@ export const getCalendarEvents = async (calendarId: string = 'primary') => {
     timeMin: substractMonths(3),
   });
   if (events.status === 200) {
-    if (events === null || events === undefined)
-      return console.error('No events found.');
+    if (events === null || events === undefined) return console.error('No events found.');
     return events.data.items;
   } else {
     console.error('Error retrieving events');

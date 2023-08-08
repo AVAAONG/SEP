@@ -16,14 +16,8 @@ export async function GET(req: NextRequest, res: NextResponse) {
   sheetNames?.forEach(async (sheetName) => {
     const range = `${sheetName}!A8:G`;
     const rageID = `${sheetName}!H7`;
-    const values = (await getSpreadsheetValues(
-      SPREADSHEET_ID,
-      range
-    )) as string[][];
-    const workshopId = (await getSpreadsheetValues(
-      SPREADSHEET_ID,
-      rageID
-    )) as string[][];
+    const values = (await getSpreadsheetValues(SPREADSHEET_ID, range)) as string[][];
+    const workshopId = (await getSpreadsheetValues(SPREADSHEET_ID, rageID)) as string[][];
 
     values.forEach(async (re) => {
       const attendance = re[6] === 'Si' ? 'ATTENDED' : 'NOT_ATTENDED';
@@ -41,9 +35,5 @@ export async function GET(req: NextRequest, res: NextResponse) {
 }
 
 const normalizeDni = (dni: string) => {
-  return dni
-    .trim()
-    .replaceAll('.', '')
-    .toLocaleLowerCase()
-    .replaceAll('v-', '');
+  return dni.trim().replaceAll('.', '').toLocaleLowerCase().replaceAll('v-', '');
 };

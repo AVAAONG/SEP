@@ -19,9 +19,7 @@ type ZoomAuthResponse = {
   scope: string;
 };
 
-const TOKEN = Buffer.from(
-  `${ZOOM_API_CLIENT_KEY}:${ZOOM_API_CLIENT_SECRET}`
-).toString('base64');
+const TOKEN = Buffer.from(`${ZOOM_API_CLIENT_KEY}:${ZOOM_API_CLIENT_SECRET}`).toString('base64');
 
 /**
  * Authenticates with the Zoom API using server-to-server OAuth.
@@ -94,14 +92,11 @@ const createZoomMeeting = async (name: string, startTime: Date) => {
 export async function getUserInfo() {
   const { access_token } = await authenticateWithZoom();
 
-  const response = await axios.get(
-    'https://api.zoom.us/v2/users/w32R3ChJTs22jdwgLHkZzw',
-    {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    }
-  );
+  const response = await axios.get('https://api.zoom.us/v2/users/w32R3ChJTs22jdwgLHkZzw', {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
   return response.data;
 }
 

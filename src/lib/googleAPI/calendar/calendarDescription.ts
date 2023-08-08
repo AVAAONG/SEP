@@ -32,11 +32,7 @@ export const createWorkshopCalendarDescription = (
   const defaultCalendarDescription = `<b>Modalidad:</b> ${activityMode}
 <b>Año del taller:</b> ${avaaYear.join(', ')}
 <b>Facilitador:</b> ${speaker}
-${
-  activityMode === 'VIRTUAL'
-    ? `<b>Plataforma:</b> ${platform}`
-    : `<b>Lugar:</b> ${platform}`
-}
+${activityMode === 'VIRTUAL' ? `<b>Plataforma:</b> ${platform}` : `<b>Lugar:</b> ${platform}`}
 <b>Competencia Asociada:</b> ${pensum}
 `;
   switch (activityMode) {
@@ -50,11 +46,7 @@ ${description}`;
       workshopCalendarDescription = `${defaultCalendarDescription}
 <b>Link de la reunion:</b> ${meetingLink}
 <b>Id de la reunion:</b> ${meetingId}
-${
-  platform === 'zoom'
-    ? `<b>Contraseña de la reunion:</b> ${meetingPassword}`
-    : ''
-}
+${platform === 'zoom' ? `<b>Contraseña de la reunion:</b> ${meetingPassword}` : ''}
 
 ${description}`;
       break;

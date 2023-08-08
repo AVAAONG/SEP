@@ -11,11 +11,7 @@ export const metadata = {
   icons: favicon.src,
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <main className="flex bg-gradient-to-b from-emerald-950 to-slate-950">
       <Sidebar />

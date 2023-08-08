@@ -4,11 +4,7 @@ import Sidebar from '@/components/scholar/Sidebar';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { getServerSession } from 'next-auth';
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions);
   return (
     <>

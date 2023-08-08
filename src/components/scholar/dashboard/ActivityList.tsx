@@ -10,17 +10,12 @@ const ActivityList = ({ activityList }) => {
       </h3>
       <div className="border-t border-gray-200 dark:border-gray-600">
         <div className=" pt-4" role="tabpanel" aria-labelledby="faq-tab">
-          <ul
-            role="list"
-            className="divide-y divide-gray-200 dark:divide-gray-700"
-          >
+          <ul role="list" className="divide-y divide-gray-200 dark:divide-gray-700">
             {activityList.map((activity, index: number) => (
               <li className="py-3 sm:py-4" key={index}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center min-w-0">
-                    <ActivityListIcon
-                      kindOfActivity={activity.kindOfActivity}
-                    />
+                    <ActivityListIcon kindOfActivity={activity.kindOfActivity} />
                     <div className="flex flex-col ml-3">
                       <p className="font-medium text-gray-900 truncate dark:text-white">
                         {activity.title}

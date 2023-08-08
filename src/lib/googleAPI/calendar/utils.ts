@@ -29,14 +29,8 @@ export const getPublicEventLink = async (
   const encodedLocation = encodeURIComponent(platform);
   const calendarName = encodeURIComponent(name);
   const encodeDescription = encodeURIComponent(calendarDescription);
-  const calendarStartDate = startDate
-    .replaceAll('-', '')
-    .replaceAll(':', '')
-    .replaceAll('.', '');
-  const calendarEndDate = endDate
-    .replaceAll('-', '')
-    .replaceAll(':', '')
-    .replaceAll('.', '');
+  const calendarStartDate = startDate.replaceAll('-', '').replaceAll(':', '').replaceAll('.', '');
+  const calendarEndDate = endDate.replaceAll('-', '').replaceAll(':', '').replaceAll('.', '');
 
   let addUrl = '';
 
@@ -140,11 +134,7 @@ export const substractMonths = (montsTosubstract: number) => {
  * @param endHour the end hour of the event
  * @returns the date object of the start and end hour in ISO string format
  */
-export const getFormatedDate = (
-  date: string,
-  startingHour: string,
-  endHour?: string
-) => {
+export const getFormatedDate = (date: string, startingHour: string, endHour?: string) => {
   const start = new Date(date + ',' + startingHour);
   const end = new Date(date + ',' + endHour);
   return [start.toISOString(), end.toISOString()];
@@ -156,10 +146,7 @@ export const getFormatedDate = (
  * @param eventId the id of the event we want get the meet meeting
  * @returns the meet link and its id
  */
-export const getMeetEventLink = async (
-  calendarId: string,
-  eventId: string
-): Promise<string[]> => {
+export const getMeetEventLink = async (calendarId: string, eventId: string): Promise<string[]> => {
   const event = await Calendar.events.get({ calendarId, eventId });
   const meetLink = event.data.hangoutLink;
   return [meetLink];

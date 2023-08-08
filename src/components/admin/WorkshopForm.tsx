@@ -60,21 +60,14 @@ const WorkshopForm = () => {
 
   return (
     <form
-      onSubmit={handleSubmit(
-        async (data, event) => await scheduleWorkshop(data, event!)
-      )}
+      onSubmit={handleSubmit(async (data, event) => await scheduleWorkshop(data, event!))}
       className="grid gap-6 md:grid-cols-2 md:grid-rows-2 caret-green-500 text-slate-300 w-full"
     >
       <div className="col-span-2 h-fit">
         <label className="block mb-2 text-xs m-l-1 font-semibold text-slate-400 uppercase">
           titulo del taller
         </label>
-        <input
-          {...register('title')}
-          type={'text'}
-          id={'Titulo del taller'}
-          required={true}
-        />
+        <input {...register('title')} type={'text'} id={'Titulo del taller'} required={true} />
       </div>
 
       <div>
@@ -101,36 +94,21 @@ const WorkshopForm = () => {
         <label className="block mb-2 text-xs m-l-1 font-semibold  text-slate-400 uppercase">
           fecha
         </label>
-        <input
-          {...register('date')}
-          type={'date'}
-          id={'Fecha'}
-          required={true}
-        />
+        <input {...register('date')} type={'date'} id={'Fecha'} required={true} />
       </div>
 
       <div>
         <label className="block mb-2 text-xs m-l-1 font-semibold  text-slate-400 uppercase">
           hora de inicio
         </label>
-        <input
-          {...register('startHour')}
-          type={'time'}
-          id={'Hora de inicio'}
-          required={true}
-        />
+        <input {...register('startHour')} type={'time'} id={'Hora de inicio'} required={true} />
       </div>
 
       <div>
         <label className="block mb-2 text-xs m-l-1 font-semibold  text-slate-400 uppercase">
           hora de cierre
         </label>
-        <input
-          {...register('endHour')}
-          type={'time'}
-          id={'Hora de cierre'}
-          required={true}
-        />
+        <input {...register('endHour')} type={'time'} id={'Hora de cierre'} required={true} />
       </div>
 
       <div>
@@ -142,8 +120,7 @@ const WorkshopForm = () => {
             <option>Cargando facilitadores ...</option>
           ) : (
             data.map((value) => {
-              const { id, first_names, last_names, email } =
-                value as WorkshopSpeaker;
+              const { id, first_names, last_names, email } = value as WorkshopSpeaker;
               const fullName = `${first_names} ${last_names}`;
               return (
                 <option key={id} value={`${id}+/+${fullName}+/+${email}`}>
@@ -158,25 +135,13 @@ const WorkshopForm = () => {
         <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">
           cupos disponibles
         </label>
-        <input
-          {...register('spots')}
-          type={'number'}
-          id="first_name"
-          required
-          min={0}
-          max={300}
-        />
+        <input {...register('spots')} type={'number'} id="first_name" required min={0} max={300} />
       </div>
       <div>
         <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">
           modalidad
         </label>
-        <select
-          {...register('modality')}
-          id="Modalidad"
-          required={true}
-          className="capitalize"
-        >
+        <select {...register('modality')} id="Modalidad" required={true} className="capitalize">
           {MODALITY.map((option, index) => {
             return (
               <option value={option?.value} key={index}>
@@ -190,11 +155,7 @@ const WorkshopForm = () => {
         <label className="block mb-2 text-xs font-semibold text-slate-400 uppercase">
           platafomra/lugar
         </label>
-        <input
-          list="allowedSelection"
-          {...register('platform')}
-          id={'Platafomra/Lugar'}
-        ></input>
+        <input list="allowedSelection" {...register('platform')} id={'Platafomra/Lugar'}></input>
         <datalist id="allowedSelection">
           {PLATFORMS.map((option) => {
             return (
@@ -206,9 +167,7 @@ const WorkshopForm = () => {
         </datalist>
       </div>
       <div className="col-span-2 h-fit flex flex-col">
-        <p className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">
-          año del taller
-        </p>
+        <p className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">año del taller</p>
         <div className="flex">
           {WORKSHOP_YEAR.map((input) => {
             return (

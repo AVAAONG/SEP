@@ -6,38 +6,26 @@ const roboto = Roboto({ subsets: ['latin'], weight: ['400', '700'] });
 
 const PublicFooter = () => {
   return (
-    <footer
-      className={` py-4 ${roboto.className} text-xs md:text-sm bg-slate-950`}
-    >
+    <footer className={` py-4 ${roboto.className} text-xs md:text-sm bg-slate-950`}>
       <div className="max-w-xs lg:max-w-7xl box-border relative justify-center items-center m-auto flex-wrap ">
         <div className="flex m-auto lg:mx-24 justify-center lg:justify-start mb-8 lg:mb-2">
           <figure>
-            <Image
-              src="/avaa-color.png"
-              alt="AVAA Logo"
-              width={200}
-              height={100}
-            ></Image>
+            <Image src="/avaa-color.png" alt="AVAA Logo" width={200} height={100}></Image>
           </figure>
         </div>
         <div className="w-full flex box-border flex-wrap justify-between items-center lg:items-start gap-8">
           <div className="max-w-sm m-auto flex flex-wrap justify-center lg:justify-start gap-4">
             <p className="text-center lg:text-start">
-              Apoyamos la educación integral y formación de jóvenes venezolanos
-              con valores sociales y morales elevados para contribuir al
-              desarrollo armónico del país en un ambiente de convivencia y
-              amistad internacional en alianza con personas y organizaciones
+              Apoyamos la educación integral y formación de jóvenes venezolanos con valores sociales
+              y morales elevados para contribuir al desarrollo armónico del país en un ambiente de
+              convivencia y amistad internacional en alianza con personas y organizaciones
               comprometidas con Venezuela
             </p>
           </div>
           <div className="flex flex-col w-full lg:w-min justify-center lg:justify-start text-center lg:text-start gap-4">
             <span>Siguenos en nuestras redes:</span>
             <div className="flex  w-full justify-center gap-6 lg:justify-start text-center lg:text-start">
-              <a
-                href="https://twitter.com/avaa_org"
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a href="https://twitter.com/avaa_org" target="_blank" rel="noreferrer">
                 <svg
                   aria-hidden="true"
                   focusable="false"
@@ -54,11 +42,7 @@ const PublicFooter = () => {
                   ></path>
                 </svg>
               </a>
-              <a
-                href="https://www.youtube.com/@avaa_org/"
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a href="https://www.youtube.com/@avaa_org/" target="_blank" rel="noreferrer">
                 <svg
                   aria-hidden="true"
                   focusable="false"
@@ -75,11 +59,7 @@ const PublicFooter = () => {
                   ></path>
                 </svg>
               </a>
-              <a
-                href="https://www.instagram.com/avaa_org/"
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a href="https://www.instagram.com/avaa_org/" target="_blank" rel="noreferrer">
                 <svg
                   aria-hidden="true"
                   focusable="false"
@@ -111,21 +91,11 @@ const PublicFooter = () => {
                   fill="#000000"
                 >
                   <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                  <g
-                    id="SVGRepo_tracerCarrier"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  ></g>
+                  <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
                   <g id="SVGRepo_iconCarrier">
                     {' '}
                     <title>linkedin [#ffffff]</title>
-                    <g
-                      id="Page-1"
-                      stroke="none"
-                      strokeWidth="1"
-                      fill="none"
-                      fillRule="evenodd"
-                    >
+                    <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
                       {' '}
                       <g
                         id="Dribbble-Light-Preview"
@@ -133,10 +103,7 @@ const PublicFooter = () => {
                         fill="#ffffff"
                       >
                         {' '}
-                        <g
-                          id="icons"
-                          transform="translate(56.000000, 160.000000)"
-                        >
+                        <g id="icons" transform="translate(56.000000, 160.000000)">
                           {' '}
                           <path
                             d="M144,7339 L140,7339 L140,7332.001 C140,7330.081 139.153,7329.01 137.634,7329.01 C135.981,7329.01 135,7330.126 135,7332.001 L135,7339 L131,7339 L131,7326 L135,7326 L135,7327.462 C135,7327.462 136.255,7325.26 139.083,7325.26 C141.912,7325.26 144,7326.986 144,7330.558 L144,7339 L144,7339 Z M126.442,7323.921 C125.093,7323.921 124,7322.819 124,7321.46 C124,7320.102 125.093,7319 126.442,7319 C127.79,7319 128.883,7320.102 128.883,7321.46 C128.884,7322.819 127.79,7323.921 126.442,7323.921 L126.442,7323.921 Z M124,7339 L129,7339 L129,7326 L124,7326 L124,7339 Z"
@@ -150,11 +117,7 @@ const PublicFooter = () => {
                   </g>
                 </svg>
               </a>
-              <a
-                href="https://www.facebook.com/avaa.org"
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a href="https://www.facebook.com/avaa.org" target="_blank" rel="noreferrer">
                 <svg
                   viewBox="-5 0 20 20"
                   version="1.1"
@@ -166,21 +129,11 @@ const PublicFooter = () => {
                   stroke="#ffffff"
                 >
                   <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                  <g
-                    id="SVGRepo_tracerCarrier"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  ></g>
+                  <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
                   <g id="SVGRepo_iconCarrier">
                     {' '}
                     <defs> </defs>{' '}
-                    <g
-                      id="Page-1"
-                      stroke="none"
-                      strokeWidth="1"
-                      fill="none"
-                      fillRule="evenodd"
-                    >
+                    <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
                       {' '}
                       <g
                         id="Dribbble-Light-Preview"
@@ -188,10 +141,7 @@ const PublicFooter = () => {
                         fill="#ffffff"
                       >
                         {' '}
-                        <g
-                          id="icons"
-                          transform="translate(56.000000, 160.000000)"
-                        >
+                        <g id="icons" transform="translate(56.000000, 160.000000)">
                           {' '}
                           <path
                             d="M335.821282,7259 L335.821282,7250 L338.553693,7250 L339,7246 L335.821282,7246 L335.821282,7244.052 C335.821282,7243.022 335.847593,7242 337.286884,7242 L338.744689,7242 L338.744689,7239.14 C338.744689,7239.097 337.492497,7239 336.225687,7239 C333.580004,7239 331.923407,7240.657 331.923407,7243.7 L331.923407,7246 L329,7246 L329,7250 L331.923407,7250 L331.923407,7259 L335.821282,7259 Z"
@@ -233,10 +183,7 @@ const PublicFooter = () => {
       <div className="py-4">
         <div className="flex flex-wrap flex-col box-border relative justify-start items-center m-auto w-auto  gap-4">
           <div className="flex flex-wrap  gap-4">
-            <a
-              href="https://avaa.org/terminos-y-condiciones/"
-              className="pointer"
-            >
+            <a href="https://avaa.org/terminos-y-condiciones/" className="pointer">
               Terminos y condiciones
             </a>
             <a href="https://avaa.org/faq/" className="pointer">

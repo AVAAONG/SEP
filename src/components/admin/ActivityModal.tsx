@@ -17,15 +17,10 @@ const ActivityModal = () => {
                 Coloca el Asusto y selecciona los contactos
               </h3>
               <form
-                onSubmit={handleSubmit(
-                  async (data, event) => await sendWorkshops(data, event!)
-                )}
+                onSubmit={handleSubmit(async (data, event) => await sendWorkshops(data, event!))}
               >
                 <div className="flex flex-col">
-                  <label
-                    htmlFor="subject"
-                    className="mb-1 text-lg font-bold  text-gray-200"
-                  >
+                  <label htmlFor="subject" className="mb-1 text-lg font-bold  text-gray-200">
                     Asunto
                   </label>
                   <input
@@ -43,10 +38,7 @@ const ActivityModal = () => {
                   />
                 </div>
                 <div className="flex flex-col mt-4">
-                  <label
-                    htmlFor="group"
-                    className="mb-1 text-lg font-bold text-gray-200"
-                  >
+                  <label htmlFor="group" className="mb-1 text-lg font-bold text-gray-200">
                     Grupo
                   </label>
                   <select
@@ -60,9 +52,7 @@ const ActivityModal = () => {
                     }
                   >
                     <option value="SOLO KEVIN">SOLO KEVIN</option>
-                    <option value="Todos los Becarios">
-                      Todos los Becarios
-                    </option>
+                    <option value="Todos los Becarios">Todos los Becarios</option>
                     <option value="Becarios I">Becarios I</option>
                     <option value="Becarios II">Becarios II</option>
                     <option value="Becarios III">Becarios III</option>
@@ -92,9 +82,7 @@ const ActivityModal = () => {
             </div>
           ) : loading === 'sending' ? (
             <div className="flex flex-col justify-center items-center">
-              <h3 className="mb-3 text-sm opacity-50 font-bold  text-white">
-                Enviando talleres
-              </h3>
+              <h3 className="mb-3 text-sm opacity-50 font-bold  text-white">Enviando talleres</h3>
               <div className="">
                 <svg
                   className="animate-spin h-20 w-20 text-green-500 transition-all duration-500"

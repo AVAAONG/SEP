@@ -98,9 +98,7 @@ const getScholarData = async (id: string) => {
   };
 
   const workScholarInformation = {
-    isCurrentlyWorking: scholar?.scholar?.is_currently_working
-      ? 'TRUE'
-      : 'FALSE',
+    isCurrentlyWorking: scholar?.scholar?.is_currently_working ? 'TRUE' : 'FALSE',
     organizationName: scholar?.scholar?.organization_name,
     positionHeld: scholar?.scholar?.position_held,
     workModality: scholar?.scholar?.work_modality,
@@ -143,11 +141,7 @@ const page = async () => {
             <ProfilePic image={scholar!.image} />
           </div>
           <div className="bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-40 p-4 mb-4  shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2  sm:p-6 dark:bg-slate-950">
-            <CVAInformation
-              id={scholarId}
-              title="CVA"
-              scholarCVAInfo={scholarCVAInfo}
-            />
+            <CVAInformation id={scholarId} title="CVA" scholarCVAInfo={scholarCVAInfo} />
           </div>
           {/* <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2 dark:border-gray-900 sm:p-6 dark:bg-slate-950">
                         <SocialMedia />

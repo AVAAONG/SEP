@@ -75,10 +75,7 @@ const Input = ({
     if (inputOptions === undefined || inputOptions === null) {
       return (
         <div key={inputId}>
-          <label
-            htmlFor="countries"
-            className="block mb-2 text-sm font-medium  text-slate-400"
-          >
+          <label htmlFor="countries" className="block mb-2 text-sm font-medium  text-slate-400">
             {title}
           </label>
           <input
@@ -91,10 +88,7 @@ const Input = ({
     } else {
       return (
         <div key={inputId}>
-          <label
-            htmlFor="countries"
-            className="block mb-2 text-sm font-medium  text-slate-400"
-          >
+          <label htmlFor="countries" className="block mb-2 text-sm font-medium  text-slate-400">
             {title}
           </label>
           <select
@@ -113,10 +107,7 @@ const Input = ({
   } else if (inputType === 'allowedSelection') {
     return (
       <div key={inputId}>
-        <label
-          htmlFor={title.trim()}
-          className="block mb-2 text-sm font-medium text-slate-400"
-        >
+        <label htmlFor={title.trim()} className="block mb-2 text-sm font-medium text-slate-400">
           {title}
         </label>
         <input
@@ -156,13 +147,10 @@ const Input = ({
       </div>
     );
   } else if (inputType === 'normal') {
-  /**  * Return a normla input, the type varies*/
+    /**  * Return a normla input, the type varies*/
     return (
       <div>
-        <label
-          htmlFor="first_name"
-          className="block mb-2 text-sm font-medium  text-slate-400"
-        >
+        <label htmlFor="first_name" className="block mb-2 text-sm font-medium  text-slate-400">
           {title}
         </label>
         <input
@@ -179,9 +167,7 @@ const Input = ({
   } else if (inputType === 'checkbox') {
     return (
       <div className="col-span-2 h-fit flex flex-col" key={inputId}>
-        <p className="block mb-2 text-sm font-medium  text-slate-400">
-          {title}
-        </p>
+        <p className="block mb-2 text-sm font-medium  text-slate-400">{title}</p>
         <div className="flex">
           {inputOptions!.map((input) => {
             return (

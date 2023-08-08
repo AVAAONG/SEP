@@ -3,11 +3,7 @@
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './calendar.css';
 
-import {
-  Calendar as BigCalendar,
-  momentLocalizer,
-  Views,
-} from 'react-big-calendar';
+import { Calendar as BigCalendar, momentLocalizer, Views } from 'react-big-calendar';
 import moment from 'moment';
 import { Fragment, useMemo } from 'react';
 import 'moment/locale/es';

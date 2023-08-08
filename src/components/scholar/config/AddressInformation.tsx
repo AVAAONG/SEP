@@ -12,14 +12,10 @@ interface AddressInformationProps {
   title: string;
 }
 
-const AddressInformation = ({
-  scholarAddressInfo,
-  title,
-  id,
-}: AddressInformationProps) => {
-  const [updatinState, changeUpdatingState] = useState<
-    'updating' | 'updated' | 'error' | 'none'
-  >('none');
+const AddressInformation = ({ scholarAddressInfo, title, id }: AddressInformationProps) => {
+  const [updatinState, changeUpdatingState] = useState<'updating' | 'updated' | 'error' | 'none'>(
+    'none'
+  );
 
   useEffect(() => {
     if (updatinState === 'updated') {
@@ -53,15 +49,11 @@ const AddressInformation = ({
   };
 
   if (updatinState !== 'none') {
-    return (
-      <LoadingModal state={updatinState} changeState={changeUpdatingState} />
-    );
+    return <LoadingModal state={updatinState} changeState={changeUpdatingState} />;
   } else {
     return (
       <>
-        <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">
-          {title}
-        </h3>
+        <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">{title}</h3>
         <form action="#">
           <div className="grid grid-cols-6 gap-6">
             <div className="col-span-6 sm:col-span-3">
@@ -71,12 +63,7 @@ const AddressInformation = ({
               >
                 Estado de Origen
               </label>
-              <input
-                type="text"
-                {...register('stateOfOrigin')}
-                placeholder="La guaira"
-                required
-              />
+              <input type="text" {...register('stateOfOrigin')} placeholder="La guaira" required />
             </div>
             <div className="col-span-6 sm:col-span-3">
               <label

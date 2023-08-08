@@ -16,11 +16,7 @@ const page = () => {
   return (
     <main className="bg-purple-300 flex flex-col">
       <div className="w-full border-b-8 border-purple-800 ">
-        <img
-          src="https://i.imgur.com/oaJRKuz.png"
-          alt=""
-          className=" w-full h-[300px]"
-        />
+        <img src="https://i.imgur.com/oaJRKuz.png" alt="" className=" w-full h-[300px]" />
       </div>
       <div className="bg-white w-[1400px] m-auto p-4 rounded-md mt-4 text-black text-center">
         <h2 className=" text-3xl font-bold">Planed Schedule for the month</h2>

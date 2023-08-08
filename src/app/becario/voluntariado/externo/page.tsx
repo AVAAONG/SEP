@@ -87,8 +87,8 @@ const page = () => {
                 />
               </svg>
               <p className="mb-2 text-sm text-green-500 dark:text-green-400 font-semibold text-center">
-                Adjunte aqui la constancia emitida por la organización, empresa
-                o institución beneficiada.
+                Adjunte aqui la constancia emitida por la organización, empresa o institución
+                beneficiada.
               </p>
               <p className="text-xs text-green-500 dark:text-green-400">
                 {' '}

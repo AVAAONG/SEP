@@ -24,9 +24,7 @@ const ProfilePic = (props: ProfilePicProps) => {
         alt="profile picture"
       />
       <div>
-        <h3 className="mb-1 text-xl font-bold text-gray-900 dark:text-white">
-          Foto de perfil
-        </h3>
+        <h3 className="mb-1 text-xl font-bold text-gray-900 dark:text-white">Foto de perfil</h3>
         <div className="mb-4 text-sm text-gray-500 dark:text-gray-400">
           JPG, GIF or PNG. MAX 800px
         </div>

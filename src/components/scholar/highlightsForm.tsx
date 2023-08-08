@@ -61,8 +61,7 @@ const HighlightsForm = () => {
                   htmlFor="studyArea"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Institución, Programa o Actividad en la cual participaste y
-                  obtuviste ese logro.
+                  Institución, Programa o Actividad en la cual participaste y obtuviste ese logro.
                 </label>
                 <input type="text" />
               </div>
@@ -72,9 +71,9 @@ const HighlightsForm = () => {
                   htmlFor="studyArea"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Describe a continuación como fue la experiencia? a que se
-                  refiere? que habilidades o características te llevaron a
-                  obtener ese logro? Por qué consideras debemos resaltarlo?
+                  Describe a continuación como fue la experiencia? a que se refiere? que habilidades
+                  o características te llevaron a obtener ese logro? Por qué consideras debemos
+                  resaltarlo?
                 </label>
                 <input type="text" />
               </div>

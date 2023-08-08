@@ -12,11 +12,7 @@ const TransitionC = () => {
 
   return (
     <Transition.Root show={sidebarOpen} as={Fragment}>
-      <Dialog
-        as="div"
-        className="fixed inset-0 flex z-40 md:hidden"
-        onClose={setSidebarOpen}
-      >
+      <Dialog as="div" className="fixed inset-0 flex z-40 md:hidden" onClose={setSidebarOpen}>
         <Transition.Child
           as={Fragment}
           enter="transition-opacity ease-linear duration-300"
@@ -54,10 +50,7 @@ const TransitionC = () => {
                   onClick={() => setSidebarOpen(false)}
                 >
                   <span className="sr-only">Cerrar</span>
-                  <XMarkIcon
-                    className="h-6 w-6 text-white"
-                    aria-hidden="true"
-                  />
+                  <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
                 </button>
               </div>
             </Transition.Child>
@@ -83,9 +76,7 @@ const TransitionC = () => {
                   >
                     <item.icon
                       className={classNames(
-                        item.current
-                          ? 'text-gray-500'
-                          : 'text-gray-400 group-hover:text-gray-500',
+                        item.current ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
                         'mr-4 flex-shrink-0 h-6 w-6'
                       )}
                       aria-hidden="true"

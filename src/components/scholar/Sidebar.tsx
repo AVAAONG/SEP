@@ -83,11 +83,7 @@ const Sidebar = () => {
         isSidebarOpen ? 'fixed  w-full md:w-64' : 'hidden'
       } top-0 left-0 z-40 h-screen pt-4  bg-white border-r border-gray-200 md:translate-x-0 dark:bg-slate-900 dark:border-gray-700`}
     >
-      <div
-        className={`flex items-center mt-2 ml-6 ${
-          isSidebarOpen ? 'justify-between' : ''
-        } `}
-      >
+      <div className={`flex items-center mt-2 ml-6 ${isSidebarOpen ? 'justify-between' : ''} `}>
         <Link href="/becario/dashboard">
           <Image src={logo} width={190} alt="Logo Proexcelencia" />
         </Link>
@@ -139,9 +135,9 @@ const Sidebar = () => {
             </span>
           </div>
           <p className="mb-3 text-xs text-green-800 dark:text-green-400">
-            El SEP actualmente sigue en proceso de desarrolo, seria genial para
-            nosotros escuchar tus comentarios con respecto a mejoras, cambios o
-            nuevas funcionalidades que te gustaria ver en el sistema.
+            El SEP actualmente sigue en proceso de desarrolo, seria genial para nosotros escuchar
+            tus comentarios con respecto a mejoras, cambios o nuevas funcionalidades que te gustaria
+            ver en el sistema.
           </p>
           <a
             className="bg-orange-100 text-red-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-90"

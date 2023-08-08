@@ -15,12 +15,8 @@ const Card = ({ stat, text, bg, Icon, cardButtonBg }: CardProps) => {
     >
       <div className="flex flex-row justify-between z-10 min-w-fit items-start">
         <div className=" ">
-          <p className="leading-snug text-white text-base font-medium flex-grow">
-            {text}
-          </p>
-          <p className="leading-tight text-5xl font-bold text-white dark:text-slate-950 ">
-            {stat}
-          </p>
+          <p className="leading-snug text-white text-base font-medium flex-grow">{text}</p>
+          <p className="leading-tight text-5xl font-bold text-white dark:text-slate-950 ">{stat}</p>
         </div>
         {/* <div className="inline-flex justify-between max-w-[190px] justify-self-end gap-1">
                     <button className={`${cardButtonBg} flex items-center justify-center px-1 py-2 font-semibold rounded-lg text-sm w-16 h-8 capitalize pointer m-auto`}>

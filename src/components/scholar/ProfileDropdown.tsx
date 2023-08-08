@@ -12,8 +12,7 @@ interface ProfileDropdownProps {
 
 const ProfileDropdown = (props: ProfileDropdownProps) => {
   const [isDrowpdownProfileOpen, setDropdownProfile] = useState(false);
-  const toggleDropdownProfile = () =>
-    setDropdownProfile(!isDrowpdownProfileOpen);
+  const toggleDropdownProfile = () => setDropdownProfile(!isDrowpdownProfileOpen);
 
   const { name, email, scholarId, image } = props;
 
@@ -41,17 +40,10 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
         } z-50 my-4 w-56 text-base list-none bg-white  divide-y divide-gray-100 shadow dark:bg-slate-900 dark:divide-gray-600 rounded-xl`}
       >
         <div className="py-3 px-4">
-          <span className="block text-sm font-semibold text-gray-900 dark:text-white">
-            {name}
-          </span>
-          <span className="block text-sm text-gray-900 truncate dark:text-white">
-            {email}
-          </span>
+          <span className="block text-sm font-semibold text-gray-900 dark:text-white">{name}</span>
+          <span className="block text-sm text-gray-900 truncate dark:text-white">{email}</span>
         </div>
-        <ul
-          className="py-1 text-gray-700 dark:text-gray-300"
-          aria-labelledby="dropdown"
-        >
+        <ul className="py-1 text-gray-700 dark:text-gray-300" aria-labelledby="dropdown">
           <li>
             <a
               href={`becario/${scholarId}/config`}

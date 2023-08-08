@@ -1,18 +1,7 @@
 'use client';
 import React, { useMemo, useState } from 'react';
-import {
-  Workshop,
-  WorkshopDates,
-  WorkshopSpeaker,
-  WorkshopTempData,
-} from '@prisma/client';
-import {
-  useTable,
-  useSortBy,
-  useGlobalFilter,
-  useAsyncDebounce,
-  usePagination,
-} from 'react-table';
+import { Workshop, WorkshopDates, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
+import { useTable, useSortBy, useGlobalFilter, useAsyncDebounce, usePagination } from 'react-table';
 import { FilterIcon, SortIcon, SortIconReverse } from '@/assets/svgs';
 import workshopHeaders from './workshopData';
 interface WorkshopTableProps {
@@ -86,10 +75,7 @@ const WorkshopTable: React.FC<WorkshopTableProps> = (props) => {
         </div>
       </div>
       <div className="flow-root w-full overflow-x-scroll  rounded-lg  h-[600px]">
-        <table
-          {...getTableProps()}
-          className="w-full text-sm text-left text-gray-300 "
-        >
+        <table {...getTableProps()} className="w-full text-sm text-left text-gray-300 ">
           <thead className="text-xs text-green-500 uppercase text-center border-b-2 border-green-600 text-ellipsis  bg-emerald-950">
             {headerGroups.map((headerGroup) => (
               <tr
@@ -146,19 +132,12 @@ const WorkshopTable: React.FC<WorkshopTableProps> = (props) => {
           </tbody>
         </table>
       </div>
-      <nav
-        className="flex items-center justify-between pt-4"
-        aria-label="Table navigation"
-      >
+      <nav className="flex items-center justify-between pt-4" aria-label="Table navigation">
         <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
           Pagina{' '}
-          <span className="font-semibold text-gray-900 dark:text-white">
-            {pageIndex + 1}{' '}
-          </span>
+          <span className="font-semibold text-gray-900 dark:text-white">{pageIndex + 1} </span>
           de{' '}
-          <span className="font-semibold text-gray-900 dark:text-white">
-            {pageOptions.length}{' '}
-          </span>
+          <span className="font-semibold text-gray-900 dark:text-white">{pageOptions.length} </span>
         </span>
         <ul className="inline-flex items-center -space-x-px">
           <li>

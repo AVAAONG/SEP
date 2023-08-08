@@ -25,9 +25,7 @@ const Sidebar = () => {
       <div className="w-full flex flex-col justify-between">
         <DropdownButton
           buttonName="Panel general"
-          itemList={[
-            { link: '/admin/dashboard', name: 'Estadisticas generales' },
-          ]}
+          itemList={[{ link: '/admin/dashboard', name: 'Estadisticas generales' }]}
           Icon={dashboardComponent}
         />
       </div>

@@ -57,16 +57,10 @@ const page = async ({
               />
             </div>
             <div className="flex flex-col justify-center items-center gap-2 sm:gap-1 sm:justify-start sm:items-start ">
-              <h1 className="text-3xl text-green-700 font-bold ">
-                {speaker.name}
-              </h1>
+              <h1 className="text-3xl text-green-700 font-bold ">{speaker.name}</h1>
               <p className="">Facilitador Chats Clubs de Ingléss</p>
               <div className="flex  w-full gap-6 text-center opacity-50 justify-center sm:justify-start lg:hidden ">
-                <a
-                  href="https://twitter.com/avaa_org"
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <a href="https://twitter.com/avaa_org" target="_blank" rel="noreferrer">
                   <svg
                     aria-hidden="true"
                     focusable="false"
@@ -83,11 +77,7 @@ const page = async ({
                     ></path>
                   </svg>
                 </a>
-                <a
-                  href="https://www.youtube.com/@avaa_org/"
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <a href="https://www.youtube.com/@avaa_org/" target="_blank" rel="noreferrer">
                   <svg
                     aria-hidden="true"
                     focusable="false"
@@ -104,11 +94,7 @@ const page = async ({
                     ></path>
                   </svg>
                 </a>
-                <a
-                  href="https://www.instagram.com/avaa_org/"
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <a href="https://www.instagram.com/avaa_org/" target="_blank" rel="noreferrer">
                   <svg
                     aria-hidden="true"
                     focusable="false"
@@ -140,21 +126,11 @@ const page = async ({
                     fill="#000000"
                   >
                     <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                    <g
-                      id="SVGRepo_tracerCarrier"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    ></g>
+                    <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
                     <g id="SVGRepo_iconCarrier">
                       {' '}
                       <title>linkedin [#ffffff]</title>
-                      <g
-                        id="Page-1"
-                        stroke="none"
-                        strokeWidth="1"
-                        fill="none"
-                        fillRule="evenodd"
-                      >
+                      <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
                         {' '}
                         <g
                           id="Dribbble-Light-Preview"
@@ -162,10 +138,7 @@ const page = async ({
                           fill="#ffffff"
                         >
                           {' '}
-                          <g
-                            id="icons"
-                            transform="translate(56.000000, 160.000000)"
-                          >
+                          <g id="icons" transform="translate(56.000000, 160.000000)">
                             {' '}
                             <path
                               d="M144,7339 L140,7339 L140,7332.001 C140,7330.081 139.153,7329.01 137.634,7329.01 C135.981,7329.01 135,7330.126 135,7332.001 L135,7339 L131,7339 L131,7326 L135,7326 L135,7327.462 C135,7327.462 136.255,7325.26 139.083,7325.26 C141.912,7325.26 144,7326.986 144,7330.558 L144,7339 L144,7339 Z M126.442,7323.921 C125.093,7323.921 124,7322.819 124,7321.46 C124,7320.102 125.093,7319 126.442,7319 C127.79,7319 128.883,7320.102 128.883,7321.46 C128.884,7322.819 127.79,7323.921 126.442,7323.921 L126.442,7323.921 Z M124,7339 L129,7339 L129,7326 L124,7326 L124,7339 Z"
@@ -179,11 +152,7 @@ const page = async ({
                     </g>
                   </svg>
                 </a>
-                <a
-                  href="https://www.facebook.com/avaa.org"
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <a href="https://www.facebook.com/avaa.org" target="_blank" rel="noreferrer">
                   <svg
                     viewBox="-5 0 20 20"
                     version="1.1"
@@ -195,21 +164,11 @@ const page = async ({
                     stroke="#ffffff"
                   >
                     <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                    <g
-                      id="SVGRepo_tracerCarrier"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    ></g>
+                    <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
                     <g id="SVGRepo_iconCarrier">
                       {' '}
                       <defs> </defs>{' '}
-                      <g
-                        id="Page-1"
-                        stroke="none"
-                        strokeWidth="1"
-                        fill="none"
-                        fillRule="evenodd"
-                      >
+                      <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
                         {' '}
                         <g
                           id="Dribbble-Light-Preview"
@@ -217,10 +176,7 @@ const page = async ({
                           fill="#ffffff"
                         >
                           {' '}
-                          <g
-                            id="icons"
-                            transform="translate(56.000000, 160.000000)"
-                          >
+                          <g id="icons" transform="translate(56.000000, 160.000000)">
                             {' '}
                             <path
                               d="M335.821282,7259 L335.821282,7250 L338.553693,7250 L339,7246 L335.821282,7246 L335.821282,7244.052 C335.821282,7243.022 335.847593,7242 337.286884,7242 L338.744689,7242 L338.744689,7239.14 C338.744689,7239.097 337.492497,7239 336.225687,7239 C333.580004,7239 331.923407,7240.657 331.923407,7243.7 L331.923407,7246 L329,7246 L329,7250 L331.923407,7250 L331.923407,7259 L335.821282,7259 Z"
@@ -237,8 +193,8 @@ const page = async ({
               </div>
               <div className="text-white flex italic lg:hidden text-center sm:text-start px-4 sm:px-0">
                 <span className="opacity-60 text-sm">
-                  Atenea es estudiante de estudios internacionales en la
-                  Universidad Central de Venezuela (UCV)
+                  Atenea es estudiante de estudios internacionales en la Universidad Central de
+                  Venezuela (UCV)
                 </span>
               </div>
             </div>
@@ -301,11 +257,7 @@ const page = async ({
             </div>
           </div>
           <div className="hidden lg:flex  w-full justify-center gap-6  text-center opacity-50">
-            <a
-              href="https://twitter.com/avaa_org"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href="https://twitter.com/avaa_org" target="_blank" rel="noreferrer">
               <svg
                 aria-hidden="true"
                 focusable="false"
@@ -322,11 +274,7 @@ const page = async ({
                 ></path>
               </svg>
             </a>
-            <a
-              href="https://www.youtube.com/@avaa_org/"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href="https://www.youtube.com/@avaa_org/" target="_blank" rel="noreferrer">
               <svg
                 aria-hidden="true"
                 focusable="false"
@@ -343,11 +291,7 @@ const page = async ({
                 ></path>
               </svg>
             </a>
-            <a
-              href="https://www.instagram.com/avaa_org/"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href="https://www.instagram.com/avaa_org/" target="_blank" rel="noreferrer">
               <svg
                 aria-hidden="true"
                 focusable="false"
@@ -379,21 +323,11 @@ const page = async ({
                 fill="#000000"
               >
                 <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                <g
-                  id="SVGRepo_tracerCarrier"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                ></g>
+                <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
                 <g id="SVGRepo_iconCarrier">
                   {' '}
                   <title>linkedin [#ffffff]</title>
-                  <g
-                    id="Page-1"
-                    stroke="none"
-                    strokeWidth="1"
-                    fill="none"
-                    fillRule="evenodd"
-                  >
+                  <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
                     {' '}
                     <g
                       id="Dribbble-Light-Preview"
@@ -401,10 +335,7 @@ const page = async ({
                       fill="#ffffff"
                     >
                       {' '}
-                      <g
-                        id="icons"
-                        transform="translate(56.000000, 160.000000)"
-                      >
+                      <g id="icons" transform="translate(56.000000, 160.000000)">
                         {' '}
                         <path
                           d="M144,7339 L140,7339 L140,7332.001 C140,7330.081 139.153,7329.01 137.634,7329.01 C135.981,7329.01 135,7330.126 135,7332.001 L135,7339 L131,7339 L131,7326 L135,7326 L135,7327.462 C135,7327.462 136.255,7325.26 139.083,7325.26 C141.912,7325.26 144,7326.986 144,7330.558 L144,7339 L144,7339 Z M126.442,7323.921 C125.093,7323.921 124,7322.819 124,7321.46 C124,7320.102 125.093,7319 126.442,7319 C127.79,7319 128.883,7320.102 128.883,7321.46 C128.884,7322.819 127.79,7323.921 126.442,7323.921 L126.442,7323.921 Z M124,7339 L129,7339 L129,7326 L124,7326 L124,7339 Z"
@@ -418,11 +349,7 @@ const page = async ({
                 </g>
               </svg>
             </a>
-            <a
-              href="https://www.facebook.com/avaa.org"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href="https://www.facebook.com/avaa.org" target="_blank" rel="noreferrer">
               <svg
                 viewBox="-5 0 20 20"
                 version="1.1"
@@ -434,21 +361,11 @@ const page = async ({
                 stroke="#ffffff"
               >
                 <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                <g
-                  id="SVGRepo_tracerCarrier"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                ></g>
+                <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
                 <g id="SVGRepo_iconCarrier">
                   {' '}
                   <defs> </defs>{' '}
-                  <g
-                    id="Page-1"
-                    stroke="none"
-                    strokeWidth="1"
-                    fill="none"
-                    fillRule="evenodd"
-                  >
+                  <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
                     {' '}
                     <g
                       id="Dribbble-Light-Preview"
@@ -456,10 +373,7 @@ const page = async ({
                       fill="#ffffff"
                     >
                       {' '}
-                      <g
-                        id="icons"
-                        transform="translate(56.000000, 160.000000)"
-                      >
+                      <g id="icons" transform="translate(56.000000, 160.000000)">
                         {' '}
                         <path
                           d="M335.821282,7259 L335.821282,7250 L338.553693,7250 L339,7246 L335.821282,7246 L335.821282,7244.052 C335.821282,7243.022 335.847593,7242 337.286884,7242 L338.744689,7242 L338.744689,7239.14 C338.744689,7239.097 337.492497,7239 336.225687,7239 C333.580004,7239 331.923407,7240.657 331.923407,7243.7 L331.923407,7246 L329,7246 L329,7250 L331.923407,7250 L331.923407,7259 L335.821282,7259 Z"
@@ -476,8 +390,8 @@ const page = async ({
           </div>
           <div className="text-white text-center hidden lg:flex ">
             <span className="opacity-60 text-sm">
-              Atenea es estudiante de estudios internacionales en la Universidad
-              Central de Venezuela (UCV)
+              Atenea es estudiante de estudios internacionales en la Universidad Central de
+              Venezuela (UCV)
             </span>
           </div>
           <div className="hidden border-t-2 border-emerald-950 w-full lg:flex flex-col gap-2">
@@ -530,15 +444,7 @@ const page = async ({
         <div className="flex flex-col min-h-screen justify-center items-center w-full lg:w-3/4">
           <div className="w-[95%] flex gap-2 justify-center items-center h-28">
             {CARD_CONTENT.map(({ icon, text, number, bg }) => {
-              return (
-                <NormalCard
-                  key={text}
-                  stat={number}
-                  Icon={icon}
-                  text={text}
-                  bg={bg}
-                />
-              );
+              return <NormalCard key={text} stat={number} Icon={icon} text={text} bg={bg} />;
             })}
           </div>
           <div className="overflow-x-scroll md:overflow-x-clip rounded-lg w-[95%] mb-8 mt-16 scroll ">
@@ -566,78 +472,73 @@ const page = async ({
                 </tr>
               </thead>
               <tbody>
-                {speaker?.Chat.map(
-                  ({ title, level, modality, dates, spots, id }) => {
-                    return (
-                      <tr
-                        className="border-b bg-transparent border-gray-700 hover:bg-green-700 hover:text-white text-center"
-                        key={id}
+                {speaker?.Chat.map(({ title, level, modality, dates, spots, id }) => {
+                  return (
+                    <tr
+                      className="border-b bg-transparent border-gray-700 hover:bg-green-700 hover:text-white text-center"
+                      key={id}
+                    >
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium  whitespace-nowrap text-white"
                       >
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium  whitespace-nowrap text-white"
+                        {title}
+                      </th>
+                      <td className="px-6 py-4">{modality}</td>
+                      <td className="px-6 py-4">{level}</td>
+                      <td className="px-6 py-4">
+                        {new Date(dates[0].startDate).toLocaleDateString()}
+                      </td>
+                      <td className="px-6 py-4">{spots}</td>
+                      <td className="px-6 py-4 w-1">
+                        <svg
+                          aria-hidden="true"
+                          className="w-5 h-5 text-yellow-400 inline"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
                         >
-                          {title}
-                        </th>
-                        <td className="px-6 py-4">{modality}</td>
-                        <td className="px-6 py-4">{level}</td>
-                        <td className="px-6 py-4">
-                          {new Date(dates[0].startDate).toLocaleDateString()}
-                        </td>
-                        <td className="px-6 py-4">{spots}</td>
-                        <td className="px-6 py-4 w-1">
-                          <svg
-                            aria-hidden="true"
-                            className="w-5 h-5 text-yellow-400 inline"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <title>First star</title>
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                          </svg>
-                          <svg
-                            aria-hidden="true"
-                            className="w-5 h-5 text-yellow-400 inline"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <title>Second star</title>
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                          </svg>
-                          <svg
-                            aria-hidden="true"
-                            className="w-5 h-5 text-yellow-400 inline"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <title>Third star</title>
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                          </svg>
-                          <svg
-                            aria-hidden="true"
-                            className="w-5 h-5 text-yellow-400 inline"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <title>Fourth star</title>
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                          </svg>
-                          {/* <svg aria-hidden="true" className="w-5 h-5 text-gray-500 inline" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Fifth star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg> */}
-                        </td>
-                      </tr>
-                    );
-                  }
-                )}
+                          <title>First star</title>
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg
+                          aria-hidden="true"
+                          className="w-5 h-5 text-yellow-400 inline"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <title>Second star</title>
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg
+                          aria-hidden="true"
+                          className="w-5 h-5 text-yellow-400 inline"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <title>Third star</title>
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg
+                          aria-hidden="true"
+                          className="w-5 h-5 text-yellow-400 inline"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <title>Fourth star</title>
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        {/* <svg aria-hidden="true" className="w-5 h-5 text-gray-500 inline" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Fifth star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg> */}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
-            <nav
-              className="flex items-center justify-between pt-4"
-              aria-label="Table navigation"
-            >
+            <nav className="flex items-center justify-between pt-4" aria-label="Table navigation">
               {/* <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Showing <span className="font-semibold text-gray-900 dark:text-white">1-10</span> of <span className="font-semibold text-gray-900 dark:text-white">1000</span></span> */}
               <ul className="inline-flex items-center -space-x-px">
                 <li>

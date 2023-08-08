@@ -35,9 +35,7 @@ const DropdownButton = (props: DropdownButtonProps) => {
           onClick={toggleDropdown}
         >
           <div className="w-6 h-6">{Icon}</div>
-          <span className="flex-1 ml-3 text-left whitespace-nowrap">
-            {buttonName}
-          </span>
+          <span className="flex-1 ml-3 text-left whitespace-nowrap">{buttonName}</span>
 
           <svg
             aria-hidden="true"
@@ -55,9 +53,7 @@ const DropdownButton = (props: DropdownButtonProps) => {
         </button>
         <ul
           id="dropdown-pages"
-          className={`${
-            isDropdownOpen ? 'flex flex-col' : 'hidden'
-          } py-2 space-y-2`}
+          className={`${isDropdownOpen ? 'flex flex-col' : 'hidden'} py-2 space-y-2`}
         >
           {itemList.map((item, index) => (
             <li className="flex justify-center items-center" key={index}>

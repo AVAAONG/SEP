@@ -15,9 +15,7 @@ const NormalCard = ({ stat, text, bg, Icon }: CardProps) => {
       <div className="flex flex-row justify-between z-10 min-w-fit items-start">
         <div className="text-white ">
           <p className="leading-tight text-5xl font-bold">{stat}</p>
-          <p className="leading-snug text-base flex-grow font-semibold">
-            {text}
-          </p>
+          <p className="leading-snug text-base flex-grow font-semibold">{text}</p>
         </div>
       </div>
       <div className="absolute opacity-20 text-[190px] -z-10 w-28 ">

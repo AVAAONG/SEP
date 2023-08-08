@@ -75,9 +75,7 @@ const page = () => {
   };
 
   const editEntry = (inputId: shortUUID.SUUID) => {
-    const data = volunteerData.filter(
-      (workshop: Volunteer) => workshop.id === inputId
-    );
+    const data = volunteerData.filter((workshop: Volunteer) => workshop.id === inputId);
     const {
       name,
       asociatedProject,
@@ -106,10 +104,7 @@ const page = () => {
     });
     deleteEntry(inputId);
   };
-  const createChat = (
-    data: Volunteer,
-    event: BaseSyntheticEvent<object, any, any> | undefined
-  ) => {
+  const createChat = (data: Volunteer, event: BaseSyntheticEvent<object, any, any> | undefined) => {
     if (event === undefined) return;
     event.preventDefault();
     data.id = shortUUID.generate();
