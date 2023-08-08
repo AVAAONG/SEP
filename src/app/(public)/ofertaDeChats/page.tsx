@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import { useSearchParams } from 'next/navigation'
-import ChatCard from '@/components/card/ChatCard'
+import ChatCard from '@/components/scholar/card/ChatCard'
 import { Chat } from '@/types/Chat'
 
 interface ChatQuery extends Chat {

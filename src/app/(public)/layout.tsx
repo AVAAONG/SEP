@@ -1,6 +1,6 @@
 /**
  * @file This file renders the layout for the public pages of the application.
- * @remarks Oublic pages in the application are rendered within this layout. So any change in the style of this layout will affect public pages in the application.
+ * @remarks Public pages in the application are rendered within this layout. So any change in the style of this layout will affect all the pages that are in the (public) folder.
  * @author Kevin Bravo (kevinbravo.me)
  * @see {@link https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts#nesting-layouts} for more information about Next.js nested layouts.
  */

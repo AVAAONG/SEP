@@ -2,7 +2,7 @@ import React from 'react'
 
 const page = () => {
     return (
-        <div>AccessDenaid</div>
+        <div>Acceso denegado</div>
     )
 }
 
