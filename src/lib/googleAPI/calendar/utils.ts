@@ -110,6 +110,12 @@ const addDays = (date: string, days: number) => {
   return result.toISOString();
 };
 
+/**
+ * it adds a specific number of `hours` to a date
+ * @param date the date of the event
+ * @param hours the number of hours we want to add to the date
+ * @returns the date with the hours added in ISO format
+ */
 export const addHours = (date: Date, hours: number) => {
   const newDate = new Date(date.getTime() + hours * 60 * 60 * 1000);
   return newDate;
