@@ -3,7 +3,7 @@
         <h1 align="center">
             <img src="https://i.imgur.com/1VDMsh4.png" width="300" />
             <p></p>
-          <br>Sistema de Evaluación del participante (SEP)
+          <br>Sistema de Evaluación del Participante (SEP)
         </h1>
         <br>
     </div>
