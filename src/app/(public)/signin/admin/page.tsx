@@ -23,17 +23,14 @@ const page = ({
    * Specify to which URL the user will be redirected after signing in. Defaults to the page URL the sign-in is initiated from.
    * @summary The URL to redirect to after a successful sign in or sign up.
    */
-  const adminCallbackUrl =
-    (searchParams!.callbackUrl as string) || '/admin/dashboard';
+  const adminCallbackUrl = (searchParams!.callbackUrl as string) || '/admin/dashboard';
 
   return (
     <main className="flex flex-col md:flex-row-reverse min-h-screen md:h-screen bg-gradient-to-b from-emerald-950 to-slate-950">
       <Aside />
       <section className="justify-center px-4 md:px-0 md:flex md:w-2/3">
         <div className="w-full max-w-sm py-4 mx-auto my-auto min-w-min md:py-9 md:w-7/12">
-          <h2 className="text-xl font-semibold md:text-2xl">
-            Acceso de administrador{' '}
-          </h2>
+          <h2 className="text-xl font-semibold md:text-2xl">Acceso de administrador </h2>
           <p className="text-xs md:text-sm text-slate-400 mt-3">
             ¿Eres un administrador? Ingresa con tu cuenta de Google.
           </p>

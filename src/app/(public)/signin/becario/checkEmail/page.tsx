@@ -29,11 +29,7 @@ const page = () => {
           fill="currentColor"
         >
           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-          <g
-            id="SVGRepo_tracerCarrier"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></g>
+          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
           <g id="SVGRepo_iconCarrier">
             {' '}
             <style type="text/css"> </style>{' '}
@@ -47,13 +43,10 @@ const page = () => {
           </g>
         </svg>
         <div className="mt-2 flex flex-col items-center justify-center text-center max-w-sm gap-4">
-          <h3 className="text-2xl font-semibold ">
-            ¡Ahora revisa tu correo electrónico!
-          </h3>
+          <h3 className="text-2xl font-semibold ">¡Ahora revisa tu correo electrónico!</h3>
           <p className="text-lg">
-            Desde{' '}
-            <span className="font-semibold text-green-700">ProExcelencia</span>{' '}
-            te hemos enviado un enlace de inicio de sesión a tu correo.
+            Desde <span className="font-semibold text-green-700">ProExcelencia</span> te hemos
+            enviado un enlace de inicio de sesión a tu correo.
           </p>
           <Link
             href={'https://mail.google.com/mail/u/0/'}
