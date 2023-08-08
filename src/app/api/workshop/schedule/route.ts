@@ -1,11 +1,16 @@
-import { setTokens } from "@/lib/auth/auth";
-import { createEvent } from "@/lib/calendar/calendar";
-import { getToken } from "next-auth/jwt";
-import { Workshop } from "@/types/Workshop";
-import { NextRequest, NextResponse } from "next/server";
-import shortUUID from "short-uuid";
-import { createWorkshop, deleteWorkshopFromDatabase, getScheduledWorkshops, getWorkshops } from "@/lib/database/Workshops";
-import { getFormatedDate } from "@/lib/calendar/utils";
+import { setTokens } from '@/lib/auth/auth';
+import { createEvent } from '@/lib/calendar/calendar';
+import { getToken } from 'next-auth/jwt';
+import { Workshop } from '@/types/Workshop';
+import { NextRequest, NextResponse } from 'next/server';
+import shortUUID from 'short-uuid';
+import {
+  createWorkshop,
+  deleteWorkshopFromDatabase,
+  getScheduledWorkshops,
+  getWorkshops,
+} from '@/lib/database/Workshops';
+import { getFormatedDate } from '@/lib/calendar/utils';
 
 // export async function POST(req: NextRequest, res: NextResponse) {
 //     const token = await getToken({ req });
@@ -18,21 +23,21 @@ import { getFormatedDate } from "@/lib/calendar/utils";
 // }
 
 export const UPDATE = async (req: NextRequest, res: NextResponse) => {
-    const token = await getToken({ req });
-    if (token) setTokens(token.accessToken as string, token.refreshToken as string);
-    else return NextResponse
-
-}
+  const token = await getToken({ req });
+  if (token)
+    setTokens(token.accessToken as string, token.refreshToken as string);
+  else return NextResponse;
+};
 
 export const DELETE = async (req: NextRequest, res: NextResponse) => {
-    const token = await getToken({ req });
-    const reqData = await req.json()
-    if (token) setTokens(token.accessToken as string, token.refreshToken as string);
-    else return NextResponse
-    await deleteWorkshopFromDatabase(reqData.id)
-    return NextResponse.json({ message: "ok" })
-
-}
+  const token = await getToken({ req });
+  const reqData = await req.json();
+  if (token)
+    setTokens(token.accessToken as string, token.refreshToken as string);
+  else return NextResponse;
+  await deleteWorkshopFromDatabase(reqData.id);
+  return NextResponse.json({ message: 'ok' });
+};
 
 // const ScheduleWorkshops = async (workshop: Workshop) => {
 //     const { date, startHour, endHour } = workshop
@@ -75,8 +80,7 @@ export const DELETE = async (req: NextRequest, res: NextResponse) => {
 //     await createWorkshop(workshop, datesObj, workshop.speaker, tempDataObj)
 // }
 
-
 export async function GET(req: NextRequest, res: NextResponse) {
-    const workshops = await getScheduledWorkshops()
-    return NextResponse.json(workshops)
+  const workshops = await getScheduledWorkshops();
+  return NextResponse.json(workshops);
 }

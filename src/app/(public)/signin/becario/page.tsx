@@ -5,14 +5,13 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import Warning from "@/components/alerts/Warning";
-import Aside from "@/components/public/signin/Aside";
-import SigninForm from "@/components/public/signin/forms/SignInForm";
-import GoogleSignInButton from "@/components/public/signin/signinButtons/GoogleSignInButton";
-import authOptions from "@/lib/auth/nextAuthScholarOptions/authOptions";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation"
-
+import Warning from '@/components/alerts/Warning';
+import Aside from '@/components/public/signin/Aside';
+import SigninForm from '@/components/public/signin/forms/SignInForm';
+import GoogleSignInButton from '@/components/public/signin/signinButtons/GoogleSignInButton';
+import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
 
 /**
  * Renders the sign-in page for the scholar role.
@@ -30,7 +29,8 @@ const page = async ({
    * Specify to which URL the user will be redirected after signing in. Defaults to the page URL the sign-in is initiated from.
    * @summary The URL to redirect to after a successful sign in or sign up.
    */
-  const scholarCallbackUrl = searchParams!.callbackUrl as string || "/becario/config";
+  const scholarCallbackUrl =
+    (searchParams!.callbackUrl as string) || '/becario/config';
   if (session) {
     redirect(scholarCallbackUrl);
   }
@@ -39,11 +39,11 @@ const page = async ({
       <Aside />
       <section className="justify-center px-4 md:px-0 md:flex md:w-2/3">
         <div className="w-full max-w-sm py-4 mx-auto my-auto min-w-min md:py-9 md:w-7/12">
-          {searchParams?.error === "notAllowed" && (
+          {searchParams?.error === 'notAllowed' && (
             <Warning
               title={`El correo no tiene permitido el acceso al SEP.`}
               subtitle={
-                "Solo los correos de los becarios que se encuentran registrado en la base de datos de ProExcelencia pueden acceder al SEP"
+                'Solo los correos de los becarios que se encuentran registrado en la base de datos de ProExcelencia pueden acceder al SEP'
               }
             />
           )}
@@ -58,7 +58,11 @@ const page = async ({
           </div>
 
           <div className="flex">
-            <GoogleSignInButton callbackUrl="/becario/config" providerId="userGoogle" cookieValue="scholar" />
+            <GoogleSignInButton
+              callbackUrl="/becario/config"
+              providerId="userGoogle"
+              cookieValue="scholar"
+            />
           </div>
         </div>
       </section>

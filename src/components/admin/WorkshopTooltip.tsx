@@ -1,7 +1,13 @@
-import { WorkshopSpeaker } from "@prisma/client";
-import React, { useState } from "react";
+import { WorkshopSpeaker } from '@prisma/client';
+import React, { useState } from 'react';
 
-const WorkshopTooltip = ({ title, speaker }: { title: string, speaker:  WorkshopSpeaker[] }) => {
+const WorkshopTooltip = ({
+  title,
+  speaker,
+}: {
+  title: string;
+  speaker: WorkshopSpeaker[];
+}) => {
   const [show, setShow] = useState(false);
 
   return (
@@ -9,20 +15,19 @@ const WorkshopTooltip = ({ title, speaker }: { title: string, speaker:  Workshop
       <div
         className="absolute bg-gray-700 text-white text-xs rounded py-1 px-4 -mt-6"
         style={{
-          visibility: show ? "visible" : "hidden",
-          transform: show ? "visible" : "hidden",
-          transition: "all 0.3s ease",
-
+          visibility: show ? 'visible' : 'hidden',
+          transform: show ? 'visible' : 'hidden',
+          transition: 'all 0.3s ease',
         }}
       >
         {title}
       </div>
       <p
-        style={{ touchAction: "none", cursor: 'default' }}
+        style={{ touchAction: 'none', cursor: 'default' }}
         onMouseEnter={() => setShow(true)}
         onMouseLeave={() => setShow(false)}
-        className="text-sm font-medium  truncate text-white">
-
+        className="text-sm font-medium  truncate text-white"
+      >
         {title}
       </p>
       <p className="text-xs text-gray-500 truncate ">
@@ -30,6 +35,6 @@ const WorkshopTooltip = ({ title, speaker }: { title: string, speaker:  Workshop
       </p>
     </div>
   );
-}
+};
 
 export default WorkshopTooltip;

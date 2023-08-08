@@ -5,7 +5,7 @@
  * @see {@link https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts#layouts} for more information about Next.js layouts.
  */
 
-import '@/app/globals.css'
+import '@/app/globals.css';
 import favicon from '@/../public/logo-proexcelencia-cap.png';
 import NextAuthProvider from '../components/providers';
 import { ThemeProviderC } from '@/components/ThemeProvider';
@@ -21,7 +21,7 @@ export const metadata = {
   title: 'Proexcelencia',
   description: 'Sistema de Evaluacion del Participante',
   icons: favicon.src,
-}
+};
 
 /**
  * Renders the root layout of the application.
@@ -31,20 +31,17 @@ export const metadata = {
  */
 
 export default async function RootLayout({
-  children
+  children,
 }: {
-  children: React.ReactNode,
+  children: React.ReactNode;
 }) {
-
   return (
-    <html lang="es" className='h-full'>
-      <body className='h-full'>
+    <html lang="es" className="h-full">
+      <body className="h-full">
         <NextAuthProvider>
-          <ThemeProviderC >
-            {children}
-          </ThemeProviderC >
+          <ThemeProviderC>{children}</ThemeProviderC>
         </NextAuthProvider>
       </body>
     </html>
-  )
+  );
 }

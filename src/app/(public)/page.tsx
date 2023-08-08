@@ -54,14 +54,25 @@ const page = () => (
         <h2 className={`mb-3 text-2xl font-semibold`}>
           Becarios{' '}
           <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-            <svg fill="none" stroke="currentColor" strokeWidth="1.5" width="50" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"></path>
+            <svg
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              width="50"
+              height="20"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+              ></path>
             </svg>
           </span>
         </h2>
-        <p
-          className={`m-0 max-w-[30ch] text-xs lg:text-sm opacity-50`}
-        >
+        <p className={`m-0 max-w-[30ch] text-xs lg:text-sm opacity-50`}>
           Ingresa para ver tu progreso en el programa.
         </p>
       </Link>
@@ -74,8 +85,21 @@ const page = () => (
         <h2 className={`mb-3 text-2xl font-semibold`}>
           Administradores{' '}
           <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-            <svg fill="none" stroke="currentColor" strokeWidth="1.5" width="50" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"></path>
+            <svg
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              width="50"
+              height="20"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+              ></path>
             </svg>
           </span>
         </h2>
@@ -85,6 +109,6 @@ const page = () => (
       </Link>
     </div>
   </main>
-)
+);
 
 export default page;

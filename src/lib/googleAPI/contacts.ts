@@ -1,6 +1,5 @@
 // Compiled using avaa_workshops_pipeline 1.0.0 (TypeScript 4.6.2)
-import { People } from "../auth/auth";
-
+import { People } from '../auth/auth';
 
 /**
  * It search for an specific group of contacs and returns the primary email address of all the contacts whithin that group
@@ -9,25 +8,19 @@ import { People } from "../auth/auth";
  * @returns  A list of the primary email address of the contract group
  */
 export async function getPrimaryEmailsFromContactGroup(resourceName: string) {
+  const { data } = await People.contactGroups.get({
+    resourceName,
+    maxMembers: 10000,
+  });
 
-    const { data } = await People.contactGroups.get(
-        {
-            resourceName,
-            maxMembers: 10000,
-        }
-    );
+  const contactsResourseNames = data.memberResourceNames ?? [];
 
-    const contactsResourseNames = data.memberResourceNames ?? [];
-
-    // const h = await People.people.getBatchGet({
-    //     resourceNames: contactsResourseNames,
-    //     personFields: "emailAddresses",
-    // })
-    return contactsResourseNames
+  // const h = await People.people.getBatchGet({
+  //     resourceNames: contactsResourseNames,
+  //     personFields: "emailAddresses",
+  // })
+  return contactsResourseNames;
 }
-
-
-
 
 /**
  * Search for only the the contacts groups (labels) we created in the actual account and returns its names.
@@ -36,6 +29,10 @@ export async function getPrimaryEmailsFromContactGroup(resourceName: string) {
  * @returns names of the contacts groups
  */
 export const getGroupOfContacts = async () => {
-    const groupsRes = await People.contactGroups.list();
-    return groupsRes.data.contactGroups?.filter((group) => group.groupType === "USER_CONTACT_GROUP")?.map((g) => g.resourceName) ?? [];
+  const groupsRes = await People.contactGroups.list();
+  return (
+    groupsRes.data.contactGroups
+      ?.filter((group) => group.groupType === 'USER_CONTACT_GROUP')
+      ?.map((g) => g.resourceName) ?? []
+  );
 };

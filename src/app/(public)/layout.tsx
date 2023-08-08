@@ -5,9 +5,9 @@
  * @see {@link https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts#nesting-layouts} for more information about Next.js nested layouts.
  */
 
-import "@/app/globals.css";
-import PublicFooter from "@/components/public/PublicFooter";
-import favicon from "@/../public/logo-proexcelencia-cap.png";
+import '@/app/globals.css';
+import PublicFooter from '@/components/public/PublicFooter';
+import favicon from '@/../public/logo-proexcelencia-cap.png';
 
 /**
  * The metadata of the application for public pages.
@@ -17,8 +17,8 @@ import favicon from "@/../public/logo-proexcelencia-cap.png";
  * @see {@link https://nextjs.org/docs/app/building-your-application/optimizing/metadata#static-metadata} for more information about Next.js metadata.
  */
 export const metadata = {
-  title: "ProExcelencia",
-  description: "Sistema de Evaluación del Participante",
+  title: 'ProExcelencia',
+  description: 'Sistema de Evaluación del Participante',
   icons: favicon.src,
 };
 
@@ -28,7 +28,11 @@ export const metadata = {
  * @see {@link https://react.dev/reference/react/Children} for more information about the React.Children utility.
  * @returns The HTML document with the rendered children components.
  */
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <>
       {children}

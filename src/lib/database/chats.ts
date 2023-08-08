@@ -14,34 +14,37 @@ import { prisma } from './prisma';
  * @param tempData - Temporary chat data.
  * @returns Chat object.
  */
-export const createChat = async (data: Chat, speakerId: string, dates: Prisma.JsonArray, tempData: ChatsTempData) => {
-    try {
-        const chat = await prisma.chat.create({
-            data: {
-                ...data,
-                speaker: {
-                    connect: {
-                        id: speakerId
-                    }
-                },
-                dates: dates,
-                tempData: {
-                    create: {
-                        ...tempData
-                    }
-                }
-            }
-        });
-        console.log(`${chat.title} created`)
-        return chat;
-    }
-    catch (err) {
-        console.log(`error creating chat: ${data.title}}`);
-    }
-    finally {
-        await prisma.$disconnect();
-    }
-}
+export const createChat = async (
+  data: Chat,
+  speakerId: string,
+  dates: Prisma.JsonArray,
+  tempData: ChatsTempData
+) => {
+  try {
+    const chat = await prisma.chat.create({
+      data: {
+        ...data,
+        speaker: {
+          connect: {
+            id: speakerId,
+          },
+        },
+        dates: dates,
+        tempData: {
+          create: {
+            ...tempData,
+          },
+        },
+      },
+    });
+    console.log(`${chat.title} created`);
+    return chat;
+  } catch (err) {
+    console.log(`error creating chat: ${data.title}}`);
+  } finally {
+    await prisma.$disconnect();
+  }
+};
 
 /**
  * Creates a chat speaker.
@@ -49,19 +52,17 @@ export const createChat = async (data: Chat, speakerId: string, dates: Prisma.Js
  * @returns ChatSpeaker object.
  */
 export const createChatSpeaker = async (data: ChatSpeaker) => {
-    try {
-        const speaker = await prisma.chatSpeaker.create({
-            data
-        });
-        return speaker;
-    }
-    catch (err) {
-        console.log(err);
-    }
-    finally {
-        await prisma.$disconnect();
-    }
-}
+  try {
+    const speaker = await prisma.chatSpeaker.create({
+      data,
+    });
+    return speaker;
+  } catch (err) {
+    console.log(err);
+  } finally {
+    await prisma.$disconnect();
+  }
+};
 
 /**
  * Converts a scholar to a speaker.
@@ -94,25 +95,23 @@ export const createChatSpeaker = async (data: ChatSpeaker) => {
 //     }
 // }
 
-
-
 /**
  * Counts the number of chat speakers.
  * @returns Number of chat speakers.
  */
 export const countChatSpeakers = async () => {
-    const count = await prisma.chatSpeaker.count();
-    return count;
-}
+  const count = await prisma.chatSpeaker.count();
+  return count;
+};
 
 /**
  * Gets all chat speakers.
  * @returns Array of chat speakers.
  */
 export const getChatSpeakers = async () => {
-    const speakers = await prisma.chatSpeaker.findMany();
-    return speakers;
-}
+  const speakers = await prisma.chatSpeaker.findMany();
+  return speakers;
+};
 
 /**
  * Gets a chat speaker by ID.
@@ -120,30 +119,27 @@ export const getChatSpeakers = async () => {
  * @returns ChatSpeaker object.
  */
 export const getChatSpeaker = async (id: string) => {
-    const speaker = await prisma.chatSpeaker.findUnique({
-        where: { id },
-        include:{
-            Chat: true
-        }
-    });
-    return speaker;
-}
-
-
-
+  const speaker = await prisma.chatSpeaker.findUnique({
+    where: { id },
+    include: {
+      Chat: true,
+    },
+  });
+  return speaker;
+};
 
 /**
  * Gets all chats.
  * @returns Array of chats.
  */
 export const getChats = async () => {
-    const chats = await prisma.chat.findMany({
-        include: {
-            speaker: true
-        }
-    });
-    return chats;
-}
+  const chats = await prisma.chat.findMany({
+    include: {
+      speaker: true,
+    },
+  });
+  return chats;
+};
 
 /**
  * Gets a chat by ID.
@@ -151,36 +147,30 @@ export const getChats = async () => {
  * @returns Chat object.
  */
 export const getChat = async (id: string) => {
-    const chat = await prisma.chat.findUnique({
-        where: { id },
-        include: {
-            speaker: true
-        }
-    });
-    return chat;
-}
-
-
-
-
-
-
+  const chat = await prisma.chat.findUnique({
+    where: { id },
+    include: {
+      speaker: true,
+    },
+  });
+  return chat;
+};
 
 export const getChatsCount = async () => {
-    const chats = await prisma.chat.count({
-        where: {
-            activityStatus: 'REALIZADO'
-        }
-    });
-    return chats;
-}
+  const chats = await prisma.chat.count({
+    where: {
+      activityStatus: 'REALIZADO',
+    },
+  });
+  return chats;
+};
 
 export const deleteAllChats = async () => {
-    const chats = await prisma.chat.deleteMany({});
-    return chats;
-}
+  const chats = await prisma.chat.deleteMany({});
+  return chats;
+};
 
 export const deleteAllChatSpeakers = async () => {
-    const speakers = await prisma.chatSpeaker.deleteMany({});
-    return speakers;
-}
+  const speakers = await prisma.chatSpeaker.deleteMany({});
+  return speakers;
+};
