@@ -10,15 +10,17 @@
 import { calendar_v3 } from '@googleapis/calendar';
 
 import { Chat } from '@/types/Chat';
-import { Calendar } from '../auth/auth';
 
-import createEventObject from './calendarEventObject';
+import createZoomMeeting from '@/lib/zoom';
+import { KindOfActivity } from '@/types/General';
+import { Workshop } from '@/types/Workshop';
+import { Modality, Skill } from '@prisma/client';
+import { Calendar } from '../auth';
 import {
   createChatCalendarDescription,
   createWorkshopCalendarDescription,
 } from './calendarDescription';
-import { Workshop } from '@/types/Workshop';
-import { KindOfActivity } from '@/types/General';
+import createEventObject from './calendarEventObject';
 import {
   addHours,
   getFormatedDate,
@@ -26,8 +28,6 @@ import {
   getPublicEventLink,
   substractMonths,
 } from './utils';
-import createZoomMeeting from '../zoom/zoom';
-import { Modality, Skill } from '@prisma/client';
 
 const WORKSHOP_CALENDAR_ID =
   '3bd2458b588a28274518ba4e7a45f44db6a04c33377cc8c008c986a72dc36cdb@group.calendar.google.com';

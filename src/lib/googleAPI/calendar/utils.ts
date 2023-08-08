@@ -3,9 +3,9 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import axios, { AxiosRequestConfig } from 'axios';
-import { Calendar } from '../auth/auth';
 import { Platform } from '@/types/General';
+import axios, { AxiosRequestConfig } from 'axios';
+import { Calendar } from '../auth';
 
 /**
  * It creates an 'Add to my calendar' Link

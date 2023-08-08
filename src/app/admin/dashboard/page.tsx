@@ -1,17 +1,13 @@
-import Card from '@/components/admin/dashboard/Card';
-import React from 'react';
 import { chatIcon, userIcon, volunterIcon, workshopIcon } from '@/assets/svgs';
+import Card from '@/components/admin/dashboard/Card';
 import Calendar from '@/components/calendar/Calendar';
-import { getServerSession } from 'next-auth';
-import { setTokens } from '@/lib/auth/auth';
-import { getCalendarEvents } from '@/lib/calendar/calendar';
-import { calendar_v3 } from '@googleapis/calendar';
-import { BigCalendarEventType } from '@/types/Calendar';
-import { getWorkshopsCount } from '@/lib/database/Workshops';
-import { getScholarsCount } from '@/lib/database/users';
-import { CALENDAR_IDS } from '@/lib/constants';
-import { getChatsCount } from '@/lib/database/chats';
 import adminAuthOptions from '@/lib/auth/nextAuthAdminOptions/authAdminOptions';
+import { CALENDAR_IDS } from '@/lib/constants';
+import { setTokens } from '@/lib/googleAPI/auth';
+import { getCalendarEvents } from '@/lib/googleAPI/calendar/calendar';
+import { BigCalendarEventType } from '@/types/Calendar';
+import { calendar_v3 } from '@googleapis/calendar';
+import { getServerSession } from 'next-auth';
 
 const createEventObject = (
   calendarEvents: calendar_v3.Schema$Event[],
@@ -76,10 +72,13 @@ const fetchEvents = async () => {
 };
 
 const page = async () => {
-  const workshopCount = await getWorkshopsCount();
-  const scholarsCount = await getScholarsCount();
-  const chatsCount = await getChatsCount();
+  // const workshopCount = await getWorkshopsCount();
+  // const scholarsCount = await getScholarsCount();
+  // const chatsCount = await getChatsCount();
 
+  const workshopCount = 21;
+  const scholarsCount = 12;
+  const chatsCount = 12;
   const events = await fetchEvents();
 
   const CARD_CONTENT = [
@@ -136,5 +135,3 @@ const page = async () => {
 };
 
 export default page;
-
-// 4V44yELPr0gr4m4Pr03xc3l3nci4
