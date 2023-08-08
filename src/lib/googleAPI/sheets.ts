@@ -1,5 +1,5 @@
 import { sheets_v4 } from '@googleapis/sheets';
-import { Sheets } from '../auth/auth';
+import { Sheets } from './auth';
 
 const copySheet = async (spreadsheetId: string, activityName: string) => {
   try {
