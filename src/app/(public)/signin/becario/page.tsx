@@ -1,11 +1,25 @@
+/**
+ * @file  This file renders the sign-in page for the scholar role.
+ * @remarks when the user is not signed in, this page will be rendered. Otherwise, the user will be redirected to the callback URL.
+ * @remarks If the user signs in with an email not registerd in the SEP, it would render a warning message.
+ * @author Kevin Bravo (kevinbravo.me)
+ */
+
 import Warning from "@/components/alerts/Warning";
-import Aside from "@/components/auth componets/Aside";
-import SigninForm from "@/components/forms/SignInForm";
-import GoogleSignInButton from "@/components/signinButtons/GoogleSignInButton";
+import Aside from "@/components/public/signin/Aside";
+import SigninForm from "@/components/public/signin/forms/SignInForm";
+import GoogleSignInButton from "@/components/public/signin/signinButtons/GoogleSignInButton";
 import authOptions from "@/lib/auth/nextAuthScholarOptions/authOptions";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation"
 
+
+/**
+ * Renders the sign-in page for the scholar role.
+ * @param searchParams - The search params of the URL.
+ * @returns The sign-in page for the scholar role.
+ * @see {@link https://nextjs.org/docs/app/api-reference/file-conventions/page#searchparams-optional} for more information about Next.js search params argument
+ */
 const page = async ({
   searchParams,
 }: {

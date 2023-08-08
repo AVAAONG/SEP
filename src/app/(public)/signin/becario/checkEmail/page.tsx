@@ -1,7 +1,18 @@
+/**
+ * @file  This file contains the page that renders the check email page for the admin sign in.
+ * @remarks The user will be redirected to this page after signing in with an email. 
+ * @author Kevin Bravo (kevinbravo.me)
+ */
+
 'use client';
 import Link from 'next/link';
 import { createPortal } from 'react-dom';
 
+/**
+ * Page that renders the check email page for the admin sign in.
+ * @see {@link https://react.dev/reference/react-dom/createPortal} for more information about React Portals.
+ * @returns The check email page for the admin sign in.
+ */
 const page = () => {
     return createPortal(
         <div className="fixed inset-0 z-10 bg-white bg-opacity-90 backdrop-filter backdrop-blur-md backdrop-hue-rotate-15 text-slate-950">
@@ -17,7 +28,6 @@ const page = () => {
                 <p className="text-sm italic text-red-700">
                     Si no llega en 3 minutos, revisa tu carpeta de spam
                 </p>
-
             </div>
         </div>,
         document.body

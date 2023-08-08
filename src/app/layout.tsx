@@ -10,9 +10,16 @@ import favicon from '@/../public/logo-proexcelencia-cap.png';
 import NextAuthProvider from '../components/providers';
 import { ThemeProviderC } from '@/components/ThemeProvider';
 
+/**
+ * The base metadata of the application.
+ * @property title - The title of the application.
+ * @property description - The description of the application.
+ * @property icons - The icons of the application.
+ * @see {@link https://nextjs.org/docs/app/building-your-application/optimizing/metadata#static-metadata} for more information about Next.js metadata.
+ */
 export const metadata = {
   title: 'Proexcelencia',
-  description: 'Sistema de Evaluacion del Becario',
+  description: 'Sistema de Evaluacion del Participante',
   icons: favicon.src,
 }
 
