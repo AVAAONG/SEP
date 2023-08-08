@@ -1,16 +1,17 @@
 {
   "name": "sep",
-  "author": "Kevin Bravo (@_bravok)",
+  "author": "Kevin Bravo (kevinbravo.me)",
   "description": "Sistema para evaluar el progreso del becario durante su estadia en el Programa Excelencia",
   "version": "0.1.0",
   "private": true,
   "homepage": "https://github.com/mustafinho/seb",
   "engines": {
-    "node": ">=16.6.0",
-    "pnpm": ">=7.27.0",
+    "node": ">=16.0.0",
+    "pnpm": ">=8.0.0",
     "npm": "please-use-pnpm"
   },
   "scripts": {
+    "prettier": "prettier --write .",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -73,6 +74,8 @@
     "@types/react-big-calendar": "^1.6.3",
     "@types/react-dom": "18.0.11",
     "@types/react-table": "^7.7.14",
-    "nodemailer": "^6.9.3"
+    "eslint-config-prettier": "^9.0.0",
+    "nodemailer": "^6.9.3",
+    "prettier": "^3.0.1"
   }
 }

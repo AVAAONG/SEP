@@ -1,9 +1,22 @@
 {
-  "extends": ["next", "next/core-web-vitals", "eslint:recommended"],
+  "extends": [
+    "next",
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "prettier"
+  ],
   "globals": {
     "React": "readonly"
   },
   "rules": {
-    "no-unused-vars": [1, { "args": "after-used", "argsIgnorePattern": "^_" }]
+    // allows you to prefix variables with an underscore _ if you have declared them but not used them in the code.
+    // @example const _myVar = 1;
+    "no-unused-vars": [
+      1,
+      {
+        "args": "after-used",
+        "argsIgnorePattern": "^_"
+      }
+    ]
   }
 }
