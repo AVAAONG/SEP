@@ -3,7 +3,7 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { ChatSpeaker, Prisma, WorkshopSpeaker } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { prisma } from './prisma';
 
 /**

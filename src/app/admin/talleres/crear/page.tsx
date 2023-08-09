@@ -15,8 +15,6 @@ interface WorkshopForm extends Workshop {
 
 const Page = () => {
   const fetcher = (...args: RequestInfo[] | URL[]) => fetch([...args]).then((res) => res.json());
-
-  const speakerResponse = ['Andrés Della'];
   const [modalopen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState('not');
   const {

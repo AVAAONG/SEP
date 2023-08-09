@@ -53,3 +53,22 @@ export const CALENDAR_IDS = [
     textColor: '#3B82F6',
   },
 ];
+
+// ======================= CONSTANTS FOR WORKSHOP =======================
+
+export const PROGRAM_COMPONENTS = [
+  { option: 'liderazgo', value: 'LEADERSHIP' },
+  { option: 'ejercicio ciudadano', value: 'CITIZEN_EXERCISE' },
+  { option: 'gerencia de sí mismo', value: 'SELF_MANAGEMENT' },
+  { option: 'tic', value: 'ICT' },
+  { option: 'emprendimiento', value: 'ENTREPRENEURSHIP' },
+];
+
+export const MODALITY = [
+  { option: 'presencial', value: 'IN_PERSON' },
+  { option: 'virtual', value: 'ONLINE' },
+  { option: 'hibrido', value: 'HYBRID' },
+];
+
+export const PLATFORMS = ['zoom', 'google meet', 'otra', 'padlet'];
+export const WORKSHOP_YEAR = ['I', 'II', 'III', 'IV', 'V', 'TODOS'];

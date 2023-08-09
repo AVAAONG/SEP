@@ -1,28 +1,16 @@
-import React, { BaseSyntheticEvent } from 'react';
-import { Workshop as FormTypeWorkshop } from '@/types/Workshop';
-import { useForm } from 'react-hook-form';
-import { WorkshopSpeaker } from '@prisma/client';
-import useSWR, { Fetcher } from 'swr';
+import { MODALITY, PLATFORMS, PROGRAM_COMPONENTS, WORKSHOP_YEAR } from '@/lib/constants';
 import { Platform } from '@/types/General';
+import { Workshop as FormTypeWorkshop } from '@/types/Workshop';
+import { WorkshopSpeaker } from '@prisma/client';
+import { BaseSyntheticEvent } from 'react';
+import { useForm } from 'react-hook-form';
+import useSWR, { Fetcher } from 'swr';
 
-const PROGRAM_COMPONENTS = [
-  { option: 'liderazgo', value: 'LEADERSHIP' },
-  { option: 'ejercicio ciudadano', value: 'CITIZEN_EXERCISE' },
-  { option: 'gerencia de sí mismo', value: 'SELF_MANAGEMENT' },
-  { option: 'tic', value: 'ICT' },
-  { option: 'emprendimiento', value: 'ENTREPRENEURSHIP' },
-];
-
-const MODALITY = [
-  { option: 'presencial', value: 'IN_PERSON' },
-  { option: 'virtual', value: 'ONLINE' },
-  ,
-  { option: 'hibrido', value: 'HYBRID' },
-];
-
-const PLATFORMS = ['zoom', 'google meet', 'otra', 'padlet'];
-const WORKSHOP_YEAR = ['I', 'II', 'III', 'IV', 'V', 'TODOS'];
-
+/**
+ * @description Normalizes the string inputs to be used as keys in the database
+ * @param data String to be normalized
+ * @returns Normalized string
+ */
 const normalizeStringInputs = (data: string) => {
   const normalizedData = data.trim().toUpperCase().replaceAll(' ', '_');
   return normalizedData;

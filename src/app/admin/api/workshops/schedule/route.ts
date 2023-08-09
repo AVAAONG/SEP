@@ -1,13 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getToken } from 'next-auth/jwt';
-import { setTokens } from '@/lib/auth/auth';
-import { createFormDescription } from '@/lib/form/form';
-import { Modality, Skill, Workshop, WorkshopTempData, WorkshopYear } from '@prisma/client';
-import { createEvent } from '@/lib/calendar/calendar';
-import { getFormatedDate } from '@/lib/calendar/utils';
 import { createWorkshop } from '@/lib/database/Workshops';
+import { setTokens } from '@/lib/googleAPI/auth';
+import { createEvent } from '@/lib/googleAPI/calendar/calendar';
+import { getFormatedDate } from '@/lib/googleAPI/calendar/utils';
+import { createFormDescription } from '@/lib/googleAPI/form';
 import { Workshop as FormTypeWorkshop } from '@/types/Workshop';
+import { Modality, Skill, Workshop, WorkshopTempData, WorkshopYear } from '@prisma/client';
 import { nanoid } from 'nanoid';
+import { getToken } from 'next-auth/jwt';
+import { NextRequest, NextResponse } from 'next/server';
 
 const FORM_CREATION_APPSCRIPT_URL =
   'https://script.google.com/macros/s/AKfycbypXIh8iD-Pbf7gEKHEDrjxTj7EB_DHbWoOO53KgukwDDgaB6PO42xQqeNUReFo4jty/exec';

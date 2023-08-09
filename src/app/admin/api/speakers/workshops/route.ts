@@ -1,4 +1,5 @@
 import { createWorkshopSpeaker } from '@/lib/database/Workshops';
+import { getWorkshopSpeakersWithParams } from '@/lib/database/speaker';
 import { setTokens } from '@/lib/googleAPI/auth';
 import { getSpreadsheetValues } from '@/lib/googleAPI/sheets';
 import { WorkshopSpeaker } from '@prisma/client';
@@ -12,15 +13,14 @@ const WORKSHOP_SPEAKERS_RANGE = `'${WORKSHOP_SPEAKER_SHEET}'!B3:I81`;
 export async function GET(req: NextRequest, res: NextResponse) {
   const token = await getToken({ req });
   setTokens(token.accessToken, token.refreshToken);
-  const workshopSpeakers = await createWorkshopSpeakerFromSheet();
-  // const toSelect: Prisma.WorkshopSpeakerSelect = {
-  //   id: true,
-  //   first_names: true,
-  //   last_names: true,
-  //   email: true,
-  // };
-  // const data = await getWorkshopSpeakersWithParams(toSelect);
-  return NextResponse.json(workshopSpeakers);
+  const toSelect = {
+    id: true,
+    first_names: true,
+    last_names: true,
+    email: true,
+  };
+  const data = await getWorkshopSpeakersWithParams(toSelect);
+  return NextResponse.json(data);
 }
 
 const createWorkshopSpeakerFromSheet = async () => {
