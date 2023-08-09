@@ -63,6 +63,14 @@ export const getAndFormatCalendarEvents = async (): Promise<BigCalendarEventType
   return Promise.all(formatedEvents);
 };
 
+/**
+ * @description Creates the content for the cards in the dashboard
+ * @param workshopCount the total count of done workshops
+ * @param chatsCount the total count of done chats
+ * @param volunteersCount the total count of done volunteers
+ * @param scholarsCount the total count of active scholars
+ * @returns Array of objects with the content for each card
+ */
 export const createDashboardCardContent = (
   workshopCount: number,
   chatsCount: number,
