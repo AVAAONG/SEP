@@ -1,18 +1,10 @@
 'use client';
 import { FilterIcon, SortIcon, SortIconReverse } from '@/assets/svgs';
-import { Workshop, WorkshopDates, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
 import React, { useMemo, useState } from 'react';
 import { useAsyncDebounce, useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table';
 import workshopHeaders from './workshopData';
-interface WorkshopTableProps {
-  workshopData: (Workshop & {
-    speaker: WorkshopSpeaker[];
-    dates: WorkshopDates[];
-    tempData: WorkshopTempData | null;
-  })[];
-}
 
-const WorkshopTable: React.FC<WorkshopTableProps> = (props) => {
+const WorkshopTable: React.FC = (props) => {
   const { workshopData } = props;
   const data = useMemo(() => workshopData, []);
   const columns = useMemo(() => workshopHeaders, []);

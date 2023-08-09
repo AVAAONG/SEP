@@ -1,14 +1,13 @@
 'use client';
+import logo from '@/../public/proexcelencia.png';
+import { dashboardComponent } from '@/assets/svgs';
+import { sidebarAtom } from '@/state/mainState';
+import { useAtom } from 'jotai';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
-import { useAtom } from 'jotai';
-import { dashboardComponent } from '@/assets/svgs';
-import logo from '@/../public/proexcelencia.png';
-import { SIDEBAR_ACTIVITIES_ACTIONS } from '../data';
 import DropdownButton from '../DropdownButton';
+import { SIDEBAR_ACTIVITIES_ACTIONS, SIDEBAR_DB_BUTTONS } from '../data';
 import SidebarSeparator from './SidebarSeparator';
-import { sidebarAtom } from '@/state/mainState';
 const Sidebar = () => {
   const [isOpen] = useAtom(sidebarAtom);
   return (
@@ -32,6 +31,19 @@ const Sidebar = () => {
       <SidebarSeparator text="Actividades" />
       <div className="w-full flex flex-col justify-between">
         {SIDEBAR_ACTIVITIES_ACTIONS.map(({ buttonName, icon, itemList }) => {
+          return (
+            <DropdownButton
+              key={buttonName}
+              buttonName={buttonName}
+              Icon={icon}
+              itemList={itemList}
+            />
+          );
+        })}
+      </div>
+      <SidebarSeparator text="Bases de datos" />
+      <div className="w-full flex flex-col justify-between">
+        {SIDEBAR_DB_BUTTONS.map(({ buttonName, icon, itemList }) => {
           return (
             <DropdownButton
               key={buttonName}

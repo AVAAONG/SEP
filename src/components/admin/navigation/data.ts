@@ -29,3 +29,30 @@ export const SIDEBAR_ACTIVITIES_ACTIONS = [
     ],
   },
 ];
+
+export const SIDEBAR_DB_BUTTONS = [
+  {
+    icon: workshopIcon,
+    buttonName: 'Becarios',
+    itemList: [
+      { name: 'Becarios activos', link: '/admin/bd/becarios' },
+      { name: 'Estadísticas', link: '/admin/bd/becarios/estadisticas' },
+    ],
+  },
+  {
+    icon: workshopIcon,
+    buttonName: 'Facilitadores de act. formativas',
+    itemList: [
+      { name: 'Facilitadores', link: '/admin/bd/facilitadores/talleres' },
+      { name: 'Estadísticas', link: '/admin/talleres/estadisticas' },
+    ],
+  },
+  {
+    icon: workshopIcon,
+    buttonName: 'Facilitadores de chats',
+    itemList: [
+      { name: 'Facilitadores', link: '/admin/bd/facilitadores/chats' },
+      { name: 'Estadísticas', link: '/admin/talleres/estadisticas' },
+    ],
+  },
+];
