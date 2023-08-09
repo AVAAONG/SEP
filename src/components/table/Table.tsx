@@ -1,27 +1,24 @@
 'use client';
 import { FilterIcon, SortIcon, SortIconReverse } from '@/assets/svgs';
-import { Workshop, WorkshopDates, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
-import React, { useMemo, useState } from 'react';
-import { useAsyncDebounce, useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table';
-import workshopHeaders from './workshopData';
-interface WorkshopTableProps {
-  workshopData: (Workshop & {
-    speaker: WorkshopSpeaker[];
-    dates: WorkshopDates[];
-    tempData: WorkshopTempData | null;
-  })[];
+import React, { useMemo } from 'react';
+import { Column, useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table';
+import TableHeader from './TableHeader';
+
+interface TableProps {
+  tableData: readonly object[];
+  tableColumns: Column<object>[];
 }
 
-const WorkshopTable: React.FC<WorkshopTableProps> = (props) => {
-  const { workshopData } = props;
-  const data = useMemo(() => workshopData, []);
-  const columns = useMemo(() => workshopHeaders, []);
+const Table: React.FC<TableProps> = ({ tableData, tableColumns }) => {
+  const data = useMemo(() => tableData, []);
+  const columns = useMemo(() => tableColumns, []);
+
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     prepareRow,
-    state,
+    state: { globalFilter, pageIndex },
     setGlobalFilter,
     page,
     nextPage,
@@ -29,58 +26,18 @@ const WorkshopTable: React.FC<WorkshopTableProps> = (props) => {
     canNextPage,
     canPreviousPage,
     pageOptions,
-    gotoPage,
-    pageCount,
   } = useTable({ columns, data }, useGlobalFilter, useSortBy, usePagination);
 
-  const { globalFilter, pageIndex } = state;
-  const [value, setValue] = useState(globalFilter);
-  const onChange = useAsyncDebounce((value) => {
-    setGlobalFilter(value || undefined);
-  }, 200);
-
   return (
-    <div>
-      <div className="pb-4">
-        <label htmlFor="table-search" className="sr-only">
-          Search
-        </label>
-        <div className="relative mt-1">
-          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <svg
-              className="w-5 h-5 text-gray-500 dark:text-gray-400"
-              aria-hidden="true"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-          </div>
-          <input
-            value={value || ''}
-            onChange={(e) => {
-              setValue(e.target.value);
-              onChange(e.target.value);
-            }}
-            type="text"
-            id="table-search"
-            className="w-72 block p-2 pl-10 focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600"
-            placeholder="Buscar taller"
-          />
-        </div>
-      </div>
-      <div className="flow-root w-full overflow-x-scroll  rounded-lg  h-[600px]">
+    <div className="relative overflow-hidden bg-white shadow-md shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full h-full">
+      <TableHeader globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
+      <div className="flow-root w-full overflow-x-scroll ">
         <table {...getTableProps()} className="w-full text-sm text-left text-gray-300 ">
-          <thead className="text-xs text-green-500 uppercase text-center border-b-2 border-green-600 text-ellipsis  bg-emerald-950">
+          <thead className="text-xs text-green-500 uppercase text-center border-b-[1px] border-green-700 text-ellipsis bg-gray-100 dark:bg-slate-950">
             {headerGroups.map((headerGroup) => (
               <tr
                 {...headerGroup.getHeaderGroupProps()}
-                className="text-xs font-medium text-green-500 uppercase tracking-wider"
+                className="text-xs font-medium text-green-700 dark:text-green-500 uppercase tracking-wider"
               >
                 {headerGroup.headers.map((column) => {
                   return (
@@ -108,19 +65,19 @@ const WorkshopTable: React.FC<WorkshopTableProps> = (props) => {
             ))}
           </thead>
 
-          <tbody {...getTableBodyProps()} className="divide-y divide-gray-200">
+          <tbody {...getTableBodyProps()} className="divide-y divide-gray-500 dark:divide-gray-700">
             {page.map((row) => {
               prepareRow(row);
               return (
                 <tr
                   {...row.getRowProps()}
-                  className="text-sm hover:bg-green-700 hover:text-white text-center"
+                  className="text-sm hover:bg-green-500 dark:hover:bg-green-700 dark:hover:text-white text-center text-gray-800 dark:text-gray-300"
                 >
                   {row.cells.map((cell) => {
                     return (
                       <td
                         {...cell.getCellProps()}
-                        className="px-6 py-4 whitespace-nowrap lowecase capitalize"
+                        className="px-4 py-2 whitespace-nowrap lowecase capitalize"
                       >
                         {cell.render('Cell')}
                       </td>
@@ -132,7 +89,10 @@ const WorkshopTable: React.FC<WorkshopTableProps> = (props) => {
           </tbody>
         </table>
       </div>
-      <nav className="flex items-center justify-between pt-4" aria-label="Table navigation">
+      <nav
+        className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
+        aria-label="Table navigation"
+      >
         <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
           Pagina{' '}
           <span className="font-semibold text-gray-900 dark:text-white">{pageIndex + 1} </span>
@@ -196,4 +156,4 @@ const WorkshopTable: React.FC<WorkshopTableProps> = (props) => {
   );
 };
 
-export default WorkshopTable;
+export default Table;

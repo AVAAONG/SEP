@@ -1,13 +1,34 @@
 'use client';
 import { FilterIcon, SortIcon, SortIconReverse } from '@/assets/svgs';
+import Image from 'next/image';
 import React, { useMemo, useState } from 'react';
-import { useAsyncDebounce, useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table';
-import workshopHeaders from './workshopData';
+import {
+  TableOptions,
+  useAsyncDebounce,
+  useGlobalFilter,
+  usePagination,
+  useSortBy,
+  useTable,
+} from 'react-table';
 
-const WorkshopTable: React.FC = (props) => {
-  const { workshopData } = props;
-  const data = useMemo(() => workshopData, []);
-  const columns = useMemo(() => workshopHeaders, []);
+const ScholarTable: React.FC = () => {
+  const scholarData = [
+    {
+      first_name: 'Juanito Pérez',
+      last_name: 'Pérez',
+      email: 'exampl1@gmail.com',
+      image: undefined,
+    },
+    {
+      first_name: 'adsf Pérez',
+      last_name: 'Pérez',
+      email: '2',
+      image: undefined,
+    },
+  ];
+  const data = useMemo(() => scholarData, []);
+  const columns = useMemo(() => scholarHeaders, []);
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -32,15 +53,12 @@ const WorkshopTable: React.FC = (props) => {
   }, 200);
 
   return (
-    <div>
-      <div className="pb-4">
-        <label htmlFor="table-search" className="sr-only">
-          Search
-        </label>
-        <div className="relative mt-1">
+    <div className="relative overflow-hidden bg-white shadow-md shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full h-full">
+      <div className="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 ">
+        <div className="relative mt-1 w-60 ">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <svg
-              className="w-5 h-5 text-gray-500 dark:text-gray-400"
+              className="w-5 h-5 text-slate-500 dark:text-slate-950"
               aria-hidden="true"
               fill="currentColor"
               viewBox="0 0 20 20"
@@ -55,24 +73,58 @@ const WorkshopTable: React.FC = (props) => {
           </div>
           <input
             value={value || ''}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
             onChange={(e) => {
               setValue(e.target.value);
               onChange(e.target.value);
             }}
             type="text"
             id="table-search"
-            className="w-72 block p-2 pl-10 focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600"
             placeholder="Buscar taller"
           />
         </div>
+        <button
+          id="filterDropdownButton"
+          data-dropdown-toggle="filterDropdown"
+          className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10  dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+          type="button"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+            className="h-4 w-4 mr-2 text-green-500"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
+              clipRule="evenodd"
+            />
+          </svg>
+          Filtrar
+          <svg
+            className="-mr-1 ml-1.5 w-5 h-5 text-green-500"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path
+              clipRule="evenodd"
+              fillRule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+            />
+          </svg>
+        </button>
       </div>
-      <div className="flow-root w-full overflow-x-scroll  rounded-lg  h-[600px]">
+      <div className="flow-root w-full overflow-x-scroll ">
         <table {...getTableProps()} className="w-full text-sm text-left text-gray-300 ">
-          <thead className="text-xs text-green-500 uppercase text-center border-b-2 border-green-600 text-ellipsis  bg-emerald-950">
+          <thead className="text-xs text-green-500 uppercase text-center border-b-[1px] border-green-700 text-ellipsis bg-gray-100 dark:bg-slate-950">
             {headerGroups.map((headerGroup) => (
               <tr
                 {...headerGroup.getHeaderGroupProps()}
-                className="text-xs font-medium text-green-500 uppercase tracking-wider"
+                className="text-xs font-medium text-green-700 dark:text-green-500 uppercase tracking-wider"
               >
                 {headerGroup.headers.map((column) => {
                   return (
@@ -100,19 +152,19 @@ const WorkshopTable: React.FC = (props) => {
             ))}
           </thead>
 
-          <tbody {...getTableBodyProps()} className="divide-y divide-gray-200">
+          <tbody {...getTableBodyProps()} className="divide-y divide-gray-500 dark:divide-gray-700">
             {page.map((row) => {
               prepareRow(row);
               return (
                 <tr
                   {...row.getRowProps()}
-                  className="text-sm hover:bg-green-700 hover:text-white text-center"
+                  className="text-sm hover:bg-green-500 dark:hover:bg-green-700 dark:hover:text-white text-center text-gray-800 dark:text-gray-300"
                 >
                   {row.cells.map((cell) => {
                     return (
                       <td
                         {...cell.getCellProps()}
-                        className="px-6 py-4 whitespace-nowrap lowecase capitalize"
+                        className="px-4 py-2 whitespace-nowrap lowecase capitalize"
                       >
                         {cell.render('Cell')}
                       </td>
@@ -124,7 +176,10 @@ const WorkshopTable: React.FC = (props) => {
           </tbody>
         </table>
       </div>
-      <nav className="flex items-center justify-between pt-4" aria-label="Table navigation">
+      <nav
+        className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
+        aria-label="Table navigation"
+      >
         <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
           Pagina{' '}
           <span className="font-semibold text-gray-900 dark:text-white">{pageIndex + 1} </span>
@@ -188,4 +243,4 @@ const WorkshopTable: React.FC = (props) => {
   );
 };
 
-export default WorkshopTable;
+export default ScholarTable;
