@@ -1,0 +1,15 @@
+// Base prisma file, Here we specified each of the configuration for make prisma work correctly
+///@see 
+/// @author Kevin Bravo (kevinbravo.me)
+
+///@see https://www.prisma.io/docs/concepts/components/prisma-schema/generators
+generator client {
+  provider = "prisma-client-js"
+}
+// ignore this error
+///@see https://www.prisma.io/docs/concepts/components/prisma-schema/data-sources
+datasource db {
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}

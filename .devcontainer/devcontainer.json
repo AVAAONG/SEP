@@ -1,40 +1,38 @@
 {
-    "image": "mcr.microsoft.com/vscode/devcontainers/typescript-node",
-    "hostRequirements": {
-      "cpus": 4
-    },
-    "onCreateCommand": "npm install -g pnpm",
-    "waitFor": "onCreateCommand",
-    "updateContentCommand": "pnpm install",
-    "postCreateCommand": "",
-    "postAttachCommand": {
-      "server": "pnpm run dev"
-    },
-    "customizations": {
-      "codespaces": {
-        "settings": {
-          "terminal.integrated.shell.linux": "/bin/bash"
-        }
-      },
-      "vscode": {
-        "extensions": [
-          "aaron-bond.better-comments",
-          "dsznajder.es7-react-js-snippets",
-          "christian-kohler.npm-intellisense",
-          "eamodio.gitlens",
-          "bradlc.vscode-tailwindcss",
-          "Prisma.prisma",
-          "GitHub.copilot"
-        ]
+  "image": "mcr.microsoft.com/vscode/devcontainers/typescript-node",
+  "hostRequirements": {
+    "cpus": 4
+  },
+  "onCreateCommand": "npm install -g pnpm",
+  "waitFor": "onCreateCommand",
+  "updateContentCommand": "pnpm install",
+  "postCreateCommand": "",
+  "postAttachCommand": {
+    "server": "pnpm run dev"
+  },
+  "customizations": {
+    "codespaces": {
+      "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
       }
     },
-    "portsAttributes": {
-      "3000": {
-        "label": "Application",
-        "onAutoForward": "openBrowser"
-      }
-    },
-    "forwardPorts": [
-      3000
-    ]
-  }
+    "vscode": {
+      "extensions": [
+        "aaron-bond.better-comments",
+        "dsznajder.es7-react-js-snippets",
+        "christian-kohler.npm-intellisense",
+        "eamodio.gitlens",
+        "bradlc.vscode-tailwindcss",
+        "Prisma.prisma",
+        "GitHub.copilot"
+      ]
+    }
+  },
+  "portsAttributes": {
+    "3000": {
+      "label": "Application",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  "forwardPorts": [3000]
+}

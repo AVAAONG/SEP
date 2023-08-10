@@ -1,107 +1,111 @@
-import { Workshop } from '@/types/Workshop';
+import { chatIcon, userIcon, volunterIcon, workshopIcon } from '@/assets/svgs';
+import adminAuthOptions from '@/lib/auth/nextAuthAdminOptions/authAdminOptions';
+import { CALENDAR_IDS } from '@/lib/constants';
+import { setTokens } from '@/lib/googleAPI/auth';
+import { getCalendarEvents } from '@/lib/googleAPI/calendar/calendar';
+import { BigCalendarEventType } from '@/types/Calendar';
 import { calendar_v3 } from '@googleapis/calendar';
-import axios, { AxiosRequestConfig } from 'axios';
-/**
- * Generates a short url link by using the firebase Dynamic links API
- *
- * @see link https://firebase.google.com/docs/dynamic-links/rest for details about the firebase dynamic links API
- * It uses the rest API of firebase dynamic links to create a shortn link
- * @param link the link we want to shorten
- * @returns the shortened link
- * */
-const shortenLink = async (link: string): Promise<string> => {
-    const webApiKey = process.env.GOOOGLE_WEB_API_KEY;
-    const data = {
-        dynamicLinkInfo: {
-            domainUriPrefix: 'https://proexcelencia.page.link',
-            link
-        },
-        suffix: {
-            option: 'SHORT'
-        }
-    }
-    const config: AxiosRequestConfig = {
-        headers: {
-            "content-type": 'application/json',
-        },
-    }
-    const response = await axios.post(`https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=${webApiKey}`, data, config);
-
-    return response.data.shortLink;
-}
-
+import { getServerSession } from 'next-auth';
 
 /**
- * Substracts the specified number of months from the current date.
- * @param montsTosubstract - The number of months to substract.
- * @returns The date in ISO string format.
+ * @description Formats the event object to the format required by the BigCalendar component
+ * @param calendarEvents Array of events from the Google Calendar API
+ * @param bgColor Background color we want to assign to the events
+ * @param textColor Text color we want to assign to the events
+ * @returns Array of events formatted for the BigCalendar component
  */
-export const substractMonths = (montsTosubstract: number) => {
-    const date = new Date();
-    date.setMonth(date.getMonth() - montsTosubstract);
-    return date.toISOString();
-}
+export const formatEventObject = (
+  calendarEvents: calendar_v3.Schema$Event[],
+  bgColor: string,
+  textColor: string
+): BigCalendarEventType[] => {
+  const formatedEvents: BigCalendarEventType[] = [];
 
-/**
- * It creates an 'Add to my calendar' Link so all the registrant can add the specific event for a workshops to its calendar
- *
-//  * @see {link https://stackoverflow.com/questions/5831877/how-do-i-create-a-link-to-add-an-entry-to-a-calendar} for more information about how to create the link
-//  * @param workshop the details of a workshop
-//  * @param meetingLink the meeting link
-//  * @param meetingId the meeting id
-//  * @returns an 'Add to my calendar' link
-//  */
-export const getPublicEventLink = async (workshop: Workshop, meetingLink?: string, meetingId?: string, meetingPasword?: string) => {
-    const { name, description, speaker, pensum, kindOfWorkshop, platform, date, startHour, endHour } = workshop;
-    const location = meetingLink ? meetingLink : platform;
-    const calendarName = encodeURIComponent(name);
-    const NDescription = createCalendarDescription(pensum, speaker, kindOfWorkshop, platform, description, meetingLink, meetingId, meetingPasword);
-    const [startDate, endDate] = getFormatedDate(date, startHour, endHour);
-    const encodedLocation = encodeURIComponent(location);
-    const encodeDescription = encodeURIComponent(NDescription);
-    const calendarStartDate = startDate.replaceAll('-', '').replaceAll(':', '').replaceAll('.', '');
-    const calendarEndDate = endDate.replaceAll('-', '').replaceAll(':', '').replaceAll('.', '');
-    let addUrl = '';
-    if (kindOfWorkshop === "Asincrono") {
-        const startDay = startDate.replaceAll('-', '').replaceAll(':', '').replaceAll('.', '').slice(0, -11);
-        const endDayISO = addDays(endDate, 3)
-        const endDay = endDayISO.replaceAll('-', '').replaceAll(':', '').replaceAll('.', '').slice(0, -11)
-        addUrl = `http://www.google.com/calendar/event?action=TEMPLATE&text=${calendarName}&dates=${startDay}/${endDay}&details=${encodeDescription}&location=${encodedLocation}`;
-    }
-    else {
-        addUrl = `http://www.google.com/calendar/event?action=TEMPLATE&text=${calendarName}&dates=${calendarStartDate}/${calendarEndDate}&details=${encodeDescription}&location=${encodedLocation}`;
-    }
-    return await shortenLink(addUrl);
+  calendarEvents.forEach((event) => {
+    const { summary, start, end, description, location } = event;
+    const obj = {
+      title: summary as string,
+      allDay: false,
+      start: new Date(start!.dateTime as string),
+      end: new Date(end!.dateTime as string),
+      description: description as string,
+      bgColor,
+      location: location as string,
+      textColor,
+    };
+    formatedEvents.push(obj);
+  });
+  return formatedEvents;
 };
 
 /**
- * gets the meet meeting link of an specific event
- *
- * @param eventId the id of the event we want get the meet meeting
- * @returns the meet link and its id
+ * Gets the events from Google Calendar for each calendar ID and formats them to match the React Big Calendar event type.
+ * @returns A promise that resolves to an array of arrays of BigCalendarEventType objects.
+ * @todo Add error handling
+ * @todo allow to return a single array of events.
  */
-const getMeetEventLink = async (eventId: string): Promise<string[]> => {
-    const auth = await getAccessToken()
-    // the calendar instance
-    const Calendar: calendar_v3.Calendar = google.calendar({ version: 'v3', auth })
-    const calendarId = await getCalendarId();
-    const event = await Calendar.events.get({ calendarId, eventId });
-    const meetLink = event.data.hangoutLink!;
-    const index = meetLink.lastIndexOf('/');
-    const meetId = meetLink.slice(index + 1);
-    return [meetLink, meetId];
+export const getAndFormatCalendarEvents = async (): Promise<BigCalendarEventType[][]> => {
+  const session = await getServerSession(adminAuthOptions);
+
+  const accessToken = session?.user?.accessToken;
+  const refreshToken = session?.user?.refreshToken;
+
+  setTokens(accessToken as string, refreshToken as string);
+
+  const formatedEvents = CALENDAR_IDS.map(async (calendar) => {
+    const { calendarId, eventColor, textColor } = calendar;
+    const events = await getCalendarEvents(calendarId);
+    const formatedEvents = formatEventObject(events!, eventColor, textColor);
+
+    return formatedEvents;
+  });
+
+  return Promise.all(formatedEvents);
 };
 
 /**
- * it formats the date passed as argument to the format needed by the calendar api
- *
- * @param date the date of the event
- * @param startingHour the start hour of the event
- * @param endHour the end hour of the event
- * @returns the date object of the start and end hour in ISO string format
+ * @description Creates the content for the cards in the dashboard
+ * @param workshopCount the total count of done workshops
+ * @param chatsCount the total count of done chats
+ * @param volunteersCount the total count of done volunteers
+ * @param scholarsCount the total count of active scholars
+ * @returns Array of objects with the content for each card
  */
-export const getFormatedDate = (date: string, startingHour: string, endHour: string) => {
-    const start = new Date(date + "," + startingHour)
-    const end = new Date(date + "," + endHour);
-    return [start.toISOString(), end.toISOString()];
+export const createDashboardCardContent = (
+  workshopCount: number,
+  chatsCount: number,
+  volunteersCount: number,
+  scholarsCount: number
+) => {
+  const cardContet = [
+    {
+      icon: workshopIcon,
+      text: 'Actividades formativas realizadas',
+      number: workshopCount,
+      bg: 'bg-gradient-to-r from-blue-700  to-indigo-900',
+      cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
+    },
+    {
+      icon: chatIcon,
+      text: 'Chats Realizados',
+      number: chatsCount,
+      bg: 'bg-gradient-to-r from-red-500  to-red-900',
+      cardButtonBg: 'bg-indigo-950 active:bg-blue-700',
+    },
+    {
+      icon: volunterIcon,
+      text: 'Horas de voluntariado realizadas',
+      number: volunteersCount,
+      bg: ' from-green-600  to-emerald-800',
+      cardButtonBg: 'bg-indigo-950 active:bg-blue-700',
+    },
+    {
+      icon: userIcon,
+      text: 'Becarios activos',
+      number: scholarsCount,
+      bg: 'from-yellow-500  to-yellow-700',
+      cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
+    },
+  ];
+  return cardContet;
 };

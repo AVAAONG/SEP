@@ -1,0 +1,20 @@
+// Base types prisma file for scholar types. Types that are only used for scholars.
+/// @author Kevin Bravo (kevinbravo.me)
+
+enum Region {
+    ZULIA
+    CARABOBO
+    CARACAS
+}
+
+enum ScholarStatus {
+    PROBATORIO_1
+    PROBATORIO_2
+    CURRENT
+    ALUMNI
+}
+
+enum ScholarCanAssist {
+    YES
+    NO
+}

@@ -1,0 +1,18 @@
+// Base types prisma file for Workshop model.
+/// @author Kevin Bravo (kevinbravo.me)
+
+enum Skill {
+    CITIZEN_EXERCISE
+    LEADERSHIP
+    SELF_MANAGEMENT
+    ICT
+    ENTREPRENEURSHIP
+}
+
+enum WorkshopYear {
+    I
+    II
+    III
+    IV
+    V
+}

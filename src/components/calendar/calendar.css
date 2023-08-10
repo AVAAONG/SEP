@@ -1,0 +1,109 @@
+/* Toolbar button styles */
+.rbc-btn-group > button {
+  color: rgb(126, 126, 126) !important;
+  border-color: rgba(156, 149, 149, 0.2) 2px solid !important;
+}
+
+.rbc-btn-group > button::selection {
+  background-color: #16a34a !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+}
+
+.rbc-btn-group > button:hover {
+  color: white !important;
+  background-color: #16a34a !important;
+}
+
+.rbc-button-link:hover {
+  background-color: rgb(55, 172, 26) !important;
+  padding: 8px;
+  border-radius: 100%;
+  width: 35px;
+  height: 35px;
+  text-align: center;
+}
+
+.rbc-button-link:hover {
+  @apply !text-white dark:!bg-emerald-700;
+}
+
+.rbc-timeslot-group > * {
+  border-color: rgba(50, 216, 0, 0.254) !important;
+}
+
+.rbc-timeslot-group {
+  border-bottom-color: rgba(19, 73, 2, 0.307) !important;
+}
+
+.rbc-day-bg {
+  border-color: rgb(255, 255, 255, 0.2) !important;
+}
+
+.rbc-active {
+  background-color: #16a34a !important;
+  border-color: rgb(99, 202, 3) 2px solid !important;
+  color: white !important;
+}
+
+.rbc-event::before {
+  content: '';
+  position: absolute;
+  margin-right: 100px;
+  margin-top: 7px;
+  height: 7px;
+  width: 7px;
+  top: '0';
+  left: '0';
+  border-radius: 100px;
+  background-color: azure;
+}
+
+.rbc-event-content {
+  margin-left: 13px;
+}
+
+.rbc-month-view {
+  border-color: #ffffff !important;
+  border-top-color: transparent !important;
+  border-radius: 6px !important;
+}
+
+.rbc-month-view {
+  @apply dark:!border-gray-600 dark:!border-t-transparent;
+}
+
+.rbc-header {
+  border-color: #014b1d !important;
+  border-width: 0.5px !important;
+}
+
+.rbc-calendar {
+  min-height: 600px !important;
+}
+.rbc-day-bg {
+  border-right: rgba(0, 0, 0, 0.2) 1px solid !important;
+}
+
+.rbc-off-range-bg {
+  @apply dark:!bg-slate-900;
+}
+
+.rbc-off-range {
+  @apply dark:!text-emerald-800;
+}
+
+.rbc-today {
+  @apply !bg-green-300 dark:!text-emerald-800 dark:!bg-emerald-700 dark:!bg-opacity-30;
+}
+.rbc-row-content {
+  @apply dark:!border-t-gray-700;
+}
+
+.rbc-month-row {
+  @apply dark:!border-gray-700;
+}
+
+.rbc-btn-group > button {
+  @apply dark:!border-gray-700 dark:!text-gray-300;
+}

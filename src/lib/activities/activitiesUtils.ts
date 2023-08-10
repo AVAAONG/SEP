@@ -5,7 +5,6 @@
 // import { Chat } from "@/types/Chat"
 // import { KindOfActivity } from "@/types/General"
 
-
 // export const deleteEntry = (inputId: shortUUID.SUUID, KindOfActivity: KindOfActivity, setData: React.Dispatch<React.SetStateAction<any>>) => {
 //     switch (KindOfActivity) {
 //         case "chat":

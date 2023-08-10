@@ -26,10 +26,13 @@ yarn-error.log*
 
 # local env files
 .env*.local
-
+.env
+.env.production
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+src/prisma/schema.prisma
+```

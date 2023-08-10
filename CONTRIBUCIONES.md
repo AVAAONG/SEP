@@ -1,7 +1,9 @@
 # Guía de contribución
+
 ¡Hola, bienvenido al SEP! De parte de ProExcelencia agradecemos tu interés en contribuir a nuestro proyecto. Tómate un momento para revisar estas pautas antes de hacer una contribución para garantizar una colaboración fluida y exitosa.
 
 ## Formas de contribuir
+
 Hay muchas formas de contribuir a nuestro proyecto. Puede:
 
 - Informar problemas y errores
@@ -15,21 +17,28 @@ Hay muchas formas de contribuir a nuestro proyecto. Puede:
 1. Haga un fork del repositorio del proyecto. Esto crea una copia del proyecto en su cuenta que puede modificar sin afectar el proyecto original.
 2. Clone el repositorio bifurcado en su máquina local utilizando un cliente Git como Git o GitHub Desktop.
 3. Cree una nueva rama con un nombre descriptivo (por ejemplo, `new-feature-branch` o `bugfix-issue-123`).
+
 ```sh
 $ git checkout -b new-feature-branch / add-some-feature
 ```
+
 4. Realice cambios en el código base del proyecto.
 5. Confirme sus cambios en su rama local con un mensaje de confirmación claro que explique los cambios que ha realizado.
+
 ```sh
 $ git add .'
 ```
+
 ```sh
 $ git commit -m 'Implemented new feature.'
 ```
+
 6. Envíe sus cambios a su repositorio bifurcado en GitHub utilizando el siguiente comando
+
 ```sh
 $ git push origin new-feature-branch / add-some-feature
 ```
+
 7. Crea una Pull Request al repositorio original.
 
 Abra una nueva solicitud de extracción al repositorio del proyecto original. En la solicitud de extracción, describa los cambios que ha realizado y por qué son necesarios.
@@ -58,4 +67,5 @@ Si desea contribuir con código a nuestro proyecto, siga estas pautas:
 Todas las contribuciones a nuestro proyecto serán revisadas por los mantenedores del proyecto antes de fusionarse en la rama principal del proyecto. Las revisiones pueden incluir comentarios sobre el código, sugerencias para mejorar o solicitudes para pruebas o documentación adicionales.
 
 ## Atribución
+
 Los colaboradores a nuestro proyecto serán reconocidos en el archivo README.md y AUTHORS.md del proyecto. 💚
