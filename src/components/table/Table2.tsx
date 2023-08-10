@@ -1,25 +1,69 @@
 'use client';
-import React, { useMemo, useState } from 'react';
-import { ScholarAttendance, Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
-import { useTable, useSortBy, useGlobalFilter, useAsyncDebounce, usePagination } from 'react-table';
+import defailProfilePic from '@/../public/defaultProfilePic.png';
 import { FilterIcon, SortIcon, SortIconReverse } from '@/assets/svgs';
-import workshopScholarFormat from '../scholar/scholars/workshopTableData';
+import { ScholarAttendance, Workshop, WorkshopSpeaker } from '@prisma/client';
+import Image from 'next/image';
+import React, { useMemo, useState } from 'react';
+import { TableOptions, useAsyncDebounce, useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table';
 
 interface WorkshopTableProps {
   workshopData:
-    | (Workshop & {
-        speaker: WorkshopSpeaker[];
-        scholarAttendance: {
-          attendance: ScholarAttendance;
-        }[];
-      })[]
-    | undefined;
+  | (Workshop & {
+    speaker: WorkshopSpeaker[];
+    scholarAttendance: {
+      attendance: ScholarAttendance;
+    }[];
+  })[]
+  | undefined;
 }
 
 const ChatTable: React.FC<WorkshopTableProps> = (props) => {
-  const { workshopData } = props;
-  const data = useMemo(() => workshopData, []);
-  const columns = useMemo(() => workshopScholarFormat, []);
+  const { tableData } = props;
+
+  const workshopSpeakerColumns: TableOptions<WorkshopSpeaker> = [
+    {
+      Header: 'Nombre completo',
+      Cell: ({ cell }) => {
+        // "use server";/
+        return (
+          <div className="flex items-center w-full">
+            <div className="flex-shrink-0 w-8 h-8">
+              <Image
+                className="w-full h-full rounded-full"
+                src={defailProfilePic}
+                alt="Foto de perfil"
+              />
+            </div>
+            <div className="ml-4">
+              <div className="text-sm text-gray-900 dark:text-slate-100">
+                {cell.row.original.first_names} {' '}
+                {cell.row.original.last_names}
+              </div>
+            </div>
+          </div>
+
+        )
+      },
+    },
+    {
+      Header: 'Telefono',
+      accessor: 'phone_number',
+    },
+    {
+      Header: 'Correo',
+      accessor: 'email',
+    },
+    {
+      Header: 'Empresa',
+      accessor: 'job_company',
+    },
+    {
+      Header: 'Gender',
+      accessor: 'gender',
+    },
+  ];
+  const data = useMemo(() => tableData, []);
+  const columns = useMemo(() => workshopSpeakerColumns, []);
   const {
     getTableProps,
     getTableBodyProps,
@@ -71,7 +115,7 @@ const ChatTable: React.FC<WorkshopTableProps> = (props) => {
             }}
             type="text"
             id="table-search"
-            placeholder="Buscar taller"
+            placeholder="Buscar"
           />
         </div>
         <button
@@ -93,7 +137,7 @@ const ChatTable: React.FC<WorkshopTableProps> = (props) => {
               clipRule="evenodd"
             />
           </svg>
-          Filtrar por componente
+          Filtrar
           <svg
             className="-mr-1 ml-1.5 w-5 h-5 text-green-500"
             fill="currentColor"
@@ -155,7 +199,7 @@ const ChatTable: React.FC<WorkshopTableProps> = (props) => {
                     return (
                       <td
                         {...cell.getCellProps()}
-                        className="px-6 py-4 whitespace-nowrap lowecase capitalize"
+                        className="px-4 py-2 whitespace-nowrap lowecase capitalize"
                       >
                         {cell.render('Cell')}
                       </td>

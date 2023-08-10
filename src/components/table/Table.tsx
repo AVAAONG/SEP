@@ -34,14 +34,16 @@ const Table: React.FC<TableProps> = ({ tableData, tableColumns }) => {
       <div className="flow-root w-full overflow-x-scroll ">
         <table {...getTableProps()} className="w-full text-sm text-left text-gray-300 ">
           <thead className="text-xs text-green-500 uppercase text-center border-b-[1px] border-green-700 text-ellipsis bg-gray-100 dark:bg-slate-950">
-            {headerGroups.map((headerGroup) => (
+            {headerGroups.map((headerGroup, index) => (
               <tr
+
                 {...headerGroup.getHeaderGroupProps()}
                 className="text-xs font-medium text-green-700 dark:text-green-500 uppercase tracking-wider"
               >
-                {headerGroup.headers.map((column) => {
+                {headerGroup.headers.map((column, index) => {
                   return (
                     <th
+
                       {...column.getHeaderProps(column.getSortByToggleProps())}
                       scope="col"
                       className="px-6 py-3"
@@ -66,16 +68,18 @@ const Table: React.FC<TableProps> = ({ tableData, tableColumns }) => {
           </thead>
 
           <tbody {...getTableBodyProps()} className="divide-y divide-gray-500 dark:divide-gray-700">
-            {page.map((row) => {
+            {page.map((row, index) => {
               prepareRow(row);
               return (
                 <tr
+
                   {...row.getRowProps()}
                   className="text-sm hover:bg-green-500 dark:hover:bg-green-700 dark:hover:text-white text-center text-gray-800 dark:text-gray-300"
                 >
-                  {row.cells.map((cell) => {
+                  {row.cells.map((cell, index) => {
                     return (
                       <td
+
                         {...cell.getCellProps()}
                         className="px-4 py-2 whitespace-nowrap lowecase capitalize"
                       >
