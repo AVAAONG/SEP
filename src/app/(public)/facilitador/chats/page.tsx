@@ -1,9 +1,7 @@
-import React from 'react';
 import Image from 'next/image';
 
-import { chatIcon, workshopIcon, Star, Point } from '@/assets/svgs';
-import NormalCard from '@/components/card/NormalCard';
-import { getSpeaker } from '@/lib/database/speaker';
+import { Star, chatIcon, workshopIcon } from '@/assets/svgs';
+import NormalCard from '@/components/scholar/card/NormalCard';
 import { getChatSpeaker } from '@/lib/database/chats';
 
 const CARD_CONTENT = [
@@ -39,8 +37,6 @@ const page = async ({
 }) => {
   const speakerId = searchParams?.speakerId || null;
   const speaker = await getChatSpeaker(speakerId);
-
-  console.log(speaker?.Chat[0].dates);
   return (
     <main>
       <section className="bg-slate-950 flex flex-col lg:flex-row min-h-screen">

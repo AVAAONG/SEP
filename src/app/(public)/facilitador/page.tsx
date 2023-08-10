@@ -1,8 +1,7 @@
-import React from 'react';
 import Image from 'next/image';
 
-import { chatIcon, workshopIcon, Star, Point } from '@/assets/svgs';
-import NormalCard from '@/components/card/NormalCard';
+import { Star, chatIcon, workshopIcon } from '@/assets/svgs';
+import NormalCard from '@/components/scholar/card/NormalCard';
 
 const CARD_CONTENT = [
   {
