@@ -126,8 +126,59 @@ const getScholarData = async (id: string) => {
  */
 const page = async () => {
   const session = await getServerSession(authOptions);
-  const scholarId = 'cljwyi8hl0008uwmkjo6dktty';
-  const scholar = await getScholarData(scholarId);
+  const scholarId = session.user.id || '';
+  console.log(scholarId)
+  const prisma = new PrismaClient();
+  const scholar = await prisma.user.findUnique({
+    where: {
+      id: scholarId,
+    },
+    include: {
+      scholar: true,
+    },
+  });
+
+  const scholarGeneralInfo = {
+    firstNames: scholar?.scholar?.first_names,
+    lastNames: scholar?.scholar?.last_names,
+    dni: scholar?.scholar?.dni,
+    gender: scholar?.scholar?.gender,
+    birthDate: formatDate(scholar?.scholar?.birthdate),
+    cellPhoneNumber: scholar?.scholar?.cell_phone_number,
+    localPhoneNumber: scholar?.scholar?.local_phone_number,
+    avaaAdmissionYear: formatDate(scholar?.scholar?.avaa_admission_year),
+    email: scholar?.scholar?.email,
+  };
+
+  const scholarAddressInfo = {
+    currentZone: scholar?.scholar?.current_zone,
+    stateOfOrigin: scholar?.scholar?.state_of_origin,
+  };
+  const scholarCollageInfo = {
+    collage: scholar?.scholar?.collage,
+    carrer: scholar?.scholar?.carrer,
+    studyArea: scholar?.scholar?.study_area,
+    currentAcademicPeriod: scholar?.scholar?.current_academic_period,
+    grade: scholar?.scholar?.grade,
+    gradeKind: scholar?.scholar?.grade_kind,
+    classModality: scholar?.scholar?.class_modality,
+    academicPeriodType: scholar?.scholar?.academic_period_type,
+  };
+
+  const workScholarInformation = {
+    isCurrentlyWorking: scholar?.scholar?.is_currently_working ? 'TRUE' : 'FALSE',
+    organizationName: scholar?.scholar?.organization_name,
+    positionHeld: scholar?.scholar?.position_held,
+    workModality: scholar?.scholar?.work_modality,
+    weeklyHours: scholar?.scholar?.weekly_hours,
+  };
+  const scholarCVAInfo = {
+    isInCVA: scholar?.scholar?.is_in_cva ? 'TRUE' : 'FALSE',
+    cvaLocation: scholar?.scholar?.cva_location,
+    cvaModality: scholar?.scholar?.cva_modality,
+    englishLevel: scholar?.scholar?.english_level,
+    notStartedCvaReason: scholar?.scholar?.not_started_cva_reason,
+  };
   return (
     <div>
       <div className="grid grid-cols-1 px-2 pt-6 xl:grid-cols-3 xl:gap-4 ">

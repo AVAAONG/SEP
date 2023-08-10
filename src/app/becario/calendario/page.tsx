@@ -1,6 +1,5 @@
 import Calendar from '@/components/calendar/Calendar';
 import { BigCalendarEventType } from '@/types/Calendar';
-import React from 'react';
 
 /**
  * The ExampleEvents constant is an array of BigCalendarEventType objects that represent the events to be displayed in the calendar.
@@ -8,9 +7,9 @@ import React from 'react';
  */
 const ExampleEvents: BigCalendarEventType[] = [
   {
-    title: 'All Day Event very long title',
-    start: new Date(2023, 7, 13),
-    end: new Date(2023, 7, 13),
+    title: 'Acampada en Lagunazo',
+    start: new Date(2023, 8, 13),
+    end: new Date(2023, 8, 13),
     allDay: true,
   },
 ];

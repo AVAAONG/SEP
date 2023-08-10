@@ -1,12 +1,11 @@
 'use client';
-import { useState } from 'react';
-import Image from 'next/image';
 import defailProfilePic from '@/../public/defaultProfilePic.png';
 import { signOut } from 'next-auth/react';
+import Image from 'next/image';
+import { useState } from 'react';
 interface ProfileDropdownProps {
   name: string | null | undefined;
   email: string | null | undefined;
-  scholarId: string;
   image: string | null | undefined;
 }
 
@@ -14,7 +13,7 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
   const [isDrowpdownProfileOpen, setDropdownProfile] = useState(false);
   const toggleDropdownProfile = () => setDropdownProfile(!isDrowpdownProfileOpen);
 
-  const { name, email, scholarId, image } = props;
+  const { name, email, image } = props;
 
   return (
     <>
@@ -33,11 +32,10 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
         />
       </button>
       <div
-        className={`${
-          isDrowpdownProfileOpen
-            ? 'absolute  transform translate-x-40 md:translate-x-48  lg:translate-x-52 translate-y-[128px]'
-            : 'hidden'
-        } z-50 my-4 w-56 text-base list-none bg-white  divide-y divide-gray-100 shadow dark:bg-slate-900 dark:divide-gray-600 rounded-xl`}
+        className={`${isDrowpdownProfileOpen
+          ? 'absolute  transform translate-x-40 md:translate-x-48  lg:translate-x-52 translate-y-[128px]'
+          : 'hidden'
+          } z-50 my-4 w-56 text-base list-none bg-white  divide-y divide-gray-100 shadow dark:bg-slate-900 dark:divide-gray-600 rounded-xl`}
       >
         <div className="py-3 px-4">
           <span className="block text-sm font-semibold text-gray-900 dark:text-white">{name}</span>
@@ -46,7 +44,7 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
         <ul className="py-1 text-gray-700 dark:text-gray-300" aria-labelledby="dropdown">
           <li>
             <a
-              href={`becario/${scholarId}/config`}
+              href={`/becario/config`}
               className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-green-600 dark:text-gray-400 dark:hover:text-white"
             >
               Mi perfil
@@ -54,7 +52,7 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
           </li>
           <li>
             <a
-              href={`becario/${scholarId}/config`}
+              href={`/becario/config`}
               className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-green-600 dark:text-gray-400 dark:hover:text-white"
             >
               Configuración de la cuenta

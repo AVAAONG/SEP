@@ -1,45 +1,78 @@
-/**
- * @file This is the chats page, here the scholar can see all the chats that he has registered and asisted
- *
- */
 import Stats from '@/components/scholar/ScholarStats';
-import ChatTable from '@/components/table/Table2';
-import { Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
-import { headers } from 'next/headers';
+import TempChatTable from '@/components/table/tempChatTable';
 
 /**
- * Renders the chats page with the scholar stats and the table with the chats that the scholar has registered and asisted.
- * @returns The chats page
+ * Renders the page component with a list of workshops for a specific scholar.
+ * @returns The HTML document with the rendered page component.
  */
 const page = async () => {
-  /**
-   * Fetches the chat data from the api
-   */
-  const host = headers().get('host');
-  const data = await fetch(`http://${host}/api/workshop`, {
-    cache: 'no-cache',
-  });
+  // const scholarId = 'cljwyi8hl0008uwmkjo6dktty';
+  // const workshops = await getWorkshopsByScholar2(scholarId);
 
-  const workshopsData: (Workshop & {
-    speaker: WorkshopSpeaker[];
-    tempData: WorkshopTempData | null;
-  })[] = await data.json();
+  const workshopDataPlaceholder = [
+    {
+      title: "Let's learn grammar",
+      first_names: "Atenea",
+      last_names: "Gimenez",
+      start_date: "01/08/2023",
+      end_date: "01/08/2023",
+      level: "Basico",
+      modality: "Presencial",
+      platform: "Oficinas de AVAA",
+      scholarAttendance: "Asistio",
+    },
+    {
+      title: "Love Languages",
+      first_names: "Asxel",
+      last_names: "Ramirez",
+      start_date: "12/08/2023",
+      end_date: "01/08/2023",
+      level: "Basico",
+      modality: "Presencial",
+      platform: "Oficinas de AVAA",
+      scholarAttendance: "Asistio",
+    },
+    {
+      title: "SUSI experience",
+      first_names: "Noris",
+      last_names: "Moreno",
+      start_date: "2/08/2023",
+      end_date: "01/08/2023",
+      level: "Intermedio",
+      modality: "Presencial",
+      platform: "Oficinas de AVAA",
+      scholarAttendance: "No asistio",
+    },
+    {
+      title: "Let's learn grammar",
+      first_names: "Atenea",
+      last_names: "Gimenez",
+      start_date: "10/08/2023",
+      end_date: "01/08/2023",
+      level: "Avanzado",
+      modality: "Presencial",
+      platform: "Oficinas de AVAA",
+      scholarAttendance: "Asistio",
+    }
+  ]
+
 
   return (
     <div>
       <div className="flex flex-col px-2 pt-6 xl:gap-4">
         <div className="mb-4 col-span-full xl:mb-2">
           <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
-            Lstado de chats
+            Listado de talleres
           </h1>
-          <div className="h-full max-w-7xl flex flex-col gap-4 pt-4">
-            <Stats kindOfActivity="chat" />
-            <ChatTable workshopData={workshopsData} />
+          <div className="h-full w-full flex flex-col gap-4 pt-4">
+            <Stats kindOfActivity="workshop" />
+            <TempChatTable tableData={workshopDataPlaceholder} />
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
 export default page;
+

@@ -15,7 +15,27 @@ const workshopHeaders: TableOptions<WorkshopTableProps> = [
   },
   {
     Header: 'Facilitador',
-    accessor: 'speaker[0].name',
+    Cell: ({ cell }) => {
+      // "use server";/
+      return (
+        <div className="flex items-center w-full">
+          <div className="flex-shrink-0 w-8 h-8">
+            <Image
+              className="w-full h-full rounded-full"
+              src={defailProfilePic}
+              alt="Foto de perfil"
+            />
+          </div>
+          <div className="ml-4">
+            <div className="text-sm text-gray-900 dark:text-slate-100">
+              {cell.row.original.first_names} {' '}
+              {cell.row.original.last_names}
+            </div>
+          </div>
+        </div>
+
+      )
+    },
   },
   {
     id: 'date',
@@ -27,7 +47,7 @@ const workshopHeaders: TableOptions<WorkshopTableProps> = [
         day: 'numeric',
         year: 'numeric',
       });
-    },
+    }, 
   },
   {
     id: 'startHour',

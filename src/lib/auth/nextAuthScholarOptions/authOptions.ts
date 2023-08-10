@@ -3,16 +3,16 @@
  * @module lib/auth/nextAuthOptions/authOptions
  * @author Kevin Bravo (kevinbravo.me)
  */
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { PrismaClient } from '@prisma/client';
 import type { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
-import { PrismaClient } from '@prisma/client';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import Email from './EmailProvider';
 import {
-  googleUserProviderConfig,
-  PAGES,
   NEXT_SECRET,
+  PAGES,
   emailUserProviderConfig,
+  googleUserProviderConfig,
 } from './authConfig';
 
 const prisma = new PrismaClient();
@@ -74,12 +74,13 @@ const authOptions: NextAuthOptions = {
 
       // const emailBasedPath= `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${email}&su=${SUBJECT_MESSAGE}&body=${encodedMessage}&bcc=${recipients}`
 
-      const userExists = await prisma.scholar.findUnique({
-        where: { email },
-      });
+    //   const userExists = await prisma.scholar.findUnique({
+    //     where: { email },
+    //   });
 
-      if (!userExists) throw 'notAllowed';
-      else return true;
+    //   if (!userExists) throw 'notAllowed';
+    //   else return true;
+    return true
     },
     session: ({ session, token }) => ({
       ...session,
@@ -98,8 +99,11 @@ const authOptions: NextAuthOptions = {
         },
         data: {
           scholar: {
-            connect: {
+            create: {
               email: data.user.email!!,
+              first_names: 'Kevin Jose',
+          last_names: 'Bravo Mota',
+          scholar_status: 'CURRENT',
             },
           },
           role: 'SCHOLAR',

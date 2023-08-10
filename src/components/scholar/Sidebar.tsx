@@ -1,18 +1,17 @@
 'use client';
+import logo from '@/../public/proexcelencia-color.png';
 import {
   CalendarIcon,
   chatIcon,
+  dashboardComponent,
   volunterIcon,
   workshopIcon,
-  dashboardComponent,
 } from '@/assets/svgs';
-import React from 'react';
-import DropdownButton from './DropdownButton';
-import logo from '@/../public/proexcelencia-color.png';
-import Link from 'next/link';
-import Image from 'next/image';
-import { useAtom } from 'jotai';
 import { scholarSidebarAtom } from '@/state/mainState';
+import { useAtom } from 'jotai';
+import Image from 'next/image';
+import Link from 'next/link';
+import DropdownButton from './DropdownButton';
 
 const SCHOLAR_PREFIX = 'becario';
 
@@ -79,15 +78,14 @@ const Sidebar = () => {
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
   return (
     <aside
-      className={`${
-        isSidebarOpen ? 'fixed  w-full md:w-64' : 'hidden'
-      } top-0 left-0 z-40 h-screen pt-4  bg-white border-r border-gray-200 md:translate-x-0 dark:bg-slate-900 dark:border-gray-700`}
+      className={`${isSidebarOpen ? 'fixed  w-full md:w-64' : 'hidden'
+        } top-0 left-0 z-40 h-screen pt-4  bg-white border-r border-gray-200 md:translate-x-0 dark:bg-slate-900 dark:border-gray-700`}
     >
       <div className={`flex items-center mt-2 ml-6 ${isSidebarOpen ? 'justify-between' : ''} `}>
         <Link href="/becario/dashboard">
           <Image src={logo} width={190} alt="Logo Proexcelencia" />
         </Link>
-        <div className="flex justify-start items-center">
+        <div className="flex justify-start items-center md:hidden">
           <button
             onClick={toggleSidebar}
             className="p-2 mr-2 text-green-600 rounded-lg cursor-pointer  hover:text-green-900 hover:bg-green-100 focus:bg-green-100 dark:focus:bg-emerald-950  dark:focus:ring-green-700 dark:text-green-700 dark:hover:bg-green-700 dark:hover:text-emerald-950 dark:focus:text-emerald-700"
@@ -141,7 +139,7 @@ const Sidebar = () => {
           </p>
           <a
             className="bg-orange-100 text-red-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-90"
-            href="#"
+            href="https://docs.google.com/forms/d/e/1FAIpQLSfRhXSZ0CB5EY5GRJ6sg5crjLgNokge8t2XHvQoUqqGve0Vkg/viewform?usp=sf_link"
           >
             Dejar feedback
           </a>

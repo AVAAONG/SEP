@@ -5,19 +5,19 @@ function classNames(...classes: string[]) {
 }
 interface WorkshopTableProps {
   workshops:
-    | (Workshop & {
-        speaker: WorkshopSpeaker[];
-        scholarAttendance: {
-          attendance: ScholarAttendance;
-        }[];
-      })[]
-    | undefined;
+  | (Workshop & {
+    speaker: WorkshopSpeaker[];
+    scholarAttendance: {
+      attendance: ScholarAttendance;
+    }[];
+  })[]
+  | undefined;
   kindOfActivity: string;
 }
 
 const defineActivity = (kindOfActivity: string) => {
   if (kindOfActivity === 'workshop') {
-    return ['actividades de formación', 20];
+    return ['actividades de formación', 10];
   } else if (kindOfActivity === 'chat') {
     return ['chats', 10];
   } else if (kindOfActivity === 'volunteer') {
@@ -30,13 +30,13 @@ const defineActivity = (kindOfActivity: string) => {
 const Stats = ({ workshops, kindOfActivity }: WorkshopTableProps) => {
   const [activityName, number] = defineActivity(kindOfActivity);
 
-  let workshopsDone = 0;
+  let workshopsDone = 4;
 
-  if (workshops) {
-    workshopsDone = workshops.filter(
-      (workshop) => workshop.scholarAttendance[0].attendance === 'ATTENDED'
-    ).length;
-  }
+  // if (workshops) {
+  //   workshopsDone = workshops.filter(
+  //     (workshop) => workshop.scholarAttendance[0].attendance === 'ATTENDED'
+  //   ).length;
+  // }
 
   const pendingWorkshops = Number(number) - workshopsDone;
   const donePercentage = (workshopsDone / 20) * 100;

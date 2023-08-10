@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import React from 'react';
 
 const ScholarFooter = () => {
   return (
@@ -45,7 +44,7 @@ const ScholarFooter = () => {
           <li>
             <Link
               target="_blank"
-              href="#"
+              href="https://docs.google.com/forms/d/e/1FAIpQLSfRhXSZ0CB5EY5GRJ6sg5crjLgNokge8t2XHvQoUqqGve0Vkg/viewform?usp=sf_link"
               className="mr-4 text-sm font-semibold text-green-500 hover:text-green-700  dark:hover:text-green-500 md:mr-6 dark:text-green-700"
             >
               Dejar feedback
