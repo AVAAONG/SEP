@@ -30,7 +30,7 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
         name: 'Reporte de actividades',
         link: `/${SCHOLAR_PREFIX}/talleres/reporte`,
       },
-      { name: 'Lista de talleres', link: `/${SCHOLAR_PREFIX}/talleres` },
+      { name: 'Lista de actividades', link: `/${SCHOLAR_PREFIX}/talleres` },
     ],
     link: '',
   },
