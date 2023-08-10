@@ -1,9 +1,13 @@
-import { NextResponse } from 'next/server';
-import { getToken } from 'next-auth/jwt';
-import { NextApiRequest } from 'next';
-import { setTokens } from '@/lib/auth/auth';
-import shortUUID from 'short-uuid';
-import { getSpreadsheetValues } from '@/lib/sheets/sheets';
+import {
+  createChat,
+  deleteAllChats
+} from '@/lib/database/chats';
+import {
+  createScholar
+} from '@/lib/database/users';
+import { setTokens } from '@/lib/googleAPI/auth';
+import { addHours, getFormatedDate } from '@/lib/googleAPI/calendar/utils';
+import { getSpreadsheetValues } from '@/lib/googleAPI/sheets';
 import { Pensum } from '@/types/Workshop';
 import {
   Attendance,
@@ -13,23 +17,10 @@ import {
   WorkshopDates,
   activityStatus,
 } from '@prisma/client';
-import { createWorkshop, createWorkshopSpeaker } from '@/lib/database/Workshops';
-import { addHours, getFormatedDate } from '@/lib/calendar/utils';
-import { create } from 'domain';
-import {
-  createScholar,
-  deleteAllScholars,
-  getScholars,
-  getScholarsCount,
-} from '@/lib/database/users';
-import {
-  convertScholarToSpeaker,
-  countChatSpeakers,
-  createChat,
-  createChatSpeaker,
-  deleteAllChatSpeakers,
-  deleteAllChats,
-} from '@/lib/database/chats';
+import { NextApiRequest } from 'next';
+import { getToken } from 'next-auth/jwt';
+import { NextResponse } from 'next/server';
+import shortUUID from 'short-uuid';
 
 const facilitadores = "'Hoja 2'!C3:D34";
 const talleres = "'Vista principal de talleres'!C10:P57";

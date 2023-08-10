@@ -1,15 +1,15 @@
+import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { PrismaClient } from '@prisma/client';
 import moment from 'moment';
 import { getServerSession } from 'next-auth';
-import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 
 import AddressInformation from '@/components/scholar/config/AddressInformation';
-import CVAInformation from '@/components/forms/userSetings/CVAInformation';
-import GeneralInformation from '@/components/forms/userSetings/GeneralInformation';
-import ProfilePic from '@/components/forms/userSetings/ProfilePic';
-import UniversityInformation from '@/components/forms/userSetings/UniversityInformation';
-import WorkInformation from '@/components/forms/userSetings/WorkInformation';
-import VolunteeringInformation from '@/components/forms/userSetings/VolunteeringInformation';
+import CVAInformation from '@/components/scholar/config/CVAInformation';
+import GeneralInformation from '@/components/scholar/config/GeneralInformation';
+import ProfilePic from '@/components/scholar/config/ProfilePic';
+import UniversityInformation from '@/components/scholar/config/UniversityInformation';
+import VolunteeringInformation from '@/components/scholar/config/VolunteeringInformation';
+import WorkInformation from '@/components/scholar/config/WorkInformation';
 
 const formatDate = (date: string) => {
   return moment(date).format('YYYY-MM-DD');

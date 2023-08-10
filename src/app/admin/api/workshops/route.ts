@@ -1,15 +1,5 @@
+import { getScheduledWorkshops } from '@/lib/database/Workshops';
 import { NextRequest, NextResponse } from 'next/server';
-import { getToken } from 'next-auth/jwt';
-import { setTokens } from '@/lib/auth/auth';
-import { createFormDescription } from '@/lib/form/form';
-import { getSpeakerName } from '@/lib/database/speaker';
-import { Modality, Workshop, WorkshopTempData } from '@prisma/client';
-import shortUUID from 'short-uuid';
-import { createEvent } from '@/lib/calendar/calendar';
-import { Platform } from '@/types/General';
-import { getFormatedDate } from '@/lib/calendar/utils';
-import { createWorkshop, getScheduledWorkshops } from '@/lib/database/Workshops';
-import { Workshop as FormTypeWorkshop } from '@/types/Workshop';
 
 const FORM_CREATION_APPSCRIPT_URL =
   'https://script.google.com/macros/s/AKfycbypXIh8iD-Pbf7gEKHEDrjxTj7EB_DHbWoOO53KgukwDDgaB6PO42xQqeNUReFo4jty/exec';

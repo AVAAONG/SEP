@@ -1,10 +1,6 @@
-import React from 'react';
 import Image from 'next/image';
 
-import { chatIcon, workshopIcon, Star, Point } from '@/assets/svgs';
-import NormalCard from '@/components/card/NormalCard';
-import { getSpeaker } from '@/lib/database/speaker';
-import { getChatSpeaker } from '@/lib/database/chats';
+import { Star, chatIcon, workshopIcon } from '@/assets/svgs';
 
 const CARD_CONTENT = [
   {

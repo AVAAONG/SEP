@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { setTokens } from '@/lib/googleAPI/auth';
+import { getSpreadsheetValues } from '@/lib/googleAPI/sheets';
 import { getToken } from 'next-auth/jwt';
-import { setTokens } from '@/lib/auth/auth';
-import { getSheetsName, getSpreadsheetValues } from '@/lib/sheets/sheets';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest, res: NextResponse) {
   const token = await getToken({ req });

@@ -1,11 +1,11 @@
 'use client';
-import Input from '@/components/forms/Inputs';
-import React, { BaseSyntheticEvent, useState } from 'react';
-import { FieldValues, UseFormRegister, useForm } from 'react-hook-form';
-import CHAT_INPUT_ELEMENTS from '@/components/forms/data/chatInputs';
-import shortUUID from 'short-uuid';
+import Input from '@/components/admin/forms/Inputs';
+import CHAT_INPUT_ELEMENTS from '@/components/admin/forms/data/chatInputs';
 import ChatsList from '@/components/admin/lists/ChatsList';
 import { Chat } from '@/types/Chat';
+import { BaseSyntheticEvent, useState } from 'react';
+import { FieldValues, UseFormRegister, useForm } from 'react-hook-form';
+import shortUUID from 'short-uuid';
 
 const page = () => {
   const {

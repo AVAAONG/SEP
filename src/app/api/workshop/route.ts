@@ -1,16 +1,10 @@
-import { setTokens } from '@/lib/auth/auth';
-import { createEvent } from '@/lib/calendar/calendar';
-import { getFormatedDate } from '@/lib/calendar/utils';
 import {
   createWorkshop,
-  getScheduledWorkshops,
-  getWorkshops,
-  getWorkshopsCount,
+  getWorkshops
 } from '@/lib/database/Workshops';
-import { getSpeakerName, getSpeakerNames } from '@/lib/database/speaker';
-import { createFormDescription } from '@/lib/form/form';
+import { setTokens } from '@/lib/googleAPI/auth';
 import { Workshop } from '@/types/Workshop';
-import { activityStatus, Prisma, WorkshopTempData } from '@prisma/client';
+import { Prisma, WorkshopTempData, activityStatus } from '@prisma/client';
 import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
 import shortUUID from 'short-uuid';

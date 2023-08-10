@@ -1,16 +1,10 @@
-import { setTokens } from '@/lib/auth/auth';
-import { createEvent } from '@/lib/calendar/calendar';
-import { getToken } from 'next-auth/jwt';
-import { Workshop } from '@/types/Workshop';
-import { NextRequest, NextResponse } from 'next/server';
-import shortUUID from 'short-uuid';
 import {
-  createWorkshop,
   deleteWorkshopFromDatabase,
-  getScheduledWorkshops,
-  getWorkshops,
+  getScheduledWorkshops
 } from '@/lib/database/Workshops';
-import { getFormatedDate } from '@/lib/calendar/utils';
+import { setTokens } from '@/lib/googleAPI/auth';
+import { getToken } from 'next-auth/jwt';
+import { NextRequest, NextResponse } from 'next/server';
 
 // export async function POST(req: NextRequest, res: NextResponse) {
 //     const token = await getToken({ req });

@@ -1,15 +1,15 @@
 import { chatIcon, volunterIcon, workshopIcon } from '@/assets/svgs';
 import Card from '@/components/admin/dashboard/Card';
-import ActivityList from '@/components/scholar/dashboard/ActivityList';
-import { SUUID } from 'short-uuid';
 import Calendar from '@/components/calendar/Calendar';
+import ActivityList from '@/components/scholar/dashboard/ActivityList';
 import { BigCalendarEventType } from '@/types/Calendar';
+import { SUUID } from 'short-uuid';
 
 const examples = [
   {
-    title: 'All Day Event very long title',
+    title: 'Acampada en lagunazo',
     startHour: '4:00PM',
-    date: '13/07/2023',
+    date: '13/08/2023',
     kindOfActivity: 'volunteering',
     speaker: 'Kevin Bravo',
   },

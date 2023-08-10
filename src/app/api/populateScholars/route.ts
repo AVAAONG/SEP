@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getToken } from 'next-auth/jwt';
-import { setTokens } from '@/lib/auth/auth';
-import { getSheetsName, getSpreadsheetValues } from '@/lib/sheets/sheets';
 import { addWorkshopToScholar } from '@/lib/database/users';
+import { setTokens } from '@/lib/googleAPI/auth';
+import { getSheetsName, getSpreadsheetValues } from '@/lib/googleAPI/sheets';
+import { getToken } from 'next-auth/jwt';
+import { NextRequest, NextResponse } from 'next/server';
 import shortUUID from 'short-uuid';
 
 const SPREADSHEET_ID = '1LstEUxNdlM5enWjIoCj-_qa0p7PiOPnPBFgXwrUbQBY';

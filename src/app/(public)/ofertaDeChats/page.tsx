@@ -9,11 +9,7 @@ interface ChatQuery extends Chat {
 }
 
 const page = () => {
-<<<<<<< HEAD
-  const searchParams = useSearchParams()
-=======
   const searchParams = useSearchParams();
->>>>>>> e12f04ed5aed60b0ced7c79c216b50cdf040a6bb
   const chats = searchParams.get('chats');
   const f = JSON.parse(chats);
 

@@ -6,7 +6,6 @@ import Stats from '@/components/scholar/ScholarStats';
 import ChatTable from '@/components/table/Table2';
 import { Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
 import { headers } from 'next/headers';
-import React from 'react';
 
 /**
  * Renders the chats page with the scholar stats and the table with the chats that the scholar has registered and asisted.
@@ -34,7 +33,7 @@ const page = async () => {
             Lstado de chats
           </h1>
           <div className="h-full max-w-7xl flex flex-col gap-4 pt-4">
-            <Stats />
+            <Stats kindOfActivity="chat" />
             <ChatTable workshopData={workshopsData} />
           </div>
         </div>

@@ -7,7 +7,7 @@
   "homepage": "https://github.com/mustafinho/seb",
   "engines": {
     "node": ">=16.0.0",
-    "pnpm": ">=8.0.0",
+    "pnpm": ">=7.0.0",
     "npm": "please-use-pnpm"
   },
   "scripts": {

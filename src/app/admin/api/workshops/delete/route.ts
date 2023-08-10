@@ -1,9 +1,7 @@
-import { setTokens } from '@/lib/auth/auth';
-import { deleteCalendarEvent } from '@/lib/calendar/calendar';
-import { deleteWorkshopFromDatabase, getScheduledWorkshops } from '@/lib/database/Workshops';
+import { deleteWorkshopFromDatabase } from '@/lib/database/Workshops';
+import { setTokens } from '@/lib/googleAPI/auth';
 import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
-import { CALENDAR_IDS } from '@/lib/constants';
 
 export const POST = async (req: NextRequest, res: NextResponse) => {
   const token = await getToken({ req });
