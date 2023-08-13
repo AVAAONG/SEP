@@ -2,6 +2,7 @@
 import { FilterIcon, SortIcon, SortIconReverse } from '@/assets/svgs';
 import React, { useMemo } from 'react';
 import { Column, useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table';
+import TableFooter from './TableFooter';
 import TableHeader from './TableHeader';
 
 interface TableProps {
@@ -69,7 +70,6 @@ const Table: React.FC<TableProps> = ({ tableData, tableColumns }) => {
                   })}
                 </tr>
               )
-
             })}
           </thead>
 
@@ -101,69 +101,14 @@ const Table: React.FC<TableProps> = ({ tableData, tableColumns }) => {
           </tbody>
         </table>
       </div>
-      <nav
-        className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
-        aria-label="Table navigation"
-      >
-        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-          Pagina{' '}
-          <span className="font-semibold text-gray-900 dark:text-white">{pageIndex + 1} </span>
-          de{' '}
-          <span className="font-semibold text-gray-900 dark:text-white">{pageOptions.length} </span>
-        </span>
-        <ul className="inline-flex items-center -space-x-px">
-          <li>
-            <button
-              onClick={() => previousPage()}
-              disabled={!canPreviousPage}
-              className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-            >
-              <span className="sr-only">Anterior</span>
-              <svg
-                className="w-5 h-5"
-                aria-hidden="true"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
-            </button>
-          </li>
-          {/* <li>
-                        <input type='number' defaultValue={pageIndex + 1} onChange={e =>{
-                            const pageNumber = e.target.value ? Number(e.target.value) - 1 : 0
-                            gotoPage(pageNumber)
-                        }} className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">100</a>
-                    </li> */}
-          <li>
-            <button
-              onClick={() => nextPage()}
-              disabled={!canNextPage}
-              className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-            >
-              <span className="sr-only">Siguiente</span>
-              <svg
-                className="w-5 h-5"
-                aria-hidden="true"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
-            </button>
-          </li>
-        </ul>
-      </nav>
+      <TableFooter
+        canNextPage={canNextPage}
+        canPreviousPage={canPreviousPage}
+        nextPage={nextPage}
+        pageIndex={pageIndex}
+        pageOptions={pageOptions}
+        previousPage={previousPage}
+      />
     </div>
   );
 };
