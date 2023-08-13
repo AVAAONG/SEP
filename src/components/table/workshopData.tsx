@@ -1,14 +1,16 @@
+"use client"
+import defailProfilePic from '@/../public/defaultProfilePic.png';
+import { Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
+import Image from 'next/image';
 import { TableOptions } from 'react-table';
-import { Workshop, WorkshopDates, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
 
 interface WorkshopTableProps {
   workshopData: (Workshop & {
     speaker: WorkshopSpeaker[];
-    dates: WorkshopDates[];
     tempData: WorkshopTempData | null;
   })[];
 }
-const workshopHeaders: TableOptions<WorkshopTableProps> = [
+const WorkshopColumns: TableOptions<WorkshopTableProps> = [
   {
     Header: 'Taller',
     accessor: 'title',
@@ -16,7 +18,6 @@ const workshopHeaders: TableOptions<WorkshopTableProps> = [
   {
     Header: 'Facilitador',
     Cell: ({ cell }) => {
-      // "use server";/
       return (
         <div className="flex items-center w-full">
           <div className="flex-shrink-0 w-8 h-8">
@@ -47,7 +48,7 @@ const workshopHeaders: TableOptions<WorkshopTableProps> = [
         day: 'numeric',
         year: 'numeric',
       });
-    }, 
+    },
   },
   {
     id: 'startHour',
@@ -101,4 +102,4 @@ const workshopHeaders: TableOptions<WorkshopTableProps> = [
   },
 ];
 
-export default workshopHeaders;
+export default WorkshopColumns;

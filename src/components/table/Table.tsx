@@ -1,7 +1,7 @@
 'use client';
 import { FilterIcon, SortIcon, SortIconReverse } from '@/assets/svgs';
 import React, { useMemo } from 'react';
-import { Column, useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table';
+import { Column, useFilters, useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table';
 import TableFooter from './TableFooter';
 import TableHeader from './TableHeader';
 
@@ -27,7 +27,7 @@ const Table: React.FC<TableProps> = ({ tableData, tableColumns }) => {
     canNextPage,
     canPreviousPage,
     pageOptions,
-  } = useTable({ columns, data }, useGlobalFilter, useSortBy, usePagination);
+  } = useTable({ columns, data }, useFilters, useGlobalFilter, useSortBy, usePagination);
 
   return (
     <div className="relative overflow-hidden bg-white shadow-md shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full h-full">

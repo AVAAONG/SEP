@@ -1,5 +1,6 @@
 import Stats from '@/components/scholar/ScholarStats';
-import Temos from '@/components/table/TempWtable';
+import Table from '@/components/table/Table';
+import WorkshopColumns from '@/components/table/workshopData';
 
 /**
  * Renders the page component with a list of workshops for a specific scholar.
@@ -70,7 +71,7 @@ const page = async () => {
           </h1>
           <div className="h-full  w-full flex flex-col gap-4 pt-4">
             <Stats kindOfActivity="workshop" />
-            <Temos tableData={workshopDataPlaceholder} />
+            <Table tableColumns={WorkshopColumns} tableData={workshopDataPlaceholder} />
           </div>
         </div>
       </div>
