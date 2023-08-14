@@ -1,9 +1,12 @@
 'use client'
 
-import { useState } from "react"
+interface ExpandTableButtonProps {
+    isExpanded: boolean;
+    toggleExpanded: (isExpanded: boolean) => void;
+}
 
-const ExpandTableButton = () => {
-    const [isExpanded, toggleExpanded] = useState(false)
+
+const ExpandTableButton = ({ isExpanded, toggleExpanded }: ExpandTableButtonProps) => {
     return (
         <button
             onClick={() => toggleExpanded(isExpanded ? false : true)}

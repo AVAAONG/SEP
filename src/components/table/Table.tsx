@@ -1,6 +1,6 @@
 'use client';
 import { FilterIcon, SortIcon, SortIconReverse } from '@/assets/svgs';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Column, useFilters, useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table';
 import TableFooter from './TableFooter';
 import TableHeader from './TableHeader';
@@ -13,6 +13,7 @@ interface TableProps {
 const Table: React.FC<TableProps> = ({ tableData, tableColumns }) => {
   const data = useMemo(() => tableData, [tableData]);
   const columns = useMemo(() => tableColumns, [tableColumns]);
+  const [isExpanded, toggleExpanded] = useState(false)
 
   const {
     getTableProps,
@@ -23,6 +24,7 @@ const Table: React.FC<TableProps> = ({ tableData, tableColumns }) => {
     setGlobalFilter,
     setFilter,
     page,
+    rows,
     nextPage,
     previousPage,
     canNextPage,
@@ -30,9 +32,18 @@ const Table: React.FC<TableProps> = ({ tableData, tableColumns }) => {
     pageOptions,
   } = useTable({ columns, data }, useFilters, useGlobalFilter, useSortBy, usePagination);
 
+  const allowPagination = (allowPagination: boolean) => {
+    const o = allowPagination ? rows : page
+    return o
+  }
+
+
   return (
-    <div className="relative overflow-hidden bg-white shadow-md shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full h-full">
+
+    <div className={`${isExpanded ? "absolute top-0 bottom-0 left-0 right-0 z-50" : "relative overflow-hidden"}  bg-white shadow-md shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full h-max min-h-full`}>
       <TableHeader
+        isExpanded={isExpanded}
+        toggleExpanded={toggleExpanded}
         optionsForFilter={[{ option: "title", label: "Titulo" }, { option: "first_names", label: "Facilitador" }]}
         setFilter={setFilter}
         setGlobalFilter={setGlobalFilter}
@@ -79,7 +90,7 @@ const Table: React.FC<TableProps> = ({ tableData, tableColumns }) => {
             })}
           </thead>
           <tbody {...getTableBodyProps()} className="divide-y divide-gray-500 dark:divide-gray-700">
-            {page.map((row) => {
+            {allowPagination(isExpanded).map((row) => {
               prepareRow(row);
               const { key, ...restRowProps } = row.getRowProps();
               return (
@@ -106,14 +117,19 @@ const Table: React.FC<TableProps> = ({ tableData, tableColumns }) => {
           </tbody>
         </table>
       </div>
-      <TableFooter
-        canNextPage={canNextPage}
-        canPreviousPage={canPreviousPage}
-        nextPage={nextPage}
-        pageIndex={pageIndex}
-        pageOptions={pageOptions}
-        previousPage={previousPage}
-      />
+      {
+        isExpanded ? null : (
+          <TableFooter
+            canNextPage={canNextPage}
+            canPreviousPage={canPreviousPage}
+            nextPage={nextPage}
+            pageIndex={pageIndex}
+            pageOptions={pageOptions}
+            previousPage={previousPage}
+          />
+        )
+      }
+
     </div>
   );
 };
