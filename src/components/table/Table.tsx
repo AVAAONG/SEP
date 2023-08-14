@@ -21,6 +21,7 @@ const Table: React.FC<TableProps> = ({ tableData, tableColumns }) => {
     prepareRow,
     state: { globalFilter, pageIndex },
     setGlobalFilter,
+    setFilter,
     page,
     nextPage,
     previousPage,
@@ -31,7 +32,7 @@ const Table: React.FC<TableProps> = ({ tableData, tableColumns }) => {
 
   return (
     <div className="relative overflow-hidden bg-white shadow-md shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full h-full">
-      <TableHeader globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
+      <TableHeader optionsForFilter={["title", 'speaker']} setFilter={setFilter} setGlobalFilter={setGlobalFilter} filterValue={globalFilter} />
       <div className="flow-root w-full overflow-x-scroll ">
         <table {...getTableProps()} className="w-full text-sm text-left text-gray-300 ">
           <thead className="text-xs text-green-500 uppercase text-center border-b-[1px] border-green-700 text-ellipsis bg-gray-100 dark:bg-slate-950">
@@ -72,7 +73,6 @@ const Table: React.FC<TableProps> = ({ tableData, tableColumns }) => {
               )
             })}
           </thead>
-
           <tbody {...getTableBodyProps()} className="divide-y divide-gray-500 dark:divide-gray-700">
             {page.map((row) => {
               prepareRow(row);
