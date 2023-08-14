@@ -1,6 +1,6 @@
-import ExpandTableButton from './ExpandTableButton';
-import ExportButton from './ExportButton';
-import TableSearhButton from './TableSearhButton';
+import ExpandTableButton from './headerComponents/ExpandTableButton';
+import ExportButton from './headerComponents/ExportButton';
+import TableSearhButton from './headerComponents/TableSearhButton';
 
 interface TableHeaderProps {
   setFilter: (columnId: string, updater: any) => void;
