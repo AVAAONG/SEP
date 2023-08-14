@@ -17,6 +17,7 @@ const WorkshopColumns: TableOptions<WorkshopTableProps> = [
   },
   {
     Header: 'Facilitador',
+    accessor: 'first_names',
     Cell: ({ cell }) => {
       return (
         <div className="flex items-center w-full">

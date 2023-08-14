@@ -1,6 +1,6 @@
 import Stats from '@/components/scholar/ScholarStats';
 import Table from '@/components/table/Table';
-import WorkshopColumns from '@/components/table/workshopData';
+import WorkshopColumns from '@/components/table/columns/workshopColumns';
 
 /**
  * Renders the page component with a list of workshops for a specific scholar.
