@@ -6,7 +6,7 @@ interface TableHeaderProps {
   setFilter: (columnId: string, updater: any) => void;
   setGlobalFilter: (updater: any) => void;
   filterValue: string;
-  optionsForFilter: string[]
+  optionsForFilter: { option: string, label: string }[];
 }
 
 const TableHeader = ({ setFilter, optionsForFilter, setGlobalFilter, filterValue }: TableHeaderProps) => {

@@ -33,7 +33,7 @@ const Table: React.FC<TableProps> = ({ tableData, tableColumns }) => {
   return (
     <div className="relative overflow-hidden bg-white shadow-md shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full h-full">
       <TableHeader
-        optionsForFilter={["title", 'speaker']}
+        optionsForFilter={[{ option: "title", label: "Titulo" }, { option: "first_names", label: "Facilitador" }]}
         setFilter={setFilter}
         setGlobalFilter={setGlobalFilter}
         filterValue={globalFilter}

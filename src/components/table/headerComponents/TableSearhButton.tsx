@@ -2,7 +2,7 @@
 import { ChangeEvent, useState } from "react";
 
 interface TableSearhButtonProps {
-  optionsForFilter: string[];
+  optionsForFilter: { option: string, label: string }[];
   filterValue: string;
   setFilter: (columnId: string, updater: any) => void;
   setGlobalFilter: (updater: any) => void
@@ -67,7 +67,7 @@ const TableSearhButton = ({ optionsForFilter, setFilter, setGlobalFilter, filter
         </button>
         <div id="dropdown" className={`${isDropdownOpen ? "absolute" : "hidden"} translate-y-11 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}>
           <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-button">
-            {optionsForFilter.map((option, index) => {
+            {optionsForFilter.map(({ option, label }, index) => {
               return (
                 <li key={index}>
                   <button
@@ -78,7 +78,7 @@ const TableSearhButton = ({ optionsForFilter, setFilter, setGlobalFilter, filter
                     type="button"
                     className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                   >
-                    {option}
+                    {label}
                   </button>
                 </li>
               )
