@@ -29,8 +29,7 @@ const TableSearhButton = ({ optionsForFilter, setFilter, setGlobalFilter, filter
     }
   }
   return (
-    <div className="flex">
-      <label htmlFor="search-dropdown" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Your Email</label>
+    <div className="flex w-96 sm:w-2/3 lg:w-1/3">
       <div className="relative w-full">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <svg

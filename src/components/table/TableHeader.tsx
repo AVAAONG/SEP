@@ -10,11 +10,10 @@ interface TableHeaderProps {
 
 const TableHeader = ({ setFilter, optionsForFilter, setGlobalFilter, filterValue, children }: TableHeaderProps) => {
   return (
-    <div className="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 ">
+    <div className="flex flex-col px-4 py-3 space-y-3 md:flex-row md:items-center md:justify-between md:space-y-0 ">
       <TableSearhButton optionsForFilter={optionsForFilter} setFilter={setFilter} setGlobalFilter={setGlobalFilter} filterValue={filterValue} />
       <div className='flex gap-4'>
         {children}
-
       </div>
     </div>
   );
