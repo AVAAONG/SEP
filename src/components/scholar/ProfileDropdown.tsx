@@ -60,7 +60,7 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
           </li>
         </ul>
         <ul
-          className="py-1 text-gray-300 bg-red-800 hover:bg-red-700  rounded-b-xl"
+          className="py-1 dark:text-gray-300 text-white bg-red-500 hover:bg-red-600 dark:bg-red-800 dark:hover:bg-red-700  rounded-b-xl"
           aria-labelledby="dropdown"
         >
           <li>
