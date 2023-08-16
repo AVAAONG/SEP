@@ -1,3 +1,9 @@
+/**
+ * @file This file renders the sign-in form for the scholar role.
+ * @remarks allows the user to sign in with their email trhough magic link or with their Google account.
+ * also allows the user to sign up if they don't have an account yet.
+ * @author Kevin Bravo (kevinbravo.me)
+ */
 'use client';
 import handler from '@/lib/serverAction';
 import { signIn } from 'next-auth/react';
@@ -10,6 +16,13 @@ interface SigninFormProps {
   cookieValue: string;
 }
 
+/**
+ * Renders the sign-in form for the scholar role.
+ * @param param0  - The callback URL to redirect to after a successful sign in or sign up.
+ * @param param1 - The cookie value to be set.
+ * @remarks use magic link to allow the user to aces the SEP.
+ * @returns The sign-in form for the scholar role.
+ */
 const SigninForm = ({ callbackUrl, cookieValue }: SigninFormProps) => {
   const { register, handleSubmit } = useForm();
   const fetcher = (...args: RequestInfo[] | URL[]) => fetch([...args]).then((res) => res.json());

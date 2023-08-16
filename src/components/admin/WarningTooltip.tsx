@@ -1,6 +1,11 @@
 'use client';
 import { useState } from 'react';
 
+/**
+ * A tooltip that render on when hovering over the warning icon.
+ * @param param0.helperText  - The helper text to be displayed.
+ * @returns A warning tooltip.
+ */
 const WarningTooltip = ({ helperText }: { helperText: string }) => {
   const [show, setShow] = useState(false);
 

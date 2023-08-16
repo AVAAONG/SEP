@@ -1,3 +1,7 @@
+/**
+ * @file  This file renders a warning alert to the users.
+ * @author Kevin Bravo (kevinbravo.me)
+ */
 import WarningTooltip from '../admin/WarningTooltip';
 
 interface WarningProps {
@@ -6,6 +10,15 @@ interface WarningProps {
   children?: React.ReactNode;
 }
 
+/**
+ *
+ * @summary A warning alert.
+ * @param title - The title of the warning.
+ * @param subtitle - The subtitle of the warning.
+ * @param children - The children of the warning.
+ * @returns A warning alert.
+ * @remarks allow to pass buttons as children to be added to the warning.
+ */
 const Warning = ({ title, subtitle, children }: WarningProps) => {
   return (
     <div
