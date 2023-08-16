@@ -9,7 +9,8 @@ generator client {
 // ignore this error
 ///@see https://www.prisma.io/docs/concepts/components/prisma-schema/data-sources
 datasource db {
-  provider     = "postgresql"
-  url          = env("DATABASE_URL")
+provider = "postgresql"
+  url  	= env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
   relationMode = "prisma"
 }
