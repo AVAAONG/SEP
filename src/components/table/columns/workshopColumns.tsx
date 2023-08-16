@@ -20,10 +20,10 @@ const WorkshopColumns: TableOptions<WorkshopTableProps> = [
     accessor: 'first_names',
     Cell: ({ cell }) => {
       return (
-        <div className="flex items-center w-full">
-          <div className="flex-shrink-0 w-8 h-8">
+        <div className="flex items-center">
+          <div className="flex w-8">
             <Image
-              className="w-full h-full rounded-full"
+              className="w-8 h-8 rounded-full hover:z-50"
               src={defailProfilePic}
               alt="Foto de perfil"
             />
