@@ -1,5 +1,5 @@
 import { WorkshopSpeaker } from '@prisma/client';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const WorkshopTooltip = ({ title, speaker }: { title: string; speaker: WorkshopSpeaker[] }) => {
   const [show, setShow] = useState(false);
