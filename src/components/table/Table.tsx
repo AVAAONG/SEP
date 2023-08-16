@@ -4,6 +4,8 @@ import React, { useMemo, useState } from 'react';
 import { Column, useFilters, useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table';
 import TableFooter from './TableFooter';
 import TableHeader from './TableHeader';
+import ExpandTableButton from './headerComponents/ExpandTableButton';
+import ExportButton from './headerComponents/ExportButton';
 
 interface TableProps {
   tableData: readonly object[];
@@ -42,13 +44,14 @@ const Table: React.FC<TableProps> = ({ tableData, tableColumns }) => {
 
     <div className={`${isExpanded ? "absolute top-0 bottom-0 left-0 right-0 z-50" : "relative overflow-hidden"}  bg-white shadow-md shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full h-max min-h-full`}>
       <TableHeader
-        isExpanded={isExpanded}
-        toggleExpanded={toggleExpanded}
         optionsForFilter={[{ option: "title", label: "Titulo" }, { option: "first_names", label: "Facilitador" }]}
         setFilter={setFilter}
         setGlobalFilter={setGlobalFilter}
         filterValue={globalFilter}
-      />
+      >
+        <ExpandTableButton isExpanded={isExpanded} toggleExpanded={toggleExpanded} />
+        <ExportButton />
+      </TableHeader>
       <div className="flow-root w-full overflow-x-scroll">
         <table {...getTableProps()} className="w-full text-sm text-left text-gray-300 ">
           <thead className="text-xs text-green-500 uppercase text-center border-b-[1px] border-green-700 text-ellipsis bg-gray-100 dark:bg-slate-950">

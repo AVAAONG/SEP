@@ -1,5 +1,3 @@
-import ExpandTableButton from './headerComponents/ExpandTableButton';
-import ExportButton from './headerComponents/ExportButton';
 import TableSearhButton from './headerComponents/TableSearhButton';
 
 interface TableHeaderProps {
@@ -7,17 +5,16 @@ interface TableHeaderProps {
   setGlobalFilter: (updater: any) => void;
   filterValue: string;
   optionsForFilter: { option: string, label: string }[];
-  isExpanded: boolean;
-  toggleExpanded: (isExpanded: boolean) => void;
+  children?: React.ReactNode
 }
 
-const TableHeader = ({ setFilter, optionsForFilter, setGlobalFilter, filterValue, toggleExpanded, isExpanded }: TableHeaderProps) => {
+const TableHeader = ({ setFilter, optionsForFilter, setGlobalFilter, filterValue, children }: TableHeaderProps) => {
   return (
     <div className="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 ">
       <TableSearhButton optionsForFilter={optionsForFilter} setFilter={setFilter} setGlobalFilter={setGlobalFilter} filterValue={filterValue} />
       <div className='flex gap-4'>
-        <ExpandTableButton isExpanded={isExpanded} toggleExpanded={toggleExpanded} />
-        <ExportButton />
+        {children}
+
       </div>
     </div>
   );
