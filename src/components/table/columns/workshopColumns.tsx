@@ -61,22 +61,10 @@ const WorkshopColumns: TableOptions<WorkshopTableProps> = [
         minute: 'numeric',
         hourCycle: 'h12',
       });
-    },
+    }
   },
   {
-    id: 'endHour',
-    Header: 'Cierre',
-    accessor: 'dates[0].end_date',
-    Cell: ({ value }: { value: string }) => {
-      return new Date(value).toLocaleString('es-ES', {
-        hour: 'numeric',
-        minute: 'numeric',
-        hourCycle: 'h12',
-      });
-    },
-  },
-  {
-    Header: 'Pensum',
+    Header: 'Competencia',
     accessor: 'pensum',
     Cell: ({ value }: { value: string }) => {
       return value.toLowerCase().replaceAll('_', ' ');
@@ -94,13 +82,40 @@ const WorkshopColumns: TableOptions<WorkshopTableProps> = [
     accessor: 'platform',
   },
   {
-    Header: 'Cupos',
-    accessor: 'spots',
-  },
-  {
     Header: 'Año',
     accessor: 'year',
   },
+  {
+    Header: 'Asistencia',
+    accesor: 'attendance',
+    Cell: ({ cell }) => {
+      if (cell.row.original.scholarAttendance == "No asistio") {
+        return (
+          <span className="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+            {/* <span className="w-2 h-2 mr-1 bg-red-500 rounded-full"></span> */}
+            No asistio
+          </span>
+        )
+      }
+      else if (cell.row.original.scholarAttendance == "a") {
+        return (
+          <span className="inline-flex items-center bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
+            <span className="w-2 h-2 mr-1 bg-yellow-500 rounded-full"></span>
+            En espera
+          </span>
+        )
+      }
+      else {
+        return (
+          <span className="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-green-900 dark:text-green-300">
+            {/* <span className="w-2 h-2 mr-1 bg-green-500 rounded-full"></span> */}
+            Asistio
+          </span>
+        )
+      }
+
+    }
+  }
 ];
 
 export default WorkshopColumns;
