@@ -30,8 +30,8 @@ const Stats = ({ activitiesDone, kindOfActivity, first, second }: StatsProps) =>
     <div>
       <dl className="mt-5 md:h-28 grid grid-cols-1 rounded-lg bg-gradient-to-t from-green-600  dark:to-emerald-900 to-emerald-400 overflow-hidden shadow divide-y-2 divide-emerald-700 dark:divide-emerald-950 md:grid-cols-3 md:divide-y-0 md:divide-x-2 border border-emerald-700  dark:border-emerald-800">
         <div className="p-4 flex flex-col justify-between">
-          <dt className="text-base font-semibold text-white">Total de {activityName} realizadas</dt>
-          <dd className="flex justify-between items-baseline md:block lg:flex">
+          <dt className="text-sm sm:text-xs lg:text-base font-semibold text-white">Total de {activityName} realizadas</dt>
+          <dd className="flex justify-between items-baseline lg:flex">
             <div className="flex items-baseline text-5xl font-bold  text-emerald-900 dark:text-emerald-950 ">
               {activitiesDone}
             </div>
@@ -52,8 +52,8 @@ const Stats = ({ activitiesDone, kindOfActivity, first, second }: StatsProps) =>
           </div>
         </div>
         <div className="p-4 flex flex-col justify-between">
-          <dt className="text-base font-semibold text-white">Total de {activityName} faltantes</dt>
-          <dd className="flex justify-between items-baseline md:block lg:flex">
+          <dt className="text-base sm:text-xs lg:text-base font-semibold text-white">Total de {activityName} faltantes</dt>
+          <dd className="flex justify-between items-baseline lg:flex">
             <div className="flex items-baseline text-5xl font-bold  text-emerald-900 dark:text-emerald-950 ">
               {pendingWorkshops}
             </div>
