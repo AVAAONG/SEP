@@ -1,10 +1,9 @@
 'use client';
-import ProfileDropdown from './ProfileDropdown';
-import ThemeToggleButton from './NavigationBar/ThemeToggleButton';
-import SolicitudeDropdown from './SolicitudeDropdown';
-import { useAtom } from 'jotai';
 import { scholarSidebarAtom } from '@/state/mainState';
-import HighlightsForm from '../forms/highlightsForm';
+import { useAtom } from 'jotai';
+import ThemeToggleButton from './NavigationBar/ThemeToggleButton';
+import ProfileDropdown from './ProfileDropdown';
+import SolicitudeDropdown from './SolicitudeDropdown';
 interface NavigationBarProps {
   image: string | null | undefined;
   name: string | null | undefined;
@@ -16,7 +15,7 @@ const NavigationBar = ({ image, name, email }: NavigationBarProps) => {
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
   return (
-    <nav className="bg-white px-4 py-2.5 dark:bg-slate-900 dark:border-gray-700 fixed left-0 right-0 top-0 z-30">
+    <nav className="bg-white px-4 py-2 dark:bg-slate-900 dark:border-gray-700 fixed left-0 right-0 top-0 z-30">
       <div
         className={`${isSidebarOpen ? 'md:ml-64' : ''} flex items-center justify-between gap-4 `}
       >

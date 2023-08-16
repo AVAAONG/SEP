@@ -24,11 +24,11 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
       >
         <span className="sr-only">Abrir menu de usuario</span>
         <Image
-          className="w-8 h-8 rounded-full border border-green-800"
+          className="w-11 h-11 rounded-full border border-green-800"
           src={image ? image : defailProfilePic}
           alt="user photo"
-          width={32}
-          height={32}
+          width={50}
+          height={50}
         />
       </button>
       <div
