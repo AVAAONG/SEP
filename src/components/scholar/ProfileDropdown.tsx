@@ -20,7 +20,7 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
       <button
         onClick={toggleDropdownProfile}
         type="button"
-        className="flex text-sm bg-gray-800 rounded-full  focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+        className="flex text-sm bg-gray-800 rounded-full  hover:ring-2 focus:ring-green-300 dark:hover:ring-green-600"
       >
         <span className="sr-only">Abrir menu de usuario</span>
         <Image
@@ -45,7 +45,7 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
           <li>
             <a
               href={`/becario/config`}
-              className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-green-600 dark:text-gray-400 dark:hover:text-white"
+              className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-green-600 dark:text-gray-300 dark:hover:text-white"
             >
               Mi perfil
             </a>
@@ -60,7 +60,7 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
           </li>
         </ul>
         <ul
-          className="py-1 text-gray-300 bg-red-700 hover:bg-red-600  rounded-b-xl"
+          className="py-1 text-gray-300 bg-red-800 hover:bg-red-700  rounded-b-xl"
           aria-labelledby="dropdown"
         >
           <li>
@@ -68,7 +68,7 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
               onClick={() => signOut({ callbackUrl: '/becario/signin' })}
               className="block py-2 px-4 text-sm "
             >
-              Sign out
+              Salir de la cuenta
             </button>
           </li>
         </ul>

@@ -22,7 +22,7 @@ const NavigationBar = ({ image, name, email }: NavigationBarProps) => {
         <div className="flex justify-start items-center">
           <button
             onClick={toggleSidebar}
-            className="p-2 mr-2 text-green-600 rounded-lg cursor-pointer  hover:text-green-900 hover:bg-green-100 focus:bg-green-100 dark:focus:bg-emerald-950  dark:focus:ring-green-700 dark:text-green-700 dark:hover:bg-green-700 dark:hover:text-emerald-950 dark:focus:text-emerald-700"
+            className="p-2 mr-2 text-green-600 rounded-lg cursor-pointer  hover:text-green-900 dark:text-green-700  dark:hover:text-emerald-950 focus:bg-transparent hover:bg-green-100 dark:hover:bg-emerald-900 focus:outline-none focus:ring-1 focus:ring-green-200 hover:bg-transparent"
           >
             <svg
               aria-hidden="true"
@@ -53,11 +53,13 @@ const NavigationBar = ({ image, name, email }: NavigationBarProps) => {
             <span className="sr-only">Toggle sidebar</span>
           </button>
         </div>
-        <div className="flex gap-8 items-center justify-start">
+        <div className="flex gap-4 md:gap-8 items-center justify-start">
           <SolicitudeDropdown />
           <button className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-xs md:text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
             <span className="relative px-4 py-2 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-              Registra tus higlights
+              <span className='hidden md:flex'>Registra tus higlights</span>
+              <span className='visible sm:hidden'>Higlights</span>
+
             </span>
             {/* <HighlightsForm /> */}
           </button>
