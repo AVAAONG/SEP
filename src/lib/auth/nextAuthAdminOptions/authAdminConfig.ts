@@ -55,15 +55,19 @@ export const GOOGLE_ADMIN_SCOPES = [
  * @description NextAuth Google Provider Options object for ADMINS
  * @summary This provider allows admin to sign in in the app using their google account.
  *
- * It is important to notice that this provider is only for admin users, so it is not available for the public,
+ * @remarks It is important to notice that this provider is only for admin users, so it is not available for the public,
  * cause have a lot of googke scopes that are not necesary for the public.
  * @see https://next-auth.js.org/configuration/providers/oauth to learn about the oauth 2.0 protocol
+ *
+ * @internal Notice we are setting "access_type:"offline" this allow to return a refresh token,
+ * that would allow the application obtain a new access token if it is about to expire
+ * @see {@link https://github.com/googleapis/google-api-nodejs-client#handling-refresh-tokens}
  *
  * @see https://next-auth.js.org/providers/google to learn about the google provider in nexth-auth
  * @see https://developers.google.com/identity/protocols/oauth2 to learn about the google oauth2 protocol
  */
 export const googleAdminProviderConfig: OAuthUserConfig<any> = {
-  id: 'google',
+  id: 'adminGoogle',
   clientId: GOOGLE_ADMIN_API_CLIENT_ID,
   clientSecret: GOOGLE_ADMIN_API_CLIENT_SECRET,
   authorization: {

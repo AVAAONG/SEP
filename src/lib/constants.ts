@@ -3,13 +3,6 @@ export const CLIENT_SECRET = process.env.GOOGLE_API_CLIENT_SECRET;
 export const REDIRECT_URL =
   'http://seb-git-adddb-mustafinho.vercel.app/api/google/calendarCallback';
 
-export const CALENDAR_SCOPES = [
-  'https://www.googleapis.com/auth/calendar',
-  'https://www.googleapis.com/auth/calendar.readonly',
-  'https://www.googleapis.com/auth/calendar.events',
-  'https://www.googleapis.com/auth/calendar.events.readonly',
-];
-
 export const MONTHS = [
   '0',
   'Enero',
