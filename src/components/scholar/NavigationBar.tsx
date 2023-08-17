@@ -57,14 +57,13 @@ const NavigationBar = ({ image, name, email }: NavigationBarProps) => {
           <SolicitudeDropdown />
           <button className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-xs md:text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
             <span className="relative px-4 py-2 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-              <span className='hidden md:flex'>Registra tus higlights</span>
-              <span className='visible sm:hidden'>Higlights</span>
-
+              <span className="hidden md:flex">Registra tus higlights</span>
+              <span className="visible sm:hidden">Higlights</span>
             </span>
             {/* <HighlightsForm /> */}
           </button>
           <ThemeToggleButton />
-          <ProfileDropdown name={name} email={email} scholarId="adfadskfma;lds" image={image} />
+          <ProfileDropdown name={name} email={email} image={image} />
         </div>
       </div>
     </nav>

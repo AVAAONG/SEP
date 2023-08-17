@@ -86,17 +86,3 @@ const adminAuthOptions: NextAuthOptions = {
 };
 
 export default adminAuthOptions;
-
-/**
- * user {id, name, email, image}
- * Adaoter uesr {id, email, emailVerified}
- * account { access_token, token_type, id_token, refresh_token, scope,
- * expires_at:
- * session_state:
- * }
- * profile {
- *   sub?: string
-  name?: string
-  email?: string
-  image?: string}
- */

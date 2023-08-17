@@ -25,17 +25,18 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
         <span className="sr-only">Abrir menu de usuario</span>
         <Image
           className="w-11 h-11 rounded-full border border-green-800"
-          src={image ? image : defailProfilePic}
+          src={image === '/' ? image : defailProfilePic}
           alt="user photo"
           width={50}
           height={50}
         />
       </button>
       <div
-        className={`${isDrowpdownProfileOpen
-          ? 'absolute  transform translate-x-40 md:translate-x-48  lg:translate-x-52 translate-y-[128px]'
-          : 'hidden'
-          } z-50 my-4 w-56 text-base list-none bg-white  divide-y divide-gray-100 shadow dark:bg-slate-900 dark:divide-gray-600 rounded-xl`}
+        className={`${
+          isDrowpdownProfileOpen
+            ? 'absolute  transform translate-x-40 md:translate-x-48  lg:translate-x-52 translate-y-[128px]'
+            : 'hidden'
+        } z-50 my-4 w-56 text-base list-none bg-white  divide-y divide-gray-100 shadow dark:bg-slate-900 dark:divide-gray-600 rounded-xl`}
       >
         <div className="py-3 px-4">
           <span className="block text-sm font-semibold text-gray-900 dark:text-white">{name}</span>
@@ -64,10 +65,7 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
           aria-labelledby="dropdown"
         >
           <li>
-            <button
-              onClick={() => signOut({ callbackUrl: '/becario/signin' })}
-              className="block py-2 px-4 text-sm "
-            >
+            <button onClick={() => signOut()} className="block py-2 px-4 text-sm ">
               Salir de la cuenta
             </button>
           </li>

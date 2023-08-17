@@ -1,8 +1,8 @@
 'use client';
-import React from 'react';
-import { useAtom } from 'jotai';
-import { sidebarAtom } from '@/state/mainState';
 import ThemeToggleButton from '@/components/scholar/NavigationBar/ThemeToggleButton';
+import ProfileDropdown from '@/components/scholar/ProfileDropdown';
+import { sidebarAtom } from '@/state/mainState';
+import { useAtom } from 'jotai';
 
 const Navbar = () => {
   const [isOpen, setSidebar] = useAtom(sidebarAtom);
@@ -33,8 +33,13 @@ const Navbar = () => {
             ></path>
           </svg>
         </button>
-        <div className="inline-flex items-center p-2 text-sm  rounded-lg  focus:outline-none focus:ring-2  bg-green-950 text-emerlad-400 hover:bg-emerald-950 focus:ring-emerald-600">
-          <ThemeToggleButton />
+        <div className="flex gap-4 ">
+          <div className="inline-flex items-center p-2 text-sm  rounded-lg  focus:outline-none focus:ring-2  bg-green-950 text-emerlad-400 hover:bg-emerald-950 focus:ring-emerald-600">
+            <ThemeToggleButton />
+          </div>
+          <div className="flex items-center justify-start">
+            <ProfileDropdown name={'Erika Campos'} email={'Erika Campos'} image={null} />
+          </div>
         </div>
       </div>
       {/* <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">

@@ -43,7 +43,7 @@ const page = ({
           <div className="flex">
             <GoogleSignInButton
               callbackUrl={adminCallbackUrl}
-              providerId="google"
+              providerId="adminGoogle"
               cookieValue="admin"
             />
           </div>
