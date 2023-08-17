@@ -15,9 +15,9 @@ const NavigationBar = ({ image, name, email }: NavigationBarProps) => {
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
   return (
-    <nav className="bg-white px-4 py-2 dark:bg-slate-900 dark:border-gray-700 fixed left-0 right-0 top-0 z-30">
+    <nav className="bg-gray-50  px-4 py-2 dark:bg-black  left-0 right-0 top-0 z-30">
       <div
-        className={`${isSidebarOpen ? 'md:ml-64' : ''} flex items-center justify-between gap-4 `}
+        className={`${isSidebarOpen ? 'md:ml-72' : ''} flex items-center justify-between gap-4 `}
       >
         <div className="flex justify-start items-center">
           <button

@@ -27,10 +27,10 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
     buttonName: 'Actividades formativas',
     itemList: [
       {
-        name: 'Reporte de actividades',
+        name: 'Reporte',
         link: `/${SCHOLAR_PREFIX}/talleres/reporte`,
       },
-      { name: 'Lista de actividades', link: `/${SCHOLAR_PREFIX}/talleres` },
+      { name: 'Lista', link: `/${SCHOLAR_PREFIX}/talleres` },
     ],
     link: '',
   },
@@ -40,7 +40,7 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
     itemList: [
       { name: 'Lista de chats', link: `/${SCHOLAR_PREFIX}/chats` },
       {
-        name: 'Reporte de chats Clubs',
+        name: 'Reporte',
         link: `/${SCHOLAR_PREFIX}/chats/reporte`,
       },
     ],
@@ -55,7 +55,7 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
         link: `/${SCHOLAR_PREFIX}/voluntariado`,
       },
       {
-        name: 'Reporte de horas de voluntariado',
+        name: 'Reporte de horas',
         link: `/${SCHOLAR_PREFIX}/voluntariado/reporte`,
       },
       {
@@ -67,7 +67,7 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
   },
   {
     Icon: CalendarIcon(),
-    buttonName: 'Calendario de Actividades',
+    buttonName: 'Calendario',
     itemList: [],
     link: `/${SCHOLAR_PREFIX}/calendario`,
   },
@@ -78,8 +78,8 @@ const Sidebar = () => {
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
   return (
     <aside
-      className={`${isSidebarOpen ? 'fixed  w-full md:w-64' : 'hidden'
-        } top-0 left-0 z-40 h-screen pt-4  bg-white border-r border-gray-200 md:translate-x-0 dark:bg-slate-900 dark:border-gray-700`}
+      className={`${isSidebarOpen ? 'fixed  w-full md:w-72' : 'hidden'
+        } top-0 left-0 z-40 h-screen pt-4  bg-gray-50  md:translate-x-0 dark:bg-black`}
     >
       <div className={`flex items-center mt-2 ml-6 ${isSidebarOpen ? 'justify-between' : ''} `}>
         <Link href="/becario/dashboard">
@@ -120,7 +120,7 @@ const Sidebar = () => {
           </button>
         </div>
       </div>
-      <div className="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-slate-900 mt-4">
+      <div className="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-black mt-4">
         <ul className="space-y-2">
           {SCHOLAR_SIDEBAR_ITEMS.map((item, index) => (
             <DropdownButton {...item} key={index} />

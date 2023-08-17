@@ -28,7 +28,7 @@ const Stats = ({ activitiesDone, kindOfActivity, first, second }: StatsProps) =>
 
   return (
     <div>
-      <dl className="mt-5 md:h-28 grid grid-cols-1 rounded-lg bg-gradient-to-t from-green-600  dark:to-emerald-900 to-emerald-400 overflow-hidden shadow divide-y-2 divide-emerald-700 dark:divide-emerald-950 md:grid-cols-3 md:divide-y-0 md:divide-x-2 border border-emerald-700  dark:border-emerald-800">
+      <dl className="mt-5 md:h-28 grid grid-cols-1 rounded-lg bg-gradient-to-t from-green-500 to-emerald-600 dark:from-green-700 dark:to-emerald-700  overflow-hidden shadow divide-y-2 divide-emerald-700 dark:divide-emerald-950 md:grid-cols-3 md:divide-y-0 md:divide-x-2 border border-emerald-700  dark:border-emerald-800">
         <div className="p-4 flex flex-col justify-between">
           <dt className="text-sm sm:text-xs lg:text-base font-semibold text-white">Total de {activityName} realizadas</dt>
           <dd className="flex justify-between items-baseline lg:flex">

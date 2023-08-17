@@ -70,7 +70,7 @@ const page = async () => {
   }
   return (
     <div>
-      <div className="flex flex-col px-2 pt-6 xl:gap-4">
+      <div className="flex flex-col px-2 xl:gap-4">
         <div className="mb-4 col-span-full xl:mb-2">
           <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
             Listado de talleres

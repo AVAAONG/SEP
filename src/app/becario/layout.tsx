@@ -8,7 +8,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const session = await getServerSession(authOptions);
   return (
     <>
-      <div className="antialiased bg-gray-100 dark:bg-slate-800">
+      <div className="antialiased bg-white dark:bg-black">
         <NavigationBar
           image={session?.user?.image}
           name={session?.user?.name}
