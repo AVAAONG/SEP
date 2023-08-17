@@ -1,4 +1,4 @@
-import { deleteWorkshopFromDatabase } from '@/lib/database/Workshops';
+import { deleteWorkshopFromDatabase } from '@/lib/db/Workshops';
 import { setTokens } from '@/lib/googleAPI/auth';
 import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';

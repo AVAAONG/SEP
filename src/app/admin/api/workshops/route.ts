@@ -1,4 +1,4 @@
-import { getScheduledWorkshops } from '@/lib/database/Workshops';
+import { getScheduledWorkshops } from '@/lib/db/Workshops';
 import { NextRequest, NextResponse } from 'next/server';
 
 const FORM_CREATION_APPSCRIPT_URL =

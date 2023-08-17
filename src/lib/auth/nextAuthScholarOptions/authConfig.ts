@@ -113,7 +113,7 @@ export const GOOGLE_ADMIN_SCOPES = [
  * @see https://developers.google.com/identity/protocols/oauth2 to learn about the google oauth2 protocol
  */
 export const googleAdminProviderConfig: OAuthUserConfig<any> = {
-  id: 'AdminGoogle',
+  id: 'userGoogle',
   clientId: GOOGLE_ADMIN_API_CLIENT_ID,
   clientSecret: GOOGLE_ADMIN_API_CLIENT_SECRET,
   authorization: {

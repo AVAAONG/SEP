@@ -1,4 +1,4 @@
-import { addWorkshopToScholar } from '@/lib/database/users';
+import { addWorkshopToScholar } from '@/lib/db/users';
 import { setTokens } from '@/lib/googleAPI/auth';
 import { getSheetsName, getSpreadsheetValues } from '@/lib/googleAPI/sheets';
 import { getToken } from 'next-auth/jwt';

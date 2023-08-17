@@ -1,7 +1,4 @@
-import {
-  createWorkshop,
-  getWorkshops
-} from '@/lib/database/Workshops';
+import { createWorkshop, getWorkshops } from '@/lib/db/Workshops';
 import { setTokens } from '@/lib/googleAPI/auth';
 import { Workshop } from '@/types/Workshop';
 import { Prisma, WorkshopTempData, activityStatus } from '@prisma/client';

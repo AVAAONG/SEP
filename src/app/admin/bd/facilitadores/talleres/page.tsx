@@ -1,6 +1,5 @@
-
 import ChatTable from '@/components/table/Table2';
-import { getWorkshopSpeakersWithParams } from '@/lib/database/speaker';
+import { getWorkshopSpeakersWithParams } from '@/lib/db/speaker';
 
 const page = async () => {
   const toSelect = {

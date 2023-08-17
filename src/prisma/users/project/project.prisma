@@ -30,7 +30,7 @@ model InternalProjects {
     description         String?
     image               String?
     instagramUser       String?
-    ScholarLeaders      Scholar[]
+    ScholarLeaders      User[]
     KPI                 Json
     volunteerActivities Volunteer[]
     createdAt           DateTime

@@ -1,5 +1,4 @@
-import { getWorkshop } from '@/lib/database/Workshops';
-import React from 'react';
+import { getWorkshop } from '@/lib/db/Workshops';
 import shortUUID from 'short-uuid';
 
 const TEMPORAL_DATA = [

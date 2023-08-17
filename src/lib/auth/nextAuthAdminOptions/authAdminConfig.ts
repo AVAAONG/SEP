@@ -19,6 +19,7 @@ export const NEXT_SECRET = process.env.NEXTAUTH_SECRET || shortUUID.generate();
 export const PAGES: Partial<PagesOptions> = {
   signIn: '/signin/admin',
   error: '/signin/admin',
+  signOut: '/signin/admin',
 };
 /// ==================================== NEXT AUTH CONFIGURATION FOR ADMINS ==================================== ///
 
@@ -77,4 +78,39 @@ export const googleAdminProviderConfig: OAuthUserConfig<any> = {
       scope: GOOGLE_ADMIN_SCOPES.join(' '),
     },
   },
+};
+
+/**
+ * The session callback allow us to send properties to the client.
+ *
+ * @remarks The session object is not persisted server side, even when using database sessions
+ * @see {@link https://next-auth.js.org/configuration/callbacks#session-callback } for more info about the sessionCallback
+ * @returns
+ */
+export const sessionCallback = () => {
+  return;
+};
+
+/**
+ * Requests to /api/auth/signin, /api/auth/session and calls to
+ * getSession(), getServerSession(), useSession()
+ * will invoke this function, **only if you are using a JWT session.**
+ *
+ * @remarks arguments user, account, profile and isNewUser are only passed the first time
+ * this callback is called on a new session,  after the user signs in.
+ * In subsequent calls, only token will be available.
+ */
+export const jwtCallback = (token: any, user: any, account: any) => {
+  if (user) {
+    const u = user as unknown as any;
+    const accessToken = account?.access_token;
+    const refreshToken = account?.refresh_token;
+    return {
+      ...token,
+      id: u.id,
+      accessToken,
+      refreshToken,
+    };
+  }
+  return token;
 };

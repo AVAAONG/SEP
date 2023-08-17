@@ -1,5 +1,5 @@
 import { CALENDAR_IDS } from '@/lib/constants';
-import { deleteWorkshopFromDatabase, getScheduledWorkshops } from '@/lib/database/Workshops';
+import { deleteWorkshopFromDatabase, getScheduledWorkshops } from '@/lib/db/Workshops';
 import { setTokens } from '@/lib/googleAPI/auth';
 import { deleteCalendarEvent } from '@/lib/googleAPI/calendar/calendar';
 import { getToken } from 'next-auth/jwt';

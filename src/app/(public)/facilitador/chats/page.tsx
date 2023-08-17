@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 import { Star, chatIcon, workshopIcon } from '@/assets/svgs';
 import NormalCard from '@/components/scholar/card/NormalCard';
-import { getChatSpeaker } from '@/lib/database/chats';
+import { getChatSpeaker } from '@/lib/db/chats';
 
 const CARD_CONTENT = [
   {

@@ -1,4 +1,4 @@
-import { createWorkshop } from '@/lib/database/Workshops';
+import { createWorkshop } from '@/lib/db/Workshops';
 import { setTokens } from '@/lib/googleAPI/auth';
 import { createEvent } from '@/lib/googleAPI/calendar/calendar';
 import { getFormatedDate } from '@/lib/googleAPI/calendar/utils';

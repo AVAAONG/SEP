@@ -1,5 +1,5 @@
-import { createWorkshopSpeaker } from '@/lib/database/Workshops';
-import { getWorkshopSpeakersWithParams } from '@/lib/database/speaker';
+import { createWorkshopSpeaker } from '@/lib/db/Workshops';
+import { getWorkshopSpeakersWithParams } from '@/lib/db/speaker';
 import { setTokens } from '@/lib/googleAPI/auth';
 import { getSpreadsheetValues } from '@/lib/googleAPI/sheets';
 import { WorkshopSpeaker } from '@prisma/client';

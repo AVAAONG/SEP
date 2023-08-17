@@ -5,9 +5,10 @@
 import { ActivityStatus, Modality } from "..\type-activities"
 import { Level } from "types-chat"
 import { ScholarAttendance } from "..\type-activities"
-import { Scholar } from "..\..\users\scholar\scholar"
+import { User } from "..\..\users\scholar\scholar"
 import { Chat } from "..\..\schema"
 import { Gender } from "..\type-activities"
+import { User } from "..\..\users\scholar\scholar"
 
 model Chat {
     id                 String           @id @default(nanoid())
@@ -31,7 +32,7 @@ model Chat {
 
 model ChatAttendance {
     id            String            @id @default(nanoid())
-    scholar       Scholar           @relation(fields: [scholar_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    scholar       User           @relation(fields: [scholar_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
     scholar_id    String
     chat          Chat              @relation(fields: [chat_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
     chat_id       String
@@ -69,7 +70,7 @@ model ChatSpeaker {
     phone_number   String?
     chat           Chat[]
     is_scholar     Boolean   @default(false)
-    scholar        Scholar?  @relation(fields: [scholar_id], references: [id])
+    scholar        User?  @relation(fields: [scholar_id], references: [id])
     scholar_id     String?
 
     @@index([scholar_id])
