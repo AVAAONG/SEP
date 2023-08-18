@@ -74,6 +74,7 @@ export const googleAdminProviderConfig: OAuthUserConfig<any> = {
   authorization: {
     params: {
       access_type: 'offline',
+      // prompt:'consent',
       include_granted_scopes: true,
       scope: GOOGLE_ADMIN_SCOPES.join(' '),
     },
