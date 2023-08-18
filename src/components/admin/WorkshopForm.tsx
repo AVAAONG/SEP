@@ -18,9 +18,8 @@ const normalizeStringInputs = (data: string) => {
 
 const WorkshopForm = () => {
   const { register, handleSubmit, reset } = useForm<FormTypeWorkshop>();
-  ///@ts-ignore
   const fetcher: Fetcher<WorkshopSpeaker[] | {}[], string> = (...args) =>
-    fetch([...args]).then((res) => res.json());
+    fetch([...args].join('')).then((res) => res.json());
 
   const { data, isLoading } = useSWR('/admin/api/speakers/workshops', fetcher, {
     fallbackData: [{}, {}],
@@ -33,16 +32,17 @@ const WorkshopForm = () => {
     if (event === undefined) return;
     event.preventDefault();
     formWorkshopData.platform =
-      formWorkshopData.modality.toLowerCase() === 'virtual'
+      formWorkshopData.modality.toLowerCase() === 'online'
         ? (normalizeStringInputs(formWorkshopData.platform) as Platform)
         : formWorkshopData.platform;
-    await fetch('/admin/api/workshops/schedule', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formWorkshopData),
-    });
+    console.log(formWorkshopData)
+    // await fetch('/admin/api/workshops/schedule', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(formWorkshopData),
+    // });
     // reset();
   };
 
@@ -53,9 +53,9 @@ const WorkshopForm = () => {
     >
       <div className="col-span-2 h-fit">
         <label className="block mb-2 text-xs m-l-1 font-semibold text-slate-400 uppercase">
-          titulo del taller
+          titulo de la actividad formativa
         </label>
-        <input {...register('title')} type={'text'} id={'Titulo del taller'} required={true} />
+        <input {...register('title')} type={'text'} id={'Titulo de la actividad formativa'} required={true} />
       </div>
 
       <div>
@@ -155,7 +155,7 @@ const WorkshopForm = () => {
         </datalist>
       </div>
       <div className="col-span-2 h-fit flex flex-col">
-        <p className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">año del taller</p>
+        <p className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">año de la actividad formativa</p>
         <div className="flex">
           {WORKSHOP_YEAR.map((input) => {
             return (
@@ -186,11 +186,11 @@ const WorkshopForm = () => {
           type="submit"
           className="w-1/2 justify-self-center  text-white bg-gradient-to-br from-emerald-500 to-lime-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none  focus:ring-green-800 font-semibold rounded-lg text-xs px-5 py-2.5 text-center mr-2 mb-2"
         >
-          Agendar Taller
+          Agendar actividad formativa
         </button>
         <button className="relative w-1/2 inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-emerald-800 group-hover:from-green-400 group-hover:to-green-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
           <span className="relative w-full px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-slate-950 rounded-md group-hover:bg-opacity-0">
-            Enviar taller
+            Enviar actividad formativa
           </span>
         </button>
       </div>

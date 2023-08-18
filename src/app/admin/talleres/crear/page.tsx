@@ -71,24 +71,7 @@ const Page = () => {
     });
     deleteEntry(inputId);
   };
-  const scheduleWorkshop = async (
-    data: WorkshopForm,
-    event: BaseSyntheticEvent<object, any, any> | undefined
-  ) => {
-    if (event === undefined) return;
-    event.preventDefault();
-    data.id = shortUUID.generate();
-    delete data['subject'];
-    delete data['group'];
-    const respin = await fetch('/api/workshop', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    reset();
-  };
+
 
   const sendWorkshops = async (data: any, event: BaseSyntheticEvent) => {
     event.preventDefault();
@@ -118,8 +101,8 @@ const Page = () => {
   return (
     <div className="flex flex-col md:flex-row gap-8">
       <div className=" w-full md:w-1/2 p-4 pt-0  flex flex-col items-center gap-4">
-        <text className="font-bold text-2xl text-green-500 mx-auto uppercase tracking-widest">
-          crear taller
+        <text className="font-semibold text-2xl text-green-500 mx-auto uppercase tracking-widest">
+          crear actividad formativa
         </text>
         <WorkshopForm />
       </div>
@@ -129,7 +112,7 @@ const Page = () => {
         ) : (
           <>
             <text className="font-bold text-3xl text-green-500 mb-6 uppercase tracking-widest">
-              talleres agendados
+              actividades formativas agendadas
             </text>
             <WorkshopsList
               workshopData={workshopResponse.data}
@@ -142,9 +125,8 @@ const Page = () => {
       <div
         id="info-popup"
         tabIndex={-1}
-        className={`${
-          modalopen ? 'flex' : 'hidden'
-        }  items-center justify-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full`}
+        className={`${modalopen ? 'flex' : 'hidden'
+          }  items-center justify-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full`}
       >
         <div className="relative p-4 w-full max-w-lg h-full md:h-auto">
           <div className="relative p-4 rounded-lg shadow bg-slate-800 md:p-8">
@@ -246,7 +228,7 @@ const Page = () => {
             ) : (
               <div className="flex flex-col justify-center items-center transition-all duration-500">
                 <h3 className="mb-3 text-sm opacity-50 font-bold  text-white">
-                  Talleres enviados de forma correcta
+                  Actividades formativas enviadas de forma correcta
                 </h3>
                 <CheckIcon color="" />
                 <button
