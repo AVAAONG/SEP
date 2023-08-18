@@ -35,14 +35,13 @@ const WorkshopForm = () => {
       formWorkshopData.modality.toLowerCase() === 'online'
         ? (normalizeStringInputs(formWorkshopData.platform) as Platform)
         : formWorkshopData.platform;
-    console.log(formWorkshopData)
-    // await fetch('/admin/api/workshops/schedule', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(formWorkshopData),
-    // });
+    await fetch('/admin/api/workshops/schedule', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formWorkshopData),
+    });
     // reset();
   };
 
@@ -59,7 +58,7 @@ const WorkshopForm = () => {
       </div>
 
       <div>
-        <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">
+        <label className="col-span-2 md:col-span-1 block mb-2 text-xs font-semibold  text-slate-400 uppercase">
           Competencia asociada
         </label>
         <select
@@ -181,7 +180,7 @@ const WorkshopForm = () => {
         </label>
         <textarea {...register('description')} />
       </div>
-      <div className="col-span-2 h-fit flex flex-col md:flex-row gap-4">
+      <div className="col-span-2 h-fit flex  gap-4">
         <button
           type="submit"
           className="w-1/2 justify-self-center  text-white bg-gradient-to-br from-emerald-500 to-lime-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none  focus:ring-green-800 font-semibold rounded-lg text-xs px-5 py-2.5 text-center mr-2 mb-2"

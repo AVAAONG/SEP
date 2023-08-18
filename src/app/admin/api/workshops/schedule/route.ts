@@ -1,11 +1,8 @@
-import { createWorkshop } from '@/lib/db/Workshops';
 import { setTokens } from '@/lib/googleAPI/auth';
 import { createEvent } from '@/lib/googleAPI/calendar/calendar';
 import { getFormatedDate } from '@/lib/googleAPI/calendar/utils';
-import { createFormDescription } from '@/lib/googleAPI/form';
 import { Workshop as FormTypeWorkshop } from '@/types/Workshop';
-import { Modality, Skill, Workshop, WorkshopTempData, WorkshopYear } from '@prisma/client';
-import { nanoid } from 'nanoid';
+import { Modality, Skill, Workshop, WorkshopYear } from '@prisma/client';
 import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -20,33 +17,36 @@ export async function POST(req: NextRequest, res: NextResponse) {
   //creamos el calendario
   const [calendarEventId, addToCalendarUrl, meetingLink, meetingId, meetingPassword] =
     await createEvent('workshop', workshop);
-  //creamos el formulario
-  const formDescription = createFormDescription(workshop);
-  console.log(formDescription);
-  const workshopId = nanoid();
 
-  const formUrl = await createForm(
-    title,
-    modality,
-    spots,
-    workshopId,
-    addToCalendarUrl!,
-    meetingLink!,
-    meetingId!,
-    meetingPassword!,
-    formDescription
-  );
-  const { speakerId } = splitSpeakerValues(speaker);
+  // //creamos el formulario
+  // const formDescription = createFormDescription(workshop);
+  // const workshopId = nanoid();
 
-  const tempDataObj: WorkshopTempData = {
-    id: nanoid(),
-    meeting_password: meetingPassword,
-    meeting_link: meetingLink,
-    meeting_id: meetingId,
-    form_link: formUrl,
-  };
-  const normalizedWorkshop = normalizeWorkshopData(workshop, workshopId, calendarEventId!);
-  const workshopCreated = await createWorkshop(normalizedWorkshop, speakerId, tempDataObj);
+  // const formUrl = await createForm(
+  //   title,
+  //   modality,
+  //   spots,
+  //   workshopId,
+  //   addToCalendarUrl!,
+  //   meetingLink!,
+  //   meetingId!,
+  //   meetingPassword!,
+  //   formDescription
+  // );
+  // const { speakerId } = splitSpeakerValues(speaker);
+
+  // const tempDataObj: WorkshopTempData = {
+  //   id: nanoid(),
+  //   meeting_password: meetingPassword,
+  //   meeting_link: meetingLink,
+  //   meeting_id: meetingId,
+  //   form_link: formUrl,
+  // };
+  // console.log(workshop)
+  // console.log(speakerId)
+  // console.log(tempDataObj)
+  // const normalizedWorkshop = normalizeWorkshopData(workshop, workshopId, calendarEventId!);
+  // const workshopCreated = await createWorkshop(normalizedWorkshop, speakerId, tempDataObj);
   //guardamos en la base de datos
   return NextResponse.json({ messagge: 'ok' });
 }

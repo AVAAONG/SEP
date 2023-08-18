@@ -14,7 +14,7 @@ import { Chat } from '@/types/Chat';
 import createZoomMeeting from '@/lib/zoom';
 import { KindOfActivity } from '@/types/General';
 import { Workshop } from '@/types/Workshop';
-import { Modality, Skill } from '@prisma/client';
+import { Skill } from '@prisma/client';
 import { Calendar } from '../auth';
 import {
   createChatCalendarDescription,
@@ -64,8 +64,6 @@ export const createEvent = async (kindOfActivity: KindOfActivity, values: Worksh
     const [eventDetails, eventDescription, zoomMeetLink, zoomMeetId, zoomMetPassword] =
       await createWorkshopEventDetails(values as Workshop);
     addUrl = await getPublicEventLink(title, platform, eventDescription, start, end);
-    console.log(addUrl);
-    console.log(eventDescription);
 
     const event = await Calendar.events.insert({
       calendarId: WORKSHOP_CALENDAR_ID,
@@ -139,14 +137,14 @@ const createWorkshopEventDetails = async (
     calendarDescription = createWorkshopCalendarDescription(
       mapWorkshopSkill(pensum),
       splitSpeakerValues(speaker).speakerName,
-      mapWorkshopModality(modality),
+      modality,
       platform,
       description,
       workshopYear
     );
     eventDetails = createEventObject(title, modality, platform, calendarDescription, start, end);
-  } else if (modality === 'VIRTUAL' || modality === 'HIBRID') {
-    if (platform.toLowerCase().trim() === 'zoom') {
+  } else if (modality === 'ONLINE' || modality === 'HIBRID') {
+    if (platform === 'ZOOM') {
       const [join_url, id, password] = await createZoomMeeting(title, new Date(start));
       zoomMeetLink = join_url;
       zoomMeetId = id;
@@ -320,15 +318,3 @@ const mapWorkshopSkill = (skill: Skill): string => {
   }
 };
 
-const mapWorkshopModality = (modality: Modality) => {
-  switch (modality) {
-    case 'HYBRID':
-      return 'Híbrido';
-    case 'VIRTUAL':
-      return 'Virutual';
-    case 'IN_PERSON':
-      return 'Presencial';
-    default:
-      return 'N/A';
-  }
-};
