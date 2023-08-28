@@ -39,7 +39,7 @@ const page = async ({
     <main className="flex flex-col md:flex-row-reverse min-h-screen md:h-screen bg-gradient-to-b from-emerald-950 to-slate-950 overflow-hidden">
       <Aside />
       <section className="justify-center px-4 md:px-0 md:flex md:w-2/3">
-        <div className="w-full max-w-sm py-4 mx-auto my-auto min-w-min md:py-9 md:w-7/12">
+        <div className="py-14 m-auto md:py-9 md:w-7/12 max-w-md">
           {searchParams?.error === 'notAllowed' && (
             <Warning
               title={`El correo no tiene permitido el acceso al SEP.`}
