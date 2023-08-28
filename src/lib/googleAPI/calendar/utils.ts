@@ -4,6 +4,7 @@
  */
 
 import { Platform } from '@/types/General';
+import { Modality, Skill } from '@prisma/client';
 import axios, { AxiosRequestConfig } from 'axios';
 import { Calendar } from '../auth';
 
@@ -104,7 +105,7 @@ export const subtractHours = (date: Date, hours: number): Date => {
  * @param days the number of days we want to add to the date
  * @returns the date with the days added in ISO format
  */
-const addDays = (date: string, days: number) => {
+export const addDays = (date: string, days: number) => {
   const result = new Date(date);
   result.setDate(result.getDate() + days);
   return result.toISOString();
@@ -157,3 +158,52 @@ export const getMeetEventLink = async (calendarId: string, eventId: string): Pro
   const meetLink = event.data.hangoutLink;
   return [meetLink];
 };
+
+
+
+
+export const getDate = () => {
+  let date = new Date().toISOString();
+  let search = date.indexOf(':');
+  date = date.slice(0, search - 3);
+  return date;
+};
+
+export const splitSpeakerValues = (value: string) => {
+  const speakerValues = value.split('+/+');
+  const speakerId = speakerValues[0];
+  const speakerName = speakerValues[1];
+  const speakerEmail = speakerValues[2];
+  return { speakerId, speakerName, speakerEmail };
+};
+
+export const mapWorkshopSkill = (skill: Skill): string => {
+  switch (skill) {
+    case 'CITIZEN_EXERCISE':
+      return 'Ejercicio Ciudadano';
+    case 'ENTREPRENEURSHIP':
+      return 'Emprendimiento';
+    case 'ICT':
+      return 'TIC';
+    case 'LEADERSHIP':
+      return 'Liderazgo';
+    case 'SELF_MANAGEMENT':
+      return 'Gerencia de si mismo';
+    default:
+      return 'N/A';
+  }
+};
+
+export const mapModality = (skill: Modality): string => {
+  switch (skill) {
+    case 'HYBRID':
+      return 'Híbrido';
+    case 'VIRTUAL':
+      return 'Virtual';
+    case 'IN_PERSON':
+      return 'Presencial';
+    default:
+      return 'N/A';
+  }
+};
+

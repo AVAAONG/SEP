@@ -36,19 +36,6 @@ const CHAT_CALENDAR_ID =
 const VOLUNTEERS_CALENDAR_ID =
   '66c8bfc0379b164b2d4104d235933b8507228ea39a0f6301f7f3a1a7e878e204@group.calendar.google.com';
 
-// {
-//     title: 'Empakdsflkdsamf',
-//         pensum: 'LEADERSHIP',
-//             date: '2023-08-10',
-//                 startHour: '11:27',
-//                     endHour: '15:26',
-//                         speaker: 'a7CUTUCTMKPXp8P7Wf8JQ1+/+Tibaire Labrador+/+tibairelabrador@gmail.com',
-//                             spots: '2',
-//                                 modality: 'IN_PERSON',
-//                                     platform: '212113221',
-//                                         workshopYear: ['III', 'IV'],
-//                                             description: 'asfasfdd'
-// }
 
 export const createEvent = async (kindOfActivity: KindOfActivity, values: Workshop | Chat) => {
   const calendarId = 'primary';
@@ -303,7 +290,7 @@ const splitSpeakerValues = (value: string) => {
   return { speakerId, speakerName, speakerEmail };
 };
 
-const mapWorkshopSkill = (skill: Skill): string => {
+export const mapWorkshopSkill = (skill: Skill): string => {
   switch (skill) {
     case 'CITIZEN_EXERCISE':
       return 'Ejercicio Ciudadano';

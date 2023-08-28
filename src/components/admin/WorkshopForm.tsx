@@ -31,6 +31,7 @@ const WorkshopForm = () => {
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
     if (event === undefined) return;
+    console.log(formWorkshopData)
     event.preventDefault();
     formWorkshopData.platform =
       formWorkshopData.modality.toLowerCase() === 'virtual'
@@ -103,11 +104,11 @@ const WorkshopForm = () => {
         <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">
           facilitador
         </label>
-        <select {...register('speaker')} id="Facilitador" required={true}>
-          {isLoading || data.length < 1 ? (
-            <option>Cargando facilitadores ...</option>
-          ) : (
-            data.map((value) => {
+        {isLoading || data.length < 1 ? (
+          <input {...register('speaker')} type="text" />
+        ) :
+          (<select {...register('speaker')} id="Facilitador" required={true}>
+            {data.map((value) => {
               const { id, first_names, last_names, email } = value as WorkshopSpeaker;
               const fullName = `${first_names} ${last_names}`;
               return (
@@ -115,9 +116,9 @@ const WorkshopForm = () => {
                   {fullName}
                 </option>
               );
-            })
-          )}
-        </select>
+            })}
+          </select>)
+        }
       </div>
       <div>
         <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">
@@ -129,7 +130,7 @@ const WorkshopForm = () => {
         <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">
           modalidad
         </label>
-        <select {...register('modality')} id="Modalidad" required={true} className="capitalize">
+        <select {...register('modality')} id="Modalidad" required={true} className="capitalize" >
           {MODALITY.map((option, index) => {
             return (
               <option value={option?.value} key={index}>

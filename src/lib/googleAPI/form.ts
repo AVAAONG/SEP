@@ -1,6 +1,11 @@
 import { Workshop } from '@/types/Workshop';
+<<<<<<< Updated upstream
 import { Form } from '../auth/auth';
 import { addDays } from '../calendar/calendar';
+=======
+
+import { addDays, mapModality, mapWorkshopSkill } from './calendar/utils';
+>>>>>>> Stashed changes
 
 export const createGoogleForm = async (title: string, description: string) => {
   const response = await Form.forms.create({
@@ -63,7 +68,7 @@ export const createFormDescription = (workshop: Workshop) => {
   const { title, pensum, date, startHour, endHour, speaker, modality, platform, description } =
     workshop;
   const formDescription = `Taller: ${title}
-Competencia Asociada: ${pensum}
+Competencia Asociada: ${mapWorkshopSkill(pensum)}
 ${
   platform === 'padlet'
     ? `Fecha: De ${new Date(date).toLocaleDateString()} hasta ${new Date(
@@ -73,8 +78,8 @@ ${
 }
 ${platform === 'padlet' ? `` : `Horario: de ${startHour} hasta las ${endHour}`}
 Facilitador: ${splitSpeakerValues(speaker).speakerName}
-Modalidad: ${modality}
-${modality === 'presencial' ? `Lugar: ${platform}` : `Plataforma: ${platform}`}
+Modalidad: ${mapModality(modality)}
+${modality === 'IN_PERSON' ? `Lugar: ${platform}` : `Plataforma: ${platform}`}
 ${description === ' ' ? '' : `\n ${description}`}`;
   return formDescription;
 };

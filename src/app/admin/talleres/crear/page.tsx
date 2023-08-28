@@ -30,7 +30,7 @@ const Page = () => {
 
   const workshopResponse = useSWR('/admin/api/workshops', fetcher, {
     fallbackData: [],
-    refreshInterval: 1000,
+    refreshInterval: 10000,
   });
 
   const deleteEntry = async (inputId: shortUUID.SUUID, calendarId: string) => {

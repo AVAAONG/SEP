@@ -4,7 +4,11 @@ import { createEvent } from '@/lib/googleAPI/calendar/calendar';
 import { getFormatedDate } from '@/lib/googleAPI/calendar/utils';
 import { createFormDescription } from '@/lib/googleAPI/form';
 import { Workshop as FormTypeWorkshop } from '@/types/Workshop';
+<<<<<<< Updated upstream
 import { Modality, Skill, Workshop, WorkshopTempData, WorkshopYear } from '@prisma/client';
+=======
+import { Modality, Skill, Workshop, WorkshopYear } from '@prisma/client';
+>>>>>>> Stashed changes
 import { nanoid } from 'nanoid';
 import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
@@ -14,7 +18,7 @@ const FORM_CREATION_APPSCRIPT_URL =
 
 export async function POST(req: NextRequest, res: NextResponse) {
   const token = await getToken({ req });
-  setTokens(token.accessToken, token.refreshToken);
+  setTokens(token.accessToken, token.refreshToken, token.jti);
   const workshop = await req.json();
   const { speaker, title, modality, spots } = workshop;
   //creamos el calendario
@@ -25,6 +29,12 @@ export async function POST(req: NextRequest, res: NextResponse) {
   console.log(formDescription);
   const workshopId = nanoid();
 
+<<<<<<< Updated upstream
+=======
+  //creamos el formulario
+  const formDescription = createFormDescription(workshop);
+  const workshopId = nanoid();
+>>>>>>> Stashed changes
   const formUrl = await createForm(
     title,
     modality,
@@ -36,8 +46,14 @@ export async function POST(req: NextRequest, res: NextResponse) {
     meetingPassword!,
     formDescription
   );
+<<<<<<< Updated upstream
   const { speakerId } = splitSpeakerValues(speaker);
 
+=======
+
+  const { speakerId } = splitSpeakerValues(speaker);
+
+>>>>>>> Stashed changes
   const tempDataObj: WorkshopTempData = {
     id: nanoid(),
     meeting_password: meetingPassword,
@@ -45,9 +61,15 @@ export async function POST(req: NextRequest, res: NextResponse) {
     meeting_id: meetingId,
     form_link: formUrl,
   };
+<<<<<<< Updated upstream
   const normalizedWorkshop = normalizeWorkshopData(workshop, workshopId, calendarEventId!);
   const workshopCreated = await createWorkshop(normalizedWorkshop, speakerId, tempDataObj);
+=======
+
+  // const normalizedWorkshop = normalizeWorkshopData(workshop, workshopId, calendarEventId!);
+>>>>>>> Stashed changes
   //guardamos en la base de datos
+  // const workshopCreated = await createWorkshop(normalizedWorkshop, speakerId, tempDataObj);
   return NextResponse.json({ messagge: 'ok' });
 }
 
@@ -77,7 +99,7 @@ const createForm = async (
     },
     body: JSON.stringify({
       kindOfActivity: 'workshop',
-      modality,
+      modality
       activityName: title,
       activityId: id,
       meetingId,
@@ -88,6 +110,7 @@ const createForm = async (
       formDescription,
     }),
   });
+
   const { formUrl } = await response.json();
 
   return formUrl;
