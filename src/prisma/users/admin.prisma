@@ -3,7 +3,7 @@
 // Here we model all the necesary data and information for the next-auth to work
 /// @author Kevin Bravo (kevinbravo.me)
 
-import { Role } from "types-users"
+import { AdminRoles } from "roles-users"
 import { Region } from "scholar\types-scholar"
 import { ChatAttendance, WorkshopAttendance } from "..\schema"
 import { ScholarCanAssist, ScholarCanAssist, ScholarStatus } from "scholar\types-scholar"
@@ -50,6 +50,8 @@ model AdminUser {
   image         String?
   accounts      AdminAccount[]
   sessions      AdminSession[]
+  lastLogin     DateTime? @default(now())
+  role          AdminRoles
 }
 
 model AdminVerificationToken {

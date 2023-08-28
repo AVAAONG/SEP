@@ -19,7 +19,7 @@ import { NEXT_SECRET, PAGES, googleAdminProviderConfig } from './authAdminConfig
  * @see https://next-auth.js.org/configuration/pages
  *
  */
-const adminAuthOptions: NextAuthOptions = {
+const authAdminOptions: NextAuthOptions = {
   /**
    * @description NextAuth providers, those are services in next auth that can be used to authenticate users.
    * @see https://next-auth.js.org/providers/ to see the complete list of options to authenticate users.
@@ -50,7 +50,34 @@ const adminAuthOptions: NextAuthOptions = {
    * @see https://next-auth.js.org/configuration/callbacks
    */
   callbacks: {
-    session: ({ session, token }) => {
+    // signIn: async ({ user, account, profile }) => {
+    //   let email: string | undefined = '';
+
+    //   if (account?.provider === 'email') email = account.providerAccountId;
+    //   else email = profile!.email;
+
+    //   const name = profile.name
+
+    //   const SUBJECT_MESSAGE =  encodeURIComponent(`Problemas al ingresar al SEP - ${name}`)
+
+    //   const emailBasedPath= `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${email}&su=${SUBJECT_MESSAGE}&body=${encodedMessage}&bcc=${recipients}`
+
+    //     const userExists = await prisma.scholar.findUnique({
+    //       where: { email },
+    //     });
+
+    //     if (!userExists) throw 'notAdmin';
+    //     else return true;
+    //   return true;
+    // },
+    session: async ({ session, token }) => {
+      //optenemos el rol del usuario en la database
+      // const role = await prisma.adminUser.findUnique({
+      //   where: {
+      //     email: token.email,
+      //   },
+      // });
+
       return {
         ...session,
         user: {
@@ -59,6 +86,7 @@ const adminAuthOptions: NextAuthOptions = {
           accessToken: token.accessToken,
           randomKey: token.randomKey,
           refreshToken: token.refreshToken,
+          role: 'STAFF',
         },
       };
     },
@@ -77,6 +105,26 @@ const adminAuthOptions: NextAuthOptions = {
       return token;
     },
   },
+  // events: {
+  //   createUser: async (data) => {
+  //     await prisma.user.update({
+  //       where: {
+  //         id: data.user.id,
+  //       },
+  //       data: {
+  //         scholar: {
+  //           create: {
+  //             email: data.user.email!!,
+  //             first_names: 'Kevin Jose',
+  //             last_names: 'Bravo Mota',
+  //             scholar_status: 'CURRENT',
+  //           },
+  //         },
+  //         role: 'SCHOLAR',
+  //       },
+  //     });
+  //   },
+  // },
   adapter: PrismaAdapter(prisma, {
     userModel: 'adminUser',
     accountModel: 'adminAccount',
@@ -85,4 +133,4 @@ const adminAuthOptions: NextAuthOptions = {
   }),
 };
 
-export default adminAuthOptions;
+export default authAdminOptions;

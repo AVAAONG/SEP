@@ -8,7 +8,7 @@
 import Error from '@/components/alerts/Error';
 import Aside from '@/components/public/signin/Aside';
 import GoogleSignInButton from '@/components/public/signin/signinButtons/GoogleSignInButton';
-import adminAuthOptions from '@/lib/auth/nextAuthAdminOptions/authAdminOptions';
+import authAdminOptions from '@/lib/auth/nextAuthAdminOptions/authAdminOptions';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 
@@ -23,7 +23,7 @@ const page = async ({
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
 }) => {
-  const session = await getServerSession(adminAuthOptions);
+  const session = await getServerSession(authAdminOptions);
   /**
    * Specify to which URL the user will be redirected after signing in. Defaults to the page URL the sign-in is initiated from.
    * @summary The URL to redirect to after a successful sign in or sign up.

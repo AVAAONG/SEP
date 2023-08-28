@@ -1,5 +1,5 @@
 import { chatIcon, userIcon, volunterIcon, workshopIcon } from '@/assets/svgs';
-import adminAuthOptions from '@/lib/auth/nextAuthAdminOptions/authAdminOptions';
+import authAdminOptions from '@/lib/auth/nextAuthAdminOptions/authAdminOptions';
 import { CALENDAR_IDS } from '@/lib/constants';
 import { setTokens } from '@/lib/googleAPI/auth';
 import { getCalendarEvents } from '@/lib/googleAPI/calendar/calendar';
@@ -45,7 +45,7 @@ export const formatEventObject = (
  * @todo allow to return a single array of events.
  */
 export const getAndFormatCalendarEvents = async (): Promise<BigCalendarEventType[][]> => {
-  const session = await getServerSession(adminAuthOptions);
+  const session = await getServerSession(authAdminOptions);
 
   const accessToken = session?.user?.accessToken;
   const refreshToken = session?.user?.refreshToken;

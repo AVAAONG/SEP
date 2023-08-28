@@ -1,0 +1,24 @@
+// Base types prisma file for general user types. Types that are share between users. 
+/// @author Kevin Bravo (kevinbravo.me)
+
+// The roles that a user can have.
+
+// STAFF_PROEXCELENCIA - Staff of the proexcelencia program. Have access to all the features of the app.
+// STAFF_COMMUNICATIONS - Staff of the communications department. Have access only to the database of the scholars
+// STAFF_ADMON - Staff of the administration department. Have access only to the 'nomina' and the database of scholars.
+// STAFF_MENTORSHIP - Staff of the mentorship department. Have access only to the database of scholars and the mentorship activities that the scholars have done. Allow them to create matches between scholars and mentors.
+// STAFF_RECRUITMENT - Staff of the recruitment department. Have access to the database of scholars, its allowd to create new scholars. Manage all the recruitment process of the program.
+// COMITEE - Comitee of scholars. Have access to the database of scholars with all the activities that they have done, and allow to create volunteers
+// PROYECT - Proyects of the proexcelencia program. Have access to the database of scholars, only volunteer activities that the scholars have done and allow to create volunteers
+// CHAT - Chats of the proexcelencia program. Have access to the database of scholars, only chat club activities that the scholars have done and allow to create volunteers and chats.
+enum AdminRoles {
+    STAFF_PROEXCELENCIA
+    STAFF_COMMUNICATIONS
+    STAFF_ADMON
+    STAFF_MENTORSHIP
+    STAFF_RECRUITMENT
+    COMITEE
+    PROYECT
+    CHAT
+}
+
