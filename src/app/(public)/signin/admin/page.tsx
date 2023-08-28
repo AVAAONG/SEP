@@ -5,6 +5,7 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
+import Error from '@/components/alerts/Error';
 import Aside from '@/components/public/signin/Aside';
 import GoogleSignInButton from '@/components/public/signin/signinButtons/GoogleSignInButton';
 
@@ -28,11 +29,20 @@ const page = ({
   return (
     <main className="flex flex-col md:flex-row-reverse min-h-screen h-screen bg-gradient-to-b from-emerald-950 to-slate-950">
       <Aside />
-      <section className="justify-center px-4 md:px-0 md:flex md:w-2/3 mt-28 md:mt-0">
-        <div className="w-full max-w-sm py-4 mx-auto my-auto min-w-min md:py-9 md:w-7/12 text-center md:text-start">
+      <section className="justify-center px-4 md:px-0 md:flex md:w-2/3">
+        <div className="py-14 m-auto md:py-9 md:w-7/12 max-w-md text-center md:text-start">
+          {searchParams?.error === 'notAdmin' && (
+            <Error
+              title={`Correo no valido.`}
+              subtitle={
+                'El correo con el que estas tratando de acceder no tiene acceso de administrador.'
+              }
+            />
+          )}
           <h2 className="text-xl font-semibold md:text-2xl">Acceso de administrador </h2>
           <p className="text-xs md:text-sm text-slate-400 mt-3">
-            <span className='hidden md:inline-block'>¿Eres un administrador?</span> Ingresa con tu cuenta de Google.
+            <span className="hidden md:inline-block">¿Eres un administrador?</span> Ingresa con tu
+            cuenta de Google.
           </p>
           <p className="text-green-500 text-xs md:text-sm font-semibold">
             Solo los administradores tienen acceso por este medio.
