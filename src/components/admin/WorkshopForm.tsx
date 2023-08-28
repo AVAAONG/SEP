@@ -2,9 +2,10 @@ import { MODALITY, PLATFORMS, PROGRAM_COMPONENTS, WORKSHOP_YEAR } from '@/lib/co
 import { Platform } from '@/types/General';
 import { Workshop as FormTypeWorkshop } from '@/types/Workshop';
 import { WorkshopSpeaker } from '@prisma/client';
-import { BaseSyntheticEvent } from 'react';
+import { BaseSyntheticEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useSWR, { Fetcher } from 'swr';
+import DateInput from '../DateInput';
 
 /**
  * @description Normalizes the string inputs to be used as keys in the database
@@ -17,6 +18,14 @@ const normalizeStringInputs = (data: string) => {
 };
 
 const WorkshopForm = () => {
+  const [dates, setDates] = useState([
+    {
+      start: new Date(),
+      end: new Date(),
+      startHour: '',
+      endHour: '',
+    },
+  ]);
   const { register, handleSubmit, reset } = useForm<FormTypeWorkshop>();
   const fetcher: Fetcher<WorkshopSpeaker[] | {}[], string> = (...args) =>
     fetch([...args].join('')).then((res) => res.json());
@@ -54,7 +63,20 @@ const WorkshopForm = () => {
         <label className="block mb-2 text-xs m-l-1 font-semibold text-slate-400 uppercase">
           titulo de la actividad formativa
         </label>
-        <input {...register('title')} type={'text'} id={'Titulo de la actividad formativa'} required={true} />
+        <input
+          {...register('title')}
+          type={'text'}
+          id={'Titulo de la actividad formativa'}
+          required={true}
+        />
+      </div>
+      <div className="flex flex-wrap">
+        <DateInput
+          dates={dates}
+          onAddDateInput={() =>
+            setDates([...dates, { start: new Date(), end: new Date(), startHour: '', endHour: '' }])
+          }
+        />
       </div>
 
       <div>
@@ -154,7 +176,9 @@ const WorkshopForm = () => {
         </datalist>
       </div>
       <div className="col-span-2 h-fit flex flex-col">
-        <p className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">año de la actividad formativa</p>
+        <p className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">
+          año de la actividad formativa
+        </p>
         <div className="flex">
           {WORKSHOP_YEAR.map((input) => {
             return (
