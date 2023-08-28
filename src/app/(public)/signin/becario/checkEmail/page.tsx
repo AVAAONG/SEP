@@ -44,7 +44,7 @@ const page = () => {
         </svg>
         <div className="mt-2 flex flex-col items-center justify-center text-center max-w-sm gap-4">
           <h3 className="text-2xl font-semibold ">¡Ahora revisa tu correo electrónico!</h3>
-          <p className="text-lg">
+          <p className="md:text-lg">
             Desde <span className="font-semibold text-green-700">ProExcelencia</span> te hemos
             enviado un enlace de inicio de sesión a tu correo.
           </p>
@@ -55,7 +55,7 @@ const page = () => {
             Revisar Correo
           </Link>
         </div>
-        <p className="text-sm italic text-red-700">
+        <p className="text-center text-sm italic text-red-700">
           Si no llega en 3 minutos, revisa tu carpeta de spam
         </p>
       </div>

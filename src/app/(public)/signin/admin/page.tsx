@@ -1,5 +1,5 @@
 /**
- * @file  This file renders the sign-in page for the admin role.
+ * @file  This file renders the sign-in page for admin users.
  * @remarks when the user is not signed in, this page will be rendered. Otherwise, the user will be redirected to the callback URL.
  * @remarks If the user signs in with an email not registered in the SEP as an admin, it would show an error message.
  * @author Kevin Bravo (kevinbravo.me)
@@ -8,6 +8,9 @@
 import Error from '@/components/alerts/Error';
 import Aside from '@/components/public/signin/Aside';
 import GoogleSignInButton from '@/components/public/signin/signinButtons/GoogleSignInButton';
+import adminAuthOptions from '@/lib/auth/nextAuthAdminOptions/authAdminOptions';
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
 
 /**
  * Renders the sign-in page for the admin role.
@@ -15,17 +18,21 @@ import GoogleSignInButton from '@/components/public/signin/signinButtons/GoogleS
  * @returns The sign-in page for the admin role.
  * @see {@link https://nextjs.org/docs/app/api-reference/file-conventions/page#searchparams-optional} for more information about Next.js search params argument
  */
-const page = ({
+const page = async ({
   searchParams,
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
 }) => {
+  const session = await getServerSession(adminAuthOptions);
   /**
    * Specify to which URL the user will be redirected after signing in. Defaults to the page URL the sign-in is initiated from.
    * @summary The URL to redirect to after a successful sign in or sign up.
    */
   const adminCallbackUrl = (searchParams!.callbackUrl as string) || '/admin/dashboard';
 
+  if (session) {
+    redirect(adminCallbackUrl);
+  }
   return (
     <main className="flex flex-col md:flex-row-reverse min-h-screen h-screen bg-gradient-to-b from-emerald-950 to-slate-950">
       <Aside />
