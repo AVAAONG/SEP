@@ -10,7 +10,7 @@ const WarningTooltip = ({ helperText }: { helperText: string }) => {
   const [show, setShow] = useState(false);
 
   return (
-    <div className="flex-1 w-1/6">
+    <div className="flex-1 max-w-min">
       <div
         className="absolute bg-green-700 text-white text-sm rounded p-1 -mt-7 translate-x-3"
         style={{
@@ -28,7 +28,7 @@ const WarningTooltip = ({ helperText }: { helperText: string }) => {
         className="text-sm font-medium text-yellow-600"
       >
         <svg
-          className="flex-shrink-0 w-4 h-4 mr-2 animate-pulse cursor-pointer"
+          className="flex-shrink-0 w-4 h-4 mr-3 animate-pulse cursor-pointer"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"

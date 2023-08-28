@@ -40,21 +40,21 @@ const page = async ({
       <Aside />
       <section className="justify-center px-4 md:px-0 md:flex md:w-2/3">
         <div className="py-14 m-auto md:py-9 md:w-7/12 max-w-md">
-          {searchParams?.error === 'notAllowed' && (
-            <Warning
-              title={`El correo no tiene permitido el acceso al SEP.`}
-              subtitle={
-                'Solo los correos de los becarios que se encuentran registrados en la base de datos de ProExcelencia pueden acceder al SEP.'
-              }
+          {/* {searchParams?.error === 'notAllowed' && ( */}
+          <Warning
+            title={`El correo no tiene permitido el acceso al SEP.`}
+            subtitle={
+              'Solo los correos de los becarios que se encuentran registrados en la base de datos de ProExcelencia pueden acceder al SEP.'
+            }
+          >
+            <a
+              href="mailto:avaatecnologia@gmail.com"
+              className="text-white bg-yellow-600 hover:bg-yellow-500 hover:text-yellow-900 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 text-center inline-flex items-center dark:hover:bg-yellow-400 dark:focus:ring-yellow-800"
             >
-              <a
-                href="mailto:avaatecnologia@gmail.com"
-                className="text-white bg-yellow-600 hover:bg-yellow-500 hover:text-yellow-900 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 text-center inline-flex items-center dark:hover:bg-yellow-400 dark:focus:ring-yellow-800"
-              >
-                Pedir ayuda
-              </a>
-            </Warning>
-          )}
+              Pedir ayuda
+            </a>
+          </Warning>
+          {/* )} */}
           <h2 className="text-xl font-semibold md:text-2xl">¡Entra!</h2>
           <div className="my-4">
             <SigninForm callbackUrl="/becario/config" cookieValue="scholar" />
