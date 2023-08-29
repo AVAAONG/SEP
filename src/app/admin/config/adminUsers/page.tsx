@@ -100,7 +100,7 @@ const page = () => {
   return (
     <section className="w-full h-screen">
       <div className="flex justify-start w-full gap-8 h-full mt-16">
-        <form className="flex flex-col gap-4 w-1/2">
+        <form className="flex flex-col gap-4 w-1/2 mt-16">
           <h1 className="text-xl text-center font-semibold text-gray-900 sm:text-2xl dark:text-white mb-4">
             Crear administrador
           </h1>
@@ -145,7 +145,7 @@ const page = () => {
           <ul className="w-full flex flex-col gap-3 max-h-96 overflow-y-auto">
             {adminUsers.map(({ name, email, role }) => (
               <li
-                className="p-4 focus:outline-none focus:outline-offset-0  rounded-md w-full bg-slate-900"
+                className="p-4 focus:outline-none focus:outline-offset-0  rounded-md w-full bg-white dark:bg-slate-900"
                 key={email}
               >
                 <div className="flex items-center space-x-4">
