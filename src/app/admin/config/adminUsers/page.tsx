@@ -99,8 +99,8 @@ const page = () => {
 
   return (
     <section className="w-full h-screen">
-      <div className="flex justify-start w-full gap-8 mt-16">
-        <form className="flex flex-col gap-4 w-1/2 mt-16 ">
+      <div className="flex flex-col sm:flex-row justify-start w-full gap-8 mt-16">
+        <form className="flex flex-col gap-4 w-full sm:w-1/2  sm:mt-16 ">
           <h1 className="text-xl text-center font-semibold text-gray-900 sm:text-2xl dark:text-white mb-4">
             Crear administrador
           </h1>
@@ -138,7 +138,7 @@ const page = () => {
             Crear administrador
           </button>
         </form>
-        <div className="w-1/2 flex flex-col items-center gap-4 h-full">
+        <div className=" w-full sm:w-1/2  flex flex-col items-center gap-4 h-full">
           <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white mb-4">
             Administradores del SEP
           </h1>
