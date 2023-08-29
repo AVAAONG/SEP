@@ -16,7 +16,7 @@ const Navbar = () => {
         <button
           onClick={setUpSidebar}
           type="button"
-          className="inline-flex items-center p-2 text-sm text-emerald-500 rounded-lg  focus:outline-none focus:ring-2  bg-green-800 text-emerlad-400 hover:bg-emerald-950 focus:ring-emerald-600"
+          className="inline-flex items-center p-2 text-sm text-white dark:text-emerald-500 rounded-lg  focus:outline-none focus:ring-2 bg-green-600  dark:bg-green-800 text-emerlad-400 hover:bg-emerald-600 dark:hover:bg-emerald-950 focus:ring-emerald-600"
         >
           <span className="sr-only">Open sidebar</span>
           <svg
@@ -34,7 +34,7 @@ const Navbar = () => {
           </svg>
         </button>
         <div className="flex gap-4 ">
-          <div className="inline-flex items-center p-2 text-sm  rounded-lg  focus:outline-none focus:ring-2  bg-green-950 text-emerlad-400 hover:bg-emerald-950 focus:ring-emerald-600">
+          <div className="inline-flex items-center p-2 text-sm  rounded-lg  focus:outline-none focus:ring-2 bg-green-600 dark:bg-green-950 text-emerlad-400 hover:bg-emerald-600 dark:hover:bg-emerald-950 focus:ring-emerald-600">
             <ThemeToggleButton />
           </div>
           <div className="flex items-center justify-start">

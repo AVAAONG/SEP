@@ -16,7 +16,7 @@ const DropdownButton = ({ buttonName, itemList, Icon }: DropdownButtonProps) => 
       <button
         onClick={toggleDropdown}
         type="button"
-        className="flex items-center justify-between p-2 w-full text-sm font-semibold text-gray-900 rounded-md transition duration-75 group hover:bg-gray-100 text-slate-300 hover:bg-green-600"
+        className="flex items-center justify-between p-2 w-full text-sm font-semibold text-black rounded-md transition duration-75 group dakr:hover:bg-gray-100 dark:text-slate-300 hover:bg-green-400 dark:hover:bg-green-600"
       >
         <i className={` w-6 h-6`}>
           <Icon />
@@ -40,7 +40,7 @@ const DropdownButton = ({ buttonName, itemList, Icon }: DropdownButtonProps) => 
         {itemList.map(({ name, link }) => {
           return (
             <li key={link}>
-              <div className="flex items-center ml-9 rounded-lg transition duration-75 group hover:bg-gray-100 text-slate-300 hover:bg-green-600 p-2 pr-6 gap-4 justify-between w-full ">
+              <div className="flex items-center ml-9 rounded-lg transition duration-75 group hover:bg-green-400 dark:text-slate-300 text-slate-950 dark:hover:bg-green-600 p-2 pr-6 gap-4 justify-between w-full ">
                 <svg
                   className="w-2 h-2 "
                   focusable="false"
@@ -51,7 +51,7 @@ const DropdownButton = ({ buttonName, itemList, Icon }: DropdownButtonProps) => 
                 >
                   <circle cx="12" cy="12" r="8"></circle>
                 </svg>
-                <Link href={link} className="flex items-center w-full text-xs font-normal">
+                <Link href={link} className="flex items-center w-full text-xs font-bold">
                   {name}
                 </Link>
               </div>

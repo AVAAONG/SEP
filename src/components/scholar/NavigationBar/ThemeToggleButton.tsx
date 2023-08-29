@@ -18,7 +18,7 @@ const ThemeToggleButton = () => {
     <button
       type="button"
       onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-      className=" text-emerald-700 rounded-lg hover:text-emerald-500  dark:text-emerald-700 dark:hover:text-emerald-500 "
+      className=" text-white dark:text-emerald-700 rounded-lg hover:text-emerald-500 dark:hover:text-emerald-500 "
     >
       {theme === 'light' ? (
         <svg
