@@ -13,7 +13,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="flex bg-gradient-to-b from-green-600 to-gray-500 dark:from-emerald-950 dark:to-slate-950">
+    <main className="flex bg-gradient-to-b from-[#238442] to-[#438f5c] dark:from-emerald-950 dark:to-slate-950">
       <Sidebar />
       <section className="flex flex-col z-10 rounded-2xl bg-gray-100 dark:bg-slate-950 p-4 m-3 min-h-screen w-screen">
         <Navbar />
