@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <main className="flex bg-gradient-to-b from-[#238442] to-[#438f5c] dark:from-emerald-950 dark:to-slate-950 w-full">
       <Sidebar />
-      <section className="flex flex-col z-10 md:rounded-2xl bg-white dark:bg-slate-950 p-4 md:m-3 min-h-screen w-full">
+      <section className="flex flex-col z-10 md:rounded-2xl bg-gray-50 dark:bg-slate-950 p-4 md:m-3 min-h-screen w-full">
         <Navbar />
         <NextAuthProvider>{children}</NextAuthProvider>
       </section>

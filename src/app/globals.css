@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .fifi::after {
   content: '';
   position: absolute;
@@ -44,14 +43,14 @@ input:-webkit-autofill:focus {
 
 @layer components {
   input {
-    @apply ring-1 focus:outline-emerald-400 ring-white sm:text-sm placeholder:text-gray-400 shadow-sm shadow-emerald-600 bg-gray-100 border-0  text-gray-900 focus:outline-none focus:outline-offset-0 p-2 rounded-md w-full dark:bg-slate-700 dark:placeholder-slate-500 dark:text-gray-300 dark:ring-1 dark:ring-emerald-950  dark:focus:outline-emerald-800;
+    @apply ring-1 focus:outline-emerald-400 ring-white sm:text-sm placeholder:text-gray-400 shadow-sm bg-slate-200 border-0  text-gray-900 focus:outline-none focus:outline-offset-0 p-2 rounded-md w-full dark:bg-slate-700 dark:placeholder-slate-500 dark:text-gray-300 dark:ring-1 dark:ring-emerald-950  dark:focus:outline-emerald-800;
   }
 
   textarea {
-    @apply min-h-[4rem] ring-1 focus:outline-emerald-400 ring-white sm:text-sm placeholder:text-gray-400 shadow-sm shadow-emerald-600 bg-gray-100 border-0  text-gray-900 focus:outline-none focus:outline-offset-0 p-2 rounded-md w-full dark:bg-slate-700 dark:placeholder-slate-500 dark:text-gray-300 dark:ring-1 dark:ring-emerald-950  dark:focus:outline-emerald-800;
+    @apply min-h-[4rem] ring-1 focus:outline-emerald-400 ring-white sm:text-sm placeholder:text-gray-400 shadow-sm bg-slate-200 border-0  text-gray-900 focus:outline-none focus:outline-offset-0 p-2 rounded-md w-full dark:bg-slate-700 dark:placeholder-slate-500 dark:text-gray-300 dark:ring-1 dark:ring-emerald-950  dark:focus:outline-emerald-800;
   }
   select {
-    @apply ring-1 focus:outline-emerald-400 ring-white sm:text-sm placeholder:text-gray-400 shadow-sm shadow-emerald-600 bg-gray-100 border-0  text-gray-900 focus:outline-none focus:outline-offset-0 p-2 rounded-md w-full dark:bg-slate-700 dark:placeholder-slate-500 dark:text-gray-300 dark:ring-1 dark:ring-emerald-950  dark:focus:outline-emerald-800;
+    @apply ring-1 focus:outline-emerald-400 ring-white sm:text-sm placeholder:text-gray-400 shadow-sm bg-slate-200 border-0  text-gray-900 focus:outline-none focus:outline-offset-0 p-2 rounded-md w-full dark:bg-slate-700 dark:placeholder-slate-500 dark:text-gray-300 dark:ring-1 dark:ring-emerald-950  dark:focus:outline-emerald-800;
   }
 }
 
