@@ -5,10 +5,10 @@
  * @see {@link https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts#layouts} for more information about Next.js layouts.
  */
 
-import '@/app/globals.css';
 import favicon from '@/../public/logo-proexcelencia-cap.png';
-import NextAuthProvider from '../components/providers';
+import '@/app/globals.css';
 import { ThemeProviderC } from '@/components/ThemeProvider';
+import NextAuthProvider from '../components/providers';
 
 /**
  * The base metadata of the application.
