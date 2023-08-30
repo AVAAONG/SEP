@@ -18,7 +18,7 @@ const Sidebar = () => {
       } flex-col gap-4 justify-start items-center z-50 xl:z-0 w-full sm:w-72 py-8 px-2 bg-gradient-to-b from-[#238442] to-[#438f5c] dark:from-emerald-950 dark:to-slate-950 `}
     >
       <div className="flex justify-between xl:justify-start items-center mb-8 xl:mb-2">
-        <Link href="/dashboard">
+        <Link href="/admin/dashboard">
           <Image src={logo} width={180} alt="Logo Proexcelencia" />
         </Link>
         <div className="flex justify-start items-center xl:hidden">
