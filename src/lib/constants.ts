@@ -1,5 +1,5 @@
-export const CLIENT_ID = process.env.GOOGLE_API_CLIENT_ID;
-export const CLIENT_SECRET = process.env.GOOGLE_API_CLIENT_SECRET;
+export const CLIENT_ID = process.env.GOOGLE_ADMIN_API_CLIENT_ID;
+export const CLIENT_SECRET = process.env.GOOGLE_ADMIN_API_CLIENT_SECRET;
 export const REDIRECT_URL =
   'http://seb-git-adddb-mustafinho.vercel.app/api/google/calendarCallback';
 

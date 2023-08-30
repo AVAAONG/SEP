@@ -217,15 +217,20 @@ const createChatEventDetails = async (
  * @param calendarId - The ID of the calendar to retrieve events from.
  */
 export const getCalendarEvents = async (calendarId: string = 'primary') => {
-  const events = await Calendar.events.list({
-    calendarId: calendarId,
-    timeMin: substractMonths(3),
-  });
-  if (events.status === 200) {
-    if (events === null || events === undefined) return console.error('No events found.');
-    return events.data.items;
-  } else {
-    console.error('Error retrieving events');
+  try {
+    const events = await Calendar.events.list({
+      calendarId: calendarId,
+      timeMin: substractMonths(3),
+    });
+    if (events.status === 200) {
+      if (events === null || events === undefined) return console.error('No events found.');
+      return events.data.items;
+    } else {
+      console.error('Error retrieving events');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error retrieving events:', error);
     return null;
   }
 };
@@ -317,4 +322,3 @@ const mapWorkshopSkill = (skill: Skill): string => {
       return 'N/A';
   }
 };
-
