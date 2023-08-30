@@ -17,8 +17,15 @@ const ActivityForm: React.FC<Props> = ({ register }) => {
       {[...Array(count)].map((_, i) => (
         <>
           <div key={i} className="col-span-2 md:col-span-1">
+            <button
+              type="button"
+              onClick={addInput}
+              className="inline h-6 w-6 bg-green-700 rounded-full text-base font-bold text-white absolute translate-x-64 translate-y-2"
+            >
+              +
+            </button>
             <label className="block mb-2 text-xs m-l-1 font-semibold text-slate-400 uppercase ">
-              Fecha de inicio
+              Fecha
             </label>
             <input type="date" {...register(`date.${i}`)} />
           </div>
@@ -36,13 +43,6 @@ const ActivityForm: React.FC<Props> = ({ register }) => {
           </div>
         </>
       ))}
-      <button
-        type="button"
-        onClick={addInput}
-        className="inline h-6 w-6 bg-green-700 rounded-full text-base font-bold text-white translate-x-96 md:translate-x-[730px] absolute translate-y-60 top-0 left-0"
-      >
-        +
-      </button>
     </>
   );
 };
