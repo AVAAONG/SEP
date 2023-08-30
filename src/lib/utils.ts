@@ -53,7 +53,7 @@ export const getAndFormatCalendarEvents = async (): Promise<BigCalendarEventType
   setTokens(accessToken as string, refreshToken as string);
 
   const formatedEvents = CALENDAR_IDS.map(async (calendar) => {
-    const { calendarId, eventColor, textColor } = calendar;
+    const { calendarId, eventColor, textColor } = calendar
     const events = await getCalendarEvents(calendarId);
     const formatedEvents = formatEventObject(events!, eventColor, textColor);
 
