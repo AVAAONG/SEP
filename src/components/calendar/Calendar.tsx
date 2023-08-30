@@ -6,7 +6,7 @@ import './calendar.css';
 import moment from 'moment';
 import 'moment/locale/es';
 import { Fragment, useMemo } from 'react';
-import { Calendar as BigCalendar, momentLocalizer, Views } from 'react-big-calendar';
+import { Calendar as BigCalendar, Views, momentLocalizer } from 'react-big-calendar';
 
 import { BigCalendarEventType } from '@/types/Calendar';
 
@@ -49,7 +49,7 @@ const Calendar = ({ events }: { events: BigCalendarEventType[] }) => {
     <Fragment>
       <div className="">
         <BigCalendar
-          className="h-96 max-h-96 overflow-hidden"
+          className="h-96 max-h-96 overflow-y-scroll overflow:-moz-scrollbars-none: "
           localizer={localizer}
           events={events}
           startAccessor="start"

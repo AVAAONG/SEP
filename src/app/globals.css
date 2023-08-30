@@ -79,3 +79,7 @@ html::-webkit-scrollbar-thumb:active {
   background: #15803d;
   border-radius: 10px;
 }
+
+div::-webkit-scrollbar {
+  display: none;
+}
