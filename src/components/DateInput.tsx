@@ -1,51 +1,50 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { UseFormRegister } from 'react-hook-form';
 
-interface DateInputProps {
-  start: Date;
-  end: Date;
-  startHour: string;
-  endHour: string;
-  onAddDateInput: () => void;
-}
+type Props = {
+  register: UseFormRegister<any>;
+};
 
-const DateInput = ({ start, end, startHour, endHour, onAddDateInput }: DateInputProps) => {
-  const [dates, setDates] = useState([
-    {
-      start,
-      end,
-      startHour,
-      endHour,
-    },
-  ]);
+const ActivityForm: React.FC<Props> = ({ register }) => {
+  const [count, setCount] = useState(1);
 
-  const handleAddDateInput = () => {
-    setDates([...dates, { start: new Date(), end: new Date(), startHour: '', endHour: '' }]);
+  const addInput = () => {
+    setCount(count + 1);
   };
 
   return (
-    <div>
-      {dates.map((date, index) => (
-        <div key={index}>
-          <input
-            type="date"
-            placeholder="Start Date"
-            value={date.start}
-            onChange={(e) =>
-              setDates(dates.map((d, i) => (i === index ? { ...d, start: e.target.value } : d)))
-            }
-          />
-          <input type="time" placeholder="Start Hour" value={date.startHour} />
-          <input type="time" placeholder="End Hour" value={date.endHour} />
-          <button
-            className="w-4 h-4 mr-2 text-gray-500 hover:text-gray-700"
-            onClick={handleAddDateInput}
-          >
-            +
-          </button>
-        </div>
+    <>
+      {[...Array(count)].map((_, i) => (
+        <>
+          <div key={i} className="col-span-2 md:col-span-1">
+            <label className="block mb-2 text-xs m-l-1 font-semibold text-slate-400 uppercase ">
+              Fecha de inicio
+            </label>
+            <input type="date" {...register(`date.${i}`)} />
+          </div>
+          <div key={i} className="col-span-2 md:col-span-1">
+            <label className="block mb-2 text-xs m-l-1 font-semibold text-slate-400 uppercase ">
+              Hora de inicio
+            </label>
+            <input type="time" {...register(`startHour.${i}`)} />
+          </div>
+          <div key={i} className="col-span-2 md:col-span-1">
+            <label className="block mb-2 text-xs m-l-1 font-semibold text-slate-400 uppercase ">
+              Hora de cierre
+            </label>
+            <input type="time" {...register(`endHour.${i}`)} />
+          </div>
+        </>
       ))}
-    </div>
+      <button
+        type="button"
+        onClick={addInput}
+        className="inline h-6 w-6 bg-green-700 rounded-full text-base font-bold text-white translate-x-96 md:translate-x-[730px] absolute translate-y-60 top-0 left-0"
+      >
+        +
+      </button>
+    </>
   );
 };
 
-export default DateInput;
+export default ActivityForm;

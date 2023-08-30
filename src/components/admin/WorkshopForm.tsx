@@ -57,10 +57,10 @@ const WorkshopForm = () => {
   return (
     <form
       onSubmit={handleSubmit(async (data, event) => await scheduleWorkshop(data, event!))}
-      className="grid gap-6 md:grid-cols-2 md:grid-rows-2 caret-green-500 text-slate-300 w-full"
+      className="grid gap-6 grid-cols-2 md:grid-rows-2 caret-green-500 text-slate-300 w-full"
     >
-      <div className="col-span-2 h-fit">
-        <label className="block mb-2 text-xs m-l-1 font-semibold text-slate-400 uppercase">
+      <div className="col-span-2">
+        <label className="block mb-2 text-xs m-l-1 font-semibold text-slate-400 uppercase ">
           titulo de la actividad formativa
         </label>
         <input
@@ -70,16 +70,9 @@ const WorkshopForm = () => {
           required={true}
         />
       </div>
-      <div className="flex flex-wrap">
-        <DateInput
-          dates={dates}
-          onAddDateInput={() =>
-            setDates([...dates, { start: new Date(), end: new Date(), startHour: '', endHour: '' }])
-          }
-        />
-      </div>
+      <DateInput register={register} />
 
-      <div>
+      <div className="col-span-2 md:col-span-1">
         <label className="col-span-2 md:col-span-1 block mb-2 text-xs font-semibold  text-slate-400 uppercase">
           Competencia asociada
         </label>
@@ -99,7 +92,7 @@ const WorkshopForm = () => {
         </select>
       </div>
 
-      <div>
+      {/* <div>
         <label className="block mb-2 text-xs m-l-1 font-semibold  text-slate-400 uppercase">
           fecha
         </label>
@@ -118,9 +111,9 @@ const WorkshopForm = () => {
           hora de cierre
         </label>
         <input {...register('endHour')} type={'time'} id={'Hora de cierre'} required={true} />
-      </div>
+      </div> */}
 
-      <div>
+      <div className="col-span-2 md:col-span-1">
         <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">
           facilitador
         </label>
@@ -140,13 +133,13 @@ const WorkshopForm = () => {
           )}
         </select>
       </div>
-      <div>
+      <div className="col-span-2 md:col-span-1">
         <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">
           cupos disponibles
         </label>
         <input {...register('spots')} type={'number'} id="first_name" required min={0} max={300} />
       </div>
-      <div>
+      <div className="col-span-2 md:col-span-1">
         <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">
           modalidad
         </label>
@@ -160,7 +153,7 @@ const WorkshopForm = () => {
           })}
         </select>
       </div>
-      <div>
+      <div className="col-span-2 md:col-span-1">
         <label className="block mb-2 text-xs font-semibold text-slate-400 uppercase">
           platafomra/lugar
         </label>
