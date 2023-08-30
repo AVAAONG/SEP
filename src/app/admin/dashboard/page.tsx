@@ -24,7 +24,7 @@ const page = async () => {
           );
         })}
       </div>
-      <div className="h-full max-h-[680px] overflow-x-clip w-full bg-slate-900 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 border-2 border-green-950 p-2">
+      <div className="h-full max-h-[680px] overflow-x-clip w-full  rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 border-2 border-green-700 dark:border-green-950 p-2">
         <Calendar events={events.flat()} />
       </div>
     </div>
