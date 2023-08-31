@@ -1,18 +1,22 @@
+import { nanoid } from 'nanoid';
 import React, { useState } from 'react';
 import { UseFormRegister } from 'react-hook-form';
 type Props = {
   register: UseFormRegister<any>;
 };
 
+
+
+
 const DateInput: React.FC<Props> = ({ register }) => {
-  const [inputs, setInputs] = useState([{ id: 0, date: '', startHour: '', endHour: '' }]);
+  const [inputs, setInputs] = useState([{ id: nanoid(), date: '', startHour: '', endHour: '' }]);
 
   const addInput = () => {
-    const newId = inputs.length;
+    const newId = nanoid()
     setInputs([...inputs, { id: newId, date: '', startHour: '', endHour: '' }]);
   };
 
-  const deleteInput = (id: number) => {
+  const deleteInput = (id: string) => {
     const newInputs = inputs.filter((input) => input.id !== id);
     setInputs(newInputs);
   };
@@ -28,7 +32,7 @@ const DateInput: React.FC<Props> = ({ register }) => {
               <button
                 type="button"
                 onClick={isLastInput ? addInput : () => deleteInput(id)}
-                className={`inline h-6 w-6 rounded-full text-base font-bold text-white absolute ${isLastInput ? 'bg-green-700 translate-x-64 translate-y-2' : 'bg-red-700 translate-x-56 translate-y-2'
+                className={`inline h-6 w-6 rounded-full text-base font-bold translate-x-64 translate-y-2  text-white absolute ${isLastInput ? 'bg-green-200 hover:bg-green-700 ' : 'bg-red-200 hover:bg-red-700'
                   }`}
               >
                 {isLastInput ? '+' : '-'}
