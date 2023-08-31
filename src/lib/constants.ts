@@ -58,6 +58,7 @@ export const PROGRAM_COMPONENTS = [
 ];
 
 export const MODALITY = [
+  { option: '', value: 'NONE' },
   { option: 'presencial', value: 'IN_PERSON' },
   { option: 'virtual', value: 'ONLINE' },
   { option: 'hibrido', value: 'HYBRID' },

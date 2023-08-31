@@ -1,11 +1,12 @@
-import { MODALITY, PLATFORMS, PROGRAM_COMPONENTS, WORKSHOP_YEAR } from '@/lib/constants';
+import { MODALITY, PROGRAM_COMPONENTS, WORKSHOP_YEAR } from '@/lib/constants';
 import { Platform } from '@/types/General';
 import { Workshop as FormTypeWorkshop } from '@/types/Workshop';
 import { WorkshopSpeaker } from '@prisma/client';
-import { BaseSyntheticEvent, useState } from 'react';
+import { BaseSyntheticEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import useSWR, { Fetcher } from 'swr';
 import DateInput from '../DateInput';
+import PlatformInput from '../PlatformInput';
 
 /**
  * @description Normalizes the string inputs to be used as keys in the database
@@ -18,15 +19,11 @@ const normalizeStringInputs = (data: string) => {
 };
 
 const WorkshopForm = () => {
-  const [dates, setDates] = useState([
-    {
-      start: new Date(),
-      end: new Date(),
-      startHour: '',
-      endHour: '',
-    },
-  ]);
-  const { register, handleSubmit, reset } = useForm<FormTypeWorkshop>();
+  const { register, handleSubmit, reset, watch } = useForm<FormTypeWorkshop>();
+
+  const modality = watch('modality');
+  console.log('la modalidad es: ', modality);
+
   const fetcher: Fetcher<WorkshopSpeaker[] | {}[], string> = (...args) =>
     fetch([...args].join('')).then((res) => res.json());
 
@@ -92,9 +89,7 @@ const WorkshopForm = () => {
         </select>
       </div>
       <div className="col-span-2 md:col-span-1">
-        <label className="block mb-2 text-xs font-semibold   uppercase">
-          facilitador
-        </label>
+        <label className="block mb-2 text-xs font-semibold   uppercase">facilitador</label>
         <select {...register('speaker')} id="Facilitador" required={true}>
           {isLoading || data.length < 1 ? (
             <option>Cargando facilitadores ...</option>
@@ -112,15 +107,11 @@ const WorkshopForm = () => {
         </select>
       </div>
       <div className="col-span-2 md:col-span-1">
-        <label className="block mb-2 text-xs font-semibold   uppercase">
-          cupos disponibles
-        </label>
+        <label className="block mb-2 text-xs font-semibold   uppercase">cupos disponibles</label>
         <input {...register('spots')} type={'number'} id="first_name" required min={0} max={300} />
       </div>
       <div className="col-span-2 md:col-span-1">
-        <label className="block mb-2 text-xs font-semibold   uppercase">
-          modalidad
-        </label>
+        <label className="block mb-2 text-xs font-semibold uppercase">modalidad</label>
         <select {...register('modality')} id="Modalidad" required={true} className="capitalize">
           {MODALITY.map((option, index) => {
             return (
@@ -131,20 +122,9 @@ const WorkshopForm = () => {
           })}
         </select>
       </div>
+
       <div className="col-span-2 md:col-span-1">
-        <label className="block mb-2 text-xs font-semibold  uppercase">
-          platafomra/lugar
-        </label>
-        <input list="allowedSelection" {...register('platform')} id={'Platafomra/Lugar'}></input>
-        <datalist id="allowedSelection">
-          {PLATFORMS.map((option) => {
-            return (
-              <option className="capitalize" key={option}>
-                {option}
-              </option>
-            );
-          })}
-        </datalist>
+        <PlatformInput modality={modality} registerFunction={register} />
       </div>
       <div className="col-span-2 h-fit flex flex-col">
         <p className="block mb-2 text-xs font-semibold   uppercase">
