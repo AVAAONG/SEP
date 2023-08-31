@@ -1,12 +1,10 @@
 import { nanoid } from 'nanoid';
 import React, { useState } from 'react';
 import { UseFormRegister } from 'react-hook-form';
+
 type Props = {
   register: UseFormRegister<any>;
 };
-
-
-
 
 const DateInput: React.FC<Props> = ({ register }) => {
   const [inputs, setInputs] = useState([{ id: nanoid(), date: '', startHour: '', endHour: '' }]);
@@ -37,22 +35,22 @@ const DateInput: React.FC<Props> = ({ register }) => {
               >
                 {isLastInput ? '+' : '-'}
               </button>
-              <label className="block mb-2 text-xs m-l-1 font-semibold text-slate-400 uppercase ">
+              <label className="block mb-2 text-xs m-l-1 font-semibold uppercase ">
                 Fecha {index + 1}
               </label>
-              <input type="date" {...register(`date.${id}` as const)} defaultValue={date} />
+              <input type="date" {...register(`date.${id}` as const)} id={'Fecha'} defaultValue={date} />
             </div >
             <div className="col-span-2 md:col-span-1">
-              <label className="block mb-2 text-xs m-l-1 font-semibold text-slate-400 uppercase ">
+              <label className="block mb-2 text-xs m-l-1 font-semibold uppercase ">
                 Hora de inicio {index + 1}
               </label>
-              <input type="time" {...register(`startHour.${id}` as const)} defaultValue={startHour} />
+              <input type="time" {...register(`startHour.${id}` as const)} defaultValue={startHour} id={'Hora de inicio'} />
             </div>
             <div className="col-span-2 md:col-span-1">
-              <label className="block mb-2 text-xs m-l-1 font-semibold text-slate-400 uppercase ">
+              <label className="block mb-2 text-xs m-l-1 font-semibold uppercase ">
                 Hora de cierre {index + 1}
               </label>
-              <input type="time" {...register(`endHour.${id}` as const)} defaultValue={endHour} />
+              <input type="time" {...register(`endHour.${id}` as const)} defaultValue={endHour} id={'Hora de cierre'} />
             </div>
           </>
         );

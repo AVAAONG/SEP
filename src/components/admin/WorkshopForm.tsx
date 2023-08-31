@@ -57,10 +57,10 @@ const WorkshopForm = () => {
   return (
     <form
       onSubmit={handleSubmit(async (data, event) => await scheduleWorkshop(data, event!))}
-      className="grid gap-6 grid-cols-2 md:grid-rows-2 caret-green-500 text-slate-300 w-full"
+      className="grid gap-6 grid-cols-2 md:grid-rows-2 caret-green-500 text-slate-800 dark:text-slate-400 w-full"
     >
       <div className="col-span-2">
-        <label className="block mb-2 text-xs m-l-1 font-semibold text-slate-400 uppercase ">
+        <label className="block mb-2 text-xs m-l-1 font-semibold  uppercase ">
           titulo de la actividad formativa
         </label>
         <input
@@ -73,7 +73,7 @@ const WorkshopForm = () => {
       <DateInput register={register} />
 
       <div className="col-span-2 md:col-span-1">
-        <label className="col-span-2 md:col-span-1 block mb-2 text-xs font-semibold  text-slate-400 uppercase">
+        <label className="col-span-2 md:col-span-1 block mb-2 text-xs font-semibold   uppercase">
           Competencia asociada
         </label>
         <select
@@ -91,30 +91,8 @@ const WorkshopForm = () => {
           })}
         </select>
       </div>
-
-      {/* <div>
-        <label className="block mb-2 text-xs m-l-1 font-semibold  text-slate-400 uppercase">
-          fecha
-        </label>
-        <input {...register('date')} type={'date'} id={'Fecha'} required={true} />
-      </div>
-
-      <div>
-        <label className="block mb-2 text-xs m-l-1 font-semibold  text-slate-400 uppercase">
-          hora de inicio
-        </label>
-        <input {...register('startHour')} type={'time'} id={'Hora de inicio'} required={true} />
-      </div>
-
-      <div>
-        <label className="block mb-2 text-xs m-l-1 font-semibold  text-slate-400 uppercase">
-          hora de cierre
-        </label>
-        <input {...register('endHour')} type={'time'} id={'Hora de cierre'} required={true} />
-      </div> */}
-
       <div className="col-span-2 md:col-span-1">
-        <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">
+        <label className="block mb-2 text-xs font-semibold   uppercase">
           facilitador
         </label>
         <select {...register('speaker')} id="Facilitador" required={true}>
@@ -134,13 +112,13 @@ const WorkshopForm = () => {
         </select>
       </div>
       <div className="col-span-2 md:col-span-1">
-        <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">
+        <label className="block mb-2 text-xs font-semibold   uppercase">
           cupos disponibles
         </label>
         <input {...register('spots')} type={'number'} id="first_name" required min={0} max={300} />
       </div>
       <div className="col-span-2 md:col-span-1">
-        <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">
+        <label className="block mb-2 text-xs font-semibold   uppercase">
           modalidad
         </label>
         <select {...register('modality')} id="Modalidad" required={true} className="capitalize">
@@ -154,7 +132,7 @@ const WorkshopForm = () => {
         </select>
       </div>
       <div className="col-span-2 md:col-span-1">
-        <label className="block mb-2 text-xs font-semibold text-slate-400 uppercase">
+        <label className="block mb-2 text-xs font-semibold  uppercase">
           platafomra/lugar
         </label>
         <input list="allowedSelection" {...register('platform')} id={'Platafomra/Lugar'}></input>
@@ -169,7 +147,7 @@ const WorkshopForm = () => {
         </datalist>
       </div>
       <div className="col-span-2 h-fit flex flex-col">
-        <p className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">
+        <p className="block mb-2 text-xs font-semibold   uppercase">
           año de la actividad formativa
         </p>
         <div className="flex">
@@ -183,7 +161,7 @@ const WorkshopForm = () => {
                   id="year"
                   className="w-4 h-4 bg-emerald-900  accent-green-500 text-emerald-600 uppercase border-gray-300 focus:ring-0 "
                 />
-                <label htmlFor="year" className="ml-2 font-semibold text-xs ">
+                <label htmlFor="year" className="ml-2 font-semibold text-xs">
                   {input}
                 </label>
               </div>
@@ -192,7 +170,7 @@ const WorkshopForm = () => {
         </div>
       </div>
       <div className="col-span-2 h-fit">
-        <label className="block mb-2 text-xs m-l-1 font-semibold max-h-10 text-slate-400 uppercase">
+        <label className="block mb-2 text-xs m-l-1 font-semibold max-h-10  uppercase">
           descripción
         </label>
         <textarea {...register('description')} />
