@@ -11,7 +11,7 @@ const Navbar = () => {
     isOpen ? setSidebar(false) : setSidebar(true);
   };
   return (
-    <nav className="block h-12 w-full top-0 left-0 mb-4">
+    <nav className="block h-12 w-full left-0 right-0 top-0 mb-4">
       <div className="flex justify-between gap-4">
         <button
           onClick={setUpSidebar}
@@ -37,7 +37,7 @@ const Navbar = () => {
           <div className="inline-flex items-center p-2 text-sm  rounded-lg  focus:outline-none focus:ring-2 bg-green-600 dark:bg-green-950 text-emerlad-400 hover:bg-emerald-600 dark:hover:bg-emerald-950 focus:ring-emerald-600">
             <ThemeToggleButton />
           </div>
-          <div className="flex items-center justify-start">
+          <div className="flex items-center justify-start ">
             <ProfileDropdown name={'Erika Campos'} email={'Erika Campos'} image={null} />
           </div>
         </div>
