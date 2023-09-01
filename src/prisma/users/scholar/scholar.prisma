@@ -10,13 +10,13 @@ import { InternalProjects } from "..\project\project"
 import { volunteerAttendance } from "..\..\activities\volunteer\volunteer"
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
-    emailVerified DateTime?
+    id                             String                @id @default(cuid())
+    name                           String?
+    email                          String?               @unique
+    image                          String?
+    accounts                       Account[]
+    sessions                       Session[]
+    emailVerified                  DateTime?
     region                         Region                @default(CARACAS)
     userId                         String?               @unique
     first_names                    String
@@ -72,7 +72,6 @@ model User {
 
     @@index([internal_projects_id])
 }
-
 
 model Account {
     id                String  @id @default(cuid())

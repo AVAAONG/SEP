@@ -3,12 +3,18 @@
 
 enum Modality {
     IN_PERSON
-    VIRTUAL
+    ONLINE
     HYBRID
 }
 
+// SCHEDULED - When the activity is scheduled but hasent been sended.
+// SEND - When the activity has been sended to the scholars.
+// IN_PROGRESS - When the activity is in progress.
+// DONE - When the activity is done.
+// SUSPENDED - When the activity is suspended.
 enum ActivityStatus {
     SCHEDULED
+    SEND
     IN_PROGRESS
     DONE
     SUSPENDED

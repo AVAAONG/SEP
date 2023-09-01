@@ -5,11 +5,12 @@
 import { AvaaYear } from "..\..\types"
 import { ActivityStatus, Modality } from "..\type-activities"
 import { ScholarAttendance } from "..\type-activities"
-import { Scholar } from "..\..\users\scholar\scholar"
 import { Skill, WorkshopYear} from "types-workshop"
 import { Gender } from "..\type-activities"
 import { User } from "..\..\schema"
+import { User } from "..\..\users\scholar\scholar"
 
+// This model is used to store the data of the workshop
 model Workshop {
     id                 String               @id @default(nanoid())
     title              String
@@ -21,16 +22,17 @@ model Workshop {
     end_dates          DateTime[]
     year               WorkshopYear[]
     modality           Modality
-    skill              Skill
+    asociated_skill    Skill
     speaker            WorkshopSpeaker[]
     temp_data          WorkshopTempData?
     activity_status    ActivityStatus
     scholar_attendance WorkshopAttendance[]
     rating             Float?
 
-    @@index([title, modality, activity_status, skill])
+    @@index([title, modality, activity_status, asociated_skill])
 }
 
+// This model is used to store the data that is not necesary to be stored in the database, but is necesary to be stored temporaly in the server
 model WorkshopTempData {
     id               String   @id @default(nanoid())
     workshop         Workshop @relation(fields: [workshop_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -41,11 +43,12 @@ model WorkshopTempData {
     meeting_password String?
 }
 
+// This model is used to store the data of the speaker of the workshop
 model WorkshopSpeaker {
     id             String     @id @default(nanoid())
     first_names    String
     last_names     String
-    email          String?  
+    email          String?
     birthdate      DateTime?
     years_of_exp   Int?
     job_title      String?
@@ -64,14 +67,16 @@ model WorkshopSpeaker {
     workshops      Workshop[]
 }
 
+//  Intermediate table to store the attendance of the scholars to the workshops
 model WorkshopAttendance {
-    id            String            @id @default(nanoid())
-    scholar       User           @relation(fields: [scholar_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    scholar_id    String
-    workshop_id   String            @unique
-    workshop      Workshop          @relation(fields: [workshop_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    attendance    ScholarAttendance
-    justification String?
+    id                       String            @id @default(nanoid())
+    scholar                  User              @relation(fields: [scholar_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    scholar_id               String
+    workshop_id              String            @unique
+    workshop                 Workshop          @relation(fields: [workshop_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    attendance               ScholarAttendance
+    justification            String?
+    satisfaction_form_filled Boolean?
 
     @@index([scholar_id])
     @@index([workshop_id])
