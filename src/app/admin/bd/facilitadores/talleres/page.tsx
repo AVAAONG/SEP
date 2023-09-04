@@ -1,9 +1,16 @@
+import {
+  FacebookIcon,
+  InstagramIcon,
+  LinkedinIcon,
+  TwitterIcon,
+} from '@/assets/svgs/SocialNetworks';
 import Table from '@/components/table/Table';
 import workshopSpeakerColumns from '@/components/table/columns/workshopSpeakerColumns';
 import { getWorkshopSpeakersWithParams } from '@/lib/db/speaker';
+import { Prisma } from '@prisma/client';
 
 const page = async () => {
-  const toSelect = {
+  const toSelect: Prisma.WorkshopSpeakerSelect = {
     id: true,
     first_names: true,
     last_names: true,
@@ -11,15 +18,47 @@ const page = async () => {
     phone_number: true,
     gender: true,
     job_company: true,
+    curriculum: true,
+    image: true,
+    twitter_user: true,
+    facebook_user: true,
+    instagram_user: true,
+    linkedin_user: true,
   };
   const workshopSpeakers = await getWorkshopSpeakersWithParams(toSelect);
+  const workshopSpeakersWithSocialNetworks = workshopSpeakers?.map((workshopSpeaker) => {
+    const { twitter_user, facebook_user, instagram_user, linkedin_user } = workshopSpeaker;
+    const socialNetworks = [
+      {
+        name: 'Twitter',
+        url: `https://twitter.com/${twitter_user}`,
+        icon: <TwitterIcon />,
+      },
+      {
+        name: 'Facebook',
+        url: `https://www.facebook.com/${facebook_user}`,
+        icon: <FacebookIcon />,
+      },
+      {
+        name: 'Instagram',
+        url: `https://www.instagram.com/${instagram_user}`,
+        icon: <InstagramIcon />,
+      },
+      {
+        name: 'Linkedin',
+        url: `https://www.linkedin.com/in/${linkedin_user}`,
+        icon: <LinkedinIcon />,
+      },
+    ];
+    return { ...workshopSpeaker, socialNetworks };
+  });
   return (
     <div className="flex flex-col items-center">
-      {/* <h1 className="font-semibold text-3xl text-green-500 mb-6 text-center">
-        Listado de talleres
-      </h1> */}
       <div className="w-full h-full">
-        <Table tableColumns={workshopSpeakerColumns} tableData={workshopSpeakers} />
+        <Table
+          tableColumns={workshopSpeakerColumns}
+          tableData={workshopSpeakersWithSocialNetworks}
+        />
       </div>
     </div>
   );
