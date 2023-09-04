@@ -14,12 +14,18 @@ import TableHeader from './TableHeader';
 import ExpandTableButton from './headerComponents/ExpandTableButton';
 import ExportButton from './headerComponents/ExportButton';
 
+type tableHeaderForSearchObject = {
+  option: string;
+  label: string;
+};
+
 interface TableProps {
   tableData: readonly object[];
   tableColumns: Column<object>[];
+  tableHeadersForSearch: tableHeaderForSearchObject[];
 }
 
-const Table: React.FC<TableProps> = ({ tableData, tableColumns }) => {
+const Table: React.FC<TableProps> = ({ tableData, tableColumns, tableHeadersForSearch }) => {
   const data = useMemo(() => tableData, [tableData]);
   const columns = useMemo(() => tableColumns, [tableColumns]);
   const [isExpanded, toggleExpanded] = useState(false);
@@ -53,10 +59,7 @@ const Table: React.FC<TableProps> = ({ tableData, tableColumns }) => {
       }  bg-white shadow-md shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full h-max min-h-full`}
     >
       <TableHeader
-        optionsForFilter={[
-          { option: 'title', label: 'Titulo' },
-          { option: 'first_names', label: 'Facilitador' },
-        ]}
+        optionsForFilter={tableHeadersForSearch}
         setFilter={setFilter}
         setGlobalFilter={setGlobalFilter}
         filterValue={globalFilter}

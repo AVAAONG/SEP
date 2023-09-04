@@ -58,6 +58,28 @@ const page = async () => {
         <Table
           tableColumns={workshopSpeakerColumns}
           tableData={workshopSpeakersWithSocialNetworks}
+          tableHeadersForSearch={[
+            {
+              option: 'first_names',
+              label: 'Nombre',
+            },
+            {
+              option: 'last_names',
+              label: 'Apellidos',
+            },
+            {
+              option: 'email',
+              label: 'Correo',
+            },
+            {
+              option: 'phone_number',
+              label: 'Telefono',
+            },
+            {
+              option: 'job_company',
+              label: 'Organización',
+            },
+          ]}
         />
       </div>
     </div>
