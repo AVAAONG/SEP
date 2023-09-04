@@ -69,12 +69,9 @@ export const getSpeakerName = async (id: string) => {
   return speaker;
 };
 
-export const getSpeaker = async (speakerId: string) => {
+export const getWorkshopSpeaker = async (speakerId: string) => {
   const speaker = await prisma.workshopSpeaker.findUnique({
     where: { id: speakerId },
-    select: {
-      workshops: {},
-    },
   });
   return speaker;
 };
