@@ -118,8 +118,8 @@ export const getWorkshopsByScholar2 = async (userId: string) => {
 };
 
 export const createWorkshopSpeaker = async (data: WorkshopSpeaker) => {
-  console.log('\x1b[36m%s\x1b[0m', `Creating speaker ${data.first_names} ${data.last_names}`);
   try {
+    console.log('\x1b[36m%s\x1b[0m', `Creating speaker ${data.first_names} ${data.last_names}`);
     await prisma.workshopSpeaker.create({
       data,
     });

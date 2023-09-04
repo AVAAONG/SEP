@@ -1,4 +1,5 @@
-import ChatTable from '@/components/table/Table2';
+import Table from '@/components/table/Table';
+import workshopSpeakerColumns from '@/components/table/columns/workshopSpeakerColumns';
 import { getWorkshopSpeakersWithParams } from '@/lib/db/speaker';
 
 const page = async () => {
@@ -18,7 +19,7 @@ const page = async () => {
         Listado de talleres
       </h1> */}
       <div className="w-full h-full">
-        <ChatTable tableData={workshopSpeakers} />/
+        <Table tableColumns={workshopSpeakerColumns} tableData={workshopSpeakers} />
       </div>
     </div>
   );

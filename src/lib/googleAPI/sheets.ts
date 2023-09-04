@@ -135,6 +135,12 @@ const createSpreadseetUpdateObject = async (
   return updateObject;
 };
 
+/**
+ * Retrieves values from a Google Sheets spreadsheet.
+ * @param spreadsheetId - The ID of the spreadsheet to retrieve values from.
+ * @param range - The range of cells to retrieve values from.
+ * @returns A promise that resolves to an array of arrays, where each inner array represents a row of values.
+ */
 export const getSpreadsheetValues = async (spreadsheetId: string, range: string) => {
   try {
     const response = await Sheets.spreadsheets.values.get({
