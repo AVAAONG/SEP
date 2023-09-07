@@ -1,0 +1,20 @@
+model ScholarCVAInformation {
+    id                     String             @id @default(nanoid())
+    is_in_cva              Boolean            @default(false)
+    not_started_cva_reason String?            @db.Text
+    cva_location           String?
+    cva_modality           String?
+    certificate            String?
+    modules                ScholarCvaModule[]
+}
+
+model ScholarCvaModule {
+    id                      String                 @id @default(nanoid())
+    module                  Int
+    qualification           Float
+    record                  String?
+    ScholarCVAInformation   ScholarCVAInformation? @relation(fields: [scholarCVAInformationId], references: [id])
+    scholarCVAInformationId String?
+
+    @@unique([scholarCVAInformationId, module])
+}

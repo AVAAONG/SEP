@@ -1,0 +1,7 @@
+import { ScholarProgramInformation } from "..\users\scholar\scholar"
+
+model Chapter {
+    id                String                      @id @default(nanoid())
+    chapterName       String
+    asociatedScholars ScholarProgramInformation[]
+}

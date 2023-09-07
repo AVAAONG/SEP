@@ -8,7 +8,7 @@ import { ScholarAttendance } from "..\type-activities"
 import { Skill, WorkshopYear} from "types-workshop"
 import { Gender } from "..\type-activities"
 import { User } from "..\..\schema"
-import { User } from "..\..\users\scholar\scholar"
+import { ScholarProgramInformation } from "..\..\users\scholar\scholar"
 
 // This model is used to store the data of the workshop
 model Workshop {
@@ -69,11 +69,11 @@ model WorkshopSpeaker {
 
 //  Intermediate table to store the attendance of the scholars to the workshops
 model WorkshopAttendance {
-    id                       String            @id @default(nanoid())
-    scholar                  User              @relation(fields: [scholar_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    id                       String                    @id @default(nanoid())
+    scholar                  ScholarProgramInformation @relation(fields: [scholar_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
     scholar_id               String
-    workshop_id              String            @unique
-    workshop                 Workshop          @relation(fields: [workshop_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    workshop_id              String                    @unique
+    workshop                 Workshop                  @relation(fields: [workshop_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
     attendance               ScholarAttendance
     justification            String?
     satisfaction_form_filled Boolean?

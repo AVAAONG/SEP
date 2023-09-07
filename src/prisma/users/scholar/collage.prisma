@@ -1,0 +1,34 @@
+import { Modality } from "..\..\schema"
+
+enum EvaluationScale {
+    ONE_TO_TEN
+    ONE_TO_FIVE
+    ONE_TO_HUNDRED
+}
+
+enum StudyRegime {
+    SEMESTER
+    QUARTER
+    ANNUAL
+}
+
+model ScholarCollageInformation {
+    id                      String                                       @id @default(nanoid())
+    academic_load_completed Boolean?
+    collage                 String?
+    carrer                  String?
+    study_area              String?
+    evaluation_scale        EvaluationScale
+    study_regime            StudyRegime
+    qualification           ScholarCollageAverageQualificationByPeriod[]
+}
+
+model ScholarCollageAverageQualificationByPeriod {
+    id                          String                     @id @default(nanoid())
+    current_academic_period     Int
+    grade                       Float
+    class_modality              Modality
+    record                      String?
+    ScholarCollageInformation   ScholarCollageInformation? @relation(fields: [scholarCollageInformationId], references: [id])
+    scholarCollageInformationId String?
+}

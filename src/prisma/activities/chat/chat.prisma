@@ -8,7 +8,7 @@ import { ScholarAttendance } from "..\type-activities"
 import { User } from "..\..\users\scholar\scholar"
 import { Chat } from "..\..\schema"
 import { Gender } from "..\type-activities"
-import { User } from "..\..\users\scholar\scholar"
+import { ScholarProgramInformation } from "..\..\users\scholar\scholar"
 
 model Chat {
     id                 String           @id @default(nanoid())
@@ -31,15 +31,14 @@ model Chat {
 }
 
 model ChatAttendance {
-    id            String            @id @default(nanoid())
-    scholar       User              @relation(fields: [scholar_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    scholar_id    String
-    chat          Chat              @relation(fields: [chat_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    id            String                    @id @default(nanoid())
+    chat          Chat                      @relation(fields: [chat_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
     chat_id       String
     attendance    ScholarAttendance
     justification String?
+    Scholar       ScholarProgramInformation @relation(fields: [scholar_id], references: [id])
+    scholar_id    String
 
-    @@index([scholar_id])
     @@index([chat_id])
 }
 
@@ -55,23 +54,9 @@ model ChatsTempData {
 }
 
 model ChatSpeaker {
-    id             String    @id @default(nanoid())
-    first_names    String
-    last_names     String
-    gender         Gender?
-    email          String?   @unique
-    birthdate      DateTime?
-    image          String?
-    description    String?
-    instagram_user String?
-    twitter_user   String?
-    linkedin_user  String?
-    facebook_user  String?
-    phone_number   String?
-    chat           Chat[]
-    is_scholar     Boolean   @default(false)
-    scholar        User?     @relation(fields: [scholar_id], references: [id])
-    scholar_id     String?
-
-    @@index([scholar_id])
+    id         String @id @default(nanoid())
+    chat       Chat   @relation(fields: [chat_id], references: [id])
+    chat_id    String @unique
+    speaker    User   @relation(fields: [speaker_id], references: [id])
+    speaker_id String @unique
 }
