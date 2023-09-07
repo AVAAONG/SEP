@@ -35,7 +35,7 @@ model Workshop {
 // This model is used to store the data that is not necesary to be stored in the database, but is necesary to be stored temporaly in the server
 model WorkshopTempData {
     id               String   @id @default(nanoid())
-    workshop         Workshop @relation(fields: [workshop_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    workshop         Workshop @relation(fields: [workshop_id], references: [id])
     workshop_id      String   @unique
     form_link        String
     meeting_link     String?
@@ -70,10 +70,10 @@ model WorkshopSpeaker {
 //  Intermediate table to store the attendance of the scholars to the workshops
 model WorkshopAttendance {
     id                       String                    @id @default(nanoid())
-    scholar                  ScholarProgramInformation @relation(fields: [scholar_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    scholar                  ScholarProgramInformation @relation(fields: [scholar_id], references: [id])
     scholar_id               String
     workshop_id              String                    @unique
-    workshop                 Workshop                  @relation(fields: [workshop_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    workshop                 Workshop                  @relation(fields: [workshop_id], references: [id])
     attendance               ScholarAttendance
     justification            String?
     satisfaction_form_filled Boolean?

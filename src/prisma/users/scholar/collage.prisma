@@ -1,4 +1,5 @@
 import { Modality } from "..\..\schema"
+import { User } from "scholar"
 
 enum EvaluationScale {
     ONE_TO_TEN
@@ -12,15 +13,27 @@ enum StudyRegime {
     ANNUAL
 }
 
+enum StudyArea {
+    BASIC_SCIENCES //Ciencias Básicas
+    HEALTH_SCIENCES // Ciencias de la Salud
+    STEM //STEM (Ciencias, Tecnología,Ingenierías, Matemáticas)=
+    SOCIAL_ECONOMIC_SCIENCES //Ciencias Sociales
+    HUMANITIES_EDUCATION //Humanidades y Educación
+    ARTS
+    ARCHITECTURE_URBANISM //Arquitectura y Urbanismo
+    OTHER
+}
+
 model ScholarCollageInformation {
     id                      String                                       @id @default(nanoid())
     academic_load_completed Boolean?
     collage                 String?
     carrer                  String?
-    study_area              String?
+    study_area              StudyArea?
     evaluation_scale        EvaluationScale
     study_regime            StudyRegime
     qualification           ScholarCollageAverageQualificationByPeriod[]
+    scholar                 User[]
 }
 
 model ScholarCollageAverageQualificationByPeriod {
@@ -31,4 +44,6 @@ model ScholarCollageAverageQualificationByPeriod {
     record                      String?
     ScholarCollageInformation   ScholarCollageInformation? @relation(fields: [scholarCollageInformationId], references: [id])
     scholarCollageInformationId String?
+
+    @@index([scholarCollageInformationId])
 }

@@ -6,9 +6,8 @@ import { ActivityStatus, Modality } from "..\type-activities"
 import { Level } from "types-chat"
 import { ScholarAttendance } from "..\type-activities"
 import { User } from "..\..\users\scholar\scholar"
-import { Chat } from "..\..\schema"
 import { Gender } from "..\type-activities"
-import { ScholarProgramInformation } from "..\..\users\scholar\scholar"
+import { ScholarProgramInformation, ScholarProgramInformation, User, User } from "..\..\users\scholar\scholar"
 
 model Chat {
     id                 String           @id @default(nanoid())
@@ -32,14 +31,16 @@ model Chat {
 
 model ChatAttendance {
     id            String                    @id @default(nanoid())
-    chat          Chat                      @relation(fields: [chat_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    chat          Chat                      @relation(fields: [chat_id], references: [id])
     chat_id       String
     attendance    ScholarAttendance
     justification String?
     Scholar       ScholarProgramInformation @relation(fields: [scholar_id], references: [id])
     scholar_id    String
 
+    @@unique([chat_id, scholar_id])
     @@index([chat_id])
+    @@index([scholar_id])
 }
 
 model ChatsTempData {
@@ -54,9 +55,10 @@ model ChatsTempData {
 }
 
 model ChatSpeaker {
-    id         String @id @default(nanoid())
-    chat       Chat   @relation(fields: [chat_id], references: [id])
-    chat_id    String @unique
-    speaker    User   @relation(fields: [speaker_id], references: [id])
-    speaker_id String @unique
+    id                        String                      @id @default(nanoid())
+    chat                      Chat                        @relation(fields: [chat_id], references: [id])
+    chat_id                   String                      @unique
+    speaker                   User                        @relation(fields: [speaker_id], references: [id], onDelete: Cascade)
+    speaker_id                String                      @unique
+    ScholarProgramInformation ScholarProgramInformation[]
 }

@@ -1,3 +1,5 @@
+import { User } from "scholar"
+
 model ScholarCVAInformation {
     id                     String             @id @default(nanoid())
     is_in_cva              Boolean            @default(false)
@@ -6,6 +8,7 @@ model ScholarCVAInformation {
     cva_modality           String?
     certificate            String?
     modules                ScholarCvaModule[]
+    scholar                User[]
 }
 
 model ScholarCvaModule {

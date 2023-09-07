@@ -5,52 +5,47 @@
 
 import { AdminRoles } from "roles-users"
 import { Region } from "scholar\types-scholar"
-import { ChatAttendance, WorkshopAttendance } from "..\schema"
 import { ScholarCanAssist, ScholarCanAssist, ScholarStatus } from "scholar\types-scholar"
-import { ChatSpeaker, volunteerAttendance } from "..\schema"
-import { InternalProjects } from "project\project"
-
 
 model AdminAccount {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
   user AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@index([userId])
-  
 }
 
 model AdminSession {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
+  id           String    @id @default(cuid())
+  sessionToken String    @unique
   userId       String
   expires      DateTime
-  user         AdminUser     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  @@index([userId])
+  user         AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
 }
 
 model AdminUser {
-  id            String    @id @default(cuid())
+  id            String         @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?        @unique
   emailVerified DateTime?
   image         String?
   accounts      AdminAccount[]
   sessions      AdminSession[]
-  lastLogin     DateTime? @default(now())
+  lastLogin     DateTime?      @default(now())
   role          AdminRoles
 }
 
