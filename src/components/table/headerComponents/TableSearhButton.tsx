@@ -56,10 +56,12 @@ const TableSearhButton = ({ optionsForFilter, setFilter, setGlobalFilter, filter
       <form className="flex">
         <button
           onClick={() => toggleDropdown(isDropdownOpen ? false : true)}
-          className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center border-l-2 shadow-sm ring-1 focus:outline-emerald-400 ring-white shadow-emerald-600 text-gray-900  bg-gray-100 rounded-r-lg  hover:bg-gray-200 dark:bg-slate-700 dark:hover:bg-slate-600 dark:focus:ring-gray-700 dark:border-slate-700 dark:ring-slate-900 dark:text-white"
+          className="flex-shrink-0 inline-flex  z-10 px-4  items-center text-sm font-medium text-center border-l border-green-600 text-gray-900  bg-gray-100 rounded-r-lg  hover:bg-gray-200 dark:bg-slate-700 dark:hover:bg-slate-600 dark:border-green-600  dark:text-white"
           type="button"
         >
-          Buscar por
+          <div className="flex flex-col text-sm">Buscar por
+            <span className="hidden text-xs sm:inline text-green-600">{optionsForFilter.find(({ option }) => option === selectedFilter)?.label}</span>
+          </div>
           <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
           </svg>
