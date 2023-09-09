@@ -5,7 +5,7 @@ import { WorkshopSpeaker } from '@prisma/client';
 import { BaseSyntheticEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import useSWR, { Fetcher } from 'swr';
-import DateInput from '../DateInput';
+import DateInput from '../commons/DateInput';
 import PlatformInput from '../PlatformInput';
 
 /**
