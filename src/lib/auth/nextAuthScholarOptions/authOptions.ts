@@ -3,8 +3,8 @@
  * @module lib/auth/nextAuthOptions/authOptions
  * @author Kevin Bravo (kevinbravo.me)
  */
+import { prisma } from '@/lib/db/utils/prisma';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { PrismaClient } from '@prisma/client';
 import type { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import Email from './EmailProvider';
@@ -15,7 +15,6 @@ import {
   googleUserProviderConfig,
 } from './authConfig';
 
-const prisma = new PrismaClient();
 const adapter = PrismaAdapter(prisma);
 
 /**

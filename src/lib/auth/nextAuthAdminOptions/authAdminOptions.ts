@@ -6,7 +6,7 @@
 import type { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 
-import { prisma } from '@/lib/db/prisma';
+import { prisma } from '@/lib/db/utils/prisma';
 import { PrismaAdapter } from 'next-auth-prisma-adapter';
 import { NEXT_SECRET, PAGES, googleAdminProviderConfig } from './authAdminConfig';
 
