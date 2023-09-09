@@ -1,12 +1,11 @@
 import { classNames, navigation } from '@/lib/scholar/utils';
-import { sidebarAtom } from '@/state/mainState';
+import { sidebarAtom } from '@/lib/state/mainState';
 import { Dialog, Transition } from '@headlessui/react';
-import { useAtom } from 'jotai';
-import { Fragment } from 'react';
 import {
   XMarkIcon,
-  ///@ts-ignore
 } from '@heroicons/react/24/outline';
+import { useAtom } from 'jotai';
+import { Fragment } from 'react';
 const TransitionC = () => {
   const [sidebarOpen, setSidebarOpen] = useAtom(sidebarAtom);
 

@@ -1,7 +1,7 @@
-import React from 'react';
-import { XIcon, EditIcon } from '@/assets/svgs';
-import shortUUID from 'short-uuid';
 import { Volunteer } from '@/types/Volunteer';
+import React from 'react';
+import shortUUID from 'short-uuid';
+import { EditIcon, XIcon } from '../../../../public/svgs/svgs';
 
 interface VolunteerListProps {
   volunteerData: Volunteer[];
@@ -53,9 +53,8 @@ const VolunteerList: React.FC<VolunteerListProps> = (props) => {
                   <p className="text-sm font-medium text-gray-900 truncate text-white">
                     {startDate === endDate
                       ? `${new Date(startDate).getDate()}/${new Date(startDate).getMonth() + 1}`
-                      : `Del ${new Date(startDate).getDate()}/${
-                          new Date(startDate).getMonth() + 1
-                        } al ${new Date(endDate).getDate()}/${new Date(endDate).getMonth() + 1}`}
+                      : `Del ${new Date(startDate).getDate()}/${new Date(startDate).getMonth() + 1
+                      } al ${new Date(endDate).getDate()}/${new Date(endDate).getMonth() + 1}`}
                   </p>
                   <p className="text-xs text-gray-500 truncate text-gray-400">
                     De {startHour} a {endHour}

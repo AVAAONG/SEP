@@ -1,5 +1,5 @@
 'use client';
-import { scholarSidebarAtom } from '@/state/mainState';
+import { scholarSidebarAtom } from '@/lib/state/mainState';
 import { useAtom } from 'jotai';
 import ThemeToggleButton from './NavigationBar/ThemeToggleButton';
 import ProfileDropdown from './ProfileDropdown';

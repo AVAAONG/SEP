@@ -1,4 +1,4 @@
-import { chatIcon, volunterIcon, workshopIcon } from '@/assets/svgs';
+import { chatIcon, volunterIcon, workshopIcon } from '../../../../public/svgs/svgs';
 
 export const SIDEBAR_ACTIVITIES_ACTIONS = [
   {

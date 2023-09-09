@@ -1,9 +1,9 @@
-import { chatIcon, volunterIcon, workshopIcon } from '@/assets/svgs';
 import Card from '@/components/admin/dashboard/Card';
 import Calendar from '@/components/calendar/Calendar';
 import ActivityList from '@/components/scholar/dashboard/ActivityList';
 import { BigCalendarEventType } from '@/types/Calendar';
 import { SUUID } from 'short-uuid';
+import { chatIcon, volunterIcon, workshopIcon } from '../../../../public/svgs/svgs';
 
 const examples = [
   {

@@ -1,5 +1,4 @@
 'use client';
-import { CheckIcon } from '@/assets/svgs';
 import WorkshopForm from '@/components/admin/WorkshopForm';
 import WorkshopsList from '@/components/admin/lists/WorkshopList';
 import { Workshop } from '@/types/Workshop';
@@ -7,6 +6,7 @@ import { BaseSyntheticEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import shortUUID from 'short-uuid';
 import useSWR from 'swr';
+import { CheckIcon } from '../../../../../public/svgs/svgs';
 
 interface WorkshopForm extends Workshop {
   subject?: string;

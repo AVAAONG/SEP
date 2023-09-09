@@ -1,7 +1,7 @@
 'use client';
 import ThemeToggleButton from '@/components/scholar/NavigationBar/ThemeToggleButton';
 import ProfileDropdown from '@/components/scholar/ProfileDropdown';
-import { sidebarAtom } from '@/state/mainState';
+import { sidebarAtom } from '@/lib/state/mainState';
 import { useAtom } from 'jotai';
 
 const Navbar = () => {

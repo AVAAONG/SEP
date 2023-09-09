@@ -1,7 +1,7 @@
 'use client';
-import { Star } from '@/assets/svgs';
 import { Workshop } from '@prisma/client';
 import { Column } from 'react-table';
+import { Star } from '../../../../public/svgs/svgs';
 
 //hora
 //scholarAttendance

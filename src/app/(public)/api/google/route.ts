@@ -1,5 +1,5 @@
-import { createChat, deleteAllChats } from '@/lib/db/chats';
 import { createScholar } from '@/lib/db/users';
+import { createChat, deleteAllChats } from '@/lib/db/utils/chats';
 import { setTokens } from '@/lib/googleAPI/auth';
 import { addHours, getFormatedDate } from '@/lib/googleAPI/calendar/utils';
 import { getSpreadsheetValues } from '@/lib/googleAPI/sheets';

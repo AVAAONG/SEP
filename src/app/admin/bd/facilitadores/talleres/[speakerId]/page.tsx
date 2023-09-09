@@ -1,17 +1,17 @@
 import defailProfilePic from '@/../public/defaultProfilePic.png';
-import { CurriculumIcon, EmailIcon, PhoneIcon, Star, chatIcon, workshopIcon } from '@/assets/svgs';
-import {
-  FacebookIcon,
-  InstagramIcon,
-  LinkedinIcon,
-  TwitterIcon,
-} from '@/assets/svgs/SocialNetworks';
 import NormalCard from '@/components/scholar/card/NormalCard';
 import Table from '@/components/table/Table';
 import speakerWorkshopsColumn from '@/components/table/columns/singleWorkshopSpeakerColumns';
 import { getWorkshopSpeaker } from '@/lib/db/speaker';
 import Image from 'next/image';
 import Link from 'next/link';
+import {
+  FacebookIcon,
+  InstagramIcon,
+  LinkedinIcon,
+  TwitterIcon,
+} from '../../../../../../../public/svgs/SocialNetworks';
+import { CurriculumIcon, EmailIcon, PhoneIcon, Star, chatIcon, workshopIcon } from '../../../../../../../public/svgs/svgs';
 
 const CARD_CONTENT = [
   {

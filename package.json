@@ -10,6 +10,9 @@
     "pnpm": ">=7.0.0",
     "npm": "please-use-pnpm"
   },
+  "prisma": {
+    "schema": "db/prisma/schema.prisma"
+  },
   "scripts": {
     "prepare": "husky install",
     "prettier": "prettier --write .",

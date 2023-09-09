@@ -1,5 +1,4 @@
-import { CheckIcon, XIcon } from '@/assets/svgs';
-import { useEffect } from 'react';
+import { CheckIcon, XIcon } from '../../../../public/svgs/svgs';
 
 interface LoadingModalProps {
   state: 'updating' | 'updated' | 'error' | 'none';

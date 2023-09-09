@@ -1,4 +1,3 @@
-import { chatIcon, userIcon, volunterIcon, workshopIcon } from '@/assets/svgs';
 import authAdminOptions from '@/lib/auth/nextAuthAdminOptions/authAdminOptions';
 import { CALENDAR_IDS } from '@/lib/constants';
 import { setTokens } from '@/lib/googleAPI/auth';
@@ -6,6 +5,7 @@ import { getCalendarEvents } from '@/lib/googleAPI/calendar/calendar';
 import { BigCalendarEventType } from '@/types/Calendar';
 import { calendar_v3 } from '@googleapis/calendar';
 import { getServerSession } from 'next-auth';
+import { chatIcon, userIcon, volunterIcon, workshopIcon } from '../../public/svgs/svgs';
 
 /**
  * @description Formats the event object to the format required by the BigCalendar component

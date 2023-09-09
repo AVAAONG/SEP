@@ -5,8 +5,8 @@
  * @see {@link https://nextjs.org/docs/app/api-reference/file-conventions/not-found} for more information about the Next.js custom 404 error page.
  */
 
-import { NotFoundImage } from '@/assets/svgs';
 import BackButton from '@/components/public/BackButton';
+import { NotFoundImage } from '../../public/svgs/svgs';
 
 /**
  * The NotFound component renders a custom 404 error page.

@@ -1,16 +1,16 @@
 'use client';
 import logo from '@/../public/proexcelencia-color.png';
+import { scholarSidebarAtom } from '@/lib/state/mainState';
+import { useAtom } from 'jotai';
+import Image from 'next/image';
+import Link from 'next/link';
 import {
   CalendarIcon,
   chatIcon,
   dashboardComponent,
   volunterIcon,
   workshopIcon,
-} from '@/assets/svgs';
-import { scholarSidebarAtom } from '@/state/mainState';
-import { useAtom } from 'jotai';
-import Image from 'next/image';
-import Link from 'next/link';
+} from '../../../public/svgs/svgs';
 import DropdownButton from './DropdownButton';
 
 const SCHOLAR_PREFIX = 'becario';

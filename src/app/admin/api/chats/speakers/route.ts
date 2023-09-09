@@ -1,4 +1,4 @@
-import { createChatSpeaker } from '@/lib/db/chats';
+import { createChatSpeaker } from '@/lib/db/utils/chats';
 import { setTokens } from '@/lib/googleAPI/auth';
 import { getSpreadsheetValues } from '@/lib/googleAPI/sheets';
 import { ChatSpeaker } from '@prisma/client';

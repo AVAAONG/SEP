@@ -1,10 +1,10 @@
 'use client';
 import defailProfilePic from '@/../public/defaultProfilePic.png';
-import { CurriculumIcon } from '@/assets/svgs';
 import { WorkshopSpeaker } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Cell, Column } from 'react-table';
+import { CurriculumIcon } from '../../../../public/svgs/svgs';
 
 const workshopSpeakerColumns: Column<WorkshopSpeaker>[] = [
   {

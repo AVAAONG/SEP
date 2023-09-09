@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { Star, chatIcon, workshopIcon } from '@/assets/svgs';
+import { Star, chatIcon, workshopIcon } from '../../../public/svgs/svgs';
 
 const CARD_CONTENT = [
   {
