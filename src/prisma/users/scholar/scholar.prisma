@@ -14,13 +14,13 @@ import { ChatSpeaker } from "..\..\activities\chat\chat"
 
 model User {
     id                     String                     @id @default(nanoid())
-    email                  String?                    @unique
     image                  String?
     accounts               Account[]
     sessions               Session[]
     emailVerified          DateTime?
     created_at             DateTime                   @default(now())
     updated_at             DateTime                   @updatedAt
+    email                  String?                    @unique
     first_names            String
     last_names             String
     dni                    String                     @unique
