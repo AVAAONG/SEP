@@ -1,7 +1,7 @@
 'use client';
 import defailProfilePic from '@/../public/defaultProfilePic.png';
 import { EditIcon, XIcon } from '@/assets/svgs';
-import InputComboBox from '@/components/ComboBox';
+import InputComboBox from '@/components/commons/ComboBox';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 
