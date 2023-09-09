@@ -7,8 +7,8 @@
 
 import favicon from '@/../public/logo-proexcelencia-cap.png';
 import '@/app/globals.css';
-import { ThemeProviderC } from '@/components/ThemeProvider';
-import NextAuthProvider from '../components/providers';
+import { ThemeProviderC } from '@/components/commons/ThemeProvider';
+import NextAuthProvider from '../components/commons/providers';
 
 /**
  * The base metadata of the application.

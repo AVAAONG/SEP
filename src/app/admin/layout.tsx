@@ -2,7 +2,7 @@ import '@/app/globals.css';
 //@ts-ignore
 import favicon from '@/../public/logo-proexcelencia-cap.png';
 import Navbar from '@/components/admin/navigation/navbar/Navbar';
-import NextAuthProvider from '@/components/providers';
+import NextAuthProvider from '@/components/commons/providers';
 
 import Sidebar from '@/components/admin/navigation/sidebar/Sidebar';
 export const metadata = {
