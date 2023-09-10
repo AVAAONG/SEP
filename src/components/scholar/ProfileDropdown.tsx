@@ -20,11 +20,11 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
       <button
         onClick={toggleDropdownProfile}
         type="button"
-        className="flex text-sm bg-gray-800 rounded-full  hover:ring-2 focus:ring-green-300 dark:hover:ring-green-600"
+        className="flex text-sm rounded-full  hover:ring-2 focus:ring-primary-light hover:ring-primary-light"
       >
         <span className="sr-only">Abrir menu de usuario</span>
         <Image
-          className="w-11 h-11 rounded-full border border-green-800"
+          className="w-10 h-10 rounded-full border border-green-800"
           src={image === '/' ? image : defailProfilePic}
           alt="user photo"
           width={50}
@@ -32,11 +32,10 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
         />
       </button>
       <div
-        className={`${
-          isDrowpdownProfileOpen
-            ? 'absolute  transform translate-x-40 md:translate-x-48  lg:translate-x-52 translate-y-[128px]'
-            : 'hidden'
-        } z-50 my-4 w-56 text-base list-none bg-white  divide-y divide-gray-100 shadow dark:bg-slate-900 dark:divide-gray-600 rounded-xl`}
+        className={`${isDrowpdownProfileOpen
+          ? 'absolute  transform translate-x-40 md:translate-x-48  lg:translate-x-52 translate-y-[128px]'
+          : 'hidden'
+          } z-50 my-4 w-56 text-base list-none bg-white  divide-y divide-gray-100 shadow dark:bg-slate-900 dark:divide-gray-600 rounded-xl`}
       >
         <div className="py-3 px-4">
           <span className="block text-sm font-semibold text-gray-900 dark:text-white">{name}</span>

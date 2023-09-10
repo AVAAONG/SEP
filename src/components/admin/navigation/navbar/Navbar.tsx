@@ -11,12 +11,12 @@ const Navbar = () => {
     isOpen ? setSidebar(false) : setSidebar(true);
   };
   return (
-    <nav className="block h-12 w-full left-0 right-0 top-0 mb-4">
+    <nav className="block h-10 w-full left-0 right-0 top-0 mb-4">
       <div className="flex justify-between gap-4">
         <button
           onClick={setUpSidebar}
           type="button"
-          className="inline-flex items-center p-2 text-sm text-white dark:text-emerald-500 rounded-lg  focus:outline-none focus:ring-2 bg-green-600  dark:bg-green-800 text-emerlad-400 hover:bg-emerald-600 dark:hover:bg-emerald-950 focus:ring-emerald-600"
+          className="inline-flex items-center p-2 text-sm rounded-lg"
         >
           <span className="sr-only">Open sidebar</span>
           <svg
@@ -34,7 +34,7 @@ const Navbar = () => {
           </svg>
         </button>
         <div className="flex gap-4 ">
-          <div className="inline-flex items-center p-2 text-sm  rounded-lg  focus:outline-none focus:ring-2 bg-green-600 dark:bg-green-950 text-emerlad-400 hover:bg-emerald-600 dark:hover:bg-emerald-950 focus:ring-emerald-600">
+          <div className="inline-flex items-center p-2 text-sm rounded-lg">
             <ThemeToggleButton />
           </div>
           <div className="flex items-center justify-start ">
@@ -42,22 +42,6 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-      {/* <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
-            <ul className="flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white bg-gray-800 md:bg-gray-900 border-gray-700">
-                <li>
-                    <a href="#" className="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 text-white" aria-current="page">Home</a>
-                </li>
-                <li>
-                    <a href="#" className="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:hover:text-white text-gray-400 hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700">About</a>
-                </li>
-                <li>
-                    <a href="#" className="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:hover:text-white text-gray-400 hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700">Services</a>
-                </li>
-                <li>
-                    <a href="#" className="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:hover:text-white text-gray-400 hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700">Contact</a>
-                </li>
-            </ul>
-        </div> */}
     </nav>
   );
 };

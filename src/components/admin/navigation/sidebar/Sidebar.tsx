@@ -14,7 +14,7 @@ const Sidebar = () => {
   return (
     <aside
       className={`${isOpen ? 'fixed xl:flex xl:relative' : 'hidden'
-        } flex-col gap-4 justify-start items-center z-50 xl:z-0 w-full sm:w-72 py-8 px-2 bg-gradient-to-b from-[#238442] to-[#438f5c] dark:from-emerald-950 dark:to-slate-950 `}
+        } flex-col gap-4 justify-start items-center z-50 xl:z-0 w-full sm:w-72 py-8 px-2 bg-primary-light dark:bg-secondary-dark transition-all`}
     >
       <div className="flex justify-between xl:justify-start items-center mb-8 xl:mb-2">
         <Link href="/admin/dashboard">

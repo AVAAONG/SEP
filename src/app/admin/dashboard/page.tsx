@@ -9,8 +9,8 @@ const page = async () => {
   const cardContent = createDashboardCardContent(12, 12, 0, 205);
   const events = await getAndFormatCalendarEvents();
   return (
-    <div className="flex flex-col gap-4 h-full w-full">
-      <div className="flex flex-col md:flex-row gap-4 items-center md:h-1/4">
+    <div className="flex flex-col gap-6 h-full w-full">
+      <div className="flex flex-col md:flex-row gap-4 items-center ">
         {cardContent.map(({ icon, text, number, bg, cardButtonBg }) => {
           return (
             <Card

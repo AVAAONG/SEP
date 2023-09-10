@@ -16,7 +16,7 @@ const DropdownButton = ({ buttonName, itemList, Icon }: DropdownButtonProps) => 
       <button
         onClick={toggleDropdown}
         type="button"
-        className="flex items-center justify-between p-2 w-full text-sm font-semibold text-white rounded-md transition duration-75 group dakr:hover:bg-gray-100 dark:text-slate-300 hover:bg-green-600 dark:hover:bg-green-600"
+        className="flex items-center justify-between p-2 w-full text-sm font-medium text-white rounded-md transition duration-75 group dakr:hover:bg-gray-100 dark:text-slate-300 hover:bg-primary-light "
       >
         <i className={` w-6 h-6`}>
           <Icon />

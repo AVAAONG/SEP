@@ -35,7 +35,7 @@ module.exports = {
           2: '#dffcdc',
         },
         dark: '#040901',
-        light: '#F4F6F5',
+        light: '#EBECEF',
       }
     },
   },
