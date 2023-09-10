@@ -20,7 +20,7 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
       <button
         onClick={toggleDropdownProfile}
         type="button"
-        className="flex text-sm rounded-full  hover:ring-2 focus:ring-primary-light hover:ring-primary-light"
+        className="flex text-sm rounded-full"
       >
         <span className="sr-only">Abrir menu de usuario</span>
         <Image
@@ -33,7 +33,7 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
       </button>
       <div
         className={`${isDrowpdownProfileOpen
-          ? 'absolute  transform translate-x-40 md:translate-x-48  lg:translate-x-52 translate-y-[128px]'
+          ? 'absolute  transform -translate-x-48 translate-y-[120px]'
           : 'hidden'
           } z-50 my-4 w-56 text-base list-none bg-white  divide-y divide-gray-100 shadow dark:bg-slate-900 dark:divide-gray-600 rounded-xl`}
       >
