@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 const PublicFooter = () => {
   return (
-    <footer className={`py-4 px-4 md:px-0 text-sm bg-slate-950`}>
+    <footer className={`py-4 px-4 md:px-0 text-sm bg-light dark:bg-dark border-t dark:border-opacity-20 border-opacity-20 border-dark dark:border-light`}>
       <div className="max-w-xs lg:max-w-7xl box-border relative justify-center items-center m-auto flex-wrap ">
         <div className="flex m-auto lg:mx-24 justify-center lg:justify-start mb-8 lg:mb-2">
           <figure>
@@ -84,7 +84,7 @@ const PublicFooter = () => {
                   xmlns="http://www.w3.org/2000/svg"
                   className="inline-block h-6 fa-instagram"
                   xmlnsXlink="http://www.w3.org/1999/xlink"
-                  fill="#000000"
+                  fill="currentColor"
                 >
                   <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                   <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
@@ -96,7 +96,7 @@ const PublicFooter = () => {
                       <g
                         id="Dribbble-Light-Preview"
                         transform="translate(-180.000000, -7479.000000)"
-                        fill="#ffffff"
+                        fill="currentColor"
                       >
                         {' '}
                         <g id="icons" transform="translate(56.000000, 160.000000)">
@@ -119,10 +119,10 @@ const PublicFooter = () => {
                   version="1.1"
                   focusable="false"
                   xmlns="http://www.w3.org/2000/svg"
-                  className="inline-block  h-5 md:h-6 fa-instagram text-white"
+                  className="inline-block  h-5 md:h-6 fa-instagram"
                   xmlnsXlink="http://www.w3.org/1999/xlink"
-                  fill="#ffffff"
-                  stroke="#ffffff"
+                  fill="currentColor"
+                  stroke="currentColor"
                 >
                   <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                   <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
@@ -134,7 +134,7 @@ const PublicFooter = () => {
                       <g
                         id="Dribbble-Light-Preview"
                         transform="translate(-385.000000, -7399.000000)"
-                        fill="#ffffff"
+                        fill="currentColor"
                       >
                         {' '}
                         <g id="icons" transform="translate(56.000000, 160.000000)">

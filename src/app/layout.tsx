@@ -32,7 +32,7 @@ export const metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className="h-full">
+    <html lang="es" className="h-full font-sans">
       <body className="h-full">
         <NextAuthProvider>
           <ThemeProviderC>{children}</ThemeProviderC>
