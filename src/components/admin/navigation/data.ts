@@ -5,9 +5,9 @@ export const SIDEBAR_ACTIVITIES_ACTIONS = [
     icon: workshopIcon,
     buttonName: 'Actividades de formación',
     itemList: [
-      { name: 'Crear', link: '/admin/talleres/crear' },
+      { name: 'Crear', link: '/admin/actividadesFormativas/crear' },
       // { name: "Estadísticas de talleres", link: "/talleres/estadisticas" },
-      { name: 'Registro', link: '/admin/talleres/lista' },
+      { name: 'Registro', link: '/admin/actividadesFormativas/lista' },
     ],
   },
   {
@@ -35,7 +35,7 @@ export const SIDEBAR_DB_BUTTONS = [
     icon: userIcon,
     buttonName: 'Becarios',
     itemList: [
-      { name: 'Becarios activos', link: '/admin/bd/becarios' },
+      { name: 'Becarios activos', link: '/admin/becarios' },
       { name: 'Estadísticas', link: '/admin/bd/becarios/estadisticas' },
     ],
   },
@@ -43,16 +43,14 @@ export const SIDEBAR_DB_BUTTONS = [
     icon: userIcon,
     buttonName: 'Facilitadores de act. formativas',
     itemList: [
-      { name: 'Facilitadores', link: '/admin/bd/facilitadores/talleres' },
-      { name: 'Estadísticas', link: '/admin/talleres/estadisticas' },
+      { name: 'Facilitadores', link: '/admin/facilitadores/actividadesFormativas' },
     ],
   },
   {
     icon: userIcon,
     buttonName: 'Facilitadores de chats',
     itemList: [
-      { name: 'Facilitadores', link: '/admin/bd/facilitadores/chats' },
-      { name: 'Estadísticas', link: '/admin/talleres/estadisticas' },
+      { name: 'Facilitadores', link: '/admin/facilitadores/chats' },
     ],
   },
 ];

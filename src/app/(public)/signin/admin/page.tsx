@@ -28,7 +28,7 @@ const page = async ({
    * Specify to which URL the user will be redirected after signing in. Defaults to the page URL the sign-in is initiated from.
    * @summary The URL to redirect to after a successful sign in or sign up.
    */
-  const adminCallbackUrl = (searchParams!.callbackUrl as string) || '/admin/dashboard';
+  const adminCallbackUrl = (searchParams!.callbackUrl as string) || '/admin/panel';
 
   if (session) {
     redirect(adminCallbackUrl);

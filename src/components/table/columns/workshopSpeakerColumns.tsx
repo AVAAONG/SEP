@@ -11,7 +11,7 @@ const workshopSpeakerColumns: Column<WorkshopSpeaker>[] = [
     Header: 'Nombre',
     accessor: (row: WorkshopSpeaker) => `${row.first_names} ${row.last_names} ${row.job_company}`,
     Cell: ({ cell }: { cell: Cell<WorkshopSpeaker> }) => (
-      <Link href={`talleres/${cell.row.original.id}`} className="flex items-center">
+      <Link href={`actividadesFormativas/${cell.row.original.id}`} className="flex items-center">
         <div className="flex-shrink-0 w-8 h-8">
           <Image
             className="w-full h-full rounded-full"

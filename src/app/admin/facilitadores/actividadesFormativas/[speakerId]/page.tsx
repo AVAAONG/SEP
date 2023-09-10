@@ -2,7 +2,8 @@ import defailProfilePic from '@/../public/defaultProfilePic.png';
 import NormalCard from '@/components/scholar/card/NormalCard';
 import Table from '@/components/table/Table';
 import speakerWorkshopsColumn from '@/components/table/columns/singleWorkshopSpeakerColumns';
-import { getWorkshopSpeaker } from '@/lib/db/speaker';
+
+import { getWorkshopSpeaker } from '@/lib/db/utils/speaker';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -10,8 +11,8 @@ import {
   InstagramIcon,
   LinkedinIcon,
   TwitterIcon,
-} from '../../../../../../../public/svgs/SocialNetworks';
-import { CurriculumIcon, EmailIcon, PhoneIcon, Star, chatIcon, workshopIcon } from '../../../../../../../public/svgs/svgs';
+} from '../../../../../../public/svgs/SocialNetworks';
+import { CurriculumIcon, EmailIcon, PhoneIcon, Star, chatIcon, workshopIcon } from '../../../../../../public/svgs/svgs';
 
 const CARD_CONTENT = [
   {

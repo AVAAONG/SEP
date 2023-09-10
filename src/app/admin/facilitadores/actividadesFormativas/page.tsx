@@ -1,13 +1,14 @@
 import Table from '@/components/table/Table';
 import workshopSpeakerColumns from '@/components/table/columns/workshopSpeakerColumns';
-import { getWorkshopSpeakersWithParams } from '@/lib/db/speaker';
+import { getWorkshopSpeakersWithParams } from '@/lib/db/utils/speaker';
 import { Prisma } from '@prisma/client';
 import {
   FacebookIcon,
   InstagramIcon,
   LinkedinIcon,
   TwitterIcon,
-} from '../../../../../../public/svgs/SocialNetworks';
+} from '../../../../../public/svgs/SocialNetworks';
+
 
 const page = async () => {
   const toSelect: Prisma.WorkshopSpeakerSelect = {
