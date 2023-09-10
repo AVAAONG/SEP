@@ -6,7 +6,7 @@ import { BaseSyntheticEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import useSWR, { Fetcher } from 'swr';
 import DateInput from '../commons/DateInput';
-import PlatformInput from '../PlatformInput';
+import PlatformInput from '../commons/PlatformInput';
 
 /**
  * @description Normalizes the string inputs to be used as keys in the database
