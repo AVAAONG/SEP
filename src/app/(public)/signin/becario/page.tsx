@@ -36,7 +36,7 @@ const page = async ({
   }
 
   return (
-    <main className="flex flex-col md:flex-row-reverse min-h-screen md:h-screen bg-gradient-to-b from-emerald-950 to-slate-950 overflow-hidden">
+    <main className="flex flex-col md:flex-row-reverse min-h-screen md:h-screen bg-light dark:bg-dark overflow-hidden">
       <Aside cookieValue="scholar" />
       <section className="justify-center px-4 md:px-0 md:flex md:w-2/3">
         <div className="py-14 m-auto md:py-9 md:w-7/12 max-w-md">
@@ -60,9 +60,9 @@ const page = async ({
             <SigninForm callbackUrl="/becario/config" cookieValue="scholar" />
           </div>
           <div className="inline-flex items-center justify-around w-full ">
-            <hr className="w-40 h-px my-8 border-0 bg-emerald-700 opacity-40" />
-            <span className="absolute px-3 font-medium  text-white ">o</span>
-            <hr className="w-40 h-px my-8 border-0 bg-emerald-700 opacity-40" />
+            <hr className="w-40 h-px my-8 border-0 bg-primary-light opacity-40" />
+            <span className="absolute px-3 font-medium  text-gray-600 dark:text-gray-400">o</span>
+            <hr className="w-40 h-px my-8 border-0 bg-primary-light opacity-40" />
           </div>
           <div className="flex">
             <GoogleSignInButton

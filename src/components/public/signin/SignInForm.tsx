@@ -44,11 +44,10 @@ const SigninForm = ({ callbackUrl, cookieValue }: SigninFormProps) => {
     <form onSubmit={handleSubmit(async (data, event) => await onSubmit(data, event!))}>
       <div className="mb-3 flex flex-col gap-2">
         {/* <input type="hidden" name="csrfToken" value={crsfToken.data.csrfToken} /> */}
-        <label htmlFor="user_email" className="text-sm text-slate-400">
+        <label htmlFor="user_email" className="text-sm dark:text-gray-400 text-gray-600">
           Correo electrónico
         </label>
         <input
-          className="focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md w-full bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600 "
           autoFocus={true}
           autoComplete="email"
           type="email"
@@ -60,7 +59,7 @@ const SigninForm = ({ callbackUrl, cookieValue }: SigninFormProps) => {
       <button
         name="button"
         type="submit"
-        className="bg-transparent border-2 border-emerald-900 hover:bg-green-600 hover:border-green-600 text-white font-semibold py-1 px-3 rounded-md w-full flex justify-center gap-4"
+        className="bg-transparent border border-primary-light  hover:bg-primary-light hover:text-white font-medium py-1 px-3 rounded-md w-full flex justify-center gap-4"
       >
         Entrar con email
       </button>
