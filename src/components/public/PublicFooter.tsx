@@ -2,7 +2,9 @@ import Image from 'next/image';
 
 const PublicFooter = () => {
   return (
-    <footer className={`py-4 px-4 md:px-0 text-sm bg-light dark:bg-dark border-t dark:border-opacity-20 border-opacity-20 border-dark dark:border-light`}>
+    <footer
+      className={`py-4 px-4 md:px-0 text-sm bg-light dark:bg-dark border-t dark:border-opacity-20 border-opacity-20 border-dark dark:border-light`}
+    >
       <div className="max-w-xs lg:max-w-7xl box-border relative justify-center items-center m-auto flex-wrap ">
         <div className="flex m-auto lg:mx-24 justify-center lg:justify-start mb-8 lg:mb-2">
           <figure>

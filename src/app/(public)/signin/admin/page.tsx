@@ -34,7 +34,7 @@ const page = async ({
     redirect(adminCallbackUrl);
   }
   return (
-    <main className="flex flex-col md:flex-row-reverse min-h-screen h-screen bg-gradient-to-b from-emerald-950 to-slate-950">
+    <main className="flex flex-col md:flex-row-reverse min-h-screen h-screen bg-light dark:bg-dark overflow-hidden">
       <Aside />
       <section className="justify-center px-4 md:px-0 md:flex md:w-2/3">
         <div className="py-14 m-auto md:py-9 md:w-7/12 max-w-md text-center md:text-start">
@@ -47,11 +47,11 @@ const page = async ({
             />
           )}
           <h2 className="text-xl font-semibold md:text-2xl">Acceso de administrador </h2>
-          <p className="text-xs md:text-sm text-slate-400 mt-3">
+          <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-3">
             <span className="hidden md:inline-block">¿Eres un administrador?</span> Ingresa con tu
             cuenta de Google.
           </p>
-          <p className="text-green-500 text-xs md:text-sm font-semibold">
+          <p className="text-primary-light text-xs md:text-sm font-semibold">
             Solo los administradores tienen acceso por este medio.
           </p>
           <div className="w-full">
