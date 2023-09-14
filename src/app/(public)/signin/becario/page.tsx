@@ -37,7 +37,7 @@ const page = async ({
 
   return (
     <main className="flex flex-col md:flex-row-reverse min-h-screen md:h-screen bg-gradient-to-b from-emerald-950 to-slate-950 overflow-hidden">
-      <Aside />
+      <Aside cookieValue="scholar" />
       <section className="justify-center px-4 md:px-0 md:flex md:w-2/3">
         <div className="py-14 m-auto md:py-9 md:w-7/12 max-w-md">
           {searchParams?.error === 'notAllowed' && (

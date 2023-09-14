@@ -35,7 +35,7 @@ const page = async ({
   }
   return (
     <main className="flex flex-col md:flex-row-reverse min-h-screen h-screen bg-light dark:bg-dark overflow-hidden">
-      <Aside />
+      <Aside cookieValue="admin" />
       <section className="justify-center px-4 md:px-0 md:flex md:w-2/3">
         <div className="py-14 m-auto md:py-9 md:w-7/12 max-w-md text-center md:text-start">
           {searchParams?.error === 'notAdmin' && (
