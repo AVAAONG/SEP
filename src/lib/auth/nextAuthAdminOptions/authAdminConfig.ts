@@ -79,6 +79,15 @@ export const googleAdminProviderConfig: OAuthUserConfig<any> = {
       scope: GOOGLE_ADMIN_SCOPES.join(' '),
     },
   },
+  async profile(profile) {
+    return {
+      id: profile.sub,
+      name: profile.name,
+      email: profile.email,
+      image: profile.picture,
+      role: 'STAFF_PROEXCELENCIA',
+    };
+  },
 };
 
 /**
