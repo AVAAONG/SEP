@@ -31,7 +31,6 @@ const SigninForm = ({ callbackUrl, cookieValue }: SigninFormProps) => {
 
   const onSubmit = async (data: { email: string }, event: BaseSyntheticEvent) => {
     event.preventDefault();
-    console.log(data);
     await handler(cookieValue);
 
     await signIn('email', {
