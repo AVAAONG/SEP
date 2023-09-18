@@ -50,26 +50,25 @@ const authAdminOptions: NextAuthOptions = {
    * @see https://next-auth.js.org/configuration/callbacks
    */
   callbacks: {
-    // signIn: async ({ user, account, profile }) => {
-    //   let email: string | undefined = '';
+    signIn: async ({ user, account, profile }) => {
+      let email: string | undefined = '';
 
-    //   if (account?.provider === 'email') email = account.providerAccountId;
-    //   else email = profile!.email;
+      if (account?.provider === 'email') email = account.providerAccountId;
+      else email = profile!.email;
 
-    //   const name = profile.name
+      // const name = profile.name
+      // const SUBJECT_MESSAGE =  encodeURIComponent(`Problemas al ingresar al SEP - ${name}`)
+      // const encodedMessage = encodeURIComponent(`Hola, mi nombre es ${name} y estoy teniendo problemas al ingresar al SEP, me gustaría que me ayudaran a solucionarlo.`)  
+      // const emailBasedPath= `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${email}&su=${SUBJECT_MESSAGE}&body=${encodedMessage}&bcc=${recipients}`
 
-    //   const SUBJECT_MESSAGE =  encodeURIComponent(`Problemas al ingresar al SEP - ${name}`)
-
-    //   const emailBasedPath= `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${email}&su=${SUBJECT_MESSAGE}&body=${encodedMessage}&bcc=${recipients}`
-
-    //     const userExists = await prisma.scholar.findUnique({
-    //       where: { email },
-    //     });
-
-    //     if (!userExists) throw 'notAdmin';
-    //     else return true;
-    //   return true;
-    // },
+        const userExists = await prisma.adminUser.findUnique({
+          where: { email },
+        });
+        console.log(userExists)
+        console.log(email)
+        if (!userExists) throw Error('notAdmin');
+        else return true;
+    },
     session: async ({ session, token }) => {
       //optenemos el rol del usuario en la database
       // const role = await prisma.adminUser.findUnique({

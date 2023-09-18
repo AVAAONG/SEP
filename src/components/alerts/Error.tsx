@@ -3,6 +3,8 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
+import { WarningIcon } from "../../../public/svgs/SocialNetworks";
+
 interface WarningProps {
   title: string;
   subtitle: string;
@@ -21,11 +23,13 @@ interface WarningProps {
 const Error = ({ title, subtitle, children }: WarningProps) => {
   return (
     <div
-      className="max-w-md p-4 mb-4 text-red-500 border border-red-300 rounded-lg bg-transparent dark:bg-transparent dark:text-red-500 dark:border-red-800"
+      className="max-w-md p-4 mb-4 text-red-500 border border-red-300 rounded-lg bg-transparent dark:bg-transparent  dark:border-red-800"
       role="alert"
     >
-      <div className="flex items-center">
-        {/* <WarningTooltip helperText="Utiliza el correo por el cual recibes los mensajes de ProExcelencia" /> */}
+      <div className="flex items-center gap-2">
+        <div className="w-5 text-red-500">
+          <WarningIcon />
+        </div>
         <span className="sr-only">Info</span>
         <h3 className=" text-base md:text-lg font-medium ">{title}</h3>
       </div>
