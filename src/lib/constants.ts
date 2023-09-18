@@ -34,7 +34,7 @@ export const CALENDAR_IDS = [
   {
     // Calendar for english chats clubs
     calendarId:
-      'e8e9c5e4d30d349b75f6061c8641fa2577ed9928403c4bd12b6bd6687291e7a9@group.calendar.google.com',
+      '4c33cf47616aea0e0c818290ef4f6369f119c42f7e25baaff330250f5af3a592@group.calendar.google.com',
     eventColor: CHATS_CALENDAR_EVENT_COLORS,
     textColor: '#E11D48',
   },
