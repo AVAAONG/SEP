@@ -1,9 +1,7 @@
 import { classNames, navigation } from '@/lib/scholar/utils';
 import { sidebarAtom } from '@/lib/state/mainState';
 import { Dialog, Transition } from '@headlessui/react';
-import {
-  XMarkIcon,
-} from '@heroicons/react/24/outline';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useAtom } from 'jotai';
 import { Fragment } from 'react';
 const TransitionC = () => {

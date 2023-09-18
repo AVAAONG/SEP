@@ -1,14 +1,14 @@
-import { getScheduledWorkshops } from '@/lib/db/Workshops';
-import { NextRequest, NextResponse } from 'next/server';
+import { getScheduledWorkshops } from '@/lib/db/utils/Workshops';
+import { NextResponse } from 'next/server';
 
 const FORM_CREATION_APPSCRIPT_URL =
   'https://script.google.com/macros/s/AKfycbypXIh8iD-Pbf7gEKHEDrjxTj7EB_DHbWoOO53KgukwDDgaB6PO42xQqeNUReFo4jty/exec';
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: Request, res: Response) {
   return NextResponse.json({ messagge: 'ok' });
 }
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: Response, res: Response) {
   const workshops = await getScheduledWorkshops();
   return NextResponse.json(workshops);
 }
@@ -80,24 +80,24 @@ export async function GET(req: NextRequest, res: NextResponse) {
 //     return normalizeWorkshopObject;
 // }
 
-// export async function PATCH(req: NextRequest, res: NextResponse) {
+// export async function PATCH(req: Response, res: Response) {
 //     const token = await getToken({ req });
 //     setTokens(token.accessToken, token.refreshToken)
 //     return NextResponse.json({ messagge: "ok" })
 // }
 
-// export async function DELETE(req: NextRequest, res: NextResponse) {
+// export async function DELETE(req: Response, res: Response) {
 //     const token = await getToken({ req });
 //     setTokens(token.accessToken, token.refreshToken)
 //     return NextResponse.json({ messagge: "ok" })
 // }
-// export async function PUT(req: NextRequest, res: NextResponse) {
+// export async function PUT(req: Response, res: Response) {
 //     const token = await getToken({ req });
 //     setTokens(token.accessToken, token.refreshToken)
 //     return NextResponse.json({ messagge: "ok" })
 // }
 
-// export async function GET(req: NextRequest, res: NextResponse) {
+// export async function GET(req: Response, res: Response) {
 //     const token = await getToken({ req });
 //     setTokens(token.accessToken, token.refreshToken)
 

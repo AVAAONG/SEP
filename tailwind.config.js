@@ -8,7 +8,7 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      sans: ["Roboto"],
+      sans: ['Roboto'],
       mono: ['Roboto Mono'],
     },
     extend: {
@@ -25,8 +25,8 @@ module.exports = {
           dark: '#1d8015',
         },
         accent: {
-          light: "#000",
-          dark: "#fff",
+          light: '#000',
+          dark: '#fff',
         },
         secondary: {
           dark: '#062e05',
@@ -36,7 +36,7 @@ module.exports = {
         },
         dark: '#040901',
         light: '#EBECEF',
-      }
+      },
     },
   },
 };

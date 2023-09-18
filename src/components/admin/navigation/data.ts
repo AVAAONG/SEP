@@ -16,7 +16,7 @@ export const SIDEBAR_ACTIVITIES_ACTIONS = [
     itemList: [
       { name: 'Crear', link: '/admin/chats/crear' },
       // { name: "Estadísticas de chats", link: "/chats/estadisticas" },
-      { name: "Registro", link: "/chats/lista" },
+      { name: 'Registro', link: '/chats/lista' },
     ],
   },
   // {
@@ -42,15 +42,11 @@ export const SIDEBAR_DB_BUTTONS = [
   {
     icon: userIcon,
     buttonName: 'Facilitadores de act. formativas',
-    itemList: [
-      { name: 'Facilitadores', link: '/admin/facilitadores/actividadesFormativas' },
-    ],
+    itemList: [{ name: 'Facilitadores', link: '/admin/facilitadores/actividadesFormativas' }],
   },
   {
     icon: userIcon,
     buttonName: 'Facilitadores de chats',
-    itemList: [
-      { name: 'Facilitadores', link: '/admin/facilitadores/chats' },
-    ],
+    itemList: [{ name: 'Facilitadores', link: '/admin/facilitadores/chats' }],
   },
 ];

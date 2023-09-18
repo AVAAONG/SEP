@@ -1,7 +1,6 @@
 import { Workshop } from '@/types/Workshop';
 import { addDays } from './calendar/calendar';
 
-
 export const createFormDescription = (workshop: Workshop) => {
   const { title, pensum, date, startHour, endHour, speaker, modality, platform, description } =
     workshop;

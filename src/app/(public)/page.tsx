@@ -76,8 +76,8 @@ const page = () => (
         rel="noopener noreferrer"
       >
         <h2 className={`text-2xl font-medium`}>
-          <span className='hidden md:inline-block'>Administradores{' '} </span>
-          <span className='inline-block md:hidden'>Admins{' '} </span>
+          <span className="hidden md:inline-block">Administradores </span>
+          <span className="inline-block md:hidden">Admins </span>
           <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
             <svg
               fill="none"

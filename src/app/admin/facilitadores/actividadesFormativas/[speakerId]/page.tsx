@@ -12,7 +12,14 @@ import {
   LinkedinIcon,
   TwitterIcon,
 } from '../../../../../../public/svgs/SocialNetworks';
-import { CurriculumIcon, EmailIcon, PhoneIcon, Star, chatIcon, workshopIcon } from '../../../../../../public/svgs/svgs';
+import {
+  CurriculumIcon,
+  EmailIcon,
+  PhoneIcon,
+  Star,
+  chatIcon,
+  workshopIcon,
+} from '../../../../../../public/svgs/svgs';
 
 const CARD_CONTENT = [
   {

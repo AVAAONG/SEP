@@ -73,13 +73,13 @@ const authOptions: NextAuthOptions = {
 
       // const emailBasedPath= `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${email}&su=${SUBJECT_MESSAGE}&body=${encodedMessage}&bcc=${recipients}`
 
-    //   const userExists = await prisma.scholar.findUnique({
-    //     where: { email },
-    //   });
+      //   const userExists = await prisma.scholar.findUnique({
+      //     where: { email },
+      //   });
 
-    //   if (!userExists) throw 'notAllowed';
-    //   else return true;
-    return true
+      //   if (!userExists) throw 'notAllowed';
+      //   else return true;
+      return true;
     },
     session: ({ session, token }) => ({
       ...session,
@@ -101,8 +101,8 @@ const authOptions: NextAuthOptions = {
             create: {
               email: data.user.email!!,
               first_names: 'Kevin Jose',
-          last_names: 'Bravo Mota',
-          scholar_status: 'CURRENT',
+              last_names: 'Bravo Mota',
+              scholar_status: 'CURRENT',
             },
           },
           role: 'SCHOLAR',

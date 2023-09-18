@@ -3,7 +3,7 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { WarningIcon } from "../../../public/svgs/SocialNetworks";
+import { WarningIcon } from '../../../public/svgs/SocialNetworks';
 
 interface WarningProps {
   title: string;

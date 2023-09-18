@@ -17,11 +17,7 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
 
   return (
     <>
-      <button
-        onClick={toggleDropdownProfile}
-        type="button"
-        className="flex text-sm rounded-full"
-      >
+      <button onClick={toggleDropdownProfile} type="button" className="flex text-sm rounded-full">
         <span className="sr-only">Abrir menu de usuario</span>
         <Image
           className="w-10 h-10 rounded-full border border-green-800"
@@ -32,10 +28,11 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
         />
       </button>
       <div
-        className={`${isDrowpdownProfileOpen
-          ? 'absolute  transform -translate-x-48 translate-y-[120px]'
-          : 'hidden'
-          } z-50 my-4 w-56 text-base list-none bg-white  divide-y divide-gray-100 shadow dark:bg-slate-900 dark:divide-gray-600 rounded-xl`}
+        className={`${
+          isDrowpdownProfileOpen
+            ? 'absolute  transform -translate-x-48 translate-y-[120px]'
+            : 'hidden'
+        } z-50 my-4 w-56 text-base list-none bg-white  divide-y divide-gray-100 shadow dark:bg-slate-900 dark:divide-gray-600 rounded-xl`}
       >
         <div className="py-3 px-4">
           <span className="block text-sm font-semibold text-gray-900 dark:text-white">{name}</span>

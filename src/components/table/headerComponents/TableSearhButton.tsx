@@ -1,33 +1,36 @@
-"use client"
-import { ChangeEvent, useState } from "react";
+'use client';
+import { ChangeEvent, useState } from 'react';
 
 interface TableSearhButtonProps {
-  optionsForFilter: { option: string, label: string }[];
+  optionsForFilter: { option: string; label: string }[];
   filterValue: string;
   setFilter: (columnId: string, updater: any) => void;
-  setGlobalFilter: (updater: any) => void
+  setGlobalFilter: (updater: any) => void;
 }
 
-const TableSearhButton = ({ optionsForFilter, setFilter, setGlobalFilter, filterValue }: TableSearhButtonProps) => {
+const TableSearhButton = ({
+  optionsForFilter,
+  setFilter,
+  setGlobalFilter,
+  filterValue,
+}: TableSearhButtonProps) => {
   const [isDropdownOpen, toggleDropdown] = useState(false);
-  const [selectedFilter, setSelectedFilter] = useState("all");
+  const [selectedFilter, setSelectedFilter] = useState('all');
 
   const selectFilter = (filterSelected: string, e: ChangeEvent<HTMLInputElement>) => {
-    if (filterSelected === "all") {
-      return setGlobalFilter(e.target.value)
+    if (filterSelected === 'all') {
+      return setGlobalFilter(e.target.value);
+    } else {
+      return setFilter(filterSelected, e.target.value);
     }
-    else {
-      return setFilter(filterSelected, e.target.value)
-    }
-  }
+  };
   const selectValue = () => {
-    if (selectedFilter === "all") {
-      return filterValue || ""
+    if (selectedFilter === 'all') {
+      return filterValue || '';
+    } else {
+      return;
     }
-    else {
-      return
-    }
-  }
+  };
   return (
     <div className="flex w-96 sm:w-2/3 lg:w-1/3">
       <div className="relative w-full">
@@ -46,7 +49,8 @@ const TableSearhButton = ({ optionsForFilter, setFilter, setGlobalFilter, filter
             ></path>
           </svg>
         </div>
-        <input type="search"
+        <input
+          type="search"
           value={selectValue()}
           onChange={(e: ChangeEvent<HTMLInputElement>) => selectFilter(selectedFilter, e)}
           className="block w-full pl-10 p-2.5 rounded-r-none"
@@ -59,15 +63,38 @@ const TableSearhButton = ({ optionsForFilter, setFilter, setGlobalFilter, filter
           className="flex-shrink-0 inline-flex  z-10 px-4  items-center text-sm font-medium text-center border-l border-green-600 text-gray-900  bg-gray-100 rounded-r-lg  hover:bg-gray-200 dark:bg-slate-700 dark:hover:bg-slate-600 dark:border-green-600  dark:text-white"
           type="button"
         >
-          <div className="flex flex-col text-sm">Buscar por
-            <span className="hidden text-xs sm:inline text-green-600">{optionsForFilter.find(({ option }) => option === selectedFilter)?.label}</span>
+          <div className="flex flex-col text-sm">
+            Buscar por
+            <span className="hidden text-xs sm:inline text-green-600">
+              {optionsForFilter.find(({ option }) => option === selectedFilter)?.label}
+            </span>
           </div>
-          <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+          <svg
+            className="w-2.5 h-2.5 ml-2.5"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 10 6"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m1 1 4 4 4-4"
+            />
           </svg>
         </button>
-        <div id="dropdown" className={`${isDropdownOpen ? "absolute" : "hidden"} translate-y-11 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}>
-          <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-button">
+        <div
+          id="dropdown"
+          className={`${
+            isDropdownOpen ? 'absolute' : 'hidden'
+          } translate-y-11 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
+        >
+          <ul
+            className="py-2 text-sm text-gray-700 dark:text-gray-200"
+            aria-labelledby="dropdown-button"
+          >
             {optionsForFilter.map(({ option, label }, index) => {
               return (
                 <li key={index}>
@@ -82,14 +109,13 @@ const TableSearhButton = ({ optionsForFilter, setFilter, setGlobalFilter, filter
                     {label}
                   </button>
                 </li>
-              )
-            }
-            )}
+              );
+            })}
           </ul>
         </div>
       </form>
-    </div >
-  )
-}
+    </div>
+  );
+};
 
-export default TableSearhButton
+export default TableSearhButton;

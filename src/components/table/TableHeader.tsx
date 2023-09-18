@@ -4,17 +4,26 @@ interface TableHeaderProps {
   setFilter: (columnId: string, updater: any) => void;
   setGlobalFilter: (updater: any) => void;
   filterValue: string;
-  optionsForFilter: { option: string, label: string }[];
-  children?: React.ReactNode
+  optionsForFilter: { option: string; label: string }[];
+  children?: React.ReactNode;
 }
 
-const TableHeader = ({ setFilter, optionsForFilter, setGlobalFilter, filterValue, children }: TableHeaderProps) => {
+const TableHeader = ({
+  setFilter,
+  optionsForFilter,
+  setGlobalFilter,
+  filterValue,
+  children,
+}: TableHeaderProps) => {
   return (
     <div className="flex flex-col px-4 py-3 space-y-3 md:flex-row md:items-center md:justify-between md:space-y-0 ">
-      <TableSearhButton optionsForFilter={optionsForFilter} setFilter={setFilter} setGlobalFilter={setGlobalFilter} filterValue={filterValue} />
-      <div className='flex gap-4'>
-        {children}
-      </div>
+      <TableSearhButton
+        optionsForFilter={optionsForFilter}
+        setFilter={setFilter}
+        setGlobalFilter={setGlobalFilter}
+        filterValue={filterValue}
+      />
+      <div className="flex gap-4">{children}</div>
     </div>
   );
 };

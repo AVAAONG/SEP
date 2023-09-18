@@ -4,8 +4,9 @@ const ActivityModal = () => {
   return (
     <div
       tabIndex={-1}
-      className={`${modalopen ? 'flex' : 'hidden'
-        }  items-center justify-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full`}
+      className={`${
+        modalopen ? 'flex' : 'hidden'
+      }  items-center justify-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full`}
     >
       <div className="relative p-4 w-full max-w-lg h-full md:h-auto">
         <div className="relative p-4 rounded-lg shadow bg-slate-800 md:p-8">

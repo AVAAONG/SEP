@@ -78,8 +78,9 @@ const Sidebar = () => {
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
   return (
     <aside
-      className={`${isSidebarOpen ? 'fixed  w-full md:w-72' : 'hidden'
-        } top-0 left-0 z-40 h-screen pt-4  bg-gray-50  md:translate-x-0 dark:bg-black`}
+      className={`${
+        isSidebarOpen ? 'fixed  w-full md:w-72' : 'hidden'
+      } top-0 left-0 z-40 h-screen pt-4  bg-gray-50  md:translate-x-0 dark:bg-black`}
     >
       <div className={`flex items-center mt-2 px-5 ${isSidebarOpen ? 'justify-between' : ''} `}>
         <Link href="/becario/dashboard">

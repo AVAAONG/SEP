@@ -13,7 +13,6 @@ import {
   TwitterIcon,
 } from '../../../../../public/svgs/SocialNetworks';
 
-
 const page = async () => {
   const toSelect: Prisma.WorkshopSpeakerSelect = {
     id: true,
@@ -59,26 +58,29 @@ const page = async () => {
   });
   return (
     <div className="flex flex-col items-center w-full gap-6">
-      <div className='flex flex-col md:flex-row gap-4 w-full'>
-        <div className='h-28 w-full'>
-          <Card Icon={UserIcon}
-            bg='bg-gradient-to-r from-blue-700  to-indigo-900'
-            cardButtonBg='bg-indigo-950 active:bg-blue-700 hover:bg-blue-700'
+      <div className="flex flex-col md:flex-row gap-4 w-full">
+        <div className="h-28 w-full">
+          <Card
+            Icon={UserIcon}
+            bg="bg-gradient-to-r from-blue-700  to-indigo-900"
+            cardButtonBg="bg-indigo-950 active:bg-blue-700 hover:bg-blue-700"
             stat={workshopSpeakers?.length || 0}
-            text='Facilitadores'
+            text="Facilitadores"
           />
         </div>
 
         <div>
-          <PieChartComponent data={[
-            { name: 'Hombres', value: 10 },
-            { name: 'Mujeres', value: 20 },
-          ]} />
+          <PieChartComponent
+            data={[
+              { name: 'Hombres', value: 10 },
+              { name: 'Mujeres', value: 20 },
+            ]}
+          />
         </div>
 
-        <div className='w-1/3 px-3'>
+        <div className="w-1/3 px-3">
           <h4 className="text-xl font-medium">Acciones</h4>
-          <Button buttonText='Crear facilitador' />
+          <Button buttonText="Crear facilitador" />
         </div>
       </div>
       <div className="w-full h-full">

@@ -54,8 +54,9 @@ const Table: React.FC<TableProps> = ({ tableData, tableColumns, tableHeadersForS
 
   return (
     <div
-      className={`${isExpanded ? 'absolute top-0 bottom-0 left-0 right-0 z-50' : 'relative overflow-hidden'
-        }  bg-white shadow-md shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full h-max min-h-full`}
+      className={`${
+        isExpanded ? 'absolute top-0 bottom-0 left-0 right-0 z-50' : 'relative overflow-hidden'
+      }  bg-white shadow-md shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full h-max min-h-full`}
     >
       <TableHeader
         optionsForFilter={tableHeadersForSearch}

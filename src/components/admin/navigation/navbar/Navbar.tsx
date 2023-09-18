@@ -7,7 +7,7 @@ import { MenuIcon } from '../../../../../public/svgs/svgs';
 
 const Navbar = () => {
   const [isOpen, setSidebar] = useAtom(sidebarAtom);
-  const setUpSidebar = () => isOpen ? setSidebar(false) : setSidebar(true);
+  const setUpSidebar = () => (isOpen ? setSidebar(false) : setSidebar(true));
 
   return (
     <nav className="block h-10 w-full left-0 right-0 top-0 mb-4">
@@ -17,7 +17,9 @@ const Navbar = () => {
           type="button"
           className="w-6 text-primary-light font-medium p-2 text-xl"
         >
-          <div className='w-6 font-bold'><MenuIcon /></div>
+          <div className="w-6 font-bold">
+            <MenuIcon />
+          </div>
         </button>
         <div className="flex gap-4 ">
           <div className="inline-flex items-center p-2 text-sm rounded-lg">
