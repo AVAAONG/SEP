@@ -46,7 +46,7 @@ const workshopSpeakerColumns: Column<WorkshopSpeaker>[] = [
           <Link
             target="_blank"
             href={socialNetwork.url}
-            className="w-8 text-green-700 dark:text-green-400 rounded-full bg-gray-100 dark:bg-slate-600 p-2"
+            className="w-8 text-primary-light dark:text-primary-light rounded-full bg-gray-100 dark:bg-slate-600 p-2"
           >
             {socialNetwork.icon}
           </Link>
@@ -61,7 +61,7 @@ const workshopSpeakerColumns: Column<WorkshopSpeaker>[] = [
         <Link
           target="_blank"
           href={cell.row.original.curriculum ? cell.row.original.curriculum : ''}
-          className="w-6 text-green-700 dark:text-green-500"
+          className="w-6 text-primary-light dark:text-primary-light"
         >
           <CurriculumIcon />
         </Link>
@@ -72,10 +72,10 @@ const workshopSpeakerColumns: Column<WorkshopSpeaker>[] = [
     Header: 'Actividades realizadas',
     Cell: ({ cell }: { cell: Cell<WorkshopSpeaker> }) => (
       <div className="m-auto divide-x-2 dark:divide-slate-600">
-        <span className="text center px-4 py-1 text-xs bg-green-500 dark:bg-green-600 text-white dark:text-slate-200 rounded-full rounded-r-none font-semibold">
+        <span className="text center px-4 py-1 text-xs bg-ligtext-primary-light dark:bg-ligtext-primary-light text-white dark:text-slate-200 rounded-full rounded-r-none font-semibold">
           4
         </span>
-        <span className="text center px-4 py-1 text-xs bg-green-500 dark:bg-green-600 text-white dark:text-slate-200 rounded-full rounded-l-none font-semibold">
+        <span className="text center px-4 py-1 text-xs bg-ligtext-primary-light dark:bg-ligtext-primary-light text-white dark:text-slate-200 rounded-full rounded-l-none font-semibold">
           10
         </span>
       </div>
