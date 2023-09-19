@@ -1,5 +1,3 @@
-import Stats from '@/components/scholar/ScholarStats';
-import TempChatTable from '@/components/table/tempChatTable';
 
 /**
  * Renders the page component with a list of workshops for a specific scholar.
@@ -64,8 +62,6 @@ const page = async () => {
             Listado de talleres
           </h1>
           <div className="h-full w-full flex flex-col gap-4 pt-4">
-            <Stats kindOfActivity="workshop" />
-            <TempChatTable tableData={workshopDataPlaceholder} />
           </div>
         </div>
       </div>

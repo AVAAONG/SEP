@@ -1,4 +1,4 @@
-import { getWorkshopsByScholar } from '@/lib/db/Workshops';
+import { getWorkshopsByScholar } from '@/lib/db/utils/Workshops';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest, res: NextResponse) {

@@ -1,4 +1,5 @@
-import { getWorkshop } from '@/lib/db/Workshops';
+
+import { getWorkshop } from '@/lib/db/utils/Workshops';
 import shortUUID from 'short-uuid';
 
 const TEMPORAL_DATA = [

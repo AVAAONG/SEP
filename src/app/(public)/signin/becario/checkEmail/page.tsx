@@ -1,3 +1,4 @@
+'use client'
 /**
  * @file  This file contains the page that renders the check email page for the admin sign in.
  * @remarks The user will be redirected to this page after signing in with an email.
@@ -7,7 +8,6 @@
 'use client';
 import Link from 'next/link';
 import { createPortal } from 'react-dom';
-
 /**
  * Page that renders the check email page for the admin sign in.
  * @see {@link https://react.dev/reference/react-dom/createPortal} for more information about React Portals.
