@@ -13,9 +13,9 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="bg-primary-light dark:bg-secondary-dark antialiased flex w-full transition-all">
+    <main className="bg-primary-light dark:bg-secondary-dark antialiased flex transition-all max-w-screen box-border md:p-2">
       <Sidebar />
-      <section className="flex flex-col z-10 md:rounded-lg bg-light dark:bg-dark p-2 md:m-2 w-full transition-all">
+      <section className=" min-w-0 flex flex-col z-10 md:rounded-lg bg-light dark:bg-dark p-2 transition-all w-full">
         <Navbar />
         <NextAuthProvider>{children}</NextAuthProvider>
       </section>
