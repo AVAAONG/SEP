@@ -1,17 +1,22 @@
 import Card from '@/components/admin/dashboard/Card';
-import PieChartComponent from '@/components/charts/Pie';
 import Button from '@/components/commons/Button';
 import Table from '@/components/table/Table';
 import workshopSpeakerColumns from '@/components/table/columns/workshopSpeakerColumns';
 import { getWorkshopSpeakersWithParams } from '@/lib/db/utils/speaker';
 import { UserIcon } from '@heroicons/react/20/solid';
 import { Prisma } from '@prisma/client';
+import dynamic from 'next/dynamic';
 import {
   FacebookIcon,
   InstagramIcon,
   LinkedinIcon,
   TwitterIcon,
 } from '../../../../../public/svgs/SocialNetworks';
+
+/**
+ * @see https://stackoverflow.com/questions/67784672/react-next-js-doesnt-seem-to-work-with-apexcharts for more info
+ */
+const PieChartComponent = dynamic(() => import('@/components/charts/Pie'), { ssr: false });
 
 const page = async () => {
   const toSelect: Prisma.WorkshopSpeakerSelect = {
