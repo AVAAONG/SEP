@@ -11,8 +11,9 @@
  */
 
 import { NextRequestWithAuth, withAuth } from 'next-auth/middleware';
+import { NextResponse } from 'next/server';
 
-export default function wrapMiddlewareFunction(req: NextRequestWithAuth) {
+export default async function wrapMiddlewareFunction(req: NextRequestWithAuth, res: Response) {
   let signinPath = '';
   if (req.nextUrl.pathname.startsWith('/becario')) {
     signinPath = 'becario';
@@ -22,19 +23,21 @@ export default function wrapMiddlewareFunction(req: NextRequestWithAuth) {
   ///@ts-expect-error
   return withAuth(
     async (request: NextRequestWithAuth) => {
-      // if (request.nextUrl.pathname.startsWith("/becario")
-      //     && request.nextauth.token?.role !== "scholar") {
-      //     return NextResponse.rewrite(
-      //         new URL("/accessDenied", request.url)
-      //     );
-      // }
-      // if (request.nextUrl.pathname.startsWith("/admin")
-      //     && request.nextauth.token?.role !== "admin"
-      //     && request.nextauth.token?.role !== "comitee") {
-      //     return NextResponse.rewrite(
-      //         new URL("/accessDenied", request.url)
-      //     )
-      // }
+      if (request.nextUrl.pathname.startsWith("/becario")
+        && request.nextauth.token?.kindOfUser !== "SCHOLAR") {
+        return NextResponse.rewrite(
+          new URL("/accessDenied", request.url)
+        );
+      }
+      else if (request.nextUrl.pathname.startsWith("/admin")
+        && request.nextauth.token?.kindOfUser !== "ADMIN") {
+        return NextResponse.rewrite(
+          new URL("/accessDenied", request.url)
+        )
+      }
+      else {
+        return NextResponse.next();
+      }
     },
     {
       pages: {
@@ -43,8 +46,6 @@ export default function wrapMiddlewareFunction(req: NextRequestWithAuth) {
     }
   )(req);
 }
-
-6;
 /**
  * @description it export the config object to be used by the middleware function
  * @see https://nextjs.org/docs/pages/building-your-application/routing/middleware for more information

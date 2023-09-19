@@ -81,6 +81,17 @@ const authOptions: NextAuthOptions = {
       //   else return true;
       return true;
     },
+    jwt: ({ token, user }) => {
+      if (user) {
+        const u = user as unknown as any;
+        return {
+          ...token,
+          id: u.id,
+          kindOfUser: 'SCHOLAR',
+        };
+      }
+      return token;
+    },
     session: ({ session, token }) => ({
       ...session,
       user: {
@@ -97,15 +108,9 @@ const authOptions: NextAuthOptions = {
           id: data.user.id,
         },
         data: {
-          scholar: {
-            create: {
-              email: data.user.email!!,
-              first_names: 'Kevin Jose',
-              last_names: 'Bravo Mota',
-              scholar_status: 'CURRENT',
-            },
-          },
-          role: 'SCHOLAR',
+          email: data.user.email!!,
+          first_names: 'Kevin Jose',
+          last_names: 'Bravo Mota',
         },
       });
     },

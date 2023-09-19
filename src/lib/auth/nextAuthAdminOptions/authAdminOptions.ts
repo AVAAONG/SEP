@@ -52,15 +52,8 @@ const authAdminOptions: NextAuthOptions = {
   callbacks: {
     signIn: async ({ user, account, profile }) => {
       let email: string | undefined = '';
-
       if (account?.provider === 'email') email = account.providerAccountId;
       else email = profile!.email;
-
-      // const name = profile.name
-      // const SUBJECT_MESSAGE =  encodeURIComponent(`Problemas al ingresar al SEP - ${name}`)
-      // const encodedMessage = encodeURIComponent(`Hola, mi nombre es ${name} y estoy teniendo problemas al ingresar al SEP, me gustaría que me ayudaran a solucionarlo.`)
-      // const emailBasedPath= `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${email}&su=${SUBJECT_MESSAGE}&body=${encodedMessage}&bcc=${recipients}`
-
       const userExists = await prisma.adminUser.findUnique({
         where: { email },
       });
@@ -70,13 +63,6 @@ const authAdminOptions: NextAuthOptions = {
       else return true;
     },
     session: async ({ session, token }) => {
-      //optenemos el rol del usuario en la database
-      // const role = await prisma.adminUser.findUnique({
-      //   where: {
-      //     email: token.email,
-      //   },
-      // });
-
       return {
         ...session,
         user: {
@@ -86,6 +72,7 @@ const authAdminOptions: NextAuthOptions = {
           randomKey: token.randomKey,
           refreshToken: token.refreshToken,
           role: 'STAFF',
+          kindOfUser: 'ADMIN',
         },
       };
     },
@@ -99,31 +86,12 @@ const authAdminOptions: NextAuthOptions = {
           id: u.id,
           accessToken,
           refreshToken,
+          kindOfUser: 'ADMIN',
         };
       }
       return token;
     },
   },
-  // events: {
-  //   createUser: async (data) => {
-  //     await prisma.user.update({
-  //       where: {
-  //         id: data.user.id,
-  //       },
-  //       data: {
-  //         scholar: {
-  //           create: {
-  //             email: data.user.email!!,
-  //             first_names: 'Kevin Jose',
-  //             last_names: 'Bravo Mota',
-  //             scholar_status: 'CURRENT',
-  //           },
-  //         },
-  //         role: 'SCHOLAR',
-  //       },
-  //     });
-  //   },
-  // },
   adapter: PrismaAdapter(prisma, {
     userModel: 'adminUser',
     accountModel: 'adminAccount',
