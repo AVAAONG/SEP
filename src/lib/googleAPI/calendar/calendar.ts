@@ -225,13 +225,10 @@ export const getCalendarEvents = async (calendarId: string = 'primary') => {
     if (events.status === 200) {
       if (events === null || events === undefined) return console.error('No events found.');
       return events.data.items;
-    } else {
-      console.error('Error retrieving events');
-      return null;
     }
   } catch (error) {
     console.error('Error retrieving events:', error);
-    return null;
+    return [];
   }
 };
 

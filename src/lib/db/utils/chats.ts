@@ -3,8 +3,58 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { Chat, ChatSpeaker, ChatsTempData, Prisma } from '@prisma/client';
+import { ActivityStatus, Chat, ChatSpeaker, ChatsTempData, Prisma } from '@prisma/client';
 import { prisma } from './prisma';
+
+/**
+ * Gets the number of chats with the specified activity status.
+ * @param status - The activity status to filter by.
+ * @returns The number of chats.
+ * 
+ * @example
+ * const scheduledChatsCount = await getChatsCountByStatus('SCHEDULED');
+ * console.log(scheduledchatsCount); // 5
+ */
+export const getChatsCountByStatus = async (status: ActivityStatus): Promise<number> => {
+  try {
+    const count = await prisma.workshop.count({
+      where: {
+        activity_status: status
+      },
+    });
+    return count;
+  } catch (error) {
+    console.error(`Error getting chats count: ${error}`);
+    return 0;
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
+/**
+ * Gets the total number of chats in the database.
+ * @returns The number of chats.
+ *  
+ * @example
+ * const chatsCount = await getChatsCount();
+ * console.log(chatsCount); // 10
+ */
+export const getChatsCount = async (): Promise<number> => {
+  try {
+    const count = await prisma.workshop.count();
+    return count;
+  } catch (error) {
+    console.error(`Error getting chats count: ${error}`);
+    return 0
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
+
+
+
+
 
 /**
  * Creates a chat.
@@ -154,15 +204,6 @@ export const getChat = async (id: string) => {
     },
   });
   return chat;
-};
-
-export const getChatsCount = async () => {
-  const chats = await prisma.chat.count({
-    where: {
-      activityStatus: 'REALIZADO',
-    },
-  });
-  return chats;
 };
 
 export const deleteAllChats = async () => {

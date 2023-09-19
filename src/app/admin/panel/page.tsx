@@ -1,12 +1,14 @@
 import Card from '@/components/admin/dashboard/Card';
 import Calendar from '@/components/calendar/Calendar';
+import { getWorkshopsCountByStatus } from '@/lib/db/utils/Workshops';
+import { getChatsCountByStatus } from '@/lib/db/utils/chats';
 import { createDashboardCardContent, getAndFormatCalendarEvents } from '@/lib/utils';
 
 const page = async () => {
-  // const workshopCount = await getWorkshopsCount();
-  // const scholarsCount = await getScholarsCount();
-  // const chatsCount = await getChatsCount();
-  const cardContent = createDashboardCardContent(12, 12, 0, 205);
+  const workshopCount = await getWorkshopsCountByStatus('DONE');
+  const scholarsCount = await getChatsCountByStatus('DONE');
+  const cardContent = createDashboardCardContent(workshopCount, scholarsCount, 0, 205);
+
   const events = await getAndFormatCalendarEvents();
   return (
     <div className="flex flex-col gap-6 h-full w-full">
