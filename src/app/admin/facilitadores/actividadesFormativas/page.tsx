@@ -17,23 +17,44 @@ import {
  * @see https://stackoverflow.com/questions/67784672/react-next-js-doesnt-seem-to-work-with-apexcharts for more info
  */
 const PieChartComponent = dynamic(() => import('@/components/charts/Pie'), { ssr: false });
-
+const tableHeaders = [
+  {
+    option: 'first_names',
+    label: 'Nombre',
+  },
+  {
+    option: 'last_names',
+    label: 'Apellidos',
+  },
+  {
+    option: 'email',
+    label: 'Correo',
+  },
+  {
+    option: 'phone_number',
+    label: 'Telefono',
+  },
+  {
+    option: 'job_company',
+    label: 'Organización',
+  },
+];
+const toSelect: Prisma.WorkshopSpeakerSelect = {
+  id: true,
+  first_names: true,
+  last_names: true,
+  email: true,
+  phone_number: true,
+  gender: true,
+  job_company: true,
+  curriculum: true,
+  image: true,
+  twitter_user: true,
+  facebook_user: true,
+  instagram_user: true,
+  linkedin_user: true,
+};
 const page = async () => {
-  const toSelect: Prisma.WorkshopSpeakerSelect = {
-    id: true,
-    first_names: true,
-    last_names: true,
-    email: true,
-    phone_number: true,
-    gender: true,
-    job_company: true,
-    curriculum: true,
-    image: true,
-    twitter_user: true,
-    facebook_user: true,
-    instagram_user: true,
-    linkedin_user: true,
-  };
   const workshopSpeakers = await getWorkshopSpeakersWithParams(toSelect);
   const workshopSpeakersWithSocialNetworks = workshopSpeakers?.map((workshopSpeaker) => {
     const { twitter_user, facebook_user, instagram_user, linkedin_user } = workshopSpeaker;
@@ -55,7 +76,7 @@ const page = async () => {
       },
       {
         name: 'Linkedin',
-        url: `https://www.linkedin.com/in/${linkedin_user}`,
+        url: linkedin_user,
         icon: <LinkedinIcon />,
       },
     ];
@@ -91,29 +112,8 @@ const page = async () => {
       <div className="w-full h-full">
         <Table
           tableColumns={workshopSpeakerColumns}
-          tableData={workshopSpeakersWithSocialNetworks}
-          tableHeadersForSearch={[
-            {
-              option: 'first_names',
-              label: 'Nombre',
-            },
-            {
-              option: 'last_names',
-              label: 'Apellidos',
-            },
-            {
-              option: 'email',
-              label: 'Correo',
-            },
-            {
-              option: 'phone_number',
-              label: 'Telefono',
-            },
-            {
-              option: 'job_company',
-              label: 'Organización',
-            },
-          ]}
+          tableData={workshopSpeakersWithSocialNetworks || []}
+          tableHeadersForSearch={tableHeaders}
         />
       </div>
     </div>
