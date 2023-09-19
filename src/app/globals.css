@@ -41,18 +41,16 @@ input:-webkit-autofill:focus {
     color 600000s 0s;
 }
 
-/*  focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 */
-
 @layer components {
   input {
-    @apply ring-1 focus:outline-emerald-400 ring-white sm:text-sm placeholder:text-gray-400 shadow-sm bg-slate-200 border-0  text-gray-900 focus:outline-none focus:outline-offset-0 p-2 rounded-md w-full dark:bg-slate-700 dark:placeholder-slate-500 dark:text-gray-300 dark:ring-1 dark:ring-emerald-950  dark:focus:outline-emerald-800;
+    @apply bg-white dark:bg-secondary-dark ring-0 focus:outline-primary-light sm:text-sm placeholder:text-gray-400 shadow-sm  text-gray-900 focus:outline-none focus:outline-offset-0 p-2 rounded-lg w-full dark:placeholder-slate-500 dark:text-gray-300 dark:focus:outline-primary-light;
   }
 
   textarea {
-    @apply min-h-[4rem] ring-1 focus:outline-emerald-400 ring-white sm:text-sm placeholder:text-gray-400 shadow-sm bg-slate-200 border-0  text-gray-900 focus:outline-none focus:outline-offset-0 p-2 rounded-md w-full dark:bg-slate-700 dark:placeholder-slate-500 dark:text-gray-300 dark:ring-1 dark:ring-emerald-950  dark:focus:outline-emerald-800;
+    @apply bg-white dark:bg-secondary-dark ring-0 min-h-[4rem] focus:outline-primary-light sm:text-sm placeholder:text-gray-400 shadow-sm  border-0  text-gray-900 focus:outline-none focus:outline-offset-0 p-2 rounded-lg w-full dark:placeholder-slate-500 dark:text-gray-300 outline-primary-light  dark:focus:outline-primary-light;
   }
   select {
-    @apply ring-1 focus:outline-emerald-400 ring-white sm:text-sm placeholder:text-gray-400 shadow-sm bg-slate-200 border-0  text-gray-900 focus:outline-none focus:outline-offset-0 p-2 rounded-md w-full dark:bg-slate-700 dark:placeholder-slate-500 dark:text-gray-300 dark:ring-1 dark:ring-emerald-950  dark:focus:outline-emerald-800;
+    @apply bg-white dark:bg-secondary-dark ring-0 focus:outline-primary-light sm:text-sm placeholder:text-gray-400 shadow-sm  border-0  text-gray-900 focus:outline-none focus:outline-offset-0 p-2 rounded-lg w-full dark:placeholder-slate-500 dark:text-gray-300 outline-primary-light  dark:focus:outline-primary-light;
   }
 }
 
