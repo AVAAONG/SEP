@@ -1,5 +1,5 @@
 'use client';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Column,
   useFilters,
@@ -14,18 +14,13 @@ import TableHeader from './TableHeader';
 import ExpandTableButton from './headerComponents/ExpandTableButton';
 import ExportButton from './headerComponents/ExportButton';
 
-type tableHeaderForSearchObject = {
-  option: string;
-  label: string;
-};
-
-interface TableProps {
-  tableData: readonly object[];
-  tableColumns: Column<object>[];
-  tableHeadersForSearch: tableHeaderForSearchObject[];
+interface TableProps<T extends object> {
+  tableData: readonly T[];
+  tableColumns: Column<T>[];
+  tableHeadersForSearch: { option: string; label: string }[];
 }
 
-const Table: React.FC<TableProps> = ({ tableData, tableColumns, tableHeadersForSearch }) => {
+function Table<T extends object>({ tableData, tableColumns, tableHeadersForSearch }: TableProps<T>) {
   const data = useMemo(() => tableData, [tableData]);
   const columns = useMemo(() => tableColumns, [tableColumns]);
   const [isExpanded, toggleExpanded] = useState(false);
@@ -54,9 +49,8 @@ const Table: React.FC<TableProps> = ({ tableData, tableColumns, tableHeadersForS
 
   return (
     <div
-      className={`${
-        isExpanded ? 'absolute top-0 bottom-0 left-0 right-0 z-50' : 'relative overflow-hidden'
-      }  bg-white shadow-md shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full h-max min-h-full`}
+      className={`${isExpanded ? 'absolute top-0 bottom-0 left-0 right-0 z-50' : 'relative overflow-hidden'
+        }  bg-white shadow-md shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full h-max min-h-full`}
     >
       <TableHeader
         optionsForFilter={tableHeadersForSearch}
