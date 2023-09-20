@@ -1,5 +1,4 @@
 import Card from '@/components/admin/dashboard/Card';
-import Button from '@/components/commons/Button';
 import Table from '@/components/table/Table';
 import workshopSpeakerColumns from '@/components/table/columns/workshopSpeakerColumns';
 import {
@@ -109,10 +108,10 @@ const page = async () => {
           />
         </div>
 
-        <div className="w-1/3 px-3">
+        {/* <div className="w-1/3 px-3">
           <h4 className="text-xl font-medium">Acciones</h4>
           <Button buttonText="Crear facilitador" />
-        </div>
+        </div> */}
       </div>
       <div className="w-full h-full">
         <Table

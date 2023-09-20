@@ -11,6 +11,7 @@ import { Gender } from "..\..\activities\type-activities"
 import { ScholarCollageInformation } from "collage"
 import { ScholarCVAInformation } from "cva"
 import { ChatSpeaker } from "..\..\activities\chat\chat"
+import { ScholarCondition } from "types-scholar"
 
 model User {
     id                     String                     @id @default(nanoid())
@@ -53,6 +54,7 @@ model ScholarProgramInformation {
     id                       String               @id @default(nanoid())
     avaa_admission_year      DateTime
     scholar_status           ScholarStatus
+    scholar_condition        ScholarCondition?
     can_assist_to_chats      ScholarCanAssist     @default(YES)
     can_assist_to_workshops  ScholarCanAssist     @default(YES)
     can_assist_to_volunteers ScholarCanAssist     @default(YES)
