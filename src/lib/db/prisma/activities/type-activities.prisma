@@ -14,7 +14,7 @@ enum Modality {
 // SUSPENDED - When the activity is suspended.
 enum ActivityStatus {
     SCHEDULED
-    SEND
+    SENT
     IN_PROGRESS
     DONE
     SUSPENDED
