@@ -50,3 +50,13 @@ export const SIDEBAR_DB_BUTTONS = [
     itemList: [{ name: 'Facilitadores', link: '/admin/facilitadores/chats' }],
   },
 ];
+
+export const SIDEBAR_ADMIN_ACTIONS = [
+  {
+    icon: userIcon,
+    buttonName: 'Acciones de administrador',
+    itemList: [
+      { name: 'control de administradores', link: '/admin/config/adminUsers' },
+    ],
+  },
+]

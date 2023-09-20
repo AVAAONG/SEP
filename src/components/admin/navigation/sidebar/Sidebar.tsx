@@ -6,16 +6,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { MenuIcon, dashboardComponent } from '../../../../../public/svgs/svgs';
 import DropdownButton from '../../../scholar/DropdownButton';
-import { SIDEBAR_ACTIVITIES_ACTIONS, SIDEBAR_DB_BUTTONS } from '../data';
+import { SIDEBAR_ACTIVITIES_ACTIONS, SIDEBAR_ADMIN_ACTIONS, SIDEBAR_DB_BUTTONS } from '../data';
 import SidebarSeparator from './SidebarSeparator';
 const Sidebar = () => {
   const [isOpen, setSidebarOpen] = useAtom(sidebarAtom);
   const toggleSidebar = () => setSidebarOpen(!isOpen);
   return (
     <aside
-      className={`${
-        isOpen ? 'fixed xl:flex xl:relative' : 'hidden'
-      } flex-col gap-4 justify-start items-center z-50 xl:z-0 w-full sm:w-72 py-8 px-2 bg-primary-light dark:bg-secondary-dark transition-all min-h-full`}
+      className={`${isOpen ? 'fixed xl:flex xl:relative' : 'hidden'
+        } flex-col gap-4 justify-start items-center z-50 xl:z-0 w-full sm:w-72 py-8 px-2 bg-primary-light dark:bg-secondary-dark transition-all min-h-full`}
     >
       <div className="flex justify-between xl:justify-start items-center mb-8 xl:mb-2">
         <Link href="/admin/panel">
@@ -70,7 +69,18 @@ const Sidebar = () => {
         })}
       </div>
       <SidebarSeparator text="Mentoria" />
-      <SidebarSeparator text="Controles de administrador" />
+      <SidebarSeparator text="Configuración" />
+      {SIDEBAR_ADMIN_ACTIONS.map(({ buttonName, icon, itemList }) => {
+        return (
+          <DropdownButton
+            key={buttonName}
+            buttonName={buttonName}
+            Icon={icon()}
+            itemList={itemList}
+            link={null}
+          />
+        );
+      })}
       <SidebarSeparator text="Captacion" />
       <SidebarSeparator text="Red de egresados" />
     </aside>
