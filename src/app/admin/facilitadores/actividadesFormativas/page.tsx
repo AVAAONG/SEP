@@ -2,7 +2,10 @@ import Card from '@/components/admin/dashboard/Card';
 import Button from '@/components/commons/Button';
 import Table from '@/components/table/Table';
 import workshopSpeakerColumns from '@/components/table/columns/workshopSpeakerColumns';
-import { getWorkshopSpeakersWithParams } from '@/lib/db/utils/speaker';
+import {
+  getWorkshopSpeakersCountByGender,
+  getWorkshopSpeakersWithParams,
+} from '@/lib/db/utils/speaker';
 import { UserIcon } from '@heroicons/react/20/solid';
 import { Prisma } from '@prisma/client';
 import dynamic from 'next/dynamic';
@@ -82,6 +85,8 @@ const page = async () => {
     ];
     return { ...workshopSpeaker, socialNetworks };
   });
+  const [workshopSpeakersWomanCount, workshopSpeakerMenCount] =
+    await getWorkshopSpeakersCountByGender();
   return (
     <div className="flex flex-col items-center w-full gap-6">
       <div className="flex flex-col md:flex-row gap-4 w-full">
@@ -98,8 +103,8 @@ const page = async () => {
         <div>
           <PieChartComponent
             data={[
-              { name: 'Hombres', value: 10 },
-              { name: 'Mujeres', value: 20 },
+              { name: 'Hombres', value: workshopSpeakerMenCount },
+              { name: 'Mujeres', value: workshopSpeakersWomanCount },
             ]}
           />
         </div>
