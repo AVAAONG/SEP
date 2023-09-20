@@ -66,3 +66,14 @@ export const MODALITY = [
 
 export const PLATFORMS = ['zoom', 'google meet', 'otra', 'padlet'];
 export const WORKSHOP_YEAR = ['I', 'II', 'III', 'IV', 'V', 'TODOS'];
+
+export const ADMIN_ROLES = [
+  { id: 1, name: 'STAFF_PROEXCELENCIA' },
+  { id: 2, name: 'STAFF_COMMUNICATIONS' },
+  { id: 3, name: 'STAFF_ADMON' },
+  { id: 4, name: 'STAFF_MENTORSHIP' },
+  { id: 5, name: 'STAFF_RECRUITMENT' },
+  { id: 6, name: 'COMITEE' },
+  { id: 7, name: 'PROYECT' },
+  { id: 8, name: 'CHAT' }
+]
