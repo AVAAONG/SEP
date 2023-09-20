@@ -1,10 +1,9 @@
-import { Modality } from "..\..\schema"
-import { User } from "scholar"
+import { Modality, User } from "..\..\schema"
 
 enum EvaluationScale {
-    ONE_TO_TEN
-    ONE_TO_FIVE
-    ONE_TO_HUNDRED
+    CERO_TO_TEN
+    CERO_TO_FIVE
+    CERO_TO_TWENTY
 }
 
 enum StudyRegime {
@@ -28,7 +27,7 @@ model ScholarCollageInformation {
     id                      String                                       @id @default(nanoid())
     academic_load_completed Boolean?
     collage                 String?
-    carrer                  String?
+    career                  String?
     study_area              StudyArea?
     evaluation_scale        EvaluationScale
     study_regime            StudyRegime

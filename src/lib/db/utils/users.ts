@@ -49,21 +49,6 @@ export const deleteAllScholars = async () => {
   const scholars = await prisma.scholar.deleteMany();
 };
 
-export const createScholar = async (data: Scholar): Promise<Scholar | null> => {
-  try {
-    const scholar = await prisma.scholar.create({
-      data,
-    });
-    console.log('Se creo a' + data.first_names + ' ' + data.last_names);
-    return scholar;
-  } catch (error) {
-    console.log(' No se creo a' + data.first_names + ' ' + data.last_names);
-    return null;
-  } finally {
-    await prisma.$disconnect();
-  }
-};
-
 /**
  * @description add a workshop to a scholar
  * @param scholarId Scholar id
@@ -222,85 +207,9 @@ export const getScholars = async () => {
   return scholar;
 };
 
-///+============== Personas de febrero
-// NO se pudo colocar a 27488394 en el taller pjvjjStiRNDib8WMJqtyu7
-// NO se pudo colocar a 29677853 en el taller pjvjjStiRNDib8WMJqtyu7
-// NO se pudo colocar a 26435596 en el taller wxnMqPAzCLfXSRSAWZ7X2i
-// NO se pudo colocar a 27687150 en el taller wxnMqPAzCLfXSRSAWZ7X2i
-// NO se pudo colocar a 27023827 en el taller oJZeTZdnV5trcyE9AVJQ8s
-// NO se pudo colocar a 29678819 en el taller 4ZkVXTQgHaqUU4P4UVuSG4
-// NO se pudo colocar a 28469196 en el taller i8Y8Yj6ay83Aom7Tx3iE62
-//  NO se pudo colocar a 26435596 en el taller uXBz5cd1iLJqJfzJ3J4fwX
-//  NO se pudo colocar a 20201110248 en el taller inoqJ593bHGb3e5TbogeyJ
-//  NO se pudo colocar a 27023827 en el taller inoqJ593bHGb3e5TbogeyJ
-//  NO se pudo colocar a 27108385 en el taller inoqJ593bHGb3e5TbogeyJ
-//  NO se pudo colocar a 29595628 en el taller inoqJ593bHGb3e5TbogeyJ
-//  NO se pudo colocar a 26435596 en el taller inoqJ593bHGb3e5TbogeyJ
-//  NO se pudo colocar a 26435596 en el taller gfKTYasHHjxVRkafMV8Khq
-//  NO se pudo colocar a 27746001 en el taller gfKTYasHHjxVRkafMV8Khq
-//  NO se pudo colocar a 26435596 en el taller oBHZkib5XHDXY32NFsesRW
-//  NO se pudo colocar a 27755868 en el taller eEm7GvVNTozLnhMvnYHz1Q
-//  NO se pudo colocar a v - 28496177 en el taller eEm7GvVNTozLnhMvnYHz1Q
-//  NO se pudo colocar a 26995018 en el taller eEm7GvVNTozLnhMvnYHz1Q
-//  NO se pudo colocar a 28015383 en el taller iKoEAPmaiQn6VoY9QDXXaJ
-//  NO se pudo colocar a 27488394 en el taller iKoEAPmaiQn6VoY9QDXXaJ
-//  NO se pudo colocar a 27023827 en el taller iKoEAPmaiQn6VoY9QDXXaJ
+export const createScholar = async (data) => {
+  const scholar = await prisma.user.create({
+    data,
 
-/// +============== Personas de marzo
-// NO se pudo colocar a 27687150 en el taller wxnMqPAzCLfXSRSAWZ7X2i
-// NO se pudo colocar a 26435596 en el taller wxnMqPAzCLfXSRSAWZ7X2i
-//  NO se pudo colocar a 20201110248 en el taller inoqJ593bHGb3e5TbogeyJ
-
-//  NO se pudo colocar a 27023827 en el taller inoqJ593bHGb3e5TbogeyJ
-//  NO se pudo colocar a 27108385 en el taller inoqJ593bHGb3e5TbogeyJ
-//  NO se pudo colocar a 29595628 en el taller inoqJ593bHGb3e5TbogeyJ
-//  NO se pudo colocar a 26435596 en el taller inoqJ593bHGb3e5TbogeyJ
-//  NO se pudo colocar a 27344118 en el taller i8Y8Yj6ay83Aom7Tx3iE62
-//  NO se pudo colocar a 28469196 en el taller i8Y8Yj6ay83Aom7Tx3iE62
-//  NO se pudo colocar a 27344118 en el taller pjvjjStiRNDib8WMJqtyu7
-//   NO se pudo colocar a 27488394 en el taller pjvjjStiRNDib8WMJqtyu7
-//   NO se pudo colocar a 29677853 en el taller pjvjjStiRNDib8WMJqtyu7
-//   NO se pudo colocar a 28015383 en el taller iKoEAPmaiQn6VoY9QDXXaJ
-//   NO se pudo colocar a 27488394 en el taller iKoEAPmaiQn6VoY9QDXXaJ
-//   NO se pudo colocar a 27023827 en el taller iKoEAPmaiQn6VoY9QDXXaJ
-//    NO se pudo colocar a 26435596 en el taller uXBz5cd1iLJqJfzJ3J4fwX
-//    NO se pudo colocar a 27344118 en el taller uXBz5cd1iLJqJfzJ3J4fwX
-//    NO se pudo colocar a 26435596 en el taller wxnMqPAzCLfXSRSAWZ7X2i
-//    NO se pudo colocar a 27687150 en el taller wxnMqPAzCLfXSRSAWZ7X2i
-//    NO se pudo colocar a 27344118 en el taller eEm7GvVNTozLnhMvnYHz1Q
-//    NO se pudo colocar a 27344118 en el taller wxnMqPAzCLfXSRSAWZ7X2i
-//     NO se pudo colocar a 27755868 en el taller eEm7GvVNTozLnhMvnYHz1Q
-//      NO se pudo colocar a v - 28496177 en el taller eEm7GvVNTozLnhMvnYHz1Q
-//       NO se pudo colocar a 26995018 en el taller eEm7GvVNTozLnhMvnYHz1Q
-//        NO se pudo colocar a 27023827 en el taller oJZeTZdnV5trcyE9AVJQ8s
-//        NO se pudo colocar a 29678819 en el taller 4ZkVXTQgHaqUU4P4UVuSG4
-//        NO se pudo colocar a 26435596 en el taller gfKTYasHHjxVRkafMV8Khq
-//         NO se pudo colocar a 27746001 en el taller gfKTYasHHjxVRkafMV8Khq
-//         NO se pudo colocar a 20201110248 en el taller inoqJ593bHGb3e5TbogeyJ
-//          NO se pudo colocar a 27023827 en el taller inoqJ593bHGb3e5TbogeyJ
-//           NO se pudo colocar a 27108385 en el taller inoqJ593bHGb3e5TbogeyJ
-//            NO se pudo colocar a 29595628 en el taller inoqJ593bHGb3e5TbogeyJ
-//            NO se pudo colocar a 26435596 en el taller inoqJ593bHGb3e5TbogeyJ
-//            NO se pudo colocar a 26435596 en el taller gfKTYasHHjxVRkafMV8Khq
-//            NO se pudo colocar a 27746001 en el taller gfKTYasHHjxVRkafMV8Khq
-//            NO se pudo colocar a 29678819 en el taller 4ZkVXTQgHaqUU4P4UVuSG4
-//             NO se pudo colocar a 27344118 en el taller oBHZkib5XHDXY32NFsesRW
-//             NO se pudo colocar a 26435596 en el taller oBHZkib5XHDXY32NFsesRW
-//              NO se pudo colocar a 27344118 en el taller i8Y8Yj6ay83Aom7Tx3iE62
-//              NO se pudo colocar a 28469196 en el taller i8Y8Yj6ay83Aom7Tx3iE62
-//              NO se pudo colocar a 26435596 en el taller uXBz5cd1iLJqJfzJ3J4fwX
-//               NO se pudo colocar a 27344118 en el taller uXBz5cd1iLJqJfzJ3J4fwX
-//                NO se pudo colocar a 27344118 en el taller eEm7GvVNTozLnhMvnYHz1Q
-//                 NO se pudo colocar a 27755868 en el taller eEm7GvVNTozLnhMvnYHz1Q
-//                  NO se pudo colocar a v - 28496177 en el taller eEm7GvVNTozLnhMvnYHz1Q
-
-//                  NO se pudo colocar a 27344118 en el taller pjvjjStiRNDib8WMJqtyu7
-//                   NO se pudo colocar a 29677853 en el taller pjvjjStiRNDib8WMJqtyu7
-//                    NO se pudo colocar a 27488394 en el taller pjvjjStiRNDib8WMJqtyu7
-//                     NO se pudo colocar a 27023827 en el taller oJZeTZdnV5trcyE9AVJQ8s
-//                     NO se pudo colocar a 26995018 en el taller eEm7GvVNTozLnhMvnYHz1Q
-//                     NO se pudo colocar a 28015383 en el taller iKoEAPmaiQn6VoY9QDXXaJ
-//                      NO se pudo colocar a 27488394 en el taller iKoEAPmaiQn6VoY9QDXXaJ
-//                       NO se pudo colocar a 27023827 en el taller iKoEAPmaiQn6VoY9QDXXaJ
-//                       NO se pudo colocar a 27344118 en el taller oBHZkib5XHDXY32NFsesRW
-//                       NO se pudo colocar a 26435596 en el taller oBHZkib5XHDXY32NFsesRW
+  });
+}

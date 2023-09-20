@@ -60,8 +60,6 @@ model ChatSpeaker {
   id                        String                      @id @default(nanoid())
   chat                      Chat                        @relation(fields: [chat_id], references: [id])
   chat_id                   String                      @unique
-  speaker                   User                        @relation(fields: [speaker_id], references: [id], onDelete: Cascade)
-  speaker_id                String                      @unique
   ScholarProgramInformation ScholarProgramInformation[]
 }
 
@@ -454,9 +452,9 @@ enum AdminRoles {
 //
 
 enum EvaluationScale {
-  ONE_TO_TEN
-  ONE_TO_FIVE
-  ONE_TO_HUNDRED
+  CERO_TO_TEN
+  CERO_TO_FIVE
+  CERO_TO_TWENTY
 }
 
 enum StudyRegime {
@@ -480,7 +478,7 @@ model ScholarCollageInformation {
   id                      String                                       @id @default(nanoid())
   academic_load_completed Boolean?
   collage                 String?
-  carrer                  String?
+  career                  String?
   study_area              StudyArea?
   evaluation_scale        EvaluationScale
   study_regime            StudyRegime
@@ -548,6 +546,9 @@ model User {
   dni                    String                     @unique
   gender                 Gender
   birthdate              DateTime
+  is_working             Boolean                    @default(false)
+  job_title              String?
+  job_company            String?
   local_phone_number     String?
   cell_phone_Number      String?
   whatsapp_number        String?
@@ -563,7 +564,6 @@ model User {
   program_information_id String?
   collage_information_id String?
   cva_information_id     String?
-  ChatSpeaker            ChatSpeaker?
 
   @@unique([program_information_id, collage_information_id, cva_information_id])
   @@index([program_information_id])
@@ -574,7 +574,8 @@ model User {
 model ScholarProgramInformation {
   id                       String               @id @default(nanoid())
   avaa_admission_year      DateTime
-  scholar_status           ScholarStatus
+  scholar_status           ScholarStatus        @default(NORMAL)
+  scholar_condition        ScholarCondition?
   can_assist_to_chats      ScholarCanAssist     @default(YES)
   can_assist_to_workshops  ScholarCanAssist     @default(YES)
   can_assist_to_volunteers ScholarCanAssist     @default(YES)
@@ -645,11 +646,17 @@ enum Region {
 enum ScholarStatus {
   PROBATORIO_1
   PROBATORIO_2
-  CURRENT
-  ALUMNI
+  NORMAL
 }
 
 enum ScholarCanAssist {
   YES
   NO
+}
+
+enum ScholarCondition {
+  ACTIVE
+  RESIGNATION
+  WITHDRAWAL
+  ALUMNI
 }
