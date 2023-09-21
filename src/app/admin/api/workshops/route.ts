@@ -4,6 +4,7 @@ import { getFormatedDate } from '@/lib/googleAPI/calendar/utils';
 import { getSpreadsheetValues } from '@/lib/googleAPI/sheets';
 import { Platform } from '@/types/General';
 import { ActivityStatus, Modality, Skill, WorkshopYear } from '@prisma/client';
+import { nanoid } from 'nanoid';
 import { NextResponse } from 'next/server';
 
 const FORM_CREATION_APPSCRIPT_URL =
@@ -34,25 +35,12 @@ const parseDates = (date: string, startHour: string, endHour: string) => {
 
 const createWorkshopsInbulkFromSpreadsheet = async () => {
   const values = (await getSpreadsheetValues(
-    WORKSHOP_SPEAKERS_SPREADSHEET,
-    WORKSHOP_SPEAKERS_RANGE
+    WORKSHOP_SPREADSHEET,
+    WORKSHOP_RANGE
   )) as string[][];
+  const workshopId = nanoid()
 
-  const  = (await getSpreadsheetValues(
-    WORKSHOP_SPEAKERS_SPREADSHEET,
-    WORKSHOP_SPEAKERS_RANGE
-  )) as string[][];
-
-
-
-  values.forEach(async (re) => {
-    const attendance = re[6] === "Si" ? "ATTENDED" : "NOT_ATTENDED"
-    if (re[3].length) await addWorkshopToScholar(re[3].trim().replaceAll('.', '').toLocaleLowerCase().replaceAll("V-", "") as shortUUID.SUUID, workshopId[0][0] as shortUUID.SUUID, attendance)
-    if (re[3] === undefined) { }
-    else if (re[3].length) await addWorkshopToScholar(normalizeDni(re[3]) as shortUUID.SUUID, workshopId[0][0] as shortUUID.SUUID, attendance)
-  })
-
-  values.forEach((value) => {
+  values.forEach(async (value) => {
     const [
       title,
       skill,
@@ -71,17 +59,9 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
     ] = value;
     const dates = parseDates(date, startHour, endHour)
 
-
-    const ATTENDANCE_SHEET = sheetName;
-    const ATTENDANCE_RANGE = `'${ATTENDANCE_SHEET}'!A2:N96`;
-
-    const attendance = await getSpreadsheetValues(spreadsheet, ATTENDANCE_RANGE) as string[][]
-
-    ATTENDANCE_RANGE
-
-
     prisma.workshop.create({
       data: {
+        id: workshopId,
         title,
         asociated_skill: skill as Skill,
         ...dates,
@@ -96,18 +76,59 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
         description,
         year: parseWorkshopYear(workshopYear),
         activity_status: parseWorkshopStatus(status) as ActivityStatus,
-      }
+      },
     })
-  });
+
+    const ATTENDANCE_SHEET = sheetName;
+    const ATTENDANCE_RANGE = `'${ATTENDANCE_SHEET}'!A2:N96`;
+
+    const attendance = await getSpreadsheetValues(spreadsheet, ATTENDANCE_RANGE) as string[][]
+
+    const attendanceMap = attendance.map(async (a) => {
+      const dni = a[3].toLowerCase().trim().replaceAll('.', '').replaceAll("v-", "")
+      const attendance = a[6] === "Si" ? "ATTENDED" : "NOT_ATTENDED"
+
+    })
+  })
 }
 
-const parseWorkshopYear = (year): WorkshopYear[] => {
-  const years = year.includes(',') ? date.split(',') : [year]
+const createAttendance = async () => {
+  let user;
+  try {
+    user = await prisma.user.findUnique({
+      where: {
+        dni: 'dni'
+      }
+    })
+  }
+  catch (e) {
+    console.log(e)
+  }
+
+  prisma.workshopAttendance.create({
+    data: {
+      workshop: {
+        connect: {
+          id: workshopId
+        }
+      },
+      scholar: {
+        connect: {
+          id: user?.id
+        }
+      },
+      attendance: 'ATTENDED'
+    },
+  })
+}
+
+const parseWorkshopYear = (year: string): WorkshopYear[] => {
+  const years = year.includes(',') ? year.split(',') : [year]
   years.map((y) => {
     y = y.trim()
     return y
   })
-  return years
+  return years as WorkshopYear[]
 }
 
 
@@ -117,7 +138,7 @@ const parseWorkshopYear = (year): WorkshopYear[] => {
 
 
 
-const parseWorkshopStatus = (statuss) => {
+const parseWorkshopStatus = (statuss: string) => {
   switch (statuss) {
     case "SCHEDULED":
       return "SCHEDULED";
@@ -129,7 +150,7 @@ const parseWorkshopStatus = (statuss) => {
       return "SENT";
   }
 }
-const parseWorkshopModality = (modality) => {
+const parseWorkshopModality = (modality: string) => {
   switch (modality) {
     case "Presencial":
       return "IN_PERSON";
