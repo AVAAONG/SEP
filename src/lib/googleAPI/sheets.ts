@@ -152,3 +152,18 @@ export const getSpreadsheetValues = async (spreadsheetId: string, range: string)
     console.error(err);
   }
 };
+
+
+
+export const getSpreadsheetValuesByUrl = async (spreadsheetUrl: string, range: string) => {
+  const spreadsheetId = spreadsheetUrl.split('/')[5];
+  try {
+    const response = await Sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range,
+    });
+    return response.data.values;
+  } catch (err) {
+    console.error(err);
+  }
+}

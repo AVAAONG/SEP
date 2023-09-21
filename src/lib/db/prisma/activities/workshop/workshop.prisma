@@ -20,6 +20,7 @@ model Workshop {
     calendar_id        String?
     start_dates        DateTime[]
     end_dates          DateTime[]
+    hours              Float
     year               WorkshopYear[]
     modality           Modality
     asociated_skill    Skill

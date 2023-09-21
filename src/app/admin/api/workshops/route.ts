@@ -1,46 +1,42 @@
-import { getScheduledWorkshops } from '@/lib/db/utils/Workshops';
 import { prisma } from '@/lib/db/utils/prisma';
+import { setTokens } from '@/lib/googleAPI/auth';
 import { getFormatedDate } from '@/lib/googleAPI/calendar/utils';
-import { getSpreadsheetValues } from '@/lib/googleAPI/sheets';
+import { getSpreadsheetValues, getSpreadsheetValuesByUrl } from '@/lib/googleAPI/sheets';
 import { Platform } from '@/types/General';
 import { ActivityStatus, Modality, Skill, WorkshopYear } from '@prisma/client';
+import moment from 'moment';
 import { nanoid } from 'nanoid';
+import { getToken } from 'next-auth/jwt';
 import { NextResponse } from 'next/server';
 
-const FORM_CREATION_APPSCRIPT_URL =
-  'https://script.google.com/macros/s/AKfycbypXIh8iD-Pbf7gEKHEDrjxTj7EB_DHbWoOO53KgukwDDgaB6PO42xQqeNUReFo4jty/exec';
-
-const WORKSHOP_SPREADSHEET = '1u-fDi_uggUCvK1v4DPPCwfx3pu8-Q2-VHnQ6ivbTi4k';
-const WORKSHOP_SHEET = 'Registro de talleres';
-const WORKSHOP_RANGE = `'${WORKSHOP_SHEET}'!A2:N96`;
-
 export async function GET(req: Response, res: Response) {
-  const workshops = await getScheduledWorkshops();
-  return NextResponse.json(workshops);
-}
-
-const parseDates = (date: string, startHour: string, endHour: string) => {
-  const dates = date.includes(',') ? date.split(',') : [date]
-
-  const newDates = dates.map((d) => {
-    d = d.trim()
-    const [startDate, endDate] = getFormatedDate(d, startHour.trim(), endHour.trim())
-    return {
-      start_date: new Date(startDate),
-      end_date: new Date(endDate),
+  const token = await getToken({ req });
+  setTokens(token.accessToken, token.refreshToken);
+  prisma.chapter.create({
+    data: {
+      chapterName: "CARACAS",
     }
-  })
-  return newDates
+  });
+  prisma.adminUser.create({
+    data: {
+      email: "avaatecnologia@gmail.com",
+      name: "Kevin Bravo",
+      role: "STAFF_PROEXCELENCIA",
+    }
+  });
+  return NextResponse.json({ messagge: 'ok' });
 }
 
 const createWorkshopsInbulkFromSpreadsheet = async () => {
+  const WORKSHOP_SPREADSHEET = '1u-fDi_uggUCvK1v4DPPCwfx3pu8-Q2-VHnQ6ivbTi4k';
+  const WORKSHOP_SHEET = 'Registro de talleres';
+  const WORKSHOP_RANGE = `'${WORKSHOP_SHEET}'!A2:N96`;
   const values = (await getSpreadsheetValues(
     WORKSHOP_SPREADSHEET,
     WORKSHOP_RANGE
   )) as string[][];
-  const workshopId = nanoid()
 
-  values.forEach(async (value) => {
+  const example = values.map(async (value) => {
     const [
       title,
       skill,
@@ -56,8 +52,9 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
       status,
       spreadsheet,
       sheetName,
-    ] = value;
-    const dates = parseDates(date, startHour, endHour)
+    ] = value; 7
+    const [dates, hours] = parseDates(date, startHour, endHour)
+    const workshopId = nanoid()
 
     prisma.workshop.create({
       data: {
@@ -65,6 +62,7 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
         title,
         asociated_skill: skill as Skill,
         ...dates,
+        hours: hours,
         speaker: {
           connect: {
             id: speakerId,
@@ -76,67 +74,50 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
         description,
         year: parseWorkshopYear(workshopYear),
         activity_status: parseWorkshopStatus(status) as ActivityStatus,
-      },
-    })
-
-    const ATTENDANCE_SHEET = sheetName;
-    const ATTENDANCE_RANGE = `'${ATTENDANCE_SHEET}'!A2:N96`;
-
-    const attendance = await getSpreadsheetValues(spreadsheet, ATTENDANCE_RANGE) as string[][]
-
-    const attendanceMap = attendance.map(async (a) => {
-      const dni = a[3].toLowerCase().trim().replaceAll('.', '').replaceAll("v-", "")
-      const attendance = a[6] === "Si" ? "ATTENDED" : "NOT_ATTENDED"
-
-    })
-  })
-}
-
-const createAttendance = async () => {
-  let user;
-  try {
-    user = await prisma.user.findUnique({
-      where: {
-        dni: 'dni'
       }
     })
-  }
-  catch (e) {
-    console.log(e)
-  }
+    const ATTENDANCE_RANGE = `'${sheetName}'!B8:G`;
+    const attendance = await getSpreadsheetValuesByUrl(spreadsheet, ATTENDANCE_RANGE) as string[][]
 
-  prisma.workshopAttendance.create({
-    data: {
-      workshop: {
-        connect: {
-          id: workshopId
-        }
-      },
-      scholar: {
-        connect: {
-          id: user?.id
-        }
-      },
-      attendance: 'ATTENDED'
-    },
+    const attendanceMap = attendance.map(async (a) => {
+      const dni = a[2].toLowerCase().trim().replaceAll('.', '').replaceAll("v-", "")
+      const attendance = a[5] === "Si" ? "ATTENDED" : "NOT_ATTENDED"
+      let user;
+      try {
+        user = await prisma.user.findUnique({
+          where: {
+            dni
+          }
+        })
+      }
+      catch (e) {
+        console.log(e)
+      }
+      prisma.workshopAttendance.create({
+        data: {
+          workshop: {
+            connect: {
+              id: workshopId
+            }
+          },
+          scholar: {
+            connect: {
+              id: user?.id
+            }
+          },
+          attendance: attendance
+        },
+      })
+    })
+    return []
   })
+  return Promise.all(example);
 }
 
 const parseWorkshopYear = (year: string): WorkshopYear[] => {
   const years = year.includes(',') ? year.split(',') : [year]
-  years.map((y) => {
-    y = y.trim()
-    return y
-  })
-  return years as WorkshopYear[]
+  return years.map((y) => y.trim().toLocaleUpperCase() as WorkshopYear)
 }
-
-
-
-
-
-
-
 
 const parseWorkshopStatus = (statuss: string) => {
   switch (statuss) {
@@ -160,94 +141,22 @@ const parseWorkshopModality = (modality: string) => {
 
 }
 
-// const temp = async (workshop) => {
-//     const { speaker, title, modality, spots } = workshop;
-//     const formDescription = createFormDescription(workshop)
-//     const workshopId = shortUUID.generate()
+const parseDates = (date: string, startHour: string, endHour: string): [{
+  start_date: string;
+  end_date: string;
+}[], number] => {
+  const dates = date.includes(',') ? date.split(',') : [date]
+  let hours: number = 0
 
-//     const [
-//         calendarEventId,
-//         addToCalendarUrl,
-//         meetingLink,
-//         meetingId,
-//         meetingPassword
-//     ] = await createEvent('workshop', workshop)
+  const newDates = dates.map((d) => {
+    d = d.trim()
+    const [startDate, endDate] = getFormatedDate(d, startHour.trim(), endHour.trim())
+    hours = hours + moment(endDate).diff(moment(startDate), 'minutes') / 60
+    return {
+      start_date: new Date(startDate).toLocaleString(),
+      end_date: new Date(endDate).toLocaleString(),
+    }
+  })
 
-//     const formUrl = await createForm(
-//         title,
-//         modality,
-//         spots,
-//         workshopId,
-//         addToCalendarUrl,
-//         meetingLink,
-//         meetingId,
-//         meetingPassword,
-//         addToCalendarUrl,
-//         meetingLink,
-//         meetingId,
-//         formDescription
-
-//     )
-//     const speakerId = speaker
-
-//     const tempDataObj: WorkshopTempData = {
-//         id: shortUUID.generate(),
-//         meetingPassword,
-//         meetingLink,
-//         meetingId,
-//         formLink: formUrl
-//     }
-//     const normalizedWorkshop = normalizeWorkshopData(workshop, workshopId, tempDataObj, calendarEventId)
-
-//     const token = await getToken({ req });
-//     setTokens(token.accessToken, token.refreshToken)
-//     createWorkshop(normalizedWorkshop, speakerId, tempDataObj)
-// }
-
-// const normalizeWorkshopData = (workshop: FormTypeWorkshop, id, tempDataObj, calendarEventId): Workshop => {
-//     const { title, pensum, startHour, endHour, date, spots, modality, description, platform, workshopYear } = workshop;
-//     const [startDate, endDate] = getFormatedDate(date, startHour, endHour)
-//     const normalizeWorkshopObject: Workshop = {
-//         id,
-//         title: title,
-//         spots: parseInt(spots),
-//         platform: platform.trim().toUpperCase().replace(' ', '_') as Platform,
-//         description,
-//         workshopYear: workshopYear,
-//         modality: modality.toUpperCase() as Modality,
-//         pensum: pensum.toUpperCase() as Pensum,
-//         dates: {
-//             start_date: new Date(startDate),
-//             end_date: new Date(endDate),
-//         },
-//         activityStatus: "AGENDADO",
-//         tempData: tempDataObj,
-//         calendarID: calendarEventId,
-
-//     }
-//     return normalizeWorkshopObject;
-// }
-
-// export async function PATCH(req: Response, res: Response) {
-//     const token = await getToken({ req });
-//     setTokens(token.accessToken, token.refreshToken)
-//     return NextResponse.json({ messagge: "ok" })
-// }
-
-// export async function DELETE(req: Response, res: Response) {
-//     const token = await getToken({ req });
-//     setTokens(token.accessToken, token.refreshToken)
-//     return NextResponse.json({ messagge: "ok" })
-// }
-// export async function PUT(req: Response, res: Response) {
-//     const token = await getToken({ req });
-//     setTokens(token.accessToken, token.refreshToken)
-//     return NextResponse.json({ messagge: "ok" })
-// }
-
-// export async function GET(req: Response, res: Response) {
-//     const token = await getToken({ req });
-//     setTokens(token.accessToken, token.refreshToken)
-
-//     return NextResponse.json({ messagge: "ok" })
-// }
+  return [newDates, hours]
+}

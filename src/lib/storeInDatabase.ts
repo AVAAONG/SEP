@@ -165,3 +165,98 @@ const WORKSHOP_SPEAKERS_RANGE = `'${WORKSHOP_SPEAKER_SHEET}'!B2:I87`;
 
 //     return workshopSpeakers;
 // };
+
+
+////// functions to create workshops
+
+// const temp = async (workshop) => {
+//     const { speaker, title, modality, spots } = workshop;
+//     const formDescription = createFormDescription(workshop)
+//     const workshopId = shortUUID.generate()
+
+//     const [
+//         calendarEventId,
+//         addToCalendarUrl,
+//         meetingLink,
+//         meetingId,
+//         meetingPassword
+//     ] = await createEvent('workshop', workshop)
+
+//     const formUrl = await createForm(
+//         title,
+//         modality,
+//         spots,
+//         workshopId,
+//         addToCalendarUrl,
+//         meetingLink,
+//         meetingId,
+//         meetingPassword,
+//         addToCalendarUrl,
+//         meetingLink,
+//         meetingId,
+//         formDescription
+
+//     )
+//     const speakerId = speaker
+
+//     const tempDataObj: WorkshopTempData = {
+//         id: shortUUID.generate(),
+//         meetingPassword,
+//         meetingLink,
+//         meetingId,
+//         formLink: formUrl
+//     }
+//     const normalizedWorkshop = normalizeWorkshopData(workshop, workshopId, tempDataObj, calendarEventId)
+
+//     const token = await getToken({ req });
+//     setTokens(token.accessToken, token.refreshToken)
+//     createWorkshop(normalizedWorkshop, speakerId, tempDataObj)
+// }
+
+// const normalizeWorkshopData = (workshop: FormTypeWorkshop, id, tempDataObj, calendarEventId): Workshop => {
+//     const { title, pensum, startHour, endHour, date, spots, modality, description, platform, workshopYear } = workshop;
+//     const [startDate, endDate] = getFormatedDate(date, startHour, endHour)
+//     const normalizeWorkshopObject: Workshop = {
+//         id,
+//         title: title,
+//         spots: parseInt(spots),
+//         platform: platform.trim().toUpperCase().replace(' ', '_') as Platform,
+//         description,
+//         workshopYear: workshopYear,
+//         modality: modality.toUpperCase() as Modality,
+//         pensum: pensum.toUpperCase() as Pensum,
+//         dates: {
+//             start_date: new Date(startDate),
+//             end_date: new Date(endDate),
+//         },
+//         activityStatus: "AGENDADO",
+//         tempData: tempDataObj,
+//         calendarID: calendarEventId,
+
+//     }
+//     return normalizeWorkshopObject;
+// }
+
+// export async function PATCH(req: Response, res: Response) {
+//     const token = await getToken({ req });
+//     setTokens(token.accessToken, token.refreshToken)
+//     return NextResponse.json({ messagge: "ok" })
+// }
+
+// export async function DELETE(req: Response, res: Response) {
+//     const token = await getToken({ req });
+//     setTokens(token.accessToken, token.refreshToken)
+//     return NextResponse.json({ messagge: "ok" })
+// }
+// export async function PUT(req: Response, res: Response) {
+//     const token = await getToken({ req });
+//     setTokens(token.accessToken, token.refreshToken)
+//     return NextResponse.json({ messagge: "ok" })
+// }
+
+// export async function GET(req: Response, res: Response) {
+//     const token = await getToken({ req });
+//     setTokens(token.accessToken, token.refreshToken)
+
+//     return NextResponse.json({ messagge: "ok" })
+// }

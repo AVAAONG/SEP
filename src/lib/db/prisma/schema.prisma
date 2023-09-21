@@ -96,7 +96,7 @@ enum Modality {
 // SUSPENDED - When the activity is suspended.
 enum ActivityStatus {
   SCHEDULED
-  SEND
+  SENT
   IN_PROGRESS
   DONE
   SUSPENDED
@@ -204,6 +204,7 @@ model Workshop {
   calendar_id        String?
   start_dates        DateTime[]
   end_dates          DateTime[]
+  hours              Float
   year               WorkshopYear[]
   modality           Modality
   asociated_skill    Skill
@@ -296,6 +297,7 @@ model Chapter {
   id                String                      @id @default(nanoid())
   chapterName       String
   asociatedScholars ScholarProgramInformation[]
+  asociatedAdmins   AdminUser[]
 }
 
 //
@@ -364,6 +366,10 @@ model AdminUser {
   sessions      AdminSession[]
   lastLogin     DateTime?      @default(now())
   role          AdminRoles
+  Chapter       Chapter?       @relation(fields: [chapterId], references: [id])
+  chapterId     String?
+
+  @@index([chapterId])
 }
 
 model AdminVerificationToken {
