@@ -58,7 +58,5 @@ model ChatSpeaker {
     id                        String                      @id @default(nanoid())
     chat                      Chat                        @relation(fields: [chat_id], references: [id])
     chat_id                   String                      @unique
-    speaker                   User                        @relation(fields: [speaker_id], references: [id], onDelete: Cascade)
-    speaker_id                String                      @unique
     ScholarProgramInformation ScholarProgramInformation[]
 }

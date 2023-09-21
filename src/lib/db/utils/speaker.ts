@@ -40,3 +40,19 @@ export const getChatSpeaker = async (speakerId: string) => {
   });
   return speaker;
 };
+
+/**
+ * Retrieves the count of workshop speakers by gender.
+ * @returns An array containing the count of female and male workshop speakers.
+ * @example
+ * const [workshopSpeakersWomanCount, workshopSpeakerMenCount] = await getSpeakerCountByGender();
+ * console.log(workshopSpeakersWomanCount, workshopSpeakerMenCount); // 2(women speakers) 3(male speakers)
+ */
+export const getWorkshopSpeakersCountByGender = async () => {
+  const [workshopSpeakersWomanCount, workshopSpeakerMenCount] = await prisma.$transaction([
+    prisma.workshopSpeaker.count({ where: { gender: 'F' } }),
+    prisma.workshopSpeaker.count({ where: { gender: 'M' } }),
+  ])
+  return [workshopSpeakersWomanCount, workshopSpeakerMenCount];
+}
+

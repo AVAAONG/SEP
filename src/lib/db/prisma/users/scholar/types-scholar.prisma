@@ -10,11 +10,17 @@ enum Region {
 enum ScholarStatus {
     PROBATORIO_1
     PROBATORIO_2
-    CURRENT
-    ALUMNI
+    NORMAL
 }
 
 enum ScholarCanAssist {
     YES
     NO
+}
+
+enum ScholarCondition {
+    ACTIVE
+    RESIGNATION
+    WITHDRAWAL
+    ALUMNI
 }
