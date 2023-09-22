@@ -23,6 +23,7 @@ enum ActivityStatus {
 
 enum ScholarAttendance {
     ENROLLED
+    WAITING_LIST
     ATTENDED
     NOT_ATTENDED
     JUSTIFY
