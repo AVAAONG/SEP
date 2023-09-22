@@ -99,10 +99,12 @@ enum ActivityStatus {
   SENT
   IN_PROGRESS
   DONE
+  ATTENDANCE_CHECKED
   SUSPENDED
 }
 
 enum ScholarAttendance {
+  ENROLLED
   ATTENDED
   NOT_ATTENDED
   JUSTIFY
@@ -327,20 +329,19 @@ enum AvaaYear {
 /// @author Kevin Bravo (kevinbravo.me)
 
 model AdminAccount {
-  id                String  @id @default(cuid())
+  id                String    @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?   @db.Text
+  access_token      String?   @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?   @db.Text
   session_state     String?
-
-  user AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@index([userId])
@@ -357,17 +358,18 @@ model AdminSession {
 }
 
 model AdminUser {
-  id            String         @id @default(cuid())
-  name          String?
-  email         String?        @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      AdminAccount[]
-  sessions      AdminSession[]
-  lastLogin     DateTime?      @default(now())
-  role          AdminRoles
-  Chapter       Chapter?       @relation(fields: [chapterId], references: [id])
-  chapterId     String?
+  id             String         @id @default(cuid())
+  name           String?
+  email          String?        @unique
+  emailVerified  DateTime?
+  image          String?
+  accounts       AdminAccount[]
+  sessions       AdminSession[]
+  lastLogin      DateTime?      @default(now())
+  role           AdminRoles
+  responsibility String
+  Chapter        Chapter?       @relation(fields: [chapterId], references: [id])
+  chapterId      String?
 
   @@index([chapterId])
 }
@@ -480,11 +482,45 @@ enum StudyArea {
   OTHER
 }
 
+enum Collages {
+  UCV
+  USB
+  UCAB
+  UNIMET
+  USM
+  UJMV
+  UCSAR
+  IUTA
+  IUT
+  IUTJOSE
+  IUNE
+  ENAHP
+  ICEE
+  IUAII
+  IFH
+  CAE
+  IUTRBF
+  UPEL
+  IPSM
+}
+
+enum Careers {
+  INGENIERIA_DE_SISTEMAS
+  INGENIERIA_DE_COMPUTACION
+  INGENIERIA_DE_TELECOMUNICACIONES
+  INGENIERIA_DE_INFORMATICA
+  INGENIERIA_DE_TELEMATICA
+  INGENIERIA_DE_SOFTWARE
+  INGENIERIA_DE_SISTEMAS_COMPUTACIONALES
+  INGENIERIA_DE_SISTEMAS_DE_INFORMACION
+  INGENIERIA_DE_SISTEMAS_DE_COMUNICACIONES
+}
+
 model ScholarCollageInformation {
   id                      String                                       @id @default(nanoid())
   academic_load_completed Boolean?
-  collage                 String?
-  career                  String?
+  collage                 Collages?
+  career                  Careers?
   study_area              StudyArea?
   evaluation_scale        EvaluationScale
   study_regime            StudyRegime

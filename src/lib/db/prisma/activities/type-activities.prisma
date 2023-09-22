@@ -17,10 +17,12 @@ enum ActivityStatus {
     SENT
     IN_PROGRESS
     DONE
+    ATTENDANCE_CHECKED
     SUSPENDED
 }
 
 enum ScholarAttendance {
+    ENROLLED
     ATTENDED
     NOT_ATTENDED
     JUSTIFY
