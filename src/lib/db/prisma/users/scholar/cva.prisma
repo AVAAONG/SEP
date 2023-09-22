@@ -12,12 +12,12 @@ model ScholarCVAInformation {
 }
 
 model ScholarCvaModule {
-    id                      String                 @id @default(nanoid())
-    module                  Int
-    qualification           Float
-    record                  String?
-    ScholarCVAInformation   ScholarCVAInformation? @relation(fields: [scholarCVAInformationId], references: [id])
-    scholarCVAInformationId String?
+    id                         String                 @id @default(nanoid())
+    module                     Int
+    qualification              Float
+    record                     String?
+    scholar_cva_information    ScholarCVAInformation? @relation(fields: [scholar_cva_information_id], references: [id])
+    scholar_cva_information_id String?
 
-    @@unique([scholarCVAInformationId, module])
+    @@unique([scholar_cva_information_id, module])
 }

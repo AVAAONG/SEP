@@ -2,21 +2,24 @@
 /// @author Kevin Bravo (kevinbravo.me)
 
 enum Region {
-    ZULIA
-    CARABOBO
-    CARACAS
+  ZULIA
+  CARABOBO
+  CARACAS
 }
+
 
 enum ScholarStatus {
-    PROBATORIO_1
-    PROBATORIO_2
-    NORMAL
+  PROBATORIO_1
+  PROBATORIO_2
+  NORMAL
 }
 
+
 enum ScholarCanAssist {
-    YES
-    NO
+  YES
+  NO
 }
+
 
 enum ScholarCondition {
     ACTIVE

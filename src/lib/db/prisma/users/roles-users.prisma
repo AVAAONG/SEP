@@ -12,12 +12,13 @@
 // PROYECT - Proyects of the proexcelencia program. Have access to the database of scholars, only volunteer activities that the scholars have done and allow to create volunteers
 // CHAT - Chats of the proexcelencia program. Have access to the database of scholars, only chat club activities that the scholars have done and allow to create volunteers and chats.
 enum AdminRoles {
-    STAFF_PROEXCELENCIA
-    STAFF_COMMUNICATIONS
-    STAFF_ADMON
-    STAFF_MENTORSHIP
-    STAFF_RECRUITMENT
-    COMITEE
-    PROYECT
-    CHAT
+  STAFF_PROEXCELENCIA
+  STAFF_COMMUNICATIONS
+  STAFF_ADMON
+  STAFF_MENTORSHIP
+  STAFF_RECRUITMENT
+  COMITEE
+  PROYECT
+  CHAT
 }
+

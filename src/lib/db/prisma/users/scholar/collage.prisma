@@ -70,13 +70,13 @@ model ScholarCollageInformation {
 }
 
 model ScholarCollageAverageQualificationByPeriod {
-    id                          String                     @id @default(nanoid())
-    current_academic_period     Int
-    grade                       Float
-    class_modality              Modality
-    record                      String?
-    ScholarCollageInformation   ScholarCollageInformation? @relation(fields: [scholarCollageInformationId], references: [id])
-    scholarCollageInformationId String?
+    id                            String                     @id @default(nanoid())
+    current_academic_period       Int
+    grade                         Float
+    class_modality                Modality
+    record                        String?
+    scholar_collage_information   ScholarCollageInformation? @relation(fields: [scholar_collage_nformation_id], references: [id])
+    scholar_collage_nformation_id String?
 
-    @@index([scholarCollageInformationId])
+    @@index([scholar_collage_nformation_id])
 }

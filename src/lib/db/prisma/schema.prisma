@@ -296,10 +296,10 @@ datasource db {
 //
 
 model Chapter {
-  id                String                      @id @default(nanoid())
-  chapterName       String
-  asociatedScholars ScholarProgramInformation[]
-  asociatedAdmins   AdminUser[]
+  id                 String                      @id @default(nanoid())
+  name               String
+  asociated_scholars ScholarProgramInformation[]
+  asociated_admins   AdminUser[]
 }
 
 //
@@ -368,10 +368,10 @@ model AdminUser {
   lastLogin      DateTime?      @default(now())
   role           AdminRoles
   responsibility String
-  Chapter        Chapter?       @relation(fields: [chapterId], references: [id])
-  chapterId      String?
+  chapter        Chapter?       @relation(fields: [chapter_id], references: [id])
+  chapter_id     String?
 
-  @@index([chapterId])
+  @@index([chapter_id])
 }
 
 model AdminVerificationToken {
@@ -529,15 +529,15 @@ model ScholarCollageInformation {
 }
 
 model ScholarCollageAverageQualificationByPeriod {
-  id                          String                     @id @default(nanoid())
-  current_academic_period     Int
-  grade                       Float
-  class_modality              Modality
-  record                      String?
-  ScholarCollageInformation   ScholarCollageInformation? @relation(fields: [scholarCollageInformationId], references: [id])
-  scholarCollageInformationId String?
+  id                            String                     @id @default(nanoid())
+  current_academic_period       Int
+  grade                         Float
+  class_modality                Modality
+  record                        String?
+  scholar_collage_information   ScholarCollageInformation? @relation(fields: [scholar_collage_nformation_id], references: [id])
+  scholar_collage_nformation_id String?
 
-  @@index([scholarCollageInformationId])
+  @@index([scholar_collage_nformation_id])
 }
 
 //
@@ -556,14 +556,14 @@ model ScholarCVAInformation {
 }
 
 model ScholarCvaModule {
-  id                      String                 @id @default(nanoid())
-  module                  Int
-  qualification           Float
-  record                  String?
-  ScholarCVAInformation   ScholarCVAInformation? @relation(fields: [scholarCVAInformationId], references: [id])
-  scholarCVAInformationId String?
+  id                         String                 @id @default(nanoid())
+  module                     Int
+  qualification              Float
+  record                     String?
+  scholar_cva_information    ScholarCVAInformation? @relation(fields: [scholar_cva_information_id], references: [id])
+  scholar_cva_information_id String?
 
-  @@unique([scholarCVAInformationId, module])
+  @@unique([scholar_cva_information_id, module])
 }
 
 //

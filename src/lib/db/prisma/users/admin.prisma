@@ -48,10 +48,10 @@ model AdminUser {
   lastLogin      DateTime?      @default(now())
   role           AdminRoles
   responsibility String
-  Chapter        Chapter?       @relation(fields: [chapterId], references: [id])
-  chapterId      String?
+  chapter        Chapter?       @relation(fields: [chapter_id], references: [id])
+  chapter_id     String?
 
-  @@index([chapterId])
+  @@index([chapter_id])
 }
 
 model AdminVerificationToken {
