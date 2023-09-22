@@ -260,7 +260,7 @@ model WorkshopAttendance {
   id                       String                    @id @default(nanoid())
   scholar                  ScholarProgramInformation @relation(fields: [scholar_id], references: [id])
   scholar_id               String
-  workshop_id              String                    @unique
+  workshop_id              String
   workshop                 Workshop                  @relation(fields: [workshop_id], references: [id])
   attendance               ScholarAttendance
   justification            String?

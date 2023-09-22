@@ -167,3 +167,47 @@ export const getSpreadsheetValuesByUrl = async (spreadsheetUrl: string, range: s
     console.error(err);
   }
 }
+
+//create spreadsheetId
+export const createSpreadsheet = async (title: string) => {
+  try {
+    const response = await Sheets.spreadsheets.create({
+      requestBody: {
+        properties: {
+          title,
+        },
+      },
+    });
+    return response.data.spreadsheetId;
+  } catch (err) {
+    console.error(err);
+  }
+}
+//append values to spreadshee
+export const appendSpreadsheetValues = async (
+  spreadsheetUrl: string,
+  sheetName: string,
+  values: any[]
+) => {
+  const spreadsheetId = spreadsheetUrl.split('/')[5];
+  try {
+    const sheet = await Sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: `${sheetName}!A:F`,
+      majorDimension: 'COLUMNS',
+    });
+    const lastRow = sheet.data.values[0].length + 1;
+    const range = `${sheetName}!A${lastRow}`;
+    const response = await Sheets.spreadsheets.values.update({
+      spreadsheetId,
+      range,
+      valueInputOption: 'RAW',
+      requestBody: {
+        values,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error(err);
+  }
+};
