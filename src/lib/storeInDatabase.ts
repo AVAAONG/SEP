@@ -117,8 +117,7 @@
 //====================================================== Speaker Functions ======================================================
 const WORKSHOP_SPEAKERS_SPREADSHEET = '1uGrF-GNSILOXVOy3SLZUvx47HXzcJMv4TaJHJ26aBLc';
 const WORKSHOP_SPEAKER_SHEET = 'Facilitadores de talleres';
-const WORKSHOP_SPEAKERS_RANGE = `'${WORKSHOP_SPEAKER_SHEET}'!B2:I87`;
-
+const WORKSHOP_SPEAKERS_RANGE = `'${WORKSHOP_SPEAKER_SHEET}'!B2:I90`;
 
 // const createWorkshopSpeakerFromSpreadsheet = async () => {
 //     const values = (await getSpreadsheetValues(

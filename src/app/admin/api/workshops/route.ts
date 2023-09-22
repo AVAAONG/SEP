@@ -9,22 +9,12 @@ import { nanoid } from 'nanoid';
 import { getToken } from 'next-auth/jwt';
 import { NextResponse } from 'next/server';
 
+
+
 export async function GET(req: Response, res: Response) {
   const token = await getToken({ req });
   setTokens(token.accessToken, token.refreshToken);
-  prisma.chapter.create({
-    data: {
-      chapterName: "CARACAS",
-    }
-  });
-  prisma.adminUser.create({
-    data: {
-      email: "avaatecnologia@gmail.com",
-      name: "Kevin Bravo",
-      role: "STAFF_PROEXCELENCIA",
-    }
-  });
-  return NextResponse.json({ messagge: 'ok' });
+  return NextResponse.json({ message: "ok" });
 }
 
 const createWorkshopsInbulkFromSpreadsheet = async () => {
