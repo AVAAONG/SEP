@@ -3,7 +3,7 @@ import Link from 'next/link';
 const ScholarFooter = () => {
   return (
     <>
-      <footer className="p-4 my-6 mx-4 bg-slate-50 rounded-lg shadow md:flex md:items-center md:justify-between md:p-6 xl:p-8 dark:bg-slate-950">
+      <footer className="p-4 my-6 mx-4 bg-transparent  md:flex md:items-center md:justify-between md:p-6 xl:p-8">
         <ul className="flex flex-wrap items-center justify-center md:justify-start mb-6 space-y-1 md:mb-0">
           <li>
             <Link

@@ -1,7 +1,7 @@
-import React from 'react';
 import { Chat } from '@/types/Chat';
-import { XIcon, EditIcon } from '@/assets/svgs';
+import React from 'react';
 import shortUUID from 'short-uuid';
+import { EditIcon, XIcon } from '../../../../public/svgs/svgs';
 
 interface ChatsListProps {
   chatsData: Chat[];

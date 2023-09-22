@@ -46,23 +46,6 @@
   color: white !important;
 }
 
-.rbc-event::before {
-  content: '';
-  position: absolute;
-  margin-right: 100px;
-  margin-top: 7px;
-  height: 7px;
-  width: 7px;
-  top: '0';
-  left: '0';
-  border-radius: 100px;
-  background-color: azure;
-}
-
-.rbc-event-content {
-  margin-left: 13px;
-}
-
 .rbc-month-view {
   border-color: #ffffff !important;
   border-top-color: transparent !important;

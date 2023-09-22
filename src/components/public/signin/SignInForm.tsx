@@ -1,3 +1,9 @@
+/**
+ * @file This file renders the sign-in form for the scholar role.
+ * @remarks allows the user to sign in with their email trhough magic link or with their Google account.
+ * also allows the user to sign up if they don't have an account yet.
+ * @author Kevin Bravo (kevinbravo.me)
+ */
 'use client';
 import handler from '@/lib/serverAction';
 import { signIn } from 'next-auth/react';
@@ -10,6 +16,13 @@ interface SigninFormProps {
   cookieValue: string;
 }
 
+/**
+ * Renders the sign-in form for the scholar role.
+ * @param param0  - The callback URL to redirect to after a successful sign in or sign up.
+ * @param param1 - The cookie value to be set.
+ * @remarks use magic link to allow the user to aces the SEP.
+ * @returns The sign-in form for the scholar role.
+ */
 const SigninForm = ({ callbackUrl, cookieValue }: SigninFormProps) => {
   const { register, handleSubmit } = useForm();
   const fetcher = (...args: RequestInfo[] | URL[]) => fetch([...args]).then((res) => res.json());
@@ -18,7 +31,6 @@ const SigninForm = ({ callbackUrl, cookieValue }: SigninFormProps) => {
 
   const onSubmit = async (data: { email: string }, event: BaseSyntheticEvent) => {
     event.preventDefault();
-    console.log(data);
     await handler(cookieValue);
 
     await signIn('email', {
@@ -31,11 +43,10 @@ const SigninForm = ({ callbackUrl, cookieValue }: SigninFormProps) => {
     <form onSubmit={handleSubmit(async (data, event) => await onSubmit(data, event!))}>
       <div className="mb-3 flex flex-col gap-2">
         {/* <input type="hidden" name="csrfToken" value={crsfToken.data.csrfToken} /> */}
-        <label htmlFor="user_email" className="text-sm text-slate-400">
+        <label htmlFor="user_email" className="text-sm dark:text-gray-400 text-gray-600">
           Correo electrónico
         </label>
         <input
-          className="focus:outline-none  focus:outline-offset-0 py-1 px-3 rounded-md w-full bg-emerald-950  ring-1 ring-emerald-900 active:border-zinc-950 focus:outline-emerald-600 "
           autoFocus={true}
           autoComplete="email"
           type="email"
@@ -47,7 +58,7 @@ const SigninForm = ({ callbackUrl, cookieValue }: SigninFormProps) => {
       <button
         name="button"
         type="submit"
-        className="bg-transparent border-2 border-emerald-900 hover:bg-green-600 hover:border-green-600 text-white font-semibold py-1 px-3 rounded-md w-full flex justify-center gap-4"
+        className="bg-transparent border border-primary-light  hover:bg-primary-light hover:text-white font-medium py-1 px-3 rounded-md w-full flex justify-center gap-4"
       >
         Entrar con email
       </button>

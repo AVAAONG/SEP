@@ -1,7 +1,7 @@
-import React from 'react';
-import { XIcon, EditIcon } from '@/assets/svgs';
-import shortUUID from 'short-uuid';
 import { Volunteer } from '@/types/Volunteer';
+import React from 'react';
+import shortUUID from 'short-uuid';
+import { EditIcon, XIcon } from '../../../../public/svgs/svgs';
 
 interface VolunteerListProps {
   volunteerData: Volunteer[];

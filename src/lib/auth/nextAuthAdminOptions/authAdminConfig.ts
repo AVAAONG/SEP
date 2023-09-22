@@ -19,6 +19,7 @@ export const NEXT_SECRET = process.env.NEXTAUTH_SECRET || shortUUID.generate();
 export const PAGES: Partial<PagesOptions> = {
   signIn: '/signin/admin',
   error: '/signin/admin',
+  signOut: '/signin/admin',
 };
 /// ==================================== NEXT AUTH CONFIGURATION FOR ADMINS ==================================== ///
 
@@ -55,22 +56,71 @@ export const GOOGLE_ADMIN_SCOPES = [
  * @description NextAuth Google Provider Options object for ADMINS
  * @summary This provider allows admin to sign in in the app using their google account.
  *
- * It is important to notice that this provider is only for admin users, so it is not available for the public,
+ * @remarks It is important to notice that this provider is only for admin users, so it is not available for the public,
  * cause have a lot of googke scopes that are not necesary for the public.
  * @see https://next-auth.js.org/configuration/providers/oauth to learn about the oauth 2.0 protocol
+ *
+ * @internal Notice we are setting "access_type:"offline" this allow to return a refresh token,
+ * that would allow the application obtain a new access token if it is about to expire
+ * @see {@link https://github.com/googleapis/google-api-nodejs-client#handling-refresh-tokens}
  *
  * @see https://next-auth.js.org/providers/google to learn about the google provider in nexth-auth
  * @see https://developers.google.com/identity/protocols/oauth2 to learn about the google oauth2 protocol
  */
 export const googleAdminProviderConfig: OAuthUserConfig<any> = {
-  id: 'google',
+  id: 'adminGoogle',
   clientId: GOOGLE_ADMIN_API_CLIENT_ID,
   clientSecret: GOOGLE_ADMIN_API_CLIENT_SECRET,
   authorization: {
     params: {
       access_type: 'offline',
+      prompt: 'consent',
       include_granted_scopes: true,
       scope: GOOGLE_ADMIN_SCOPES.join(' '),
     },
   },
+  async profile(profile) {
+    return {
+      id: profile.sub,
+      name: profile.name,
+      email: profile.email,
+      image: profile.picture,
+      role: 'STAFF_PROEXCELENCIA',
+    };
+  },
+};
+
+/**
+ * The session callback allow us to send properties to the client.
+ *
+ * @remarks The session object is not persisted server side, even when using database sessions
+ * @see {@link https://next-auth.js.org/configuration/callbacks#session-callback } for more info about the sessionCallback
+ * @returns
+ */
+export const sessionCallback = () => {
+  return;
+};
+
+/**
+ * Requests to /api/auth/signin, /api/auth/session and calls to
+ * getSession(), getServerSession(), useSession()
+ * will invoke this function, **only if you are using a JWT session.**
+ *
+ * @remarks arguments user, account, profile and isNewUser are only passed the first time
+ * this callback is called on a new session,  after the user signs in.
+ * In subsequent calls, only token will be available.
+ */
+export const jwtCallback = (token: any, user: any, account: any) => {
+  if (user) {
+    const u = user as unknown as any;
+    const accessToken = account?.access_token;
+    const refreshToken = account?.refresh_token;
+    return {
+      ...token,
+      id: u.id,
+      accessToken,
+      refreshToken,
+    };
+  }
+  return token;
 };

@@ -1,18 +1,9 @@
-import { ScholarAttendance, Workshop, WorkshopSpeaker } from '@prisma/client';
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
-interface WorkshopTableProps {
-  workshops:
-  | (Workshop & {
-    speaker: WorkshopSpeaker[];
-    scholarAttendance: {
-      attendance: ScholarAttendance;
-    }[];
-  })[]
-  | undefined;
-  kindOfActivity: string;
+import StatsTooltip from '../admin/StatsTooltip';
+interface StatsProps {
+  kindOfActivity: 'workshop' | 'chat' | 'voluteer';
+  activitiesDone: number;
+  first: number;
+  second: number;
 }
 
 const defineActivity = (kindOfActivity: string) => {
@@ -27,56 +18,61 @@ const defineActivity = (kindOfActivity: string) => {
   }
 };
 
-const Stats = ({ workshops, kindOfActivity }: WorkshopTableProps) => {
+const Stats = ({ activitiesDone, kindOfActivity, first, second }: StatsProps) => {
   const [activityName, number] = defineActivity(kindOfActivity);
 
-  let workshopsDone = 4;
-
-  // if (workshops) {
-  //   workshopsDone = workshops.filter(
-  //     (workshop) => workshop.scholarAttendance[0].attendance === 'ATTENDED'
-  //   ).length;
-  // }
-
-  const pendingWorkshops = Number(number) - workshopsDone;
-  const donePercentage = (workshopsDone / 20) * 100;
+  const pendingWorkshops = Number(number) - activitiesDone;
+  const donePercentage = (activitiesDone / 20) * 100;
   const pendingPercentage = 100 - donePercentage;
 
   return (
     <div>
-      <dl className="mt-5 grid grid-cols-1 rounded-lg bg-gradient-to-t from-green-600  dark:to-emerald-900 to-emerald-400 overflow-hidden shadow divide-y divide-emerald-600 dark:divide-emerald-950 md:grid-cols-2 md:divide-y-0 md:divide-x border border-emerald-600 dark:border-emerald-950">
-        <div className="px-4 py-5 sm:p-6  ">
-          <dt className="text-base font-semibold text-white">
-            Total de {activityName} realizados.
+      <dl className="mt-5 md:h-28 grid grid-cols-1 rounded-lg bg-gradient-to-t from-green-500 to-emerald-600 dark:from-green-700 dark:to-emerald-700  overflow-hidden shadow divide-y-2 divide-emerald-700 dark:divide-emerald-950 md:grid-cols-3 md:divide-y-0 md:divide-x-2 border border-emerald-700  dark:border-emerald-800">
+        <div className="p-4 flex flex-col justify-between">
+          <dt className="text-sm sm:text-xs lg:text-base font-semibold text-white">
+            Total de {activityName} realizadas
           </dt>
-          <dd className="mt-1 flex justify-between items-baseline md:block lg:flex">
-            <div className="flex items-baseline text-5xl font-bold dark:text-slate-950 text-white">
-              {workshopsDone}
+          <dd className="flex justify-between items-baseline lg:flex">
+            <div className="flex items-baseline text-5xl font-bold  text-emerald-900 dark:text-emerald-950 ">
+              {activitiesDone}
             </div>
-            <div
-              className={classNames(
-                'bg-green-100 text-green-800',
-                'inline-flex items-baseline px-2.5 py-0.5 rounded-full text-sm font-medium md:mt-2 lg:mt-0'
-              )}
-            >
-              {donePercentage}%
-            </div>
+            <StatsTooltip
+              percentage={donePercentage}
+              text={`Has cumplido con un ${donePercentage}% de tus ${activityName}`}
+              down={false}
+            />
           </dd>
         </div>
-        <div className="px-4 py-5 sm:p-6  ">
-          <dt className="text-base font-semibold text-white">Total de {activityName} faltantes.</dt>
-          <dd className="mt-1 flex justify-between items-baseline md:block lg:flex">
-            <div className="flex items-baseline text-5xl font-bold dark:text-slate-950 text-white">
+        <div className="p-4 overflow-hidden flex justify-between h-28">
+          <div className="flex items-start text-5xl font-bold  text-emerald-900 dark:text-emerald-950  h-min">
+            <span className="-mt-1">{first}</span>
+            <span className="text-xs ml-2 text-white">
+              {activityName} {kindOfActivity === 'voluteer' ? 'internas' : 'presenciales'}
+            </span>
+          </div>
+          <div className="w-0">
+            <hr className="border-2 w-20 translate-y-10  -translate-x-12 -skew-y-[65deg] border-emerald-700 dark:border-emerald-950 " />
+          </div>
+          <div className="flex items-end text-5xl font-bold  text-emerald-900 dark:text-emerald-950">
+            <span className="">{second}</span>
+            <span className="text-xs  ml-2 text-white">
+              {activityName} {kindOfActivity === 'voluteer' ? 'externas' : 'virtuales'}
+            </span>
+          </div>
+        </div>
+        <div className="p-4 flex flex-col justify-between">
+          <dt className="text-base sm:text-xs lg:text-base font-semibold text-white">
+            Total de {activityName} faltantes
+          </dt>
+          <dd className="flex justify-between items-baseline lg:flex">
+            <div className="flex items-baseline text-5xl font-bold  text-emerald-900 dark:text-emerald-950 ">
               {pendingWorkshops}
             </div>
-            <div
-              className={classNames(
-                'bg-red-100 text-red-800',
-                'inline-flex items-baseline px-2.5 py-0.5 rounded-full text-sm font-medium md:mt-2 lg:mt-0'
-              )}
-            >
-              ${pendingPercentage}%
-            </div>
+            <StatsTooltip
+              percentage={pendingPercentage}
+              text={`Te falta cumplir un ${pendingPercentage}% de tus ${activityName}`}
+              down={true}
+            />
           </dd>
         </div>
       </dl>

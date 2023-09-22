@@ -1,0 +1,62 @@
+/// Prisma schema model for `Chat` table in database.
+/// Here we model all the necesary data and information wee need for the English Chat clubs, and related tables (tempData, attendance, speaker)
+/// @author Kevin Bravo (kevinbravo.me)
+
+import { ActivityStatus, Modality } from "..\type-activities"
+import { Level } from "types-chat"
+import { ScholarAttendance } from "..\type-activities"
+import { User } from "..\..\users\scholar\scholar"
+import { Gender } from "..\type-activities"
+import { ScholarProgramInformation, ScholarProgramInformation, User, User } from "..\..\users\scholar\scholar"
+
+model Chat {
+    id                 String           @id @default(nanoid())
+    title              String
+    avalible_spots     Int
+    platform           String
+    description        String
+    calendar_id        String?
+    start_dates        DateTime[]
+    end_dates          DateTime[]
+    rating             Float?
+    modality           Modality
+    level              Level
+    speaker            ChatSpeaker[]
+    activity_status    ActivityStatus
+    temp_data          ChatsTempData?
+    scholar_attendance ChatAttendance[]
+
+    @@index([title, modality, activity_status, level])
+}
+
+model ChatAttendance {
+    id            String                    @id @default(nanoid())
+    chat          Chat                      @relation(fields: [chat_id], references: [id])
+    chat_id       String
+    attendance    ScholarAttendance
+    justification String?
+    Scholar       ScholarProgramInformation @relation(fields: [scholar_id], references: [id])
+    scholar_id    String
+
+    @@unique([chat_id, scholar_id])
+    @@index([chat_id])
+    @@index([scholar_id])
+}
+
+model ChatsTempData {
+    id               String  @id @default(nanoid())
+    chat             Chat    @relation(fields: [chat_id], references: [id])
+    chat_id          String  @unique
+    form_link        String?
+    meeting_link     String?
+    meeting_id       String?
+    meeting_password String?
+    whatsapp_link    String?
+}
+
+model ChatSpeaker {
+    id                        String                      @id @default(nanoid())
+    chat                      Chat                        @relation(fields: [chat_id], references: [id])
+    chat_id                   String                      @unique
+    ScholarProgramInformation ScholarProgramInformation[]
+}

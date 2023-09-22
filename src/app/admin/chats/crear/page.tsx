@@ -1,10 +1,8 @@
 'use client';
-import Input from '@/components/admin/forms/Inputs';
-import CHAT_INPUT_ELEMENTS from '@/components/admin/forms/data/chatInputs';
 import ChatsList from '@/components/admin/lists/ChatsList';
 import { Chat } from '@/types/Chat';
 import { BaseSyntheticEvent, useState } from 'react';
-import { FieldValues, UseFormRegister, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import shortUUID from 'short-uuid';
 
 const page = () => {
@@ -154,15 +152,6 @@ const page = () => {
           onSubmit={handleSubmit(createChat)}
           className="grid gap-6 md:grid-cols-2 md:grid-rows-2 caret-green-500 text-slate-300 w-full"
         >
-          {CHAT_INPUT_ELEMENTS.map((field) => {
-            return (
-              <Input
-                {...field}
-                key={field.title}
-                register={register as unknown as UseFormRegister<FieldValues>}
-              />
-            );
-          })}
           <button
             type="submit"
             className="w-1/2 justify-self-center col-span-2 text-white bg-gradient-to-br from-emerald-500 to-lime-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"

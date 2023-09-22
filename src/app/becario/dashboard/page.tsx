@@ -1,9 +1,9 @@
-import { chatIcon, volunterIcon, workshopIcon } from '@/assets/svgs';
 import Card from '@/components/admin/dashboard/Card';
 import Calendar from '@/components/calendar/Calendar';
 import ActivityList from '@/components/scholar/dashboard/ActivityList';
 import { BigCalendarEventType } from '@/types/Calendar';
 import { SUUID } from 'short-uuid';
+import { chatIcon, volunterIcon, workshopIcon } from '../../../../public/svgs/svgs';
 
 const examples = [
   {
@@ -50,7 +50,7 @@ const page = async ({ params }: { params: { scholarId: SUUID } }) => {
   ];
   return (
     <div>
-      <div className="flex flex-col px-2 pt-6 gap-4">
+      <div className="flex flex-col px-2 gap-4">
         <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
           ¡Hola, Kevin! 💚
         </h1>

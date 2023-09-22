@@ -1,0 +1,17 @@
+///  Base prisma file, Here we specified each of the configuration for make prisma work correctly
+/// @author Kevin Bravo (kevinbravo.me)
+
+///@see https://www.prisma.io/docs/concepts/components/prisma-schema/generators
+generator client {
+  provider = "prisma-client-js"
+}
+
+/// This determines how Prisma connects your database.
+///@see https://www.prisma.io/docs/concepts/components/prisma-schema/data-sources
+/// Ignore the warning, this is a bug from prisma-import
+datasource db {
+  provider     = "postgresql"
+  url          = env("PRISMA_DATABASE_URL")
+  directUrl    = env("PRISMA_DIRECT_DATABASE_URL")
+  relationMode = "prisma"
+}

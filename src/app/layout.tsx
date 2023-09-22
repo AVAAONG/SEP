@@ -5,10 +5,10 @@
  * @see {@link https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts#layouts} for more information about Next.js layouts.
  */
 
-import '@/app/globals.css';
 import favicon from '@/../public/logo-proexcelencia-cap.png';
-import NextAuthProvider from '../components/providers';
-import { ThemeProviderC } from '@/components/ThemeProvider';
+import '@/app/globals.css';
+import { ThemeProviderC } from '@/components/commons/ThemeProvider';
+import NextAuthProvider from '../components/commons/providers';
 
 /**
  * The base metadata of the application.
@@ -32,7 +32,7 @@ export const metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className="h-full">
+    <html lang="es" className="h-full font-sans">
       <body className="h-full">
         <NextAuthProvider>
           <ThemeProviderC>{children}</ThemeProviderC>

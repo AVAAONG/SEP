@@ -13,9 +13,9 @@ import Link from 'next/link';
  * @see {@link https://nextjs.org/docs/app/api-reference/components/image} for more information about Next.js Image component.
  */
 const page = () => (
-  <main className="flex min-h-screen flex-col items-center justify-between p-16 lg:p-24 gap-16 bg-gradient-to-b from-emerald-950 to-slate-950">
-    <div className="z-10 w-full max-w-5xl items-center justify-left font-mono text-sm ">
-      <div className="bottom-0 left-0 flex h-48 w-full items-end justify-center lg:justify-end lg:static lg:h-auto lg:w-auto">
+  <main className="dark:bg-dark bg-light flex min-h-screen flex-col w-full items-center justify-between py-8 lg:p-24 lg:gap-16 overflow-y-clip">
+    <div className="w-full items-center justify-left font-mono text-sm">
+      <div className="bottom-0 left-0 flex w-full items-end justify-center md:justify-end lg:static lg:h-auto lg:w-auto">
         <Link
           className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
           href="https://www.avaa.org"
@@ -27,31 +27,31 @@ const page = () => (
       </div>
     </div>
 
-    <div className="relative flex place-items-center">
+    <div className="relative flex place-items-center px-8 md:mb-16">
       <Image
-        className="relative drop-shadow-[0_0_1rem_#279902] animate-pulse"
-        src="/proexcelencia.png"
+        className="relative dark:drop-shadow-[0_0_1rem_#279902] animate-pulse"
+        src="/proexcelencia-color.png"
         alt="Logo Proexcelencia"
-        width={380}
+        width={360}
         height={50}
         priority
       />
     </div>
 
-    <div className="mb-32 grid text-center lg:grid-cols-2 lg:text-left gap-6">
+    <div className="mb-32 grid grid-cols-2 text-center sm:text-left gap-6 px-8">
       <Link
         href="/signin/becario"
-        className="relative bg-black group rounded-lg  px-5 py-4  border-emerald-900 border-2"
+        className="relative group rounded-lg p-2 sm:p-5 text-dark dark:text-light border-primary-light border transition-all dark:hover:bg-primary-light dark:focus:bg-primary-light hover:bg-primary-1 focus:bg-primary-1"
         rel="noopener noreferrer"
       >
-        <h2 className={`mb-3 text-2xl font-semibold`}>
+        <h2 className={`text-2xl font-medium`}>
           Becarios{' '}
-          <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+          <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none ">
             <svg
               fill="none"
               stroke="currentColor"
               strokeWidth="1.5"
-              width="50"
+              width="30"
               height="20"
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
@@ -65,18 +65,19 @@ const page = () => (
             </svg>
           </span>
         </h2>
-        <p className={`m-0 max-w-[30ch] text-xs lg:text-sm opacity-50`}>
+        <p className={`hidden sm:block m-0 max-w-[30ch] text-xs lg:text-sm`}>
           Ingresa para ver tu progreso en el programa.
         </p>
       </Link>
 
       <Link
         href="/signin/admin"
-        className="relative bg-black group rounded-lg px-5 py-4 border-emerald-900 border-2"
+        className="relative group rounded-lg p-2 sm:p-5 text-dark dark:text-light border-primary-light border transition-all dark:hover:bg-primary-light dark:focus:bg-primary-light hover:bg-primary-1 focus:bg-primary-1"
         rel="noopener noreferrer"
       >
-        <h2 className={`mb-3 text-2xl font-semibold`}>
-          Administradores{' '}
+        <h2 className={`text-2xl font-medium`}>
+          <span className="hidden md:inline-block">Administradores </span>
+          <span className="inline-block md:hidden">Admins </span>
           <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
             <svg
               fill="none"
@@ -96,7 +97,7 @@ const page = () => (
             </svg>
           </span>
         </h2>
-        <p className={`m-0 max-w-[30ch] text-xs lg:text-sm opacity-50`}>Administra el SEP</p>
+        <p className={` hidden sm:block m-0 max-w-[30ch] text-xs lg:text-sm `}>Administra el SEP</p>
       </Link>
     </div>
   </main>

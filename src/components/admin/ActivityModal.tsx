@@ -1,5 +1,4 @@
-import { CheckIcon } from '@/assets/svgs';
-import React from 'react';
+import { CheckIcon } from '../../../public/svgs/svgs';
 
 const ActivityModal = () => {
   return (

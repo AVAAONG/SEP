@@ -2,7 +2,7 @@ import '@/app/globals.css';
 //@ts-ignore
 import favicon from '@/../public/logo-proexcelencia-cap.png';
 import Navbar from '@/components/admin/navigation/navbar/Navbar';
-import NextAuthProvider from '@/components/providers';
+import NextAuthProvider from '@/components/commons/providers';
 
 import Sidebar from '@/components/admin/navigation/sidebar/Sidebar';
 export const metadata = {
@@ -13,9 +13,9 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="flex bg-gradient-to-b from-emerald-950 to-slate-950">
+    <main className="bg-primary-light dark:bg-secondary-dark antialiased flex transition-all max-w-screen box-border md:pe-2 md:py-2">
       <Sidebar />
-      <section className="flex flex-col z-10 rounded-2xl  bg-slate-950 p-4 m-3 min-h-screen w-screen">
+      <section className=" min-w-0 flex flex-col z-10 md:rounded-lg bg-light dark:bg-dark p-2 transition-all w-full">
         <Navbar />
         <NextAuthProvider>{children}</NextAuthProvider>
       </section>

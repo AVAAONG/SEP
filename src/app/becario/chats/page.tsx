@@ -1,5 +1,3 @@
-import Stats from '@/components/scholar/ScholarStats';
-import TempChatTable from '@/components/table/tempChatTable';
 
 /**
  * Renders the page component with a list of workshops for a specific scholar.
@@ -12,50 +10,49 @@ const page = async () => {
   const workshopDataPlaceholder = [
     {
       title: "Let's learn grammar",
-      first_names: "Atenea",
-      last_names: "Gimenez",
-      start_date: "01/08/2023",
-      end_date: "01/08/2023",
-      level: "Basico",
-      modality: "Presencial",
-      platform: "Oficinas de AVAA",
-      scholarAttendance: "Asistio",
+      first_names: 'Atenea',
+      last_names: 'Gimenez',
+      start_date: '01/08/2023',
+      end_date: '01/08/2023',
+      level: 'Basico',
+      modality: 'Presencial',
+      platform: 'Oficinas de AVAA',
+      scholarAttendance: 'Asistio',
     },
     {
-      title: "Love Languages",
-      first_names: "Asxel",
-      last_names: "Ramirez",
-      start_date: "12/08/2023",
-      end_date: "01/08/2023",
-      level: "Basico",
-      modality: "Presencial",
-      platform: "Oficinas de AVAA",
-      scholarAttendance: "Asistio",
+      title: 'Love Languages',
+      first_names: 'Asxel',
+      last_names: 'Ramirez',
+      start_date: '12/08/2023',
+      end_date: '01/08/2023',
+      level: 'Basico',
+      modality: 'Presencial',
+      platform: 'Oficinas de AVAA',
+      scholarAttendance: 'Asistio',
     },
     {
-      title: "SUSI experience",
-      first_names: "Noris",
-      last_names: "Moreno",
-      start_date: "2/08/2023",
-      end_date: "01/08/2023",
-      level: "Intermedio",
-      modality: "Presencial",
-      platform: "Oficinas de AVAA",
-      scholarAttendance: "No asistio",
+      title: 'SUSI experience',
+      first_names: 'Noris',
+      last_names: 'Moreno',
+      start_date: '2/08/2023',
+      end_date: '01/08/2023',
+      level: 'Intermedio',
+      modality: 'Presencial',
+      platform: 'Oficinas de AVAA',
+      scholarAttendance: 'No asistio',
     },
     {
       title: "Let's learn grammar",
-      first_names: "Atenea",
-      last_names: "Gimenez",
-      start_date: "10/08/2023",
-      end_date: "01/08/2023",
-      level: "Avanzado",
-      modality: "Presencial",
-      platform: "Oficinas de AVAA",
-      scholarAttendance: "Asistio",
-    }
-  ]
-
+      first_names: 'Atenea',
+      last_names: 'Gimenez',
+      start_date: '10/08/2023',
+      end_date: '01/08/2023',
+      level: 'Avanzado',
+      modality: 'Presencial',
+      platform: 'Oficinas de AVAA',
+      scholarAttendance: 'Asistio',
+    },
+  ];
 
   return (
     <div>
@@ -65,14 +62,11 @@ const page = async () => {
             Listado de talleres
           </h1>
           <div className="h-full w-full flex flex-col gap-4 pt-4">
-            <Stats kindOfActivity="workshop" />
-            <TempChatTable tableData={workshopDataPlaceholder} />
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 
 export default page;
-

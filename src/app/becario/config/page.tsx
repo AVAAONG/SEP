@@ -127,7 +127,7 @@ const getScholarData = async (id: string) => {
 const page = async () => {
   const session = await getServerSession(authOptions);
   const scholarId = session.user.id || '';
-  console.log(scholarId)
+  console.log(scholarId);
   const prisma = new PrismaClient();
   const scholar = await prisma.user.findUnique({
     where: {

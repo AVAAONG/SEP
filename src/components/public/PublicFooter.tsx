@@ -1,12 +1,10 @@
-import React from 'react';
 import Image from 'next/image';
-import { Roboto } from 'next/font/google';
-
-const roboto = Roboto({ subsets: ['latin'], weight: ['400', '700'] });
 
 const PublicFooter = () => {
   return (
-    <footer className={` py-4 ${roboto.className} text-xs md:text-sm bg-slate-950`}>
+    <footer
+      className={`py-4 px-4 md:px-0 text-sm bg-light dark:bg-dark border-t dark:border-opacity-20 border-opacity-20 border-dark dark:border-light`}
+    >
       <div className="max-w-xs lg:max-w-7xl box-border relative justify-center items-center m-auto flex-wrap ">
         <div className="flex m-auto lg:mx-24 justify-center lg:justify-start mb-8 lg:mb-2">
           <figure>
@@ -24,14 +22,14 @@ const PublicFooter = () => {
           </div>
           <div className="flex flex-col w-full lg:w-min justify-center lg:justify-start text-center lg:text-start gap-4">
             <span>Siguenos en nuestras redes:</span>
-            <div className="flex  w-full justify-center gap-6 lg:justify-start text-center lg:text-start">
+            <div className="flex w-full justify-center gap-6 lg:justify-start text-center lg:text-start">
               <a href="https://twitter.com/avaa_org" target="_blank" rel="noreferrer">
                 <svg
                   aria-hidden="true"
                   focusable="false"
                   data-prefix="fab"
                   data-icon="twitter"
-                  className="inline-block h-4 lg:h-6 "
+                  className="inline-block h-5 md:h-6 "
                   role="img"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 512 512"
@@ -48,7 +46,7 @@ const PublicFooter = () => {
                   focusable="false"
                   data-prefix="fab"
                   data-icon="youtube"
-                  className="inline-block  h-4 lg:h-6 fa-youtube "
+                  className="inline-block h-5 md:h-6 fa-youtube "
                   role="img"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 576 512"
@@ -65,7 +63,7 @@ const PublicFooter = () => {
                   focusable="false"
                   data-prefix="fab"
                   data-icon="instagram"
-                  className="inline-block h-4 lg:h-6 fa-instagram"
+                  className="inline-block  h-5 md:h-6 fa-instagram"
                   role="img"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 448 512"
@@ -86,9 +84,9 @@ const PublicFooter = () => {
                   version="1.1"
                   focusable="false"
                   xmlns="http://www.w3.org/2000/svg"
-                  className="inline-block h-4 lg:h-6 fa-instagram"
+                  className="inline-block h-6 fa-instagram"
                   xmlnsXlink="http://www.w3.org/1999/xlink"
-                  fill="#000000"
+                  fill="currentColor"
                 >
                   <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                   <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
@@ -100,7 +98,7 @@ const PublicFooter = () => {
                       <g
                         id="Dribbble-Light-Preview"
                         transform="translate(-180.000000, -7479.000000)"
-                        fill="#ffffff"
+                        fill="currentColor"
                       >
                         {' '}
                         <g id="icons" transform="translate(56.000000, 160.000000)">
@@ -123,10 +121,10 @@ const PublicFooter = () => {
                   version="1.1"
                   focusable="false"
                   xmlns="http://www.w3.org/2000/svg"
-                  className="inline-block h-4 lg:h-6 fa-instagram text-white"
+                  className="inline-block  h-5 md:h-6 fa-instagram"
                   xmlnsXlink="http://www.w3.org/1999/xlink"
-                  fill="#ffffff"
-                  stroke="#ffffff"
+                  fill="currentColor"
+                  stroke="currentColor"
                 >
                   <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                   <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
@@ -138,7 +136,7 @@ const PublicFooter = () => {
                       <g
                         id="Dribbble-Light-Preview"
                         transform="translate(-385.000000, -7399.000000)"
-                        fill="#ffffff"
+                        fill="currentColor"
                       >
                         {' '}
                         <g id="icons" transform="translate(56.000000, 160.000000)">
@@ -182,7 +180,7 @@ const PublicFooter = () => {
       </div>
       <div className="py-4">
         <div className="flex flex-wrap flex-col box-border relative justify-start items-center m-auto w-auto  gap-4">
-          <div className="flex flex-wrap  gap-4">
+          <div className="flex flex-wrap gap-2 md:gap-4">
             <a href="https://avaa.org/terminos-y-condiciones/" className="pointer">
               Terminos y condiciones
             </a>

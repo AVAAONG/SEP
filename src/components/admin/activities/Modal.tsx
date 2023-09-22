@@ -1,7 +1,7 @@
-import { CheckIcon, LoadingIcon } from '@/assets/svgs';
 import { KindOfActivity } from '@/types/General';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { CheckIcon, LoadingIcon } from '../../../../public/svgs/svgs';
 
 const CONTACTS_GROUP_OPTIONS = [
   { inputName: 'Kevin', value: 'SOLO KEVIN' },

@@ -14,7 +14,7 @@ import { Chat } from '@/types/Chat';
 import createZoomMeeting from '@/lib/zoom';
 import { KindOfActivity } from '@/types/General';
 import { Workshop } from '@/types/Workshop';
-import { Modality, Skill } from '@prisma/client';
+import { Skill } from '@prisma/client';
 import { Calendar } from '../auth';
 import {
   createChatCalendarDescription,
@@ -51,8 +51,6 @@ export const createEvent = async (kindOfActivity: KindOfActivity, values: Worksh
     const [eventDetails, eventDescription, zoomMeetLink, zoomMeetId, zoomMetPassword] =
       await createWorkshopEventDetails(values as Workshop);
     addUrl = await getPublicEventLink(title, platform, eventDescription, start, end);
-    console.log(addUrl);
-    console.log(eventDescription);
 
     const event = await Calendar.events.insert({
       calendarId: WORKSHOP_CALENDAR_ID,
@@ -126,14 +124,14 @@ const createWorkshopEventDetails = async (
     calendarDescription = createWorkshopCalendarDescription(
       mapWorkshopSkill(pensum),
       splitSpeakerValues(speaker).speakerName,
-      mapWorkshopModality(modality),
+      modality,
       platform,
       description,
       workshopYear
     );
     eventDetails = createEventObject(title, modality, platform, calendarDescription, start, end);
-  } else if (modality === 'VIRTUAL' || modality === 'HIBRID') {
-    if (platform.toLowerCase().trim() === 'zoom') {
+  } else if (modality === 'ONLINE' || modality === 'HIBRID') {
+    if (platform === 'ZOOM') {
       const [join_url, id, password] = await createZoomMeeting(title, new Date(start));
       zoomMeetLink = join_url;
       zoomMeetId = id;
@@ -206,16 +204,18 @@ const createChatEventDetails = async (
  * @param calendarId - The ID of the calendar to retrieve events from.
  */
 export const getCalendarEvents = async (calendarId: string = 'primary') => {
-  const events = await Calendar.events.list({
-    calendarId: calendarId,
-    timeMin: substractMonths(3),
-  });
-  if (events.status === 200) {
-    if (events === null || events === undefined) return console.error('No events found.');
-    return events.data.items;
-  } else {
-    console.error('Error retrieving events');
-    return null;
+  try {
+    const events = await Calendar.events.list({
+      calendarId: calendarId,
+      timeMin: substractMonths(3),
+    });
+    if (events.status === 200) {
+      if (events === null || events === undefined) return console.error('No events found.');
+      return events.data.items;
+    }
+  } catch (error) {
+    console.error('Error retrieving events:', error);
+    return [];
   }
 };
 
@@ -302,19 +302,6 @@ export const mapWorkshopSkill = (skill: Skill): string => {
       return 'Liderazgo';
     case 'SELF_MANAGEMENT':
       return 'Gerencia de si mismo';
-    default:
-      return 'N/A';
-  }
-};
-
-const mapWorkshopModality = (modality: Modality) => {
-  switch (modality) {
-    case 'HYBRID':
-      return 'Híbrido';
-    case 'VIRTUAL':
-      return 'Virutual';
-    case 'IN_PERSON':
-      return 'Presencial';
     default:
       return 'N/A';
   }

@@ -18,11 +18,11 @@ const ThemeToggleButton = () => {
     <button
       type="button"
       onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-      className=" text-emerald-700 rounded-lg hover:text-emerald-500  dark:text-emerald-700 dark:hover:text-emerald-500 "
+      className="text-primary-light dark:text-primary-dark"
     >
       {theme === 'light' ? (
         <svg
-          className="w-6 h-6"
+          className="w-7 h-7"
           fill="currentColor"
           viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"
@@ -31,7 +31,7 @@ const ThemeToggleButton = () => {
         </svg>
       ) : (
         <svg
-          className="w-6 h-6"
+          className="w-7 h-7"
           fill="currentColor"
           viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"

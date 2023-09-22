@@ -1,9 +1,9 @@
 'use client';
-import { XIcon, EditIcon } from '@/assets/svgs';
-import { SUUID } from 'short-uuid';
 import { Modality, Skill, Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
+import { BaseSyntheticEvent } from 'react';
 import { useForm } from 'react-hook-form';
-import { BaseSyntheticEvent, useState } from 'react';
+import { SUUID } from 'short-uuid';
+import { EditIcon, XIcon } from '../../../../public/svgs/svgs';
 import WorkshopTooltip from '../WorkshopTooltip';
 
 interface WorkshopsListProps {

@@ -16,12 +16,16 @@ const oauth2Client = new auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL);
  * @param refresh_token the refresh token of the user who is logged in
  * @see https://github.com/googleapis/google-api-nodejs-client#retrieve-access-token for more information
  */
-export const setTokens = (access_token: string, refresh_token: string, id_token?:string ) => {
-  oauth2Client.setCredentials({
-    access_token,
-    refresh_token,
-    id_token
-  });
+export const setTokens = (access_token: string, refresh_token: string) => {
+  console.log(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL);
+  try {
+    oauth2Client.setCredentials({
+      access_token,
+      refresh_token,
+    });
+  } catch (err) {
+    console.log('A ocurrido el siguiente error al intentar setear los tokens: ', err);
+  }
 };
 
 /**

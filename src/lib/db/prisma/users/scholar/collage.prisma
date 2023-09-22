@@ -1,0 +1,82 @@
+import { Modality, User } from "..\..\schema"
+
+enum EvaluationScale {
+    CERO_TO_TEN
+    CERO_TO_FIVE
+    CERO_TO_TWENTY
+}
+
+enum StudyRegime {
+    SEMESTER
+    QUARTER
+    ANNUAL
+}
+
+enum StudyArea {
+    BASIC_SCIENCES //Ciencias Básicas
+    HEALTH_SCIENCES // Ciencias de la Salud
+    STEM //STEM (Ciencias, Tecnología,Ingenierías, Matemáticas)=
+    SOCIAL_ECONOMIC_SCIENCES //Ciencias Sociales
+    HUMANITIES_EDUCATION //Humanidades y Educación
+    ARTS
+    ARCHITECTURE_URBANISM //Arquitectura y Urbanismo
+    OTHER
+}
+
+enum Collages {
+    UCV
+    USB
+    UCAB
+    UNIMET
+    USM
+    UJMV
+    UCSAR
+    IUTA
+    IUT
+    IUTJOSE
+    IUNE
+    ENAHP
+    ICEE
+    IUAII
+    IFH
+    CAE
+    IUTRBF
+    UPEL
+    IPSM
+}
+
+enum Careers {
+    INGENIERIA_DE_SISTEMAS
+    INGENIERIA_DE_COMPUTACION
+    INGENIERIA_DE_TELECOMUNICACIONES
+    INGENIERIA_DE_INFORMATICA
+    INGENIERIA_DE_TELEMATICA
+    INGENIERIA_DE_SOFTWARE
+    INGENIERIA_DE_SISTEMAS_COMPUTACIONALES
+    INGENIERIA_DE_SISTEMAS_DE_INFORMACION
+    INGENIERIA_DE_SISTEMAS_DE_COMUNICACIONES
+}
+
+model ScholarCollageInformation {
+    id                      String                                       @id @default(nanoid())
+    academic_load_completed Boolean?
+    collage                 Collages?
+    career                  Careers?
+    study_area              StudyArea?
+    evaluation_scale        EvaluationScale
+    study_regime            StudyRegime
+    qualification           ScholarCollageAverageQualificationByPeriod[]
+    scholar                 User[]
+}
+
+model ScholarCollageAverageQualificationByPeriod {
+    id                          String                     @id @default(nanoid())
+    current_academic_period     Int
+    grade                       Float
+    class_modality              Modality
+    record                      String?
+    ScholarCollageInformation   ScholarCollageInformation? @relation(fields: [scholarCollageInformationId], references: [id])
+    scholarCollageInformationId String?
+
+    @@index([scholarCollageInformationId])
+}

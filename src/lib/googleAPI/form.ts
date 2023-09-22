@@ -1,4 +1,5 @@
 import { Workshop } from '@/types/Workshop';
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 import { Form } from '../auth/auth';
 import { addDays } from '../calendar/calendar';
@@ -63,6 +64,9 @@ export const updateFormInfo = async (formId: string, title: string, description:
   });
   return res.data.form?.formId;
 };
+=======
+import { addDays } from './calendar/calendar';
+>>>>>>> fcef2336378e1c4ee972daefd689a96eb8bd57ce
 
 export const createFormDescription = (workshop: Workshop) => {
   const { title, pensum, date, startHour, endHour, speaker, modality, platform, description } =

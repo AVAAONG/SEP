@@ -3,10 +3,10 @@
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './calendar.css';
 
-import { Calendar as BigCalendar, momentLocalizer, Views } from 'react-big-calendar';
 import moment from 'moment';
-import { Fragment, useMemo } from 'react';
 import 'moment/locale/es';
+import { useMemo } from 'react';
+import { Calendar as BigCalendar, Views, momentLocalizer } from 'react-big-calendar';
 
 import { BigCalendarEventType } from '@/types/Calendar';
 
@@ -46,30 +46,26 @@ const Calendar = ({ events }: { events: BigCalendarEventType[] }) => {
     []
   );
   return (
-    <Fragment>
-      <div className="">
-        <BigCalendar
-          className="h-96"
-          localizer={localizer}
-          events={events}
-          startAccessor="start"
-          endAccessor="end"
-          defaultDate={defaultDate}
-          views={views}
-          showMultiDayTimes
-          eventPropGetter={styleEvent}
-          messages={{
-            month: 'Mes',
-            day: 'Día',
-            today: 'Hoy',
-            week: 'Semana',
-            work_week: 'Semana Laboral',
-            previous: 'Atrás',
-            next: 'Siguiente',
-          }}
-        />
-      </div>
-    </Fragment>
+    <BigCalendar
+      className="h-96 max-h-96 w-full overflow-y-scroll overflow:-moz-scrollbars-none"
+      localizer={localizer}
+      events={events}
+      startAccessor="start"
+      endAccessor="end"
+      defaultDate={defaultDate}
+      views={views}
+      showMultiDayTimes
+      eventPropGetter={styleEvent}
+      messages={{
+        month: 'Mes',
+        day: 'Día',
+        today: 'Hoy',
+        week: 'Semana',
+        work_week: 'Semana Laboral',
+        previous: 'Atrás',
+        next: 'Siguiente',
+      }}
+    />
   );
 };
 

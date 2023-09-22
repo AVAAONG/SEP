@@ -35,7 +35,7 @@ const GoogleSignInButton = ({ providerId, callbackUrl, cookieValue }: GoogleSign
     <button
       onClick={() => handleSignIn()}
       role="button"
-      className="bg-green-600 hover:bg-green-500 border-2 border-emerald-950 hover:border-green-600 text-white font-semibold py-2 px-4 rounded-md w-full flex justify-center gap-4"
+      className="bg-primary-light hover:bg-primary-dark transition-colors text-white font-semibold py-2 px-4 rounded-md w-full flex justify-center gap-4"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

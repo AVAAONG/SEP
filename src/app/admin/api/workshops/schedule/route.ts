@@ -1,15 +1,17 @@
-import { createWorkshop } from '@/lib/database/Workshops';
 import { setTokens } from '@/lib/googleAPI/auth';
 import { createEvent } from '@/lib/googleAPI/calendar/calendar';
 import { getFormatedDate } from '@/lib/googleAPI/calendar/utils';
-import { createFormDescription } from '@/lib/googleAPI/form';
 import { Workshop as FormTypeWorkshop } from '@/types/Workshop';
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 import { Modality, Skill, Workshop, WorkshopTempData, WorkshopYear } from '@prisma/client';
 =======
 import { Modality, Skill, Workshop, WorkshopYear } from '@prisma/client';
 >>>>>>> Stashed changes
 import { nanoid } from 'nanoid';
+=======
+import { Modality, Skill, Workshop, WorkshopYear } from '@prisma/client';
+>>>>>>> fcef2336378e1c4ee972daefd689a96eb8bd57ce
 import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -24,11 +26,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
   //creamos el calendario
   const [calendarEventId, addToCalendarUrl, meetingLink, meetingId, meetingPassword] =
     await createEvent('workshop', workshop);
-  //creamos el formulario
-  const formDescription = createFormDescription(workshop);
-  console.log(formDescription);
-  const workshopId = nanoid();
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
   //creamos el formulario
@@ -68,6 +67,37 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   // const normalizedWorkshop = normalizeWorkshopData(workshop, workshopId, calendarEventId!);
 >>>>>>> Stashed changes
+=======
+  // //creamos el formulario
+  // const formDescription = createFormDescription(workshop);
+  // const workshopId = nanoid();
+
+  // const formUrl = await createForm(
+  //   title,
+  //   modality,
+  //   spots,
+  //   workshopId,
+  //   addToCalendarUrl!,
+  //   meetingLink!,
+  //   meetingId!,
+  //   meetingPassword!,
+  //   formDescription
+  // );
+  // const { speakerId } = splitSpeakerValues(speaker);
+
+  // const tempDataObj: WorkshopTempData = {
+  //   id: nanoid(),
+  //   meeting_password: meetingPassword,
+  //   meeting_link: meetingLink,
+  //   meeting_id: meetingId,
+  //   form_link: formUrl,
+  // };
+  // console.log(workshop)
+  // console.log(speakerId)
+  // console.log(tempDataObj)
+  // const normalizedWorkshop = normalizeWorkshopData(workshop, workshopId, calendarEventId!);
+  // const workshopCreated = await createWorkshop(normalizedWorkshop, speakerId, tempDataObj);
+>>>>>>> fcef2336378e1c4ee972daefd689a96eb8bd57ce
   //guardamos en la base de datos
   // const workshopCreated = await createWorkshop(normalizedWorkshop, speakerId, tempDataObj);
   return NextResponse.json({ messagge: 'ok' });

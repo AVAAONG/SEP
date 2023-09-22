@@ -1,14 +1,13 @@
-import { Chat, ChatLevel, KindOfChat } from '@/types/Chat';
-import { KindOfActivity, Platform, activityMode } from '@/types/General';
-import { AsociatedProject } from '@/types/Volunteer';
+import { ChatLevel, KindOfChat } from '@/types/Chat';
+import { Platform, activityMode } from '@/types/General';
 import { Pensum } from '@/types/Workshop';
-import { Skill } from '@prisma/client';
+import { Modality } from '@prisma/client';
 
 /**
  * Creates the description for a workshop event
  *
  * @param pensum
- * @param activityMode
+ * @param modality
  * @param platform
  * @param description
  * @param meetingLink
@@ -19,7 +18,7 @@ import { Skill } from '@prisma/client';
 export const createWorkshopCalendarDescription = (
   pensum: Pensum,
   speaker: string,
-  activityMode: activityMode,
+  modality: activityMode,
   platform: Platform,
   description: string,
   avaaYear: string[],
@@ -29,20 +28,20 @@ export const createWorkshopCalendarDescription = (
 ) => {
   let workshopCalendarDescription = '';
 
-  const defaultCalendarDescription = `<b>Modalidad:</b> ${activityMode}
+  const defaultCalendarDescription = `<b>Modalidad:</b> ${mapWorkshopModality(modality)}
 <b>Año del taller:</b> ${avaaYear.join(', ')}
 <b>Facilitador:</b> ${speaker}
-${activityMode === 'VIRTUAL' ? `<b>Plataforma:</b> ${platform}` : `<b>Lugar:</b> ${platform}`}
+${modality === 'ONLINE' ? `<b>Plataforma:</b> ${platform}` : `<b>Lugar:</b> ${platform}`}
 <b>Competencia Asociada:</b> ${pensum}
 `;
-  switch (activityMode) {
+  switch (modality) {
     case 'IN_PERSON':
       workshopCalendarDescription = `${defaultCalendarDescription}
 
 ${description}`;
       break;
 
-    case 'VIRTUAL':
+    case 'ONLINE':
       workshopCalendarDescription = `${defaultCalendarDescription}
 <b>Link de la reunion:</b> ${meetingLink}
 <b>Id de la reunion:</b> ${meetingId}
@@ -86,4 +85,17 @@ export const createChatCalendarDescription = (
   ${description}`;
 
   return calendarDescription;
+};
+
+const mapWorkshopModality = (modality: Modality) => {
+  switch (modality) {
+    case 'HYBRID':
+      return 'Híbrido';
+    case 'VIRTUAL':
+      return 'Virutual';
+    case 'IN_PERSON':
+      return 'Presencial';
+    default:
+      return 'N/A';
+  }
 };

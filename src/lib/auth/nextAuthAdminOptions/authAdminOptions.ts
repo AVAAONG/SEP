@@ -6,7 +6,9 @@
 import type { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 
-import { PAGES, NEXT_SECRET, googleAdminProviderConfig } from './authAdminConfig';
+import { prisma } from '@/lib/db/utils/prisma';
+import { PrismaAdapter } from 'next-auth-prisma-adapter';
+import { NEXT_SECRET, PAGES, googleAdminProviderConfig } from './authAdminConfig';
 
 /**
  *
@@ -17,12 +19,13 @@ import { PAGES, NEXT_SECRET, googleAdminProviderConfig } from './authAdminConfig
  * @see https://next-auth.js.org/configuration/pages
  *
  */
-const adminAuthOptions: NextAuthOptions = {
+const authAdminOptions: NextAuthOptions = {
   /**
    * @description NextAuth providers, those are services in next auth that can be used to authenticate users.
    * @see https://next-auth.js.org/providers/ to see the complete list of options to authenticate users.
    */
   providers: [GoogleProvider(googleAdminProviderConfig)],
+  secret: NEXT_SECRET,
   /**
    * @see https://authjs.dev/reference/adapters for adapters information
    * @see https://authjs.dev/reference/adapter/pri sma for prisma adapter information
@@ -39,16 +42,27 @@ const adminAuthOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
   },
-  secret: NEXT_SECRET,
+  pages: PAGES,
 
   /**
    * @description Callbacks are functions that are called **async** during the execution of NextAuth.js,
    * when specific events occur.
    * @see https://next-auth.js.org/configuration/callbacks
    */
-
   callbacks: {
-    session: ({ session, token }) => {
+    signIn: async ({ user, account, profile }) => {
+      let email: string | undefined = '';
+      if (account?.provider === 'email') email = account.providerAccountId;
+      else email = profile!.email;
+      const userExists = await prisma.adminUser.findUnique({
+        where: { email },
+      });
+      console.log(userExists);
+      console.log(email);
+      if (!userExists) throw Error('notAdmin');
+      else return true;
+    },
+    session: async ({ session, token }) => {
       return {
         ...session,
         user: {
@@ -57,6 +71,8 @@ const adminAuthOptions: NextAuthOptions = {
           accessToken: token.accessToken,
           randomKey: token.randomKey,
           refreshToken: token.refreshToken,
+          role: 'STAFF',
+          kindOfUser: 'ADMIN',
         },
       };
     },
@@ -70,13 +86,18 @@ const adminAuthOptions: NextAuthOptions = {
           id: u.id,
           accessToken,
           refreshToken,
-          randomKey: u.randomKey,
+          kindOfUser: 'ADMIN',
         };
       }
       return token;
     },
   },
-  pages: PAGES,
+  adapter: PrismaAdapter(prisma, {
+    userModel: 'adminUser',
+    accountModel: 'adminAccount',
+    sessionModel: 'adminSession',
+    verificationTokenModel: 'adminVerificationToken',
+  }),
 };
 
-export default adminAuthOptions;
+export default authAdminOptions;

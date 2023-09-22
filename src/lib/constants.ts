@@ -1,14 +1,7 @@
-export const CLIENT_ID = process.env.GOOGLE_API_CLIENT_ID;
-export const CLIENT_SECRET = process.env.GOOGLE_API_CLIENT_SECRET;
+export const CLIENT_ID = process.env.GOOGLE_ADMIN_API_CLIENT_ID;
+export const CLIENT_SECRET = process.env.GOOGLE_ADMIN_API_CLIENT_SECRET;
 export const REDIRECT_URL =
   'http://localhost:3000/api/auth/callback/adminGoogle';
-
-export const CALENDAR_SCOPES = [
-  'https://www.googleapis.com/auth/calendar',
-  'https://www.googleapis.com/auth/calendar.readonly',
-  'https://www.googleapis.com/auth/calendar.events',
-  'https://www.googleapis.com/auth/calendar.events.readonly',
-];
 
 export const MONTHS = [
   '0',
@@ -28,7 +21,7 @@ export const MONTHS = [
 
 const VOLUNTEER_CALENDAR_EVENT_COLORS = 'linear-gradient(to right, #16a34a, #059669)';
 const WORKSHOP_CALENDAR_EVENT_COLORS = 'linear-gradient(to right, #1D4ED8, #312E81)';
-const CHATS_CALENDAR_EVENT_COLORS = 'linear-gradient(to right, #4b0082, #059669)';
+const CHATS_CALENDAR_EVENT_COLORS = 'linear-gradient(to right, #e11d48, #b91c1c)';
 
 export const CALENDAR_IDS = [
   {
@@ -41,7 +34,7 @@ export const CALENDAR_IDS = [
   {
     // Calendar for english chats clubs
     calendarId:
-      'e8e9c5e4d30d349b75f6061c8641fa2577ed9928403c4bd12b6bd6687291e7a9@group.calendar.google.com',
+      '4c33cf47616aea0e0c818290ef4f6369f119c42f7e25baaff330250f5af3a592@group.calendar.google.com',
     eventColor: CHATS_CALENDAR_EVENT_COLORS,
     textColor: '#E11D48',
   },
@@ -65,6 +58,7 @@ export const PROGRAM_COMPONENTS = [
 ];
 
 export const MODALITY = [
+  { option: '', value: 'NONE' },
   { option: 'presencial', value: 'IN_PERSON' },
   { option: 'virtual', value: 'ONLINE' },
   { option: 'hibrido', value: 'HYBRID' },
@@ -72,3 +66,14 @@ export const MODALITY = [
 
 export const PLATFORMS = ['zoom', 'google meet', 'otra', 'padlet'];
 export const WORKSHOP_YEAR = ['I', 'II', 'III', 'IV', 'V', 'TODOS'];
+
+export const ADMIN_ROLES = [
+  { id: 1, name: 'STAFF_PROEXCELENCIA' },
+  { id: 2, name: 'STAFF_COMMUNICATIONS' },
+  { id: 3, name: 'STAFF_ADMON' },
+  { id: 4, name: 'STAFF_MENTORSHIP' },
+  { id: 5, name: 'STAFF_RECRUITMENT' },
+  { id: 6, name: 'COMITEE' },
+  { id: 7, name: 'PROYECT' },
+  { id: 8, name: 'CHAT' }
+]

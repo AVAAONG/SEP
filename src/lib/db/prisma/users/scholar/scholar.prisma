@@ -1,0 +1,112 @@
+/// Prisma schema model for `Scholar` table in database.
+/// Here we model all the necessary data and information we need for the scholars.
+/// @author Kevin Bravo (kevinbravo.me)
+
+import { WorkshopAttendance } from "..\..\activities\workshop\workshop"
+import { ChatAttendance } from "..\..\activities\chat\chat"
+import { Region, ScholarCanAssist, ScholarStatus } from "types-scholar"
+import { Chapter } from "..\..\organization\chapter"
+import { ScholarCanAssist } from "types-scholar"
+import { Gender } from "..\..\activities\type-activities"
+import { ScholarCollageInformation } from "collage"
+import { ScholarCVAInformation } from "cva"
+import { ChatSpeaker } from "..\..\activities\chat\chat"
+import { ScholarCondition, ScholarStatus } from "types-scholar"
+
+model User {
+    id                     String                     @id @default(nanoid())
+    image                  String?
+    accounts               Account[]
+    sessions               Session[]
+    emailVerified          DateTime?
+    created_at             DateTime                   @default(now())
+    updated_at             DateTime                   @updatedAt
+    email                  String?                    @unique
+    first_names            String
+    last_names             String
+    dni                    String                     @unique
+    gender                 Gender
+    birthdate              DateTime
+    is_working             Boolean                    @default(false)
+    job_title              String?
+    job_company            String?
+    local_phone_number     String?
+    cell_phone_Number      String?
+    whatsapp_number        String?
+    state_of_origin        String?
+    address                String?
+    instagram_user         String?
+    twitter_user           String?
+    facebook_user          String?
+    linkedin_user          String?
+    program_information    ScholarProgramInformation? @relation(fields: [program_information_id], references: [id])
+    collage_information    ScholarCollageInformation? @relation(fields: [collage_information_id], references: [id])
+    cva_information        ScholarCVAInformation?     @relation(fields: [cva_information_id], references: [id])
+    program_information_id String?
+    collage_information_id String?
+    cva_information_id     String?
+
+    @@unique([program_information_id, collage_information_id, cva_information_id])
+    @@index([program_information_id])
+    @@index([collage_information_id])
+    @@index([cva_information_id])
+}
+
+model ScholarProgramInformation {
+    id                       String               @id @default(nanoid())
+    avaa_admission_year      DateTime
+    scholar_status           ScholarStatus        @default(NORMAL)
+    scholar_condition        ScholarCondition?
+    can_assist_to_chats      ScholarCanAssist     @default(YES)
+    can_assist_to_workshops  ScholarCanAssist     @default(YES)
+    can_assist_to_volunteers ScholarCanAssist     @default(YES)
+    chapter                  Chapter?             @relation(fields: [chapter_id], references: [id])
+    chapter_id               String?
+    attended_workshops       WorkshopAttendance[]
+    attended_chats           ChatAttendance[]
+    is_chat_speaker          Boolean              @default(false)
+    chat_speaker             ChatSpeaker?         @relation(fields: [chat_speaker_id], references: [id], onUpdate: Restrict, onDelete: Restrict)
+    chat_speaker_id          String?
+    User                     User[]
+
+    @@unique([chapter_id, chat_speaker_id])
+    @@index([chapter_id])
+    @@index([chat_speaker_id])
+}
+
+model Account {
+    id                String  @id @default(nanoid())
+    userId            String
+    type              String
+    provider          String
+    providerAccountId String
+    refresh_token     String? @db.Text
+    access_token      String? @db.Text
+    expires_at        Int?
+    token_type        String?
+    scope             String?
+    id_token          String? @db.Text
+    session_state     String?
+    user              User    @relation(fields: [userId], references: [id])
+
+    @@unique([provider, providerAccountId])
+    @@index([userId])
+}
+
+model Session {
+    id           String   @id @default(nanoid())
+    sessionToken String   @unique
+    userId       String
+    expires      DateTime
+    User         User?    @relation(fields: [userId], references: [id])
+
+    @@index([userId])
+}
+
+model VerificationToken {
+    identifier String
+    token      String   @unique
+    expires    DateTime
+
+    @@unique([identifier, token])
+}

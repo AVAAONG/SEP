@@ -1,72 +1,88 @@
 'use client';
 import logo from '@/../public/proexcelencia.png';
-import { dashboardComponent } from '@/assets/svgs';
-import { sidebarAtom } from '@/state/mainState';
+import { sidebarAtom } from '@/lib/state/mainState';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
 import Link from 'next/link';
-import DropdownButton from '../DropdownButton';
-import { SIDEBAR_ACTIVITIES_ACTIONS, SIDEBAR_DB_BUTTONS } from '../data';
+import { MenuIcon, dashboardComponent } from '../../../../../public/svgs/svgs';
+import DropdownButton from '../../../scholar/DropdownButton';
+import { SIDEBAR_ACTIVITIES_ACTIONS, SIDEBAR_ADMIN_ACTIONS, SIDEBAR_DB_BUTTONS } from '../data';
 import SidebarSeparator from './SidebarSeparator';
 const Sidebar = () => {
-  const [isOpen] = useAtom(sidebarAtom);
+  const [isOpen, setSidebarOpen] = useAtom(sidebarAtom);
+  const toggleSidebar = () => setSidebarOpen(!isOpen);
   return (
     <aside
-      className={`${
-        isOpen ? 'flex' : 'hidden'
-      } flex-col gap-4 justify-start items-center w-72 bg-white py-8 px-2 bg-gradient-to-b from-emerald-950 to-slate-950 `}
+      className={`${isOpen ? 'fixed xl:flex xl:relative' : 'hidden'
+        } flex-col gap-4 justify-start items-center z-50 xl:z-0 w-full sm:w-72 py-8 px-2 bg-primary-light dark:bg-secondary-dark transition-all min-h-full`}
     >
-      <div className="flex items-center mb-2">
-        <Link href="/dashboard">
+      <div className="flex justify-between xl:justify-start items-center mb-8 xl:mb-2">
+        <Link href="/admin/panel">
           <Image src={logo} width={180} alt="Logo Proexcelencia" />
         </Link>
+        <div className="flex justify-start items-center xl:hidden">
+          <button
+            onClick={toggleSidebar}
+            type="button"
+            className="w-6 text-white font-medium p-2 mr-4 text-xl"
+          >
+            <div className="w-6 font-bold">
+              <MenuIcon />
+            </div>
+          </button>
+        </div>
       </div>
-      <div className="w-full flex flex-col justify-between">
+      <div className="w-full flex flex-col gap-2 justify-between">
         <DropdownButton
           buttonName="Panel general"
-          itemList={[{ link: '/admin/dashboard', name: 'Estadisticas generales' }]}
-          Icon={dashboardComponent}
+          Icon={dashboardComponent()}
+          itemList={[]}
+          link="/admin/panel"
         />
       </div>
-      <SidebarSeparator text="Actividades" />
-      <div className="w-full flex flex-col justify-between">
+      <SidebarSeparator text="Componentes" />
+      <div className="w-full flex flex-col gap-2 justify-between">
         {SIDEBAR_ACTIVITIES_ACTIONS.map(({ buttonName, icon, itemList }) => {
           return (
             <DropdownButton
               key={buttonName}
               buttonName={buttonName}
-              Icon={icon}
+              Icon={icon()}
               itemList={itemList}
+              link={null}
             />
           );
         })}
       </div>
       <SidebarSeparator text="Bases de datos" />
-      <div className="w-full flex flex-col justify-between">
+      <div className="w-full flex flex-col gap-2 justify-between">
         {SIDEBAR_DB_BUTTONS.map(({ buttonName, icon, itemList }) => {
           return (
             <DropdownButton
               key={buttonName}
               buttonName={buttonName}
-              Icon={icon}
+              Icon={icon()}
               itemList={itemList}
+              link={null}
             />
           );
         })}
       </div>
       <SidebarSeparator text="Mentoria" />
-      <SidebarSeparator text="Controles de administrador" />
+      <SidebarSeparator text="Configuración" />
+      {SIDEBAR_ADMIN_ACTIONS.map(({ buttonName, icon, itemList }) => {
+        return (
+          <DropdownButton
+            key={buttonName}
+            buttonName={buttonName}
+            Icon={icon()}
+            itemList={itemList}
+            link={null}
+          />
+        );
+      })}
       <SidebarSeparator text="Captacion" />
       <SidebarSeparator text="Red de egresados" />
-
-      {/* 
-                <ul className=" space-y-2 ">
-                    {SIDEBAR_DATABSE_ELEMENTS.map(({ buttonName, icon, itemList }) => {
-                        return (
-                            <DropdownButton key={buttonName} buttonName={buttonName} icon={icon} itemList={itemList} />
-                        )
-                    })}
-                </ul> */}
     </aside>
   );
 };

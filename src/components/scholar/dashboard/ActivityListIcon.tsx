@@ -1,5 +1,4 @@
-import { chatIcon, volunterIcon, workshopIcon } from '@/assets/svgs';
-import React from 'react';
+import { chatIcon, volunterIcon, workshopIcon } from '../../../../public/svgs/svgs';
 
 interface ActivityListIconProps {
   kindOfActivity: 'workshop' | 'chat' | 'volunteering';
