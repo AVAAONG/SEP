@@ -17,7 +17,6 @@ const oauth2Client = new auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL);
  * @see https://github.com/googleapis/google-api-nodejs-client#retrieve-access-token for more information
  */
 export const setTokens = (access_token: string, refresh_token: string) => {
-  console.log(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL);
   try {
     oauth2Client.setCredentials({
       access_token,
