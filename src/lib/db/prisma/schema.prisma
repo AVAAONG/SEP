@@ -384,6 +384,11 @@ model AdminVerificationToken {
   @@unique([identifier, token])
 }
 
+model AllowedAdmins {
+  id    String @id @default(nanoid())
+  email String
+}
+
 //
 // project.prisma
 //

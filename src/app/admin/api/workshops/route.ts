@@ -210,9 +210,9 @@ const parseSkill = (skill: string) => {
       return "ICT";
     default:
       return "CITIZEN_EXERCISE";
-
   }
 }
+
 const parseWorkshopStatus = (statuss: string) => {
   switch (statuss) {
     case "SCHEDULED":

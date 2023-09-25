@@ -3,7 +3,7 @@ import NormalCard from '@/components/scholar/card/NormalCard';
 import Table from '@/components/table/Table';
 import speakerWorkshopsColumn from '@/components/table/columns/singleWorkshopSpeakerColumns';
 
-import { getWorkshopSpeaker } from '@/lib/db/utils/speaker';
+import { getWorkshopSpeakerWithWorkshops } from '@/lib/db/utils/speaker';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -45,57 +45,6 @@ const CARD_CONTENT = [
   },
 ];
 
-const TEMPORAL_DATA = [
-  {
-    title: 'Taller de prueba',
-    modality: 'Presencial',
-    platform: 'Zoom',
-    start_dates: '12/12/2021',
-    asociated_skill: 'Liderazgo',
-    rating: 4.5,
-  },
-  {
-    title: 'Taller de prueba',
-    modality: 'Presencial',
-    platform: 'Zoom',
-    start_dates: '12/12/2021',
-    asociated_skill: 'Liderazgo',
-    rating: 4.5,
-  },
-  {
-    title: 'Taller de prueba',
-    modality: 'Presencial',
-    platform: 'Zoom',
-    start_dates: '12/12/2021',
-    asociated_skill: 'Liderazgo',
-    rating: 1,
-  },
-  {
-    title: 'Taller de prueba',
-    modality: 'Presencial',
-    platform: 'Zoom',
-    start_dates: '12/12/2021',
-    asociated_skill: 'Liderazgo',
-    rating: 2,
-  },
-  {
-    title: 'Taller de prueba',
-    modality: 'Presencial',
-    platform: 'Zoom',
-    start_dates: '12/12/2021',
-    asociated_skill: 'Liderazgo',
-    rating: 4.5,
-  },
-  {
-    title: 'Taller de prueba',
-    modality: 'Presencial',
-    platform: 'Zoom',
-    start_dates: '12/12/2021',
-    asociated_skill: 'Liderazgo',
-    rating: 4.5,
-  },
-];
-
 const speakerSearchOptions = [
   {
     option: 'title',
@@ -116,7 +65,8 @@ const speakerSearchOptions = [
 ];
 const page = async ({ params }: { params: { speakerId: string } }) => {
   const { speakerId } = params;
-  const workshopSpeaker = await getWorkshopSpeaker(speakerId);
+  const [workshopSpeaker, workshops] = await getWorkshopSpeakerWithWorkshops(speakerId);
+  console.log(workshops.workshops);
   const {
     first_names,
     last_names,
@@ -238,7 +188,7 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
         <div className="flex gap-2 justify-center items-center mt-20">
           <Table
             tableColumns={speakerWorkshopsColumn}
-            tableData={TEMPORAL_DATA}
+            tableData={workshops.workshops || []}
             tableHeadersForSearch={speakerSearchOptions}
           />
         </div>

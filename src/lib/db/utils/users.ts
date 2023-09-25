@@ -4,13 +4,10 @@
  */
 
 import {
-  Region,
-  Role,
   Scholar,
   ScholarAttendance,
-  ScholarStatus,
   User,
-  WorkshopAttendance,
+  WorkshopAttendance
 } from '@prisma/client';
 import shortUUID from 'short-uuid';
 import { prisma } from './prisma';
@@ -168,40 +165,6 @@ export const getUsers = async (): Promise<User[]> => {
   return users;
 };
 
-export const getUserByRole = async (role: Role): Promise<User[]> => {
-  const users = await prisma.user.findMany({
-    where: {
-      role,
-    },
-  });
-  return users;
-};
-
-// export const getScholarStatus = async (scholarStatus: ScholarStatus): Promise<User[]> => {
-//     const users = await prisma.user.findMany({
-//         where: {
-//             scholar: {
-//                 scholarStatus
-//             }
-//         }
-//     });
-//     return users;
-// }
-
-/**
- * @description get the total count of scholars
- * @returns the total count of scholars
- *
- */
-export const getScholarsCount = async (): Promise<number> => {
-  const count = await prisma.scholar.count({
-    where: {
-      scholarStatus: ScholarStatus.CURRENT,
-    },
-  });
-  return count;
-};
-
 export const getScholars = async () => {
   const scholar = await prisma.scholar.findMany();
   return scholar;
@@ -210,6 +173,50 @@ export const getScholars = async () => {
 export const createScholar = async (data) => {
   const scholar = await prisma.user.create({
     data,
-
   });
+}
+
+/**
+ * Gets all scholars with all associated data
+ *
+ * @returns An array of scholars with all associated data
+ */
+export const getScholarWithAllData = async () => {
+  const scholar = await prisma.user.findMany({
+    where: {
+      program_information: {
+        scholar_condition: {
+          equals: "ACTIVE"
+        }
+      }
+    }, include: {
+      collage_information: {
+        include: {
+          qualification: true,
+        }
+      },
+      cva_information: {
+        include: {
+          modules: true,
+        }
+      },
+      program_information: {
+        include: {
+          attended_chats: {
+            include: {
+              chat: true,
+            }
+          },
+          attended_workshops: {
+            include: {
+              workshop: true,
+            }
+          },
+          chapter: true,
+        }
+      },
+    },
+  });
+
+  return scholar;
 }
