@@ -114,6 +114,7 @@ enum ScholarAttendance {
 enum Gender {
   M
   F
+  O
 }
 
 //
