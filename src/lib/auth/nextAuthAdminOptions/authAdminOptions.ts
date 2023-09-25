@@ -57,8 +57,6 @@ const authAdminOptions: NextAuthOptions = {
       const userExists = await prisma.adminUser.findUnique({
         where: { email },
       });
-      console.log(userExists);
-      console.log(email);
       if (!userExists) throw Error('notAdmin');
       else return true;
     },
