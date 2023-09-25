@@ -211,3 +211,62 @@ export const appendSpreadsheetValues = async (
     console.error(err);
   }
 };
+
+
+//create a new spreadsheet and return its url 
+export const createSpreadsheetAndReturnUrl = async (title: string) => {
+  try {
+    const response = await Sheets.spreadsheets.create({
+      requestBody: {
+        properties: {
+          title,
+        },
+      },
+    });
+    return response.data.spreadsheetUrl;
+  } catch (err) {
+    console.log("Error al crear el spreadsheet")
+    console.error(err);
+  }
+}
+//append a new row with a specified  values to a spreadsheet 
+export const appendSpreadsheetValuesByRange = async (
+  spreadsheetUrl: string,
+  values: any[]
+) => {
+  const spreadsheetId = spreadsheetUrl.split('/')[5];
+  try {
+    const response = await Sheets.spreadsheets.values.append({
+      spreadsheetId,
+      range: 'Sheet1!A:F',
+      valueInputOption: 'RAW',
+      requestBody: {
+        values,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+//insert a value in a specific cell of a spreadsheet
+export const insertSpreadsheetValue = async (
+  spreadsheetId: string,
+  range: string,
+  values: any[]
+) => {
+  try {
+    const response = await Sheets.spreadsheets.values.update({
+      spreadsheetId,
+      range,
+      valueInputOption: 'RAW',
+      requestBody: {
+        values,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error(err);
+  }
+};

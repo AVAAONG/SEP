@@ -1,46 +1,36 @@
 import { prisma } from '@/lib/db/utils/prisma';
 import { setTokens } from '@/lib/googleAPI/auth';
 import { getFormatedDate } from '@/lib/googleAPI/calendar/utils';
-import { getSpreadsheetValues, getSpreadsheetValuesByUrl } from '@/lib/googleAPI/sheets';
+import { appendSpreadsheetValuesByRange, createSpreadsheetAndReturnUrl, getSpreadsheetValues, getSpreadsheetValuesByUrl, insertSpreadsheetValue } from '@/lib/googleAPI/sheets';
 import { Platform } from '@/types/General';
 import { ActivityStatus, Modality, ScholarAttendance, User, WorkshopYear } from '@prisma/client';
 import moment from 'moment';
 import { nanoid } from 'nanoid';
+import { NextApiRequest } from 'next';
 import { getToken } from 'next-auth/jwt';
 import { NextResponse } from 'next/server';
 
-export async function GET(req: Response, res: Response) {
+
+export async function GET(req: NextApiRequest) {
   const token = await getToken({ req });
-  setTokens(token.accessToken, token.refreshToken);
-  await createWorkshopsInbulkFromSpreadsheet()
-  return NextResponse.json({ message: "flour" });
+  if (token === null) return NextResponse.redirect('/api/auth/signin');
+  setTokens(token.accessToken as string, token.refreshToken as string);
+  return NextResponse.json({ message: "ok" });
 }
 
-const addAttendaceToScholar = async (workshopId: string, user: User, attendance: ScholarAttendance) => {
-  await prisma.workshopAttendance.create({
-    data: {
-      workshop: {
-        connect: {
-          id: workshopId
-        }
-      },
-      scholar: {
-        connect: {
-          id: user?.program_information_id!
-        }
-      },
-      attendance: attendance as ScholarAttendance
-    },
-  })
-}
+
+
 
 
 
 
 const createWorkshopsInbulkFromSpreadsheet = async () => {
+  let index = 2;  // indice desde donde se empieza a extraer los datos de los talleres (se coloca la fila 2 porque la fila 1 son los titulos de las columnas)
+
   const WORKSHOP_SPREADSHEET = '1u-fDi_uggUCvK1v4DPPCwfx3pu8-Q2-VHnQ6ivbTi4k';
   const WORKSHOP_SHEET = 'Registro de talleres';
-  const WORKSHOP_RANGE = `'${WORKSHOP_SHEET}'!A8:N96`;
+  const WORKSHOP_RANGE = `'${WORKSHOP_SHEET}'!A${index}:O96`;
+
   const values = (await getSpreadsheetValues(
     WORKSHOP_SPREADSHEET,
     WORKSHOP_RANGE
@@ -55,7 +45,7 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
       endHour,
       speakerId,
       spots,
-      modality,
+      workshopModality,
       platform,
       description,
       workshopYear,
@@ -63,82 +53,142 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
       spreadsheet,
       sheetName,
     ] = value;
+
+    let spreadsheetForErrors: null | string = null // dejamos la variable en null hasta que ocurra un problema, en caso de apareceer. colocamos la spreadsheet aqui. 
+
+    //parseamos los datos del taller
     const [dates, hours] = parseDates(date, startHour, endHour)
     const workshopId = nanoid()
+    const asociated_skill = parseSkill(skill)
+    const avalible_spots = parseInt(spots)
+    const modality = parseWorkshopModality(workshopModality) as Modality
+    const year = parseWorkshopYear(workshopYear)
+    const activity_status = parseWorkshopStatus(status) as ActivityStatus
+    const speakersId = parseSpeakerId(speakerId)
+
+    // creamos el taller
     try {
       await prisma.workshop.create({
         data: {
           id: workshopId,
           title,
-          asociated_skill: parseSkill(skill),
+          asociated_skill,
           ...dates,
           hours: hours,
           speaker: {
-            connect: {
-              id: speakerId,
-            },
+            connect: speakersId.map((id) => ({ id }))
           },
-          avalible_spots: parseInt(spots),
-          modality: parseWorkshopModality(modality) as Modality,
+          avalible_spots,
+          modality,
           platform: platform as Platform,
           description,
-          year: parseWorkshopYear(workshopYear),
-          activity_status: parseWorkshopStatus(status) as ActivityStatus,
+          year,
+          activity_status
         }
       })
-      console.log("✅✅✅✅✅✅✅ Taller creado " + title + " ✅✅✅✅✅✅✅")
+      console.log("✅✅✅ Taller creado " + title)
     }
     catch (e) {
-      console.log("❌❌❌❌❌ No se pudo crear el taller ❌❌❌❌❌", title)
+      console.log(e)
+      console.log("❌❌❌ No se pudo crear el taller ", title)
       continue
     }
+
     if (status === 'SUSPENDIDO' || status === 'SCHEDULED') continue;
+
     else {
-      console.log("Colocando asistencia " + title);
-      const ATTENDANCE_RANGE1 = `'${sheetName}'!B8:G${spots}`;
+
+
+      //asistencia de la lista principal
+      const ATTENDANCE_RANGE1 = `'${sheetName}'!B8:G${spots + 8}`;
       const attendance = await getSpreadsheetValuesByUrl(spreadsheet, ATTENDANCE_RANGE1) as string[][];
+
+      if (attendance === undefined || attendance.length === 0 || attendance === undefined) {
+        console.log("   No hay asistencia en lista principal")
+        continue
+      }
+      console.log("   Colocando asistencia " + title);
       for (const a of attendance) {
-        if (a[2].length === 0) break;
-        const dni = a[2].toLowerCase().trim().replaceAll('.', '').replaceAll("v-", "");
-        const attendance = parseScholarAttendace(status, a[5]);
+        if (a === undefined || a[2] === undefined || a[2].length === 0) continue;
+        const dni = parseDni(a[2])
+        const attendaci = parseScholarAttendace(status, a[5] as "Si" | "No");
         let user;
         try {
-          user = await prisma.user.findUnique({
+          user = await prisma.user.findUniqueOrThrow({
             where: {
               dni
             }
           })
-          addAttendaceToScholar(workshopId, user!, attendance as ScholarAttendance);
         }
         catch (e) {
-          console.log("no se pudo colocar a ", dni, "en", title, spreadsheet)
+          if (spreadsheetForErrors === null) {
+            console.log("       Creando Spreadsheet de errores")
+            spreadsheetForErrors = await createSpreadsheetAndReturnUrl(title) as string
+            console.log("   Colocando Spreadsheet ")
+            await insertSpreadsheetValue(WORKSHOP_SPREADSHEET, `'${WORKSHOP_SHEET}'!O${index}:O${index}`, [[spreadsheetForErrors]])
+          }
+          console.log('     Colocando a ' + a[0] + ' en el spreadsheet de errores', dni, user)
+          a.push("MAIN_LIST")
+          await appendSpreadsheetValuesByRange(spreadsheetForErrors, attendance)
+          continue
         }
+        console.log('     Dando asistencia a ' + a[0])
+        await addAttendaceToScholar(workshopId, user!, attendaci as ScholarAttendance);
       }
-      const ATTENDANCE_RANGE2 = `'${sheetName}'!B${spots}:G`;
+
+
+      //ASISTENCIA DE LA LSITA DE ESPERA. 
+      const ATTENDANCE_RANGE2 = `'${sheetName}'!B${spots + 8}:G`;
       const attendance2 = await getSpreadsheetValuesByUrl(spreadsheet, ATTENDANCE_RANGE2) as string[][]
-      if (attendance2 === undefined || attendance2.length === 0) continue
+      if (attendance2 === undefined || attendance2.length === 0) {
+        console.log("No hay asistencia en lista de espera")
+        continue;
+      }
       else {
         for (const a of attendance2) {
-          if (a[0].length === 0) break
-          const dni = a[2].toLowerCase().trim().replaceAll('.', '').replaceAll("v-", "")
-          const attendance = parseScholarAttendace(status, a[5])
+          if (a === undefined || a[2] === undefined || a[2].length === 0) {
+            console.log("Asistencia finalizada")
+            break
+          };
+          const dni = parseDni(a[2])
+          const attendance = parseScholarAttendaceWaitingList(status, a[5] as "Si" | "No")
           let user;
           try {
-            user = await prisma.user.findUnique({
+            user = await prisma.user.findUniqueOrThrow({
               where: {
                 dni
               }
             })
-            addAttendaceToScholar(workshopId, user!, attendance as ScholarAttendance);
           }
           catch (e) {
-            console.log("no se pudo colocar a ", dni, "en el taller", title, spreadsheet)
+            if (spreadsheetForErrors === null) {
+              console.log("   Creando Spreadsheet de errores")
+              spreadsheetForErrors = await createSpreadsheetAndReturnUrl(title) as string
+              console.log("   colocando Spreadsheet ")
+              await insertSpreadsheetValue(WORKSHOP_SPREADSHEET, `'${WORKSHOP_SHEET}'!O${index}:O${index}`, [[spreadsheetForErrors]])
+            }
+            console.log('colocando a ' + a[1] + ' en el spreadsheet de errores')
+            a.push("WAITING_LIST")
+            await appendSpreadsheetValuesByRange(spreadsheetForErrors, attendance2)
+            continue
           }
+          console.log('     Dando asistencia a ' + a[0])
+
+          await addAttendaceToScholar(workshopId, user, attendance as ScholarAttendance);
         }
       }
     }
+    index = index + 1
   }
 }
+
+
+
+
+
+
+
+
 
 
 // ======================================================= UTILS 
@@ -209,18 +259,44 @@ const parseDates = (date: string, startHour: string, endHour: string): [{
   return [newDates, hours]
 }
 
-const parseScholarAttendace = (status: string, attendance: "Si" | "No") => {
+const parseScholarAttendaceWaitingList = (status: string, attendance: "Si" | "No") => {
   let parseAttendance;
   if (status === 'ENVIADO') parseAttendance = "ENROLLED"
+  else if (status === 'SIN_ASISTENCIA') parseAttendance = "ENROLLED"
   else parseAttendance = attendance === "Si" ? "ATTENDED" : "WAITING_LIST"
   return parseAttendance
 }
+const parseScholarAttendace = (status: string, attendance: "Si" | "No") => {
+  let parseAttendance;
+  if (status === 'ENVIADO') parseAttendance = "ENROLLED"
+  else if (status === 'SIN_ASISTENCIA') parseAttendance = "ENROLLED"
+  else parseAttendance = attendance === "Si" ? "ATTENDED" : "NOT_ATTENDED"
+  return parseAttendance
+}
 
-const findUser = async (dni: string) => {
-  const user = await prisma.user.findUnique({
-    where: {
-      dni
-    }
+
+
+const parseDni = (dni: string) => dni.trim().toLowerCase().replace(/[^0-9]/g, '');
+
+const addAttendaceToScholar = async (workshopId: string, user: User, attendance: ScholarAttendance) => {
+  await prisma.workshopAttendance.create({
+    data: {
+      workshop: {
+        connect: {
+          id: workshopId
+        }
+      },
+      scholar: {
+        connect: {
+          id: user.program_information_id!
+        }
+      },
+      attendance: attendance as ScholarAttendance
+    },
   })
-  return user
+}
+
+const parseSpeakerId = (speakersId: string) => {
+  const speakersIdArr = speakersId.includes(',') ? speakersId.split(',') : [speakersId]
+  return speakersIdArr.map((speaker) => speaker.trim() as string)
 }
