@@ -86,6 +86,7 @@ export const googleAdminProviderConfig: OAuthUserConfig<any> = {
       email: profile.email,
       image: profile.picture,
       role: 'STAFF_PROEXCELENCIA',
+      responsibility: 'ADMIN',
     };
   },
 };
