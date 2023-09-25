@@ -8,10 +8,18 @@ const handler = async (cookieValue: string) => {
   else if (hasTheCookie !== cookieValue) {
     // deletes the actual cookie and set the new one
     cookieStore.delete('fromWhereYouCome');
-    cookieStore.set('fromWhereYouCome', cookieValue);
+    cookieStore.set('fromWhereYouCome', cookieValue, {
+      //set max age in 30 days
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+    });
     return;
   } else {
-    cookieStore.set('fromWhereYouCome', cookieValue);
+    cookieStore.set('fromWhereYouCome', cookieValue, {
+      //set max age in 30 days
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+    });
     return;
   }
 };
