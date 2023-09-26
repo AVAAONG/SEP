@@ -11,6 +11,7 @@ enum Modality {
 // SEND - When the activity has been sended to the scholars.
 // IN_PROGRESS - When the activity is in progress.
 // DONE - When the activity is done.
+// ATTENDANCE_CHECKED - (The last state of a sucsessfully done activity)  When the attendance has been checked.
 // SUSPENDED - When the activity is suspended.
 enum ActivityStatus {
     SCHEDULED
