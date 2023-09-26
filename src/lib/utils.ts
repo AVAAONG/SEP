@@ -63,7 +63,7 @@ export const getAndFormatCalendarEvents = async (): Promise<BigCalendarEventType
 };
 
 interface CardProps {
-  icon: string;
+  icon: () => JSX.Element;
   text: string;
   number: number;
   bg: string;
