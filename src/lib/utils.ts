@@ -5,7 +5,6 @@ import { getCalendarEvents } from '@/lib/googleAPI/calendar/calendar';
 import { BigCalendarEventType } from '@/types/Calendar';
 import { calendar_v3 } from '@googleapis/calendar';
 import { getServerSession } from 'next-auth';
-import { chatIcon, userIcon, volunterIcon, workshopIcon } from '../../public/svgs/svgs';
 
 /**
  * @description Formats the event object to the format required by the BigCalendar component
@@ -63,6 +62,14 @@ export const getAndFormatCalendarEvents = async (): Promise<BigCalendarEventType
   return Promise.all(formatedEvents);
 };
 
+interface CardProps {
+  icon: string;
+  text: string;
+  number: number;
+  bg: string;
+  cardButtonBg: string;
+}
+
 /**
  * @description Creates the content for the cards in the dashboard
  * @param workshopCount the total count of done workshops
@@ -71,41 +78,12 @@ export const getAndFormatCalendarEvents = async (): Promise<BigCalendarEventType
  * @param scholarsCount the total count of active scholars
  * @returns Array of objects with the content for each card
  */
-export const createDashboardCardContent = (
-  workshopCount: number,
-  chatsCount: number,
-  volunteersCount: number,
-  scholarsCount: number
-) => {
-  const cardContet = [
-    {
-      icon: workshopIcon,
-      text: 'Actividades formativas realizadas',
-      number: workshopCount,
-      bg: 'bg-gradient-to-r from-blue-700  to-indigo-900',
-      cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
-    },
-    {
-      icon: chatIcon,
-      text: 'Chats Realizados',
-      number: chatsCount,
-      bg: 'bg-gradient-to-r from-red-500  to-red-900',
-      cardButtonBg: 'bg-indigo-950 active:bg-blue-700',
-    },
-    {
-      icon: volunterIcon,
-      text: 'Horas de voluntariado realizadas',
-      number: volunteersCount,
-      bg: ' from-green-600  to-emerald-800',
-      cardButtonBg: 'bg-indigo-950 active:bg-blue-700',
-    },
-    {
-      icon: userIcon,
-      text: 'Becarios activos',
-      number: scholarsCount,
-      bg: 'from-yellow-500  to-yellow-700',
-      cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
-    },
-  ];
-  return cardContet;
+export const createDataCardsContent = (data: CardProps[]) => {
+
+  const cardContent = data.map((card) => {
+    const { icon, text, number, bg, cardButtonBg } = card;
+    return { icon, text, number, bg, cardButtonBg };
+  });
+
+  return cardContent;
 };
