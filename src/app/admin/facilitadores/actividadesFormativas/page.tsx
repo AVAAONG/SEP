@@ -1,6 +1,6 @@
 import Card from '@/components/admin/dashboard/Card';
 import Table from '@/components/table/Table';
-import workshopSpeakerColumns from '@/components/table/columns/workshopSpeakerColumns';
+import workshopSpeakersColumns from '@/components/table/columns/workshopSpeakersColumns';
 import {
   getWorkshopSpeakersCountByGender,
   getWorkshopSpeakersWithParams,
@@ -55,7 +55,13 @@ const toSelect: Prisma.WorkshopSpeakerSelect = {
   facebook_user: true,
   instagram_user: true,
   linkedin_user: true,
+  workshops: {
+    select: {
+      modality: true,
+    },
+  },
 };
+
 const page = async () => {
   const workshopSpeakers = await getWorkshopSpeakersWithParams(toSelect);
   const workshopSpeakersWithSocialNetworks = workshopSpeakers?.map((workshopSpeaker) => {
@@ -102,20 +108,15 @@ const page = async () => {
         <div>
           <PieChartComponent
             data={[
-              { name: 'Hombres', value: workshopSpeakerMenCount },
               { name: 'Mujeres', value: workshopSpeakersWomanCount },
+              { name: 'Hombres', value: workshopSpeakerMenCount },
             ]}
           />
         </div>
-
-        {/* <div className="w-1/3 px-3">
-          <h4 className="text-xl font-medium">Acciones</h4>
-          <Button buttonText="Crear facilitador" />
-        </div> */}
       </div>
       <div className="w-full h-full">
         <Table
-          tableColumns={workshopSpeakerColumns}
+          tableColumns={workshopSpeakersColumns}
           tableData={workshopSpeakersWithSocialNetworks || []}
           tableHeadersForSearch={tableHeaders}
         />
