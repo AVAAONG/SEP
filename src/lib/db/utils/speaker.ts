@@ -80,6 +80,9 @@ export const getWorkshopSpeakerWithWorkshops = async (speakerId: string): Promis
           some: { id: speakerId },
         }
       },
+      include: {
+        scholar_attendance: true,
+      }
     }),
   ]);
   return [speaker, workshops];
