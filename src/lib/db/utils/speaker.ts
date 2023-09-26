@@ -2,7 +2,7 @@
  * @file This file contains all the necesary logic to interact with the database for the users collection.
  * @author Kevin Bravo (kevinbravo.me)
  */
-import { Prisma } from '@prisma/client';
+import { Prisma, Workshop, WorkshopSpeaker } from '@prisma/client';
 import { prisma } from './prisma';
 /**
  * Get speakers with parameters
@@ -69,19 +69,18 @@ export const getWorkshopSpeakersCountByGender = async () => {
   return [workshopSpeakersWomanCount, workshopSpeakerMenCount];
 }
 
-export const getWorkshopSpeakerWithWorkshops = async (speakerId: string) => {
-  const [speaker, workshops] = await prisma.$transaction(
-    [
-      prisma.workshopSpeaker.findUnique({
-        where: { id: speakerId },
-      }),
-      prisma.workshopSpeaker.findUnique({
-        where: { id: speakerId },
-        select: {
-          workshops: true,
-        },
-      })
-    ]
-  );
+export const getWorkshopSpeakerWithWorkshops = async (speakerId: string): Promise<[WorkshopSpeaker | null, Workshop[] | null]> => {
+  const [speaker, workshops] = await prisma.$transaction([
+    prisma.workshopSpeaker.findUnique({
+      where: { id: speakerId },
+    }),
+    prisma.workshop.findMany({
+      where: {
+        speaker: {
+          some: { id: speakerId },
+        }
+      },
+    }),
+  ]);
   return [speaker, workshops];
 };

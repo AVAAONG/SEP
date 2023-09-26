@@ -66,7 +66,6 @@ const speakerSearchOptions = [
 const page = async ({ params }: { params: { speakerId: string } }) => {
   const { speakerId } = params;
   const [workshopSpeaker, workshops] = await getWorkshopSpeakerWithWorkshops(speakerId);
-  console.log(workshops.workshops);
   const {
     first_names,
     last_names,
@@ -80,7 +79,7 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
     facebook_user,
     instagram_user,
     linkedin_user,
-  } = workshopSpeaker;
+  } = workshopSpeaker || {};
 
   const workshopSpeakerSocialNetwork = [
     {
@@ -188,7 +187,7 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
         <div className="flex gap-2 justify-center items-center mt-20">
           <Table
             tableColumns={speakerWorkshopsColumn}
-            tableData={workshops.workshops || []}
+            tableData={workshops || []}
             tableHeadersForSearch={speakerSearchOptions}
           />
         </div>
