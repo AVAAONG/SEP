@@ -1,13 +1,44 @@
 import Card from '@/components/admin/dashboard/Card';
 import Calendar from '@/components/calendar/Calendar';
 import { getWorkshopsCountByStatus } from '@/lib/db/utils/Workshops';
-import { getChatsCountByStatus } from '@/lib/db/utils/chats';
-import { createDashboardCardContent, getAndFormatCalendarEvents } from '@/lib/utils';
+import { getScholarsCountByCondition } from '@/lib/db/utils/users';
+import { createDataCardsContent, getAndFormatCalendarEvents } from '@/lib/utils';
+import { chatIcon, userIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs';
 
 const page = async () => {
-  const workshopCount = await getWorkshopsCountByStatus('DONE');
-  const scholarsCount = await getChatsCountByStatus('DONE');
-  const cardContent = createDashboardCardContent(workshopCount, scholarsCount, 0, 205);
+  const workshopWithAttendanceCheckedCount = await getWorkshopsCountByStatus('ATTENDANCE_CHECKED');
+  const workshopDoneCount = await getWorkshopsCountByStatus('DONE');
+  const activeScholarsCount = await getScholarsCountByCondition('ACTIVE');
+  const cardContent = createDataCardsContent([
+    {
+      icon: workshopIcon,
+      text: 'Actividades formativas realizadas',
+      number: workshopDoneCount + workshopWithAttendanceCheckedCount,
+      bg: 'bg-gradient-to-r from-blue-700  to-indigo-900',
+      cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
+    },
+    {
+      icon: chatIcon,
+      text: 'Chats Realizados',
+      number: 10,
+      bg: 'bg-gradient-to-r from-red-500  to-red-900',
+      cardButtonBg: 'bg-indigo-950 active:bg-blue-700',
+    },
+    {
+      icon: volunterIcon,
+      text: 'Horas de voluntariado realizadas',
+      number: 10,
+      bg: ' from-green-600  to-emerald-800',
+      cardButtonBg: 'bg-indigo-950 active:bg-blue-700',
+    },
+    {
+      icon: userIcon,
+      text: 'Becarios activos',
+      number: activeScholarsCount,
+      bg: 'from-yellow-500  to-yellow-700',
+      cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
+    },
+  ]);
 
   const events = await getAndFormatCalendarEvents();
   return (

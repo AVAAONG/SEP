@@ -4,8 +4,7 @@
  */
 
 import {
-  Scholar,
-  ScholarAttendance,
+  ScholarCondition,
   User,
   WorkshopAttendance
 } from '@prisma/client';
@@ -42,47 +41,6 @@ export const createUser = async (data: User): Promise<User> => {
  * @returns
  */
 
-export const deleteAllScholars = async () => {
-  const scholars = await prisma.scholar.deleteMany();
-};
-
-/**
- * @description add a workshop to a scholar
- * @param scholarId Scholar id
- * @param workshopId Workshop id
- * @returns The scholar updated
- * @throws Error if the scholar does not exist
- * @see https://www.prisma.io/docs/concepts/components/prisma-client/crud#update
- *
- */
-
-export const addWorkshopToScholar = async (
-  scholarId: shortUUID.SUUID,
-  workshopId: shortUUID.SUUID,
-  attendance: ScholarAttendance
-): Promise<Scholar | null> => {
-  try {
-    const scholar = await prisma.scholar.update({
-      where: { dni: scholarId },
-      data: {
-        attendedWorkshpos: {
-          create: {
-            workshopId: workshopId,
-            attendance: attendance,
-          },
-        },
-      },
-    });
-    console.log('se coloco a ' + scholarId + ' en el taller ' + workshopId);
-    return scholar;
-  } catch (error) {
-    console.log(error);
-    // console.log(" NO se pudo colocar a " + scholarId + " en el taller " + workshopId)
-    return null;
-  } finally {
-    await prisma.$disconnect();
-  }
-};
 
 const createScholarAttendance = async (
   data: WorkshopAttendance
@@ -165,17 +123,6 @@ export const getUsers = async (): Promise<User[]> => {
   return users;
 };
 
-export const getScholars = async () => {
-  const scholar = await prisma.scholar.findMany();
-  return scholar;
-};
-
-export const createScholar = async (data) => {
-  const scholar = await prisma.user.create({
-    data,
-  });
-}
-
 /**
  * Gets all scholars with all associated data
  *
@@ -219,4 +166,20 @@ export const getScholarWithAllData = async () => {
   });
 
   return scholar;
+}
+
+/**
+ * Returns the count of users that match the given ScholarCondition.
+ * @param condition The ScholarCondition object used to filter the users based on their program information.
+ * @returns A Promise that resolves to the count of users that match the condition.
+ */
+export const getScholarsCountByCondition = async (condition: ScholarCondition) => {
+  const scholars = await prisma.user.count({
+    where: {
+      program_information: {
+        scholar_condition: condition
+      }
+    }
+  })
+  return scholars
 }
