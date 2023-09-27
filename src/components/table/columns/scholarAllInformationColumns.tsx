@@ -1,11 +1,11 @@
 'use client';
 import defailProfilePic from '@/../public/defaultProfilePic.png';
-import { User, WorkshopSpeaker } from '@prisma/client';
+import { ScholarProgramInformation, User, WorkshopSpeaker } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Cell, Column } from 'react-table';
+import { Cell, CellProps, Column } from 'react-table';
 
-const scholarAllInformationCollumn: Column<> = [
+const scholarAllInformationCollumn: Column<User> = [
   {
     Header: 'Nombre',
     accessor: (row: WorkshopSpeaker) => `${row.first_names} ${row.last_names}`,
@@ -36,22 +36,49 @@ const scholarAllInformationCollumn: Column<> = [
     Header: 'Cédula',
     accessor: 'dni',
   },
-  // {
-  //   Header: 'Fecha de nacimiento',
-  //   accessor: 'birthdate',
-  // },
+  {
+    Header: 'Fecha de nacimiento',
+    accessor: 'birthdate',
+    Cell: ({ cell }: CellProps<User>) => {
+      const date = new Date(cell.value);
+      return (
+        <span>
+          {' '}
+          {date.toLocaleDateString('es-ES', {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+          })}
+        </span>
+      );
+    },
+  },
   // {
   //   Header: 'Edad',
   //   Cell: ({ cell }: { cell: Cell<User> }) => {
-  //     const birthdate = new Date(cell.row.original.birthdate);
-  //     const ageDifMs = Date.now() - birthdate.getTime();
-  //     const ageDate = new Date(ageDifMs);
-  //     return <span>{Math.abs(ageDate.getUTCFullYear())}</span>;
+  //     const birthdate = new Date(cell.value).getFullYear();
+  //     const age = new Date().getFullYear() - birthdate;
+  //     return <span>{age}</span>;
   //   },
   // },
   {
-    Header: 'Sexo',
+    Header: 'Género',
     accessor: 'gender',
+    Cell: ({ cell }: CellProps<User>) => {
+      if (cell.value === 'M') {
+        return (
+          <span className="inline-flex items-center bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+            Masculino
+          </span>
+        );
+      } else {
+        return (
+          <span className="inline-flex items-center bg-rose-100 text-rose-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-rose-900 dark:text-rose-300">
+            Femenino
+          </span>
+        );
+      }
+    },
   },
   {
     Header: 'Telefono local',
@@ -62,7 +89,7 @@ const scholarAllInformationCollumn: Column<> = [
     accessor: 'cell_phone_Number',
   },
   {
-    Header: 'Wwhatsapp',
+    Header: 'Whatsapp',
     accessor: 'whatsapp_number',
   },
   {
@@ -85,10 +112,23 @@ const scholarAllInformationCollumn: Column<> = [
     Header: 'Carrera',
     accessor: 'career',
   },
-  // {
-  //   Header: 'Fecha de ingreso a AVAA',
-  //   accessor: 'avaa_entry_date',
-  // },
+  {
+    Header: 'Fecha de ingreso a AVAA',
+    accessor: 'program_information',
+    Cell: ({ cell }: CellProps<ScholarProgramInformation>) => {
+      const date = new Date(cell.value.avaa_admission_year);
+      return (
+        <span>
+          {' '}
+          {date.toLocaleDateString('es-ES', {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+          })}
+        </span>
+      );
+    },
+  },
   // {
   //   Header: 'Año actual en AVAA',
   //   Cell: ({ cell }: { cell: Cell<User> }) => {
