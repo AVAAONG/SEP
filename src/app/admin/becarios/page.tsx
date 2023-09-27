@@ -1,7 +1,7 @@
 import Card from '@/components/admin/dashboard/Card';
 import Table from '@/components/table/Table';
 import scholarAllInformationCollumn from '@/components/table/columns/scholarAllInformationColumns';
-import { getScholarWithAllData } from '@/lib/db/utils/users';
+import { getScholarWithAllData, getScholarcountByGender } from '@/lib/db/utils/users';
 import { UserIcon } from '@heroicons/react/20/solid';
 import dynamic from 'next/dynamic';
 import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from 'public/svgs/SocialNetworks';
@@ -35,6 +35,7 @@ const tableHeaders = [
 
 const page = async () => {
   const scholars = await getScholarWithAllData();
+  const [womenScholars, menScholars] = await getScholarcountByGender();
   const workshopSpeakersWithSocialNetworks = scholars?.map((scholar) => {
     const { twitter_user, facebook_user, instagram_user, linkedin_user } = scholar;
     const socialNetworks = [
@@ -73,11 +74,14 @@ const page = async () => {
             text="Becarios activos"
           />
         </div>
-
-        {/* <div className="w-1/3 px-3">
-          <h4 className="text-xl font-medium">Acciones</h4>
-          <Button buttonText="Crear facilitador" />
-        </div> */}
+        <div>
+          <PieChartComponent
+            data={[
+              { name: 'Hombres', value: menScholars },
+              { name: 'Mujeres', value: womenScholars },
+            ]}
+          />
+        </div>
       </div>
       <div className="w-full h-full">
         <Table
