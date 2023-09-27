@@ -50,7 +50,6 @@ export const volunterIcon = () => {
       xmlnsXlink="http://www.w3.org/1999/xlink"
       viewBox="0 0 121.352 121.352"
       xmlSpace="preserve"
-      stroke="#ffffff"
     >
       <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
       <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
