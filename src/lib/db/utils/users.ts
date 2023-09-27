@@ -128,7 +128,7 @@ export const getUsers = async (): Promise<User[]> => {
  *
  * @returns An array of scholars with all associated data
  */
-export const getScholarWithAllData = async () => {
+export const getScholarsWithAllData = async () => {
   const scholar = await prisma.user.findMany({
     where: {
       program_information: {
@@ -190,4 +190,50 @@ export const getScholarcountByGender = async () => {
     prisma.user.count({ where: { gender: 'M' } }),
   ])
   return [womenScholars, menScholars];
+}
+
+
+
+export const getScholarWithAllData = async (scholar_id: string) => {
+  const scholar = await prisma.user.findUnique({
+    where: {
+      id: scholar_id
+    }, include: {
+      collage_information: {
+        include: {
+          qualification: true,
+        }
+      },
+      cva_information: {
+        include: {
+          modules: true,
+        }
+      },
+      program_information: {
+        include: {
+          attended_chats: {
+            include: {
+              chat: true,
+            }
+          },
+          attended_workshops: {
+            include: {
+              workshop: {
+                include: {
+                  scholar_attendance: {
+                    include: {
+                      workshop: true,
+                    }
+                  },
+                }
+              },
+            }
+          },
+          chapter: true,
+        }
+      },
+    },
+  });
+
+  return scholar;
 }

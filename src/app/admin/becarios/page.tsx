@@ -1,7 +1,7 @@
 import Card from '@/components/admin/dashboard/Card';
 import Table from '@/components/table/Table';
 import scholarAllInformationCollumn from '@/components/table/columns/scholarAllInformationColumns';
-import { getScholarWithAllData, getScholarcountByGender } from '@/lib/db/utils/users';
+import { getScholarcountByGender, getScholarsWithAllData } from '@/lib/db/utils/users';
 import { UserIcon } from '@heroicons/react/20/solid';
 import dynamic from 'next/dynamic';
 import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from 'public/svgs/SocialNetworks';
@@ -34,7 +34,7 @@ const tableHeaders = [
 ];
 
 const page = async () => {
-  const scholars = await getScholarWithAllData();
+  const scholars = await getScholarsWithAllData();
   const [womenScholars, menScholars] = await getScholarcountByGender();
   const workshopSpeakersWithSocialNetworks = scholars?.map((scholar) => {
     const { twitter_user, facebook_user, instagram_user, linkedin_user } = scholar;
