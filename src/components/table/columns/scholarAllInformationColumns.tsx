@@ -142,8 +142,9 @@ const scholarAllInformationCollumn: Column<User> = [
     Header: 'Redes Sociales',
     Cell: ({ cell }: { cell: any }) => (
       <div className="flex gap-2 justify-center">
-        {cell.row.original.socialNetworks.map((socialNetwork: any) => (
+        {cell.row.original.socialNetworks.map((socialNetwork: any, index: number) => (
           <Link
+            key={index}
             target="_blank"
             href={socialNetwork.url ? socialNetwork.url : ''}
             className="w-8 text-primary-light dark:text-primary-light rounded-full bg-gray-100 dark:bg-slate-600 p-2"
