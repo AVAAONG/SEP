@@ -4,6 +4,38 @@
 @tailwind components;
 @tailwind utilities;
 
+.copied-text {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  padding: 4px 8px;
+  background-color: #f7fafc;
+  border-radius: 4px;
+  font-family: 'Indie Flower', cursive;
+  font-size: 14px;
+  animation-name: slide-in-out;
+  animation-duration: 2s;
+}
+
+@keyframes slide-in-out {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  90% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+}
+
 .fifi::after {
   content: '';
   position: absolute;
