@@ -97,8 +97,6 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
     if (status === 'SUSPENDIDO' || status === 'SCHEDULED') continue;
 
     else {
-
-
       //asistencia de la lista principal
       const ATTENDANCE_RANGE1 = `'${sheetName}'!B8:G${spots + 8}`;
       const attendance = await getSpreadsheetValuesByUrl(spreadsheet, ATTENDANCE_RANGE1) as string[][];
@@ -170,10 +168,10 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
             console.log('colocando a ' + a[1] + ' en el spreadsheet de errores')
             a.push("WAITING_LIST")
             await appendSpreadsheetValuesByRange(spreadsheetForErrors, attendance2)
+            console.log('colocando el spreadsheet de errores', `'${WORKSHOP_SHEET}'!O${index}:O${index}`)
             continue
           }
           console.log('     Dando asistencia a ' + a[0])
-
           await addAttendaceToScholar(workshopId, user, attendance as ScholarAttendance);
         }
       }
