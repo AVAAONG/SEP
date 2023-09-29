@@ -36,7 +36,7 @@ const WorkshopForm = () => {
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
     if (event === undefined) return;
-    console.log(formWorkshopData)
+    console.log(formWorkshopData);
     event.preventDefault();
     formWorkshopData.platform =
       formWorkshopData.modality.toLowerCase() === 'online'
@@ -89,39 +89,6 @@ const WorkshopForm = () => {
           })}
         </select>
       </div>
-<<<<<<< HEAD
-
-      <div>
-        <label className="block mb-2 text-xs m-l-1 font-semibold  text-slate-400 uppercase">
-          fecha
-        </label>
-        <input {...register('date')} type={'date'} id={'Fecha'} required={true} />
-      </div>
-
-      <div>
-        <label className="block mb-2 text-xs m-l-1 font-semibold  text-slate-400 uppercase">
-          hora de inicio
-        </label>
-        <input {...register('startHour')} type={'time'} id={'Hora de inicio'} required={true} />
-      </div>
-
-      <div>
-        <label className="block mb-2 text-xs m-l-1 font-semibold  text-slate-400 uppercase">
-          hora de cierre
-        </label>
-        <input {...register('endHour')} type={'time'} id={'Hora de cierre'} required={true} />
-      </div>
-
-      <div>
-        <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">
-          facilitador
-        </label>
-        {isLoading || data.length < 1 ? (
-          <input {...register('speaker')} type="text" />
-        ) :
-          (<select {...register('speaker')} id="Facilitador" required={true}>
-            {data.map((value) => {
-=======
       <div className="col-span-2 md:col-span-1">
         <label className="block mb-2 text-xs font-semibold   uppercase">facilitador</label>
         <select {...register('speaker')} id="Facilitador" required={true}>
@@ -129,7 +96,6 @@ const WorkshopForm = () => {
             <option>Cargando facilitadores ...</option>
           ) : (
             data.map((value) => {
->>>>>>> fcef2336378e1c4ee972daefd689a96eb8bd57ce
               const { id, first_names, last_names, email } = value as WorkshopSpeaker;
               const fullName = `${first_names} ${last_names}`;
               return (
@@ -137,25 +103,17 @@ const WorkshopForm = () => {
                   {fullName}
                 </option>
               );
-            })}
-          </select>)
-        }
+            })
+          )}
+        </select>
       </div>
       <div className="col-span-2 md:col-span-1">
         <label className="block mb-2 text-xs font-semibold   uppercase">cupos disponibles</label>
         <input {...register('spots')} type={'number'} id="first_name" required min={0} max={300} />
       </div>
-<<<<<<< HEAD
-      <div>
-        <label className="block mb-2 text-xs font-semibold  text-slate-400 uppercase">
-          modalidad
-        </label>
-        <select {...register('modality')} id="Modalidad" required={true} className="capitalize" >
-=======
       <div className="col-span-2 md:col-span-1">
         <label className="block mb-2 text-xs font-semibold uppercase">modalidad</label>
         <select {...register('modality')} id="Modalidad" required={true} className="capitalize">
->>>>>>> fcef2336378e1c4ee972daefd689a96eb8bd57ce
           {MODALITY.map((option, index) => {
             return (
               <option value={option?.value} key={index}>

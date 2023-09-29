@@ -1,6 +1,5 @@
 'use client';
 import WorkshopForm from '@/components/admin/WorkshopForm';
-import WorkshopsList from '@/components/admin/lists/WorkshopList';
 import { Workshop } from '@/types/Workshop';
 import { BaseSyntheticEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -113,11 +112,11 @@ const Page = () => {
             <text className="font-bold text-3xl text-green-500 mb-6 uppercase tracking-widest">
               actividades formativas agendadas
             </text>
-            <WorkshopsList
-              workshopData={workshopResponse.data}
+            {/* <WorkshopsList
+              workshopData={workshopResponse.data || []}
               deleteEntry={deleteEntry}
               editEntry={editEntry}
-            />
+            /> */}
           </>
         )}
       </div>
