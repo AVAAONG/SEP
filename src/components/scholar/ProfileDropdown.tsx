@@ -38,8 +38,8 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
         } z-50 my-4 w-56 text-base list-none bg-white  divide-y divide-gray-100 shadow dark:bg-slate-900 dark:divide-gray-600 rounded-xl`}
       >
         <div className="py-3 px-4">
-          <span className="block text-sm font-semibold text-gray-900 dark:text-white">{name}</span>
-          <span className="block text-sm text-gray-900 truncate dark:text-white">{email}</span>
+          <span className="block text-sm font-medium">{name}</span>
+          <span className="block text-sm  truncate">{email}</span>
         </div>
         {type === 'scholar' && (
           <ul className="py-1 text-gray-700 dark:text-gray-300">
@@ -61,7 +61,7 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
             </li>
           </ul>
         )}
-        <ul className="py-1 dark:text-gray-300 text-white bg-red-500 hover:bg-red-600 dark:bg-red-800 dark:hover:bg-red-700  rounded-b-xl">
+        <ul className="py-1 bg-red-500 hover:bg-red-600  dark:hover:bg-red-700  rounded-b-xl">
           <li>
             <button onClick={() => signOut()} className="block py-2 px-4 text-sm ">
               Salir de la cuenta
