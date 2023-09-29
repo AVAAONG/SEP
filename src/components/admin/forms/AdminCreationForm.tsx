@@ -8,7 +8,7 @@ import { Controller, useForm } from 'react-hook-form';
 const AdminCreationForm = () => {
     const { register, handleSubmit, control } = useForm<AdminUser>();
 
-    const createAdmin = (data: AdminUser, event: BaseSyntheticEvent<object, any, any> | undefined) => {
+    const createAdmin = (data: AdminUser, event: BaseSyntheticEvent<object> | undefined) => {
         if (event === undefined) return;
         event.preventDefault();
         console.log(data);
@@ -50,9 +50,9 @@ const AdminCreationForm = () => {
                     name="role"
                     control={control}
                     rules={{
-                        required: "Please select a user",
+                        required: "Por favor selecciona un rol",
                     }}
-                    render={({ field: { onChange, value, onBlur } }) => (
+                    render={() => (
                         <InputComboBox values={ADMIN_ROLES} />
                     )}
                 />
