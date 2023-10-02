@@ -1,9 +1,9 @@
 import { ScholarProgramInformation } from "..\users\scholar\scholar"
-import { AdminUser } from "..\users\admin"
+import { AdminProfile } from "..\users\admin"
 
 model Chapter {
     id                 String                      @id @default(nanoid())
     name               String
     asociated_scholars ScholarProgramInformation[]
-    asociated_admins   AdminUser[]
+    asociated_admins   AdminProfile[]
 }
