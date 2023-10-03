@@ -54,8 +54,8 @@ const authAdminOptions: NextAuthOptions = {
       let email: string | undefined = '';
       if (account?.provider === 'email') email = account.providerAccountId;
       else email = profile!.email;
-      const userExists = await prisma.adminUser.findUnique({
-        where: { email },
+      const userExists = await prisma.adminProfile.findUnique({
+        where: { allowedEmail: email! },
       });
       if (!userExists) throw Error('notAdmin');
       else return true;
@@ -69,7 +69,6 @@ const authAdminOptions: NextAuthOptions = {
           accessToken: token.accessToken,
           randomKey: token.randomKey,
           refreshToken: token.refreshToken,
-          role: 'STAFF',
           kindOfUser: 'ADMIN',
         },
       };
