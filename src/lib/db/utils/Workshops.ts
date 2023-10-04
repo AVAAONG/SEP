@@ -119,6 +119,19 @@ export const getWorkshops = async () => {
   return workshops;
 };
 
+export const getWorkshopByStatus = async (status: ActivityStatus) => {
+  const workshops = await prisma.workshop.findMany({
+    where: {
+      activity_status: status,
+    },
+    include: {
+      speaker: true,
+      temp_data: true,
+    },
+  });
+  return workshops;
+}
+
 // export const getWorkshopsByScholar = async (scholarId: string) => {
 //   const workshops = await prisma.user.findUnique({
 //     where: { id: scholarId },
