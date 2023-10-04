@@ -64,7 +64,7 @@ const page = async () => {
   });
   return (
     <div className="flex flex-col items-center w-full gap-6">
-      <div className="flex flex-col md:flex-row gap-4 w-full">
+      <div className="flex flex-col md:flex-row gap-4 w-full bg-white rounded-lg p-2 justify-center items-center shadow-md">
         <div className="h-28 w-full">
           <Card
             Icon={UserIcon}
