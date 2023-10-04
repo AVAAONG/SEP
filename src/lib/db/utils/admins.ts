@@ -47,3 +47,10 @@ export const deleteAdmin = async (adminId: string) => {
     });
     return user;
 }
+
+export const deleteadminProfile = async (adminId: string) => {
+    const user = await prisma.adminProfile.delete({
+        where: { id: adminId }
+    });
+    return user;
+}

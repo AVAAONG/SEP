@@ -1,7 +1,12 @@
 'use client';
 import AdminUsersList from '@/components/admin/AdminUsersList';
 import AdminCreationForm from '@/components/admin/forms/AdminCreationForm';
-import { createAdminProfileUser, deleteAdmin, getAdminsProfiles } from '@/lib/db/utils/admins';
+import {
+  createAdminProfileUser,
+  deleteAdmin,
+  deleteadminProfile,
+  getAdminsProfiles,
+} from '@/lib/db/utils/admins';
 import { uploadImageToImgur } from '@/lib/imgurUpload';
 import createSEPOnboardingMessage from '@/lib/mailMessages/sepOnboardingMessage';
 import sendEmailWithDevAccount from '@/lib/sendEmails';
@@ -10,15 +15,16 @@ import { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 const page = () => {
-  const { register, handleSubmit, reset } = useForm<AdminProfile>();
+  const { register, handleSubmit, reset } = useForm<AdminProfile>({
+    mode: 'onChange',
+  });
   const [image, setImage] = useState<File | null>(null);
   const [adminProfiles, setAdminProfile] = useState<AdminProfile[] | null>(null);
-  const [isLoading, setLoading] = useState(true);
+  const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
     getAdminsProfiles().then((data) => {
       setAdminProfile(data);
-      setLoading(false);
     });
   }, [adminProfiles]);
 
@@ -28,14 +34,18 @@ const page = () => {
   ) => {
     if (event === undefined) return;
     event.preventDefault();
+    setIsCreating(true);
     let imageLink;
     if (image) imageLink = await uploadImageToImgur(image!);
     else imageLink = null;
     data.profileImage = imageLink;
+    data.profileName = data.profileName.trim();
+    const name = data.profileName.split(' ')[0];
     await createAdminProfileUser(data);
-    const onboardingMessage = createSEPOnboardingMessage(data.gender, data.profileName);
-    await sendEmailWithDevAccount(data.profileName, onboardingMessage, data.allowedEmail);
+    const onboardingMessage = createSEPOnboardingMessage(data.gender, name);
+    await sendEmailWithDevAccount(name, onboardingMessage, data.allowedEmail, data.gender);
     reset();
+    setIsCreating(false);
   };
   const deleteAdmins = async (inputId: string) => {
     await deleteAdmin(inputId);
@@ -44,10 +54,11 @@ const page = () => {
   const handleImageChange = (event: BaseSyntheticEvent<object, any, any>) =>
     setImage(event.target.files[0]);
 
-  const editAdmin = (inputId: string) => {
-    const adminUser = adminProfiles?.filter((admin: AdminProfile) => admin.id === inputId);
-    if (adminUser === undefined) return;
-    reset({ ...adminUser[0] });
+  const editAdmin = async (inputId: string) => {
+    const adminUserToEdit = adminProfiles?.filter((admin: AdminProfile) => admin.id === inputId);
+    await deleteadminProfile(inputId);
+    if (adminUserToEdit === undefined) return;
+    reset({ ...adminUserToEdit[0] });
   };
 
   return (
@@ -59,6 +70,7 @@ const page = () => {
           handleSubmit={handleSubmit}
           handleImageChange={handleImageChange}
           image={image}
+          isCreating={isCreating}
         />
         <div className=" w-full sm:w-1/2  flex flex-col items-center gap-4 h-full">
           <h1 className="text-xl font-semibold text-gray-900 mt-16 sm:text-2xl dark:text-white mb-4">

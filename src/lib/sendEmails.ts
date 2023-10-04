@@ -1,7 +1,9 @@
 'use server'
+import { Gender } from "@prisma/client";
 import { createTransport } from "nodemailer";
 
-const sendEmailWithDevAccount = async (name: string, html: string, to: string) => {
+const sendEmailWithDevAccount = async (name: string, html: string, to: string, gender: Gender) => {
+    const welcome = gender === "F" ? "Bienvenida" : "Bienvenido";
     const transport = createTransport({
         service: 'gmail',
         auth: {
@@ -15,7 +17,7 @@ const sendEmailWithDevAccount = async (name: string, html: string, to: string) =
     const result = await transport.sendMail({
         to,
         from: 'ProExcelencia <avaatecnologia@gmail.com>',
-        subject: `🌟¡Bienvenida al SEP, ${name}!`,
+        subject: `🌟 ¡${welcome} al SEP, ${name}!`,
         html
     });
     const failed = result.rejected.concat(result.pending).filter(Boolean);

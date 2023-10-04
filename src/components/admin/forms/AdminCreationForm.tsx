@@ -15,6 +15,7 @@ interface AdminCreationFormProps {
   handleImageChange: (event: BaseSyntheticEvent<object, any, any>) => void;
   handleSubmit: UseFormHandleSubmit<AdminProfile>;
   image: File | null;
+  isCreating: boolean;
 }
 
 const AdminCreationForm: React.FC<AdminCreationFormProps> = ({
@@ -23,6 +24,7 @@ const AdminCreationForm: React.FC<AdminCreationFormProps> = ({
   handleImageChange,
   handleSubmit,
   image,
+  isCreating,
 }) => {
   return (
     <>
@@ -137,8 +139,9 @@ const AdminCreationForm: React.FC<AdminCreationFormProps> = ({
         <button
           className="w-1/2 self-center mt-4 text-white bg-primary-light hover:bg-primary-dark font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           type="submit"
+          disabled={isCreating}
         >
-          Crear administrador
+          {isCreating ? '⏳ Creando administrador ⏳' : 'Crear administrador'}
         </button>{' '}
       </form>
     </>
