@@ -4,6 +4,7 @@ import { setTokens } from '@/lib/googleAPI/auth';
 import { getCalendarEvents } from '@/lib/googleAPI/calendar/calendar';
 import { BigCalendarEventType } from '@/types/Calendar';
 import { calendar_v3 } from '@googleapis/calendar';
+import { Chat, Workshop } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 
 /**
@@ -37,11 +38,40 @@ export const formatEventObject = (
   return formatedEvents;
 };
 
-/**
+
+export const formatEventObjectForBigCalendar = (
+  calendarEvents: Workshop[] | Chat[],
+  bgColor: string,
+  textColor: string
+): BigCalendarEventType[] => {
+  const formatedEvents: BigCalendarEventType[] = [];
+
+  calendarEvents.forEach((event) => {
+    const { title, start_dates, end_dates, description, platform } = event;
+    const obj = {
+      title,
+      allDay: false,
+      start: new Date(start_dates[0]),
+      end: new Date(end_dates[0]),
+      description: description as string,
+      bgColor,
+      location: platform as string,
+      textColor,
+    };
+    formatedEvents.push(obj);
+  });
+  return formatedEvents;
+}
+
+
+
+
+
+/*
  * Gets the events from Google Calendar for each calendar ID and formats them to match the React Big Calendar event type.
  * @returns A promise that resolves to an array of arrays of BigCalendarEventType objects.
  * @todo Add error handling
- * @todo allow to return a single array of events.
+  * @todo allow to return a single array of events.
  */
 export const getAndFormatCalendarEvents = async (): Promise<BigCalendarEventType[][]> => {
   const session = await getServerSession(authAdminOptions);
