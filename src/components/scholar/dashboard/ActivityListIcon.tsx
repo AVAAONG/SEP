@@ -6,7 +6,6 @@ interface ActivityListIconProps {
 
 const ActivityListIcon = ({ kindOfActivity }: ActivityListIconProps) => {
   if (kindOfActivity === 'workshop') {
-    console.log('workshop');
     return (
       <div className="p-1 text-white inline-flex items-center justify-center flex-shrink-0 w-8 h-8 bg-blue-600 rounded-md dark:bg-blue-800">
         {workshopIcon()}
