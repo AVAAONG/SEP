@@ -23,28 +23,28 @@ enum StudyArea {
 }
 
 enum Collages {
-    USB
-    UCV
-    UCAB
-    USM
-    UNEXCA
+    ENAHP
     UCSAR
     UNIMET
+    IUPSM
+    UCV
+    UCAB
+    USB
+    UNE
+    UNEXPO
     UNESR
+    UMA
     UNEARTE
     UJMV
-    IUTA
-    IUT
-    IUTJOSE
-    IUNE
-    ENAHP
-    ICEE
-    IUAII
-    IFH
-    CAE
-    IUTRBF
+    UMC
     UPEL
-    IPSM
+    CUR
+    UNEFA
+    USM
+    UNEXCA
+    ENAPH
+    UAH
+    UBV
 }
 
 model ScholarCollageInformation {
