@@ -14,14 +14,22 @@ import { ChatSpeaker } from "..\..\activities\chat\chat"
 import { ScholarCondition, ScholarStatus } from "types-scholar"
 
 model User {
+    id            String    @id @default(nanoid())
+    image         String?
+    accounts      Account[]
+    sessions      Session[]
+    emailVerified DateTime?
+    created_at    DateTime  @default(now())
+    updated_at    DateTime  @updatedAt
+    lastLogin     DateTime? @default(now())
+    email         String?   @unique
+    scholar       Scholar   @relation(fields: [scholarId], references: [id])
+    scholarId     String    @unique
+}
+
+model Scholar {
     id                     String                     @id @default(nanoid())
-    image                  String?
-    accounts               Account[]
-    sessions               Session[]
-    emailVerified          DateTime?
-    created_at             DateTime                   @default(now())
-    updated_at             DateTime                   @updatedAt
-    email                  String?                    @unique
+    allowedEmail           String?                    @unique
     first_names            String
     last_names             String
     dni                    String                     @unique
@@ -45,6 +53,7 @@ model User {
     program_information_id String?
     collage_information_id String?
     cva_information_id     String?
+    user                   User?
 
     @@unique([program_information_id, collage_information_id, cva_information_id])
     @@index([program_information_id])
@@ -67,7 +76,7 @@ model ScholarProgramInformation {
     is_chat_speaker          Boolean              @default(false)
     chat_speaker             ChatSpeaker?         @relation(fields: [chat_speaker_id], references: [id], onUpdate: Restrict, onDelete: Restrict)
     chat_speaker_id          String?
-    User                     User[]
+    Scholar                  Scholar[]
 
     @@unique([chapter_id, chat_speaker_id])
     @@index([chapter_id])

@@ -1,4 +1,5 @@
 import { Modality, User } from "..\..\schema"
+import { Scholar } from "scholar"
 
 enum EvaluationScale {
     CERO_TO_TEN
@@ -56,7 +57,7 @@ model ScholarCollageInformation {
     evaluation_scale        EvaluationScale
     study_regime            StudyRegime
     qualification           ScholarCollageAverageQualificationByPeriod[]
-    scholar                 User[]
+    Scholar                 Scholar[]
 }
 
 model ScholarCollageAverageQualificationByPeriod {
