@@ -62,8 +62,8 @@ const page = () => {
   };
 
   return (
-    <section className="w-full h-screen">
-      <div className="flex flex-col sm:flex-row justify-start w-full gap-8 mt-16 p-8">
+    <section className="w-full min-h-screen">
+      <div className="flex flex-col md:flex-row justify-start w-full gap-8 xl:mt-16 p-4 md:p-8">
         <AdminCreationForm
           createAdmin={createAdmin}
           register={register}
@@ -72,8 +72,8 @@ const page = () => {
           image={image}
           isCreating={isCreating}
         />
-        <div className=" w-full sm:w-1/2  flex flex-col items-center gap-4 h-full">
-          <h1 className="text-xl font-semibold text-gray-900 mt-16 sm:text-2xl dark:text-white mb-4">
+        <div className=" w-full md:w-1/2 flex flex-col items-center gap-4 h-full">
+          <h1 className="text-xl font-semibold text-gray-900 xl:mt-16 md:text-2xl dark:text-white mb-4">
             Administradores del SEP
           </h1>
           <AdminUsersList

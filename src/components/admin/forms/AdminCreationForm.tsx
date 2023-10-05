@@ -29,7 +29,7 @@ const AdminCreationForm: React.FC<AdminCreationFormProps> = ({
   return (
     <>
       <form
-        className="flex flex-col gap-4 w-full sm:w-1/2 sm:mt-16"
+        className="flex flex-col gap-4 w-full sm:w-1/2 "
         onSubmit={handleSubmit(async (data, event) => await createAdmin(data, event!))}
       >
         <h1 className="text-xl text-center font-semibold text-gray-900 sm:text-2xl dark:text-white mb-4">
@@ -58,7 +58,7 @@ const AdminCreationForm: React.FC<AdminCreationFormProps> = ({
       hover:file:bg-primary-light hover:file:text-secondary-2"
           />
         </div>
-        <div className="flex gap-4">
+        <div className="flex flex-col gap-4 md:flex-row">
           <div className="w-full">
             <label
               htmlFor="studyArea"
@@ -105,7 +105,7 @@ const AdminCreationForm: React.FC<AdminCreationFormProps> = ({
           </label>
           <input type="email" required {...register('allowedEmail')} />
         </div>
-        <div className="flex gap-4 ">
+        <div className="flex flex-col md:flex-row gap-4 ">
           <div className="w-full">
             <label
               htmlFor="currentAcademicPeriod"
@@ -137,7 +137,7 @@ const AdminCreationForm: React.FC<AdminCreationFormProps> = ({
           </div>
         </div>
         <button
-          className="w-1/2 self-center mt-4 text-white bg-primary-light hover:bg-primary-dark font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          className="w-full md:w-1/2 self-center mt-4 text-white bg-primary-light hover:bg-primary-dark font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           type="submit"
           disabled={isCreating}
         >

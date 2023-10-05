@@ -15,7 +15,7 @@ const AdminUsersList: React.FC<AdminUsersListProps> = ({ adminUsers, editUser, d
     return (
       <ul className="w-full flex flex-col gap-3 max-h-96 overflow-y-auto transform transition duration-300 ease-in-out">
         {Array.from({ length: 3 }).map((_, index) => (
-          <li className="p-4 focus:outline-none focus:outline-offset-0  rounded-md w-full bg-gray-100 shadow-sm dark:bg-slate-900  animate-pulse">
+          <li className="p-4 focus:outline-none focus:outline-offset-0 rounded-md w-full bg-gray-100 shadow-sm dark:bg-slate-900  animate-pulse">
             <div className="flex items-center space-x-4">
               <div className="flex-shrink-0">
                 <div className="p-6 rounded-full bg-gray-200"></div>
@@ -39,7 +39,7 @@ const AdminUsersList: React.FC<AdminUsersListProps> = ({ adminUsers, editUser, d
       {adminUsers.map(
         ({ allowedEmail, chapter_id, id, responsibility, role, profileImage, profileName }) => (
           <li
-            className="p-4 focus:outline-none focus:outline-offset-0  rounded-md w-full bg-white dark:bg-slate-900"
+            className="p-2 md:p-4 focus:outline-none focus:outline-offset-0  rounded-md w-full bg-white dark:bg-slate-900"
             key={allowedEmail}
           >
             <div className="flex items-center space-x-4">
@@ -69,7 +69,7 @@ const AdminUsersList: React.FC<AdminUsersListProps> = ({ adminUsers, editUser, d
                 </p>
                 <p className="text-sm text-gray-500 truncate dark:text-gray-400">{allowedEmail}</p>
               </div>
-              <div className="flex flex-col items-center">
+              <div className="hidden md:flex flex-col items-center">
                 <div className="inline-flex items-center text-base font-medium text-gray-900 dark:text-white">
                   {role}
                 </div>
