@@ -20,7 +20,11 @@ interface TableProps<T extends object> {
   tableHeadersForSearch: { option: string; label: string }[];
 }
 
-function Table<T extends object>({ tableData, tableColumns, tableHeadersForSearch }: TableProps<T>) {
+function Table<T extends object>({
+  tableData,
+  tableColumns,
+  tableHeadersForSearch,
+}: TableProps<T>) {
   const data = useMemo(() => tableData, [tableData]);
   const columns = useMemo(() => tableColumns, [tableColumns]);
   const [isExpanded, toggleExpanded] = useState(false);
@@ -49,8 +53,9 @@ function Table<T extends object>({ tableData, tableColumns, tableHeadersForSearc
 
   return (
     <div
-      className={`${isExpanded ? 'absolute top-0 bottom-0 left-0 right-0 z-50' : 'relative overflow-hidden'
-        }  bg-white shadow-md shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full h-max min-h-full`}
+      className={`${
+        isExpanded ? 'absolute top-0 bottom-0 left-0 right-0 z-50' : 'relative overflow-hidden'
+      }  bg-white shadow-md shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full h-max min-h-full`}
     >
       <TableHeader
         optionsForFilter={tableHeadersForSearch}
@@ -63,20 +68,20 @@ function Table<T extends object>({ tableData, tableColumns, tableHeadersForSearc
       </TableHeader>
       <div className="flow-root w-full overflow-x-scroll">
         <table {...getTableProps()} className="w-full text-sm text-left text-gray-300 ">
-          <thead className="text-xs text-green-500 uppercase text-center border-b-[1px] border-green-700 text-ellipsis bg-gray-100 dark:bg-slate-950">
+          <thead className="text-xs text-primary-light uppercase text-center border-b-[1px] border-green-700 text-ellipsis bg-gray-100 dark:bg-slate-950">
             {headerGroups.map((headerGroup) => {
               const { key, ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps();
               return (
                 <tr
                   key={key}
                   {...restHeaderGroupProps}
-                  className="text-xs font-medium text-green-700 dark:text-green-500 uppercase tracking-wider"
+                  className="text-xs font-medium text-primary-light dark:text-primary-dark uppercase tracking-wider"
                 >
                   {headerGroup.headers.map((column) => {
                     const { getHeaderProps, getSortByToggleProps } = column;
                     const { key, ...restColumn } = getHeaderProps(getSortByToggleProps());
                     return (
-                      <th key={key} {...restColumn} scope="col" className="px-6 py-3">
+                      <th key={key} {...restColumn} scope="col" className="px-4">
                         <div className="flex text-center gap-2 justify-center items-center">
                           {column.render('Header')}
                           {column.isSorted ? (
@@ -112,7 +117,7 @@ function Table<T extends object>({ tableData, tableColumns, tableHeadersForSearc
                       <td
                         key={key}
                         {...restCellProps}
-                        className="px-4 py-1.5 whitespace-nowrap lowecase capitalize"
+                        className="px-4 py-1 whitespace-nowrap lowecase capitalize"
                       >
                         {cell.render('Cell')}
                       </td>
@@ -136,6 +141,6 @@ function Table<T extends object>({ tableData, tableColumns, tableHeadersForSearc
       )}
     </div>
   );
-};
+}
 
 export default Table;
