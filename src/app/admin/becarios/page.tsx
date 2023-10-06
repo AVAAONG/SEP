@@ -1,8 +1,6 @@
-import Card from '@/components/admin/dashboard/Card';
 import Table from '@/components/table/Table';
 import scholarAllInformationCollumn from '@/components/table/columns/scholarAllInformationColumns';
 import { getScholarcountByGender, getScholarsWithAllData } from '@/lib/db/utils/users';
-import { UserIcon } from '@heroicons/react/20/solid';
 import dynamic from 'next/dynamic';
 import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from 'public/svgs/SocialNetworks';
 
@@ -63,16 +61,14 @@ const page = async () => {
     return { ...scholar, socialNetworks };
   });
   return (
-    <div className="flex flex-col items-center w-full gap-6">
-      <div className="flex flex-col md:flex-row gap-4 w-full bg-white rounded-lg p-2 justify-center items-center shadow-md">
-        <div className="h-28 w-full">
-          <Card
-            Icon={UserIcon}
-            bg="bg-gradient-to-r from-yellow-700  to-yellow-900"
-            cardButtonBg="bg-yelow-950 active:bg-yellow-700 hover:bg-yellow-700"
-            stat={scholars?.length || 0}
-            text="Becarios activos"
-          />
+    <div className="flex flex-col w-full gap-6">
+      <div className="flex flex-col md:flex-row gap-4 w-full bg-white rounded-lg p-4 items-center shadow-md">
+        <div className="flex rounded-lg relative overflow-hidden antialiased">
+          <div className="flex flex-col">
+            <div className="text-2xl font-bold truncated text-gray-800">Becarios activos</div>
+            <p className=" text-5xl font-bold">{scholars.length}</p>
+          </div>
+          <div className="w-52">{/* <UserIcon /> */}</div>
         </div>
         <div>
           <PieChartComponent
@@ -83,6 +79,7 @@ const page = async () => {
           />
         </div>
       </div>
+
       <div className="w-full h-full">
         <Table
           tableColumns={scholarAllInformationCollumn}

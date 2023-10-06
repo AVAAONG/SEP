@@ -29,10 +29,9 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
   const {
     first_names,
     last_names,
-    image,
     twitter_user,
     facebook_user,
-    email,
+    allowedEmail,
     instagram_user,
     linkedin_user,
     program_information,
@@ -85,7 +84,7 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
     },
     {
       name: 'Correo',
-      value: email,
+      value: allowedEmail,
       icon: <EmailIcon />,
     },
   ];

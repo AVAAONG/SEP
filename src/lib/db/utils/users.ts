@@ -186,8 +186,8 @@ export const getScholarsCountByCondition = async (condition: ScholarCondition) =
 
 export const getScholarcountByGender = async () => {
   const [womenScholars, menScholars] = await prisma.$transaction([
-    prisma.scholar.count({ where: { gender: 'F' } }),
-    prisma.scholar.count({ where: { gender: 'M' } }),
+    prisma.scholar.count({ where: { gender: 'F', program_information: { scholar_condition: 'ACTIVE' } } }),
+    prisma.scholar.count({ where: { gender: 'M', program_information: { scholar_condition: 'ACTIVE' } } }),
   ])
   return [womenScholars, menScholars];
 }

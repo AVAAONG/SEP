@@ -7,7 +7,7 @@ interface PieChartProps {
 const PieChart = ({ data }: PieChartProps) => {
   const options: ApexCharts.ApexOptions = {
     chart: {
-      type: 'pie',
+      type: 'donut',
     },
     labels: data.map((d) => d.name),
     dataLabels: {

@@ -12,7 +12,6 @@ export async function GET(req: NextApiRequest) {
     const token = await getToken({ req });
     if (token === null) return NextResponse.redirect('/api/auth/signin');
     setTokens(token.accessToken as string, token.refreshToken as string);
-    await createScholarsInBulkFromSheet();
     return NextResponse.json({ message: "ok" });
 }
 
