@@ -16,6 +16,11 @@ datasource db {
   relationMode = "prisma"
 }
 
+/// This is the configuration for the prisma-erd-generator
+/// @see https://github.com/keonik/prisma-erd-generator
+/// This allow to create an ERD from the prisma schema on generation
+/// @example:
+///       $ pnpm prisma:generate
 generator erd {
   provider = "prisma-erd-generator"
   output   = "./ERD.svg"
