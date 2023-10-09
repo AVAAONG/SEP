@@ -294,6 +294,11 @@ datasource db {
   relationMode = "prisma"
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "./ERD.svg"
+}
+
 //
 // chapter.prisma
 //
