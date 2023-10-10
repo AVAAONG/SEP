@@ -142,7 +142,7 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
         <div className="flex flex-col lg:flex-row justify-center lg:justify-start w-full">
           <div className="w-52 flex items-center justify-center rounded-full shadow-lg border-4 border-green-500 p-1">
             <Image
-              src={image ? image : defailProfilePic}
+              src={defailProfilePic}
               alt="Imagen del facilitador"
               width={200}
               height={200}

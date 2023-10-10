@@ -150,6 +150,9 @@ devDependencies:
   '@types/react-big-calendar':
     specifier: ^1.6.3
     version: 1.6.3
+  '@types/react-copy-to-clipboard':
+    specifier: ^5.0.5
+    version: 5.0.5
   '@types/react-dom':
     specifier: 18.0.11
     version: 18.0.11
@@ -1072,6 +1075,12 @@ packages:
     dependencies:
       '@types/date-arithmetic': 4.1.1
       '@types/prop-types': 15.7.5
+      '@types/react': 18.0.33
+    dev: true
+
+  /@types/react-copy-to-clipboard@5.0.5:
+    resolution: {integrity: sha512-en3JGqPA4RX4aUlo6q6uUbnqLp31Dhm2E/thiMvFTIvU+dUDG249jBG2MJ0rPMXE/MbKVrpmi/1r1G4QLhIHKQ==}
+    dependencies:
       '@types/react': 18.0.33
     dev: true
 
