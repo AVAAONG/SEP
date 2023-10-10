@@ -1,10 +1,41 @@
+import StatsCard from '@/components/StatsCard';
 import Table from '@/components/table/Table';
 import scholarAllInformationCollumn from '@/components/table/columns/scholarAllInformationColumns';
 import { getScholarcountByGender, getScholarsWithAllData } from '@/lib/db/utils/users';
 import moment from 'moment';
 import dynamic from 'next/dynamic';
 import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from 'public/svgs/SocialNetworks';
-import { WarningIcon } from 'public/svgs/svgs';
+
+const SAMPLESTATTS = [
+  {
+    name: 'Total Subscribers',
+    stat: '71,897',
+    previousStat: '70,946',
+    change: '12%',
+    changeType: 'increase',
+  },
+  {
+    name: 'Avg. Open Rate',
+    stat: '58.16%',
+    previousStat: '56.14%',
+    change: '2.02%',
+    changeType: 'increase',
+  },
+  {
+    name: 'Avg. Click Rate',
+    stat: '24.57%',
+    previousStat: '28.62%',
+    change: '4.05%',
+    changeType: 'decrease',
+  },
+  {
+    name: 'Avg. Click Rate',
+    stat: '24.57%',
+    previousStat: '28.62%',
+    change: '4.05%',
+    changeType: 'decrease',
+  },
+];
 
 /**
  * @see https://stackoverflow.com/questions/67784672/react-next-js-doesnt-seem-to-work-with-apexcharts for more info
@@ -83,10 +114,12 @@ const page = async () => {
   const activeScholarsByStudyAreaArray: {
     label: string;
     value: string | number;
-  }[] = Object.entries(activeScholarsByStudyArea).map(([label, value]) => ({
-    label,
-    value,
-  }));
+  }[] = Object.entries(activeScholarsByStudyArea)
+    .map(([label, value]) => ({
+      label,
+      value,
+    }))
+    .sort((a, b) => b.value - a.value);
 
   const activeScholarsByStatus = scholars.reduce(
     (acc, scholar) => {
@@ -120,10 +153,12 @@ const page = async () => {
   const activeScholarsByAvaYearArray: {
     label: string;
     value: number;
-  }[] = Object.entries(activeScholarsByAvaYear).map(([label, value]) => ({
-    label,
-    value,
-  }));
+  }[] = Object.entries(activeScholarsByAvaYear)
+    .map(([label, value]) => ({
+      label,
+      value,
+    }))
+    .sort((a, b) => b.value - a.value);
 
   const [womenScholars, menScholars] = await getScholarcountByGender();
   const workshopSpeakersWithSocialNetworks = scholars?.map((scholar) => {
@@ -153,75 +188,63 @@ const page = async () => {
     return { ...scholar, socialNetworks };
   });
   return (
-    <div className="flex flex-col w-full gap-6">
-      <div className="flex flex-col gap-4 w-full bg-white rounded-lg p-4 shadow-md">
-        <h2 className="truncated font-bold text-2xl">Resumen</h2>
+    <div className="flex flex-col w-full gap-4">
+      <StatsCard
+        stats={[
+          {
+            name: 'Becarios activos',
+            stat: scholars.length || 0,
+            previousStat: 250,
+            change: Number((((250 - scholars.length) / 250) * 100).toFixed(2)),
+            changeType: 'decrease',
+          },
+          {
+            name: 'Becarios en probatorio I',
+            stat: 4 || 0,
+            previousStat: 250,
+            change: Number((((250 - scholars.length) / 250) * 100).toFixed(2)),
+            changeType: 'decrease',
+          },
+          {
+            name: 'Becarios en probatorio II',
+            stat: 10 || 0,
+            previousStat: 250,
+            change: Number((((250 - scholars.length) / 250) * 100).toFixed(2)),
+            changeType: 'decrease',
+          },
+        ]}
+      />
+      <h2 className="font-bold uppercase text-base tracking-wide px-4 mt-4"> Resumen</h2>
 
-        <div className="flex gap-4 relative overflow-hidden antialiased ">
-          <div className="flex flex-col border border-primary-1 p-4 rounded-lg">
-            <div className="text-xs font-bold truncated">Total de becarios activos</div>
-            <div className="flex items-end gap-1">
-              <p className="text-3xl font-bold">{scholars.length}</p>
-              <p className="text-xs font-medium truncated">becarios</p>
-            </div>
-          </div>
-          <div className="flex flex-col gap-4 text-sm">
-            <div className="flex gap-2 items-center justify-center text-yellow-600 border border-yellow-400 bg-yellow-100 py-1 px-2 rounded-lg h-fit">
-              <div className="w-3">
-                <WarningIcon />
-              </div>
-              <div className="font-medium truncate ">Becarios en probatorio I</div>
-              <p className="font-bold">3</p>
-            </div>
-            <div className="flex gap-2 items-center justify-center text-red-600 border border-red-300 bg-red-100 py-1 px-4 rounded-lg h-fit">
-              <div className="w-3">
-                <WarningIcon />
-              </div>
-              <div className="font-medium truncate">Becarios en probatorio II</div>
-              <p className="font-bold">3</p>
-            </div>
+      <div className="flex flex-col md:flex-row gap-8 md:gap-2 w-full h-full bg-white dark:bg-black rounded-lg py-4 justify-center shadow-md ">
+        <div className="w-full md:w-2/5 flex flex-col items-center gap-2 h-full">
+          <h3 className="text-sm font-bold uppercase">Distribución de becarios area de estudio</h3>
+          <div className="w-full h-full">
+            <PieChartComponent data={activeScholarsByStudyAreaArray} />
           </div>
         </div>
-
-        <div className="flex flex-col gap-4">
-          {/* <div className="w-80 flex flex-col items-center">
-            <h3 className="text-lg font-bold">Distribucion de becarios por genero</h3>
+        <div className="w-full md:w-1/3 flex flex-col items-center gap-2 h-full">
+          <h3 className="text-sm font-bold uppercase">Distribución de becarios por género</h3>
+          <div className="w-10/12 h-full min-w-max">
             <DonutChartComponent
               data={[
                 { label: 'Becarios', value: menScholars },
                 { label: 'Becarias', value: womenScholars },
               ]}
             />
-          </div> 
-          <div className="w-80 flex flex-col items-center">
-            <h3 className="text-lg font-bold">Distribucion de becarios por area de a;o</h3>
+          </div>
+        </div>
+        <div className="w-full md:w-1/3 flex flex-col items-center gap-2 h-full">
+          <h3 className="text-sm font-bold uppercase">Distribución de becarios por año</h3>
+          <div className="w-9/12 h-full min-w-max">
             <PieChartComponent data={activeScholarsByAvaYearArray} />
           </div>
-          */}
-          <h2 className="truncated font-bold text-2xl">Resumen universitario</h2>
-          <div className="w-full flex ">
-            <div className="w-1/3 h-full flex flex-col  items-center">
-              <h3 className="text-lg font-bold">Distribucion de becarios por universidad</h3>
-              <div className="w-full">
-                <TreeMapChartComponent data={activeScholarsByCollegeArray} />
-              </div>
-            </div>
-            <div className="w-1/3 h-full flex flex-col items-center">
-              <h3 className="text-lg font-bold">Distribucion de becarios por area de estudio</h3>
-              <div className="w-full">
-                <PieChartComponent data={activeScholarsByStudyAreaArray} />
-              </div>
-            </div>
-          </div>
-
-          {/* <div className="w-full flex flex-col items-center">
-            <h3 className="text-lg font-bold">Distribucion de becarios por area de estudio</h3>
-            <PieChartComponent data={activeScholarsByStudyAreaArray} />
-          </div>
-           */}
         </div>
+        {/* <div className="absolute translate-x-[700px] w-8 h-8 text-primary-1">
+          <ExternalStatsIcon />
+        </div> */}
       </div>
-
+      <h2 className="font-bold  uppercase text-base tracking-wide px-4 mt-4"> Base de datos</h2>
       <div className="w-full h-full">
         <Table
           tableColumns={scholarAllInformationCollumn}

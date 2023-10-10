@@ -12,7 +12,7 @@ const DonutChart: React.FC<ChartProps> = ({ data }) => {
       enabled: false,
     },
     legend: {
-      show: false,
+      show: true,
     },
     colors: ['#23a217', '#eab308', '#1d4ed8', '#b91c1c'],
     plotOptions: {

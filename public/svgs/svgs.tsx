@@ -13,6 +13,39 @@ export const workshopIcon = () => {
   );
 };
 
+export const ExternalStatsIcon = () => (
+  <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+    <g
+      id="SVGRepo_tracerCarrier"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke="#CCCCCC"
+      stroke-width="2"
+    ></g>
+    <g id="SVGRepo_iconCarrier">
+      {' '}
+      <g clip-path="url(#clip0_901_1551)">
+        {' '}
+        <path
+          d="M27 8H30C30.553 8 31 8.447 31 9V30C31 30.553 30.553 31 30 31H2C1.447 31 1 30.553 1 30V9C1 8.447 1.447 8 2 8H21M4 28L16 16L24 24V1M24 1L20 5M24 1L28 5"
+          stroke="currentColor"
+          stroke-width="5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        ></path>{' '}
+      </g>{' '}
+      <defs>
+        {' '}
+        <clipPath id="clip0_901_1551">
+          {' '}
+          <rect width="32" height="32" fill="white"></rect>{' '}
+        </clipPath>{' '}
+      </defs>{' '}
+    </g>
+  </svg>
+);
+
 export const WarningIcon = () => (
   <svg
     aria-hidden="true"
