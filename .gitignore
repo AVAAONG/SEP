@@ -34,5 +34,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-src/prisma/schema.prisma
+src/lib/db/prisma/schema.prisma
+src/lib/db/prisma/ERD.svg
 ```
