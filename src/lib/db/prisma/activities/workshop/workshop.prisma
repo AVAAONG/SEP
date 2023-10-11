@@ -7,7 +7,6 @@ import { ActivityStatus, Modality } from "..\type-activities"
 import { ScholarAttendance } from "..\type-activities"
 import { Skill, WorkshopYear} from "types-workshop"
 import { Gender } from "..\type-activities"
-import { User } from "..\..\schema"
 import { ScholarProgramInformation } from "..\..\users\scholar\scholar"
 
 // This model is used to store the data of the workshop

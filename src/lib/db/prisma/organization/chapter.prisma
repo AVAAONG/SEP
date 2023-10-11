@@ -1,5 +1,5 @@
 import { ScholarProgramInformation } from "..\users\scholar\scholar"
-import { AdminProfile } from "..\users\admin"
+import { AdminProfile, Controller } from "..\users\admin"
 
 model Chapter {
     id                 String                      @id @default(nanoid())

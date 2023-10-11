@@ -1,4 +1,4 @@
-import { Scholar, User } from "scholar"
+import { Scholar, Scholar, } from "scholar"
 
 model ScholarCVAInformation {
     id                     String             @id @default(nanoid())

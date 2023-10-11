@@ -6,69 +6,31 @@
 import { AdminRoles } from "roles-users"
 import { Region } from "scholar\types-scholar"
 import { ScholarCanAssist, ScholarCanAssist, ScholarStatus } from "scholar\types-scholar"
-import { Chapter, Gender } from "..\schema"
-
-model AdminAccount {
-  id                String    @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?   @db.Text
-  access_token      String?   @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?   @db.Text
-  session_state     String?
-  user              AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-  @@index([userId])
-}
-
-model AdminSession {
-  id           String    @id @default(cuid())
-  sessionToken String    @unique
-  userId       String
-  expires      DateTime
-  user         AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-}
-
-model AdminUser {
-  id             String         @id @default(nanoid())
-  name           String?
-  email          String?        @unique
-  emailVerified  DateTime?
-  image          String?
-  accounts       AdminAccount[]
-  sessions       AdminSession[]
-  lastLogin      DateTime?      @default(now())
-  adminProfile   AdminProfile   @relation(fields: [adminProfileId], references: [id])
-  adminProfileId String         @unique
-}
+import { Gender } from "..\activities\type-activities"
+import { Chapter } from "..\organization\chapter"
+import { User } from "..\base-next-auth"
+import { Gender } from "..\activities\type-activities"
+import { Chapter } from "..\organization\chapter"
 
 model AdminProfile {
-  id             String     @id @default(nanoid())
-  profileName    String
-  profileImage   String?
-  allowedEmail   String     @unique
+  id             String      @id @default(nanoid())
+  allowedEmail   String      @unique
   gender         Gender
-  role           AdminRoles
+  updated_at     DateTime    @updatedAt
   responsibility String
-  chapter        Chapter?   @relation(fields: [chapter_id], references: [id])
+  chapter        Chapter?    @relation(fields: [chapter_id], references: [id])
   chapter_id     String?
-  adminUser      AdminUser?
+  user           User?
+  allowedActions Controller?
 
   @@index([chapter_id])
 }
 
-model AdminVerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
+model Controller {
+  id             String       @id @default(nanoid())
+  name           String
+  admin          AdminProfile @relation(fields: [admin_id], references: [id])
+  admin_id       String       @unique
+  allowedActions Json[]
+  chapter        String
 }

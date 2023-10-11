@@ -1,5 +1,5 @@
-import { Modality, User } from "..\..\schema"
 import { Scholar } from "scholar"
+import { Modality } from "..\..\activities\type-activities"
 
 enum EvaluationScale {
     CERO_TO_TEN
@@ -43,24 +43,23 @@ enum Collages {
     UNEFA
     USM
     UNEXCA
-    ENAPH
     UAH
     UBV
 }
 
 model ScholarCollageInformation {
-    id                      String                                       @id @default(nanoid())
+    id                      String                 @id @default(nanoid())
     academic_load_completed Boolean?
     collage                 Collages?
     career                  String
     study_area              StudyArea?
     evaluation_scale        EvaluationScale
     study_regime            StudyRegime
-    qualification           ScholarCollageAverageQualificationByPeriod[]
+    collage_period          ScholarCollagePeriod[]
     Scholar                 Scholar[]
 }
 
-model ScholarCollageAverageQualificationByPeriod {
+model ScholarCollagePeriod {
     id                            String                     @id @default(nanoid())
     current_academic_period       Int
     grade                         Float

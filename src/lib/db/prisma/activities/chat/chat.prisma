@@ -5,9 +5,8 @@
 import { ActivityStatus, Modality } from "..\type-activities"
 import { Level } from "types-chat"
 import { ScholarAttendance } from "..\type-activities"
-import { User } from "..\..\users\scholar\scholar"
 import { Gender } from "..\type-activities"
-import { ScholarProgramInformation, ScholarProgramInformation, User, User } from "..\..\users\scholar\scholar"
+import { Scholar, ScholarProgramInformation, ScholarProgramInformation } from "..\..\users\scholar\scholar"
 
 model Chat {
     id                 String           @id @default(nanoid())
@@ -21,7 +20,7 @@ model Chat {
     rating             Float?
     modality           Modality
     level              Level
-    speaker            ChatSpeaker[]
+    speaker            Scholar[]
     activity_status    ActivityStatus
     temp_data          ChatsTempData?
     scholar_attendance ChatAttendance[]
@@ -30,17 +29,14 @@ model Chat {
 }
 
 model ChatAttendance {
-    id            String                    @id @default(nanoid())
-    chat          Chat                      @relation(fields: [chat_id], references: [id])
-    chat_id       String
-    attendance    ScholarAttendance
-    justification String?
-    Scholar       ScholarProgramInformation @relation(fields: [scholar_id], references: [id])
-    scholar_id    String
-
-    @@unique([chat_id, scholar_id])
-    @@index([chat_id])
-    @@index([scholar_id])
+    id                       String                    @id @default(nanoid())
+    scholar                  ScholarProgramInformation @relation(fields: [scholar_id], references: [id])
+    scholar_id               String
+    chat_id                  String
+    chat                     Chat                      @relation(fields: [chat_id], references: [id])
+    attendance               ScholarAttendance
+    justification            String?
+    satisfaction_form_filled Boolean?
 }
 
 model ChatsTempData {
@@ -52,11 +48,4 @@ model ChatsTempData {
     meeting_id       String?
     meeting_password String?
     whatsapp_link    String?
-}
-
-model ChatSpeaker {
-    id                        String                      @id @default(nanoid())
-    chat                      Chat                        @relation(fields: [chat_id], references: [id])
-    chat_id                   String                      @unique
-    ScholarProgramInformation ScholarProgramInformation[]
 }

@@ -10,22 +10,9 @@ import { ScholarCanAssist } from "types-scholar"
 import { Gender } from "..\..\activities\type-activities"
 import { ScholarCollageInformation } from "collage"
 import { ScholarCVAInformation } from "cva"
-import { ChatSpeaker } from "..\..\activities\chat\chat"
-import { ScholarCondition, ScholarStatus } from "types-scholar"
-
-model User {
-    id            String    @id @default(nanoid())
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
-    emailVerified DateTime?
-    created_at    DateTime  @default(now())
-    updated_at    DateTime  @updatedAt
-    lastLogin     DateTime? @default(now())
-    email         String?   @unique
-    scholar       Scholar   @relation(fields: [scholarId], references: [id])
-    scholarId     String    @unique
-}
+import { ScholarCondition, ScholarStatus, ScholarStatus } from "types-scholar"
+import { User } from "..\..\base-next-auth"
+import { Chat, Chat, Chat } from "..\..\activities\chat\chat"
 
 model Scholar {
     id                     String                     @id @default(nanoid())
@@ -53,6 +40,8 @@ model Scholar {
     program_information_id String?
     collage_information_id String?
     cva_information_id     String?
+    is_chat_speaker        Boolean                    @default(false)
+    chat_speaker           Chat[]
     user                   User?
 
     @@unique([program_information_id, collage_information_id, cva_information_id])
@@ -73,49 +62,26 @@ model ScholarProgramInformation {
     chapter_id               String?
     attended_workshops       WorkshopAttendance[]
     attended_chats           ChatAttendance[]
-    is_chat_speaker          Boolean              @default(false)
-    chat_speaker             ChatSpeaker?         @relation(fields: [chat_speaker_id], references: [id], onUpdate: Restrict, onDelete: Restrict)
-    chat_speaker_id          String?
-    Scholar                  Scholar[]
 
-    @@unique([chapter_id, chat_speaker_id])
+    Scholar   Scholar[]
+    probation Probation[]
+
+    @@unique([chapter_id])
     @@index([chapter_id])
-    @@index([chat_speaker_id])
 }
 
-model Account {
-    id                String  @id @default(nanoid())
-    userId            String
-    type              String
-    provider          String
-    providerAccountId String
-    refresh_token     String? @db.Text
-    access_token      String? @db.Text
-    expires_at        Int?
-    token_type        String?
-    scope             String?
-    id_token          String? @db.Text
-    session_state     String?
-    user              User    @relation(fields: [userId], references: [id])
+model Probation {
+    id                 String                    @id @default(nanoid())
+    kind_of_probation  ScholarStatus
+    starting_date      DateTime
+    ending_date        DateTime
+    done_at_the_moment Json
+    probation_reason   String
+    agreement          Json
+    meetings           DateTime[]
+    next_meeting       DateTime
+    scholar            ScholarProgramInformation @relation(fields: [scholar_id], references: [id])
+    scholar_id         String
 
-    @@unique([provider, providerAccountId])
-    @@index([userId])
-}
-
-model Session {
-    id           String   @id @default(nanoid())
-    sessionToken String   @unique
-    userId       String
-    expires      DateTime
-    User         User?    @relation(fields: [userId], references: [id])
-
-    @@index([userId])
-}
-
-model VerificationToken {
-    identifier String
-    token      String   @unique
-    expires    DateTime
-
-    @@unique([identifier, token])
+    @@index([scholar_id])
 }
