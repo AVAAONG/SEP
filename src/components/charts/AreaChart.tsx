@@ -16,6 +16,9 @@ const AreaChart = ({ chartData, title, xAxysType }: AreaChartProps) => {
         show: false,
       },
     },
+    stroke: {
+      curve: 'smooth',
+    },
     xaxis: {
       type: xAxysType,
       labels: {

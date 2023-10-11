@@ -1,29 +1,32 @@
 import defailProfilePic from '@/../public/defaultProfilePic.png';
+import ScholarStatus from '@/components/ScholarStatus';
 import AreaChart from '@/components/charts/AreaChart';
+import RadarChart from '@/components/charts/RadarChart';
 import IconWithInfo from '@/components/commons/IconInWithInformation';
-import NormalCard from '@/components/scholar/card/NormalCard';
+import CardWithStat from '@/components/scholar/card/CardWithStats';
 
 import { getScholarWithAllData } from '@/lib/db/utils/users';
 import { createDataCardsContent } from '@/lib/utils';
 import { Collages, StudyArea } from '@prisma/client';
 import Image from 'next/image';
-import { CellPhoneIcon, FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon, WhatsAppIcon } from 'public/svgs/SocialNetworks';
-import { AddressIcon, CakeIcon, DniIcon, EmailIcon, PhoneIcon, chatIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs';
-
-const speakerSearchOptions = [
-  {
-    option: 'title',
-    label: 'Nombre',
-  },
-  {
-    option: 'asociated_skill',
-    label: 'Competencia asociada',
-  },
-  {
-    option: 'job_company',
-    label: 'Organización',
-  },
-];
+import {
+  CellPhoneIcon,
+  FacebookIcon,
+  InstagramIcon,
+  LinkedinIcon,
+  TwitterIcon,
+  WhatsAppIcon,
+} from 'public/svgs/SocialNetworks';
+import {
+  AddressIcon,
+  CalendarIcon,
+  DniIcon,
+  EmailIcon,
+  PhoneIcon,
+  chatIcon,
+  volunterIcon,
+  workshopIcon,
+} from 'public/svgs/svgs';
 const page = async ({ params }: { params: { scholarId: string } }) => {
   const { scholarId } = params;
   const scholar = await getScholarWithAllData(scholarId);
@@ -40,11 +43,15 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
     whatsapp_number,
     cell_phone_Number,
     collage_information,
+    address,
+    cva_information,
     dni,
-    birthdate
+    birthdate,
   } = scholar || {};
-  const { attended_workshops, attended_chats } = program_information || {};
-  const { collage, career, study_area } = collage_information || {};
+  const { attended_workshops, attended_chats, scholar_status } = program_information || {};
+  const { collage, career, study_area, study_regime } = collage_information || {};
+  const { is_in_cva, not_started_cva_reason, cva_location, cva_modality, certificate } =
+    cva_information || {};
 
   const workshopSpeakerSocialNetwork = [
     {
@@ -121,7 +128,10 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
     },
   ]);
   function formatDni(dni: string): string {
-    const formattedDni = dni.replace(/\D/g, '').replace(/^(\d{2})(\d)/g, '$1.$2').replace(/(\d{3})(?=\d)/g, '$1.');
+    const formattedDni = dni
+      .replace(/\D/g, '')
+      .replace(/^(\d{2})(\d)/g, '$1.$2')
+      .replace(/(\d{3})(?=\d)/g, '$1.');
     return formattedDni;
   }
 
@@ -145,47 +155,51 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
     x: new Date(0, month),
     y: count,
   }));
+  const dataSeries = [
+    [80, 50, 30, 40, 20],
+    [60, 70, 40, 50, 80],
+  ];
 
   const getCollageName = (university: Collages) => {
     switch (university) {
       case 'UCAB':
-        return `Universidad Católica Andrés Bello (${university})`
+        return `Universidad Católica Andrés Bello (${university})`;
       case 'USB':
-        return `Universidad Simón Bolívar (${university})`
+        return `Universidad Simón Bolívar (${university})`;
       case 'UCV':
-        return `Universidad Central de Venezuela (${university})`
+        return `Universidad Central de Venezuela (${university})`;
       case 'UNIMET':
-        return `Universidad Metropolitana (${university})`
+        return `Universidad Metropolitana (${university})`;
       case 'UNEXCA':
-        return `Universidad Experimental de Caracas (${university})`
+        return `Universidad Experimental de Caracas (${university})`;
       case 'ENAHP':
-        return `Escuela Nacional de Administración y Hacienda Pública (${university})`
+        return `Escuela Nacional de Administración y Hacienda Pública (${university})`;
       case 'UNEARTE':
-        return `Universidad Nacional Experimental de las Artes (${university})`
+        return `Universidad Nacional Experimental de las Artes (${university})`;
     }
-  }
+  };
 
   const parseStudyArea = (studyArea: StudyArea) => {
     switch (studyArea) {
       case 'ARCHITECTURE_URBANISM':
-        return 'Arquitectura y urbanismo'
+        return 'Arquitectura y urbanismo';
       case 'HEALTH_SCIENCES':
-        return 'Ciencias de la salud'
+        return 'Ciencias de la salud';
       case 'HUMANITIES_EDUCATION':
-        return 'Humanidades y educación'
+        return 'Humanidades y educación';
       case 'JURIDICAL_POLITICAL_SCIENCES':
-        return 'Ciencias jurídicas y políticas'
+        return 'Ciencias jurídicas y políticas';
       case 'SOCIAL_SCIENCES':
-        return 'Ciencias sociales'
+        return 'Ciencias sociales';
       case 'STEM':
-        return 'Ciencias, tecnología, ingeniería y matemáticas'
+        return 'Ciencias, tecnología, ingeniería y matemáticas';
     }
-  }
+  };
 
   return (
     <section className="flex flex-col gap-4 p-6 pt-0">
       <div className="flex flex-col lg:flex-row justify-center lg:justify-start gap-4 w-full">
-        <div className="w-52 flex items-center justify-center rounded-full shadow-lg border-4 border-green-500 p-1">
+        <div className="w-52 h-fit flex items-center justify-center rounded-full shadow-lg border-4 border-green-500 p-1">
           <Image
             src={defailProfilePic}
             alt="Imagen del facilitador"
@@ -195,65 +209,122 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
             className="rounded-full"
           />
         </div>
-        <div className="flex flex-col gap-2 items-start">
-          <h1 className="block text-4xl text-primary-light font-bold text-center">
-            {first_names} {last_names}{' '}
-          </h1>{' '}
-          <div className="flex gap-2">
-            {scholarContactData.map(({ value, icon }, index) => {
-              return <IconWithInfo key={index} value={value!} icon={icon} />;
-            })}
+        <div className="flex flex-col gap-2 items-start w-full">
+          <div className="w-10/12 flex justify-between items-center">
+            <h1 className="block text-4xl text-primary-light font-bold">
+              {first_names} {last_names}{' '}
+            </h1>{' '}
+            <ScholarStatus status={scholar_status || 'NORMAL'} scholarId={scholarId} />
           </div>
-          <div className='mt-2 flex flex-col gap-2'>
-            <div className='text-sm flex gap-1 items-center'>
-              <div className='w-5 h-5'>
-                <DniIcon />
+          <div className="flex w-full justify-between mt-2">
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-2 max-w-[180px]">
+                {scholarContactData.map(({ value, icon }, index) => {
+                  return <IconWithInfo key={index} value={value!} icon={icon} />;
+                })}
               </div>
-              V-{formatDni(dni || "")}
+              <div className="mt-2 flex flex-col gap-2">
+                <div className="text-sm flex gap-1 items-center">
+                  <div className="w-5 h-5 text-primary-dark">
+                    <DniIcon />
+                  </div>
+                  V-{formatDni(dni || '')}
+                </div>
+                <div className="text-sm flex gap-1 items-center ">
+                  <div className="w-5 h-5  text-primary-dark">
+                    <CalendarIcon />
+                  </div>
+                  {birthdate?.toLocaleString('es-ES', {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
+                  })}
+                  <span className="text-primary-light font-medium">
+                    ({new Date().getFullYear() - birthdate?.getFullYear()!} años)
+                  </span>
+                </div>
+                <div className="text-sm flex gap-1 items-center  text-primary-dark">
+                  <div className="w-5 h-5">
+                    <AddressIcon />
+                  </div>
+                  {address}
+                </div>
+              </div>
             </div>
-            <div className='text-sm flex gap-1 items-center'>
-              <div className='w-5 h-5'>
-                <CakeIcon />
+
+            <div className="flex gap-8">
+              <div className="flex flex-col gap-2">
+                <div>
+                  <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">
+                    Universidad
+                  </h3>
+                  <p className="text-sm font-medium">{getCollageName(collage!)}</p>
+                </div>
+                <div>
+                  <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">
+                    Area de estudio
+                  </h3>
+                  <p className="text-sm font-medium">{parseStudyArea(study_area!)}</p>
+                </div>
               </div>
-              {birthdate?.toLocaleString('es-ES', {
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric',
-              })}
-              <span>{new Date().getFullYear() - birthdate?.getFullYear()}</span>
+              <div className="flex flex-col gap-2">
+                <div>
+                  <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">
+                    Carrera
+                  </h3>
+                  <p className="text-sm font-medium">{career}</p>
+                </div>
+                <div>
+                  <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">
+                    Regimen de estudio
+                  </h3>
+                  <p className="text-sm font-medium">{study_regime}</p>
+                </div>
+              </div>
             </div>
-            <div className='text-sm flex gap-1 items-center'>
-              <div className='w-5 h-5'>
-                <AddressIcon />
+            <div className="flex flex-col gap-2">
+              <div>
+                <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">
+                  ¿Se encuentra en el CVA?
+                </h3>
+                <p className="text-sm font-medium">{is_in_cva}</p>
               </div>
-              Esquina la pedreda ave dfasdfjadf
+              <div>
+                <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">
+                  Razon por la cual no ha iniciado el CVA
+                </h3>
+                <p className="text-sm font-medium">{not_started_cva_reason}</p>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">
+                  Cede del CVA
+                </h3>
+                <p className="text-sm font-medium">{cva_location}</p>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">
+                  Modalidad
+                </h3>
+                <p className="text-sm font-medium">{cva_modality}</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <h2 className="font-bold uppercase text-base tracking-wide px-4 mt-4"> Información universitaria</h2>
-      <div className=' flex flex-col gap-2 bg-white dark:bg-dark p-4 rounded-lg'>
-        <div>
-          <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">Universidad</h3>
-          <p className='text-sm font-medium'>{getCollageName(collage!)}</p>
-        </div>
-        <div>
-          <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">Area de estudio</h3>
-          <p className='text-sm font-medium'>{parseStudyArea(study_area!)}</p>
-        </div>
-        <div>
-          <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">Carrera</h3>
-          <p className='text-sm font-medium'>{career}</p>
-        </div>
-      </div>
+
       <div className="flex flex-col  w-full">
         <div className="flex gap-2 justify-center items-center mt-4">
           {cardContent.map(({ icon, text, number, bg }) => {
-            return <NormalCard key={text} stat={number} Icon={icon} text={text} bg={bg} />;
+            return (
+              <CardWithStat key={text} stat={number} Icon={icon} text={text} bg={bg} data={[]} />
+            );
           })}
         </div>
-        <div className="mt-6">
+        <div className="mt-6 p-2 rounded-lg bg-white">
           <AreaChart chartData={chartData} title="Actividades realizadas" xAxysType="datetime" />
+        </div>
+        <div className="w-1/3 mt-6 p-2 rounded-lg bg-white">
+          <RadarChart dataSeries={dataSeries} />
         </div>
       </div>
       <div className="flex justify-center items-center ">
