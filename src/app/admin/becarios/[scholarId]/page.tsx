@@ -5,9 +5,10 @@ import NormalCard from '@/components/scholar/card/NormalCard';
 
 import { getScholarWithAllData } from '@/lib/db/utils/users';
 import { createDataCardsContent } from '@/lib/utils';
+import { Collages, StudyArea } from '@prisma/client';
 import Image from 'next/image';
 import { CellPhoneIcon, FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon, WhatsAppIcon } from 'public/svgs/SocialNetworks';
-import { EmailIcon, PhoneIcon, chatIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs';
+import { AddressIcon, CakeIcon, DniIcon, EmailIcon, PhoneIcon, chatIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs';
 
 const speakerSearchOptions = [
   {
@@ -38,8 +39,13 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
     local_phone_number,
     whatsapp_number,
     cell_phone_Number,
+    collage_information,
+    dni,
+    birthdate
   } = scholar || {};
   const { attended_workshops, attended_chats } = program_information || {};
+  const { collage, career, study_area } = collage_information || {};
+
   const workshopSpeakerSocialNetwork = [
     {
       name: 'Twitter',
@@ -114,6 +120,10 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
       cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
     },
   ]);
+  function formatDni(dni: string): string {
+    const formattedDni = dni.replace(/\D/g, '').replace(/^(\d{2})(\d)/g, '$1.$2').replace(/(\d{3})(?=\d)/g, '$1.');
+    return formattedDni;
+  }
 
   const workshopsByMonth: Record<number, number> =
     attended_workshops?.reduce((acc, workshop) => {
@@ -136,81 +146,114 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
     y: count,
   }));
 
+  const getCollageName = (university: Collages) => {
+    switch (university) {
+      case 'UCAB':
+        return `Universidad Católica Andrés Bello (${university})`
+      case 'USB':
+        return `Universidad Simón Bolívar (${university})`
+      case 'UCV':
+        return `Universidad Central de Venezuela (${university})`
+      case 'UNIMET':
+        return `Universidad Metropolitana (${university})`
+      case 'UNEXCA':
+        return `Universidad Experimental de Caracas (${university})`
+      case 'ENAHP':
+        return `Escuela Nacional de Administración y Hacienda Pública (${university})`
+      case 'UNEARTE':
+        return `Universidad Nacional Experimental de las Artes (${university})`
+    }
+  }
+
+  const parseStudyArea = (studyArea: StudyArea) => {
+    switch (studyArea) {
+      case 'ARCHITECTURE_URBANISM':
+        return 'Arquitectura y urbanismo'
+      case 'HEALTH_SCIENCES':
+        return 'Ciencias de la salud'
+      case 'HUMANITIES_EDUCATION':
+        return 'Humanidades y educación'
+      case 'JURIDICAL_POLITICAL_SCIENCES':
+        return 'Ciencias jurídicas y políticas'
+      case 'SOCIAL_SCIENCES':
+        return 'Ciencias sociales'
+      case 'STEM':
+        return 'Ciencias, tecnología, ingeniería y matemáticas'
+    }
+  }
+
   return (
     <section className="flex flex-col gap-4 p-6 pt-0">
-      <div className="flex flex-col">
-        <div className="flex flex-col lg:flex-row justify-center lg:justify-start w-full">
-          <div className="w-52 flex items-center justify-center rounded-full shadow-lg border-4 border-green-500 p-1">
-            <Image
-              src={defailProfilePic}
-              alt="Imagen del facilitador"
-              width={200}
-              height={200}
-              priority
-              className="rounded-full"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <h1 className="block text-4xl text-green-700 font-bold text-center">
-              {first_names} {last_names}{' '}
-            </h1>{' '}
-            <div className=" pl-2 flex gap-2">
-              {scholarContactData.map(({ value, icon }, index) => {
-                return <IconWithInfo key={index} value={value} icon={icon} />;
-              })}
-            </div>
-            {/* <div className="flex flex-row gap-4">
-              {workshopSpeakerSocialNetwork.map(
-                ({ url, icon, username }, index) =>
-                  username && (
-                    <Link
-                      target="_blank"
-                      href={url}
-                      className="w-9 text-green-700 dark:text-green-400 rounded-full  bg-gray-100 dark:bg-slate-600 p-2"
-                      key={index}
-                    >
-                      {icon}
-                    </Link>
-                  )
-              )}
-            </div> */}
-            {/* <div className="flex text-sm gap-2 ">
-              {cell_phone_Number && (
-                <div className="flex gap-2 items-center justify-center ">
-                  <div className="bg-white dark:bg-slate-600 p-2 w-9 rounded-full">
-                    <PhoneIcon />
-                  </div>
-                  <span>{cell_phone_Number}</span> *
-                </div>
-              )}
-              {local_phone_number && (
-                <div className="flex gap-2 items-center justify-center ">
-                  <div className="bg-white dark:bg-slate-600 p-2 w-9 rounded-full">
-                    <PhoneIcon />
-                  </div>
-                  <span>{local_phone_number}</span>
-                </div>
-              )}
-              {email && (
-                <div className=" bg-white rounded-full  flex gap-2 items-center justify-center">
-                  <div className="bg-white dark:bg-slate-600 p-2 w-9 rounded-full">
-                    <EmailIcon />
-                  </div>
-                 <span>{email}</span> 
-                </div>
-              )}
-            </div> */}
-          </div>
+      <div className="flex flex-col lg:flex-row justify-center lg:justify-start gap-4 w-full">
+        <div className="w-52 flex items-center justify-center rounded-full shadow-lg border-4 border-green-500 p-1">
+          <Image
+            src={defailProfilePic}
+            alt="Imagen del facilitador"
+            width={200}
+            height={200}
+            priority
+            className="rounded-full"
+          />
         </div>
-        <div className="flex flex-col  w-full">
-          <div className="flex gap-2 justify-center items-center mt-4">
-            {cardContent.map(({ icon, text, number, bg }) => {
-              return <NormalCard key={text} stat={number} Icon={icon} text={text} bg={bg} />;
+        <div className="flex flex-col gap-2 items-start">
+          <h1 className="block text-4xl text-primary-light font-bold text-center">
+            {first_names} {last_names}{' '}
+          </h1>{' '}
+          <div className="flex gap-2">
+            {scholarContactData.map(({ value, icon }, index) => {
+              return <IconWithInfo key={index} value={value!} icon={icon} />;
             })}
           </div>
-          <div className="mt-6">
-            <AreaChart chartData={chartData} title="Actividades realizadas" xAxysType="datetime" />
+          <div className='mt-2 flex flex-col gap-2'>
+            <div className='text-sm flex gap-1 items-center'>
+              <div className='w-5 h-5'>
+                <DniIcon />
+              </div>
+              V-{formatDni(dni || "")}
+            </div>
+            <div className='text-sm flex gap-1 items-center'>
+              <div className='w-5 h-5'>
+                <CakeIcon />
+              </div>
+              {birthdate?.toLocaleString('es-ES', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric',
+              })}
+              <span>{new Date().getFullYear() - birthdate?.getFullYear()}</span>
+            </div>
+            <div className='text-sm flex gap-1 items-center'>
+              <div className='w-5 h-5'>
+                <AddressIcon />
+              </div>
+              Esquina la pedreda ave dfasdfjadf
+            </div>
           </div>
+        </div>
+      </div>
+      <h2 className="font-bold uppercase text-base tracking-wide px-4 mt-4"> Información universitaria</h2>
+      <div className=' flex flex-col gap-2 bg-white dark:bg-dark p-4 rounded-lg'>
+        <div>
+          <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">Universidad</h3>
+          <p className='text-sm font-medium'>{getCollageName(collage!)}</p>
+        </div>
+        <div>
+          <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">Area de estudio</h3>
+          <p className='text-sm font-medium'>{parseStudyArea(study_area!)}</p>
+        </div>
+        <div>
+          <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">Carrera</h3>
+          <p className='text-sm font-medium'>{career}</p>
+        </div>
+      </div>
+      <div className="flex flex-col  w-full">
+        <div className="flex gap-2 justify-center items-center mt-4">
+          {cardContent.map(({ icon, text, number, bg }) => {
+            return <NormalCard key={text} stat={number} Icon={icon} text={text} bg={bg} />;
+          })}
+        </div>
+        <div className="mt-6">
+          <AreaChart chartData={chartData} title="Actividades realizadas" xAxysType="datetime" />
         </div>
       </div>
       <div className="flex justify-center items-center ">
