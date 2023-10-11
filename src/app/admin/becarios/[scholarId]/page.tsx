@@ -1,11 +1,11 @@
 import defailProfilePic from '@/../public/defaultProfilePic.png';
 import AreaChart from '@/components/charts/AreaChart';
+import IconWithInfo from '@/components/commons/IconInWithInformation';
 import NormalCard from '@/components/scholar/card/NormalCard';
 
 import { getScholarWithAllData } from '@/lib/db/utils/users';
 import { createDataCardsContent } from '@/lib/utils';
 import Image from 'next/image';
-import Link from 'next/link';
 import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from 'public/svgs/SocialNetworks';
 import { EmailIcon, PhoneIcon, chatIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs';
 
@@ -29,11 +29,9 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
   const {
     first_names,
     last_names,
-    job_company,
-    email,
-    image,
     twitter_user,
     facebook_user,
+    allowedEmail,
     instagram_user,
     linkedin_user,
     program_information,
@@ -66,6 +64,28 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
       url: `https://www.linkedin.com/in/${linkedin_user}`,
       icon: <LinkedinIcon />,
       username: linkedin_user,
+    },
+  ];
+  const scholarContactData = [
+    {
+      name: 'Celular',
+      value: cell_phone_Number,
+      icon: <PhoneIcon />,
+    },
+    {
+      name: 'Teléfono local',
+      value: local_phone_number,
+      icon: <PhoneIcon />,
+    },
+    {
+      name: 'Whatsapp',
+      value: whatsapp_number,
+      icon: <PhoneIcon />,
+    },
+    {
+      name: 'Correo',
+      value: allowedEmail,
+      icon: <EmailIcon />,
     },
   ];
   const atendedWorkshops = attended_workshops?.filter(
@@ -117,12 +137,12 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
   }));
 
   return (
-    <section className="flex flex-col gap-4 ">
+    <section className="flex flex-col gap-4 p-6 pt-0">
       <div className="flex flex-col">
-        <div className="flex flex-col lg:flex-row justify-center lg:justify-start items-center w-full">
+        <div className="flex flex-col lg:flex-row justify-center lg:justify-start w-full">
           <div className="w-52 flex items-center justify-center rounded-full shadow-lg border-4 border-green-500 p-1">
             <Image
-              src={image ? image : defailProfilePic}
+              src={defailProfilePic}
               alt="Imagen del facilitador"
               width={200}
               height={200}
@@ -130,15 +150,16 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
               className="rounded-full"
             />
           </div>
-          <div>
-            <div className="flex flex-col justify-center items-center gap-1 sm:gap-1 w-full px-4">
-              <h1 className="text-xl text-green-700 font-bold text-center flex items-center justify-center gap-2">
-                <span>
-                  {first_names} {last_names}{' '}
-                </span>
-              </h1>{' '}
+          <div className="flex flex-col gap-2">
+            <h1 className="block text-4xl text-green-700 font-bold text-center">
+              {first_names} {last_names}{' '}
+            </h1>{' '}
+            <div className=" pl-2 flex gap-2">
+              {scholarContactData.map(({ value, icon }, index) => {
+                return <IconWithInfo key={index} value={value} icon={icon} />;
+              })}
             </div>
-            <div className="flex flex-row gap-4">
+            {/* <div className="flex flex-row gap-4">
               {workshopSpeakerSocialNetwork.map(
                 ({ url, icon, username }, index) =>
                   username && (
@@ -152,22 +173,22 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
                     </Link>
                   )
               )}
-            </div>
-            <div className="flex text-sm gap-2 ">
+            </div> */}
+            {/* <div className="flex text-sm gap-2 ">
               {cell_phone_Number && (
-                <div className="w-full flex gap-2 items-center justify-center ">
+                <div className="flex gap-2 items-center justify-center ">
                   <div className="bg-white dark:bg-slate-600 p-2 w-9 rounded-full">
                     <PhoneIcon />
                   </div>
-                  {/* <span>{cell_phone_Number}</span> */}
+                  <span>{cell_phone_Number}</span> *
                 </div>
               )}
               {local_phone_number && (
-                <div className="w-full flex gap-2 items-center justify-center ">
+                <div className="flex gap-2 items-center justify-center ">
                   <div className="bg-white dark:bg-slate-600 p-2 w-9 rounded-full">
                     <PhoneIcon />
                   </div>
-                  {/* <span>{local_phone_number}</span> */}
+                  <span>{local_phone_number}</span>
                 </div>
               )}
               {email && (
@@ -175,10 +196,10 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
                   <div className="bg-white dark:bg-slate-600 p-2 w-9 rounded-full">
                     <EmailIcon />
                   </div>
-                  {/* <span>{email}</span> */}
+                 <span>{email}</span> 
                 </div>
               )}
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="flex flex-col  w-full">

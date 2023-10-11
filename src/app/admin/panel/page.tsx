@@ -1,8 +1,10 @@
+import NextEventsList from '@/components/NextEventsList';
 import Card from '@/components/admin/dashboard/Card';
 import Calendar from '@/components/calendar/Calendar';
-import { getWorkshopsCountByStatus } from '@/lib/db/utils/Workshops';
+import { WORKSHOP_CALENDAR_EVENT_COLORS } from '@/lib/constants';
+import { getWorkshopByStatus, getWorkshopsCountByStatus } from '@/lib/db/utils/Workshops';
 import { getScholarsCountByCondition } from '@/lib/db/utils/users';
-import { createDataCardsContent, getAndFormatCalendarEvents } from '@/lib/utils';
+import { createDataCardsContent, formatEventObjectForBigCalendar } from '@/lib/utils';
 import { chatIcon, userIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs';
 
 const page = async () => {
@@ -39,11 +41,18 @@ const page = async () => {
       cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
     },
   ]);
-
-  const events = await getAndFormatCalendarEvents();
+  const scheduledWorkshops = await getWorkshopByStatus('DONE');
+  const events = () => {
+    const workshopEvents = formatEventObjectForBigCalendar(
+      scheduledWorkshops,
+      WORKSHOP_CALENDAR_EVENT_COLORS,
+      '#3B82F6'
+    );
+    return workshopEvents;
+  };
   return (
-    <div className="flex flex-col gap-6 h-full w-full">
-      <div className="flex flex-col md:flex-row gap-4 items-center">
+    <div className="flex flex-col gap-4 h-full w-full">
+      <div className="flex flex-col md:flex-row gap-3 items-center md:bg-white dark:bg-black rounded-lg md:p-2 shadow-md">
         {cardContent.map(({ icon, text, number, bg, cardButtonBg }) => {
           return (
             <Card
@@ -57,8 +66,13 @@ const page = async () => {
           );
         })}
       </div>
-      <div className="h-full max-h-[680px] w-full overflow-x-clip rounded-md backdrop-filter backdrop-blur-3xl bg-opacity-40 bg-white dark:bg-black shadow-md p-2">
-        <Calendar events={events.flat()} />
+      <div className="flex flex-col lg:flex-row gap-2 ">
+        <div className="h-full max-h-[680px] w-full overflow-x-clip rounded-md backdrop-filter backdrop-blur-3xl bg-white dark:bg-black shadow-md p-2">
+          <Calendar events={events()} />
+        </div>
+        <div className="w-full lg:w-1/4 p-4 bg-white rounded-lg shadow-md backdrop-filter backdrop-blur-3xl dark:bg-black max-h-[680px] overflow-y-scroll">
+          <NextEventsList activities={scheduledWorkshops} />
+        </div>
       </div>
     </div>
   );

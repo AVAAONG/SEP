@@ -1,15 +1,15 @@
 'use client';
 import defailProfilePic from '@/../public/defaultProfilePic.png';
-import { ScholarProgramInformation, User, WorkshopSpeaker } from '@prisma/client';
+import { Scholar, ScholarProgramInformation, User, WorkshopSpeaker } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Cell, CellProps, Column } from 'react-table';
 
-const scholarAllInformationCollumn: Column<User> = [
+const scholarAllInformationCollumn: Column<Scholar> = [
   {
     Header: 'Nombre',
     accessor: (row: WorkshopSpeaker) => `${row.first_names} ${row.last_names}`,
-    Cell: ({ cell }: { cell: Cell<User> }) => (
+    Cell: ({ cell }: { cell: Cell<Scholar> }) => (
       <Link
         href={cell.row.original.id ? `becarios/${cell.row.original.id}` : ''}
         className="flex items-center"
@@ -93,12 +93,12 @@ const scholarAllInformationCollumn: Column<User> = [
     accessor: 'whatsapp_number',
   },
   {
-    Header: 'Dirección',
-    accessor: 'address',
+    Header: 'Correo',
+    accessor: 'allowedEmail',
   },
   {
-    Header: 'Correo',
-    accessor: 'email',
+    Header: 'Dirección',
+    accessor: 'address',
   },
   {
     Header: 'Universidad',

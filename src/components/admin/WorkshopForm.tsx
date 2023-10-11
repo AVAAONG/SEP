@@ -36,7 +36,7 @@ const WorkshopForm = () => {
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
     if (event === undefined) return;
-    console.log(formWorkshopData)
+    console.log(formWorkshopData);
     event.preventDefault();
     formWorkshopData.platform =
       formWorkshopData.modality.toLowerCase() === 'online'

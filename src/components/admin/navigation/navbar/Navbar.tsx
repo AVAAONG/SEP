@@ -3,10 +3,12 @@ import ThemeToggleButton from '@/components/scholar/NavigationBar/ThemeToggleBut
 import ProfileDropdown from '@/components/scholar/ProfileDropdown';
 import { sidebarAtom } from '@/lib/state/mainState';
 import { useAtom } from 'jotai';
+import { useSession } from 'next-auth/react';
 import { MenuIcon } from '../../../../../public/svgs/svgs';
 
 const Navbar = () => {
   const [isOpen, setSidebar] = useAtom(sidebarAtom);
+  const { data: session } = useSession();
   const setUpSidebar = () => (isOpen ? setSidebar(false) : setSidebar(true));
 
   return (
@@ -25,8 +27,13 @@ const Navbar = () => {
           <div className="inline-flex items-center p-2 text-sm rounded-lg">
             <ThemeToggleButton />
           </div>
-          <div className="flex items-center justify-start ">
-            <ProfileDropdown name={'Erika Campos'} email={'Erika Campos'} image={null} />
+          <div className="flex items-center justify-start">
+            <ProfileDropdown
+              name={session?.user?.name || ' '}
+              email={session?.user?.email || ' '}
+              image={session?.user?.image || ' '}
+              type="admin"
+            />
           </div>
         </div>
       </div>

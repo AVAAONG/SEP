@@ -4,6 +4,10 @@
   border-color: rgba(156, 149, 149, 0.2) 2px solid !important;
 }
 
+.rbc-toolbar-label {
+  text-transform: uppercase !important;
+  font-weight: 500;
+}
 .rbc-btn-group > button::selection {
   background-color: #16a34a !important;
   border-color: rgba(255, 255, 255, 0.2) !important;
@@ -47,7 +51,7 @@
 }
 
 .rbc-month-view {
-  border-color: #ffffff !important;
+  border-color: transparent !important;
   border-top-color: transparent !important;
   border-radius: 6px !important;
 }
@@ -57,8 +61,9 @@
 }
 
 .rbc-header {
-  border-color: #014b1d !important;
-  border-width: 0.5px !important;
+  border-color: rgba(63, 63, 63, 0.171) !important;
+  border-width: 0.3px !important;
+  text-transform: uppercase !important;
 }
 
 .rbc-calendar {
@@ -77,7 +82,7 @@
 }
 
 .rbc-today {
-  @apply !bg-green-300 dark:!text-emerald-800 dark:!bg-emerald-700 dark:!bg-opacity-30;
+  @apply !bg-green-200 dark:!text-emerald-800 dark:!bg-emerald-700 dark:!bg-opacity-30;
 }
 .rbc-row-content {
   @apply dark:!border-t-gray-700;
@@ -88,5 +93,8 @@
 }
 
 .rbc-btn-group > button {
-  @apply dark:!border-gray-700 dark:!text-gray-300;
+  @apply dark:!border-gray-700 dark:!text-gray-300 active:!text-white selection:!text-white;
+}
+.rbc-active {
+  @apply !text-white;
 }

@@ -129,7 +129,7 @@ export const getUsers = async (): Promise<User[]> => {
  * @returns An array of scholars with all associated data
  */
 export const getScholarsWithAllData = async () => {
-  const scholar = await prisma.user.findMany({
+  const scholar = await prisma.scholar.findMany({
     where: {
       program_information: {
         scholar_condition: {
@@ -174,7 +174,7 @@ export const getScholarsWithAllData = async () => {
  * @returns A Promise that resolves to the count of users that match the condition.
  */
 export const getScholarsCountByCondition = async (condition: ScholarCondition) => {
-  const scholars = await prisma.user.count({
+  const scholars = await prisma.scholar.count({
     where: {
       program_information: {
         scholar_condition: condition
@@ -186,8 +186,8 @@ export const getScholarsCountByCondition = async (condition: ScholarCondition) =
 
 export const getScholarcountByGender = async () => {
   const [womenScholars, menScholars] = await prisma.$transaction([
-    prisma.user.count({ where: { gender: 'F' } }),
-    prisma.user.count({ where: { gender: 'M' } }),
+    prisma.scholar.count({ where: { gender: 'F', program_information: { scholar_condition: 'ACTIVE' } } }),
+    prisma.scholar.count({ where: { gender: 'M', program_information: { scholar_condition: 'ACTIVE' } } }),
   ])
   return [womenScholars, menScholars];
 }
@@ -195,7 +195,7 @@ export const getScholarcountByGender = async () => {
 
 
 export const getScholarWithAllData = async (scholar_id: string) => {
-  const scholar = await prisma.user.findUnique({
+  const scholar = await prisma.scholar.findUnique({
     where: {
       id: scholar_id
     }, include: {

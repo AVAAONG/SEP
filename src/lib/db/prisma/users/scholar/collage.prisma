@@ -1,4 +1,5 @@
 import { Modality, User } from "..\..\schema"
+import { Scholar } from "scholar"
 
 enum EvaluationScale {
     CERO_TO_TEN
@@ -13,60 +14,50 @@ enum StudyRegime {
 }
 
 enum StudyArea {
-    BASIC_SCIENCES //Ciencias Básicas
-    HEALTH_SCIENCES // Ciencias de la Salud
-    STEM //STEM (Ciencias, Tecnología,Ingenierías, Matemáticas)=
-    SOCIAL_ECONOMIC_SCIENCES //Ciencias Sociales
-    HUMANITIES_EDUCATION //Humanidades y Educación
-    ARTS
     ARCHITECTURE_URBANISM //Arquitectura y Urbanismo
+    HEALTH_SCIENCES // Ciencias de la Salud
+    JURIDICAL_POLITICAL_SCIENCES //Jurídico-Políticas
+    SOCIAL_SCIENCES //Ciencias Sociales
+    HUMANITIES_EDUCATION //Humanidades y Educación
+    STEM //STEM (Ciencias, Tecnología,Ingenierías, Matemáticas)=
     OTHER
 }
 
 enum Collages {
-    UCV
-    USB
-    UCAB
-    UNIMET
-    USM
-    UJMV
-    UCSAR
-    IUTA
-    IUT
-    IUTJOSE
-    IUNE
     ENAHP
-    ICEE
-    IUAII
-    IFH
-    CAE
-    IUTRBF
+    UCSAR
+    UNIMET
+    IUPSM
+    UCV
+    UCAB
+    USB
+    UNE
+    UNEXPO
+    UNESR
+    UMA
+    UNEARTE
+    UJMV
+    UMC
     UPEL
-    IPSM
-}
-
-enum Careers {
-    INGENIERIA_DE_SISTEMAS
-    INGENIERIA_DE_COMPUTACION
-    INGENIERIA_DE_TELECOMUNICACIONES
-    INGENIERIA_DE_INFORMATICA
-    INGENIERIA_DE_TELEMATICA
-    INGENIERIA_DE_SOFTWARE
-    INGENIERIA_DE_SISTEMAS_COMPUTACIONALES
-    INGENIERIA_DE_SISTEMAS_DE_INFORMACION
-    INGENIERIA_DE_SISTEMAS_DE_COMUNICACIONES
+    CUR
+    UNEFA
+    USM
+    UNEXCA
+    ENAPH
+    UAH
+    UBV
 }
 
 model ScholarCollageInformation {
     id                      String                                       @id @default(nanoid())
     academic_load_completed Boolean?
     collage                 Collages?
-    career                  Careers?
+    career                  String
     study_area              StudyArea?
     evaluation_scale        EvaluationScale
     study_regime            StudyRegime
     qualification           ScholarCollageAverageQualificationByPeriod[]
-    scholar                 User[]
+    Scholar                 Scholar[]
 }
 
 model ScholarCollageAverageQualificationByPeriod {

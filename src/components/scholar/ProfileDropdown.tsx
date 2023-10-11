@@ -7,13 +7,14 @@ interface ProfileDropdownProps {
   name: string | null | undefined;
   email: string | null | undefined;
   image: string | null | undefined;
+  type: 'scholar' | 'admin';
 }
 
 const ProfileDropdown = (props: ProfileDropdownProps) => {
   const [isDrowpdownProfileOpen, setDropdownProfile] = useState(false);
   const toggleDropdownProfile = () => setDropdownProfile(!isDrowpdownProfileOpen);
 
-  const { name, email, image } = props;
+  const { name, email, image, type } = props;
 
   return (
     <>
@@ -30,36 +31,37 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
       <div
         className={`${
           isDrowpdownProfileOpen
-            ? 'absolute  transform -translate-x-48 translate-y-[120px]'
+            ? `absolute  transform -translate-x-48 ${
+                type === 'scholar' ? 'translate-y-[120px]' : 'translate-y-[80px]'
+              } `
             : 'hidden'
         } z-50 my-4 w-56 text-base list-none bg-white  divide-y divide-gray-100 shadow dark:bg-slate-900 dark:divide-gray-600 rounded-xl`}
       >
         <div className="py-3 px-4">
-          <span className="block text-sm font-semibold text-gray-900 dark:text-white">{name}</span>
-          <span className="block text-sm text-gray-900 truncate dark:text-white">{email}</span>
+          <span className="block text-sm font-medium">{name}</span>
+          <span className="block text-sm  truncate">{email}</span>
         </div>
-        <ul className="py-1 text-gray-700 dark:text-gray-300" aria-labelledby="dropdown">
-          <li>
-            <a
-              href={`/becario/config`}
-              className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-green-600 dark:text-gray-300 dark:hover:text-white"
-            >
-              Mi perfil
-            </a>
-          </li>
-          <li>
-            <a
-              href={`/becario/config`}
-              className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-green-600 dark:text-gray-400 dark:hover:text-white"
-            >
-              Configuración de la cuenta
-            </a>
-          </li>
-        </ul>
-        <ul
-          className="py-1 dark:text-gray-300 text-white bg-red-500 hover:bg-red-600 dark:bg-red-800 dark:hover:bg-red-700  rounded-b-xl"
-          aria-labelledby="dropdown"
-        >
+        {type === 'scholar' && (
+          <ul className="py-1 text-gray-700 dark:text-gray-300">
+            <li>
+              <a
+                href={`/becario/config`}
+                className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-green-600 dark:text-gray-300 dark:hover:text-white"
+              >
+                Mi perfil
+              </a>
+            </li>
+            <li>
+              <a
+                href={`/becario/config`}
+                className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-green-600 dark:text-gray-400 dark:hover:text-white"
+              >
+                Configuración de la cuenta
+              </a>
+            </li>
+          </ul>
+        )}
+        <ul className="py-1 bg-red-500 hover:bg-red-600  dark:hover:bg-red-700  rounded-b-xl">
           <li>
             <button onClick={() => signOut()} className="block py-2 px-4 text-sm ">
               Salir de la cuenta

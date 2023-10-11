@@ -93,6 +93,7 @@ enum Modality {
 // SEND - When the activity has been sended to the scholars.
 // IN_PROGRESS - When the activity is in progress.
 // DONE - When the activity is done.
+// ATTENDANCE_CHECKED - (The last state of a sucsessfully done activity)  When the attendance has been checked.
 // SUSPENDED - When the activity is suspended.
 enum ActivityStatus {
   SCHEDULED
@@ -293,6 +294,11 @@ datasource db {
   relationMode = "prisma"
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "./ERD.svg"
+}
+
 //
 // chapter.prisma
 //
@@ -301,7 +307,7 @@ model Chapter {
   id                 String                      @id @default(nanoid())
   name               String
   asociated_scholars ScholarProgramInformation[]
-  asociated_admins   AdminUser[]
+  asociated_admins   AdminProfile[]
 }
 
 //
@@ -360,7 +366,7 @@ model AdminSession {
 }
 
 model AdminUser {
-  id             String         @id @default(cuid())
+  id             String         @id @default(nanoid())
   name           String?
   email          String?        @unique
   emailVerified  DateTime?
@@ -368,10 +374,21 @@ model AdminUser {
   accounts       AdminAccount[]
   sessions       AdminSession[]
   lastLogin      DateTime?      @default(now())
+  adminProfile   AdminProfile   @relation(fields: [adminProfileId], references: [id])
+  adminProfileId String         @unique
+}
+
+model AdminProfile {
+  id             String     @id @default(nanoid())
+  profileName    String
+  profileImage   String?
+  allowedEmail   String     @unique
+  gender         Gender
   role           AdminRoles
   responsibility String
-  chapter        Chapter?       @relation(fields: [chapter_id], references: [id])
+  chapter        Chapter?   @relation(fields: [chapter_id], references: [id])
   chapter_id     String?
+  adminUser      AdminUser?
 
   @@index([chapter_id])
 }
@@ -382,11 +399,6 @@ model AdminVerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-}
-
-model AllowedAdmins {
-  id    String @id @default(nanoid())
-  email String
 }
 
 //
@@ -479,60 +491,50 @@ enum StudyRegime {
 }
 
 enum StudyArea {
-  BASIC_SCIENCES //Ciencias Básicas
-  HEALTH_SCIENCES // Ciencias de la Salud
-  STEM //STEM (Ciencias, Tecnología,Ingenierías, Matemáticas)=
-  SOCIAL_ECONOMIC_SCIENCES //Ciencias Sociales
-  HUMANITIES_EDUCATION //Humanidades y Educación
-  ARTS
   ARCHITECTURE_URBANISM //Arquitectura y Urbanismo
+  HEALTH_SCIENCES // Ciencias de la Salud
+  JURIDICAL_POLITICAL_SCIENCES //Jurídico-Políticas
+  SOCIAL_SCIENCES //Ciencias Sociales
+  HUMANITIES_EDUCATION //Humanidades y Educación
+  STEM //STEM (Ciencias, Tecnología,Ingenierías, Matemáticas)=
   OTHER
 }
 
 enum Collages {
-  UCV
-  USB
-  UCAB
-  UNIMET
-  USM
-  UJMV
-  UCSAR
-  IUTA
-  IUT
-  IUTJOSE
-  IUNE
   ENAHP
-  ICEE
-  IUAII
-  IFH
-  CAE
-  IUTRBF
+  UCSAR
+  UNIMET
+  IUPSM
+  UCV
+  UCAB
+  USB
+  UNE
+  UNEXPO
+  UNESR
+  UMA
+  UNEARTE
+  UJMV
+  UMC
   UPEL
-  IPSM
-}
-
-enum Careers {
-  INGENIERIA_DE_SISTEMAS
-  INGENIERIA_DE_COMPUTACION
-  INGENIERIA_DE_TELECOMUNICACIONES
-  INGENIERIA_DE_INFORMATICA
-  INGENIERIA_DE_TELEMATICA
-  INGENIERIA_DE_SOFTWARE
-  INGENIERIA_DE_SISTEMAS_COMPUTACIONALES
-  INGENIERIA_DE_SISTEMAS_DE_INFORMACION
-  INGENIERIA_DE_SISTEMAS_DE_COMUNICACIONES
+  CUR
+  UNEFA
+  USM
+  UNEXCA
+  ENAPH
+  UAH
+  UBV
 }
 
 model ScholarCollageInformation {
   id                      String                                       @id @default(nanoid())
   academic_load_completed Boolean?
   collage                 Collages?
-  career                  Careers?
+  career                  String
   study_area              StudyArea?
   evaluation_scale        EvaluationScale
   study_regime            StudyRegime
   qualification           ScholarCollageAverageQualificationByPeriod[]
-  scholar                 User[]
+  Scholar                 Scholar[]
 }
 
 model ScholarCollageAverageQualificationByPeriod {
@@ -559,7 +561,7 @@ model ScholarCVAInformation {
   cva_modality           String?
   certificate            String?
   modules                ScholarCvaModule[]
-  scholar                User[]
+  scholar                Scholar[]
 }
 
 model ScholarCvaModule {
@@ -582,14 +584,22 @@ model ScholarCvaModule {
 /// @author Kevin Bravo (kevinbravo.me)
 
 model User {
+  id            String    @id @default(nanoid())
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  emailVerified DateTime?
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  lastLogin     DateTime? @default(now())
+  email         String?   @unique
+  scholar       Scholar   @relation(fields: [scholarId], references: [id])
+  scholarId     String    @unique
+}
+
+model Scholar {
   id                     String                     @id @default(nanoid())
-  image                  String?
-  accounts               Account[]
-  sessions               Session[]
-  emailVerified          DateTime?
-  created_at             DateTime                   @default(now())
-  updated_at             DateTime                   @updatedAt
-  email                  String?                    @unique
+  allowedEmail           String?                    @unique
   first_names            String
   last_names             String
   dni                    String                     @unique
@@ -613,6 +623,7 @@ model User {
   program_information_id String?
   collage_information_id String?
   cva_information_id     String?
+  user                   User?
 
   @@unique([program_information_id, collage_information_id, cva_information_id])
   @@index([program_information_id])
@@ -635,7 +646,7 @@ model ScholarProgramInformation {
   is_chat_speaker          Boolean              @default(false)
   chat_speaker             ChatSpeaker?         @relation(fields: [chat_speaker_id], references: [id], onUpdate: Restrict, onDelete: Restrict)
   chat_speaker_id          String?
-  User                     User[]
+  Scholar                  Scholar[]
 
   @@unique([chapter_id, chat_speaker_id])
   @@index([chapter_id])

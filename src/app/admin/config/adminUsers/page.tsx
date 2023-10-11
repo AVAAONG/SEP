@@ -1,60 +1,86 @@
-
-import defailProfilePic from '@/../public/defaultProfilePic.png';
+'use client';
+import AdminUsersList from '@/components/admin/AdminUsersList';
 import AdminCreationForm from '@/components/admin/forms/AdminCreationForm';
-import { getAdminUsers } from '@/lib/db/utils/admins';
-import Image from 'next/image';
-import { EditIcon, XIcon } from '../../../../../public/svgs/svgs';
+import {
+  createAdminProfileUser,
+  deleteAdmin,
+  deleteadminProfile,
+  getAdminsProfiles,
+} from '@/lib/db/utils/admins';
+import { uploadImageToImgur } from '@/lib/imgurUpload';
+import createSEPOnboardingMessage from '@/lib/mailMessages/sepOnboardingMessage';
+import sendEmailWithDevAccount from '@/lib/sendEmails';
+import { AdminProfile } from '@prisma/client';
+import { BaseSyntheticEvent, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
-const page = async () => {
-  const adminUsers = await getAdminUsers()
+const page = () => {
+  const { register, handleSubmit, reset } = useForm<AdminProfile>({
+    mode: 'onChange',
+  });
+  const [image, setImage] = useState<File | null>(null);
+  const [adminProfiles, setAdminProfile] = useState<AdminProfile[] | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
+
+  useEffect(() => {
+    getAdminsProfiles().then((data) => {
+      setAdminProfile(data);
+    });
+  }, [adminProfiles]);
+
+  const createAdmin = async (
+    data: AdminProfile,
+    event: BaseSyntheticEvent<object, any, any> | undefined
+  ) => {
+    if (event === undefined) return;
+    event.preventDefault();
+    setIsCreating(true);
+    let imageLink;
+    if (image) imageLink = await uploadImageToImgur(image!);
+    else imageLink = null;
+    data.profileImage = imageLink;
+    data.profileName = data.profileName.trim();
+    const name = data.profileName.split(' ')[0];
+    await createAdminProfileUser(data);
+    const onboardingMessage = createSEPOnboardingMessage(data.gender, name);
+    await sendEmailWithDevAccount(name, onboardingMessage, data.allowedEmail, data.gender);
+    reset();
+    setIsCreating(false);
+  };
+  const deleteAdmins = async (inputId: string) => {
+    await deleteAdmin(inputId);
+  };
+
+  const handleImageChange = (event: BaseSyntheticEvent<object, any, any>) =>
+    setImage(event.target.files[0]);
+
+  const editAdmin = async (inputId: string) => {
+    const adminUserToEdit = adminProfiles?.filter((admin: AdminProfile) => admin.id === inputId);
+    await deleteadminProfile(inputId);
+    if (adminUserToEdit === undefined) return;
+    reset({ ...adminUserToEdit[0] });
+  };
+
   return (
-    <section className="w-full h-screen">
-      <div className="flex flex-col sm:flex-row justify-start w-full gap-8 mt-16 p-8">
-        <AdminCreationForm />
-        <div className=" w-full sm:w-1/2  flex flex-col items-center gap-4 h-full">
-          <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white mb-4">
+    <section className="w-full min-h-screen">
+      <div className="flex flex-col md:flex-row justify-start w-full gap-8 xl:mt-16 p-4 md:p-8">
+        <AdminCreationForm
+          createAdmin={createAdmin}
+          register={register}
+          handleSubmit={handleSubmit}
+          handleImageChange={handleImageChange}
+          image={image}
+          isCreating={isCreating}
+        />
+        <div className=" w-full md:w-1/2 flex flex-col items-center gap-4 h-full">
+          <h1 className="text-xl font-semibold text-gray-900 xl:mt-16 md:text-2xl dark:text-white mb-4">
             Administradores del SEP
           </h1>
-          <ul className="w-full flex flex-col gap-3 max-h-96 overflow-y-auto">
-            {adminUsers.map(({ name, email, role, image }) => (
-              <li
-                className="p-4 focus:outline-none focus:outline-offset-0  rounded-md w-full bg-white dark:bg-slate-900"
-                key={email}
-              >
-                <div className="flex items-center space-x-4">
-                  {email !== 'avaatecnologia@gmail.com' && (
-                    <div className="w-5 h-5 cursor-pointer">
-                      <EditIcon />
-                    </div>
-                  )}
-                  <div className="flex-shrink-0">
-                    <Image
-                      className="w-10 h-10 rounded-full"
-                      src={image ? image : defailProfilePic}
-                      alt={name ? '' : "Foto de perfil por defecto"}
-                      width={100}
-                      height={100}
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                      {name}
-                    </p>
-                    <p className="text-sm text-gray-500 truncate dark:text-gray-400">{email}</p>
-                  </div>
-                  <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                    {role}
-                  </div>
-                  {email !== 'avaatecnologia@gmail.com' && (
-                    <div className="w-5 h-5 cursor-pointer">
-                      <XIcon />
-                    </div>
-                  )
-                  }
-                </div>
-              </li>
-            ))}
-          </ul>
+          <AdminUsersList
+            adminUsers={adminProfiles}
+            editUser={editAdmin}
+            deleteUser={deleteAdmins}
+          />
         </div>
       </div>
     </section>

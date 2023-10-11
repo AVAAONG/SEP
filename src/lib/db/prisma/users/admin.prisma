@@ -6,7 +6,7 @@
 import { AdminRoles } from "roles-users"
 import { Region } from "scholar\types-scholar"
 import { ScholarCanAssist, ScholarCanAssist, ScholarStatus } from "scholar\types-scholar"
-import { Chapter } from "..\schema"
+import { Chapter, Gender } from "..\schema"
 
 model AdminAccount {
   id                String    @id @default(cuid())
@@ -38,7 +38,7 @@ model AdminSession {
 }
 
 model AdminUser {
-  id             String         @id @default(cuid())
+  id             String         @id @default(nanoid())
   name           String?
   email          String?        @unique
   emailVerified  DateTime?
@@ -46,10 +46,21 @@ model AdminUser {
   accounts       AdminAccount[]
   sessions       AdminSession[]
   lastLogin      DateTime?      @default(now())
+  adminProfile   AdminProfile   @relation(fields: [adminProfileId], references: [id])
+  adminProfileId String         @unique
+}
+
+model AdminProfile {
+  id             String     @id @default(nanoid())
+  profileName    String
+  profileImage   String?
+  allowedEmail   String     @unique
+  gender         Gender
   role           AdminRoles
   responsibility String
-  chapter        Chapter?       @relation(fields: [chapter_id], references: [id])
+  chapter        Chapter?   @relation(fields: [chapter_id], references: [id])
   chapter_id     String?
+  adminUser      AdminUser?
 
   @@index([chapter_id])
 }
@@ -60,9 +71,4 @@ model AdminVerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-}
-
-model AllowedAdmins {
-  id    String @id @default(nanoid())
-  email String
 }

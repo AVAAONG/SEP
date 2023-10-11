@@ -47,7 +47,7 @@ const Calendar = ({ events }: { events: BigCalendarEventType[] }) => {
   );
   return (
     <BigCalendar
-      className="h-96 max-h-96 w-full overflow-y-scroll overflow:-moz-scrollbars-none"
+      className="h-full w-full overflow-y-scroll overflow:-moz-scrollbars-none"
       localizer={localizer}
       events={events}
       startAccessor="start"
@@ -56,6 +56,7 @@ const Calendar = ({ events }: { events: BigCalendarEventType[] }) => {
       views={views}
       showMultiDayTimes
       eventPropGetter={styleEvent}
+      popup
       messages={{
         month: 'Mes',
         day: 'Día',
