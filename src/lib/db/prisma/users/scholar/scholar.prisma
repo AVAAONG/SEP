@@ -13,6 +13,7 @@ import { ScholarCVAInformation } from "cva"
 import { ScholarCondition, ScholarStatus, ScholarStatus } from "types-scholar"
 import { User } from "..\..\base-next-auth"
 import { Chat, Chat, Chat } from "..\..\activities\chat\chat"
+import { VolunteerAttendance } from "..\..\activities\volunteer\volunteer"
 
 model Scholar {
     id                     String                     @id @default(nanoid())
@@ -51,20 +52,20 @@ model Scholar {
 }
 
 model ScholarProgramInformation {
-    id                       String               @id @default(nanoid())
+    id                       String                @id @default(nanoid())
     avaa_admission_year      DateTime
-    scholar_status           ScholarStatus        @default(NORMAL)
+    scholar_status           ScholarStatus         @default(NORMAL)
     scholar_condition        ScholarCondition?
-    can_assist_to_chats      ScholarCanAssist     @default(YES)
-    can_assist_to_workshops  ScholarCanAssist     @default(YES)
-    can_assist_to_volunteers ScholarCanAssist     @default(YES)
-    chapter                  Chapter?             @relation(fields: [chapter_id], references: [id])
+    can_assist_to_chats      ScholarCanAssist      @default(YES)
+    can_assist_to_workshops  ScholarCanAssist      @default(YES)
+    can_assist_to_volunteers ScholarCanAssist      @default(YES)
+    chapter                  Chapter?              @relation(fields: [chapter_id], references: [id])
     chapter_id               String?
     attended_workshops       WorkshopAttendance[]
     attended_chats           ChatAttendance[]
-
-    Scholar   Scholar[]
-    probation Probation[]
+    Scholar                  Scholar[]
+    probation                Probation[]
+    VolunteerAttendance      VolunteerAttendance[]
 
     @@unique([chapter_id])
     @@index([chapter_id])
