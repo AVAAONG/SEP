@@ -89,9 +89,9 @@ export const googleAdminProviderConfig: OAuthUserConfig<any> = {
       image: profile.picture,
       adminProfile: {
         connect: {
-          allowedEmail: profile.email
-        }
-      }
+          allowedEmail: profile.email,
+        },
+      },
     };
   },
 };

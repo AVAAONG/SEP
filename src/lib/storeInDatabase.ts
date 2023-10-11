@@ -4,7 +4,6 @@
  * This were the first funcitons we use to store data in the database in the beggining of the project.
  */
 
-
 //====================================================== Scholar Functions ======================================================
 
 // const SCHOLARS_SPREADSHEET = '1Fuut0jNZ4Onp4UO_yKmcVfThzRWpvlZpNPMf0I6HjtY';
@@ -88,7 +87,6 @@
 //   return scholars;
 // };
 
-
 // const parseStatus = (status: string) => {
 //   switch (status) {
 //     case "ACTIVO":
@@ -100,7 +98,6 @@
 //     case "RENUNCIO":
 //       return "RESIGNATION";
 //   }
-
 
 // }
 

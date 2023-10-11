@@ -159,9 +159,6 @@ export const getMeetEventLink = async (calendarId: string, eventId: string): Pro
   return [meetLink];
 };
 
-
-
-
 export const getDate = () => {
   let date = new Date().toISOString();
   let search = date.indexOf(':');
@@ -206,4 +203,3 @@ export const mapModality = (skill: Modality): string => {
       return 'N/A';
   }
 };
-

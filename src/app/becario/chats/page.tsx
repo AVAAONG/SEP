@@ -1,4 +1,3 @@
-
 /**
  * Renders the page component with a list of workshops for a specific scholar.
  * @returns The HTML document with the rendered page component.
@@ -61,8 +60,7 @@ const page = async () => {
           <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
             Listado de talleres
           </h1>
-          <div className="h-full w-full flex flex-col gap-4 pt-4">
-          </div>
+          <div className="h-full w-full flex flex-col gap-4 pt-4"></div>
         </div>
       </div>
     </div>

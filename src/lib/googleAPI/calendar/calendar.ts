@@ -36,7 +36,6 @@ const CHAT_CALENDAR_ID =
 const VOLUNTEERS_CALENDAR_ID =
   '66c8bfc0379b164b2d4104d235933b8507228ea39a0f6301f7f3a1a7e878e204@group.calendar.google.com';
 
-
 export const createEvent = async (kindOfActivity: KindOfActivity, values: Workshop | Chat) => {
   const calendarId = 'primary';
   let addUrl: string | null = null;

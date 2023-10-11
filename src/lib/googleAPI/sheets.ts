@@ -153,8 +153,6 @@ export const getSpreadsheetValues = async (spreadsheetId: string, range: string)
   }
 };
 
-
-
 export const getSpreadsheetValuesByUrl = async (spreadsheetUrl: string, range: string) => {
   const spreadsheetId = spreadsheetUrl.split('/')[5];
   try {
@@ -166,7 +164,7 @@ export const getSpreadsheetValuesByUrl = async (spreadsheetUrl: string, range: s
   } catch (err) {
     console.error(err);
   }
-}
+};
 
 //create spreadsheetId
 export const createSpreadsheet = async (title: string) => {
@@ -182,7 +180,7 @@ export const createSpreadsheet = async (title: string) => {
   } catch (err) {
     console.error(err);
   }
-}
+};
 //append values to spreadshee
 export const appendSpreadsheetValues = async (
   spreadsheetUrl: string,
@@ -212,8 +210,7 @@ export const appendSpreadsheetValues = async (
   }
 };
 
-
-//create a new spreadsheet and return its url 
+//create a new spreadsheet and return its url
 export const createSpreadsheetAndReturnUrl = async (title: string) => {
   try {
     const response = await Sheets.spreadsheets.create({
@@ -225,15 +222,12 @@ export const createSpreadsheetAndReturnUrl = async (title: string) => {
     });
     return response.data.spreadsheetUrl;
   } catch (err) {
-    console.log("Error al crear el spreadsheet")
+    console.log('Error al crear el spreadsheet');
     console.error(err);
   }
-}
-//append a new row with a specified  values to a spreadsheet 
-export const appendSpreadsheetValuesByRange = async (
-  spreadsheetUrl: string,
-  values: any[]
-) => {
+};
+//append a new row with a specified  values to a spreadsheet
+export const appendSpreadsheetValuesByRange = async (spreadsheetUrl: string, values: any[]) => {
   const spreadsheetId = spreadsheetUrl.split('/')[5];
   try {
     const response = await Sheets.spreadsheets.values.append({

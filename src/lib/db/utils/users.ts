@@ -3,11 +3,7 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import {
-  ScholarCondition,
-  User,
-  WorkshopAttendance
-} from '@prisma/client';
+import { ScholarCondition, User, WorkshopAttendance } from '@prisma/client';
 import shortUUID from 'short-uuid';
 import { prisma } from './prisma';
 /**
@@ -40,7 +36,6 @@ export const createUser = async (data: User): Promise<User> => {
  * @param dat
  * @returns
  */
-
 
 const createScholarAttendance = async (
   data: WorkshopAttendance
@@ -133,40 +128,41 @@ export const getScholarsWithAllData = async () => {
     where: {
       program_information: {
         scholar_condition: {
-          equals: "ACTIVE"
-        }
-      }
-    }, include: {
+          equals: 'ACTIVE',
+        },
+      },
+    },
+    include: {
       collage_information: {
         include: {
           qualification: true,
-        }
+        },
       },
       cva_information: {
         include: {
           modules: true,
-        }
+        },
       },
       program_information: {
         include: {
           attended_chats: {
             include: {
               chat: true,
-            }
+            },
           },
           attended_workshops: {
             include: {
               workshop: true,
-            }
+            },
           },
           chapter: true,
-        }
+        },
       },
     },
   });
 
   return scholar;
-}
+};
 
 /**
  * Returns the count of users that match the given ScholarCondition.
@@ -177,44 +173,47 @@ export const getScholarsCountByCondition = async (condition: ScholarCondition) =
   const scholars = await prisma.scholar.count({
     where: {
       program_information: {
-        scholar_condition: condition
-      }
-    }
-  })
-  return scholars
-}
+        scholar_condition: condition,
+      },
+    },
+  });
+  return scholars;
+};
 
 export const getScholarcountByGender = async () => {
   const [womenScholars, menScholars] = await prisma.$transaction([
-    prisma.scholar.count({ where: { gender: 'F', program_information: { scholar_condition: 'ACTIVE' } } }),
-    prisma.scholar.count({ where: { gender: 'M', program_information: { scholar_condition: 'ACTIVE' } } }),
-  ])
+    prisma.scholar.count({
+      where: { gender: 'F', program_information: { scholar_condition: 'ACTIVE' } },
+    }),
+    prisma.scholar.count({
+      where: { gender: 'M', program_information: { scholar_condition: 'ACTIVE' } },
+    }),
+  ]);
   return [womenScholars, menScholars];
-}
-
-
+};
 
 export const getScholarWithAllData = async (scholar_id: string) => {
   const scholar = await prisma.scholar.findUnique({
     where: {
-      id: scholar_id
-    }, include: {
+      id: scholar_id,
+    },
+    include: {
       collage_information: {
         include: {
           qualification: true,
-        }
+        },
       },
       cva_information: {
         include: {
           modules: true,
-        }
+        },
       },
       program_information: {
         include: {
           attended_chats: {
             include: {
               chat: true,
-            }
+            },
           },
           attended_workshops: {
             include: {
@@ -223,17 +222,17 @@ export const getScholarWithAllData = async (scholar_id: string) => {
                   scholar_attendance: {
                     include: {
                       workshop: true,
-                    }
+                    },
                   },
-                }
+                },
               },
-            }
+            },
           },
           chapter: true,
-        }
+        },
       },
     },
   });
 
   return scholar;
-}
+};

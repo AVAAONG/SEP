@@ -38,7 +38,6 @@ export const formatEventObject = (
   return formatedEvents;
 };
 
-
 export const formatEventObjectForBigCalendar = (
   calendarEvents: Workshop[] | Chat[],
   bgColor: string,
@@ -61,17 +60,13 @@ export const formatEventObjectForBigCalendar = (
     formatedEvents.push(obj);
   });
   return formatedEvents;
-}
-
-
-
-
+};
 
 /*
  * Gets the events from Google Calendar for each calendar ID and formats them to match the React Big Calendar event type.
  * @returns A promise that resolves to an array of arrays of BigCalendarEventType objects.
  * @todo Add error handling
-  * @todo allow to return a single array of events.
+ * @todo allow to return a single array of events.
  */
 export const getAndFormatCalendarEvents = async (): Promise<BigCalendarEventType[][]> => {
   const session = await getServerSession(authAdminOptions);
@@ -109,7 +104,6 @@ interface CardProps {
  * @returns Array of objects with the content for each card
  */
 export const createDataCardsContent = (data: CardProps[]) => {
-
   const cardContent = data.map((card) => {
     const { icon, text, number, bg, cardButtonBg } = card;
     return { icon, text, number, bg, cardButtonBg };

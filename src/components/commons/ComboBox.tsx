@@ -10,11 +10,11 @@ const InputComboBox = ({ values }) => {
     query === ''
       ? values
       : values.filter((value) =>
-        value.name
-          .toLowerCase()
-          .replace(/\s+/g, '')
-          .includes(query.toLowerCase().replace(/\s+/g, ''))
-      );
+          value.name
+            .toLowerCase()
+            .replace(/\s+/g, '')
+            .includes(query.toLowerCase().replace(/\s+/g, ''))
+        );
 
   return (
     <Combobox value={selected} onChange={setSelected}>
@@ -46,7 +46,8 @@ const InputComboBox = ({ values }) => {
                 <Combobox.Option
                   key={value.id}
                   className={({ active }) =>
-                    `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-primary-light text-white' : 'text-gray-900'
+                    `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                      active ? 'bg-primary-light text-white' : 'text-gray-900'
                     }`
                   }
                   value={value}
@@ -60,8 +61,9 @@ const InputComboBox = ({ values }) => {
                       </span>
                       {selected ? (
                         <span
-                          className={`absolute inset-y-0 left-0 flex items-center pl-3 ${active ? 'text-white' : 'text-pribg-primary-light'
-                            }`}
+                          className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+                            active ? 'text-white' : 'text-pribg-primary-light'
+                          }`}
                         >
                           <CheckIcon className="h-5 w-5" aria-hidden="true" />
                         </span>

@@ -11,7 +11,7 @@ import { prisma } from './prisma';
  * Gets the number of workshops with the specified activity status.
  * @param status - The activity status to filter by.
  * @returns The number of workshops.
- * 
+ *
  * @example
  * const scheduledWorkshopsCount = await getWorkshopsCountByStatus('SCHEDULED');
  * console.log(scheduledWorkshopsCount); // 5
@@ -20,7 +20,7 @@ export const getWorkshopsCountByStatus = async (status: ActivityStatus): Promise
   try {
     const count = await prisma.workshop.count({
       where: {
-        activity_status: status
+        activity_status: status,
       },
     });
     return count;
@@ -35,7 +35,7 @@ export const getWorkshopsCountByStatus = async (status: ActivityStatus): Promise
 /**
  * Gets the total number of workshops in the database.
  * @returns The number of workshops.
- *  
+ *
  * @example
  * const workshopsCount = await getWorkshopsCount();
  * console.log(workshopsCount); // 10
@@ -46,15 +46,11 @@ export const getWorkshopsCount = async (): Promise<number> => {
     return count;
   } catch (error) {
     console.error(`Error getting workshops count: ${error}`);
-    return 0
+    return 0;
   } finally {
     await prisma.$disconnect();
   }
 };
-
-
-
-
 
 export const createWorkshop = async (
   data: Workshop,
@@ -103,7 +99,7 @@ export const getWorkshop = async (id: shortUUID.SUUID) => {
     include: {
       speaker: true,
       scholar_attendance: true,
-      temp_data: true
+      temp_data: true,
     },
   });
   return workshop;
@@ -130,7 +126,7 @@ export const getWorkshopByStatus = async (status: ActivityStatus) => {
     },
   });
   return workshops;
-}
+};
 
 // export const getWorkshopsByScholar = async (scholarId: string) => {
 //   const workshops = await prisma.user.findUnique({
@@ -213,10 +209,6 @@ export const deleteWorkshopSpeakers = async () => {
     await prisma.$disconnect();
   }
 };
-
-
-
-
 
 export const getScheduledWorkshops = async () => {
   const workshops = await prisma.workshop.findMany({

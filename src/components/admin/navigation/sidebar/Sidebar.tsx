@@ -13,8 +13,9 @@ const Sidebar = () => {
   const toggleSidebar = () => setSidebarOpen(!isOpen);
   return (
     <aside
-      className={`${isOpen ? 'fixed xl:flex xl:relative' : 'hidden'
-        } flex-col gap-4 justify-start items-center z-50 xl:z-0 w-full sm:w-72 py-8 px-2 bg-primary-light dark:bg-secondary-dark transition-all min-h-full`}
+      className={`${
+        isOpen ? 'fixed xl:flex xl:relative' : 'hidden'
+      } flex-col gap-4 justify-start items-center z-50 xl:z-0 w-full sm:w-72 py-8 px-2 bg-primary-light dark:bg-secondary-dark transition-all min-h-full`}
     >
       <div className="flex justify-between xl:justify-start items-center mb-8 xl:mb-2">
         <Link href="/admin/panel">

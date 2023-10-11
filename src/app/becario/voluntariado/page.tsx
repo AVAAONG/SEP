@@ -19,8 +19,7 @@ const page = async () => {
           <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
             Lstado de chats
           </h1>
-          <div className="h-full max-w-7xl flex flex-col gap-4 pt-4">
-          </div>
+          <div className="h-full max-w-7xl flex flex-col gap-4 pt-4"></div>
         </div>
       </div>
     </div>

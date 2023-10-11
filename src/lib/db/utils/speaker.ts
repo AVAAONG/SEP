@@ -39,8 +39,6 @@ export const getWorkshopSpeakerWorkshops = async (speakerId: string) => {
   return speaker;
 };
 
-
-
 /**
  * get all the information of a chat speaker and the chatrooms he is in
  */
@@ -65,11 +63,13 @@ export const getWorkshopSpeakersCountByGender = async () => {
   const [workshopSpeakersWomanCount, workshopSpeakerMenCount] = await prisma.$transaction([
     prisma.workshopSpeaker.count({ where: { gender: 'F' } }),
     prisma.workshopSpeaker.count({ where: { gender: 'M' } }),
-  ])
+  ]);
   return [workshopSpeakersWomanCount, workshopSpeakerMenCount];
-}
+};
 
-export const getWorkshopSpeakerWithWorkshops = async (speakerId: string): Promise<[WorkshopSpeaker | null, Workshop[] | null]> => {
+export const getWorkshopSpeakerWithWorkshops = async (
+  speakerId: string
+): Promise<[WorkshopSpeaker | null, Workshop[] | null]> => {
   const [speaker, workshops] = await prisma.$transaction([
     prisma.workshopSpeaker.findUnique({
       where: { id: speakerId },
@@ -78,11 +78,11 @@ export const getWorkshopSpeakerWithWorkshops = async (speakerId: string): Promis
       where: {
         speaker: {
           some: { id: speakerId },
-        }
+        },
       },
       include: {
         scholar_attendance: true,
-      }
+      },
     }),
   ]);
   return [speaker, workshops];

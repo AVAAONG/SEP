@@ -1,9 +1,15 @@
-'use server'
+'use server';
 import { Gmail, setTokens } from '@/lib/googleAPI/auth';
 import { useSession } from 'next-auth/react';
 
-const sendEmail = async (to: string, sender: string, subject: string, text: string, html: string) => {
-  const session = useSession()
+const sendEmail = async (
+  to: string,
+  sender: string,
+  subject: string,
+  text: string,
+  html: string
+) => {
+  const session = useSession();
   setTokens(session.data?.accessToken as string, session.data?.refreshToken as string);
   const message = [
     'Content-Type: multipart/alternative; boundary="foo_bar_baz"\r\n',

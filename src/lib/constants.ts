@@ -1,7 +1,6 @@
 export const CLIENT_ID = process.env.GOOGLE_ADMIN_API_CLIENT_ID;
 export const CLIENT_SECRET = process.env.GOOGLE_ADMIN_API_CLIENT_SECRET;
-export const REDIRECT_URL =
-  'http://localhost:3000/api/auth/callback/adminGoogle';
+export const REDIRECT_URL = 'http://localhost:3000/api/auth/callback/adminGoogle';
 
 export const MONTHS = [
   '0',
@@ -75,5 +74,5 @@ export const ADMIN_ROLES = [
   { id: 5, name: 'STAFF_RECRUITMENT' },
   { id: 6, name: 'COMITEE' },
   { id: 7, name: 'PROYECT' },
-  { id: 8, name: 'CHAT' }
-]
+  { id: 8, name: 'CHAT' },
+];

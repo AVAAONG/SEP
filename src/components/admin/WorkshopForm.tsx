@@ -103,9 +103,9 @@ const WorkshopForm = () => {
                   {fullName}
                 </option>
               );
-            }))}
+            })
+          )}
         </select>
-
       </div>
       <div className="col-span-2 md:col-span-1">
         <label className="block mb-2 text-xs font-semibold   uppercase">cupos disponibles</label>
