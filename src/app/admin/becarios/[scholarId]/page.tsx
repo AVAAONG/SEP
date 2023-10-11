@@ -6,7 +6,7 @@ import NormalCard from '@/components/scholar/card/NormalCard';
 import { getScholarWithAllData } from '@/lib/db/utils/users';
 import { createDataCardsContent } from '@/lib/utils';
 import Image from 'next/image';
-import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from 'public/svgs/SocialNetworks';
+import { CellPhoneIcon, FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon, WhatsAppIcon } from 'public/svgs/SocialNetworks';
 import { EmailIcon, PhoneIcon, chatIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs';
 
 const speakerSearchOptions = [
@@ -70,7 +70,7 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
     {
       name: 'Celular',
       value: cell_phone_Number,
-      icon: <PhoneIcon />,
+      icon: <CellPhoneIcon />,
     },
     {
       name: 'Teléfono local',
@@ -80,7 +80,7 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
     {
       name: 'Whatsapp',
       value: whatsapp_number,
-      icon: <PhoneIcon />,
+      icon: <WhatsAppIcon />,
     },
     {
       name: 'Correo',
