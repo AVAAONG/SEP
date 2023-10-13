@@ -14,6 +14,8 @@ import { Chapter } from "..\organization\chapter"
 
 model AdminProfile {
   id             String      @id @default(nanoid())
+  profileName    String
+  profilePic     String
   allowedEmail   String      @unique
   gender         Gender
   updated_at     DateTime    @updatedAt
@@ -27,10 +29,9 @@ model AdminProfile {
 }
 
 model Controller {
-  id             String       @id @default(nanoid())
-  name           String
-  admin          AdminProfile @relation(fields: [admin_id], references: [id])
-  admin_id       String       @unique
+  id             String        @id @default(nanoid())
+  name           String        @unique
+  admin          AdminProfile? @relation(fields: [admin_id], references: [id])
+  admin_id       String        @unique
   allowedActions Json[]
-  chapter        String
 }

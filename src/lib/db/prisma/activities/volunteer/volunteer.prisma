@@ -25,12 +25,12 @@ model Volunteer {
     volunteer_attendance VolunteerAttendance[]
 }
 
-model Project {
-    id           String      @id @default(nanoid())
-    organizacion beneficiada
+// model Project {
+//     id           String      @id @default(nanoid())
+//     organizacion beneficiada
 
-    beneficiary String
-}
+//     beneficiary String
+// }
 
 model VolunteerAttendance {
     id            String                    @id @default(nanoid(22))
