@@ -3,7 +3,6 @@
  * @module lib/auth/nextAuthOptions/authOptions
  * @author Kevin Bravo (kevinbravo.me)
  */
-import { getAdmin } from '@/lib/db/utils/admins';
 import { PagesOptions } from 'next-auth';
 import { OAuthUserConfig } from 'next-auth/providers';
 import shortUUID from 'short-uuid';
@@ -81,7 +80,6 @@ export const googleAdminProviderConfig: OAuthUserConfig<any> = {
     },
   },
   async profile(profile) {
-    const adminProfile = await getAdmin(profile.email);
     return {
       id: profile.sub,
       name: profile.name,

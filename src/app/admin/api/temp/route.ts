@@ -1,5 +1,4 @@
 // import { prisma } from "@/lib/db/utils/prisma";
-import { setTokens } from '@/lib/googleAPI/auth';
 import { getSpreadsheetValues } from '@/lib/googleAPI/sheets';
 import { Collages, PrismaClient, ScholarCondition } from '@prisma/client';
 import { NextApiRequest } from 'next';
@@ -10,7 +9,16 @@ const prisma = new PrismaClient();
 export async function GET(req: NextApiRequest) {
   const token = await getToken({ req });
   if (token === null) return NextResponse.redirect('/api/auth/signin');
-  setTokens(token.accessToken as string, token.refreshToken as string);
+  prisma.chapter.create({
+    data: {
+      id: "XkGWyWt_hiz7j4GX6Fzke",
+      name: "CARACAS"
+
+    }
+  })
+  // setTokens(token.accessToken as string, token.refreshToken as string);
+
+
   return NextResponse.json({ message: 'ok' });
 }
 

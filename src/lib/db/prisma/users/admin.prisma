@@ -13,17 +13,18 @@ import { Gender } from "..\activities\type-activities"
 import { Chapter } from "..\organization\chapter"
 
 model AdminProfile {
-  id             String      @id @default(nanoid())
-  profileName    String
-  profilePic     String
-  allowedEmail   String      @unique
-  gender         Gender
-  updated_at     DateTime    @updatedAt
-  responsibility String
-  chapter        Chapter?    @relation(fields: [chapter_id], references: [id])
-  chapter_id     String?
-  user           User?
-  allowedActions Controller?
+  id                String     @id @default(nanoid())
+  profileName       String
+  profilePic        String
+  allowedEmail      String     @unique
+  gender            Gender
+  updated_at        DateTime   @updatedAt
+  responsibility    String
+  chapter           Chapter?   @relation(fields: [chapter_id], references: [id])
+  chapter_id        String?
+  user              User?
+  allowedActions    Controller @relation(fields: [allowedActions_id], references: [id])
+  allowedActions_id String     @unique
 
   @@index([chapter_id])
 }
@@ -31,7 +32,6 @@ model AdminProfile {
 model Controller {
   id             String        @id @default(nanoid())
   name           String        @unique
-  admin          AdminProfile? @relation(fields: [admin_id], references: [id])
-  admin_id       String        @unique
+  admin          AdminProfile?
   allowedActions Json[]
 }

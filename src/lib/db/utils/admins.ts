@@ -1,7 +1,8 @@
 'use server';
 
-import { AdminProfile } from '@prisma/client';
-import { prisma } from './prisma';
+import { AdminProfile, PrismaClient } from '@prisma/client';
+// import { prisma } from './prisma';
+const prisma = new PrismaClient()
 
 export const getAdminsProfiles = async () => {
   const users = await prisma.adminProfile.findMany();
@@ -19,12 +20,21 @@ export const getAdmin = async (email: string) => {
 export const createAdminProfileUser = async (data: AdminProfile) => {
   const adminProfile = await prisma.adminProfile.create({
     data: {
+      profileName: data.profileName,
+      profilePic: data.profilePic,
       allowedEmail: data.allowedEmail,
       gender: data.gender,
+      allowedActions: {
+        create: {
+          name: "SUPER_ADMIN"
+        }
+      },
       responsibility: data.responsibility,
-      role: data.role,
-      profileName: data.profileName,
-      profileImage: data.profileImage,
+      chapter: {
+        create: {
+          name: "CARACAS"
+        }
+      }
     },
   });
   return adminProfile;
@@ -38,7 +48,7 @@ export const deleteAdmin = async (adminId: string) => {
   const user = await prisma.adminProfile.delete({
     where: { id: adminId },
     include: {
-      adminUser: {
+      user: {
         include: {
           accounts: true,
           sessions: true,

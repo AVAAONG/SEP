@@ -3,12 +3,14 @@
  * @module lib/auth/nextAuthOptions/authOptions
  * @author Kevin Bravo (kevinbravo.me)
  */
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import type { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 
 import { prisma } from '@/lib/db/utils/prisma';
-import { PrismaAdapter } from 'next-auth-prisma-adapter';
 import { NEXT_SECRET, PAGES, googleAdminProviderConfig } from './authAdminConfig';
+
+const adapter = PrismaAdapter(prisma);
 
 /**
  *
@@ -69,7 +71,7 @@ const authAdminOptions: NextAuthOptions = {
           accessToken: token.accessToken,
           randomKey: token.randomKey,
           refreshToken: token.refreshToken,
-          kindOfUser: 'ADMIN',
+          kind_of_user: 'ADMIN',
         },
       };
     },
@@ -83,18 +85,13 @@ const authAdminOptions: NextAuthOptions = {
           id: u.id,
           accessToken,
           refreshToken,
-          kindOfUser: 'ADMIN',
+          kind_of_user: 'ADMIN',
         };
       }
       return token;
     },
   },
-  adapter: PrismaAdapter(prisma, {
-    userModel: 'adminUser',
-    accountModel: 'adminAccount',
-    sessionModel: 'adminSession',
-    verificationTokenModel: 'adminVerificationToken',
-  }),
+  adapter
 };
 
 export default authAdminOptions;

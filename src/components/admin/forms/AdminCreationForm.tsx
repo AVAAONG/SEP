@@ -1,5 +1,4 @@
 'use client';
-import { ADMIN_ROLES } from '@/lib/constants';
 import { AdminProfile } from '@prisma/client';
 import Image from 'next/image';
 import { BaseSyntheticEvent } from 'react';
@@ -44,7 +43,7 @@ const AdminCreationForm: React.FC<AdminCreationFormProps> = ({
             alt="profile picture"
           />
           <input
-            {...register('profileImage')}
+            {...register('profilePic')}
             type="file"
             accept="image/*"
             onChange={handleImageChange}
@@ -88,7 +87,7 @@ const AdminCreationForm: React.FC<AdminCreationFormProps> = ({
               >
                 Capitulo
               </label>
-              <select {...register('chapter')}>
+              <select {...register('chapter_id')}>
                 <option value="CARACAS">Caracas</option>
                 <option value="ZULIA">Zulia</option>
                 <option value="CARABOBO">Carabobo</option>
@@ -111,14 +110,10 @@ const AdminCreationForm: React.FC<AdminCreationFormProps> = ({
               htmlFor="currentAcademicPeriod"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Rol{' '}
+              Capacidades{' '}
             </label>
-            <select required {...register('role')}>
-              {ADMIN_ROLES.map(({ id, name }) => (
-                <option key={id} value={name}>
-                  {name}
-                </option>
-              ))}
+            <select required {...register('allowedActions')}>
+              <option value={'SUPER_ADMIN'}>Super Administrador</option>
             </select>
           </div>
           <div className="w-full">
@@ -126,7 +121,7 @@ const AdminCreationForm: React.FC<AdminCreationFormProps> = ({
               htmlFor="currentAcademicPeriod"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Responsabilidad{' '}
+              Cargo{' '}
             </label>
             <input
               type="text"

@@ -38,7 +38,7 @@ const page = () => {
     let imageLink;
     if (image) imageLink = await uploadImageToImgur(image!);
     else imageLink = null;
-    data.profileImage = imageLink;
+    data.profilePic = imageLink || '';
     data.profileName = data.profileName.trim();
     const name = data.profileName.split(' ')[0];
     await createAdminProfileUser(data);
