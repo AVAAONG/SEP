@@ -3,7 +3,7 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { ActivityStatus, Chat, ChatSpeaker, ChatsTempData, Prisma } from '@prisma/client';
+import { ActivityStatus, Chat, ChatsTempData, Prisma } from '@prisma/client';
 import { prisma } from './prisma';
 
 /**
