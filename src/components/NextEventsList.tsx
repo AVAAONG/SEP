@@ -36,7 +36,11 @@ const NextEventsList = ({ activities }: { activities: Workshop[] }) => {
                           {activity.start_dates[0].toLocaleDateString()}
                         </span>
                         <span className="ml-1 text-gray-500 dark:text-gray-400">
-                          {activity.start_dates[0].toLocaleTimeString()}
+                          {activity.start_dates[0].toLocaleTimeString('es-ES', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            hour12: true,
+                          })}
                         </span>
                       </div>
                     </div>
