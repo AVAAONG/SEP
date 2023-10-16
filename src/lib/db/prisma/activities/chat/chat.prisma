@@ -20,10 +20,10 @@ model Chat {
     rating             Float?
     modality           Modality
     level              Level
-    speaker            Scholar[]
     activity_status    ActivityStatus
     temp_data          ChatsTempData?
     scholar_attendance ChatAttendance[]
+    speaker            ChatSpeaker[]
 
     @@index([title, modality, activity_status, level])
 }
@@ -48,4 +48,27 @@ model ChatsTempData {
     meeting_id       String?
     meeting_password String?
     whatsapp_link    String?
+}
+
+model ChatSpeaker {
+    id             String    @id @default(nanoid())
+    first_names    String
+    last_names     String
+    email          String?
+    birthdate      DateTime?
+    years_of_exp   Int?
+    job_title      String?
+    job_company    String?
+    actual_city    String?
+    actual_country String?
+    image          String?
+    description    String?
+    instagram_user String?
+    twitter_user   String?
+    linkedin_user  String?
+    facebook_user  String?
+    phone_number   String?
+    curriculum     String?
+    gender         Gender?
+    chat           Chat[]
 }

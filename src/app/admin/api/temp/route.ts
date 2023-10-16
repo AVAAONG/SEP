@@ -1,4 +1,5 @@
 // import { prisma } from "@/lib/db/utils/prisma";
+import { setTokens } from '@/lib/googleAPI/auth';
 import { getSpreadsheetValues } from '@/lib/googleAPI/sheets';
 import { Collages, PrismaClient, ScholarCondition } from '@prisma/client';
 import { NextApiRequest } from 'next';
@@ -9,24 +10,15 @@ const prisma = new PrismaClient();
 export async function GET(req: NextApiRequest) {
   const token = await getToken({ req });
   if (token === null) return NextResponse.redirect('/api/auth/signin');
-  prisma.chapter.create({
-    data: {
-      id: "XkGWyWt_hiz7j4GX6Fzke",
-      name: "CARACAS"
-
-    }
-  })
-  // setTokens(token.accessToken as string, token.refreshToken as string);
-
-
+  setTokens(token.accessToken as string, token.refreshToken as string);
+  await createScholarsInBulkFromSheet();
   return NextResponse.json({ message: 'ok' });
 }
 
 const SCHOLARS_SPREADSHEET = '1Fuut0jNZ4Onp4UO_yKmcVfThzRWpvlZpNPMf0I6HjtY';
 const SCHOLAR_SHEET = 'Database';
-const SCHOLARS_SHEET_RANGE = `'${SCHOLAR_SHEET}'!A2:R275`;
-
-const createScholarsInBulkFromSheet = async (chapterID: string = 'YOXA5dBmHyHv7EC0ndO6y') => {
+const SCHOLARS_SHEET_RANGE = `'${SCHOLAR_SHEET}'!A2:R276`;
+const createScholarsInBulkFromSheet = async (chapterID: string = 'XkGWyWt_hiz7j4GX6Fzke') => {
   const values = (await getSpreadsheetValues(
     SCHOLARS_SPREADSHEET,
     SCHOLARS_SHEET_RANGE
@@ -67,10 +59,10 @@ const createScholarsInBulkFromSheet = async (chapterID: string = 'YOXA5dBmHyHv7E
           address: address,
           gender: spreadsheetGender.toLowerCase() === 'hombre' ? 'M' : 'F',
           is_working: isWorking === 'No' ? false : true,
+          is_chat_speaker: false,
           program_information: {
             create: {
               avaa_admission_year: new Date(avaaStartedDate),
-              is_chat_speaker: false,
               scholar_condition: parseStatus(status) as ScholarCondition,
               chapter: {
                 connect: {

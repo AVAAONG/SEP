@@ -42,7 +42,7 @@ model Scholar {
     collage_information_id String?
     cva_information_id     String?
     is_chat_speaker        Boolean                    @default(false)
-    chat_speaker           Chat[]
+    chat_speaker_id        String?
     user                   User?
 
     @@unique([program_information_id, collage_information_id, cva_information_id])
