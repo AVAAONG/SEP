@@ -135,7 +135,7 @@ export const getScholarsWithAllData = async () => {
     include: {
       collage_information: {
         include: {
-          qualification: true,
+          collage_period: true,
         },
       },
       cva_information: {
@@ -200,7 +200,7 @@ export const getScholarWithAllData = async (scholar_id: string) => {
     include: {
       collage_information: {
         include: {
-          qualification: true,
+          collage_period: true,
         },
       },
       cva_information: {

@@ -1,9 +1,10 @@
 import defailProfilePic from '@/../public/defaultProfilePic.png';
 import ScholarStatus from '@/components/ScholarStatus';
 import AreaChart from '@/components/charts/AreaChart';
-import RadarChart from '@/components/charts/RadarChart';
 import IconWithInfo from '@/components/commons/IconInWithInformation';
 import CardWithStat from '@/components/scholar/card/CardWithStats';
+import Table from '@/components/table/Table';
+import singleScholarWorkshopsColumns from '@/components/table/columns/singleScholarWorkshopColumns';
 
 import { getScholarWithAllData } from '@/lib/db/utils/users';
 import { createDataCardsContent } from '@/lib/utils';
@@ -155,10 +156,6 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
     x: new Date(0, month),
     y: count,
   }));
-  const dataSeries = [
-    [80, 50, 30, 40, 20],
-    [60, 70, 40, 50, 80],
-  ];
 
   const getCollageName = (university: Collages) => {
     switch (university) {
@@ -323,16 +320,16 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
         <div className="mt-6 p-2 rounded-lg bg-white">
           <AreaChart chartData={chartData} title="Actividades realizadas" xAxysType="datetime" />
         </div>
-        <div className="w-1/3 mt-6 p-2 rounded-lg bg-white">
+        {/* <div className="w-1/3 mt-6 p-2 rounded-lg bg-white">
           <RadarChart dataSeries={dataSeries} />
-        </div>
+        </div> */}
       </div>
       <div className="flex justify-center items-center ">
-        {/* <Table
+        <Table
           tableColumns={singleScholarWorkshopsColumns}
           tableData={workshops || []}
-          tableHeadersForSearch={speakerSearchOptions}
-        /> */}
+          tableHeadersForSearch={[{ option: 'adsf', label: 'adsfadsf' }]}
+        />
       </div>
     </section>
   );

@@ -42,7 +42,7 @@ const page = async () => {
       cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
     },
   ]);
-  const scheduledWorkshops = await getWorkshopByStatus('DONE');
+  const scheduledWorkshops = await getWorkshopByStatus('SCHEDULED');
   const events = () => {
     const workshopEvents = formatEventObjectForBigCalendar(
       scheduledWorkshops,

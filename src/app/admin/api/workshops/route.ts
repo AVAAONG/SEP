@@ -20,19 +20,24 @@ export async function GET(req: NextApiRequest) {
   const token = await getToken({ req });
   if (token === null) return NextResponse.redirect('/api/auth/signin');
   setTokens(token.accessToken as string, token.refreshToken as string);
+  // await prisma.workshopAttendance.deleteMany()
+
+  // await prisma.workshop.deleteMany()
+  // await prisma.workshopTempData.deleteMany()
+  await createWorkshopsInbulkFromSpreadsheet()
   return NextResponse.json({ message: 'ok' });
 }
 
 const createWorkshopsInbulkFromSpreadsheet = async () => {
-  let index = 2; // indice desde donde se empieza a extraer los datos de los talleres (se coloca la fila 2 porque la fila 1 son los titulos de las columnas)
+  // indice desde donde se empieza a extraer los datos de los talleres (se coloca la fila 2 porque la fila 1 son los titulos de las columnas)
 
   const WORKSHOP_SPREADSHEET = '1u-fDi_uggUCvK1v4DPPCwfx3pu8-Q2-VHnQ6ivbTi4k';
   const WORKSHOP_SHEET = 'Registro de talleres';
-  const WORKSHOP_RANGE = `'${WORKSHOP_SHEET}'!A${index}:O96`;
+  const WORKSHOP_RANGE = `'${WORKSHOP_SHEET}'!A${96}:N100`;
 
   const values = (await getSpreadsheetValues(WORKSHOP_SPREADSHEET, WORKSHOP_RANGE)) as string[][];
 
-  for (const value of values) {
+  for (const [index, value] of values.entries()) {
     const [
       title,
       skill,
@@ -89,24 +94,70 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
       continue;
     }
 
-    if (status === 'SUSPENDIDO' || status === 'SCHEDULED') continue;
-    else {
-      //asistencia de la lista principal
-      const ATTENDANCE_RANGE1 = `'${sheetName}'!B8:G${spots + 8}`;
-      const attendance = (await getSpreadsheetValuesByUrl(
-        spreadsheet,
-        ATTENDANCE_RANGE1
-      )) as string[][];
+    if (activity_status === 'SUSPENDED' || activity_status === 'SCHEDULED') continue;
 
-      if (attendance === undefined || attendance.length === 0 || attendance === undefined) {
-        console.log('   No hay asistencia en lista principal');
+    //asistencia de la lista principal
+    const attendanceRangeMainList = `'${sheetName}'!B8:G${spots + 8}`;
+    const attendance = (await getSpreadsheetValuesByUrl(
+      spreadsheet,
+      attendanceRangeMainList
+    )) as string[][];
+
+    if (attendance === undefined || attendance.length === 0) {
+      console.log('   No hay asistencia en lista principal');
+      continue;
+    }
+    console.log('   Colocando asistencia ' + title);
+    for (const a of attendance) {
+      if (a === undefined || a[2] === undefined || a[2].length === 0) continue;
+      const dni = parseDni(a[2]);
+      let attendaci
+      if (speakerId === "h3hPNMMFtpkrGEBQ8kq8M3") attendaci = "ATTENDED"
+      else attendaci = parseScholarAttendace(status, a[5] as 'Si' | 'No');
+      let user;
+      try {
+        user = await prisma.scholar.findUniqueOrThrow({
+          where: {
+            dni,
+          },
+        });
+      } catch (e) {
+        if (spreadsheetForErrors === null) {
+          console.log('       Creando Spreadsheet de errores');
+          spreadsheetForErrors = (await createSpreadsheetAndReturnUrl(title)) as string;
+          console.log('   Colocando Spreadsheet ');
+          await insertSpreadsheetValue(
+            WORKSHOP_SPREADSHEET,
+            `'${WORKSHOP_SHEET}'!O${index + 2}:O${index + 2}`,
+            [[spreadsheetForErrors]]
+          );
+        }
+        console.log('     Colocando a ' + a[0] + ' en el spreadsheet de errores', dni, user);
+        a.push('MAIN_LIST');
+        await appendSpreadsheetValuesByRange(spreadsheetForErrors, [a]);
         continue;
       }
-      console.log('   Colocando asistencia ' + title);
-      for (const a of attendance) {
-        if (a === undefined || a[2] === undefined || a[2].length === 0) continue;
+      console.log('     Dando asistencia a ' + a[0]);
+      await addAttendaceToScholar(workshopId, user!, attendaci as ScholarAttendance);
+    }
+
+    //ASISTENCIA DE LA LSITA DE ESPERA.
+    const ATTENDANCE_RANGE2 = `'${sheetName}'!B${spots + 8}:G`;
+    const attendance2 = (await getSpreadsheetValuesByUrl(
+      spreadsheet,
+      ATTENDANCE_RANGE2
+    )) as string[][];
+    if (attendance2 === undefined || attendance2.length === 0) {
+      console.log('No hay asistencia en lista de espera');
+      continue;
+    } else {
+      for (const a of attendance2) {
+        if (a === undefined || a[2] === undefined || a[2].length === 0) {
+          console.log('Asistencia finalizada');
+          break;
+        }
         const dni = parseDni(a[2]);
-        const attendaci = parseScholarAttendace(status, a[5] as 'Si' | 'No');
+        const attendance = parseScholarAttendaceWaitingList(status, a[5] as 'Si' | 'No');
         let user;
         try {
           user = await prisma.user.findUniqueOrThrow({
@@ -116,74 +167,28 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
           });
         } catch (e) {
           if (spreadsheetForErrors === null) {
-            console.log('       Creando Spreadsheet de errores');
+            console.log('   Creando Spreadsheet de errores');
             spreadsheetForErrors = (await createSpreadsheetAndReturnUrl(title)) as string;
-            console.log('   Colocando Spreadsheet ');
+            console.log('   colocando Spreadsheet ');
             await insertSpreadsheetValue(
               WORKSHOP_SPREADSHEET,
-              `'${WORKSHOP_SHEET}'!O${index}:O${index}`,
+              `'${WORKSHOP_SHEET}'!O${index + 2}:O${index + 2}`,
               [[spreadsheetForErrors]]
             );
           }
-          console.log('     Colocando a ' + a[0] + ' en el spreadsheet de errores', dni, user);
-          a.push('MAIN_LIST');
-          await appendSpreadsheetValuesByRange(spreadsheetForErrors, attendance);
+          console.log('colocando a ' + a[1] + ' en el spreadsheet de errores');
+          a.push('WAITING_LIST');
+          await appendSpreadsheetValuesByRange(spreadsheetForErrors, [a]);
+          console.log(
+            'colocando el spreadsheet de errores',
+            `'${WORKSHOP_SHEET}'!O${index + 2}:O${index + 2}`
+          );
           continue;
         }
         console.log('     Dando asistencia a ' + a[0]);
-        await addAttendaceToScholar(workshopId, user!, attendaci as ScholarAttendance);
-      }
-
-      //ASISTENCIA DE LA LSITA DE ESPERA.
-      const ATTENDANCE_RANGE2 = `'${sheetName}'!B${spots + 8}:G`;
-      const attendance2 = (await getSpreadsheetValuesByUrl(
-        spreadsheet,
-        ATTENDANCE_RANGE2
-      )) as string[][];
-      if (attendance2 === undefined || attendance2.length === 0) {
-        console.log('No hay asistencia en lista de espera');
-        continue;
-      } else {
-        for (const a of attendance2) {
-          if (a === undefined || a[2] === undefined || a[2].length === 0) {
-            console.log('Asistencia finalizada');
-            break;
-          }
-          const dni = parseDni(a[2]);
-          const attendance = parseScholarAttendaceWaitingList(status, a[5] as 'Si' | 'No');
-          let user;
-          try {
-            user = await prisma.user.findUniqueOrThrow({
-              where: {
-                dni,
-              },
-            });
-          } catch (e) {
-            if (spreadsheetForErrors === null) {
-              console.log('   Creando Spreadsheet de errores');
-              spreadsheetForErrors = (await createSpreadsheetAndReturnUrl(title)) as string;
-              console.log('   colocando Spreadsheet ');
-              await insertSpreadsheetValue(
-                WORKSHOP_SPREADSHEET,
-                `'${WORKSHOP_SHEET}'!O${index}:O${index}`,
-                [[spreadsheetForErrors]]
-              );
-            }
-            console.log('colocando a ' + a[1] + ' en el spreadsheet de errores');
-            a.push('WAITING_LIST');
-            await appendSpreadsheetValuesByRange(spreadsheetForErrors, attendance2);
-            console.log(
-              'colocando el spreadsheet de errores',
-              `'${WORKSHOP_SHEET}'!O${index}:O${index}`
-            );
-            continue;
-          }
-          console.log('     Dando asistencia a ' + a[0]);
-          await addAttendaceToScholar(workshopId, user, attendance as ScholarAttendance);
-        }
+        await addAttendaceToScholar(workshopId, user, attendance as ScholarAttendance);
       }
     }
-    index = index + 1;
   }
 };
 
@@ -211,7 +216,7 @@ const parseSkill = (skill: string) => {
 
 const parseWorkshopStatus = (statuss: string) => {
   switch (statuss) {
-    case 'SCHEDULED':
+    case 'AGENDADO':
       return 'SCHEDULED';
     case 'SUSPENDIDO':
       return 'SUSPENDED';
@@ -238,12 +243,12 @@ const parseDates = (
   startHour: string,
   endHour: string
 ): [
-  {
-    start_dates: string[];
-    end_dates: string[];
-  },
-  number,
-] => {
+    {
+      start_dates: string[];
+      end_dates: string[];
+    },
+    number,
+  ] => {
   const dates = date.includes(',') ? date.split(',') : [date];
   let hours: number = 0;
   const start_dates: string[] = [];

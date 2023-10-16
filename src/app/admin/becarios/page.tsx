@@ -6,37 +6,6 @@ import moment from 'moment';
 import dynamic from 'next/dynamic';
 import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from 'public/svgs/SocialNetworks';
 
-const SAMPLESTATTS = [
-  {
-    name: 'Total Subscribers',
-    stat: '71,897',
-    previousStat: '70,946',
-    change: '12%',
-    changeType: 'increase',
-  },
-  {
-    name: 'Avg. Open Rate',
-    stat: '58.16%',
-    previousStat: '56.14%',
-    change: '2.02%',
-    changeType: 'increase',
-  },
-  {
-    name: 'Avg. Click Rate',
-    stat: '24.57%',
-    previousStat: '28.62%',
-    change: '4.05%',
-    changeType: 'decrease',
-  },
-  {
-    name: 'Avg. Click Rate',
-    stat: '24.57%',
-    previousStat: '28.62%',
-    change: '4.05%',
-    changeType: 'decrease',
-  },
-];
-
 /**
  * @see https://stackoverflow.com/questions/67784672/react-next-js-doesnt-seem-to-work-with-apexcharts for more info
  */
@@ -200,17 +169,17 @@ const page = async () => {
           },
           {
             name: 'Becarios en probatorio I',
-            stat: 4 || 0,
+            stat: 0 || 0,
             previousStat: 250,
-            change: Number((((250 - scholars.length) / 250) * 100).toFixed(2)),
-            changeType: 'decrease',
+            change: 0,
+            changeType: 'increase',
           },
           {
             name: 'Becarios en probatorio II',
-            stat: 10 || 0,
+            stat: 0 || 0,
             previousStat: 250,
-            change: Number((((250 - scholars.length) / 250) * 100).toFixed(2)),
-            changeType: 'decrease',
+            change: 0,
+            changeType: 'increase',
           },
         ]}
       />

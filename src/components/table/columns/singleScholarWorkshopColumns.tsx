@@ -26,7 +26,6 @@ const singleScholarWorkshopsColumns: Column<WorkshopAttendance & Workshop>[] = [
     Header: 'Fecha',
     accessor: 'start_dates',
     Cell: ({ cell }) => {
-      console.log(cell);
       const date = new Date(cell.value[0]);
       return (
         <span>
@@ -41,7 +40,7 @@ const singleScholarWorkshopsColumns: Column<WorkshopAttendance & Workshop>[] = [
     },
   },
   {
-    Header: 'Status',
+    Header: 'Estatus',
     accessor: 'activity_status',
     Cell: ({ cell }: CellProps<Workshop, ActivityStatus>) => {
       const workshopStatus = parseWorkshopStatusFromDatabase(cell.value);
@@ -70,7 +69,7 @@ const singleScholarWorkshopsColumns: Column<WorkshopAttendance & Workshop>[] = [
       ) {
         return (
           <span className="inline-flex items-center bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-blue-900 dark:text-blue-300">
-            {workshopStatus}
+            Programado
           </span>
         );
       } else {
@@ -80,6 +79,49 @@ const singleScholarWorkshopsColumns: Column<WorkshopAttendance & Workshop>[] = [
           </span>
         );
       }
+    },
+  },
+  {
+    Header: 'Asistencia',
+    accessor: 'scholar_attendance',
+    Cell: ({ cell }) => {
+      return <div>{cell.value.attendance}</div>;
+      //     const workshopStatus = parseWorkshopStatusFromDatabase(cell.value);
+      //     if (cell.value === 'SUSPENDED') {
+      //       return (
+      //         <span className="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+      //           {workshopStatus}
+      //         </span>
+      //       );
+      //     } else if (cell.value === 'DONE') {
+      //       return (
+      //         <span className="inline-flex items-center bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
+      //           {workshopStatus}
+      //         </span>
+      //       );
+      //     } else if (cell.value === 'ATTENDANCE_CHECKED') {
+      //       return (
+      //         <span className="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-green-900 dark:text-green-300">
+      //           {workshopStatus}
+      //         </span>
+      //       );
+      //     } else if (
+      //       cell.value === 'SCHEDULED' ||
+      //       cell.value === 'SENT' ||
+      //       cell.value === 'IN_PROGRESS'
+      //     ) {
+      //       return (
+      //         <span className="inline-flex items-center bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-blue-900 dark:text-blue-300">
+      //           Programado
+      //         </span>
+      //       );
+      //     } else {
+      //       return (
+      //         <span className="inline-flex items-center bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-gray-900 dark:text-gray-300">
+      //           Error
+      //         </span>
+      //       );
+      //     }
     },
   },
   {

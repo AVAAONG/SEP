@@ -322,27 +322,3 @@
 //     }
 //     return normalizeWorkshopObject;
 // }
-
-// export async function PATCH(req: Response, res: Response) {
-//     const token = await getToken({ req });
-//     setTokens(token.accessToken, token.refreshToken)
-//     return NextResponse.json({ messagge: "ok" })
-// }
-
-// export async function DELETE(req: Response, res: Response) {
-//     const token = await getToken({ req });
-//     setTokens(token.accessToken, token.refreshToken)
-//     return NextResponse.json({ messagge: "ok" })
-// }
-// export async function PUT(req: Response, res: Response) {
-//     const token = await getToken({ req });
-//     setTokens(token.accessToken, token.refreshToken)
-//     return NextResponse.json({ messagge: "ok" })
-// }
-
-// export async function GET(req: Response, res: Response) {
-//     const token = await getToken({ req });
-//     setTokens(token.accessToken, token.refreshToken)
-
-//     return NextResponse.json({ messagge: "ok" })
-// }
