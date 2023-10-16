@@ -22,7 +22,7 @@ const page = () => (
           target="_blank"
           rel="noopener noreferrer"
         >
-          By <Image src="/avaa.png" alt="AVAA Logo" width={100} height={24} priority />
+          By <Image src="/avaa-color-simple.png" alt="AVAA Logo" width={100} height={24} priority />
         </Link>
       </div>
     </div>
