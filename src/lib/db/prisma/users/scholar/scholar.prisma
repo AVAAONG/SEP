@@ -67,7 +67,6 @@ model ScholarProgramInformation {
     probation                Probation[]
     VolunteerAttendance      VolunteerAttendance[]
 
-    @@unique([chapter_id])
     @@index([chapter_id])
 }
 

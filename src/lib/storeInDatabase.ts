@@ -8,9 +8,8 @@
 
 // const SCHOLARS_SPREADSHEET = '1Fuut0jNZ4Onp4UO_yKmcVfThzRWpvlZpNPMf0I6HjtY';
 // const SCHOLAR_SHEET = 'Database';
-// const SCHOLARS_SHEET_RANGE = `'${SCHOLAR_SHEET}'!A2:Q275`;
-
-// const createScholarsInBulkFromSheet = async (chapterID: string) => {
+// const SCHOLARS_SHEET_RANGE = `'${SCHOLAR_SHEET}'!A2:S276`;
+// const createScholarsInBulkFromSheet = async (chapterID: string = 'J4ZlF-eg2fTL9W7hnxRe3') => {
 //   const values = (await getSpreadsheetValues(
 //     SCHOLARS_SPREADSHEET,
 //     SCHOLARS_SHEET_RANGE
@@ -28,96 +27,129 @@
 //       address,
 //       collage,
 //       career,
+//       studyArea,
 //       academicRegime,
 //       classModality,
 //       isInCVA,
 //       isWorking,
 //       avaaStartedDate,
 //       status,
+//       chatSpeakerId,
 //     ] = row;
+//     const evaluationScale = parseEvaluationScale(collage as Collages);
 //     try {
-//       await prisma.user.create({
+//       await prisma.scholar.create({
 //         data: {
 //           first_names: firstName,
 //           last_names: lastName,
 //           dni: dni,
 //           birthdate: new Date(spreadSheetBirthdate),
-//           email: email,
+//           allowedEmail: email,
 //           local_phone_number: localPhone,
 //           cell_phone_Number: mobilePhone,
 //           whatsapp_number: mobilePhone,
 //           address: address,
 //           gender: spreadsheetGender.toLowerCase() === 'hombre' ? 'M' : 'F',
+//           is_working: isWorking === 'No' ? false : true,
+//           is_chat_speaker: chatSpeakerId.trim() === "No" ? false : true,
+//           chat_speaker_id: chatSpeakerId.trim() === "No" ? null : chatSpeakerId.trim(),
 //           program_information: {
 //             create: {
 //               avaa_admission_year: new Date(avaaStartedDate),
-//               is_chat_speaker: false,
 //               scholar_condition: parseStatus(status) as ScholarCondition,
 //               chapter: {
 //                 connect: {
 //                   id: chapterID,
-//                 }
+//                 },
 //               },
-//             }
+//             },
 //           },
-//           // collage_information: {
-//           //   create: {
-//           //     collage,
-//           //     career,
-//           //     study_regime: parseStudyRegime(academicRegime),
-//           //     evaluation_scale: 'CERO_TO_TWENTY'
-//           //   }
-//           // },
+//           collage_information: {
+//             create: {
+//               collage: collage.toUpperCase() as Collages,
+//               career,
+//               study_area: parseStudyArea(studyArea),
+//               study_regime: parseStudyRegime(academicRegime),
+//               evaluation_scale: evaluationScale,
+//             },
+//           },
 //           cva_information: {
 //             create: {
 //               is_in_cva: isInCVA === 'No' ? false : true,
-//             }
-//           }
-//         }
+//             },
+//           },
+//         },
 //       });
-//       console.log("El becario", firstName, lastName, "se ha creado correctamente")
-
+//       console.log('✅ El becario', firstName, lastName, 'se ha creado correctamente');
+//     } catch (error) {
+//       console.error('El becario', firstName, lastName, 'no se ha podido crear');
+//       console.error(error);
 //     }
-//     catch (error) {
-//       console.log("El becario", firstName, lastName, "no se ha podido crear correctamente")
-//       console.log(error)
-//     }
-//   })
+//   });
 
 //   return scholars;
 // };
 
 // const parseStatus = (status: string) => {
 //   switch (status) {
-//     case "ACTIVO":
-//       return "ACTIVE";
-//     case "EGRESADO":
-//       return "ALUMNI";
-//     case "RETIRO":
-//       return "WITHDRAWAL";
-//     case "RENUNCIO":
-//       return "RESIGNATION";
+//     case 'ACTIVO':
+//       return 'ACTIVE';
+//     case 'EGRESADO':
+//       return 'ALUMNI';
+//     case 'RETIRO':
+//       return 'WITHDRAWAL';
+//     case 'RENUNCIO':
+//       return 'RESIGNATION';
 //   }
-
-// }
+// };
 
 // const parseStudyRegime = (regime: string) => {
 //   switch (regime) {
-//     case "Semestral":
-//       return "SEMESTER";
-//     case "Anual":
-//       return "ANNUAL";
-//     case "Trimestral":
-//       return "QUARTER";
+//     case 'Semestral':
+//       return 'SEMESTER';
+//     case 'Anual':
+//       return 'ANNUAL';
+//     case 'Trimestral':
+//       return 'QUARTER';
 //     default:
-//       return "ANNUAL";
+//       return 'ANNUAL';
 //   }
-// }
+// };
 
-//====================================================== Speaker Functions ======================================================
+// const parseEvaluationScale = (collage: Collages) => {
+//   switch (collage) {
+//     case 'USB':
+//       return 'CERO_TO_FIVE';
+//     case 'UPEL':
+//       return 'CERO_TO_TEN';
+//     default:
+//       return 'CERO_TO_TWENTY';
+//   }
+// };
+
+// const parseStudyArea = (area: string) => {
+//   switch (area) {
+//     case 'Arquitectura y Urbanismo':
+//       return 'ARCHITECTURE_URBANISM';
+//     case 'Ciencias de la Salud':
+//       return 'HEALTH_SCIENCES';
+//     case 'Ciencias Jurídicas y Políticas':
+//       return 'JURIDICAL_POLITICAL_SCIENCES';
+//     case 'Ciencias Sociales':
+//       return 'SOCIAL_SCIENCES';
+//     case 'Humanidades y Educación':
+//       return 'HUMANITIES_EDUCATION';
+//     case 'STEM':
+//       return 'STEM';
+//     default:
+//       return 'OTHER';
+//   }
+// };
+
+//====================================================== workshop Speaker Functions ======================================================
 // const WORKSHOP_SPEAKERS_SPREADSHEET = '1uGrF-GNSILOXVOy3SLZUvx47HXzcJMv4TaJHJ26aBLc';
 // const WORKSHOP_SPEAKER_SHEET = 'Facilitadores de talleres';
-// const WORKSHOP_SPEAKERS_RANGE = `'${WORKSHOP_SPEAKER_SHEET}'!B91:I91`;
+// const WORKSHOP_SPEAKERS_RANGE = `'${WORKSHOP_SPEAKER_SHEET}'!B2:J92`;
 
 // const createWorkshopSpeakerFromSpreadsheet = async () => {
 //   const values = (await getSpreadsheetValues(
@@ -135,11 +167,12 @@
 //       phone_number,
 //       job_company,
 //       speakerGender,
+//       linkedin_profile
 //     ] = value;
 //     let gender;
 //     if (speakerGender === "O") gender = "O"
 //     else gender = speakerGender.toLowerCase() === 'masculino' ? 'M' : 'F';
-//     const workshopSpeaker: WorkshopSpeaker = {
+//     const workshopSpeaker: Speaker = {
 //       id,
 //       first_names,
 //       last_names: `${last_names1} ${last_names2}`,
@@ -149,14 +182,15 @@
 //       job_title: null,
 //       job_company: job_company ? job_company.toLowerCase() : null,
 //       actual_city: null,
-//       gender,
+//       gender: gender as Gender,
 //       actual_country: null,
 //       curriculum: null,
 //       description: null,
 //       facebook_user: null,
 //       image: null,
+//       speaker_kind: 'WORKSHOPS',
 //       instagram_user: null,
-//       linkedin_user: null,
+//       linkedin_user: linkedin_profile,
 //       phone_number: phone_number ? phone_number.replace(/\s/g, '') : null,
 //       twitter_user: null,
 //     };
@@ -164,6 +198,59 @@
 //     return workshopSpeaker;
 //   });
 //   return workshopSpeakers;
+// };
+
+//=============================================== Chat Speaker Functions ======================================================
+
+// const WORKSHOP_SPEAKERS_SPREADSHEET = '1uGrF-GNSILOXVOy3SLZUvx47HXzcJMv4TaJHJ26aBLc';
+// const WORKSHOP_SPEAKER_SHEET = 'Facilitadores de chats';
+// const WORKSHOP_SPEAKERS_RANGE = `'${WORKSHOP_SPEAKER_SHEET}'!C3:J39`;
+
+// const createChatSpeakerFromSpreadsheet = async () => {
+//     const values = (await getSpreadsheetValues(
+//         WORKSHOP_SPEAKERS_SPREADSHEET,
+//         WORKSHOP_SPEAKERS_RANGE
+//     )) as string[][];
+
+//     const workshopSpeakers = values.map(async (value) => {
+//         const [
+//             first_names,
+//             last_names1,
+//             last_names2,
+//             id,
+//             email,
+//             phone_number,
+//             speakerGender,
+//         ] = value;
+//         let gender;
+//         if (speakerGender === "O") gender = "O"
+//         else gender = speakerGender.toLowerCase() === 'hombre' ? 'M' : 'F';
+//         const workshopSpeaker: Speaker = {
+//             id,
+//             first_names,
+//             last_names: `${last_names1} ${last_names2}`,
+//             email: email ? email.toLowerCase() : null,
+//             birthdate: null,
+//             years_of_exp: null,
+//             job_title: null,
+//             job_company: null,
+//             actual_city: null,
+//             gender: gender as Gender,
+//             actual_country: null,
+//             curriculum: null,
+//             description: null,
+//             facebook_user: null,
+//             image: null,
+//             speaker_kind: 'CHATS',
+//             instagram_user: null,
+//             linkedin_user: null,
+//             phone_number: phone_number ? phone_number.replace(/\s/g, '') : null,
+//             twitter_user: null,
+//         };
+//         await createWorkshopSpeaker(workshopSpeaker);
+//         return workshopSpeaker;
+//     });
+//     return workshopSpeakers;
 // };
 
 ////// functions to create workshops

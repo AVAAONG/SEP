@@ -8,6 +8,7 @@ import { ScholarAttendance } from "..\type-activities"
 import { Skill, WorkshopYear} from "types-workshop"
 import { Gender } from "..\type-activities"
 import { ScholarProgramInformation } from "..\..\users\scholar\scholar"
+import { Speaker } from "..\speaker"
 
 // This model is used to store the data of the workshop
 model Workshop {
@@ -23,11 +24,11 @@ model Workshop {
     year               WorkshopYear[]
     modality           Modality
     asociated_skill    Skill
-    speaker            WorkshopSpeaker[]
     temp_data          WorkshopTempData?
     activity_status    ActivityStatus
     scholar_attendance WorkshopAttendance[]
     rating             Float?
+    speaker            Speaker[]
 
     @@index([title, modality, activity_status, asociated_skill])
 }
@@ -41,30 +42,6 @@ model WorkshopTempData {
     meeting_link     String?
     meeting_id       String?
     meeting_password String?
-}
-
-// This model is used to store the data of the speaker of the workshop
-model WorkshopSpeaker {
-    id             String     @id @default(nanoid())
-    first_names    String
-    last_names     String
-    email          String?
-    birthdate      DateTime?
-    years_of_exp   Int?
-    job_title      String?
-    job_company    String?
-    actual_city    String?
-    actual_country String?
-    image          String?
-    description    String?
-    instagram_user String?
-    twitter_user   String?
-    linkedin_user  String?
-    facebook_user  String?
-    phone_number   String?
-    curriculum     String?
-    gender         Gender?
-    workshops      Workshop[]
 }
 
 //  Intermediate table to store the attendance of the scholars to the workshops

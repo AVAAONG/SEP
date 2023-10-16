@@ -3,9 +3,10 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { ActivityStatus, Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
+import { ActivityStatus, PrismaClient, Speaker, Workshop, WorkshopTempData } from '@prisma/client';
 import shortUUID from 'short-uuid';
-import { prisma } from './prisma';
+
+const prisma = new PrismaClient();
 
 /**
  * Gets the number of workshops with the specified activity status.
@@ -182,10 +183,10 @@ export const getWorkshopByStatus = async (status: ActivityStatus) => {
 //   }
 // };
 
-export const createWorkshopSpeaker = async (data: WorkshopSpeaker) => {
+export const createWorkshopSpeaker = async (data: Speaker) => {
   try {
     console.log('\x1b[36m%s\x1b[0m', `Creating speaker ${data.first_names} ${data.last_names}`);
-    await prisma.workshopSpeaker.create({
+    await prisma.speaker.create({
       data,
     });
     console.log(
@@ -201,7 +202,7 @@ export const createWorkshopSpeaker = async (data: WorkshopSpeaker) => {
 
 export const deleteWorkshopSpeakers = async () => {
   try {
-    await prisma.workshopSpeaker.deleteMany({});
+    await prisma.speaker.deleteMany({});
     console.log('\x1b[32m%s\x1b[0m', `Speakers deleted successfully`);
   } catch (err) {
     console.log('\x1b[31m%s\x1b[0m', err);

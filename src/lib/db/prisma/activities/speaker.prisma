@@ -1,0 +1,35 @@
+import { Gender } from "type-activities"
+import { Workshop } from "workshop\workshop"
+import { Chat } from "chat\chat"
+
+enum KindOfSpeaker {
+    CHATS
+    WORKSHOPS
+    CHATS_AND_WORKSHOPS
+}
+
+// This model is used to store the data of the speaker of the workshop
+model Speaker {
+    id             String        @id @default(nanoid())
+    first_names    String
+    last_names     String
+    email          String?
+    birthdate      DateTime?
+    years_of_exp   Int?
+    job_title      String?
+    job_company    String?
+    actual_city    String?
+    actual_country String?
+    image          String?
+    description    String?
+    instagram_user String?
+    twitter_user   String?
+    linkedin_user  String?
+    facebook_user  String?
+    phone_number   String?
+    curriculum     String?
+    gender         Gender?
+    speaker_kind   KindOfSpeaker
+    workshops      Workshop[]
+    chats          Chat[]
+}

@@ -2,16 +2,16 @@
  * @file This file contains all the necesary logic to interact with the database for the users collection.
  * @author Kevin Bravo (kevinbravo.me)
  */
-import { Prisma, Workshop, WorkshopSpeaker } from '@prisma/client';
+import { Prisma, Speaker, Workshop } from '@prisma/client';
 import { prisma } from './prisma';
 /**
  * Get speakers with parameters
  * @param data - The data to select from the workshopSpeaker table
  * @returns The selected speakers
  */
-export const getWorkshopSpeakersWithParams = async (data: Prisma.WorkshopSpeakerSelect) => {
+export const getWorkshopSpeakersWithParams = async (data: Prisma.SpeakerSelect) => {
   try {
-    const speakers = await prisma.workshopSpeaker.findMany({
+    const speakers = await prisma.speaker.findMany({
       select: data,
     });
     console.log(speakers);
@@ -23,14 +23,14 @@ export const getWorkshopSpeakersWithParams = async (data: Prisma.WorkshopSpeaker
 };
 
 export const getWorkshopSpeaker = async (speakerId: string) => {
-  const speaker = await prisma.workshopSpeaker.findUnique({
+  const speaker = await prisma.speaker.findUnique({
     where: { id: speakerId },
   });
   return speaker;
 };
 
 export const getWorkshopSpeakerWorkshops = async (speakerId: string) => {
-  const speaker = await prisma.workshopSpeaker.findUnique({
+  const speaker = await prisma.speaker.findUnique({
     where: { id: speakerId },
     include: {
       workshops: true,
@@ -43,10 +43,10 @@ export const getWorkshopSpeakerWorkshops = async (speakerId: string) => {
  * get all the information of a chat speaker and the chatrooms he is in
  */
 export const getChatSpeaker = async (speakerId: string) => {
-  const speaker = await prisma.chatSpeaker.findUnique({
+  const speaker = await prisma.speaker.findUnique({
     where: { id: speakerId },
     include: {
-      chat: true,
+      chats: true,
     },
   });
   return speaker;
@@ -61,17 +61,17 @@ export const getChatSpeaker = async (speakerId: string) => {
  */
 export const getWorkshopSpeakersCountByGender = async () => {
   const [workshopSpeakersWomanCount, workshopSpeakerMenCount] = await prisma.$transaction([
-    prisma.workshopSpeaker.count({ where: { gender: 'F' } }),
-    prisma.workshopSpeaker.count({ where: { gender: 'M' } }),
+    prisma.speaker.count({ where: { gender: 'F' } }),
+    prisma.speaker.count({ where: { gender: 'M' } }),
   ]);
   return [workshopSpeakersWomanCount, workshopSpeakerMenCount];
 };
 
 export const getWorkshopSpeakerWithWorkshops = async (
   speakerId: string
-): Promise<[WorkshopSpeaker | null, Workshop[] | null]> => {
+): Promise<[Speaker | null, Workshop[] | null]> => {
   const [speaker, workshops] = await prisma.$transaction([
-    prisma.workshopSpeaker.findUnique({
+    prisma.speaker.findUnique({
       where: { id: speakerId },
     }),
     prisma.workshop.findMany({
