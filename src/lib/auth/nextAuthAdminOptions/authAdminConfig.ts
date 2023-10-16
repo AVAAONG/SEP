@@ -3,6 +3,7 @@
  * @module lib/auth/nextAuthOptions/authOptions
  * @author Kevin Bravo (kevinbravo.me)
  */
+import { KinOfUser } from '@prisma/client';
 import { PagesOptions } from 'next-auth';
 import { OAuthUserConfig } from 'next-auth/providers';
 import shortUUID from 'short-uuid';
@@ -85,7 +86,8 @@ export const googleAdminProviderConfig: OAuthUserConfig<any> = {
       name: profile.name,
       email: profile.email,
       image: profile.picture,
-      adminProfile: {
+      kind_of_user: 'ADMIN' as KinOfUser,
+      admin: {
         connect: {
           allowedEmail: profile.email,
         },

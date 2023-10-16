@@ -25,12 +25,12 @@ export default async function wrapMiddlewareFunction(req: NextRequestWithAuth, r
     async (request: NextRequestWithAuth) => {
       if (
         request.nextUrl.pathname.startsWith('/becario') &&
-        request.nextauth.token?.kindOfUser !== 'SCHOLAR'
+        request.nextauth.token?.kind_of_user !== 'SCHOLAR'
       ) {
         return NextResponse.rewrite(new URL('/accessDenied', request.url));
       } else if (
         request.nextUrl.pathname.startsWith('/admin') &&
-        request.nextauth.token?.kindOfUser !== 'ADMIN'
+        request.nextauth.token?.kind_of_user !== 'ADMIN'
       ) {
         return NextResponse.rewrite(new URL('/accessDenied', request.url));
       } else {
