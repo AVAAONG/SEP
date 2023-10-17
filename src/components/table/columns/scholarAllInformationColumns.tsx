@@ -1,15 +1,30 @@
 'use client';
 import defailProfilePic from '@/../public/defaultProfilePic.png';
-import { Scholar, ScholarProgramInformation, User, WorkshopSpeaker } from '@prisma/client';
+import formatDni from '@/lib/db/utils/formatDni';
+import { parseAvaaAdmisionYear, parseStudyAreaFromDatabase } from '@/lib/parseFromDatabase';
+import { Prisma, Scholar } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Cell, CellProps, Column } from 'react-table';
+import { Cell, CellValue, Column } from 'react-table';
 
-const scholarAllInformationCollumn: Column<Scholar> = [
+const scholarWithActivities = Prisma.validator<Prisma.ScholarDefaultArgs>()({
+  include: {
+    program_information: {
+      include: {
+        attended_chats: true,
+        attended_workshops: true,
+      },
+    },
+    collage_information: true,
+  },
+});
+type ScholarWithActivities = Prisma.ScholarGetPayload<typeof scholarWithActivities>;
+
+const scholarAllInformationCollumn: Column<ScholarWithActivities>[] = [
   {
     Header: 'Nombre',
-    accessor: (row: WorkshopSpeaker) => `${row.first_names} ${row.last_names}`,
-    Cell: ({ cell }: { cell: Cell<Scholar> }) => (
+    accessor: (row: Scholar) => `${row.first_names} ${row.last_names}`,
+    Cell: ({ value, cell }: { value: CellValue; cell: Cell<ScholarWithActivities> }) => (
       <Link
         href={cell.row.original.id ? `becarios/${cell.row.original.id}` : ''}
         className="flex items-center"
@@ -17,17 +32,12 @@ const scholarAllInformationCollumn: Column<Scholar> = [
         <div className="flex-shrink-0 w-8 h-8">
           <Image
             className="w-full h-full rounded-full"
-            src={cell.row.original.image ? cell.row.original.image : defailProfilePic}
+            src={defailProfilePic}
             alt="Foto de perfil"
           />
         </div>
         <div className="ml-4 text-start">
-          <span className="text-sm font-medium text-gray-900 dark:text-slate-100">
-            {cell.row.original.first_names} {cell.row.original.last_names}
-          </span>
-          <span className="block text-xs font-medium text-gray-400 dark:text-slate-400">
-            {cell.row.original.job_company}
-          </span>
+          <span className="text-sm font-medium text-gray-900 dark:text-slate-100">{value}</span>
         </div>
       </Link>
     ),
@@ -35,12 +45,16 @@ const scholarAllInformationCollumn: Column<Scholar> = [
   {
     Header: 'Cédula',
     accessor: 'dni',
+    Cell: ({ value }: { value: CellValue }) => {
+      const dni = formatDni(value);
+      return <span>V-{dni}</span>;
+    },
   },
   {
     Header: 'Fecha de nacimiento',
     accessor: 'birthdate',
-    Cell: ({ cell }: CellProps<User>) => {
-      const date = new Date(cell.value);
+    Cell: ({ value }: { value: CellValue }) => {
+      const date = new Date(value);
       return (
         <span>
           {' '}
@@ -53,19 +67,19 @@ const scholarAllInformationCollumn: Column<Scholar> = [
       );
     },
   },
-  // {
-  //   Header: 'Edad',
-  //   Cell: ({ cell }: { cell: Cell<User> }) => {
-  //     const birthdate = new Date(cell.value).getFullYear();
-  //     const age = new Date().getFullYear() - birthdate;
-  //     return <span>{age}</span>;
-  //   },
-  // },
+  {
+    Header: 'Edad',
+    Cell: ({ cell }: { cell: Cell<ScholarWithActivities> }) => {
+      const birthdate = new Date(cell.row.original.birthdate).getFullYear();
+      const age = new Date().getFullYear() - birthdate;
+      return <span>{age}</span>;
+    },
+  },
   {
     Header: 'Género',
     accessor: 'gender',
-    Cell: ({ cell }: CellProps<User>) => {
-      if (cell.value === 'M') {
+    Cell: ({ value }: { value: CellValue }) => {
+      if (value === 'M') {
         return (
           <span className="inline-flex items-center bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
             Masculino
@@ -97,26 +111,36 @@ const scholarAllInformationCollumn: Column<Scholar> = [
     accessor: 'allowedEmail',
   },
   {
-    Header: 'Dirección',
-    accessor: 'address',
-  },
-  {
     Header: 'Universidad',
-    accessor: 'collage',
+    accessor: 'collage_information',
+    id: 'collage',
+    Cell: ({ value }: { value: CellValue }) => {
+      return <span>{value.collage}</span>;
+    },
   },
   {
     Header: 'Area de estudio',
-    accessor: 'study_area',
+    accessor: 'collage_information',
+    id: 'study_area',
+    Cell: ({ value }: { value: CellValue }) => {
+      return <span>{parseStudyAreaFromDatabase(value.study_area)}</span>;
+    },
   },
   {
     Header: 'Carrera',
-    accessor: 'career',
+    accessor: 'collage_information',
+    id: 'career',
+    Cell: ({ value }: { value: CellValue }) => {
+      return <span>{value.career}</span>;
+    },
   },
   {
     Header: 'Fecha de ingreso a AVAA',
     accessor: 'program_information',
-    Cell: ({ cell }: CellProps<ScholarProgramInformation>) => {
-      const date = new Date(cell.value.avaa_admission_year);
+    id: 'avaa_admission_year',
+
+    Cell: ({ value }: { value: CellValue }) => {
+      const date = new Date(value.avaa_admission_year);
       return (
         <span>
           {' '}
@@ -129,20 +153,21 @@ const scholarAllInformationCollumn: Column<Scholar> = [
       );
     },
   },
-  // {
-  //   Header: 'Año actual en AVAA',
-  //   Cell: ({ cell }: { cell: Cell<User> }) => {
-  //     const avaaEntryDate = new Date(cell.row.original.avaa_entry_date);
-  //     const ageDifMs = Date.now() - avaaEntryDate.getTime();
-  //     const ageDate = new Date(ageDifMs);
-  //     return <span>{Math.abs(ageDate.getUTCFullYear())}</span>;
-  //   },
-  // },
+  {
+    Header: 'Año actual en AVAA',
+    Cell: ({ cell }: { cell: Cell<ScholarWithActivities> }) => {
+      const avaaEntryDate = cell.row.original.program_information?.avaa_admission_year
+        ? new Date(cell.row.original.program_information.avaa_admission_year).getFullYear()
+        : null;
+      const age = avaaEntryDate ? new Date().getFullYear() - avaaEntryDate : null;
+      return <span>{parseAvaaAdmisionYear(age!)}</span>;
+    },
+  },
   {
     Header: 'Redes Sociales',
     Cell: ({ cell }: { cell: any }) => (
       <div className="flex gap-2 justify-center">
-        {cell.row.original.socialNetworks.map((socialNetwork: any, index: number) => (
+        {cell.row.original.socialMedia.map((socialNetwork: any, index: number) => (
           <Link
             key={index}
             target="_blank"
@@ -155,19 +180,20 @@ const scholarAllInformationCollumn: Column<Scholar> = [
       </div>
     ),
   },
-  // {
-  //   Header: 'Actividades realizadas',
-  //   Cell: ({ cell }: { cell: Cell<WorkshopSpeaker> }) => (
-  //     <div className="m-auto divide-x-2 dark:divide-slate-600">
-  //       <span className="text center px-4 py-1 text-xs bg-primary-light dark:bg-primary-light text-white dark:text-slate-200 rounded-full rounded-r-none font-semibold">
-  //         4
-  //       </span>
-  //       <span className="text center px-4 py-1 text-xs bg-primary-light dark:bg-primary-light text-white dark:text-slate-200 rounded-full rounded-l-none font-semibold">
-  //         10
-  //       </span>
-  //     </div>
-  //   ),
-  // },
+  {
+    Header: 'Actividades realizadas',
+    accessor: 'program_information',
+    Cell: ({ value }: { value: CellValue }) => (
+      <div className="m-auto divide-x-2 dark:divide-slate-600">
+        <span className="text center px-4 py-1 text-xs bg-blue-600 dark:bg-blue-500 text-white dark:text-slate-200 rounded-full rounded-r-none font-semibold">
+          {value.attended_workshops.length}
+        </span>
+        <span className="text center px-4 py-1 text-xs bg-red-600 dark:bg-red-500 text-white dark:text-slate-200 rounded-full rounded-l-none font-semibold">
+          {value.attended_chats.length}
+        </span>
+      </div>
+    ),
+  },
 ];
 
 export default scholarAllInformationCollumn;

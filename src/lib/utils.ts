@@ -111,3 +111,30 @@ export const createDataCardsContent = (data: CardProps[]) => {
 
   return cardContent;
 };
+
+
+export const reduceByProperty = <T extends Record<string, any>, D extends Record<string, any>>(
+  valuesToReduce: T[],
+  property1: keyof T,
+  property2: keyof D
+) => {
+  const reducedValues = valuesToReduce.reduce(
+    (acc, value) => {
+      const filter = value[property1]?.[property2] ?? 'Unknown';
+      acc[filter] = (acc[filter] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>
+  );
+  return reducedValues;
+};
+
+export const createArrayFromObject = (object: Record<string, number>) => {
+  const array = Object.entries(object)
+    .map(([label, value]) => ({
+      label,
+      value,
+    }))
+    .sort((a, b) => b.value - a.value);
+  return array;
+};
