@@ -17,7 +17,7 @@ const IconWithInfo = ({ icon, value }: { icon: JSX.Element; value: string }) => 
 
   return (
     <>
-      <div className="flex gap-2 items-center justify-center bg-white rounded-full dark:bg-slate-600 z-50 ">
+      <div className="flex gap-2 items-center justify-center bg-white rounded-full dark:bg-slate-600 z-50">
         <CopyToClipboard text={value}>
           <div
             className="bg-white  dark:bg-slate-600 p-2 w-9 rounded-full hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600"

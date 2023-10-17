@@ -93,6 +93,7 @@ interface CardProps {
   number: number;
   bg: string;
   cardButtonBg: string;
+  activity: 'talleres' | 'chats' | 'voluntariado';
 }
 
 /**
@@ -105,8 +106,8 @@ interface CardProps {
  */
 export const createDataCardsContent = (data: CardProps[]) => {
   const cardContent = data.map((card) => {
-    const { icon, text, number, bg, cardButtonBg } = card;
-    return { icon, text, number, bg, cardButtonBg };
+    const { icon, text, number, bg, cardButtonBg, activity } = card;
+    return { icon, text, number, bg, cardButtonBg, activity };
   });
 
   return cardContent;

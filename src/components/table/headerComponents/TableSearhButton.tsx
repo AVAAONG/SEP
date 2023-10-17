@@ -53,14 +53,14 @@ const TableSearhButton = ({
           type="search"
           value={selectValue()}
           onChange={(e: ChangeEvent<HTMLInputElement>) => selectFilter(selectedFilter, e)}
-          className="block w-full pl-10 p-2.5 rounded-r-none"
+          className="block w-full pl-10 p-2.5 rounded-r-none bg-light dark:bg-black"
           placeholder="Buscar..."
         />
       </div>
       <form className="flex">
         <button
           onClick={() => toggleDropdown(isDropdownOpen ? false : true)}
-          className="flex-shrink-0 inline-flex  z-10 px-4  items-center text-sm font-medium text-center border-l border-green-600 text-gray-900  bg-gray-100 rounded-r-lg  hover:bg-gray-200 dark:bg-slate-700 dark:hover:bg-slate-600 dark:border-green-600  dark:text-white"
+          className="flex-shrink-0 inline-flex  z-10 px-4 items-center text-sm font-medium text-center border-l bg-white rounded-r-lg   hover:bg-light dark:bg-slate-700 dark:hover:bg-slate-600 dark:border-green-600  "
           type="button"
         >
           <div className="flex flex-col text-sm">

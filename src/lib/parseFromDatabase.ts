@@ -1,21 +1,46 @@
-export const parseStudyAreaFromDatabase = (area: string) => {
-    switch (area) {
+import { Collages, StudyArea } from "@prisma/client";
+
+export const parseStudyAreaFromDatabase = (studyArea: StudyArea) => {
+    switch (studyArea) {
         case 'ARCHITECTURE_URBANISM':
-            return 'Arquitectura y Urbanismo';
+            return 'Arquitectura y urbanismo';
         case 'HEALTH_SCIENCES':
-            return 'Ciencias de la Salud';
-        case 'JURIDICAL_POLITICAL_SCIENCES':
-            return 'Ciencias Jurídicas y Políticas';
-        case 'SOCIAL_SCIENCES':
-            return 'Ciencias Sociales';
+            return 'Ciencias de la salud';
         case 'HUMANITIES_EDUCATION':
-            return 'Humanidades y Educación';
+            return 'Humanidades y educación';
+        case 'JURIDICAL_POLITICAL_SCIENCES':
+            return 'Ciencias jurídicas y políticas';
+        case 'SOCIAL_SCIENCES':
+            return 'Ciencias sociales';
         case 'STEM':
-            return 'STEM';
-        default:
-            return 'OTHER';
+            return 'Ciencias, tecnología, ingeniería y matemáticas';
     }
 };
+
+
+export const getCollageName = (university: Collages) => {
+    switch (university) {
+        case 'UCAB':
+            return `Universidad Católica Andrés Bello (${university})`;
+        case 'USB':
+            return `Universidad Simón Bolívar (${university})`;
+        case 'UCV':
+            return `Universidad Central de Venezuela (${university})`;
+        case 'UNIMET':
+            return `Universidad Metropolitana (${university})`;
+        case 'UNEXCA':
+            return `Universidad Experimental de Caracas (${university})`;
+        case 'ENAHP':
+            return `Escuela Nacional de Administración y Hacienda Pública (${university})`;
+        case 'UNEARTE':
+            return `Universidad Nacional Experimental de las Artes (${university})`;
+        case 'UNESR':
+            return `Universidad Nacional Experimental Simón Rodríguez (${university})`;
+        case 'UNESR':
+            return `Universidad Nacional Experimental Simón Rodríguez (${university})`;
+    }
+};
+
 
 export const parseAvaaAdmisionYear = (year: number,) => {
     switch (year) {

@@ -5,19 +5,13 @@ import IconWithInfo from '@/components/commons/IconInWithInformation';
 import CardWithStat from '@/components/scholar/card/CardWithStats';
 import Table from '@/components/table/Table';
 import singleScholarWorkshopsColumns from '@/components/table/columns/singleScholarWorkshopColumns';
+import formatDni from '@/lib/db/utils/formatDni';
 
 import { getScholarWithAllData } from '@/lib/db/utils/users';
+import { getCollageName, parseStudyAreaFromDatabase } from '@/lib/parseFromDatabase';
 import { createDataCardsContent } from '@/lib/utils';
-import { Collages, StudyArea } from '@prisma/client';
 import Image from 'next/image';
-import {
-  CellPhoneIcon,
-  FacebookIcon,
-  InstagramIcon,
-  LinkedinIcon,
-  TwitterIcon,
-  WhatsAppIcon,
-} from 'public/svgs/SocialNetworks';
+import { CellPhoneIcon, WhatsAppIcon } from 'public/svgs/SocialNetworks';
 import {
   AddressIcon,
   CalendarIcon,
@@ -28,7 +22,13 @@ import {
   volunterIcon,
   workshopIcon,
 } from 'public/svgs/svgs';
-const page = async ({ params }: { params: { scholarId: string } }) => {
+const page = async ({
+  params,
+  searchParams,
+}: {
+  params: { scholarId: string };
+  searchParams?: { actividad: string };
+}) => {
   const { scholarId } = params;
   const scholar = await getScholarWithAllData(scholarId);
   const {
@@ -54,32 +54,6 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
   const { is_in_cva, not_started_cva_reason, cva_location, cva_modality, certificate } =
     cva_information || {};
 
-  const workshopSpeakerSocialNetwork = [
-    {
-      name: 'Twitter',
-      url: `https://twitter.com/${twitter_user}`,
-      icon: <TwitterIcon />,
-      username: twitter_user,
-    },
-    {
-      name: 'Facebook',
-      url: `https://www.facebook.com/${facebook_user}`,
-      icon: <FacebookIcon />,
-      username: facebook_user,
-    },
-    {
-      name: 'Instagram',
-      url: `https://www.instagram.com/${instagram_user}`,
-      icon: <InstagramIcon />,
-      username: instagram_user,
-    },
-    {
-      name: 'Linkedin',
-      url: `https://www.linkedin.com/in/${linkedin_user}`,
-      icon: <LinkedinIcon />,
-      username: linkedin_user,
-    },
-  ];
   const scholarContactData = [
     {
       name: 'Celular',
@@ -112,6 +86,7 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
       number: atendedWorkshops?.length || 0,
       bg: 'bg-gradient-to-r from-blue-700  to-indigo-900',
       cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
+      activity: 'talleres',
     },
     {
       icon: chatIcon,
@@ -119,6 +94,7 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
       number: attended_chats?.length || 0,
       bg: 'bg-gradient-to-r from-red-500  to-red-900',
       cardButtonBg: 'bg-indigo-950 active:bg-blue-700',
+      activity: 'chats',
     },
     {
       icon: volunterIcon,
@@ -126,24 +102,18 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
       number: 0,
       bg: 'from-green-500  to-green-700',
       cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
+      activity: 'voluntariado',
     },
   ]);
-  function formatDni(dni: string): string {
-    const formattedDni = dni
-      .replace(/\D/g, '')
-      .replace(/^(\d{2})(\d)/g, '$1.$2')
-      .replace(/(\d{3})(?=\d)/g, '$1.');
-    return formattedDni;
-  }
 
   const workshopsByMonth: Record<number, number> =
-    attended_workshops?.reduce((acc, workshop) => {
+    atendedWorkshops?.reduce((acc, workshop) => {
       const month = new Date(workshop.workshop.start_dates[0]).getMonth();
       acc[month] = (acc[month] || 0) + 1;
       return acc;
     }, {}) || {};
 
-  const workshops = attended_workshops?.map((workshop) => workshop.workshop) || [];
+  const workshops = atendedWorkshops?.map((workshop) => workshop.workshop) || [];
 
   // Add null values for months without workshops
   for (let month = 0; month < 12; month++) {
@@ -156,42 +126,6 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
     x: new Date(0, month),
     y: count,
   }));
-
-  const getCollageName = (university: Collages) => {
-    switch (university) {
-      case 'UCAB':
-        return `Universidad Católica Andrés Bello (${university})`;
-      case 'USB':
-        return `Universidad Simón Bolívar (${university})`;
-      case 'UCV':
-        return `Universidad Central de Venezuela (${university})`;
-      case 'UNIMET':
-        return `Universidad Metropolitana (${university})`;
-      case 'UNEXCA':
-        return `Universidad Experimental de Caracas (${university})`;
-      case 'ENAHP':
-        return `Escuela Nacional de Administración y Hacienda Pública (${university})`;
-      case 'UNEARTE':
-        return `Universidad Nacional Experimental de las Artes (${university})`;
-    }
-  };
-
-  const parseStudyArea = (studyArea: StudyArea) => {
-    switch (studyArea) {
-      case 'ARCHITECTURE_URBANISM':
-        return 'Arquitectura y urbanismo';
-      case 'HEALTH_SCIENCES':
-        return 'Ciencias de la salud';
-      case 'HUMANITIES_EDUCATION':
-        return 'Humanidades y educación';
-      case 'JURIDICAL_POLITICAL_SCIENCES':
-        return 'Ciencias jurídicas y políticas';
-      case 'SOCIAL_SCIENCES':
-        return 'Ciencias sociales';
-      case 'STEM':
-        return 'Ciencias, tecnología, ingeniería y matemáticas';
-    }
-  };
 
   return (
     <section className="flex flex-col gap-4 p-6 pt-0">
@@ -215,7 +149,7 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
           </div>
           <div className="flex w-full justify-between mt-2">
             <div className="flex flex-col gap-2">
-              <div className="flex gap-2 max-w-[180px]">
+              <div className="flex gap-2 max-w-[200px]">
                 {scholarContactData.map(({ value, icon }, index) => {
                   return <IconWithInfo key={index} value={value!} icon={icon} />;
                 })}
@@ -261,7 +195,7 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
                   <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">
                     Area de estudio
                   </h3>
-                  <p className="text-sm font-medium">{parseStudyArea(study_area!)}</p>
+                  <p className="text-sm font-medium">{parseStudyAreaFromDatabase(study_area!)}</p>
                 </div>
               </div>
               <div className="flex flex-col gap-2">
@@ -311,9 +245,17 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
 
       <div className="flex flex-col  w-full">
         <div className="flex gap-2 justify-center items-center mt-4">
-          {cardContent.map(({ icon, text, number, bg }) => {
+          {cardContent.map(({ icon, text, number, bg, activity }) => {
             return (
-              <CardWithStat key={text} stat={number} Icon={icon} text={text} bg={bg} data={[]} />
+              <CardWithStat
+                key={text}
+                stat={number}
+                Icon={icon}
+                text={text}
+                bg={bg}
+                data={[]}
+                activity={activity}
+              />
             );
           })}
         </div>
@@ -323,14 +265,18 @@ const page = async ({ params }: { params: { scholarId: string } }) => {
         {/* <div className="w-1/3 mt-6 p-2 rounded-lg bg-white">
           <RadarChart dataSeries={dataSeries} />
         </div> */}
+        {/* horarios en donde mas participa */}
+        {/* tipos de chats que mas partici */}
       </div>
-      <div className="flex justify-center items-center ">
-        <Table
-          tableColumns={singleScholarWorkshopsColumns}
-          tableData={workshops || []}
-          tableHeadersForSearch={[{ option: 'adsf', label: 'adsfadsf' }]}
-        />
-      </div>
+      {searchParams?.actividad === 'talleres' && (
+        <div className="flex justify-center items-center ">
+          <Table
+            tableColumns={singleScholarWorkshopsColumns}
+            tableData={workshops || []}
+            tableHeadersForSearch={[{ option: 'adsf', label: 'adsfadsf' }]}
+          />
+        </div>
+      )}
     </section>
   );
 };
