@@ -3,10 +3,10 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { ActivityStatus, PrismaClient, Speaker, Workshop, WorkshopTempData } from '@prisma/client';
+import { ActivityStatus, Speaker, Workshop, WorkshopTempData } from '@prisma/client';
 import shortUUID from 'short-uuid';
+import { prisma } from './prisma';
 
-const prisma = new PrismaClient();
 
 /**
  * Gets the number of workshops with the specified activity status.
@@ -111,6 +111,7 @@ export const getWorkshops = async () => {
     include: {
       speaker: true,
       temp_data: true,
+      scholar_attendance: true,
     },
   });
   return workshops;

@@ -1,24 +1,32 @@
 'use client';
 import defailProfilePic from '@/../public/defaultProfilePic.png';
-import { Workshop, WorkshopSpeaker, WorkshopTempData } from '@prisma/client';
+import {
+  parseModalityFromDatabase,
+  parseSkillFromDatabase,
+  parseWorkshopStatusFromDatabase,
+} from '@/lib/utils2';
+import { Prisma } from '@prisma/client';
 import Image from 'next/image';
-import { TableOptions } from 'react-table';
+import { Column } from 'react-table';
 
-interface WorkshopTableProps {
-  workshopData: (Workshop & {
-    speaker: WorkshopSpeaker[];
-    tempData: WorkshopTempData | null;
-  })[];
-}
-const WorkshopColumns: TableOptions<WorkshopTableProps> = [
+const workshopWithAllData = Prisma.validator<Prisma.WorkshopDefaultArgs>()({
+  include: {
+    speaker: true,
+    temp_data: true,
+    scholar_attendance: true,
+  },
+});
+type WorkshopWithAllData = Prisma.WorkshopGetPayload<typeof workshopWithAllData>;
+
+const WorkshopColumns: Column<WorkshopWithAllData>[] = [
   {
     Header: 'Taller',
     accessor: 'title',
   },
   {
     Header: 'Facilitador',
-    accessor: 'first_names',
-    Cell: ({ cell }) => {
+    accessor: 'speaker',
+    Cell: ({ value }) => {
       return (
         <div className="flex items-center">
           <div className="flex w-8">
@@ -30,7 +38,7 @@ const WorkshopColumns: TableOptions<WorkshopTableProps> = [
           </div>
           <div className="ml-4">
             <div className="text-sm text-gray-900 dark:text-slate-100">
-              {cell.row.original.first_names} {cell.row.original.last_names}
+              {value[0].first_names} {value[0].last_names}
             </div>
           </div>
         </div>
@@ -40,39 +48,87 @@ const WorkshopColumns: TableOptions<WorkshopTableProps> = [
   {
     id: 'date',
     Header: 'Fecha',
-    accessor: 'dates[0].start_date',
-    Cell: ({ value }: { value: string }) => {
-      return new Date(value).toLocaleString('es-ES', {
+    accessor: 'start_dates',
+    Cell: ({ value }) => {
+      const date = new Date(value[0]).toLocaleString('es-ES', {
         month: 'numeric',
         day: 'numeric',
         year: 'numeric',
       });
+      return <span>{date}</span>;
     },
   },
   {
     id: 'startHour',
     Header: 'Inicio',
-    accessor: 'dates[0].start_date',
-    Cell: ({ value }: { value: string }) => {
-      return new Date(value).toLocaleString('es-ES', {
+    accessor: 'end_dates',
+    Cell: ({ value }) => {
+      const date = new Date(value[0]).toLocaleString('es-ES', {
         hour: 'numeric',
         minute: 'numeric',
         hourCycle: 'h12',
       });
+      return <span>{date}</span>;
+    },
+  },
+  {
+    accessor: 'activity_status',
+    Header: 'Estatus',
+    Cell: ({ value }) => {
+      const workshopStatus = parseWorkshopStatusFromDatabase(value);
+      if (value === 'SUSPENDED') {
+        return (
+          <span className="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+            {workshopStatus}
+          </span>
+        );
+      } else if (value === 'DONE') {
+        return (
+          <span className="inline-flex items-center bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
+            {workshopStatus}
+          </span>
+        );
+      } else if (value === 'ATTENDANCE_CHECKED') {
+        return (
+          <span className="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-green-900 dark:text-green-300">
+            {workshopStatus}
+          </span>
+        );
+      } else if (value === 'SCHEDULED' || value === 'SENT') {
+        return (
+          <span className="inline-flex items-center bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-blue-900 dark:text-blue-300">
+            Programado
+          </span>
+        );
+      } else if (value === 'IN_PROGRESS')
+        return (
+          <span className="inline-flex items-center bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-gray-900 dark:text-gray-300">
+            Error
+          </span>
+        );
+      else {
+        return (
+          <span className="inline-flex items-center bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-gray-900 dark:text-gray-300">
+            Error
+          </span>
+        );
+      }
     },
   },
   {
     Header: 'Competencia',
-    accessor: 'pensum',
-    Cell: ({ value }: { value: string }) => {
-      return value.toLowerCase().replaceAll('_', ' ');
+    accessor: 'asociated_skill',
+    Cell: ({ value }) => {
+      const skill = parseSkillFromDatabase(value);
+      return <span>{skill}</span>;
     },
   },
   {
     Header: 'Modalidad',
     accessor: 'modality',
-    Cell: ({ value }: { value: string }) => {
-      return value.toLowerCase();
+    Cell: ({ value }) => {
+      const modality = parseModalityFromDatabase(value);
+      return <span>{modality}</span>;
     },
   },
   {
@@ -84,31 +140,23 @@ const WorkshopColumns: TableOptions<WorkshopTableProps> = [
     accessor: 'year',
   },
   {
-    Header: 'Asistencia',
-    accesor: 'attendance',
-    Cell: ({ cell }) => {
-      if (cell.row.original.scholarAttendance == 'No asistio') {
-        return (
-          <span className="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-            {/* <span className="w-2 h-2 mr-1 bg-red-500 rounded-full"></span> */}
-            No asistio
-          </span>
-        );
-      } else if (cell.row.original.scholarAttendance == 'a') {
-        return (
-          <span className="inline-flex items-center bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
-            <span className="w-2 h-2 mr-1 bg-yellow-500 rounded-full"></span>
-            En espera
-          </span>
-        );
-      } else {
-        return (
-          <span className="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-green-900 dark:text-green-300">
-            {/* <span className="w-2 h-2 mr-1 bg-green-500 rounded-full"></span> */}
-            Asistio
-          </span>
-        );
-      }
+    Header: 'Inscritos',
+    id: 'inscritos',
+    accessor: 'scholar_attendance',
+    Cell: ({ value }) => {
+      const attendance = value.filter((a) => a.attendance === 'ENROLLED' || 'ATTENDED');
+
+      return <span>{attendance.length}</span>;
+    },
+  },
+  {
+    Header: 'Asistentes',
+    id: 'asistentes',
+    accessor: 'scholar_attendance',
+    Cell: ({ value }) => {
+      const attendance = value.filter((a) => a.attendance === 'ATTENDED');
+
+      return <span>{attendance.length}</span>;
     },
   },
 ];
