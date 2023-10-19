@@ -4,7 +4,7 @@
  * @author Kevin Bravo (kevinbravo.me)
  * @see https://www.prisma.io/docs/guides/other/troubleshooting-orm/help-articles/nextjs-prisma-client-dev-practices for more information. about initializing prisma.
  */
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
 const prismaClientSingleton = () => {
   return new PrismaClient();

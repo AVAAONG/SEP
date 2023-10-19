@@ -1,4 +1,5 @@
 import defailProfilePic from '@/../public/defaultProfilePic.png';
+import AddWorkshopButton from '@/components/ConfirmButton';
 import ScholarStatus from '@/components/ScholarStatus';
 import AreaChart from '@/components/charts/AreaChart';
 import IconWithInfo from '@/components/commons/IconInWithInformation';
@@ -259,6 +260,7 @@ const page = async ({
             );
           })}
         </div>
+        <AddWorkshopButton scholarId={scholarId} data={workshops} />
         <div className="mt-6 p-2 rounded-lg bg-white">
           <AreaChart chartData={chartData} title="Actividades realizadas" xAxysType="datetime" />
         </div>

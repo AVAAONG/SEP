@@ -28,7 +28,7 @@
     "prisma:studio": "prisma studio --schema=./src/lib/db/prisma/schema.prisma",
     "prisma:push": "prisma db push dev --schema=./src/lib/db/prisma/schema.prisma",
     "prisma:format": "prisma format --schema=./src/lib/db/prisma/schema.prisma",
-    "prisma:import": "rm ./src/lib/db/prisma/schema.prisma && pnpm prisma-import --schemas=./src/lib/db/prisma/**/*.prisma --output=./src/lib/db/prisma/schema.prisma && pnpm prisma:format"
+    "prisma:import": "pnpm prisma-import --schemas=./src/lib/db/prisma/**/*.prisma --output=./src/lib/db/prisma/schema.prisma && pnpm prisma:format"
   },
   "dependencies": {
     "@googleapis/calendar": "^4.1.0",
@@ -41,7 +41,7 @@
     "@headlessui/react": "^1.7.15",
     "@heroicons/react": "^2.0.18",
     "@microsoft/microsoft-graph-client": "^3.0.5",
-    "@next-auth/prisma-adapter": "^1.0.7",
+    "@next-auth/prisma-clear": "^1.0.7",
     "@prisma/client": "^5.3.1",
     "@typescript-eslint/eslint-plugin": "^6.7.2",
     "@typescript-eslint/parser": "6.0.0",
@@ -55,7 +55,6 @@
     "nanoid": "^4.0.2",
     "next": "13.5.4",
     "next-auth": "^4.23.1",
-    "next-auth-prisma-adapter": "^0.1.0",
     "next-themes": "^0.2.1",
     "prisma": "^5.3.1",
     "prisma-import": "^1.0.4",
