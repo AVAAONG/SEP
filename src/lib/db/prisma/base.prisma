@@ -20,7 +20,7 @@ datasource db {
 /// This allow to create an ERD from the prisma schema on generation
 /// @example:
 ///       $ pnpm prisma:generate
-generator erd {
-  provider = "prisma-erd-generator"
-  output   = "./ERD.svg"
-}
+// generator erd {
+//   provider = "prisma-erd-generator"
+//   output   = "./ERD.svg"
+// }
