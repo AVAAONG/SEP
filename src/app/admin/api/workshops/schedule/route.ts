@@ -1,183 +1,183 @@
-import { setTokens } from '@/lib/googleAPI/auth';
-import { createEvent } from '@/lib/googleAPI/calendar/calendar';
-import { getFormatedDate } from '@/lib/googleAPI/calendar/utils';
-import { Workshop as FormTypeWorkshop } from '@/types/Workshop';
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-import { Modality, Skill, Workshop, WorkshopTempData, WorkshopYear } from '@prisma/client';
-=======
-import { Modality, Skill, Workshop, WorkshopYear } from '@prisma/client';
->>>>>>> Stashed changes
-import { nanoid } from 'nanoid';
-=======
-import { Modality, Skill, Workshop, WorkshopYear } from '@prisma/client';
->>>>>>> fcef2336378e1c4ee972daefd689a96eb8bd57ce
-import { getToken } from 'next-auth/jwt';
-import { NextRequest, NextResponse } from 'next/server';
+// import { setTokens } from '@/lib/googleAPI/auth';
+// import { createEvent } from '@/lib/googleAPI/calendar/calendar';
+// import { getFormatedDate } from '@/lib/googleAPI/calendar/utils';
+// import { Workshop as FormTypeWorkshop } from '@/types/Workshop';
+// <<<<<<< HEAD
+// <<<<<<< Updated upstream
+// import { Modality, Skill, Workshop, WorkshopTempData, WorkshopYear } from '@prisma/client';
+// =======
+// import { Modality, Skill, Workshop, WorkshopYear } from '@prisma/client';
+// >>>>>>> Stashed changes
+// import { nanoid } from 'nanoid';
+// =======
+// import { Modality, Skill, Workshop, WorkshopYear } from '@prisma/client';
+// >>>>>>> fcef2336378e1c4ee972daefd689a96eb8bd57ce
+// import { getToken } from 'next-auth/jwt';
+// import { NextRequest, NextResponse } from 'next/server';
 
-const FORM_CREATION_APPSCRIPT_URL =
-  'https://script.google.com/macros/s/AKfycbypXIh8iD-Pbf7gEKHEDrjxTj7EB_DHbWoOO53KgukwDDgaB6PO42xQqeNUReFo4jty/exec';
+// const FORM_CREATION_APPSCRIPT_URL =
+//   'https://script.google.com/macros/s/AKfycbypXIh8iD-Pbf7gEKHEDrjxTj7EB_DHbWoOO53KgukwDDgaB6PO42xQqeNUReFo4jty/exec';
 
-export async function POST(req: NextRequest, res: NextResponse) {
-  const token = await getToken({ req });
-  setTokens(token.accessToken, token.refreshToken, token.jti);
-  const workshop = await req.json();
-  const { speaker, title, modality, spots } = workshop;
-  //creamos el calendario
-  const [calendarEventId, addToCalendarUrl, meetingLink, meetingId, meetingPassword] =
-    await createEvent('workshop', workshop);
+// export async function POST(req: NextRequest, res: NextResponse) {
+//   const token = await getToken({ req });
+//   setTokens(token.accessToken, token.refreshToken, token.jti);
+//   const workshop = await req.json();
+//   const { speaker, title, modality, spots } = workshop;
+//   //creamos el calendario
+//   const [calendarEventId, addToCalendarUrl, meetingLink, meetingId, meetingPassword] =
+//     await createEvent('workshop', workshop);
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
-  //creamos el formulario
-  const formDescription = createFormDescription(workshop);
-  const workshopId = nanoid();
->>>>>>> Stashed changes
-  const formUrl = await createForm(
-    title,
-    modality,
-    spots,
-    workshopId,
-    addToCalendarUrl!,
-    meetingLink!,
-    meetingId!,
-    meetingPassword!,
-    formDescription
-  );
-<<<<<<< Updated upstream
-  const { speakerId } = splitSpeakerValues(speaker);
+// <<<<<<< HEAD
+// <<<<<<< Updated upstream
+// =======
+//   //creamos el formulario
+//   const formDescription = createFormDescription(workshop);
+//   const workshopId = nanoid();
+// >>>>>>> Stashed changes
+//   const formUrl = await createForm(
+//     title,
+//     modality,
+//     spots,
+//     workshopId,
+//     addToCalendarUrl!,
+//     meetingLink!,
+//     meetingId!,
+//     meetingPassword!,
+//     formDescription
+//   );
+// <<<<<<< Updated upstream
+//   const { speakerId } = splitSpeakerValues(speaker);
 
-=======
+// =======
 
-  const { speakerId } = splitSpeakerValues(speaker);
+//   const { speakerId } = splitSpeakerValues(speaker);
 
->>>>>>> Stashed changes
-  const tempDataObj: WorkshopTempData = {
-    id: nanoid(),
-    meeting_password: meetingPassword,
-    meeting_link: meetingLink,
-    meeting_id: meetingId,
-    form_link: formUrl,
-  };
-<<<<<<< Updated upstream
-  const normalizedWorkshop = normalizeWorkshopData(workshop, workshopId, calendarEventId!);
-  const workshopCreated = await createWorkshop(normalizedWorkshop, speakerId, tempDataObj);
-=======
+// >>>>>>> Stashed changes
+//   const tempDataObj: WorkshopTempData = {
+//     id: nanoid(),
+//     meeting_password: meetingPassword,
+//     meeting_link: meetingLink,
+//     meeting_id: meetingId,
+//     form_link: formUrl,
+//   };
+// <<<<<<< Updated upstream
+//   const normalizedWorkshop = normalizeWorkshopData(workshop, workshopId, calendarEventId!);
+//   const workshopCreated = await createWorkshop(normalizedWorkshop, speakerId, tempDataObj);
+// =======
 
-  // const normalizedWorkshop = normalizeWorkshopData(workshop, workshopId, calendarEventId!);
->>>>>>> Stashed changes
-=======
-  // //creamos el formulario
-  // const formDescription = createFormDescription(workshop);
-  // const workshopId = nanoid();
+//   // const normalizedWorkshop = normalizeWorkshopData(workshop, workshopId, calendarEventId!);
+// >>>>>>> Stashed changes
+// =======
+//   // //creamos el formulario
+//   // const formDescription = createFormDescription(workshop);
+//   // const workshopId = nanoid();
 
-  // const formUrl = await createForm(
-  //   title,
-  //   modality,
-  //   spots,
-  //   workshopId,
-  //   addToCalendarUrl!,
-  //   meetingLink!,
-  //   meetingId!,
-  //   meetingPassword!,
-  //   formDescription
-  // );
-  // const { speakerId } = splitSpeakerValues(speaker);
+//   // const formUrl = await createForm(
+//   //   title,
+//   //   modality,
+//   //   spots,
+//   //   workshopId,
+//   //   addToCalendarUrl!,
+//   //   meetingLink!,
+//   //   meetingId!,
+//   //   meetingPassword!,
+//   //   formDescription
+//   // );
+//   // const { speakerId } = splitSpeakerValues(speaker);
 
-  // const tempDataObj: WorkshopTempData = {
-  //   id: nanoid(),
-  //   meeting_password: meetingPassword,
-  //   meeting_link: meetingLink,
-  //   meeting_id: meetingId,
-  //   form_link: formUrl,
-  // };
-  // console.log(workshop)
-  // console.log(speakerId)
-  // console.log(tempDataObj)
-  // const normalizedWorkshop = normalizeWorkshopData(workshop, workshopId, calendarEventId!);
-  // const workshopCreated = await createWorkshop(normalizedWorkshop, speakerId, tempDataObj);
->>>>>>> fcef2336378e1c4ee972daefd689a96eb8bd57ce
-  //guardamos en la base de datos
-  // const workshopCreated = await createWorkshop(normalizedWorkshop, speakerId, tempDataObj);
-  return NextResponse.json({ messagge: 'ok' });
-}
+//   // const tempDataObj: WorkshopTempData = {
+//   //   id: nanoid(),
+//   //   meeting_password: meetingPassword,
+//   //   meeting_link: meetingLink,
+//   //   meeting_id: meetingId,
+//   //   form_link: formUrl,
+//   // };
+//   // console.log(workshop)
+//   // console.log(speakerId)
+//   // console.log(tempDataObj)
+//   // const normalizedWorkshop = normalizeWorkshopData(workshop, workshopId, calendarEventId!);
+//   // const workshopCreated = await createWorkshop(normalizedWorkshop, speakerId, tempDataObj);
+// >>>>>>> fcef2336378e1c4ee972daefd689a96eb8bd57ce
+//   //guardamos en la base de datos
+//   // const workshopCreated = await createWorkshop(normalizedWorkshop, speakerId, tempDataObj);
+//   return NextResponse.json({ messagge: 'ok' });
+// }
 
-const splitSpeakerValues = (value: string) => {
-  const speakerValues = value.split('+/+');
-  const speakerId = speakerValues[0];
-  const speakerName = speakerValues[1];
-  const speakerEmail = speakerValues[2];
-  return { speakerId, speakerName, speakerEmail };
-};
+// const splitSpeakerValues = (value: string) => {
+//   const speakerValues = value.split('+/+');
+//   const speakerId = speakerValues[0];
+//   const speakerName = speakerValues[1];
+//   const speakerEmail = speakerValues[2];
+//   return { speakerId, speakerName, speakerEmail };
+// };
 
-const createForm = async (
-  title: string,
-  modality: string,
-  spots: string,
-  id: string,
-  addToCalendarUrl: string,
-  meetingLink: string,
-  meetingId: string,
-  meetingPassword: string,
-  formDescription: string
-) => {
-  const response = await fetch(FORM_CREATION_APPSCRIPT_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      kindOfActivity: 'workshop',
-      modality
-      activityName: title,
-      activityId: id,
-      meetingId,
-      meetingPassword,
-      meetingLink,
-      addToCalendarUrl,
-      limit: spots,
-      formDescription,
-    }),
-  });
+// const createForm = async (
+//   title: string,
+//   modality: string,
+//   spots: string,
+//   id: string,
+//   addToCalendarUrl: string,
+//   meetingLink: string,
+//   meetingId: string,
+//   meetingPassword: string,
+//   formDescription: string
+// ) => {
+//   const response = await fetch(FORM_CREATION_APPSCRIPT_URL, {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify({
+//       kindOfActivity: 'workshop',
+//       modality
+//       activityName: title,
+//       activityId: id,
+//       meetingId,
+//       meetingPassword,
+//       meetingLink,
+//       addToCalendarUrl,
+//       limit: spots,
+//       formDescription,
+//     }),
+//   });
 
-  const { formUrl } = await response.json();
+//   const { formUrl } = await response.json();
 
-  return formUrl;
-};
+//   return formUrl;
+// };
 
-const normalizeWorkshopData = (
-  workshop: FormTypeWorkshop,
-  id: string,
-  calendarEventId: string
-): Workshop => {
-  const {
-    title,
-    pensum,
-    startHour,
-    endHour,
-    date,
-    spots,
-    modality,
-    description,
-    platform,
-    workshopYear,
-  } = workshop;
-  const [startDate, endDate] = getFormatedDate(date, startHour, endHour);
-  const normalizeWorkshopObject: Workshop = {
-    id,
-    title: title,
-    avalible_spots: parseInt(spots),
-    platform,
-    description,
-    year: workshopYear as WorkshopYear[],
-    modality: modality.toUpperCase() as Modality,
-    skill: pensum as Skill,
-    start_dates: [new Date(startDate)],
-    end_dates: [new Date(endDate)],
-    activity_status: 'SCHEDULED',
-    calendar_id: calendarEventId,
-    rating: 0,
-  };
-  return normalizeWorkshopObject;
-};
+// const normalizeWorkshopData = (
+//   workshop: FormTypeWorkshop,
+//   id: string,
+//   calendarEventId: string
+// ): Workshop => {
+//   const {
+//     title,
+//     pensum,
+//     startHour,
+//     endHour,
+//     date,
+//     spots,
+//     modality,
+//     description,
+//     platform,
+//     workshopYear,
+//   } = workshop;
+//   const [startDate, endDate] = getFormatedDate(date, startHour, endHour);
+//   const normalizeWorkshopObject: Workshop = {
+//     id,
+//     title: title,
+//     avalible_spots: parseInt(spots),
+//     platform,
+//     description,
+//     year: workshopYear as WorkshopYear[],
+//     modality: modality.toUpperCase() as Modality,
+//     skill: pensum as Skill,
+//     start_dates: [new Date(startDate)],
+//     end_dates: [new Date(endDate)],
+//     activity_status: 'SCHEDULED',
+//     calendar_id: calendarEventId,
+//     rating: 0,
+//   };
+//   return normalizeWorkshopObject;
+// };
