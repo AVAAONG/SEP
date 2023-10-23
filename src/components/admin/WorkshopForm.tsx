@@ -22,7 +22,7 @@ const WorkshopForm = () => {
   const { register, handleSubmit, reset, watch } = useForm<FormTypeWorkshop>();
 
   const modality = watch('modality');
-  console.log('la modalidad es: ', modality);
+  // console.log('la modalidad es: ', modality);
 
   const fetcher: Fetcher<WorkshopSpeaker[] | {}[], string> = (...args) =>
     fetch([...args].join('')).then((res) => res.json());

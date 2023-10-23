@@ -1,6 +1,5 @@
 import MonthTab from '@/components/MonthsTab';
 import StatsCard from '@/components/StatsCard';
-import MixedAreaChart from '@/components/charts/MixedAreaChart';
 import Table from '@/components/table/Table';
 import WorkshopColumns from '@/components/table/columns/workshopColumns';
 import { getWorkshops } from '@/lib/db/utils/Workshops';
@@ -31,6 +30,9 @@ const years = [
 ];
 
 const PieChartComponent = dynamic(() => import('@/components/charts/Pie'), { ssr: false });
+const MixedAreaChartComponent = dynamic(() => import('@/components/charts/MixedAreaChart'), {
+  ssr: false,
+});
 
 function categorizeWorkshops(workshops: Workshop[]): {
   morning: Workshop[];
@@ -109,7 +111,6 @@ const page = async () => {
   const byModality = createArrayFromObject(workshopsByModality);
 
   const s = createArrayFromObject(workshopsBySchil);
-  console.log(s);
 
   const chartData = Object.entries(workshopsByMonth).map(([month, count]) => ({
     x: new Date(0, month),
@@ -155,7 +156,11 @@ const page = async () => {
       </div>
 
       <div className="w-full  rounded-lg bg-white">
-        <MixedAreaChart areaSeries={chartData.map((d) => d.y)} barSeries={f.map((y) => y.y)} />
+        <MixedAreaChartComponent
+          areaSeries={chartData.map((d) => d.y)}
+          barSeries={f.map((y) => y.y)}
+          xAxysType="category"
+        />
       </div>
       <div className="w-full flex gap-6 justify-center rounded-lg bg-white">
         <div className="w-1/3 ">
