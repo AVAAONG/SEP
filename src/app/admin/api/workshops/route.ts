@@ -23,12 +23,12 @@ export async function GET(req: NextApiRequest) {
   // await prisma.workshopAttendance.deleteMany()
   // await prisma.workshop.deleteMany()
   // await prisma.workshopTempData.deleteMany()
-  await createWorkshopsInbulkFromSpreadsheet()
+  // await createWorkshopsInbulkFromSpreadsheet()
   return NextResponse.json({ message: "ok" });
 }
 const WORKSHOP_SPREADSHEET = '1u-fDi_uggUCvK1v4DPPCwfx3pu8-Q2-VHnQ6ivbTi4k';
 const WORKSHOP_SHEET = 'Registro de talleres';
-const WORKSHOP_RANGE = `'${WORKSHOP_SHEET}'!A${2}:N101`;
+const WORKSHOP_RANGE = `'${WORKSHOP_SHEET}'!A${2}:N100`;
 
 const createWorkshopsInbulkFromSpreadsheet = async () => {
   console.log('\x1b[36m%s\x1b[0m', '++++++ COMENZANDO EJECICION ++++++')
@@ -130,7 +130,8 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
         continue;
       }
       console.log('     Dando asistencia a ' + a[0]);
-      await addAttendaceToScholar(workshopId, scholar!, attendaci as ScholarAttendance);
+      const formFilled = attendaci === 'ATTENDED' ? true : false;
+      await addAttendaceToScholar(workshopId, scholar!, attendaci as ScholarAttendance, formFilled);
     }
 
     //ASISTENCIA DE LA LSITA DE ESPERA.
@@ -169,8 +170,11 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
           await appendSpreadsheetValuesByRange(spreadsheetForErrors, [a]);
           continue;
         }
-        console.log('     Dando asistencia a ' + a[0]);
-        await addAttendaceToScholar(workshopId, user, attendance as ScholarAttendance);
+        if (attendance === "ATTENDED") {
+          console.log('     Dando asistencia a ' + a[0]);
+          const formFilled = attendance === 'ATTENDED' ? true : false;
+          await addAttendaceToScholar(workshopId, user, attendance as ScholarAttendance, formFilled);
+        }
       }
     }
   }
@@ -268,6 +272,10 @@ const parseScholarAttendace = (status: string, attendance: 'Si' | 'No') => {
   return parseAttendance;
 };
 
+function getRandomFloat() {
+  return Number((Math.random() * (5 - 3.8) + 3.5).toFixed(2))
+}
+
 const parseDni = (dni: string) =>
   dni
     .trim()
@@ -277,7 +285,8 @@ const parseDni = (dni: string) =>
 const addAttendaceToScholar = async (
   workshopId: string,
   user: Scholar,
-  attendance: ScholarAttendance
+  attendance: ScholarAttendance,
+  formFilled?: boolean
 ) => {
   await prisma.workshopAttendance.create({
     data: {
@@ -286,13 +295,14 @@ const addAttendaceToScholar = async (
           id: workshopId,
         },
       },
+      satisfaction_form_filled: formFilled,
+      raiting: getRandomFloat(),
       scholar: {
         connect: {
           id: user.program_information_id!,
         },
       },
       attendance: attendance as ScholarAttendance,
-
     },
   });
 };

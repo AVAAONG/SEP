@@ -28,7 +28,7 @@
     "prisma:studio": "prisma studio --schema=./src/lib/db/prisma/schema.prisma",
     "prisma:push": "prisma db push dev --schema=./src/lib/db/prisma/schema.prisma",
     "prisma:format": "prisma format --schema=./src/lib/db/prisma/schema.prisma",
-    "prisma:import": "pnpm prisma-import --schemas=./src/lib/db/prisma/**/*.prisma --output=./src/lib/db/prisma/schema.prisma && pnpm prisma:format"
+    "prisma:import": "rm ./src/lib/db/prisma/schema.prisma && pnpm prisma-import --schemas=./src/lib/db/prisma/**/*.prisma --output=./src/lib/db/prisma/schema.prisma && pnpm prisma:format"
   },
   "dependencies": {
     "@googleapis/calendar": "^4.1.0",

@@ -19,6 +19,7 @@ const page = async () => {
       number: workshopDoneCount,
       bg: 'bg-gradient-to-r from-blue-700  to-indigo-900',
       cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
+      activity: 'talleres',
     },
     {
       icon: chatIcon,
@@ -26,6 +27,7 @@ const page = async () => {
       number: chatsDoneCount,
       bg: 'bg-gradient-to-r from-red-500  to-red-900',
       cardButtonBg: 'bg-indigo-950 active:bg-blue-700',
+      activity: 'chats',
     },
     {
       icon: volunterIcon,
@@ -33,6 +35,7 @@ const page = async () => {
       number: 0,
       bg: ' from-green-600  to-emerald-800',
       cardButtonBg: 'bg-indigo-950 active:bg-blue-700',
+      activity: 'voluntariado',
     },
     {
       icon: userIcon,
@@ -40,12 +43,14 @@ const page = async () => {
       number: activeScholarsCount,
       bg: 'from-yellow-500  to-yellow-700',
       cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
+      activity: 'talleres',
     },
   ]);
   const scheduledWorkshops = await getWorkshopByStatus('SCHEDULED');
+  const sentWorkshops = await getWorkshopByStatus('SENT');
   const events = () => {
     const workshopEvents = formatEventObjectForBigCalendar(
-      scheduledWorkshops,
+      [...scheduledWorkshops, ...sentWorkshops],
       WORKSHOP_CALENDAR_EVENT_COLORS,
       '#3B82F6'
     );
@@ -72,7 +77,7 @@ const page = async () => {
           <Calendar events={events()} />
         </div>
         <div className="w-full lg:w-1/4 p-4 bg-white rounded-lg shadow-md backdrop-filter backdrop-blur-3xl dark:bg-black max-h-[680px] overflow-y-scroll">
-          <NextEventsList activities={scheduledWorkshops} />
+          <NextEventsList activities={[...scheduledWorkshops, ...sentWorkshops]} />
         </div>
       </div>
     </div>

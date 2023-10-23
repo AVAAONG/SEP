@@ -27,7 +27,6 @@ model Workshop {
     temp_data          WorkshopTempData?
     activity_status    ActivityStatus
     scholar_attendance WorkshopAttendance[]
-    rating             Float?
     speaker            Speaker[]
 
     @@index([title, modality, activity_status, asociated_skill])
@@ -54,6 +53,7 @@ model WorkshopAttendance {
     attendance               ScholarAttendance
     justification            String?
     satisfaction_form_filled Boolean?
+    raiting                  Float?
 
     @@index([scholar_id])
     @@index([workshop_id])
