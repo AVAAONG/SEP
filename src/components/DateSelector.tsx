@@ -1,29 +1,44 @@
 'use client'
 import { classNames } from '@/lib/scholar/utils';
-import { getYearObjects } from '@/lib/utils2';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+const getYearObjects = (): { name: string; queryYear: string; current: boolean }[] => {
+
+  const currentYear = new Date().getFullYear();
+  const years = [];
+
+  for (let year = 2020; year <= currentYear; year++) {
+    years.push({
+      name: year.toString(),
+      queryYear: year.toString(),
+      current: false,
+    });
+  }
+
+  return years;
+}
+
 const MONTHS = [
-  { name: 'Enero', href: 'Enero', quarter: 'I', current: false },
-  { name: 'Febrero', href: 'Febrero', quarter: 'I', current: false },
-  { name: 'Marzo', href: 'Marzo', quarter: 'I', current: false },
-  { name: 'Abril', href: 'Abril', quarter: 'II', current: false },
-  { name: 'Mayo', href: 'Mayo', quarter: 'II', current: false },
-  { name: 'Junio', href: 'Junio', quarter: 'II', current: false },
-  { name: 'Julio', href: 'Julio', quarter: 'III', current: false },
-  { name: 'Agosto', href: 'Agosto', quarter: 'III', current: false },
-  { name: 'Septiembre', href: 'Septiembre', quarter: 'III', current: false },
-  { name: 'Octubre', href: 'Octubre', quarter: 'IV', current: false },
-  { name: 'Noviembre', href: 'Noviembre', quarter: 'IV', current: false },
-  { name: 'Diciembre', href: 'Diciembre', quarter: 'IV', current: false },
+  { name: 'Enero', href: '0', quarter: '1', current: false },
+  { name: 'Febrero', href: '1', quarter: '1', current: false },
+  { name: 'Marzo', href: '2', quarter: '1', current: false },
+  { name: 'Abril', href: '3', quarter: '2', current: false },
+  { name: 'Mayo', href: '4', quarter: '2', current: false },
+  { name: 'Junio', href: '5', quarter: '2', current: false },
+  { name: 'Julio', href: '6', quarter: '3', current: false },
+  { name: 'Agosto', href: '7', quarter: '3', current: false },
+  { name: 'Septiembre', href: '8', quarter: '3', current: false },
+  { name: 'Octubre', href: '9', quarter: '4', current: false },
+  { name: 'Noviembre', href: '10', quarter: '4', current: false },
+  { name: 'Diciembre', href: '11', quarter: '4', current: false },
 ];
 const QUARTERS = [
-  { name: '1er trimestre', href: 'I', current: false },
-  { name: '2do trimestre', href: 'II', current: false },
-  { name: '3er trimestre', href: 'III', current: false },
-  { name: '4to trimestre', href: 'IV', current: false },
+  { name: '1er trimestre', href: '1', current: false },
+  { name: '2do trimestre', href: '2', current: false },
+  { name: '3er trimestre', href: '3', current: false },
+  { name: '4to trimestre', href: '4', current: false },
 ];
 
 const YEARS = getYearObjects();
@@ -147,7 +162,7 @@ const DateSelector = () => {
                 return (<Link
                   key={tab.name}
                   replace={false}
-                  href={tab.current ? `?year=${searchParams.get('year')}&quarter=${tab.href}` : `?year=${searchParams.get('year')}&quarter=${searchParams.get('quarter')}&month=${tab.href}`}
+                  href={tab.current ? `?year=${searchParams.get('year')}&quarter=${searchParams.get('quarter')}` : `?year=${searchParams.get('year')}&quarter=${searchParams.get('quarter')}&month=${tab.href}`}
                   className={classNames(
                     tab.current ? 'text-primary-light font-semibold' : 'text-gray-500 hover:text-gray-700',
                     'rounded-md px-3 py-2 text-sm font-medium'
@@ -157,7 +172,7 @@ const DateSelector = () => {
                     if (tab.current) {
                       setQuarterTabs(QUARTERS);
                       setMonthTabs(MONTHS);
-                      setSearchParams(new URLSearchParams(`year=${searchParams.get('year')}&quarter=${tab.href}`));
+                      setSearchParams(new URLSearchParams(`year=${searchParams.get('year')}&quarter=${searchParams.get('quarter')}`));
                     } else {
                       setMonthTabs((prevTabs) =>
                         prevTabs.map((prevTab) => ({

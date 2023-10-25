@@ -17,7 +17,7 @@ const workshopWithAllData = Prisma.validator<Prisma.WorkshopDefaultArgs>()({
     scholar_attendance: true,
   },
 });
-type WorkshopWithAllData = Prisma.WorkshopGetPayload<typeof workshopWithAllData>;
+export type WorkshopWithAllData = Prisma.WorkshopGetPayload<typeof workshopWithAllData>;
 
 const WorkshopColumns: Column<WorkshopWithAllData>[] = [
   {
