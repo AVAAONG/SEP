@@ -7,6 +7,7 @@ import {
 } from '@/lib/utils2';
 import { Prisma } from '@prisma/client';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Column } from 'react-table';
 
 const workshopWithAllData = Prisma.validator<Prisma.WorkshopDefaultArgs>()({
@@ -22,26 +23,43 @@ const WorkshopColumns: Column<WorkshopWithAllData>[] = [
   {
     Header: 'Taller',
     accessor: 'title',
+    Cell: ({ value, cell }) => {
+      return <Link
+        href={cell.row.original.id ? `/admin/actividadesFormativas/${cell.row.original.id}` : ''}
+      >
+        <div
+          className="block w-80 overflow-x-scroll">
+          {value}
+        </div>
+      </Link>
+
+    }
   },
   {
     Header: 'Facilitador',
     accessor: 'speaker',
-    Cell: ({ value }) => {
+    Cell: ({ cell, value }) => {
       return (
-        <div className="flex items-center">
-          <div className="flex w-8">
+        <Link
+          href={cell.row.original.id ? `actividadesFormativas/${cell.row.original.id}` : ''}
+          className="flex items-center"
+        >
+          <div className="flex-shrink-0 w-8 h-8">
             <Image
-              className="w-8 h-8 rounded-full hover:z-50"
-              src={defailProfilePic}
+              className="w-full h-full rounded-full"
+              src={value[0].image ? value[0].image : defailProfilePic}
               alt="Foto de perfil"
             />
           </div>
-          <div className="ml-4">
-            <div className="text-sm text-gray-900 dark:text-slate-100">
+          <div className="ml-4 text-start">
+            <span className="text-sm font-medium text-gray-900 dark:text-slate-100">
               {value[0].first_names} {value[0].last_names}
+            </span>
+            <div className="w-32 overflow-x-scroll text-xs font-medium text-gray-400 dark:text-slate-400">
+              {value[0].job_company}
             </div>
           </div>
-        </div>
+        </Link>
       );
     },
   },
@@ -55,20 +73,20 @@ const WorkshopColumns: Column<WorkshopWithAllData>[] = [
         day: 'numeric',
         year: 'numeric',
       });
-      return <span>{date}</span>;
+      return <time suppressHydrationWarning>{date}</time >;
     },
   },
   {
     id: 'startHour',
     Header: 'Inicio',
-    accessor: 'end_dates',
+    accessor: 'start_dates',
     Cell: ({ value }) => {
-      const date = new Date(value[0]).toLocaleString('es-ES', {
+      const date = new Date(value[0]).toLocaleTimeString('es-VE', {
         hour: 'numeric',
         minute: 'numeric',
         hourCycle: 'h12',
       });
-      return <span>{date}</span>;
+      return <div suppressHydrationWarning>{date.toUpperCase()}</div>;
     },
   },
   {
@@ -120,7 +138,7 @@ const WorkshopColumns: Column<WorkshopWithAllData>[] = [
     accessor: 'asociated_skill',
     Cell: ({ value }) => {
       const skill = parseSkillFromDatabase(value);
-      return <span>{skill}</span>;
+      return <span className='text-xs'>{skill.toUpperCase()}</span>;
     },
   },
   {
@@ -138,6 +156,10 @@ const WorkshopColumns: Column<WorkshopWithAllData>[] = [
   {
     Header: 'Año',
     accessor: 'year',
+    Cell: ({ value }) => {
+      if (value.length === 5) return <span className='text-sm'>TODOS</span>;
+      else return <span className='text-sm'>{value.join(', ')}</span>
+    },
   },
   {
     Header: 'Inscritos',
