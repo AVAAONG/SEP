@@ -12,7 +12,7 @@ import {
   InstagramIcon,
   LinkedinIcon,
   TwitterIcon,
-} from '../../../../../public/svgs/SocialNetworks';
+} from '../../../../public/svgs/SocialNetworks';
 
 /**
  * @see https://stackoverflow.com/questions/67784672/react-next-js-doesnt-seem-to-work-with-apexcharts for more info
