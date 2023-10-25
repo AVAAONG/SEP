@@ -12,7 +12,7 @@ const Navbar = () => {
   const [isOpen, setSidebar] = useAtom(sidebarAtom);
   const { data: session } = useSession();
   const setUpSidebar = () => (isOpen ? setSidebar(false) : setSidebar(true));
-  useSWR(`/api/setAuthCookie?cookieValue='admin'`, fetcher);
+  useSWR(`/api/setAuthCookie?cookieValue=admin`, fetcher);
 
   return (
     <nav className="block h-10 w-full left-0 right-0 top-0 mb-4">
