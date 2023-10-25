@@ -1,4 +1,4 @@
-import MonthTab from '@/components/MonthsTab';
+import DateSelector from '@/components/DateSelector';
 import StatsCard from '@/components/StatsCard';
 import Table from '@/components/table/Table';
 import WorkshopColumns from '@/components/table/columns/workshopColumns';
@@ -6,28 +6,6 @@ import { getWorkshops } from '@/lib/db/utils/Workshops';
 import { createArrayFromObject } from '@/lib/utils';
 import { Workshop } from '@prisma/client';
 import dynamic from 'next/dynamic';
-
-const months = [
-  { name: 'Enero', href: 'Enero', current: false },
-  { name: 'Febrero', href: 'Febrero', current: false },
-  { name: 'Marzo', href: 'Marzo', current: false },
-  { name: 'Abril', href: 'Abril', current: false },
-  { name: 'Mayo', href: 'Mayo', current: false },
-  { name: 'Junio', href: 'Junio', current: true },
-  { name: 'Julio', href: 'Julio', current: false },
-  { name: 'Agosto', href: 'Agosto', current: false },
-  { name: 'Septiembre', href: 'Septiembre', current: false },
-  { name: 'Octubre', href: 'Octubre', current: false },
-  { name: 'Noviembre', href: 'Noviembre', current: false },
-  { name: 'Diciembre', href: 'Diciembre', current: false },
-];
-
-const years = [
-  { name: '2020', href: 'Enero', current: false },
-  { name: '2021', href: 'Febrero', current: false },
-  { name: '2022', href: 'Marzo', current: true },
-  { name: '2023', href: 'Marzo', current: false },
-];
 
 const PieChartComponent = dynamic(() => import('@/components/charts/Pie'), { ssr: false });
 const MixedAreaChartComponent = dynamic(() => import('@/components/charts/MixedAreaChart'), {
@@ -124,7 +102,7 @@ const page = async () => {
   return (
     <div className="w-full flex flex-col gap-6  items-center ">
       <div className="flex flex-col gap-2 items-center">
-        <MonthTab month={months} year={years} />
+        <DateSelector />
       </div>
 
       <div className="w-full">
