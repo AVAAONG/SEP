@@ -1,9 +1,6 @@
 import Table from '@/components/table/Table';
 import workshopSpeakersColumns from '@/components/table/columns/workshopSpeakersColumns';
-import {
-  getWorkshopSpeakersCountByGender,
-  getWorkshopSpeakersWithParams,
-} from '@/lib/db/utils/speaker';
+import { getChatSpeakersCountByGender, getChatSpeakersWithParams } from '@/lib/db/utils/speaker';
 import { Prisma } from '@prisma/client';
 import dynamic from 'next/dynamic';
 import { userIcon } from 'public/svgs/svgs';
@@ -62,8 +59,8 @@ const toSelect: Prisma.SpeakerSelect = {
 };
 
 const page = async () => {
-  const workshopSpeakers = await getWorkshopSpeakersWithParams(toSelect);
-  const workshopSpeakersWithSocialNetworks = workshopSpeakers?.map((workshopSpeaker) => {
+  const chatSpeakers = await getChatSpeakersWithParams(toSelect);
+  const chattSpeakersWithSocialNetworks = chatSpeakers?.map((workshopSpeaker) => {
     const { twitter_user, facebook_user, instagram_user, linkedin_user } = workshopSpeaker;
     const socialNetworks = [
       {
@@ -89,8 +86,7 @@ const page = async () => {
     ];
     return { ...workshopSpeaker, socialNetworks };
   });
-  const [workshopSpeakersWomanCount, workshopSpeakerMenCount] =
-    await getWorkshopSpeakersCountByGender();
+  const [chatSpeakerWomanCount, chatSpeakerManCount] = await getChatSpeakersCountByGender();
   return (
     <div className="flex flex-col items-center w-full gap-6 min-h-screen">
       <div className="flex flex-1 flex-col md:flex-row gap-4 w-full">
@@ -104,7 +100,7 @@ const page = async () => {
             </p>
           </dt>
           <dd className="ml-16 flex items-baseline ">
-            <p className="text-2xl font-semibold text-gray-900">{workshopSpeakers?.length}</p>
+            <p className="text-2xl font-semibold text-gray-900">{chatSpeakers?.length}</p>
           </dd>
         </div>
 
@@ -114,8 +110,8 @@ const page = async () => {
           </h2>
           <PieChartComponent
             data={[
-              { label: 'Mujeres', value: workshopSpeakersWomanCount },
-              { label: 'Hombres', value: workshopSpeakerMenCount },
+              { label: 'Mujeres', value: chatSpeakerWomanCount },
+              { label: 'Hombres', value: chatSpeakerManCount },
             ]}
           />
         </div>
@@ -123,7 +119,7 @@ const page = async () => {
       <div className="w-full h-fit">
         <Table
           tableColumns={workshopSpeakersColumns}
-          tableData={workshopSpeakersWithSocialNetworks || []}
+          tableData={chattSpeakersWithSocialNetworks || []}
           tableHeadersForSearch={tableHeaders}
         />
       </div>

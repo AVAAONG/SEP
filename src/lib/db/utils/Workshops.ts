@@ -99,7 +99,19 @@ export const getWorkshop = async (id: shortUUID.SUUID) => {
     where: { id },
     include: {
       speaker: true,
-      scholar_attendance: true,
+      scholar_attendance: {
+        include: {
+          scholar: {
+            include: {
+              Scholar: {
+                include: {
+                  collage_information: true,
+                }
+              },
+            }
+          },
+        },
+      },
       temp_data: true,
     },
   });
