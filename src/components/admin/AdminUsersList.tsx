@@ -15,7 +15,7 @@ const AdminUsersList: React.FC<AdminUsersListProps> = ({ adminUsers, editUser, d
     return (
       <ul className="w-full flex flex-col gap-3 max-h-96 overflow-y-auto transform transition duration-300 ease-in-out">
         {Array.from({ length: 3 }).map((_, index) => (
-          <li className="p-4 focus:outline-none focus:outline-offset-0 rounded-md w-full bg-gray-100 shadow-sm dark:bg-slate-900  animate-pulse">
+          <li className="p-4 focus:outline-none focus:outline-offset-0 rounded-md w-full bg-gray-100 shadow-sm dark:bg-slate-900  animate-pulse" key={index}>
             <div className="flex items-center space-x-4">
               <div className="flex-shrink-0">
                 <div className="p-6 rounded-full bg-gray-200"></div>
@@ -37,7 +37,7 @@ const AdminUsersList: React.FC<AdminUsersListProps> = ({ adminUsers, editUser, d
   return (
     <ul className="w-full flex flex-col gap-3 max-h-96 overflow-y-auto ">
       {adminUsers.map(
-        ({ allowedEmail, chapter_id, id, responsibility, role, profileImage, profileName }) => (
+        ({ allowedEmail, id, responsibility, role, profileImage, profileName }) => (
           <li
             className="p-2 md:p-4 focus:outline-none focus:outline-offset-0  rounded-md w-full bg-white dark:bg-slate-900"
             key={allowedEmail}

@@ -25,16 +25,16 @@ export const createAdminProfileUser = async (data: AdminProfile) => {
       allowedEmail: data.allowedEmail,
       gender: data.gender,
       allowedActions: {
-        create: {
+        connect: {
           name: "SUPER_ADMIN"
         }
       },
       responsibility: data.responsibility,
       chapter: {
-        create: {
-          name: "CARACAS"
+        connect: {
+          id: 'J4ZlF-eg2fTL9W7hnxRe3'
         }
-      }
+      },
     },
   });
   return adminProfile;
