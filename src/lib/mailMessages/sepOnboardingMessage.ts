@@ -314,6 +314,7 @@ const createSEPOnboardingMessage = (gender: Gender, name: string) => {
     
     
   <div class="u-row-container" style="padding: 0px;background-color: transparent">
+  <a href="https://sepdocs.vercel.app/guides/iniciarsesion/" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
     <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
       <div style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
         <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr style="background-color: transparent;"><![endif]-->
@@ -369,6 +370,7 @@ const createSEPOnboardingMessage = (gender: Gender, name: string) => {
   
     <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
     </div>
+    </a>
   </div>
   <!--[if (mso)|(IE)]></td><![endif]-->
   <!--[if (mso)|(IE)]><td align="center" width="189" class="v-col-border" style="background-color: #f4f4f4;width: 189px;padding: 0px;border-top: 0px solid transparent;border-left: 1px solid #CCC;border-right: 1px solid #CCC;border-bottom: 1px solid #CCC;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
