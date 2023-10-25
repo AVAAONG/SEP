@@ -14,10 +14,10 @@ const page = () => {
           <div className="sm:ml-6">
             <div className="sm:border-l sm:border-gray-200 sm:pl-6">
               <h1 className="text-4xl font-extrabold text-gray-900 dark:text-gray-200 tracking-tight sm:text-5xl">
-                Accion denegada. <span className="font-normal">🤨</span>
+                Acción denegada. <span className="font-normal">🤨</span>
               </h1>
               <p className="mt-1 text-base text-gray-500">
-                No tienes los permisos necesarios para ingresar a esta pagina.
+                No tienes los permisos necesarios para ingresar a esta página.
               </p>
             </div>
             <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">

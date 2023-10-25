@@ -5,7 +5,7 @@ import ActivityListIcon from './scholar/dashboard/ActivityListIcon';
 const NextEventsList = ({ activities }: { activities: Workshop[] }) => {
   return (
     <>
-      <h3 className="flex items-center mb-2 text-lg font-medium ">Proximos Eventos</h3>
+      <h3 className="flex items-center mb-2 text-lg font-medium ">Próximos Eventos</h3>
       <div className="border-t border-gray-200 dark:border-gray-600">
         <div className="">
           <ul role="list" className="divide-y divide-gray-200 dark:divide-gray-700">

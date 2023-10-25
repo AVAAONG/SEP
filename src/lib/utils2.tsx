@@ -41,3 +41,4 @@ export const parseWorkshopStatusFromDatabase = (status: ActivityStatus) => {
       return 'Suspendido';
   }
 };
+

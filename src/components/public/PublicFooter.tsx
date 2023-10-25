@@ -14,14 +14,11 @@ const PublicFooter = () => {
         <div className="w-full flex box-border flex-wrap justify-between items-center lg:items-start gap-8">
           <div className="max-w-sm m-auto flex flex-wrap justify-center lg:justify-start gap-4">
             <p className="text-center lg:text-start">
-              Apoyamos la educación integral y formación de jóvenes venezolanos con valores sociales
-              y morales elevados para contribuir al desarrollo armónico del país en un ambiente de
-              convivencia y amistad internacional en alianza con personas y organizaciones
-              comprometidas con Venezuela
+              Apoyamos la educación integral y formación de jóvenes venezolanos con valores sociales y morales elevados para contribuir al desarrollo armónico del país en un ambiente de convivencia y amistad internacional en alianza con personas y organizaciones comprometidas con Venezuela
             </p>
           </div>
           <div className="flex flex-col w-full lg:w-min justify-center lg:justify-start text-center lg:text-start gap-4">
-            <span>Siguenos en nuestras redes:</span>
+            <span>Síguenos en nuestras redes:</span>
             <div className="flex w-full justify-center gap-6 lg:justify-start text-center lg:text-start">
               <a href="https://twitter.com/avaa_org" target="_blank" rel="noreferrer">
                 <svg
@@ -182,7 +179,7 @@ const PublicFooter = () => {
         <div className="flex flex-wrap flex-col box-border relative justify-start items-center m-auto w-auto  gap-4">
           <div className="flex flex-wrap gap-2 md:gap-4">
             <a href="https://avaa.org/terminos-y-condiciones/" className="pointer">
-              Terminos y condiciones
+              Términos y condiciones
             </a>
             <a href="https://avaa.org/faq/" className="pointer">
               Preguntas frecuentes
