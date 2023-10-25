@@ -41,14 +41,10 @@ export const SIDEBAR_DB_BUTTONS = [
   },
   {
     icon: userIcon,
-    buttonName: 'Facilitadores de act. formativas',
-    itemList: [{ name: 'Facilitadores', link: '/admin/facilitadores/actividadesFormativas' }],
+    buttonName: 'Facilitadores',
+    itemList: [{ name: 'Actividades formativas', link: '/admin/facilitadores/actividadesFormativas' }, { name: 'Chat clubs', link: '/admin/facilitadores/chats' }],
   },
-  {
-    icon: userIcon,
-    buttonName: 'Facilitadores de chats',
-    itemList: [{ name: 'Facilitadores', link: '/admin/facilitadores/chats' }],
-  },
+
 ];
 
 export const SIDEBAR_ADMIN_ACTIONS = [
