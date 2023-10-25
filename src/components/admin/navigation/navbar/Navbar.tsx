@@ -4,12 +4,15 @@ import ProfileDropdown from '@/components/scholar/ProfileDropdown';
 import { sidebarAtom } from '@/lib/state/mainState';
 import { useAtom } from 'jotai';
 import { useSession } from 'next-auth/react';
+import useSWR from 'swr';
 import { MenuIcon } from '../../../../../public/svgs/svgs';
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Navbar = () => {
   const [isOpen, setSidebar] = useAtom(sidebarAtom);
   const { data: session } = useSession();
   const setUpSidebar = () => (isOpen ? setSidebar(false) : setSidebar(true));
+  useSWR(`/api/setAuthCookie?cookieValue='admin'`, fetcher);
 
   return (
     <nav className="block h-10 w-full left-0 right-0 top-0 mb-4">
