@@ -1,4 +1,4 @@
-import { chatIcon, userIcon, workshopIcon } from '../../../../public/svgs/svgs';
+import { userIcon, workshopIcon } from '../../../../public/svgs/svgs';
 
 export const SIDEBAR_ACTIVITIES_ACTIONS = [
   {
@@ -10,15 +10,15 @@ export const SIDEBAR_ACTIVITIES_ACTIONS = [
       { name: 'Registro', link: '/admin/actividadesFormativas/lista' },
     ],
   },
-  {
-    icon: chatIcon,
-    buttonName: 'Chats clubs',
-    itemList: [
-      { name: 'Crear', link: '/admin/chats/crear' },
-      // { name: "Estadísticas de chats", link: "/chats/estadisticas" },
-      { name: 'Registro', link: '/chats/lista' },
-    ],
-  },
+  // {
+  //   icon: chatIcon,
+  //   buttonName: 'Chats clubs',
+  //   itemList: [
+  //     { name: 'Crear', link: '/admin/chats/crear' },
+  //     // { name: "Estadísticas de chats", link: "/chats/estadisticas" },
+  //     { name: 'Registro', link: '/chats/lista' },
+  //   ],
+  // },
   // {
   //   icon: volunterIcon,
   //   buttonName: 'Voluntariado',
@@ -55,6 +55,6 @@ export const SIDEBAR_ADMIN_ACTIONS = [
   {
     icon: userIcon,
     buttonName: 'Acciones de administrador',
-    itemList: [{ name: 'control de administradores', link: '/admin/config/adminUsers' }],
+    itemList: [{ name: 'Control de administradores', link: '/admin/config/adminUsers' }],
   },
 ];
