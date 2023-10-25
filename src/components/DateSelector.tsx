@@ -27,7 +27,11 @@ const QUARTERS = [
 ];
 
 const YEARS = getYearObjects();
-
+/**
+ * A React component that provides a user interface for selecting a date range.
+ * The component updates the URL query parameters accordingly.
+ * @abstract The component conditionally renders the quarter and month tabs based on whether a year and quarter have been selected.
+ */
 const DateSelector = () => {
   const [yearTabs, setYearTabs] = useState(YEARS);
   const [quarterTabs, setQuarterTabs] = useState(QUARTERS);
