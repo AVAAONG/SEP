@@ -24,6 +24,5 @@ const sendEmailWithDevAccount = async (name: string, html: string, to: string, g
   if (failed.length) {
     throw new Error(`Email (${failed.join(', ')}) could not be sent`);
   }
-  console.log(result);
 };
 export default sendEmailWithDevAccount;
