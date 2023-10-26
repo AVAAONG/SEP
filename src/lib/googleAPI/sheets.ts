@@ -155,16 +155,28 @@ export const getSpreadsheetValues = async (spreadsheetId: string, range: string)
 
 export const getSpreadsheetValuesByUrl = async (spreadsheetUrl: string, range: string) => {
   const spreadsheetId = spreadsheetUrl.split('/')[5];
+  const sheetName = range.includes('!')
+    ? range.split('!')[0].replace(/'/g, '')
+    : (await getFirstSheetName(spreadsheetId));
+  const sheetRange = range.includes('!') ? range.split('!')[1] : range;
   try {
     const response = await Sheets.spreadsheets.values.get({
       spreadsheetId,
-      range,
+      range: `${sheetName}!${sheetRange}`,
     });
     return response.data.values;
   } catch (err) {
     console.error(err);
   }
 };
+
+async function getFirstSheetName(spreadsheetId: string): Promise<string> {
+  const spreadsheet = await Sheets.spreadsheets.get({
+    spreadsheetId,
+  });
+  const sheet = spreadsheet.data.sheets?.[0];
+  return sheet?.properties?.title || '';
+}
 
 //create spreadsheetId
 export const createSpreadsheet = async (title: string) => {

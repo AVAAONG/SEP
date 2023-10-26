@@ -12,4 +12,3 @@ export async function GET(req: NextApiRequest) {
   setTokens(token.accessToken as string, token.refreshToken as string);
   return NextResponse.json({ message: 'ok' });
 }
-

@@ -142,8 +142,10 @@ export const substractMonths = (montsTosubstract: number) => {
  * @returns the date object of the start and end hour in ISO string format
  */
 export const getFormatedDate = (date: string, startingHour: string, endHour?: string) => {
+  let end;
   const start = new Date(date + ',' + startingHour);
-  const end = new Date(date + ',' + endHour);
+  if (endHour === undefined) end = addHours(start, 2);
+  else end = new Date(date + ',' + endHour);
   return [start.toISOString(), end.toISOString()];
 };
 
