@@ -75,14 +75,14 @@ input:-webkit-autofill:focus {
 
 @layer components {
   input {
-    @apply bg-white dark:bg-secondary-dark ring-0 focus:outline-primary-light sm:text-sm placeholder:text-gray-400 shadow-sm  text-gray-900 focus:outline-none focus:outline-offset-0 p-2 rounded-lg w-full dark:placeholder-slate-500 dark:text-gray-300 dark:focus:outline-primary-light;
+    @apply bg-white outline-none dark:bg-secondary-dark ring-1 ring-light dark:ring-black sm:text-sm placeholder:text-gray-400 focus:outline-primary-light text-gray-900  p-2 rounded-lg w-full dark:placeholder-slate-500 dark:text-gray-300;
   }
 
   textarea {
-    @apply bg-white dark:bg-secondary-dark ring-0 min-h-[4rem] focus:outline-primary-light sm:text-sm placeholder:text-gray-400 shadow-sm  border-0  text-gray-900 focus:outline-none focus:outline-offset-0 p-2 rounded-lg w-full dark:placeholder-slate-500 dark:text-gray-300 outline-primary-light  dark:focus:outline-primary-light;
+    @apply bg-white dark:bg-secondary-dark ring-1 ring-light dark:ring-black  min-h-[4rem] focus:outline-primary-light sm:text-sm placeholder:text-gray-400  border-0  text-gray-900 focus:outline-none focus:outline-offset-0 p-2 rounded-lg w-full dark:placeholder-slate-500 dark:text-gray-300 outline-primary-light  dark:focus:outline-primary-light;
   }
   select {
-    @apply bg-white dark:bg-secondary-dark ring-0 focus:outline-primary-light sm:text-sm placeholder:text-gray-400 shadow-sm  border-0  text-gray-900 focus:outline-none focus:outline-offset-0 p-2 rounded-lg w-full dark:placeholder-slate-500 dark:text-gray-300 outline-primary-light  dark:focus:outline-primary-light;
+    @apply bg-white dark:bg-secondary-dark ring-0 focus:outline-primary-light sm:text-sm placeholder:text-gray-400  border-0  text-gray-900 focus:outline-none focus:outline-offset-0 p-2 rounded-lg w-full dark:placeholder-slate-500 dark:text-gray-300 outline-primary-light  dark:focus:outline-primary-light;
   }
 }
 

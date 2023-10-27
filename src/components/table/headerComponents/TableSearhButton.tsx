@@ -53,18 +53,18 @@ const TableSearhButton = ({
           type="search"
           value={selectValue()}
           onChange={(e: ChangeEvent<HTMLInputElement>) => selectFilter(selectedFilter, e)}
-          className="block w-full pl-10 p-2.5 rounded-r-none bg-light dark:bg-black"
+          className="block w-full pl-10 rounded-r-none"
           placeholder="Buscar..."
         />
       </div>
       <form className="flex">
         <button
           onClick={() => toggleDropdown(isDropdownOpen ? false : true)}
-          className="flex-shrink-0 inline-flex  z-10 px-4 items-center text-sm font-medium text-center border-l bg-white rounded-r-lg   hover:bg-light dark:bg-slate-700 dark:hover:bg-slate-600 dark:border-green-600  "
+          className="flex-shrink-0 inline-flex  -ml-4 -mt-[1px] z-10 p-2 items-center text-sm font-medium text-center border border-gray-200 bg-white rounded-r-lg   hover:bg-light dark:bg-black dark:hover:bg-dark"
           type="button"
         >
-          <div className="flex flex-col text-sm">
-            Buscar por
+          <div className="flex gap-2 items-center text-sm">
+            Buscar por:
             <span className="hidden text-xs sm:inline text-green-600">
               {optionsForFilter.find(({ option }) => option === selectedFilter)?.label}
             </span>
