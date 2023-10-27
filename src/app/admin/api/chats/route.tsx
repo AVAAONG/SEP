@@ -2,11 +2,11 @@ import { prisma } from '@/lib/db/utils/prisma';
 import { setTokens } from '@/lib/googleAPI/auth';
 import { getFormatedDate } from '@/lib/googleAPI/calendar/utils';
 import {
-    appendSpreadsheetValuesByRange,
-    createSpreadsheetAndReturnUrl,
-    getSpreadsheetValues,
-    getSpreadsheetValuesByUrl,
-    insertSpreadsheetValue,
+  appendSpreadsheetValuesByRange,
+  createSpreadsheetAndReturnUrl,
+  getSpreadsheetValues,
+  getSpreadsheetValuesByUrl,
+  insertSpreadsheetValue,
 } from '@/lib/googleAPI/sheets';
 import { Level, Modality, Scholar, ScholarAttendance, WorkshopYear } from '@prisma/client';
 import moment from 'moment';
@@ -99,7 +99,7 @@ const createChatsInBulkFromSpreadsheet = async () => {
       console.log('\x1b[31m%s\x1b[0m', '❌❌❌ No se pudo crear el chat ', title);
       continue;
     }
-    if (activity_status === 'SUSPENDED') continue;
+    if (activity_status === 'SUSPENDED' || spreadsheet === 'NO_LINK') continue;
     //asistencia de la lista principal
     console.log('\x1b[34m%s\x1b[0m', 'Obteniendo datos de la lista principal');
     const attendanceRangeMainList = `A12:D${15 + 11}`;
