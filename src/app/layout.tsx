@@ -8,7 +8,7 @@
 import favicon from '@/../public/logo-proexcelencia-cap.png';
 import '@/app/globals.css';
 import { ThemeProviderC } from '@/components/commons/ThemeProvider';
-import NextAuthProvider from '../components/commons/providers';
+import Providers from '../components/commons/Providers';
 
 /**
  * The base metadata of the application.
@@ -34,9 +34,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="es" className="h-full font-sans">
       <body className="h-full">
-        <NextAuthProvider>
+        <Providers>
           <ThemeProviderC>{children}</ThemeProviderC>
-        </NextAuthProvider>
+        </Providers>
       </body>
     </html>
   );

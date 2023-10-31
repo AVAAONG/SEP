@@ -1,5 +1,6 @@
 import { PLATFORMS } from '@/lib/constants';
 import { Workshop as FormTypeWorkshop } from '@/types/Workshop';
+import { Input, Select, SelectItem } from '@nextui-org/react';
 import { UseFormRegister } from 'react-hook-form';
 
 interface PlatformInputProps {
@@ -18,23 +19,20 @@ const PlatformInput = ({ modality, registerFunction }: PlatformInputProps) => {
   } else if (modality === 'ONLINE' || modality === 'HYBRID') {
     return (
       <>
-        <label className="block mb-2 text-xs font-semibold  uppercase">plataforma</label>
-        <select {...registerFunction('platform')} id={'Platafomra'}>
-          {PLATFORMS.map((option) => {
-            return (
-              <option className="capitalize" key={option}>
-                {option}
-              </option>
-            );
-          })}
-        </select>
+        <Select label="Plataforma" {...registerFunction('pensum')} labelPlacement="outside">
+          {PLATFORMS.map((animal) => (
+            <SelectItem key={animal} value={animal}>
+              {animal}
+            </SelectItem>
+          ))}
+        </Select>
       </>
     );
   } else if (modality === 'IN_PERSON') {
     return (
       <>
         <label className="block mb-2 text-xs font-semibold  uppercase">lugar</label>
-        <input {...registerFunction('platform')} id={'Lugar'}></input>
+        <Input type="text" label="Título" {...registerFunction('platform')} id={'Lugar'} />
       </>
     );
   } else {

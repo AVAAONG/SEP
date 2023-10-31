@@ -1,3 +1,4 @@
+import { Input } from '@nextui-org/input';
 import { nanoid } from 'nanoid';
 import React, { useState } from 'react';
 import { UseFormRegister } from 'react-hook-form';
@@ -39,18 +40,13 @@ const DateInput: React.FC<Props> = ({ register }) => {
               <label className="block mb-2 text-xs m-l-1 font-semibold uppercase ">
                 Fecha {index + 1}
               </label>
-              <input
-                type="date"
-                {...register(`date.${id}` as const)}
-                id={'Fecha'}
-                defaultValue={date}
-              />
+              <Input type="date" {...register(`date.${id}` as const)} />
             </div>
             <div className="col-span-2 md:col-span-1">
               <label className="block mb-2 text-xs m-l-1 font-semibold uppercase ">
                 Hora de inicio {index + 1}
               </label>
-              <input
+              <Input
                 type="time"
                 {...register(`startHour.${id}` as const)}
                 defaultValue={startHour}
@@ -61,7 +57,7 @@ const DateInput: React.FC<Props> = ({ register }) => {
               <label className="block mb-2 text-xs m-l-1 font-semibold uppercase ">
                 Hora de cierre {index + 1}
               </label>
-              <input
+              <Input
                 type="time"
                 {...register(`endHour.${id}` as const)}
                 defaultValue={endHour}

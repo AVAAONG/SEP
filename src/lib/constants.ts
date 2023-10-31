@@ -49,18 +49,17 @@ export const CALENDAR_IDS = [
 // ======================= CONSTANTS FOR WORKSHOP =======================
 
 export const PROGRAM_COMPONENTS = [
-  { option: 'liderazgo', value: 'LEADERSHIP' },
-  { option: 'ejercicio ciudadano', value: 'CITIZEN_EXERCISE' },
-  { option: 'gerencia de sí mismo', value: 'SELF_MANAGEMENT' },
-  { option: 'tic', value: 'ICT' },
-  { option: 'emprendimiento', value: 'ENTREPRENEURSHIP' },
+  { label: 'liderazgo', value: 'LEADERSHIP' },
+  { label: 'ejercicio ciudadano', value: 'CITIZEN_EXERCISE' },
+  { label: 'gerencia de sí mismo', value: 'SELF_MANAGEMENT' },
+  { label: 'tic', value: 'ICT' },
+  { label: 'emprendimiento', value: 'ENTREPRENEURSHIP' },
 ];
 
 export const MODALITY = [
-  { option: '', value: 'NONE' },
-  { option: 'presencial', value: 'IN_PERSON' },
-  { option: 'virtual', value: 'ONLINE' },
-  { option: 'hibrido', value: 'HYBRID' },
+  { label: 'presencial', value: 'IN_PERSON' },
+  { label: 'virtual', value: 'ONLINE' },
+  { label: 'hibrido', value: 'HYBRID' },
 ];
 
 export const PLATFORMS = ['zoom', 'google meet', 'otra', 'padlet'];

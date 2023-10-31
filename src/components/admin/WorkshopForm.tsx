@@ -1,10 +1,9 @@
 import { MODALITY, PROGRAM_COMPONENTS, WORKSHOP_YEAR } from '@/lib/constants';
 import { Platform } from '@/types/General';
 import { Workshop as FormTypeWorkshop } from '@/types/Workshop';
-import { WorkshopSpeaker } from '@prisma/client';
+import { Checkbox, CheckboxGroup, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
 import { BaseSyntheticEvent } from 'react';
 import { useForm } from 'react-hook-form';
-import useSWR, { Fetcher } from 'swr';
 import DateInput from '../commons/DateInput';
 import PlatformInput from '../commons/PlatformInput';
 
@@ -20,17 +19,7 @@ const normalizeStringInputs = (data: string) => {
 
 const WorkshopForm = () => {
   const { register, handleSubmit, reset, watch } = useForm<FormTypeWorkshop>();
-
   const modality = watch('modality');
-  // console.log('la modalidad es: ', modality);
-
-  const fetcher: Fetcher<WorkshopSpeaker[] | {}[], string> = (...args) =>
-    fetch([...args].join('')).then((res) => res.json());
-
-  const { data, isLoading } = useSWR('/admin/api/speakers/workshops', fetcher, {
-    fallbackData: [{}, {}],
-  });
-
   const scheduleWorkshop = async (
     formWorkshopData: FormTypeWorkshop,
     event: BaseSyntheticEvent<object, any, any> | undefined
@@ -55,106 +44,80 @@ const WorkshopForm = () => {
   return (
     <form
       onSubmit={handleSubmit(async (data, event) => await scheduleWorkshop(data, event!))}
-      className="grid gap-6 grid-cols-2 md:grid-rows-2 caret-green-500 text-slate-800 dark:text-slate-400 w-full"
+      className="grid gap-6 grid-cols-2 md:grid-rows-2 w-full"
     >
-      <div className="col-span-2">
-        <label className="block mb-2 text-xs m-l-1 font-semibold  uppercase ">
-          titulo de la actividad formativa
-        </label>
-        <input
-          {...register('title')}
-          type={'text'}
-          id={'Titulo de la actividad formativa'}
-          required={true}
-        />
-      </div>
+      <Input
+        type="text"
+        label="Título"
+        radius="sm"
+        classNames={{ base: 'col-span-2' }}
+        labelPlacement="outside"
+        {...register('title')}
+        aria-required="true"
+      />
+
       <DateInput register={register} />
 
+      <div className="col-span-2 md:col-span-1 flex w-full flex-wrap md:flex-nowrap gap-4">
+        <Select label="Competencia asociada" {...register('pensum')} labelPlacement="outside">
+          {PROGRAM_COMPONENTS.map((animal) => (
+            <SelectItem key={animal.value} value={animal.value}>
+              {animal.label}
+            </SelectItem>
+          ))}
+        </Select>
+      </div>
+
       <div className="col-span-2 md:col-span-1">
-        <label className="col-span-2 md:col-span-1 block mb-2 text-xs font-semibold   uppercase">
-          Competencia asociada
-        </label>
-        <select
-          {...register('pensum')}
-          id="Competencia asociada"
-          required={true}
-          className="capitalize"
-        >
-          {PROGRAM_COMPONENTS.map((option, index) => {
-            return (
-              <option value={option.value} key={index}>
-                {option.option}
-              </option>
-            );
-          })}
-        </select>
+        <Select label="Facilitador" {...register('pensum')} labelPlacement="outside">
+          {PROGRAM_COMPONENTS.map((animal) => (
+            <SelectItem key={animal.value} value={animal.value}>
+              {animal.label}
+            </SelectItem>
+          ))}
+        </Select>
       </div>
       <div className="col-span-2 md:col-span-1">
-        <label className="block mb-2 text-xs font-semibold   uppercase">facilitador</label>
-        <select {...register('speaker')} id="Facilitador" required={true}>
-          {isLoading || data.length < 1 ? (
-            <option>Cargando facilitadores ...</option>
-          ) : (
-            data.map((value) => {
-              const { id, first_names, last_names, email } = value as WorkshopSpeaker;
-              const fullName = `${first_names} ${last_names}`;
-              return (
-                <option key={id} value={`${id}+/+${fullName}+/+${email}`}>
-                  {fullName}
-                </option>
-              );
-            })
-          )}
-        </select>
+        <Input
+          {...register('spots')}
+          type="number"
+          required
+          min={0}
+          max={300}
+          label="cupos disponibles"
+          labelPlacement="outside"
+        />
       </div>
       <div className="col-span-2 md:col-span-1">
-        <label className="block mb-2 text-xs font-semibold   uppercase">cupos disponibles</label>
-        <input {...register('spots')} type={'number'} id="first_name" required min={0} max={300} />
-      </div>
-      <div className="col-span-2 md:col-span-1">
-        <label className="block mb-2 text-xs font-semibold uppercase">modalidad</label>
-        <select {...register('modality')} id="Modalidad" required={true} className="capitalize">
-          {MODALITY.map((option, index) => {
-            return (
-              <option value={option?.value} key={index}>
-                {option?.option}
-              </option>
-            );
-          })}
-        </select>
+        <Select label="Modalidad" {...register('pensum')} labelPlacement="outside">
+          {MODALITY.map((animal) => (
+            <SelectItem key={animal.value} value={animal.value}>
+              {animal.label}
+            </SelectItem>
+          ))}
+        </Select>
       </div>
 
       <div className="col-span-2 md:col-span-1">
         <PlatformInput modality={modality} registerFunction={register} />
       </div>
-      <div className="col-span-2 h-fit flex flex-col">
-        <p className="block mb-2 text-xs font-semibold   uppercase">
-          año de la actividad formativa
-        </p>
-        <div className="flex">
-          {WORKSHOP_YEAR.map((input) => {
-            return (
-              <div className="flex flex-row items-center mr-4" key={input}>
-                <input
-                  {...register('workshopYear')}
-                  type="checkbox"
-                  value={input}
-                  id="year"
-                  className="w-4 h-4 bg-emerald-900  accent-green-500 text-emerald-600 uppercase border-gray-300 focus:ring-0 "
-                />
-                <label htmlFor="year" className="ml-2 font-semibold text-xs">
-                  {input}
-                </label>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      <CheckboxGroup
+        color="success"
+        label="Año"
+        orientation="horizontal"
+        classNames={{ base: 'col-span-2' }}
+      >
+        {WORKSHOP_YEAR.map((year) => (
+          <Checkbox value={year}>{year}</Checkbox>
+        ))}
+      </CheckboxGroup>
       <div className="col-span-2 h-fit">
-        <label className="block mb-2 text-xs m-l-1 font-semibold max-h-10  uppercase">
-          descripción
-        </label>
-        <textarea {...register('description')} />
+        <Textarea
+          {...register('description')}
+          label="Description"
+          labelPlacement="outside"
+          placeholder="Enter your description"
+        />
       </div>
       <div className="col-span-2 h-fit flex  gap-4">
         <button

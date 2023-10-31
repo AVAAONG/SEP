@@ -2,7 +2,7 @@ import '@/app/globals.css';
 //@ts-ignore
 import favicon from '@/../public/logo-proexcelencia-cap.png';
 import Navbar from '@/components/admin/navigation/navbar/Navbar';
-import NextAuthProvider from '@/components/commons/providers';
+import Providers from '@/components/commons/Providers';
 
 import Sidebar from '@/components/admin/navigation/sidebar/Sidebar';
 export const metadata = {
@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <Sidebar />
       <section className=" min-w-0 flex flex-col z-10 md:rounded-lg bg-light dark:bg-dark p-2 transition-all w-full">
         <Navbar />
-        <NextAuthProvider>{children}</NextAuthProvider>
+        <Providers>{children}</Providers>
       </section>
     </main>
   );

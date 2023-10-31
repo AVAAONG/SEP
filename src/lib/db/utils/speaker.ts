@@ -2,7 +2,7 @@
  * @file This file contains all the necesary logic to interact with the database for the users collection.
  * @author Kevin Bravo (kevinbravo.me)
  */
-import { Prisma, Speaker, Workshop } from '@prisma/client';
+import { Speaker, Workshop } from '@prisma/client';
 import { prisma } from './prisma';
 /**
  * Get speakers with parameters
