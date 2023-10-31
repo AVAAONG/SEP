@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverActions: true,
-  },
   images: {
     domains: ['avaa.org', 'media.licdn.com', 'i.imgur.com', 'lh3.googleusercontent.com'],
   },
