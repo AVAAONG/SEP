@@ -17,16 +17,6 @@ import useSWR, { Fetcher } from 'swr';
 import DateInput from '../commons/DateInput';
 import PlatformInput from '../commons/PlatformInput';
 
-/**
- * @description Normalizes the string inputs to be used as keys in the database
- * @param data String to be normalized
- * @returns Normalized string
- */
-const normalizeStringInputs = (data: string) => {
-  const normalizedData = data.trim().toUpperCase().replaceAll(' ', '_');
-  return normalizedData;
-};
-
 const WorkshopForm = () => {
   const { register, handleSubmit, reset, watch, setValue } = useForm<Workshop>();
   const [checkedYears, setCheckedYears] = useState<WorkshopYear[]>([]);
@@ -38,36 +28,21 @@ const WorkshopForm = () => {
   const { data, isLoading } = useSWR('/admin/api/speakers/workshops', fetcher, {
     fallbackData: [{}],
   });
-  const parseWorkshopYear = (years: string[]) => {
-    return years.map((y) => y.trim().toLocaleUpperCase() as WorkshopYear);
-  };
-  const scheduleWorkshop = async (
+  const handleFormSubmit = async (
     formWorkshopData: Workshop,
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
     console.log(formWorkshopData);
-    // if (event === undefined) return;
-    // console.log(formWorkshopData);
-    // event.preventDefault();
-    // formWorkshopData.platform =
-    //   formWorkshopData.modality.toLowerCase() === 'online'
-    //     ? (normalizeStringInputs(formWorkshopData.platform) as Platform)
-    //     : formWorkshopData.platform;
-    // await fetch('/admin/api/workshops/schedule', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(formWorkshopData),
-    // });
-    // reset();
+    if (event === undefined) return;
+    event.preventDefault();
+    reset();
   };
 
   return (
     <form
       onSubmit={handleSubmit(
         async (data: Workshop, event: BaseSyntheticEvent<object, any, any> | undefined) =>
-          await scheduleWorkshop(data, event!)
+          await handleFormSubmit(data, event!)
       )}
       className="grid grid-cols-2 w-full space-y-9 gap-x-4 items-center justify-center p-4"
     >
