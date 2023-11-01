@@ -6,7 +6,7 @@
   "private": true,
   "homepage": "https://github.com/mustafinho/seb",
   "engines": {
-    "node": ">=16.0.0",
+    "node": ">=18.17.0",
     "pnpm": ">=7.0.0",
     "npm": "please-use-pnpm"
   },
