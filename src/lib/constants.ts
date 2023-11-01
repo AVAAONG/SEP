@@ -49,29 +49,18 @@ export const CALENDAR_IDS = [
 // ======================= CONSTANTS FOR WORKSHOP =======================
 
 export const PROGRAM_COMPONENTS = [
-  { label: 'liderazgo', value: 'LEADERSHIP' },
-  { label: 'ejercicio ciudadano', value: 'CITIZEN_EXERCISE' },
-  { label: 'gerencia de sí mismo', value: 'SELF_MANAGEMENT' },
-  { label: 'tic', value: 'ICT' },
-  { label: 'emprendimiento', value: 'ENTREPRENEURSHIP' },
+  { label: 'Liderazgo', value: 'LEADERSHIP' },
+  { label: 'Ejercicio Ciudadano', value: 'CITIZEN_EXERCISE' },
+  { label: 'Gerencia de sí mismo', value: 'SELF_MANAGEMENT' },
+  { label: 'TIC', value: 'ICT' },
+  { label: 'Emprendimiento', value: 'ENTREPRENEURSHIP' },
 ];
 
 export const MODALITY = [
-  { label: 'presencial', value: 'IN_PERSON' },
-  { label: 'virtual', value: 'ONLINE' },
-  { label: 'hibrido', value: 'HYBRID' },
+  { label: 'Presencial', value: 'IN_PERSON' },
+  { label: 'Virtual', value: 'ONLINE' },
+  { label: 'Híbrido', value: 'HYBRID' },
 ];
 
-export const PLATFORMS = ['zoom', 'google meet', 'otra', 'padlet'];
+export const PLATFORMS = ['Zoom', 'Google Meet', 'Padlet', 'MS Teams', 'Otra',];
 export const WORKSHOP_YEAR = ['I', 'II', 'III', 'IV', 'V', 'TODOS'];
-
-export const ADMIN_ROLES = [
-  { id: 1, name: 'STAFF_PROEXCELENCIA' },
-  { id: 2, name: 'STAFF_COMMUNICATIONS' },
-  { id: 3, name: 'STAFF_ADMON' },
-  { id: 4, name: 'STAFF_MENTORSHIP' },
-  { id: 5, name: 'STAFF_RECRUITMENT' },
-  { id: 6, name: 'COMITEE' },
-  { id: 7, name: 'PROYECT' },
-  { id: 8, name: 'CHAT' },
-];

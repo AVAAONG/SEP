@@ -1,25 +1,26 @@
 import { PLATFORMS } from '@/lib/constants';
-import { Workshop as FormTypeWorkshop } from '@/types/Workshop';
 import { Input, Select, SelectItem } from '@nextui-org/react';
+import { Workshop } from '@prisma/client';
 import { UseFormRegister } from 'react-hook-form';
 
 interface PlatformInputProps {
   modality: string;
-  registerFunction: UseFormRegister<FormTypeWorkshop>;
+  registerFunction: UseFormRegister<Workshop>;
 }
 
 const PlatformInput = ({ modality, registerFunction }: PlatformInputProps) => {
   if (modality === 'NONE') {
-    return (
-      <>
-        <label className="block mb-2 text-xs font-semibold  uppercase">plataforma/lugar</label>
-        <input disabled placeholder="Selecciona la modalidad"></input>
-      </>
-    );
+    return <p>ERROR</p>;
   } else if (modality === 'ONLINE' || modality === 'HYBRID') {
     return (
       <>
-        <Select label="Plataforma" {...registerFunction('pensum')} labelPlacement="outside">
+        <Select
+          isRequired
+          label="Plataforma"
+          radius="sm"
+          {...registerFunction('platform')}
+          labelPlacement="outside"
+        >
           {PLATFORMS.map((animal) => (
             <SelectItem key={animal} value={animal}>
               {animal}
@@ -31,12 +32,19 @@ const PlatformInput = ({ modality, registerFunction }: PlatformInputProps) => {
   } else if (modality === 'IN_PERSON') {
     return (
       <>
-        <label className="block mb-2 text-xs font-semibold  uppercase">lugar</label>
-        <Input type="text" label="Título" {...registerFunction('platform')} id={'Lugar'} />
+        <Input
+          radius="sm"
+          isRequired
+          type="text"
+          label="Lugar"
+          labelPlacement="outside"
+          {...registerFunction('platform')}
+          id={'Lugar'}
+        />
       </>
     );
   } else {
-    return <input disabled placeholder="Selecciona la modalidad"></input>;
+    return <p>Selecciona la modalidad 👀</p>;
   }
 };
 

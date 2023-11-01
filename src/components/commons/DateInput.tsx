@@ -1,4 +1,5 @@
 import { Input } from '@nextui-org/input';
+import { Button } from '@nextui-org/react';
 import { nanoid } from 'nanoid';
 import React, { useState } from 'react';
 import { UseFormRegister } from 'react-hook-form';
@@ -20,6 +21,20 @@ const DateInput: React.FC<Props> = ({ register }) => {
     setInputs(newInputs);
   };
 
+  const validateDate = (date: string) => {
+    const today = new Date().toISOString().split('T')[0];
+    console.log(today, date);
+    return date >= today;
+  };
+
+  const isInvalid = (value: string) => {
+    return React.useMemo(() => {
+      if (value === '') return false;
+
+      return validateDate(value) ? false : true;
+    }, [value]);
+  };
+
   return (
     <>
       {inputs.map((input, index) => {
@@ -27,43 +42,56 @@ const DateInput: React.FC<Props> = ({ register }) => {
         const isLastInput = index === inputs.length - 1;
         return (
           <>
-            <div className="col-span-2 md:col-span-1 relative">
-              <button
-                type="button"
-                onClick={isLastInput ? addInput : () => deleteInput(id)}
-                className={`inline h-6 w-6 rounded-full text-base font-bold translate-x-64 translate-y-2  text-white absolute ${
-                  isLastInput ? 'bg-green-200 hover:bg-green-700 ' : 'bg-red-200 hover:bg-red-700'
-                }`}
-              >
-                {isLastInput ? '+' : '-'}
-              </button>
-              <label className="block mb-2 text-xs m-l-1 font-semibold uppercase ">
-                Fecha {index + 1}
-              </label>
-              <Input type="date" {...register(`date.${id}` as const)} />
-            </div>
             <div className="col-span-2 md:col-span-1">
-              <label className="block mb-2 text-xs m-l-1 font-semibold uppercase ">
-                Hora de inicio {index + 1}
-              </label>
+              <div className="min-h-0 h-0 flex justify-end w-full">
+                <Button
+                  size="sm"
+                  isIconOnly
+                  radius="full"
+                  onClick={isLastInput ? addInput : () => deleteInput(id)}
+                  className={`translate-x-4 translate-y-2 text-white z-50  ${
+                    isLastInput
+                      ? 'bg-gray-300 hover:bg-primary-light'
+                      : 'bg-red-200 hover:bg-red-700'
+                  }`}
+                >
+                  {isLastInput ? '+' : '-'}
+                </Button>
+              </div>
               <Input
-                type="time"
-                {...register(`startHour.${id}` as const)}
-                defaultValue={startHour}
-                id={'Hora de inicio'}
+                min={new Date().toISOString().split('T')[0]}
+                radius="sm"
+                type="date"
+                label={`Fecha (${index + 1})`}
+                placeholder="Fecha"
+                labelPlacement="outside"
+                classNames={{ base: 'col-span-2 md:col-span-1' }}
+                isRequired
+                {...register(`date.${id}` as const)}
               />
             </div>
-            <div className="col-span-2 md:col-span-1">
-              <label className="block mb-2 text-xs m-l-1 font-semibold uppercase ">
-                Hora de cierre {index + 1}
-              </label>
-              <Input
-                type="time"
-                {...register(`endHour.${id}` as const)}
-                defaultValue={endHour}
-                id={'Hora de cierre'}
-              />
-            </div>
+            <Input
+              radius="sm"
+              type="time"
+              label={`Hora de inicio (${index + 1})`}
+              placeholder="Hora de inicio"
+              labelPlacement="outside"
+              classNames={{ base: 'col-span-2 md:col-span-1' }}
+              isRequired
+              {...register(`startHour.${id}` as const)}
+              defaultValue={startHour}
+            />
+            <Input
+              radius="sm"
+              label={`Hora de cierre (${index + 1})`}
+              placeholder="Hora de cierre"
+              labelPlacement="outside"
+              classNames={{ base: 'col-span-2 md:col-span-1' }}
+              type="time"
+              isRequired
+              {...register(`endHour.${id}` as const)}
+              defaultValue={endHour}
+            />
           </>
         );
       })}

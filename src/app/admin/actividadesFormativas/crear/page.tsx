@@ -33,7 +33,6 @@ const Page = () => {
   });
 
   const deleteEntry = async (inputId: shortUUID.SUUID, calendarId: string) => {
-    console.log(inputId, calendarId);
     await fetch('/admin/api/workshops/delete', {
       method: 'POST',
       body: JSON.stringify({ id: inputId, calendarId }),
@@ -98,20 +97,15 @@ const Page = () => {
 
   return (
     <div className="flex flex-col md:flex-row gap-8">
-      <div className=" w-full md:w-1/2 p-4 pt-0  flex flex-col items-center gap-4">
-        <text className="font-semibold text-2xl text-green-500 mx-auto uppercase tracking-widest">
-          crear actividad formativa
-        </text>
+      <div className=" w-full md:w-1/2">
         <WorkshopForm />
       </div>
+
       <div className="w-full md:w-1/2 p-4 pt-0 flex flex-col items-center">
         {workshopResponse.isLoading || workshopResponse.data.length === 0 ? (
           <></>
         ) : (
           <>
-            <text className="font-bold text-3xl text-green-500 mb-6 uppercase tracking-widest">
-              actividades formativas agendadas
-            </text>
             {/* <WorkshopsList
               workshopData={workshopResponse.data || []}
               deleteEntry={deleteEntry}
@@ -247,3 +241,4 @@ const Page = () => {
 };
 
 export default Page;
+
