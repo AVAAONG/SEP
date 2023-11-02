@@ -10,18 +10,24 @@ import {
   SelectItem,
   Textarea,
 } from '@nextui-org/react';
-import { Speaker, Workshop, WorkshopYear } from '@prisma/client';
+import { Prisma, Speaker, Workshop, WorkshopYear } from '@prisma/client';
 import { BaseSyntheticEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useSWR, { Fetcher } from 'swr';
 import DateInput from '../commons/DateInput';
 import PlatformInput from '../commons/PlatformInput';
 
-const WorkshopForm = () => {
-  const { register, handleSubmit, reset, watch, setValue } = useForm<Workshop>();
+const workshopWithSpeaker = Prisma.validator<Prisma.WorkshopDefaultArgs>()({
+  include: {
+    speaker: true,
+  },
+});
+export type WorkshopWithSpeaker = Prisma.WorkshopGetPayload<typeof workshopWithSpeaker>;
+
+const WorkshopCreationForm = () => {
+  const { register, handleSubmit, reset, watch } = useForm<WorkshopWithSpeaker>();
   const [checkedYears, setCheckedYears] = useState<WorkshopYear[]>([]);
   const modality = watch('modality');
-
   const fetcher: Fetcher<{ speakers: Speaker[] } | {}[], string> = (...args) =>
     fetch([...args].join('')).then((res) => res.json());
 
@@ -32,10 +38,12 @@ const WorkshopForm = () => {
     formWorkshopData: Workshop,
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
+    formWorkshopData.year = checkedYears;
     console.log(formWorkshopData);
     if (event === undefined) return;
     event.preventDefault();
     reset();
+    setCheckedYears([]);
   };
 
   return (
@@ -50,6 +58,7 @@ const WorkshopForm = () => {
         crear actividad formativa
       </h1>
       <Input
+        isClearable
         isRequired
         type="text"
         label="Título"
@@ -89,7 +98,7 @@ const WorkshopForm = () => {
           radius="sm"
           label="Facilitador"
           isRequired
-          {...register('speaker')}
+          {...register(`speaker`)}
           labelPlacement="outside"
           isMultiline={true}
           selectionMode="multiple"
@@ -135,7 +144,9 @@ const WorkshopForm = () => {
       <Input
         classNames={{ base: 'col-span-2 md:col-span-1' }}
         radius="sm"
-        {...register('avalible_spots')}
+        {...register('avalible_spots', {
+          valueAsNumber: true,
+        })}
         type="number"
         isRequired
         min={0}
@@ -147,7 +158,6 @@ const WorkshopForm = () => {
         classNames={{ base: 'col-span-2 md:col-span-1' }}
         radius="sm"
         label="Modalidad"
-        isRequired
         {...register('modality')}
         labelPlacement="outside"
       >
@@ -168,6 +178,7 @@ const WorkshopForm = () => {
         label="Año"
         orientation="horizontal"
         classNames={{ base: 'col-span-2' }}
+        value={checkedYears}
         onChange={(e) => setCheckedYears(e as WorkshopYear[])}
       >
         {WORKSHOP_YEAR.map((year) => (
@@ -202,4 +213,4 @@ const WorkshopForm = () => {
   );
 };
 
-export default WorkshopForm;
+export default WorkshopCreationForm;

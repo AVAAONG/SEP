@@ -1,10 +1,10 @@
 'use client';
-import WorkshopForm from '@/components/admin/WorkshopForm';
+import WorkshopCreationForm from '@/components/admin/WorkshopForm';
+import ScheduledWorkshopsList from '@/components/admin/lists/2';
 import { Workshop } from '@/types/Workshop';
 import { BaseSyntheticEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import shortUUID from 'short-uuid';
-import useSWR from 'swr';
 import { CheckIcon } from '../../../../../public/svgs/svgs';
 
 interface WorkshopForm extends Workshop {
@@ -27,10 +27,61 @@ const Page = () => {
     group: '',
   });
 
-  const workshopResponse = useSWR('/admin/api/workshops', fetcher, {
-    fallbackData: [],
-    refreshInterval: 10000,
-  });
+  // const workshopResponse = useSWR('/admin/api/workshops', fetcher, {
+  //   fallbackData: [],
+  //   refreshInterval: 10000,
+  // });
+
+  const dumyData = [
+    {
+      id: '1',
+      title: 'Taller de prueba',
+      pensum: 'Pensum 1',
+      date: '2021-09-10',
+      startHour: '10:00',
+      endHour: '12:00',
+      speaker: 'Kevin',
+      asociated_skill: 'LEADERSHIP',
+      spots: 20,
+      year: ['I', 'II', 'III', 'IV', 'V', 'V+'],
+      modality: 'ONLINE',
+      platform: 'ZOOM',
+      workshopYear: 'Becarios I',
+      description: 'Taller de prueba',
+    },
+    {
+      id: '2',
+      title: 'Taller de prueba 2',
+      pensum: 'Pensum 1',
+      date: '2021-09-10',
+      startHour: '10:00',
+      endHour: '12:00',
+      speaker: 'Kevin',
+      asociated_skill: 'LEADERSHIP',
+      spots: 20,
+      year: ['I', 'II', 'III', 'IV', 'V', 'V+'],
+      modality: 'ONLINE',
+      platform: 'ZOOM',
+      workshopYear: 'Becarios I',
+      description: 'Taller de prueba',
+    },
+    {
+      id: '3',
+      title: 'Taller de prueba 2',
+      pensum: 'Pensum 1',
+      date: '2021-09-10',
+      startHour: '10:00',
+      endHour: '12:00',
+      speaker: 'Kevin',
+      asociated_skill: 'LEADERSHIP',
+      spots: 20,
+      year: ['I', 'II', 'III', 'IV', 'V', 'V+'],
+      modality: 'ONLINE',
+      platform: 'ZOOM',
+      workshopYear: 'Becarios I',
+      description: 'Taller de prueba',
+    },
+  ];
 
   const deleteEntry = async (inputId: shortUUID.SUUID, calendarId: string) => {
     await fetch('/admin/api/workshops/delete', {
@@ -98,21 +149,15 @@ const Page = () => {
   return (
     <div className="flex flex-col md:flex-row gap-8">
       <div className=" w-full md:w-1/2">
-        <WorkshopForm />
+        <WorkshopCreationForm />
       </div>
 
       <div className="w-full md:w-1/2 p-4 pt-0 flex flex-col items-center">
-        {workshopResponse.isLoading || workshopResponse.data.length === 0 ? (
+        {/* {workshopResponse.isLoading || workshopResponse.data.length === 0 ? (
           <></>
-        ) : (
-          <>
-            {/* <WorkshopsList
-              workshopData={workshopResponse.data || []}
-              deleteEntry={deleteEntry}
-              editEntry={editEntry}
-            /> */}
-          </>
-        )}
+        ) : ( */}
+        <ScheduledWorkshopsList workshops={dumyData || []} />
+        {/* )} */}
       </div>
       <div
         id="info-popup"
@@ -241,4 +286,3 @@ const Page = () => {
 };
 
 export default Page;
-

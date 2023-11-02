@@ -79,7 +79,6 @@ const DateInput: React.FC<Props> = ({ register }) => {
               classNames={{ base: 'col-span-2 md:col-span-1' }}
               isRequired
               {...register(`startHour.${id}` as const)}
-              defaultValue={startHour}
             />
             <Input
               radius="sm"
@@ -90,7 +89,6 @@ const DateInput: React.FC<Props> = ({ register }) => {
               type="time"
               isRequired
               {...register(`endHour.${id}` as const)}
-              defaultValue={endHour}
             />
           </>
         );

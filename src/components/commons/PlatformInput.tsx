@@ -1,11 +1,11 @@
 import { PLATFORMS } from '@/lib/constants';
 import { Input, Select, SelectItem } from '@nextui-org/react';
-import { Workshop } from '@prisma/client';
 import { UseFormRegister } from 'react-hook-form';
+import { WorkshopWithSpeaker } from '../admin/WorkshopForm';
 
 interface PlatformInputProps {
   modality: string;
-  registerFunction: UseFormRegister<Workshop>;
+  registerFunction: UseFormRegister<WorkshopWithSpeaker>;
 }
 
 const PlatformInput = ({ modality, registerFunction }: PlatformInputProps) => {
