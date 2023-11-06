@@ -4,6 +4,7 @@
  */
 
 import { ActivityStatus, Chat, ChatsTempData, Prisma } from '@prisma/client';
+import shortUUID from 'short-uuid';
 import { prisma } from './prisma';
 
 /**
@@ -173,33 +174,7 @@ export const getChatSpeaker = async (id: string) => {
   return speaker;
 };
 
-/**
- * Gets all chats.
- * @returns Array of chats.
- */
-export const getChats = async () => {
-  const chats = await prisma.chat.findMany({
-    include: {
-      speaker: true,
-    },
-  });
-  return chats;
-};
 
-/**
- * Gets a chat by ID.
- * @param id - Chat ID.
- * @returns Chat object.
- */
-export const getChat = async (id: string) => {
-  const chat = await prisma.chat.findUnique({
-    where: { id },
-    include: {
-      speaker: true,
-    },
-  });
-  return chat;
-};
 
 export const deleteAllChats = async () => {
   const chats = await prisma.chat.deleteMany({});
@@ -209,4 +184,60 @@ export const deleteAllChats = async () => {
 export const deleteAllChatSpeakers = async () => {
   const speakers = await prisma.chatSpeaker.deleteMany({});
   return speakers;
+};
+
+
+export const getChats = async () => {
+  const workshops = await prisma.chat.findMany({
+    include: {
+      speaker: true,
+      temp_data: true,
+      scholar_attendance: true,
+    },
+  });
+  return workshops;
+};
+
+/**
+ * Get speakers with parameters
+ * @param data - The data to select from the workshopSpeaker table
+ * @returns The selected speakers
+ */
+export const getChatSpeakerWithParams = async (data: Prisma.SpeakerSelect) => {
+  try {
+    const speakers = await prisma.speaker.findMany({
+      select: data,
+      where: {
+        speaker_kind: 'CHATS'
+      }
+    });
+    return speakers;
+  } catch (e) {
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
+export const getChat = async (id: shortUUID.SUUID) => {
+  const workshop = await prisma.chat.findUnique({
+    where: { id },
+    include: {
+      speaker: true,
+      scholar_attendance: {
+        include: {
+          scholar: {
+            include: {
+              Scholar: {
+                include: {
+                  collage_information: true,
+                }
+              },
+            }
+          },
+        },
+      },
+      temp_data: true,
+    },
+  });
+  return workshop;
 };

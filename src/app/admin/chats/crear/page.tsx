@@ -1,173 +1,147 @@
 'use client';
-import ChatsList from '@/components/admin/lists/ChatsList';
-import { Chat } from '@/types/Chat';
-import { BaseSyntheticEvent, useState } from 'react';
+import ChatCreationForm from '@/components/admin/ChatFormCreation';
+import ScheduledWorkshopsList from '@/components/admin/lists/2';
+import { Workshop } from '@/types/Workshop';
+import { BaseSyntheticEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import shortUUID from 'short-uuid';
 
-const page = () => {
+interface WorkshopForm extends Workshop {
+  subject?: string;
+  group?: string;
+}
+
+const Page = () => {
+  const fetcher = (...args: RequestInfo[] | URL[]) => fetch([...args]).then((res) => res.json());
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<Chat>();
-  const [chatData, setChatData] = useState<Chat[]>([
-    // {
-    //     "name": "Liderazgo para el siglo 21",
-    //     "pensum": "Liderazgo",
-    //     "date": "2023-04-20",
-    //     "startHour": "18:33",
-    //     "endHour": "22:30",
-    //     "speaker": "Luis Lopéz",
-    //     "numberOfParticipants": 20,
-    //     "kindOfWorkshop": "Presencial",
-    //     "platform": "Oficinas de AVAA",
-    //     "avaaYear": [
-    //         "V",
-    //         "+V"
-    //     ],
-    //     "description": "Este taller...",
-    //     "id": "guy2a9Z8oo7Nb45z343teEyBNAq" as shortUUID.SUUID
-    // },
-    // {
-    //     "name": "Liderazgo para el siglo 21",
-    //     "pensum": "Liderazgo",
-    //     "date": "2023-04-20",
-    //     "startHour": "18:33",
-    //     "endHour": "22:30",
-    //     "speaker": "Luis Lopéz",
-    //     "numberOfParticipants": 20,
-    //     "kindOfWorkshop": "Presencial",
-    //     "platform": "Oficinas de AVAA",
-    //     "avaaYear": [
-    //         "V",
-    //         "+V"
-    //     ],
-    //     "description": "Este taller...",
-    //     "id": "guy2a9Z8oo7Nb43786778435zEyBNAq" as shortUUID.SUUID
-    // },
-    // {
-    //     "name": "Liderazgo para el siglo 21",
-    //     "pensum": "Liderazgo",
-    //     "date": "2023-04-20",
-    //     "startHour": "18:33",
-    //     "endHour": "22:30",
-    //     "speaker": "Luis Lopéz",
-    //     "numberOfParticipants": 20,
-    //     "kindOfWorkshop": "Presencial",
-    //     "platform": "Oficinas de AVAA",
-    //     "avaaYear": [
-    //         "V",
-    //         "+V"
-    //     ],
-    //     "description": "Este taller...",
-    //     "id": "guy2a9Z8oo7Nb43435zEyBNAq" as shortUUID.SUUID
-    // }
-  ]);
+  } = useForm<WorkshopForm>();
+  // const workshopResponse = useSWR('/admin/api/workshops', fetcher, {
+  //   fallbackData: [],
+  //   refreshInterval: 10000,
+  // });
 
-  const deleteEntry = (inputId: shortUUID.SUUID) => {
-    setChatData((oldValues: Chat[]) => {
-      return oldValues.filter((chat: Chat) => chat.id !== inputId);
+  const dumyData = [
+    {
+      id: '1',
+      title: 'Taller de prueba',
+      pensum: 'Pensum 1',
+      date: '2021-09-10',
+      startHour: '10:00',
+      endHour: '12:00',
+      speaker: 'Kevin',
+      asociated_skill: 'LEADERSHIP',
+      spots: 20,
+      year: ['I', 'II', 'III', 'IV', 'V', 'V+'],
+      modality: 'ONLINE',
+      platform: 'ZOOM',
+      workshopYear: 'Becarios I',
+      description: 'Taller de prueba',
+    },
+    {
+      id: '2',
+      title: 'Taller de prueba 2',
+      pensum: 'Pensum 1',
+      date: '2021-09-10',
+      startHour: '10:00',
+      endHour: '12:00',
+      speaker: 'Kevin',
+      asociated_skill: 'LEADERSHIP',
+      spots: 20,
+      year: ['I', 'II', 'III', 'IV', 'V', 'V+'],
+      modality: 'ONLINE',
+      platform: 'ZOOM',
+      workshopYear: 'Becarios I',
+      description: 'Taller de prueba',
+    },
+    {
+      id: '3',
+      title: 'Taller de prueba 2',
+      pensum: 'Pensum 1',
+      date: '2021-09-10',
+      startHour: '10:00',
+      endHour: '12:00',
+      speaker: 'Kevin',
+      asociated_skill: 'LEADERSHIP',
+      spots: 20,
+      year: ['I', 'II', 'III', 'IV', 'V', 'V+'],
+      modality: 'ONLINE',
+      platform: 'ZOOM',
+      workshopYear: 'Becarios I',
+      description: 'Taller de prueba',
+    },
+  ];
+
+  const deleteEntry = async (inputId: shortUUID.SUUID, calendarId: string) => {
+    await fetch('/admin/api/workshops/delete', {
+      method: 'POST',
+      body: JSON.stringify({ id: inputId, calendarId }),
     });
   };
 
   const editEntry = (inputId: shortUUID.SUUID) => {
-    const data = chatData.filter((workshop: Chat) => workshop.id === inputId);
+    const workshops = workshopResponse.data.filter((workshop: Workshop) => workshop.id === inputId);
     const {
-      name,
-      level,
+      title,
+      pensum,
       date,
       startHour,
       endHour,
       speaker,
-      numberOfParticipants,
-      kindOfChat,
+      spots,
+      modality,
       platform,
-      turn,
+      workshopYear,
       description,
-    } = data[0];
+    } = workshops[0];
     reset({
-      name,
-      level,
+      title,
+      pensum,
       date,
       startHour,
       endHour,
       speaker,
-      numberOfParticipants,
-      kindOfChat,
+      spots,
+      modality,
       platform,
-      turn,
+      workshopYear,
       description,
     });
     deleteEntry(inputId);
   };
-  const createChat = (data: Chat, event: BaseSyntheticEvent<object, any, any> | undefined) => {
-    if (event === undefined) return;
+
+  const sendWorkshops = async (data: any, event: BaseSyntheticEvent) => {
     event.preventDefault();
-    data.id = shortUUID.generate();
-    // delete data.subject;
-    // delete data.group;
-    setChatData([...chatData, data]);
-    reset({
-      name: '',
-      level: 'Basico',
-      date: '',
-      startHour: '',
-      endHour: '',
-      speaker: '',
-      numberOfParticipants: 0,
-      kindOfChat: 'Presencial',
-      platform: 'Zoom',
-      turn: 'A',
-      description: '',
+    const payload = {
+      group: data.group,
+      workshops: workshopResponse.data,
+    };
+    const respin = await fetch('/api/google/form', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
     });
-    console.log(data);
-    // setSubmit(true)
   };
 
   return (
-    <div className="flex flex-col-reverse md:flex-row gap-8">
-      <div className="w-screen md:w-1/2 p-4 flex flex-col items-center">
-        {
-          chatData.length >= 1 ? (
-            <>
-              <text className="font-semibold text-3xl text-green-500 mb-6">Chats para enviar</text>
-              <ChatsList chatsData={chatData} deleteEntry={deleteEntry} editEntry={editEntry} />
-              <button className="bg-green-600 text-white rounded-lg col-span-2 max-w-fit px-5 py-2 self-center mt-4">
-                Enviar chats
-              </button>
-            </>
-          ) : (
-            <></>
-          )
-          // <h3 className='font-semibold text-3xl text-green-500 mb-6'>
-          //     Talleres para enviar
-          // </h3>
-        }
+    <div className="flex flex-col md:flex-row gap-8">
+      <div className=" w-full md:w-1/2">
+        <ChatCreationForm />
       </div>
-      <div className=" w-full md:w-1/2 p-4 flex flex-col items-center gap-4">
-        <text className="font-semibold text-3xl text-green-500 mx-auto">Crea un chat</text>
-        <form
-          onSubmit={handleSubmit(createChat)}
-          className="grid gap-6 md:grid-cols-2 md:grid-rows-2 caret-green-500 text-slate-300 w-full"
-        >
-          <button
-            type="submit"
-            className="w-1/2 justify-self-center col-span-2 text-white bg-gradient-to-br from-emerald-500 to-lime-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
-          >
-            Crear Chat
-          </button>
-        </form>
+      <div className="w-full md:w-1/2 p-4 pt-0 flex flex-col items-center">
+        {/* {workshopResponse.isLoading || workshopResponse.data.length === 0 ? (
+          <></>
+        ) : ( */}
+        <ScheduledWorkshopsList workshops={dumyData || []} />
+        {/* )} */}
       </div>
-      {/* 
-            <div id="info-popup" tabIndex={-1} className={`${modalopen ? 'flex' : "hidden"}  items-center justify-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full`}>
-                <div className="relative p-4 w-full max-w-lg h-full md:h-auto">
-                  //aqui va el modal component
-                </div>
-            </div > */}
     </div>
   );
 };
 
-export default page;
+export default Page;

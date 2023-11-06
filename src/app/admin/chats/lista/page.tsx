@@ -1,10 +1,10 @@
 import DateSelector from '@/components/DateSelector';
 import Table from '@/components/table/Table';
-import WorkshopColumns, { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
-import { getWorkshops } from '@/lib/db/utils/Workshops';
+import ChatColumns, { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
+import { getChats } from '@/lib/db/utils/chats';
 import { createArrayFromObject } from '@/lib/utils';
-import { parseModalityFromDatabase, parseSkillFromDatabase } from '@/lib/utils2';
-import { Workshop } from '@prisma/client';
+import { parseModalityFromDatabase } from '@/lib/utils2';
+import { Chat } from '@prisma/client';
 import dynamic from 'next/dynamic';
 
 const PieChartComponent = dynamic(() => import('@/components/charts/Pie'), { ssr: false });
@@ -12,7 +12,7 @@ const MixedAreaChartComponent = dynamic(() => import('@/components/charts/MixedA
   ssr: false,
 });
 
-function filterWorkshopsByMonth(workshops: Workshop[], month: number): Workshop[] {
+function filterWorkshopsByMonth(workshops: Chat[], month: number): Chat[] {
   const filteredWorkshops = workshops.filter((workshop) => {
     const startMonth = new Date(workshop.start_dates[0]).getMonth();
     return startMonth === month;
@@ -20,7 +20,7 @@ function filterWorkshopsByMonth(workshops: Workshop[], month: number): Workshop[
 
   return filteredWorkshops;
 }
-function filterWorkshopsByQuarter(workshops: WorkshopWithAllData[], quarter: number): Workshop[] {
+function filterWorkshopsByQuarter(workshops: ChatsWithAllData[], quarter: number): Chat[] {
   const filteredWorkshops = workshops.filter((workshop) => {
     const startMonth = new Date(workshop.start_dates[0]).getMonth();
     const workshopQuarter = Math.floor(startMonth / 3) + 1;
@@ -30,7 +30,7 @@ function filterWorkshopsByQuarter(workshops: WorkshopWithAllData[], quarter: num
   return filteredWorkshops;
 }
 
-function filterWorkshopsByYear(workshops: WorkshopWithAllData[], year: number): Workshop[] {
+function filterWorkshopsByYear(workshops: ChatsWithAllData[], year: number): Chat[] {
   const filteredWorkshops = workshops.filter((workshop) => {
     const startYear = new Date(workshop.start_dates[0]).getFullYear();
     return startYear === year;
@@ -39,12 +39,12 @@ function filterWorkshopsByYear(workshops: WorkshopWithAllData[], year: number): 
   return filteredWorkshops;
 }
 
-function categorizeWorkshops(workshops: Workshop[]): {
-  morning: Workshop[];
-  afternoon: Workshop[];
+function categorizeWorkshops(workshops: Chat[]): {
+  morning: Chat[];
+  afternoon: Chat[];
 } {
-  const morningWorkshops: Workshop[] = [];
-  const afternoonWorkshops: Workshop[] = [];
+  const morningWorkshops: Chat[] = [];
+  const afternoonWorkshops: Chat[] = [];
 
   for (const workshop of workshops) {
     const startHour = new Date(workshop.start_dates[0]).getHours();
@@ -63,10 +63,10 @@ const page = async ({
   searchParams,
 }: {
   params: { scholarId: string };
-  searchParams?: { year: string, month: string, quarter: string };
+  searchParams?: { year: string; month: string; quarter: string };
 }) => {
-  const resultWorkshops = await getWorkshops();
-  let workshops: Workshop[] = [];
+  const resultWorkshops = await getChats();
+  let workshops: Chat[] = [];
   if (searchParams?.year) {
     workshops = filterWorkshopsByYear(resultWorkshops, Number(searchParams?.year));
   }
@@ -77,88 +77,100 @@ const page = async ({
     workshops = filterWorkshopsByMonth(resultWorkshops, Number(searchParams?.month));
   }
   if (!searchParams?.year && !searchParams?.quarter && !searchParams?.month) {
-    workshops = resultWorkshops
+    workshops = resultWorkshops;
   }
 
   const suspendedWorkshops = workshops.filter(
     (workshop) => workshop.activity_status === 'SUSPENDED'
   );
   const doneWorkshops = workshops.filter(
-    (workshop) => workshop.activity_status === 'ATTENDANCE_CHECKED' || workshop.activity_status === 'DONE'
+    (workshop) =>
+      workshop.activity_status === 'ATTENDANCE_CHECKED' || workshop.activity_status === 'DONE'
   );
   const scheduledWorkshops = workshops.filter(
     (workshop) => workshop.activity_status === 'SCHEDULED' || workshop.activity_status === 'SENT'
   );
 
-
-  const stats =
-    [
-      {
-        name: 'Chat clubs ofertados',
-        stat: workshops.length || 0,
-        previousStat: 250,
-        change: Number((((150 - workshops.length) / 150) * 100).toFixed(2)),
-        changeType: 'decrease',
-      },
-      {
-        name: 'Chat clubs realizados',
-        stat: doneWorkshops.length || 0,
-        previousStat: 250,
-        change: 0,
-        changeType: 'increase',
-      },
-      {
-        name: 'Chat clubs agendados',
-        stat: scheduledWorkshops.length || 0,
-        previousStat: 250,
-        change: 0,
-        changeType: 'increase',
-      },
-      {
-        name: 'Chat clubs cancelados',
-        stat: suspendedWorkshops.length || 0,
-        previousStat: 250,
-        change: 0,
-        changeType: 'increase',
-      },
-    ]
+  const stats = [
+    {
+      name: 'Chat clubs ofertados',
+      stat: workshops.length || 0,
+      previousStat: 250,
+      change: Number((((150 - workshops.length) / 150) * 100).toFixed(2)),
+      changeType: 'decrease',
+    },
+    {
+      name: 'Chat clubs realizados',
+      stat: doneWorkshops.length || 0,
+      previousStat: 250,
+      change: 0,
+      changeType: 'increase',
+    },
+    {
+      name: 'Chat clubs agendados',
+      stat: scheduledWorkshops.length || 0,
+      previousStat: 250,
+      change: 0,
+      changeType: 'increase',
+    },
+    {
+      name: 'Chat clubs cancelados',
+      stat: suspendedWorkshops.length || 0,
+      previousStat: 250,
+      change: 0,
+      changeType: 'increase',
+    },
+  ];
 
   const workshopsByModalityObj =
-    doneWorkshops?.reduce((acc, workshop) => {
-      const skill = parseModalityFromDatabase(workshop.modality);
-      acc[skill] = (acc[skill] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>) || {};
+    doneWorkshops?.reduce(
+      (acc, workshop) => {
+        const skill = parseModalityFromDatabase(workshop.modality);
+        acc[skill] = (acc[skill] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    ) || {};
 
-  const workshopsBySkillObj =
-    doneWorkshops?.reduce((acc, workshop) => {
-      const skill = parseSkillFromDatabase(workshop.asociated_skill);
-      acc[skill] = (acc[skill] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>) || {};
+  const chatsBySkill =
+    doneWorkshops?.reduce(
+      (acc, chat) => {
+        acc[chat.level] = (acc[chat.level] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    ) || {};
 
-  const workshopsBySkill = createArrayFromObject(workshopsBySkillObj);
+  const workshopsBySkill = createArrayFromObject(chatsBySkill);
   const workshopsByModality = createArrayFromObject(workshopsByModalityObj);
   const { morning, afternoon } = categorizeWorkshops(doneWorkshops);
 
-
   const workshopsByMonth: Record<number, number> =
-    doneWorkshops?.reduce((acc, workshop) => {
-      const month = new Date(workshop.start_dates[0]).getMonth();
-      acc[month] = (acc[month] || 0) + 1;
-      return acc;
-    }, {} as Record<number, number>) || {};
+    doneWorkshops?.reduce(
+      (acc, workshop) => {
+        const month = new Date(workshop.start_dates[0]).getMonth();
+        acc[month] = (acc[month] || 0) + 1;
+        return acc;
+      },
+      {} as Record<number, number>
+    ) || {};
 
-  interface WorkshopWithAttendance extends Workshop {
+  interface ChatWithAttendance extends Chat {
     scholar_attendance?: { attendance: string }[];
   }
 
-  const workshopsWithHighAttendancePerMonth: Record<string, number> = doneWorkshops?.reduce((acc, workshop) => {
-    const month = new Date(workshop.start_dates[0]).getMonth();
-    const attendance = (workshop as WorkshopWithAttendance).scholar_attendance?.filter((a: { attendance: string }) => a.attendance === 'ATTENDED')?.length;
-    if (attendance && attendance > 15) acc[month.toString()] = (acc[month.toString()] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>) || {};
+  const workshopsWithHighAttendancePerMonth: Record<string, number> =
+    doneWorkshops?.reduce(
+      (acc, workshop) => {
+        const month = new Date(workshop.start_dates[0]).getMonth();
+        const attendance = (workshop as ChatWithAttendance).scholar_attendance?.filter(
+          (a: { attendance: string }) => a.attendance === 'ATTENDED'
+        )?.length;
+        if (attendance && attendance > 15) acc[month.toString()] = (acc[month.toString()] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    ) || {};
 
   // Add null values for months without workshops
   for (let month = 0; month < 12; month++) {
@@ -177,13 +189,13 @@ const page = async ({
   }));
   const areaSeries = {
     data: chartData2,
-    name: 'Actividades formativas con alta asistencia',
+    name: 'Chats clubs con alta asistencia',
     color: '#eab308',
     type: 'line',
   };
   const barSeries = {
     data: chartData,
-    name: 'Actividades formativas realizadas',
+    name: 'Chats clubs realizadas',
     color: '#23a217',
     type: 'bar',
   };
@@ -214,10 +226,7 @@ const page = async ({
       </div>
 
       <div className="w-full  rounded-lg bg-white">
-        <MixedAreaChartComponent
-          areaSeries={areaSeries}
-          barSeries={barSeries}
-        />
+        <MixedAreaChartComponent areaSeries={areaSeries} barSeries={barSeries} />
       </div>
       <div className="w-full grid grid-cols-3 justify-center items-center rounded-lg bg-white">
         <div className="w-full">
@@ -239,7 +248,7 @@ const page = async ({
         </div>
       </div>
       <div className="w-full ">
-        <Table tableData={workshops} tableColumns={WorkshopColumns} tableHeadersForSearch={[]} />
+        <Table tableData={workshops} tableColumns={ChatColumns} tableHeadersForSearch={[]} />
       </div>
     </div>
   );

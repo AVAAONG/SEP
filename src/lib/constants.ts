@@ -64,3 +64,9 @@ export const MODALITY = [
 
 export const PLATFORMS = ['Zoom', 'Google Meet', 'Padlet', 'MS Teams', 'Otra',];
 export const WORKSHOP_YEAR = ['I', 'II', 'III', 'IV', 'V', 'TODOS'];
+
+export const CHAT_LEVELS = [
+  { label: 'Básico', value: 'BASIC' },
+  { label: 'Intermedio', value: 'INTERMEDIATE' },
+  { label: 'Avanzado', value: 'ADVANCED' },
+];
