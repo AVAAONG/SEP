@@ -1,5 +1,6 @@
 'use client';
 import defailProfilePic from '@/../public/defaultProfilePic.png';
+import { changeScholarAttendance } from '@/lib/db/utils/Workshops';
 import formatDni from '@/lib/db/utils/formatDni';
 import { Prisma, ScholarAttendance } from '@prisma/client';
 import Image from 'next/image';
@@ -102,7 +103,7 @@ const ScholarActivityAttendance: Column<ScholarWithActivities>[] = [
   {
     Header: 'Asistencia',
     accessor: 'attendance',
-    Cell: ({ value }) => {
+    Cell: ({ value, cell }) => {
       const [attendace, setAttendance] = useState(value);
       return (
         <select
@@ -120,7 +121,14 @@ const ScholarActivityAttendance: Column<ScholarWithActivities>[] = [
               : ''
           }`}
           value={attendace}
-          onChange={(event) => setAttendance(event.target.value as ScholarAttendance)}
+          onChange={async (event) => {
+            await changeScholarAttendance(
+              cell.row.original.id,
+              cell.row.original.scholar_id,
+              event.target.value as ScholarAttendance
+            );
+            setAttendance(event.target.value as ScholarAttendance);
+          }}
         >
           <option value="ATTENDED">Asistió</option>
           <option value="NOT_ATTENDED">No asistió</option>

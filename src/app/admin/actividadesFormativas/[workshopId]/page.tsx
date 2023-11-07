@@ -72,11 +72,11 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
           </div>
           <div className="w-full space-y-3">
             <h2 className="text-xl font-semibold text-primary-light">
-              {speaker?.length >= 2 ? 'Facilitadores' : 'Facilitador'}
+              {speaker && speaker.length && speaker.length >= 2 ? 'Facilitadores' : 'Facilitador'}
             </h2>
             <div className="flex flex-col space-y-4">
               {speaker?.map((s) => (
-                <div className="flex items-center space-x-2">
+                <div key={s.email} className="flex items-center space-x-2">
                   <div className="h-9 w-9 shrink-0">
                     <Image
                       alt={s.first_names}

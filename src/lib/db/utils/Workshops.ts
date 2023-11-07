@@ -1,9 +1,11 @@
+'use server';
+
 /**
  * Module for creating and updating workshops.
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { ActivityStatus, Speaker, Workshop, WorkshopTempData } from '@prisma/client';
+import { ActivityStatus, ScholarAttendance, Speaker, Workshop, WorkshopTempData } from '@prisma/client';
 import shortUUID from 'short-uuid';
 import { prisma } from './prisma';
 
@@ -94,39 +96,42 @@ export const deleteWorkshopFromDatabase = async (id: shortUUID.SUUID) => {
   });
 };
 
-export const getWorkshop = async (id: shortUUID.SUUID) => {
+export const changeScholarAttendance = async (
+
+  workshopId: string,
+  scholarId: string,
+  attendance: ScholarAttendance
+) => {
   const workshop = await prisma.workshop.findUnique({
-    where: { id },
-    include: {
-      speaker: true,
-      scholar_attendance: {
-        include: {
-          scholar: {
-            include: {
-              Scholar: {
-                include: {
-                  collage_information: true,
-                }
-              },
-            }
+    where: {
+      id: workshopId,
+      AND: {
+        scholar_attendance: {
+          some: {
+            scholar_id: scholarId,
           },
         },
-      },
-      temp_data: true,
+      }
+
     },
+    include: {
+      scholar_attendance: true
+    }
   });
-  return workshop;
-};
+  console.log(workshop?.scholar_attendance)
+
+  // await prisma.workshopAttendance.update({
+  //   where: {
+  //     id: workshop?.scholar_attendance[0].id,
+  //   },
+  //   data: {
+  //     attendance: attendance,
+  //   }
+  // })
+}
+
 
 export const getWorkshops = async () => {
-  const workshops = await prisma.workshop.findMany({
-    include: {
-      speaker: true,
-      temp_data: true,
-      scholar_attendance: true,
-    },
-  });
-  return workshops;
 };
 
 export const getWorkshopByStatus = async (status: ActivityStatus) => {
@@ -194,7 +199,32 @@ export const getWorkshopByStatus = async (status: ActivityStatus) => {
 //   } finally {
 //     await prisma.$disconnect();
 //   }
+
 // };
+
+export const getWorkshop = async (id: shortUUID.SUUID) => {
+  const workshop = await prisma.workshop.findUnique({
+    where: { id },
+    include: {
+      speaker: true,
+      scholar_attendance: {
+        include: {
+          scholar: {
+            include: {
+              Scholar: {
+                include: {
+                  collage_information: true,
+                }
+              },
+            }
+          },
+        },
+      },
+      temp_data: true,
+    },
+  });
+  return workshop;
+};
 
 export const createWorkshopSpeaker = async (data: Speaker) => {
   try {
