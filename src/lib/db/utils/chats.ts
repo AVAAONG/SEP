@@ -241,3 +241,34 @@ export const getChat = async (id: shortUUID.SUUID) => {
   });
   return workshop;
 };
+
+
+export const getChatsByScholar = async (programInformationId: string, scholarId: string) => {
+  const chats = await prisma.chat.findMany({
+    where: {
+      OR: [
+        {
+          scholar_attendance: {
+            some: {
+              scholar_id: programInformationId,
+            },
+          },
+        },
+        { speaker: { some: { id: scholarId } } },
+      ],
+    },
+    include: {
+      scholar_attendance: {
+        where: {
+          scholar_id: programInformationId,
+        },
+      },
+      speaker: {
+        where: {
+          id: scholarId,
+        },
+      },
+    },
+  });
+  return chats;
+}

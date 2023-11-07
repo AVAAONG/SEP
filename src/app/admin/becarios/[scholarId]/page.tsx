@@ -5,12 +5,25 @@ import AreaChart from '@/components/charts/AreaChart';
 import IconWithInfo from '@/components/commons/IconInWithInformation';
 import CardWithStat from '@/components/scholar/card/CardWithStats';
 import Table from '@/components/table/Table';
-import singleScholarWorkshopsColumns from '@/components/table/columns/singleScholarWorkshopColumns';
+import { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
+import scholarChatAttendaceColumns from '@/components/table/columns/scholarChatAttendance';
+import scholarWorkshopAttendanceColumns from '@/components/table/columns/scholarWorkshopAttendance';
+import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
+import { getWorkhsopsByScholar } from '@/lib/db/utils/Workshops';
+import { getChatsByScholar } from '@/lib/db/utils/chats';
 import formatDni from '@/lib/db/utils/formatDni';
 
 import { getScholarWithAllData } from '@/lib/db/utils/users';
 import { getCollageName, parseStudyAreaFromDatabase } from '@/lib/parseFromDatabase';
 import { createDataCardsContent } from '@/lib/utils';
+import {
+  ActivityStatus,
+  Level,
+  Modality,
+  ScholarAttendance,
+  Skill,
+  WorkshopYear,
+} from '@prisma/client';
 import Image from 'next/image';
 import { CellPhoneIcon, WhatsAppIcon } from 'public/svgs/SocialNetworks';
 import {
@@ -23,6 +36,76 @@ import {
   volunterIcon,
   workshopIcon,
 } from 'public/svgs/svgs';
+
+type scholarChatAttendaceColumns = 'ATTENDED' | 'SPEAKER' | 'NOT_ATTENDED' | 'SPEAKER';
+
+export interface ScholarChatColumnT {
+  id: string;
+  title: string;
+  platform: string;
+  start_dates: Date[];
+  end_dates: Date[];
+  rating: number | null;
+  modality: Modality;
+  level: Level;
+  activity_status: ActivityStatus;
+  attendance: scholarChatAttendaceColumns;
+}
+[];
+
+export interface IScholarWorkshopColumn {
+  id: string;
+  title: string;
+  platform: string;
+  start_dates: Date[];
+  end_dates: Date[];
+  modality: Modality;
+  skill: Skill;
+  activity_status: ActivityStatus;
+  attendance: ScholarAttendance;
+  year: WorkshopYear[];
+}
+[];
+const createChatObject = (chat: ChatsWithAllData[]) => {
+  return chat.map((chat) => {
+    let att = '';
+    if (chat.speaker.length > 0) {
+      att = 'SPEAKER';
+    } else {
+      att = chat.scholar_attendance[0].attendance;
+    }
+    return {
+      id: chat.id,
+      title: chat.title,
+      platform: chat.platform,
+      start_dates: chat.start_dates,
+      end_dates: chat.end_dates,
+      rating: chat.rating,
+      modality: chat.modality,
+      level: chat.level,
+      activity_status: chat.activity_status,
+      attendance: att,
+    };
+  });
+};
+
+const createWorkshopObject = (workshops: WorkshopWithAllData[]) => {
+  return workshops.map((workshop) => {
+    return {
+      id: workshop.id,
+      title: workshop.title,
+      platform: workshop.platform,
+      start_dates: workshop.start_dates,
+      end_dates: workshop.end_dates,
+      modality: workshop.modality,
+      skill: workshop.asociated_skill,
+      activity_status: workshop.activity_status,
+      attendance: workshop.scholar_attendance[0].attendance,
+      year: workshop.year,
+    };
+  });
+};
+
 const page = async ({
   params,
   searchParams,
@@ -35,12 +118,9 @@ const page = async ({
   const {
     first_names,
     last_names,
-    twitter_user,
-    facebook_user,
     allowedEmail,
-    instagram_user,
-    linkedin_user,
     program_information,
+    program_information_id,
     local_phone_number,
     whatsapp_number,
     cell_phone_Number,
@@ -50,10 +130,14 @@ const page = async ({
     dni,
     birthdate,
   } = scholar || {};
-  const { attended_workshops, attended_chats, scholar_status } = program_information || {};
+  const { attended_workshops, scholar_status } = program_information || {};
   const { collage, career, study_area, study_regime } = collage_information || {};
   const { is_in_cva, not_started_cva_reason, cva_location, cva_modality, certificate } =
     cva_information || {};
+  const chats = await getChatsByScholar(program_information_id!, scholarId);
+  const workshops = await getWorkhsopsByScholar(program_information_id!, scholarId);
+  const workshopObj = createWorkshopObject(workshops);
+  const chatObject = createChatObject(chats);
 
   const scholarContactData = [
     {
@@ -80,6 +164,11 @@ const page = async ({
   const atendedWorkshops = attended_workshops?.filter(
     (workshop) => workshop.attendance === 'ATTENDED'
   );
+  const atendedChats = chatObject?.filter(
+    (chat) =>
+      chat.attendance === 'ATTENDED' ||
+      (chat.attendance === 'SPEAKER' && chat.activity_status !== 'SUSPENDED')
+  );
   const cardContent = createDataCardsContent([
     {
       icon: workshopIcon,
@@ -92,7 +181,7 @@ const page = async ({
     {
       icon: chatIcon,
       text: 'Chats clubs',
-      number: attended_chats?.length || 0,
+      number: atendedChats?.length || 0,
       bg: 'bg-gradient-to-r from-red-500  to-red-900',
       cardButtonBg: 'bg-indigo-950 active:bg-blue-700',
       activity: 'chats',
@@ -114,12 +203,23 @@ const page = async ({
       return acc;
     }, {}) || {};
 
-  const workshops = atendedWorkshops?.map((workshop) => workshop.workshop) || [];
-
+  const chatsByMonth: Record<number, number> =
+    atendedChats?.reduce((acc, chat) => {
+      const month = new Date(chat.start_dates).getMonth();
+      acc[month] = (acc[month] || 0) + 1;
+      return acc;
+    }, {}) || {};
   // Add null values for months without workshops
   for (let month = 0; month < 12; month++) {
     if (!(month in workshopsByMonth)) {
       workshopsByMonth[month] = 0;
+    }
+  }
+
+  // Add null values for months without chats
+  for (let month = 0; month < 12; month++) {
+    if (!(month in chatsByMonth)) {
+      chatsByMonth[month] = 0;
     }
   }
 
@@ -273,8 +373,17 @@ const page = async ({
       {searchParams?.actividad === 'talleres' && (
         <div className="flex justify-center items-center ">
           <Table
-            tableColumns={singleScholarWorkshopsColumns}
-            tableData={workshops || []}
+            tableColumns={scholarWorkshopAttendanceColumns}
+            tableData={workshopObj || []}
+            tableHeadersForSearch={[{ option: 'adsf', label: 'adsfadsf' }]}
+          />
+        </div>
+      )}
+      {searchParams?.actividad === 'chats' && (
+        <div className="flex justify-center items-center ">
+          <Table
+            tableColumns={scholarChatAttendaceColumns}
+            tableData={chatObject || []}
             tableHeadersForSearch={[{ option: 'adsf', label: 'adsfadsf' }]}
           />
         </div>

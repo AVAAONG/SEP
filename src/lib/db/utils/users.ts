@@ -212,7 +212,15 @@ export const getScholarWithAllData = async (scholar_id: string) => {
         include: {
           attended_chats: {
             include: {
-              chat: true,
+              chat: {
+                include: {
+                  scholar_attendance: {
+                    include: {
+                      chat: true,
+                    },
+                  },
+                },
+              },
             },
           },
           attended_workshops: {
