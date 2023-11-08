@@ -4,7 +4,7 @@ import Table from '@/components/table/Table';
 import speakerWorkshopsColumn from '@/components/table/columns/singleWorkshopSpeakerColumns';
 
 import ChartComponent from '@/components/charts/AreaChart';
-import { getWorkshopSpeakerWithWorkshops } from '@/lib/db/utils/speaker';
+import { getChatSpeakersWithChats } from '@/lib/db/utils/speaker';
 import { createDataCardsContent } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -39,7 +39,7 @@ const speakerSearchOptions = [
 ];
 const page = async ({ params }: { params: { speakerId: string } }) => {
   const { speakerId } = params;
-  const [workshopSpeaker, workshops] = await getWorkshopSpeakerWithWorkshops(speakerId);
+  const [workshopSpeaker, workshops] = await getChatSpeakersWithChats(speakerId);
   const {
     first_names,
     last_names,
@@ -65,6 +65,7 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
       ) ?? []
     ),
   ];
+  console.log(workshops);
 
   const workshopSpeakerSocialNetwork = [
     {

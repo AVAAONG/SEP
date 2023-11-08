@@ -166,7 +166,7 @@ const page = async ({
         const attendance = (workshop as ChatWithAttendance).scholar_attendance?.filter(
           (a: { attendance: string }) => a.attendance === 'ATTENDED'
         )?.length;
-        if (attendance && attendance > 15) acc[month.toString()] = (acc[month.toString()] || 0) + 1;
+        if (attendance && attendance > 8) acc[month.toString()] = (acc[month.toString()] || 0) + 1;
         return acc;
       },
       {} as Record<string, number>

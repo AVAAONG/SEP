@@ -1,5 +1,5 @@
 import Table from '@/components/table/Table';
-import workshopSpeakersColumns from '@/components/table/columns/workshopSpeakersColumns';
+import chatSpeakerColumns from '@/components/table/columns/chatSpeakerColumns';
 import { getChatSpeakersCountByGender, getChatSpeakersWithParams } from '@/lib/db/utils/speaker';
 import { Prisma } from '@prisma/client';
 import dynamic from 'next/dynamic';
@@ -118,7 +118,7 @@ const page = async () => {
       </div>
       <div className="w-full h-fit">
         <Table
-          tableColumns={workshopSpeakersColumns}
+          tableColumns={chatSpeakerColumns}
           tableData={chattSpeakersWithSocialNetworks || []}
           tableHeadersForSearch={tableHeaders}
         />

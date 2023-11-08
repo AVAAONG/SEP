@@ -137,7 +137,7 @@ const Page = () => {
         {/* {workshopResponse.isLoading || workshopResponse.data.length === 0 ? (
           <></>
         ) : ( */}
-        <ScheduledWorkshopsList workshops={dumyData || []} />
+        {/* <ScheduledWorkshopsList workshops={dumyData || []} /> */}
         {/* )} */}
       </div>
     </div>

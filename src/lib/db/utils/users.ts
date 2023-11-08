@@ -164,6 +164,20 @@ export const getScholarsWithAllData = async () => {
   return scholar;
 };
 
+export const getScholars = async () => {
+  const scholars = prisma.scholar.findMany({
+    where: {
+      program_information: {
+        scholar_condition: {
+          equals: 'ACTIVE',
+        },
+      },
+    },
+  })
+  return scholars;
+}
+
+
 /**
  * Returns the count of users that match the given ScholarCondition.
  * @param condition The ScholarCondition object used to filter the users based on their program information.

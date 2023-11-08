@@ -12,7 +12,6 @@ import { SortIcon, SortIconDown, SortIconReverse } from '../../../public/svgs/sv
 import TableFooter from './TableFooter';
 import TableHeader from './TableHeader';
 import ExpandTableButton from './headerComponents/ExpandTableButton';
-import ExportButton from './headerComponents/ExportButton';
 
 interface TableProps<T extends object> {
   tableData: readonly T[];
@@ -65,7 +64,7 @@ function Table<T extends object>({
         filterValue={globalFilter}
       >
         <ExpandTableButton isExpanded={isExpanded} toggleExpanded={toggleExpanded} />
-        <ExportButton />
+        {/* <ExportButton /> */}
       </TableHeader>
       <div className="flow-root w-full overflow-x-scroll mt-2">
         <table {...getTableProps()} className="w-full  text-sm text-left text-gray-300 ">

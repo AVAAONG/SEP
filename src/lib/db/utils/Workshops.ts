@@ -98,27 +98,36 @@ export const deleteWorkshopFromDatabase = async (id: shortUUID.SUUID) => {
 
 export const changeScholarAttendance = async (
 
-  workshopId: string,
-  scholarId: string,
+  workshopAttendanceId: string,
   attendance: ScholarAttendance
 ) => {
-  const workshop = await prisma.workshop.findUnique({
+  const workshopAttendance = await prisma.workshopAttendance.update({
     where: {
-      id: workshopId,
-      AND: {
-        scholar_attendance: {
-          some: {
-            scholar_id: scholarId,
-          },
-        },
-      }
-
+      id: workshopAttendanceId,
     },
-    include: {
-      scholar_attendance: true
+    data: {
+      attendance: attendance,
     }
-  });
-  console.log(workshop?.scholar_attendance)
+  })
+  console.log(workshopAttendance)
+
+  // const workshop = await prisma.workshop.findUnique({
+  //   where: {
+  //     id: workshopId,
+  //     AND: {
+  //       scholar_attendance: {
+  //         some: {
+  //           scholar_id: scholarId,
+  //         },
+  //       },
+  //     }
+
+  //   },
+  //   include: {
+  //     scholar_attendance: true
+  //   }
+  // });
+  // console.log(workshop?.scholar_attendance)
 
   // await prisma.workshopAttendance.update({
   //   where: {
@@ -132,6 +141,14 @@ export const changeScholarAttendance = async (
 
 
 export const getWorkshops = async () => {
+  const workshops = await prisma.workshop.findMany({
+    include: {
+      speaker: true,
+      temp_data: true,
+      scholar_attendance: true,
+    },
+  });
+  return workshops;
 };
 
 export const getWorkshopByStatus = async (status: ActivityStatus) => {
@@ -287,3 +304,25 @@ export const getWorkhsopsByScholar = async (programInformationId: string, schola
   });
   return chats;
 }
+
+export const addAttendaceToScholar = async (
+  workshopId: string,
+  scholarId: string,
+  attendance: ScholarAttendance,
+) => {
+  await prisma.workshopAttendance.create({
+    data: {
+      workshop: {
+        connect: {
+          id: workshopId,
+        },
+      },
+      scholar: {
+        connect: {
+          id: scholarId
+        },
+      },
+      attendance: attendance as ScholarAttendance,
+    },
+  });
+};

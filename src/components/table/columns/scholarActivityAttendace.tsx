@@ -107,9 +107,7 @@ const ScholarActivityAttendance: Column<ScholarWithActivities>[] = [
       const [attendace, setAttendance] = useState(value);
       return (
         <select
-          name=""
-          id=""
-          className={`border-0 cursor-pointer rounded-full font-medium w-24 text-xs  p-0 ${
+          className={`border-0 cursor-pointer rounded-full font-medium w-24 text-xs  p-0 outline-transparent ${
             attendace === 'ATTENDED'
               ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
               : attendace === 'NOT_ATTENDED'
@@ -122,12 +120,9 @@ const ScholarActivityAttendance: Column<ScholarWithActivities>[] = [
           }`}
           value={attendace}
           onChange={async (event) => {
-            await changeScholarAttendance(
-              cell.row.original.id,
-              cell.row.original.scholar_id,
-              event.target.value as ScholarAttendance
-            );
-            setAttendance(event.target.value as ScholarAttendance);
+            const attendance = event.target.value as ScholarAttendance;
+            await changeScholarAttendance(cell.row.original.id, attendance);
+            return setAttendance(attendance);
           }}
         >
           <option value="ATTENDED">Asistió</option>

@@ -1,12 +1,15 @@
 import defailProfilePic from '@/../public/defaultProfilePic.png';
+import AddScholarToActivityButton from '@/components/admin/AddScholarToActivityButton';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
 import { getWorkshop } from '@/lib/db/utils/Workshops';
+import { getScholarsWithAllData } from '@/lib/db/utils/users';
 import Image from 'next/image';
 import shortUUID from 'short-uuid';
 
 const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => {
   const workshopId = params.workshopId || ('null' as shortUUID.SUUID);
+  const scholars = await getScholarsWithAllData();
 
   const workshop = await getWorkshop(workshopId);
   const {
@@ -107,6 +110,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
         <h2 className="px-8 text-2xl leading-none tracking-tight text-primary-light font-semibold">
           Becarios
         </h2>
+        <AddScholarToActivityButton scholars={scholars} />
         <div className="flex flex-row items-center space-x-2">
           <div className="overflow-x-scroll md:overflow-x-clip rounded-lg w-full">
             <Table
