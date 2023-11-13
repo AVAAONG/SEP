@@ -55,10 +55,9 @@ const page = async () => {
     },
     {} as Record<string, number>
   );
-
   const activeScholarsByAvaYearArray = createArrayFromObject(activeScholarsByAvaYear);
 
-  const workshopSpeakersWithSocialNetworks = scholars?.map((scholar) => {
+  const scholarsWithSocialNetworks = scholars?.map((scholar) => {
     const { twitter_user, facebook_user, instagram_user, linkedin_user } = scholar;
     const socialMedia = createSocialMediaIcons(
       twitter_user,
@@ -68,6 +67,59 @@ const page = async () => {
     );
     return { ...scholar, socialMedia };
   });
+
+  const scholarTableData = scholarsWithSocialNetworks?.map((scholar) => {
+    const {
+      id,
+      first_names,
+      last_names,
+      dni,
+      birthdate,
+      local_phone_number,
+      cell_phone_Number,
+      whatsapp_number,
+      allowedEmail,
+      collage_information,
+      program_information,
+      socialMedia,
+      gender,
+    } = scholar;
+    return {
+      id,
+      first_names,
+      socialMedia,
+      last_names,
+      dni,
+      birthdate,
+      years: moment().diff(moment(birthdate), 'years'),
+      local_phone_number: local_phone_number!,
+      cell_phone_Number: cell_phone_Number!,
+      whatsapp_number: whatsapp_number!,
+      gender: gender!,
+      allowedEmail,
+      collage: collage_information?.collage!,
+      career: collage_information?.career!,
+      avaaStarteYear: program_information?.avaa_admission_year!,
+      yearsInAvaa: parseAvaaAdmisionYear(
+        moment().diff(moment(program_information?.avaa_admission_year), 'years')
+      ),
+      atendedChats: program_information?.attended_chats.filter((attendance) => {
+        return (
+          attendance.attendance === 'ATTENDED' &&
+          (attendance.chat.activity_status === 'DONE' ||
+            attendance.chat.activity_status === 'ATTENDANCE_CHECKED')
+        );
+      }).length!,
+      atendedWorkshops: program_information?.attended_workshops.filter((attendance) => {
+        return (
+          attendance.attendance === 'ATTENDED' &&
+          (attendance.workshop.activity_status === 'DONE' ||
+            attendance.workshop.activity_status === 'ATTENDANCE_CHECKED')
+        );
+      }).length!,
+    };
+  });
+  console.log(scholarTableData);
 
   return (
     <div className="flex flex-col w-full gap-4">
@@ -136,7 +188,7 @@ const page = async () => {
       <div className="w-full h-full">
         <Table
           tableColumns={scholarAllInformationCollumn}
-          tableData={workshopSpeakersWithSocialNetworks || []}
+          tableData={scholarTableData}
           tableHeadersForSearch={tableHeaders}
         />
       </div>

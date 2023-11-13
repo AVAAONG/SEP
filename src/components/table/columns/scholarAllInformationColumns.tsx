@@ -1,8 +1,7 @@
 'use client';
 import defailProfilePic from '@/../public/defaultProfilePic.png';
 import formatDni from '@/lib/db/utils/formatDni';
-import { parseAvaaAdmisionYear, parseStudyAreaFromDatabase } from '@/lib/parseFromDatabase';
-import { Prisma, Scholar } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Cell, CellValue, Column } from 'react-table';
@@ -20,11 +19,33 @@ const scholarWithActivities = Prisma.validator<Prisma.ScholarDefaultArgs>()({
 });
 type ScholarWithActivities = Prisma.ScholarGetPayload<typeof scholarWithActivities>;
 
-const scholarAllInformationCollumn: Column<ScholarWithActivities>[] = [
+interface ScholarTableData {
+  id: string;
+  first_names: string;
+  last_names: string;
+  dni: string;
+  birthdate: Date;
+  years: number;
+  gender: 'F' | 'M' | 'O';
+  local_phone_number: string;
+  cell_phone_Number: string;
+  whatsapp_number: string;
+  allowedEmail: string;
+  collage: string;
+  career: string;
+  avaaStarteYear: Date;
+  yearsInAvaa: number;
+  socialMedia: any[]; // Replace any with the actual type
+  atendedChats: number;
+  atendedWorkshops: number;
+}
+[];
+
+const scholarAllInformationCollumn: Column<ScholarTableData>[] = [
   {
     Header: 'Nombre',
-    accessor: (row: Scholar) => `${row.first_names} ${row.last_names}`,
-    Cell: ({ value, cell }: { value: CellValue; cell: Cell<ScholarWithActivities> }) => (
+    accessor: (row: ScholarTableData) => `${row.first_names} ${row.last_names}`,
+    Cell: ({ value, cell }: { value: CellValue; cell: Cell<ScholarTableData> }) => (
       <Link
         href={cell.row.original.id ? `becarios/${cell.row.original.id}` : ''}
         className="flex items-center"
@@ -69,11 +90,7 @@ const scholarAllInformationCollumn: Column<ScholarWithActivities>[] = [
   },
   {
     Header: 'Edad',
-    Cell: ({ cell }: { cell: Cell<ScholarWithActivities> }) => {
-      const birthdate = new Date(cell.row.original.birthdate).getFullYear();
-      const age = new Date().getFullYear() - birthdate;
-      return <span>{age}</span>;
-    },
+    accessor: 'years',
   },
   {
     Header: 'Género',
@@ -112,33 +129,23 @@ const scholarAllInformationCollumn: Column<ScholarWithActivities>[] = [
   },
   {
     Header: 'Universidad',
-    accessor: 'collage_information',
+    accessor: 'collage',
     id: 'collage',
     Cell: ({ value }: { value: CellValue }) => {
-      return <span>{value.collage}</span>;
+      return <span>{value}</span>;
     },
   },
-  {
-    Header: 'Area de estudio',
-    accessor: 'collage_information',
-    id: 'study_area',
-    Cell: ({ value }: { value: CellValue }) => {
-      return <span>{parseStudyAreaFromDatabase(value.study_area)}</span>;
-    },
-  },
+  // {
+  //   Header: 'Area de estudio',
+  //   accessor: '',
+  // },
   {
     Header: 'Carrera',
-    accessor: 'collage_information',
-    id: 'career',
-    Cell: ({ value }: { value: CellValue }) => {
-      return <span>{value.career}</span>;
-    },
+    accessor: 'career',
   },
   {
     Header: 'Fecha de ingreso a AVAA',
-    accessor: 'program_information',
-    id: 'avaa_admission_year',
-
+    accessor: 'avaaStarteYear',
     Cell: ({ value }: { value: CellValue }) => {
       const date = new Date(value.avaa_admission_year);
       return (
@@ -155,19 +162,14 @@ const scholarAllInformationCollumn: Column<ScholarWithActivities>[] = [
   },
   {
     Header: 'Año actual en AVAA',
-    Cell: ({ cell }: { cell: Cell<ScholarWithActivities> }) => {
-      const avaaEntryDate = cell.row.original.program_information?.avaa_admission_year
-        ? new Date(cell.row.original.program_information.avaa_admission_year).getFullYear()
-        : null;
-      const age = avaaEntryDate ? new Date().getFullYear() - avaaEntryDate : null;
-      return <span>{parseAvaaAdmisionYear(age!)}</span>;
-    },
+    accessor: 'yearsInAvaa',
   },
   {
     Header: 'Redes Sociales',
-    Cell: ({ cell }: { cell: any }) => (
+    accessor: 'socialMedia',
+    Cell: ({ value }) => (
       <div className="flex gap-2 justify-center">
-        {cell.row.original.socialMedia.map((socialNetwork: any, index: number) => (
+        {value.map((socialNetwork: any, index: number) => (
           <Link
             key={index}
             target="_blank"
@@ -181,18 +183,12 @@ const scholarAllInformationCollumn: Column<ScholarWithActivities>[] = [
     ),
   },
   {
-    Header: 'Actividades realizadas',
-    accessor: 'program_information',
-    Cell: ({ value }: { value: CellValue }) => (
-      <div className="m-auto divide-x-2 dark:divide-slate-600">
-        <span className="text center px-4 py-1 text-xs bg-blue-600 dark:bg-blue-500 text-white dark:text-slate-200 rounded-full rounded-r-none font-semibold">
-          {value.attended_workshops.length}
-        </span>
-        <span className="text center px-4 py-1 text-xs bg-red-600 dark:bg-red-500 text-white dark:text-slate-200 rounded-full rounded-l-none font-semibold">
-          {value.attended_chats.length}
-        </span>
-      </div>
-    ),
+    Header: 'Actividades formativas realizadas',
+    accessor: 'atendedWorkshops',
+  },
+  {
+    Header: 'Chat clubs  realizadas',
+    accessor: 'atendedChats',
   },
 ];
 
