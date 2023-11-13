@@ -1,5 +1,5 @@
 import defailProfilePic from '@/../public/defaultProfilePic.png';
-import AddWorkshopButton from '@/components/ConfirmButton';
+import ScholarDropdown from '@/components/ScholarDropdown';
 import ScholarStatus from '@/components/ScholarStatus';
 import AreaChart from '@/components/charts/AreaChart';
 import IconWithInfo from '@/components/commons/IconInWithInformation';
@@ -12,10 +12,11 @@ import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns'
 import { getWorkhsopsByScholar } from '@/lib/db/utils/Workshops';
 import { getChatsByScholar } from '@/lib/db/utils/chats';
 import formatDni from '@/lib/db/utils/formatDni';
+import { Tooltip } from '@nextui-org/react';
 
 import { getScholarWithAllData } from '@/lib/db/utils/users';
-import { getCollageName, parseStudyAreaFromDatabase } from '@/lib/parseFromDatabase';
 import { createDataCardsContent } from '@/lib/utils';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import {
   ActivityStatus,
   Level,
@@ -25,6 +26,7 @@ import {
   WorkshopYear,
 } from '@prisma/client';
 import Image from 'next/image';
+import Link from 'next/link';
 import { CellPhoneIcon, WhatsAppIcon } from 'public/svgs/SocialNetworks';
 import {
   AddressIcon,
@@ -223,15 +225,36 @@ const page = async ({
     }
   }
 
-  const chartData = Object.entries(workshopsByMonth).map(([month, count]) => ({
-    x: new Date(0, month),
-    y: count,
-  }));
+  let areaChartSeries = [];
+
+  if (searchParams !== undefined || searchParams.actividad === 'talleres') {
+    areaChartSeries.push({
+      name: 'Actividades formativas',
+      data: Object.entries(workshopsByMonth).map(([month, count]) => ({
+        x: new Date(0, month),
+        y: count,
+      })),
+    });
+  }
+
+  if (searchParams !== undefined || searchParams.actividad === 'chats') {
+    areaChartSeries.push({
+      name: 'Chats',
+      data: Object.entries(chatsByMonth).map(([month, count]) => ({
+        x: new Date(0, month),
+        y: count,
+      })),
+    });
+  }
 
   return (
-    <section className="flex flex-col gap-4 p-6 pt-0">
-      <div className="flex flex-col lg:flex-row justify-center lg:justify-start gap-4 w-full">
-        <div className="w-52 h-fit flex items-center justify-center rounded-full shadow-lg border-4 border-green-500 p-1">
+    <section className="flex flex-col gap-4 lg:p-6 pt-0">
+      <div className="flex flex-col items-center lg:items-start lg:flex-row justify-center lg:justify-start gap-2 lg:gap-6 w-full">
+        <div className="flex lg:hidden items-center justify-between w-full gap-4 px-6 lg:p-0">
+          <ScholarStatus status={scholar_status || 'NORMAL'} scholarId={scholarId} />
+          <ScholarDropdown />
+        </div>
+        <div className="w-52 h-fit flex items-center justify-center rounded-full shadow-lg border-3 border-green-500 p-1">
           <Image
             src={defailProfilePic}
             alt="Imagen del facilitador"
@@ -241,21 +264,31 @@ const page = async ({
             className="rounded-full"
           />
         </div>
-        <div className="flex flex-col gap-2 items-start w-full">
-          <div className="w-10/12 flex justify-between items-center">
-            <h1 className="block text-4xl text-primary-light font-bold">
-              {first_names} {last_names}{' '}
-            </h1>{' '}
-            <ScholarStatus status={scholar_status || 'NORMAL'} scholarId={scholarId} />
+        <div className="flex flex-col gap-4 items-start w-full">
+          <div className="w-full flex  lg:flex-row justify-between items-center">
+            <div className="flex gap-4 items-center text-primary-light">
+              <h1 className="block text-center text-3xl lg:text-4xl  font-bold">
+                {first_names} {last_names}{' '}
+              </h1>
+              <Tooltip content="Ver perfil publico">
+                <Link href={`/perfilBecario/${scholarId}`}>
+                  <ArrowTopRightOnSquareIcon width={20} height={20} />
+                </Link>
+              </Tooltip>
+            </div>
+            <div className="hidden lg:flex items-center gap-4">
+              <ScholarStatus status={scholar_status || 'NORMAL'} scholarId={scholarId} />
+              <ScholarDropdown />
+            </div>
           </div>
-          <div className="flex w-full justify-between mt-2">
-            <div className="flex flex-col gap-2">
-              <div className="flex gap-2 max-w-[200px]">
+          <div className="flex w-full justify-between ">
+            <div className="flex items-center lg:items-start flex-col gap-2 w-full">
+              <div className="flex gap-2">
                 {scholarContactData.map(({ value, icon }, index) => {
                   return <IconWithInfo key={index} value={value!} icon={icon} />;
                 })}
               </div>
-              <div className="mt-2 flex flex-col gap-2">
+              <div className="mt-2 items-center lg:items-start flex flex-col gap-2">
                 <div className="text-sm flex gap-1 items-center">
                   <div className="w-5 h-5 text-primary-dark">
                     <DniIcon />
@@ -284,7 +317,7 @@ const page = async ({
               </div>
             </div>
 
-            <div className="flex gap-8">
+            {/* <div className="flex gap-8">
               <div className="flex flex-col gap-2">
                 <div>
                   <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">
@@ -339,13 +372,13 @@ const page = async ({
                 </h3>
                 <p className="text-sm font-medium">{cva_modality}</p>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col  w-full">
-        <div className="flex gap-2 justify-center items-center mt-4">
+      <div className="flex flex-col w-full">
+        <div className="flex gap-2 justify-center h-full items-center mt-4">
           {cardContent.map(({ icon, text, number, bg, activity }) => {
             return (
               <CardWithStat
@@ -360,9 +393,8 @@ const page = async ({
             );
           })}
         </div>
-        <AddWorkshopButton scholarId={scholarId} data={workshops} />
         <div className="mt-6 p-2 rounded-lg bg-white">
-          <AreaChart chartData={chartData} title="Actividades realizadas" xAxysType="datetime" />
+          <AreaChart series={areaChartSeries} title="Actividades realizadas" xAxysType="datetime" />
         </div>
         {/* <div className="w-1/3 mt-6 p-2 rounded-lg bg-white">
           <RadarChart dataSeries={dataSeries} />
