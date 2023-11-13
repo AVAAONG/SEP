@@ -14,11 +14,21 @@ const scholarPublicWorkshopAttendanceColumns: Column<IScholarWorkshopColumn>[] =
   {
     Header: 'Actividad formativa',
     accessor: 'title',
-    Cell: ({ value, cell }) => (
+    Cell: ({ value }) => (
       <div>
         <div className="block w-96 text-center overflow-x-scroll">{value}</div>
       </div>
     ),
+  },
+  // {
+  //   Header: 'Facilitador',
+  //   accessor: 'speaker',
+  //   Cell: ({ value }) => {
+  //     return <span>{value[0].first_names}</span>;
+  //   },
+  // },
+  {
+    Header: 'Duracion',
   },
   {
     Header: 'Modalidad',

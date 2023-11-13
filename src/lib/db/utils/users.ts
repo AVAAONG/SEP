@@ -246,6 +246,7 @@ export const getScholarWithAllData = async (scholar_id: string) => {
                       workshop: true,
                     },
                   },
+                  speaker: true,
                 },
               },
             },

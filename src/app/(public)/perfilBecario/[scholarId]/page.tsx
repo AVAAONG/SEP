@@ -26,31 +26,37 @@ const createWorkshopObject = (workshops: WorkshopWithAllData[]) => {
     };
   });
 };
-function getTotalHours(workshops: { startDates: Date[]; endDates: Date[]; skill: string }[]) {
-  const totalHoursBySkill: { [skill: string]: number } = {};
+
+const getActivityDurationInAcademicHours = (startDate: Date, endDate: Date) => {
+  const duration = moment.duration(moment(endDate).diff(moment(startDate)));
+  const durationInMinutes = duration.asMinutes();
+  const academicHourInMinutes = 45;
+  return Number((durationInMinutes / academicHourInMinutes).toFixed());
+}
+
+function getTotalHours(activities: { startDates: Date[]; endDates: Date[]; category: string }[]) {
+  const totalHoursBycategory: { [category: string]: number } = {};
   let totalHours = 0;
+  activities.forEach((activity) => {
+    activity.startDates.forEach((startDate, index) => {
+      const endDate = activity.endDates[index];
+      const durationInAcademicHours = getActivityDurationInAcademicHours(startDate, endDate)
+      totalHours += durationInAcademicHours
 
-  workshops.forEach((workshop) => {
-    workshop.startDates.forEach((startDate, index) => {
-      const endDate = workshop.endDates[index];
-
-      const duration = moment.duration(moment(endDate).diff(moment(startDate)));
-      const durationInMinutes = duration.asMinutes();
-
-      const academicHourInMinutes = 45;
-      const durationInAcademicHours = durationInMinutes / academicHourInMinutes;
-      totalHours += Number(durationInAcademicHours.toFixed());
-
-      if (totalHoursBySkill[workshop.skill]) {
-        totalHoursBySkill[workshop.skill] += Number(durationInAcademicHours.toFixed());
+      if (totalHoursBycategory[activity.category]) {
+        totalHoursBycategory[activity.category] += durationInAcademicHours;
       } else {
-        totalHoursBySkill[workshop.skill] = Number(durationInAcademicHours.toFixed());
+        totalHoursBycategory[activity.category] = durationInAcademicHours;
       }
     });
   });
 
-  return [totalHours, totalHoursBySkill];
+  const totalHoursArray = Object.entries(totalHoursBycategory).map(([category, totalHours]) => ({ category, totalHours }));
+  return [totalHours, totalHoursArray];
 }
+
+
+
 const page = async ({
   params,
   searchParams,
@@ -93,7 +99,7 @@ const page = async ({
         startDates: start_dates,
         endDates: end_dates,
         status: activity_status,
-        skill: asociated_skill,
+        category: asociated_skill,
         scholar_attendance: attendance.attendance,
         year,
       };
@@ -117,14 +123,13 @@ const page = async ({
         startDates: start_dates,
         endDates: end_dates,
         status: activity_status,
-        skill: level,
+        category: level,
         scholar_attendance: attendance.attendance,
       };
     });
   const workshopObj = createWorkshopObject(workshops);
   const [totalHours, totalHoursBySkill] = getTotalHours(workshops);
   const [chatTotalHours, chatTotalHoursByLevel] = getTotalHours(chats);
-  console.log(chatTotalHoursByLevel, chatTotalHours);
 
   const workshopAccordionInfo = {
     workshopTotalHours: totalHours,
@@ -161,6 +166,7 @@ const page = async ({
       username: linkedin_user,
     },
   ];
+
   return (
     <main className="min-h-screen">
       <section className="flex flex-col md:flex-row gap-4 w-full ">
@@ -181,32 +187,31 @@ const page = async ({
               Licenciatura en{' '}
               <span className="font-semibold">{scholar?.collage_information?.career}</span> en la{' '}
               <span className="font-semibold">
-                {getCollageName(scholar?.collage_information?.collage)}
+                {getCollageName(scholar?.collage_information?.collage!)}
               </span>
             </p>
 
             <div className="flex w-full gap-2 justify-center">
               {scholarSocialNetworks.map(
                 ({ url, icon, username }, index) => (
-                  // username && (
-                  <Link
-                    target="_blank"
-                    href={url}
-                    className="w-9 text-green-700 dark:text-green-400 rounded-full  bg-gray-100 dark:bg-slate-600 p-2"
-                    key={index}
-                  >
-                    {icon}
-                  </Link>
+                  username && (
+                    <Link
+                      target="_blank"
+                      href={url}
+                      className="w-9 text-green-700 dark:text-green-400 rounded-full  bg-gray-100 dark:bg-slate-600 p-2"
+                      key={index}
+                    >
+                      {icon}
+                    </Link>
+                  )
                 )
-                // )
               )}
             </div>
           </div>
         </div>
         <div
-          className={`w-full flex-1 bg-gray-100 flex flex-col gap-4 ${
-            searchParams?.actividad === undefined ? ' py-4 md:py-36 ' : 'py-4'
-          } px-10`}
+          className={`w-full flex-1 bg-gray-100 flex flex-col gap-4 ${searchParams?.actividad === undefined ? ' py-4 md:py-36 ' : 'py-4'
+            } px-10`}
         >
           {searchParams?.actividad !== undefined && (
             <Link
@@ -216,6 +221,7 @@ const page = async ({
               <ChevronLeftIcon width={24} height={24} />
             </Link>
           )}
+
           <PublicAccordion
             workshopInfo={workshopAccordionInfo}
             kindOfActivity={searchParams?.actividad}
