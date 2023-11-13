@@ -1,54 +1,28 @@
 'use client';
 import { parseSkillFromDatabase } from '@/lib/utils2';
 import { Accordion, AccordionItem } from '@nextui-org/react';
-import { Level, Skill } from '@prisma/client';
+import { Skill } from '@prisma/client';
 import Link from 'next/link';
 import { chatIcon } from 'public/svgs/svgs';
-
-interface PublicAccordionProps {
-  workshopInfo: {
-    workshopTotalHours: number;
-    totalHoursBySkill: {
-      [skill: string]: number;
-    };
-  };
-  chatInfo: {
-    chatTotalHours: number;
-    chatTotalHoursByLevel: {
-      [Level: Level]: number;
-    };
-  };
-  volunteerInfo: {
-    totalHours: number;
-  };
-  kindOfActivity: string;
-}
 
 interface WorkshopAccordionProps {
   workshopInfo: {
     workshopTotalHours: number;
-    totalHoursBySkill: {
-      [skill: Skill]: number;
-    };
+    totalHoursBySkill: [{ category: string; totalHours: number }];
   };
 }
-
 interface ChatAccordionProps {
   chatInfo: {
     chatTotalHours: number;
-    chatTotalHoursByLevel: {
-      [Level: Level]: number;
-    };
+    chatTotalHoursByLevel: [{ category: string; totalHours: number }];
   };
 }
-
-
 
 const WorkshopsAccordion: React.FC<WorkshopAccordionProps> = ({ workshopInfo }) => {
   const { workshopTotalHours, totalHoursBySkill } = workshopInfo;
 
   return (
-    <>
+    <div className="flex flex-col gap-3">
       <div className="flex gap-4 px-4 items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -65,9 +39,7 @@ const WorkshopsAccordion: React.FC<WorkshopAccordionProps> = ({ workshopInfo }) 
           <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
           <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
         </svg>
-        <h3 className="col-span-full text-3xl font-semibold">
-          Actividades formativas
-        </h3>
+        <h3 className="col-span-full text-3xl font-semibold">Actividades formativas</h3>
       </div>
       <Accordion variant="splitted">
         <AccordionItem
@@ -85,7 +57,7 @@ const WorkshopsAccordion: React.FC<WorkshopAccordionProps> = ({ workshopInfo }) 
               <div className="flex items-center gap-4">
                 <p className="text-4xl font-bold">{workshopTotalHours}</p>
                 <h3 className="text-xl md:text-2xl font-semibold leading-none tracking-tight">
-                  Horas académicas de actividades formativas realizadas
+                  Horas académicas realizadas en actividades formativas
                 </h3>
               </div>
             </div>
@@ -94,7 +66,9 @@ const WorkshopsAccordion: React.FC<WorkshopAccordionProps> = ({ workshopInfo }) 
           <div className="p-4 gap-4 flex flex-wrap justify-between">
             {totalHoursBySkill.map((skill) => (
               <div className="flex-grow">
-                <h4 className="font-semibold text-light">{parseSkillFromDatabase(skill.category)}</h4>
+                <h4 className="font-semibold text-light">
+                  {parseSkillFromDatabase(skill.category as Skill)}
+                </h4>
                 <p className="text-4xl font-bold text-white ">{skill.totalHours}</p>
                 <p className="text-base  text-black dark:text-blue-200">Horas académicas</p>
               </div>
@@ -102,20 +76,20 @@ const WorkshopsAccordion: React.FC<WorkshopAccordionProps> = ({ workshopInfo }) 
           </div>
           <Link
             replace={false}
-            href="?actividad=talleres"
+            href="?actividad=actividadesFormativas"
             className="p-2 block rounded-b-lg text-sm font-semibold text-light  transition-transform duration-75 hover:bg-blue-600"
           >
             Ver actividades realizadas
           </Link>
         </AccordionItem>
       </Accordion>
-    </>
-  )
-}
+    </div>
+  );
+};
 const ChatsAccordion: React.FC<ChatAccordionProps> = ({ chatInfo }) => {
   const { chatTotalHours, chatTotalHoursByLevel } = chatInfo;
   return (
-    <>
+    <div className="flex flex-col gap-3">
       <div className="flex gap-4 px-4 items-center">
         <div className="w-14 h-14 text-red-600">{chatIcon()}</div>
         <h3 className="col-span-full text-3xl font-semibold text-gray-900 dark:text-white">
@@ -138,7 +112,7 @@ const ChatsAccordion: React.FC<ChatAccordionProps> = ({ chatInfo }) => {
               <div className="flex items-center space-x-4">
                 <p className="text-4xl font-bold">{chatTotalHours}</p>
                 <h3 className="text-2xl font-semibold leading-none tracking-tight">
-                  Horas académicas de actividades formativas realizadas
+                  Horas académicas realizadas en chat clubs
                 </h3>
               </div>
             </div>
@@ -153,6 +127,7 @@ const ChatsAccordion: React.FC<ChatAccordionProps> = ({ chatInfo }) => {
               </div>
             ))}
           </div>
+          <div>Completo el CVA EN iandsfndsafjdsalf</div>
           <Link
             replace={false}
             href="?actividad=chats"
@@ -162,98 +137,33 @@ const ChatsAccordion: React.FC<ChatAccordionProps> = ({ chatInfo }) => {
           </Link>
         </AccordionItem>
       </Accordion>
-    </>
-  )
+    </div>
+  );
+};
+
+interface PublicAccordionProps {
+  workshopInfo: {
+    workshopTotalHours: number;
+    totalHoursBySkill: { category: string; totalHours: number }[];
+  };
+  chatInfo: {
+    chatTotalHours: number;
+    chatTotalHoursByLevel: { category: string; totalHours: number }[];
+  };
+  activity: 'actividadesFormativas' | 'chats' | 'voluntariado' | undefined;
 }
 
-
-
-
-
-const PublicAccordion: React.FC<PublicAccordionProps> = ({
-  workshopInfo,
-  kindOfActivity,
-  chatInfo,
-}) => {
-
-  if (kindOfActivity === 'talleres') {
-    return (
-      <WorkshopsAccordion workshopInfo={workshopInfo} />
-    );
-  } else if (kindOfActivity === 'chats') {
-    return (
-      <ChatsAccordion chatInfo={chatInfo} />
-    );
-  }
-  // else if (kindOfActivity === 'voluntariado') {
-  //   return (
-  // <>
-  //   <div className="flex gap-4 px-4 items-center">
-  //     <div className="w-14 h-14 text-green-600">{volunterIcon()}</div>
-
-  //     <h3 className="col-span-full text-3xl font-semibold  ">Actividades de voluntariado</h3>
-  //   </div>
-  //   <Accordion variant="splitted">
-  //     <AccordionItem
-  //       key="3"
-  //       className="group-[.is-splitted]:p-0 p-0 w-full"
-  //       aria-label="Actividades de voluntariado"
-  //       classNames={{
-  //         content: 'bg-green-100  rounded-b-lg',
-  //         base: '!bg-green-500',
-  //         title: 'text-light text-xl font-semibold leading-none tracking-tight',
-  //         subtitle: 'text-green-100',
-  //         indicator: 'text-white text-center pr-4',
-  //       }}
-  //       title={
-  //         <div className="flex-col space-y-1.5  flex justify-between items-center">
-  //           <div className="flex items-center space-x-4">
-  //             <p className="text-4xl font-bold">{workshopTotalHours}</p>
-  //             <h3 className="text-2xl font-semibold leading-none tracking-tight">
-  //               Horas de voluntariado realizadas
-  //             </h3>
-  //           </div>
-  //         </div>
-  //       }
-  //     ></AccordionItem>
-  //   </Accordion>
-  // </>
-  // );
-  // } 
-  else {
+const PublicAccordion: React.FC<PublicAccordionProps> = ({ workshopInfo, chatInfo, activity }) => {
+  if (activity === 'actividadesFormativas') {
+    return <WorkshopsAccordion workshopInfo={workshopInfo} />;
+  } else if (activity === 'chats') {
+    return <ChatsAccordion chatInfo={chatInfo} />;
+  } else if (activity === 'voluntariado') {
+    return <></>;
+  } else {
     return (
       <>
         <WorkshopsAccordion workshopInfo={workshopInfo} />
-
-        {/* <div className="flex gap-4 px-4 items-center">
-          <div className="w-14 h-14 text-green-600">{volunterIcon()}</div>
-
-          <h3 className="col-span-full text-3xl font-semibold  ">Actividades de voluntariado</h3>
-        </div>
-        <Accordion variant="splitted">
-          <AccordionItem
-            key="3"
-            className="group-[.is-splitted]:p-0 p-0 w-full"
-            aria-label="Actividades de voluntariado"
-            classNames={{
-              content: 'bg-green-100  rounded-b-lg',
-              base: '!bg-green-500',
-              title: 'text-light text-xl font-semibold leading-none tracking-tight',
-              subtitle: 'text-green-100',
-              indicator: 'text-white text-center pr-4',
-            }}
-            title={
-              <div className="flex-col space-y-1.5  flex justify-between items-center">
-                <div className="flex items-center space-x-4">
-                  <p className="text-4xl font-bold">{workshopTotalHours}</p>
-                  <h3 className="text-2xl font-semibold leading-none tracking-tight">
-                    Horas de voluntariado realizadas
-                  </h3>
-                </div>
-              </div>
-            }
-          ></AccordionItem>
-        </Accordion> */}
         <ChatsAccordion chatInfo={chatInfo} />
       </>
     );
