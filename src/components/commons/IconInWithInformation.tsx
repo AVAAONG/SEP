@@ -34,7 +34,7 @@ const IconWithInfo = ({ icon, value }: { icon: JSX.Element; value: string }) => 
         )}{' '}
       </div>
       {showCopied && (
-        <span className="absolute translate-x-80">
+        <span className="absolute translate-x-80 z-50">
           <Image
             className="inline-block"
             src="/svgs/copied-text.svg"
