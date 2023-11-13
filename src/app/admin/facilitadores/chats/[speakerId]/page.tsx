@@ -134,10 +134,15 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
     }
   }
 
-  const chartData = Object.entries(workshopsByMonth).map(([month, count]) => ({
-    x: new Date(0, month),
-    y: count,
-  }));
+  const areaSeries = [
+    {
+      name: 'Meses de actividad',
+      data: Object.entries(workshopsByMonth).map(([month, count]) => ({
+        x: new Date(0, month),
+        y: count,
+      })),
+    },
+  ];
 
   return (
     <section className="flex flex-col gap-4">
@@ -219,7 +224,7 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
           </div>
           <div className="mt-6">
             <ChartComponent
-              chartData={chartData}
+              series={areaSeries}
               title="Chat clubs realizados"
               xAxysType="datetime"
             />

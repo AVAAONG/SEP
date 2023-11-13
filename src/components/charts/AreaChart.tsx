@@ -1,15 +1,14 @@
 'use client';
-import { useState } from 'react';
 import Chart from 'react-apexcharts';
 
 interface AreaChartProps {
-  chartData: number[];
+  series: ApexAxisChartSeries;
   title: string;
   xAxysType: 'category' | 'datetime' | 'numeric' | undefined;
 }
 
-const AreaChart = ({ chartData, title, xAxysType }: AreaChartProps) => {
-  const [options] = useState<ApexCharts.ApexOptions>({
+const AreaChart = ({ series, title, xAxysType }: AreaChartProps) => {
+  const options: ApexCharts.ApexOptions = {
     chart: {
       type: 'area',
       toolbar: {
@@ -23,8 +22,7 @@ const AreaChart = ({ chartData, title, xAxysType }: AreaChartProps) => {
       type: xAxysType,
       labels: {
         format: 'MMM',
-      },
-      tickAmount: 12, // Display all twelve months on the x-axis
+      }, // Display all twelve months on the x-axis
     },
     yaxis: {
       title: {
@@ -34,15 +32,8 @@ const AreaChart = ({ chartData, title, xAxysType }: AreaChartProps) => {
         formatter: (value) => Math.round(value).toString(), // Display y-axis labels as integers
       },
     },
-    colors: ['#23a217'],
-  });
-
-  const [series] = useState<ApexAxisChartSeries>([
-    {
-      name: 'Actividades',
-      data: chartData,
-    },
-  ]);
+    colors: ['#23a217', '#eab308', '#1d4ed8', '#b91c1c'],
+  };
 
   return <Chart options={options} series={series} seriestype="bar" height={250} />;
 };
