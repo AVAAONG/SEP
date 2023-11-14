@@ -17,8 +17,8 @@ import {
   useDisclosure,
 } from '@nextui-org/react';
 
-import { Modality, Prisma, Speaker, Workshop, WorkshopYear } from '@prisma/client';
-import { BaseSyntheticEvent, useState } from 'react';
+import { Modality, Prisma, Skill, Speaker, Workshop, WorkshopYear } from '@prisma/client';
+import { BaseSyntheticEvent, Key, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useSWR, { Fetcher } from 'swr';
 import DateInput from '../commons/DateInput';
@@ -39,7 +39,7 @@ type SelectedSpeaker = {
 };
 
 const WorkshopCreationForm = () => {
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const { isOpen, onOpenChange, onClose } = useDisclosure();
   const {
     register,
     handleSubmit,
@@ -48,9 +48,9 @@ const WorkshopCreationForm = () => {
     formState: { isValid },
   } = useForm<WorkshopWithSpeaker>();
   const [checkedYears, setCheckedYears] = useState<WorkshopYear[]>([]);
-  const [selectedSpeakers, setSelectedSpeakers] = useState(new Set<SelectedSpeaker[]>([]));
-  const [selectedModality, setselectedModality] = useState(new Set<Modality[]>([]));
-  const [value, setValue] = useState(new Set([]));
+  const [selectedSpeakers, setSelectedSpeakers] = useState<Speaker[]>([]);
+  const [selectedModality, setSelectedModality] = useState<Set<Modality>>(new Set());
+  const [asociatedSkill, setAsociatedSkill] = useState<Set<Skill>>(new Set());
 
   const modality = watch('modality');
   const fetcher: Fetcher<{ speakers: Speaker[] } | {}[], string> = (...args) =>
@@ -94,21 +94,22 @@ const WorkshopCreationForm = () => {
     // setSelectedSpeakers(new Set([]));
     // setselectedModality(new Set([]));
   };
-  const handleFormSumbit = async (
+  const handleFormSubmit = async (
     formWorkshopData: Workshop,
-    event: BaseSyntheticEvent<object, any, any> | undefined
+    event: BaseSyntheticEvent | undefined
   ) => {
     formWorkshopData.year = checkedYears;
     console.log(formWorkshopData);
     if (!event) return;
-    const buttonType = event.nativeEvent.submitter.name;
+    const buttonType = (event.nativeEvent as any).submitter.name;
+    console.log(buttonType); // use the buttonType variable
   };
 
   return (
     <>
       <form
         onSubmit={(event) => event.preventDefault()}
-        className="grid grid-cols-2 w-full space-y-9 gap-x-4 items-center justify-center p-4"
+        className="grid grid-cols-2 w-full gap-y-6 gap-x-4 items-center justify-center p-4"
       >
         <h1 className="col-span-2 mb-3 text-center w-full font-semibold text-2xl text-primary-light uppercase tracking-widest">
           crear actividad formativa
@@ -131,11 +132,14 @@ const WorkshopCreationForm = () => {
           radius="sm"
           label="Competencia asociada"
           isRequired
-          classNames={{ mainWrapper: 'md:mt-6', base: 'col-span-2 md:col-span-1' }}
+          classNames={{ base: 'col-span-2 md:col-span-1' }}
           {...register('asociated_skill')}
           labelPlacement="outside"
-          selectedKeys={value}
-          onSelectionChange={setValue}
+          selectedKeys={asociatedSkill}
+          onSelectionChange={(keys: Iterable<Key>) => {
+            const newSet = new Set<Skill>(Array.from(keys) as unknown as Skill[]);
+            setAsociatedSkill(newSet);
+          }}
         >
           {PROGRAM_COMPONENTS.map((animal) => (
             <SelectItem key={animal.value} value={animal.value}>
@@ -163,14 +167,14 @@ const WorkshopCreationForm = () => {
             isMultiline={true}
             selectionMode="multiple"
             classNames={{
-              base: 'col-span-2 md:col-span-1',
-              trigger: 'min-h-unit-12 py-2',
+              base: 'col-span-2  md:col-span-1',
+              trigger: 'py-2',
             }}
             selectedKeys={selectedSpeakers}
             onSelectionChange={setSelectedSpeakers}
             renderValue={(items) => {
               return (
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-grow flex-wrap gap-2">
                   {items.map((item) => (
                     <Chip key={item.key}>
                       {item.data?.first_names} {item.data?.last_names}
@@ -223,7 +227,10 @@ const WorkshopCreationForm = () => {
           {...register('modality')}
           labelPlacement="outside"
           selectedKeys={selectedModality}
-          onSelectionChange={setselectedModality}
+          onSelectionChange={(keys: Iterable<Key>) => {
+            const newSet = new Set<Modality>(Array.from(keys) as unknown as Modality[]);
+            setSelectedModality(newSet);
+          }}
         >
           {MODALITY.map((animal) => (
             <SelectItem key={animal.value} value={animal.value}>
