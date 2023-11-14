@@ -23,7 +23,7 @@ export async function GET(req: NextApiRequest) {
   // await prisma.workshopAttendance.deleteMany()
   // await prisma.workshop.deleteMany()
   // await prisma.workshopTempData.deleteMany()
-  await createWorkshopsInbulkFromSpreadsheet()
+  // await createWorkshopsInbulkFromSpreadsheet()
   return NextResponse.json({ message: "ok" });
 }
 const WORKSHOP_SPREADSHEET = '1u-fDi_uggUCvK1v4DPPCwfx3pu8-Q2-VHnQ6ivbTi4k';
