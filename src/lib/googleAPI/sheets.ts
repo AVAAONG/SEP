@@ -1,3 +1,4 @@
+'use server';
 import { sheets_v4 } from '@googleapis/sheets';
 import { Sheets } from './auth';
 
@@ -232,6 +233,7 @@ export const createSpreadsheetAndReturnUrl = async (title: string) => {
         },
       },
     });
+    console.log('creado')
     return response.data.spreadsheetUrl;
   } catch (err) {
     console.log('Error al crear el spreadsheet');

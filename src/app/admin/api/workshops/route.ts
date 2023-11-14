@@ -23,12 +23,12 @@ export async function GET(req: NextApiRequest) {
   // await prisma.workshopAttendance.deleteMany()
   // await prisma.workshop.deleteMany()
   // await prisma.workshopTempData.deleteMany()
-  // await createWorkshopsInbulkFromSpreadsheet()
+  await createWorkshopsInbulkFromSpreadsheet()
   return NextResponse.json({ message: "ok" });
 }
 const WORKSHOP_SPREADSHEET = '1u-fDi_uggUCvK1v4DPPCwfx3pu8-Q2-VHnQ6ivbTi4k';
 const WORKSHOP_SHEET = 'Registro de talleres';
-const WORKSHOP_RANGE = `'${WORKSHOP_SHEET}'!A${2}:N100`;
+const WORKSHOP_RANGE = `'${WORKSHOP_SHEET}'!A${100}:N116`;
 
 const createWorkshopsInbulkFromSpreadsheet = async () => {
   console.log('\x1b[36m%s\x1b[0m', '++++++ COMENZANDO EJECICION ++++++')
@@ -110,9 +110,7 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
     for (const a of mainListAttendance) {
       if (a === undefined) continue;
       const dni = parseDni(a[2] ?? 'NOEXISTE');
-      let attendaci
-      if (speakerId === "h3hPNMMFtpkrGEBQ8kq8M3") attendaci = "ATTENDED"
-      else attendaci = parseScholarAttendace(status, a[5] as 'Si' | 'No');
+      let attendaci = parseScholarAttendace(status, a[5] as 'Si' | 'No');
       let scholar;
       try {
         scholar = await prisma.scholar.findUniqueOrThrow({
@@ -314,7 +312,7 @@ const parseSpeakerId = (speakersId: string) => {
 
 
 const createSpreadsheetForErrors = async (activityTitle: string, index: number) => {
-  const cellToPutSpreadsheet = `'${WORKSHOP_SHEET}'!O${index + 2}:O${index + 2}`;
+  const cellToPutSpreadsheet = `'${WORKSHOP_SHEET}'!O${index + 100}:O${index + 100}`;
   console.log('\x1b[36m%s\x1b[0m', 'Creando Spreadsheet de errores');
   const spreadsheetForErrors = (await createSpreadsheetAndReturnUrl(activityTitle)) as string;
   await insertSpreadsheetValue(

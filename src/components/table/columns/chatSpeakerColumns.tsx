@@ -1,6 +1,6 @@
 'use client';
 import defailProfilePic from '@/../public/defaultProfilePic.png';
-import { Workshop, WorkshopSpeaker } from '@prisma/client';
+import { WorkshopSpeaker } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Cell, Column } from 'react-table';
@@ -71,27 +71,27 @@ const chatSpeakerColumns: Column<WorkshopSpeaker>[] = [
       </div>
     ),
   },
-  {
-    Header: 'Actividades realizadas',
-    Cell: ({ cell }: { cell: Cell<any> }) => (
-      <div className="m-auto divide-x-2 dark:divide-slate-600">
-        <span className="text center px-4 py-1 text-xs bg-primary-light dark:bg-primary-light text-white dark:text-slate-200 rounded-full rounded-r-none font-semibold">
-          {
-            cell.row.original.workshops.filter(
-              (workshop: Workshop) => workshop.modality === 'IN_PERSON'
-            ).length
-          }
-        </span>
-        <span className="text center px-4 py-1 text-xs bg-primary-light dark:bg-primary-light text-white dark:text-slate-200 rounded-full rounded-l-none font-semibold">
-          {
-            cell.row.original.workshops.filter(
-              (workshop: Workshop) => workshop.modality === 'ONLINE'
-            ).length
-          }
-        </span>
-      </div>
-    ),
-  },
+  // {
+  //   Header: 'Actividades realizadas',
+  //   Cell: ({ cell }: { cell: Cell<any> }) => (
+  //     <div className="m-auto divide-x-2 dark:divide-slate-600">
+  //       <span className="text center px-4 py-1 text-xs bg-primary-light dark:bg-primary-light text-white dark:text-slate-200 rounded-full rounded-r-none font-semibold">
+  //         {
+  //           cell.row.original.workshops.filter(
+  //             (workshop: Workshop) => workshop.modality === 'IN_PERSON'
+  //           ).length
+  //         }
+  //       </span>
+  //       <span className="text center px-4 py-1 text-xs bg-primary-light dark:bg-primary-light text-white dark:text-slate-200 rounded-full rounded-l-none font-semibold">
+  //         {
+  //           cell.row.original.workshops.filter(
+  //             (workshop: Workshop) => workshop.modality === 'ONLINE'
+  //           ).length
+  //         }
+  //       </span>
+  //     </div>
+  //   ),
+  // },
 ];
 
 export default chatSpeakerColumns;

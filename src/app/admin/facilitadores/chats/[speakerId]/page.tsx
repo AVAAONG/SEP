@@ -1,9 +1,9 @@
 import defailProfilePic from '@/../public/defaultProfilePic.png';
 import NormalCard from '@/components/scholar/card/NormalCard';
 import Table from '@/components/table/Table';
-import speakerWorkshopsColumn from '@/components/table/columns/singleWorkshopSpeakerColumns';
 
 import ChartComponent from '@/components/charts/AreaChart';
+import singleChatSpeakerColumns from '@/components/table/columns/SinglechatSpeakerColumns';
 import { getChatSpeakersWithChats } from '@/lib/db/utils/speaker';
 import { createDataCardsContent } from '@/lib/utils';
 import Image from 'next/image';
@@ -233,7 +233,7 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
       </div>
       <div className="flex justify-center items-center ">
         <Table
-          tableColumns={speakerWorkshopsColumn}
+          tableColumns={singleChatSpeakerColumns}
           tableData={workshops || []}
           tableHeadersForSearch={speakerSearchOptions}
         />
