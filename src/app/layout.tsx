@@ -8,7 +8,7 @@
 import favicon from '@/../public/logo-proexcelencia-cap.png';
 import '@/app/globals.css';
 import { ThemeProviderC } from '@/components/commons/ThemeProvider';
-import Providers from '../components/commons/Providers';
+import Providers from '../components/commons/Providerz';
 
 /**
  * The base metadata of the application.
