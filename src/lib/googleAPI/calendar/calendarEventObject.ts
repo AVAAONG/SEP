@@ -1,5 +1,5 @@
-import { Platform, activityMode } from '@/types/General';
 import { calendar_v3 } from '@googleapis/calendar';
+import { Modality } from '@prisma/client';
 
 /**
  * Creates the default event object with all the details about the activitie
@@ -15,7 +15,7 @@ import { calendar_v3 } from '@googleapis/calendar';
  */
 const createDefaultEvent = (
   name: string,
-  platform: Platform,
+  platform: string,
   calendarDescription: string,
   start: string,
   end: string,
@@ -25,6 +25,7 @@ const createDefaultEvent = (
     summary: name,
     description: calendarDescription,
     location: platform,
+
     start: {
       dateTime: start,
       timeZone: 'America/Caracas',
@@ -35,34 +36,45 @@ const createDefaultEvent = (
     },
     visibility: 'public',
     guestsCanSeeOtherGuests: true,
-    //sets a reminder 1:30 hours before the event begins
     reminders: {
       useDefault: false,
       overrides: [
+        // remainder 1 day before the event
+        {
+          method: 'email',
+          minutes: 1440,
+        },
         {
           method: 'popup',
-          minutes: 78,
+          minutes: 1440,
+        },
+        // remainder 1 hour before the event
+        {
+          method: 'popup',
+          minutes: 60,
+        },
+        {
+          method: 'email',
+          minutes: 60,
+        },
+        // remainder 30 minutes before the event
+        {
+          method: 'email',
+          minutes: 30,
         },
         {
           method: 'popup',
           minutes: 30,
+        },
+        {
+          method: 'popup',
+          minutes: 15,
         },
       ],
     },
     attendees,
   };
   return defaultEvent;
-};
-
-/** TODO: should be fixed
- * create a recurrent event
- */
-const createRecurrentEvent = (event: calendar_v3.Schema$Event, days: Date[]) => {
-  const recurrentEvent = {
-    ...event,
-    recurrence: [`RRULE:`],
-  };
-  return recurrentEvent;
 };
 
 /**
@@ -87,8 +99,8 @@ const createRecurrentEvent = (event: calendar_v3.Schema$Event, days: Date[]) => 
  */
 const createEventObject = (
   name: string,
-  activityMode: activityMode,
-  platform: Platform,
+  Modality: Modality,
+  platform: string,
   calendarDescription: string,
   start: string,
   end: string,
@@ -105,8 +117,8 @@ const createEventObject = (
     attendees
   );
 
-  if (activityMode === 'presencial') event = defaultEvent;
-  else if (activityMode === 'virtual' || activityMode === 'hibrida') {
+  if (Modality === 'IN_PERSON') event = defaultEvent;
+  else if (Modality === 'ONLINE') {
     if (platform === 'google meet') {
       event = {
         ...defaultEvent,

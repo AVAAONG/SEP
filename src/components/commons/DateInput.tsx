@@ -3,9 +3,10 @@ import { Button } from '@nextui-org/react';
 import { nanoid } from 'nanoid';
 import React, { useState } from 'react';
 import { UseFormRegister } from 'react-hook-form';
+import { WorkshopCreationFormProps } from '../admin/WorkshopForm';
 
 type Props = {
-  register: UseFormRegister<any>;
+  register: UseFormRegister<WorkshopCreationFormProps>;
 };
 
 const DateInput: React.FC<Props> = ({ register }) => {
@@ -78,6 +79,7 @@ const DateInput: React.FC<Props> = ({ register }) => {
               labelPlacement="outside"
               classNames={{ base: 'col-span-2 md:col-span-1' }}
               isRequired
+              pattern="[0-9]{2}:[0-9]{2}"
               {...register(`startHour.${id}` as const)}
             />
             <Input
@@ -88,6 +90,7 @@ const DateInput: React.FC<Props> = ({ register }) => {
               classNames={{ base: 'col-span-2 md:col-span-1' }}
               type="time"
               isRequired
+              pattern="[0-9]{2}:[0-9]{2}"
               {...register(`endHour.${id}` as const)}
             />
           </>

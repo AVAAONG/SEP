@@ -6,17 +6,12 @@ import {
   CheckboxGroup,
   Chip,
   Input,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
   Select,
   SelectItem,
   Textarea,
-  useDisclosure,
 } from '@nextui-org/react';
 
+import { formatDates, sumHours } from '@/lib/googleAPI/calendar/utils';
 import { Modality, Prisma, Skill, Speaker, Workshop, WorkshopYear } from '@prisma/client';
 import { BaseSyntheticEvent, Key, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -24,91 +19,82 @@ import useSWR, { Fetcher } from 'swr';
 import DateInput from '../commons/DateInput';
 import PlatformInput from '../commons/PlatformInput';
 
-const workshopWithSpeaker = Prisma.validator<Prisma.WorkshopDefaultArgs>()({
-  include: {
-    speaker: true,
-  },
-});
-export type WorkshopWithSpeaker = Prisma.WorkshopGetPayload<typeof workshopWithSpeaker>;
-
 type SelectedSpeaker = {
   id: string;
   first_names: string;
   last_names: string;
   email: string;
 };
+export interface WorkshopCreationFormProps extends Omit<Workshop, 'start_dates'> {
+  speaker: string;
+  date: { [key: string]: string };
+  startHour: { [key: string]: string };
+  endHour: { [key: string]: string };
+}
 
 const WorkshopCreationForm = () => {
-  const { isOpen, onOpenChange, onClose } = useDisclosure();
-  const {
-    register,
-    handleSubmit,
-    reset,
-    watch,
-    formState: { isValid },
-  } = useForm<WorkshopWithSpeaker>();
+  const { register, handleSubmit, reset, watch, formState } = useForm<WorkshopCreationFormProps>();
   const [checkedYears, setCheckedYears] = useState<WorkshopYear[]>([]);
-  const [selectedSpeakers, setSelectedSpeakers] = useState<Speaker[]>([]);
   const [selectedModality, setSelectedModality] = useState<Set<Modality>>(new Set());
   const [asociatedSkill, setAsociatedSkill] = useState<Set<Skill>>(new Set());
 
   const modality = watch('modality');
+
   const fetcher: Fetcher<{ speakers: Speaker[] } | {}[], string> = (...args) =>
     fetch([...args].join('')).then((res) => res.json());
-
   const { data, isLoading } = useSWR('/admin/api/speakers/workshops', fetcher, {
     fallbackData: [{}],
   });
-  const handleSchedule = async (
-    formWorkshopData: Workshop,
-    event: BaseSyntheticEvent<object, any, any> | undefined
-  ) => {
-    formWorkshopData.year = checkedYears;
-    console.log(formWorkshopData);
-    if (!event) return;
-    event.preventDefault();
-    console.log('ESTO ESAESNKJDSL');
-    onClose();
-
-    // reset();
-    // setCheckedYears([]);
-    // setValue(new Set([]));
-    // setSelectedSpeakers(new Set([]));
-    // setselectedModality(new Set([]));
+  const parseSpeakerObject = (speakersId: string) => {
+    const speakers = speakersId.split(',');
+    const parsedSpeakers: SelectedSpeaker[] = [];
+    speakers.forEach((speaker) => {
+      const [id, first_names, last_names, email] = speaker.split('-');
+      parsedSpeakers.push({ id, first_names, last_names, email });
+    });
+    return parsedSpeakers;
   };
 
-  const handleSend = async (
-    formWorkshopData: Workshop,
-    event: BaseSyntheticEvent<object, any, any> | undefined
-  ) => {
-    formWorkshopData.year = checkedYears;
-    console.log(formWorkshopData);
-    if (!event) return;
-    event.preventDefault();
-    console.log(selectedSpeakers);
-    console.log('sending');
-
-    // reset();
-    // setCheckedYears([]);
-    // setValue(new Set([]));
-    // setSelectedSpeakers(new Set([]));
-    // setselectedModality(new Set([]));
-  };
   const handleFormSubmit = async (
-    formWorkshopData: Workshop,
+    formWorkshopData: WorkshopCreationFormProps,
     event: BaseSyntheticEvent | undefined
   ) => {
-    formWorkshopData.year = checkedYears;
-    console.log(formWorkshopData);
     if (!event) return;
+    event.preventDefault();
+    const dates = await formatDates(
+      formWorkshopData.date,
+      formWorkshopData.startHour,
+      formWorkshopData.endHour
+    );
+    const speakers = parseSpeakerObject(formWorkshopData.speaker);
+    const workshop = {
+      title: formWorkshopData.title,
+      ...dates,
+      activity_status: 'SCHEDULED',
+      avalible_spots: formWorkshopData.avalible_spots,
+      asociated_skill: formWorkshopData.asociated_skill,
+      modality: formWorkshopData.modality,
+      year: checkedYears,
+      description: formWorkshopData.description,
+      platform: formWorkshopData.platform,
+      hours: await sumHours(dates.start_dates, dates.end_dates),
+      speaker: {
+        connect: speakers.map((speaker) => ({
+          id: speaker.id,
+        })),
+      },
+    } satisfies Prisma.WorkshopCreateInput;
+
+    console.log(workshop);
     const buttonType = (event.nativeEvent as any).submitter.name;
-    console.log(buttonType); // use the buttonType variable
+    console.log(buttonType);
+    return;
   };
 
   return (
     <>
       <form
-        onSubmit={(event) => event.preventDefault()}
+        onSubmit={handleSubmit(async (data, event) => await handleFormSubmit(data, event))}
         className="grid grid-cols-2 w-full gap-y-6 gap-x-4 items-center justify-center p-4"
       >
         <h1 className="col-span-2 mb-3 text-center w-full font-semibold text-2xl text-primary-light uppercase tracking-widest">
@@ -148,13 +134,14 @@ const WorkshopCreationForm = () => {
           ))}
         </Select>
 
-        {isLoading || !('speakers' in data) || data.speakers.length < 3 ? (
+        {isLoading || !('speakers' in data) ? (
           <Input
             radius="sm"
             isDisabled
             type="text"
             defaultValue="Cargando facilitadores"
             className="animate-pulse"
+            classNames={{ base: 'col-span-2  md:col-span-1 h-fit' }}
           />
         ) : (
           <Select
@@ -170,8 +157,6 @@ const WorkshopCreationForm = () => {
               base: 'col-span-2  md:col-span-1',
               trigger: 'py-2',
             }}
-            selectedKeys={selectedSpeakers}
-            onSelectionChange={setSelectedSpeakers}
             renderValue={(items) => {
               return (
                 <div className="flex flex-grow flex-wrap gap-2">
@@ -278,61 +263,11 @@ const WorkshopCreationForm = () => {
             Agendar
           </Button>
 
-          <Button type="submit" name="send" radius="sm" className=" w-1/2">
+          <Button type="submit" name="send" radius="sm" className="w-1/2">
             Enviar
           </Button>
         </div>
       </form>
-      <Modal
-        backdrop="opaque"
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        radius="sm"
-        classNames={{
-          body: 'p-4',
-          backdrop: 'bg-secondary-dark bg-opacity-80',
-        }}
-      >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1 text-center">
-                Selecciona el grupo de becarios al que deseas enviar el taller
-              </ModalHeader>
-              <ModalBody>
-                <Select
-                  classNames={{ base: 'col-span-2 md:col-span-1' }}
-                  radius="sm"
-                  label="Grupo de contactos"
-                  labelPlacement="outside"
-                >
-                  {['DESARROLLO', 'KEVIN', 'Todos los becarios'].map((animal) => (
-                    <SelectItem key={animal} value={animal}>
-                      {animal}
-                    </SelectItem>
-                  ))}
-                </Select>
-              </ModalBody>
-              <ModalFooter>
-                <Button variant="light" onPress={onClose}>
-                  Close
-                </Button>
-                <Button
-                  className="bg-[#6f4ef2] shadow-lg shadow-indigo-500/20"
-                  onClick={handleSubmit(
-                    async (
-                      data: Workshop,
-                      event: BaseSyntheticEvent<object, any, any> | undefined
-                    ) => await handleSend(data, event!)
-                  )}
-                >
-                  Action
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
     </>
   );
 };
