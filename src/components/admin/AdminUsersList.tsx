@@ -1,4 +1,5 @@
 import defailProfilePic from '@/../public/defaultProfilePic.png';
+import { ScrollShadow } from '@nextui-org/react';
 import { AdminProfile } from '@prisma/client';
 import Image from 'next/image';
 import { EditIcon, XIcon } from 'public/svgs/svgs';
@@ -15,7 +16,10 @@ const AdminUsersList: React.FC<AdminUsersListProps> = ({ adminUsers, editUser, d
     return (
       <ul className="w-full flex flex-col gap-3 max-h-96 overflow-y-auto transform transition duration-300 ease-in-out">
         {Array.from({ length: 3 }).map((_, index) => (
-          <li className="p-4 focus:outline-none focus:outline-offset-0 rounded-md w-full bg-gray-100 shadow-sm dark:bg-slate-900  animate-pulse" key={index}>
+          <li
+            className="p-4 focus:outline-none focus:outline-offset-0 rounded-md w-full bg-gray-100 shadow-sm dark:bg-slate-900  animate-pulse"
+            key={index}
+          >
             <div className="flex items-center space-x-4">
               <div className="flex-shrink-0">
                 <div className="p-6 rounded-full bg-gray-200"></div>
@@ -35,9 +39,9 @@ const AdminUsersList: React.FC<AdminUsersListProps> = ({ adminUsers, editUser, d
     );
   }
   return (
-    <ul className="w-full flex flex-col gap-3 max-h-96 overflow-y-auto ">
-      {adminUsers.map(
-        ({ allowedEmail, id, responsibility, role, profileImage, profileName }) => (
+    <ScrollShadow hideScrollBar className="h-[400px] w-full">
+      <ul className="w-full flex flex-col gap-3 max-h-96 overflow-y-auto ">
+        {adminUsers.map(({ allowedEmail, id, responsibility, profilePic, profileName }) => (
           <li
             className="p-2 md:p-4 focus:outline-none focus:outline-offset-0  rounded-md w-full bg-white dark:bg-slate-900"
             key={allowedEmail}
@@ -57,7 +61,7 @@ const AdminUsersList: React.FC<AdminUsersListProps> = ({ adminUsers, editUser, d
               <div className="flex-shrink-0">
                 <Image
                   className="w-10 h-10 rounded-full"
-                  src={profileImage ? profileImage : defailProfilePic}
+                  src={profilePic ? profilePic : defailProfilePic}
                   alt={profileName ? '' : 'Foto de perfil por defecto'}
                   width={100}
                   height={100}
@@ -70,10 +74,7 @@ const AdminUsersList: React.FC<AdminUsersListProps> = ({ adminUsers, editUser, d
                 <p className="text-sm text-gray-500 truncate dark:text-gray-400">{allowedEmail}</p>
               </div>
               <div className="hidden md:flex flex-col items-center">
-                <div className="inline-flex items-center text-base font-medium text-gray-900 dark:text-white">
-                  {role}
-                </div>
-                <div className="text-xs text-gray-500 truncate dark:text-gray-400">
+                <div className="hidden md:flex text-xs text-gray-500 truncate dark:text-gray-400">
                   {responsibility}
                 </div>
               </div>
@@ -90,9 +91,9 @@ const AdminUsersList: React.FC<AdminUsersListProps> = ({ adminUsers, editUser, d
               )}
             </div>
           </li>
-        )
-      )}
-    </ul>
+        ))}
+      </ul>
+    </ScrollShadow>
   );
 };
 

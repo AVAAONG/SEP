@@ -18,26 +18,32 @@ export const getAdmin = async (email: string) => {
 
 //durante la creacion, en el profile buscamos el usuario y lo retornamos
 export const createAdminProfileUser = async (data: AdminProfile) => {
-  const adminProfile = await prisma.adminProfile.create({
-    data: {
-      profileName: data.profileName,
-      profilePic: data.profilePic,
-      allowedEmail: data.allowedEmail,
-      gender: data.gender,
-      allowedActions: {
-        connect: {
-          name: "SUPER_ADMIN"
-        }
+  try {
+    const adminProfile = await prisma.adminProfile.create({
+      data: {
+        profileName: data.profileName,
+        profilePic: data.profilePic,
+        allowedEmail: data.allowedEmail,
+        gender: data.gender,
+        allowedActions: {
+          connect: {
+            id: data.allowedActions_id
+          }
+        },
+        responsibility: data.responsibility,
+        chapter: {
+          connect: {
+            id: data.chapter_id!
+          }
+        },
       },
-      responsibility: data.responsibility,
-      chapter: {
-        connect: {
-          id: 'J4ZlF-eg2fTL9W7hnxRe3'
-        }
-      },
-    },
-  });
-  return adminProfile;
+    });
+    return adminProfile;
+  }
+  catch (error) {
+    console.log(error)
+  }
+
 };
 
 export const updateAdminProfileUser = async (data: AdminProfile) => {

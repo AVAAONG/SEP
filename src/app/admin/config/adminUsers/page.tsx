@@ -15,9 +15,11 @@ import { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 const page = () => {
-  const { register, handleSubmit, reset } = useForm<AdminProfile>({
+  const { register, handleSubmit, reset, watch } = useForm<AdminProfile>({
     mode: 'onChange',
   });
+  const email = watch('allowedEmail');
+
   const [image, setImage] = useState<File | null>(null);
   const [adminProfiles, setAdminProfile] = useState<AdminProfile[] | null>(null);
   const [isCreating, setIsCreating] = useState(false);
@@ -26,7 +28,7 @@ const page = () => {
     getAdminsProfiles().then((data) => {
       setAdminProfile(data);
     });
-  }, [adminProfiles]);
+  }, []);
 
   const createAdmin = async (
     data: AdminProfile,
@@ -41,6 +43,10 @@ const page = () => {
     data.profilePic = imageLink || '';
     data.profileName = data.profileName.trim();
     const name = data.profileName.split(' ')[0];
+    if (adminProfiles?.some((profile) => profile.allowedEmail === data.allowedEmail)) {
+      setIsCreating(false);
+      return alert('El correo que introduciste ya lo posee otro administrador.');
+    }
     await createAdminProfileUser(data);
     const onboardingMessage = createSEPOnboardingMessage(data.gender, name);
     await sendEmailWithDevAccount(name, onboardingMessage, data.allowedEmail, data.gender);
@@ -73,7 +79,7 @@ const page = () => {
           isCreating={isCreating}
         />
         <div className=" w-full md:w-1/2 flex flex-col items-center gap-4 h-full">
-          <h1 className="text-xl font-semibold text-gray-900 xl:mt-16 md:text-2xl dark:text-white mb-4">
+          <h1 className="text-xl font-semibold text-gray-900 md:text-2xl dark:text-white mb-4">
             Administradores del SEP
           </h1>
           <AdminUsersList

@@ -1,4 +1,5 @@
 'use client';
+import { Button, Input, Select, SelectItem, Spinner } from '@nextui-org/react';
 import { AdminProfile } from '@prisma/client';
 import Image from 'next/image';
 import { BaseSyntheticEvent } from 'react';
@@ -16,7 +17,6 @@ interface AdminCreationFormProps {
   image: File | null;
   isCreating: boolean;
 }
-
 const AdminCreationForm: React.FC<AdminCreationFormProps> = ({
   register,
   createAdmin,
@@ -34,11 +34,11 @@ const AdminCreationForm: React.FC<AdminCreationFormProps> = ({
         <h1 className="text-xl text-center font-semibold text-gray-900 sm:text-2xl dark:text-white mb-4">
           Crear administrador
         </h1>
-        <div className="w-full rounded-full flex gap-2 items-center justify-center">
+        <div className="w-full rounded-full flex items-center justify-center gap-4 ">
           <Image
             width={80}
             height={80}
-            className="mb-4 rounded-full sm:mb-0 xl:mb-4 2xl:mb-0 bg-white "
+            className="rounded-full bg-white"
             src={image == null ? defaultProfilePic : URL.createObjectURL(image)}
             alt="profile picture"
           />
@@ -58,86 +58,91 @@ const AdminCreationForm: React.FC<AdminCreationFormProps> = ({
           />
         </div>
         <div className="flex flex-col gap-4 md:flex-row">
-          <div className="w-full">
-            <label
-              htmlFor="studyArea"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Nombre
-            </label>
-            <input type="text" required {...register('profileName')} />
-          </div>
+          <Input
+            isRequired
+            label="Nombre"
+            size="md"
+            labelPlacement="outside"
+            type="text"
+            {...register('profileName')}
+          />
           <div className="w-full flex gap-4">
             <div className="w-1/2">
-              <label
-                htmlFor="studyArea"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              <Select
+                isRequired={true}
+                {...register('gender')}
+                label="Género"
+                labelPlacement="outside"
               >
-                Genero
-              </label>
-              <select {...register('gender')}>
-                <option value="M">Masculino</option>
-                <option value="F">Femenino</option>
-              </select>
+                <SelectItem key="M" value="M">
+                  Masculino
+                </SelectItem>
+                <SelectItem key="F" value="F">
+                  Femenino
+                </SelectItem>
+              </Select>
             </div>
             <div className="w-1/2">
-              <label
-                htmlFor="studyArea"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              <Select
+                isRequired={true}
+                {...register('chapter_id')}
+                label="Capitulo"
+                labelPlacement="outside"
               >
-                Capitulo
-              </label>
-              <select {...register('chapter_id')}>
-                <option value="CARACAS">Caracas</option>
-                <option value="ZULIA">Zulia</option>
-                <option value="CARABOBO">Carabobo</option>
-              </select>
+                <SelectItem key="J4ZlF-eg2fTL9W7hnxRe3" value="CARACAS">
+                  Caracas
+                </SelectItem>
+                <SelectItem key="ZULIA" value="ZULIA">
+                  Zulia
+                </SelectItem>
+                <SelectItem key="CARABOBO" value="CARABOBO">
+                  Carabobo
+                </SelectItem>
+              </Select>
             </div>
           </div>
         </div>
-        <div className="">
-          <label
-            htmlFor="currentAcademicPeriod"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Email{' '}
-          </label>
-          <input type="email" required {...register('allowedEmail')} />
-        </div>
+        <Input
+          isRequired
+          label="Correo electrónico"
+          size="md"
+          labelPlacement="outside"
+          type="email"
+          {...register('allowedEmail')}
+        />
         <div className="flex flex-col md:flex-row gap-4 ">
           <div className="w-full">
-            <label
-              htmlFor="currentAcademicPeriod"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            <Select
+              isRequired={true}
+              {...register('allowedActions_id')}
+              label="Capacidades"
+              labelPlacement="outside"
             >
-              Capacidades{' '}
-            </label>
-            <select required {...register('allowedActions')}>
-              <option value={'SUPER_ADMIN'}>Super Administrador</option>
-            </select>
+              <SelectItem key={'1qX5_TAyd-1hZBEVTrNnY'} value={'1qX5_TAyd-1hZBEVTrNnY'}>
+                Super Administrador
+              </SelectItem>
+            </Select>
           </div>
           <div className="w-full">
-            <label
-              htmlFor="currentAcademicPeriod"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Cargo{' '}
-            </label>
-            <input
+            <Input
+              label="Cargo"
+              size="md"
+              labelPlacement="outside"
               type="text"
-              required
+              isRequired={true}
               {...register('responsibility')}
               placeholder="Asistente de programas educativos"
             />
           </div>
         </div>
-        <button
-          className="w-full md:w-1/2 self-center mt-4 text-white bg-primary-light hover:bg-primary-dark font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+        <Button
+          color="success"
+          className="w-full md:w-1/2 self-center mt-4"
           type="submit"
           disabled={isCreating}
         >
-          {isCreating ? '⏳ Creando administrador ⏳' : 'Crear administrador'}
-        </button>{' '}
+          {isCreating ? <Spinner color="primary" labelColor="primary" /> : 'Crear administrador'}
+        </Button>
       </form>
     </>
   );
