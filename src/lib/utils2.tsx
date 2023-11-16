@@ -39,6 +39,7 @@ export const parseWorkshopStatusFromDatabase = (status: ActivityStatus) => {
       return 'Enviado';
     case 'SUSPENDED':
       return 'Suspendido';
+    case 'IN_PROGRESS':
+      return 'En progreso';
   }
 };
-

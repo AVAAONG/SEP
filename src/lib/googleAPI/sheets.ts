@@ -1,6 +1,6 @@
 'use server';
 import { sheets_v4 } from '@googleapis/sheets';
-import { Sheets } from './auth';
+import { Sheets, setTokens } from './auth';
 
 const copySheet = async (spreadsheetId: string, activityName: string) => {
   try {
@@ -224,7 +224,8 @@ export const appendSpreadsheetValues = async (
 };
 
 //create a new spreadsheet and return its url
-export const createSpreadsheetAndReturnUrl = async (title: string) => {
+export const createSpreadsheetAndReturnUrl = async (title: string, accesToken, refreshToken) => {
+  setTokens(accesToken, refreshToken)
   try {
     const response = await Sheets.spreadsheets.create({
       requestBody: {
@@ -241,7 +242,9 @@ export const createSpreadsheetAndReturnUrl = async (title: string) => {
   }
 };
 //append a new row with a specified  values to a spreadsheet
-export const appendSpreadsheetValuesByRange = async (spreadsheetUrl: string, values: any[]) => {
+export const appendSpreadsheetValuesByRange = async (spreadsheetUrl: string, values: any[], accesToken, refreshToken) => {
+  setTokens(accesToken, refreshToken)
+
   const spreadsheetId = spreadsheetUrl.split('/')[5];
   try {
     const response = await Sheets.spreadsheets.values.append({

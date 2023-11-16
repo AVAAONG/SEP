@@ -1,29 +1,42 @@
 'use client';
 
-import { appendSpreadsheetValuesByRange, createSpreadsheetAndReturnUrl } from "@/lib/googleAPI/sheets";
-
+import {
+  appendSpreadsheetValuesByRange,
+  createSpreadsheetAndReturnUrl,
+} from '@/lib/googleAPI/sheets';
+import { getSession } from 'next-auth/react';
 
 interface ExportButtonProps {
   dataToExport: any[];
 }
 
 const createSpreadsheetAndAddData = async (data: any[]) => {
-  const spreadsheet = await createSpreadsheetAndReturnUrl('EXPORT')
-  await appendSpreadsheetValuesByRange(spreadsheet!, data)
+  const session = await getSession();
+  const spreadsheet = await createSpreadsheetAndReturnUrl(
+    'EXPORT',
+    session?.user.accessToken,
+    session?.user.refreshToken
+  );
+  await appendSpreadsheetValuesByRange(
+    spreadsheet!,
+    data,
+    session?.user.accessToken,
+    session?.user.refreshToken
+  );
   return spreadsheet;
-}
+};
 const ExportButton: React.FC<ExportButtonProps> = ({ dataToExport }) => {
   const handleExport = async () => {
     const headers = Object.keys(dataToExport[0]);
     // Create a two-dimensional array of the object values
-    const rows = dataToExport.map(object => Object.values(object));
+    const rows = dataToExport.map((object) => Object.values(object));
     // Combine the headers and rows
     const dataForSpreadsheet = [headers, ...rows];
     // const twoDimensionalArray = dataToExport.map(obj => Object.values(obj));
-    const link = await createSpreadsheetAndAddData(dataForSpreadsheet)
+    const link = await createSpreadsheetAndAddData(dataForSpreadsheet);
     // const spreadsheet = await createSpreadsheetAndAddData(dataToExport);
     window.open(link!, '_blank');
-  }
+  };
 
   return (
     <button
