@@ -4,6 +4,18 @@
 @tailwind components;
 @tailwind utilities;
 
+/* This remove the  blue highlight when on touch in mobile
+@see https://stackoverflow.com/questions/45049873/how-to-remove-the-blue-highlight-of-button-on-mobile#:~:text=add%20to%20the%20button%20style%20%22cursor%3A%20default%3B%22%20This,buttons%20on%20the%20mobile%20screen%20as%20you%20want
+  */
+
+input,
+textarea,
+button,
+select,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
 .copied-text {
   position: absolute;
   top: -10px;
