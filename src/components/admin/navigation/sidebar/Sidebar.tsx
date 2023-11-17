@@ -4,13 +4,24 @@ import { sidebarAtom } from '@/lib/state/mainState';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useEffect } from 'react';
 import { MenuIcon, dashboardComponent } from '../../../../../public/svgs/svgs';
 import DropdownButton from '../../../scholar/DropdownButton';
 import { SIDEBAR_ACTIVITIES_ACTIONS, SIDEBAR_ADMIN_ACTIONS, SIDEBAR_DB_BUTTONS } from '../data';
 import SidebarSeparator from './SidebarSeparator';
+
 const Sidebar = () => {
+  const pathname = usePathname();
+
   const [isOpen, setSidebarOpen] = useAtom(sidebarAtom);
   const toggleSidebar = () => setSidebarOpen(!isOpen);
+  useEffect(() => {
+    // Function to handle route changes
+    if (window.innerWidth <= 768) {
+      setSidebarOpen(false);
+    }
+  }, [pathname]);
   return (
     <aside
       className={`${
