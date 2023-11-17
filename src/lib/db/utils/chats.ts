@@ -188,14 +188,14 @@ export const deleteAllChatSpeakers = async () => {
 
 
 export const getChats = async () => {
-  const workshops = await prisma.chat.findMany({
+  const chats = await prisma.chat.findMany({
     include: {
       speaker: true,
       temp_data: true,
       scholar_attendance: true,
     },
   });
-  return workshops;
+  return chats;
 };
 
 /**

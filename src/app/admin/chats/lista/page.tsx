@@ -3,7 +3,7 @@ import Table from '@/components/table/Table';
 import ChatColumns, { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
 import { getChats } from '@/lib/db/utils/chats';
 import { createArrayFromObject } from '@/lib/utils';
-import { parseModalityFromDatabase } from '@/lib/utils2';
+import { parseModalityFromDatabase, parseWorkshopStatusFromDatabase } from '@/lib/utils2';
 import { Chat } from '@prisma/client';
 import dynamic from 'next/dynamic';
 
@@ -12,7 +12,7 @@ const MixedAreaChartComponent = dynamic(() => import('@/components/charts/MixedA
   ssr: false,
 });
 
-function filterWorkshopsByMonth(workshops: Chat[], month: number): Chat[] {
+function filterWorkshopsByMonth(workshops: ChatsWithAllData[], month: number): ChatsWithAllData[] {
   const filteredWorkshops = workshops.filter((workshop) => {
     const startMonth = new Date(workshop.start_dates[0]).getMonth();
     return startMonth === month;
@@ -20,7 +20,10 @@ function filterWorkshopsByMonth(workshops: Chat[], month: number): Chat[] {
 
   return filteredWorkshops;
 }
-function filterWorkshopsByQuarter(workshops: ChatsWithAllData[], quarter: number): Chat[] {
+function filterWorkshopsByQuarter(
+  workshops: ChatsWithAllData[],
+  quarter: number
+): ChatsWithAllData[] {
   const filteredWorkshops = workshops.filter((workshop) => {
     const startMonth = new Date(workshop.start_dates[0]).getMonth();
     const workshopQuarter = Math.floor(startMonth / 3) + 1;
@@ -30,7 +33,7 @@ function filterWorkshopsByQuarter(workshops: ChatsWithAllData[], quarter: number
   return filteredWorkshops;
 }
 
-function filterWorkshopsByYear(workshops: ChatsWithAllData[], year: number): Chat[] {
+function filterWorkshopsByYear(workshops: ChatsWithAllData[], year: number): ChatsWithAllData[] {
   const filteredWorkshops = workshops.filter((workshop) => {
     const startYear = new Date(workshop.start_dates[0]).getFullYear();
     return startYear === year;
@@ -39,7 +42,7 @@ function filterWorkshopsByYear(workshops: ChatsWithAllData[], year: number): Cha
   return filteredWorkshops;
 }
 
-function categorizeWorkshops(workshops: Chat[]): {
+function categorizeWorkshops(workshops: ChatsWithAllData[]): {
   morning: Chat[];
   afternoon: Chat[];
 } {
@@ -66,7 +69,7 @@ const page = async ({
   searchParams?: { year: string; month: string; quarter: string };
 }) => {
   const resultWorkshops = await getChats();
-  let workshops: Chat[] = [];
+  let workshops: ChatsWithAllData[] = [];
   if (searchParams?.year) {
     workshops = filterWorkshopsByYear(resultWorkshops, Number(searchParams?.year));
   }
@@ -91,6 +94,36 @@ const page = async ({
     (workshop) => workshop.activity_status === 'SCHEDULED' || workshop.activity_status === 'SENT'
   );
 
+  const chatSDataForTable = workshops.map((chat) => {
+    const speakerName =
+      chat.speaker[0].first_names.split(' ')[0] + ' ' + chat.speaker[0].last_names.split(' ')[0];
+    return {
+      id: chat.id,
+      title: chat.title,
+      speakerId: chat.speaker[0].id,
+      speakerName,
+      speakerCompany: chat.speaker[0].job_company,
+      speakerImage: chat.speaker[0].image,
+      date: new Date(chat.start_dates[0]).toLocaleString('es-ES', {
+        month: 'numeric',
+        day: 'numeric',
+        year: 'numeric',
+      }),
+      startHour: new Date(chat.start_dates[0]).toLocaleTimeString('es-VE', {
+        hour: 'numeric',
+        minute: 'numeric',
+        hourCycle: 'h12',
+      }),
+      status: parseWorkshopStatusFromDatabase(chat.activity_status),
+      modality: parseModalityFromDatabase(chat.modality),
+      platform: chat.platform,
+      level: chat.level,
+      scholarsEnrroled: chat.scholar_attendance.filter(
+        (a) => a.attendance === 'ENROLLED' || 'ATTENDED'
+      ).length,
+      attendedScholars: chat.scholar_attendance.filter((a) => a.attendance === 'ATTENDED').length,
+    };
+  });
   const stats = [
     {
       name: 'Chat clubs ofertados',
@@ -248,7 +281,11 @@ const page = async ({
         </div>
       </div>
       <div className="w-full ">
-        <Table tableData={workshops} tableColumns={ChatColumns} tableHeadersForSearch={[]} />
+        <Table
+          tableData={chatSDataForTable}
+          tableColumns={ChatColumns}
+          tableHeadersForSearch={[]}
+        />
       </div>
     </div>
   );
