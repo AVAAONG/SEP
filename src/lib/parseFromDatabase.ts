@@ -36,8 +36,30 @@ export const getCollageName = (university: Collages) => {
             return `Universidad Nacional Experimental de las Artes (${university})`;
         case 'UNESR':
             return `Universidad Nacional Experimental Simón Rodríguez (${university})`;
-        case 'UNESR':
-            return `Universidad Nacional Experimental Simón Rodríguez (${university})`;
+        case 'UCSAR':
+            return `Universidad Católica Santa Rosa (${university})`;
+        case 'IUPSM':
+            return `Instituto Universitario Politécnico Santiago Mariño (${university})`;
+        case 'UNEXPO':
+            return `Universidad Nacional Experimental Politécnica Antonio José de Sucre (${university})`;
+        case 'UMA':
+            return `Universidad Monteávila (${university})`;
+        case 'UJMV':
+            return `Universidad José María Vargas (${university})`;
+        case 'UMC':
+            return `Universidad Metropolitana de Caracas (${university})`;
+        case 'UPEL':
+            return `Universidad Pedagógica Experimental Libertador (${university})`;
+        case 'CUR':
+            return `Colegio Universitario de Rehabilitación May Hamilton (${university})`;
+        case 'USM':
+            return `Universidad Santa María (${university})`;
+        case 'UNEFA':
+            return `Universidad Nacional Experimental de la Fuerza Armada Nacional Bolivariana (${university})`;
+        case 'UAH':
+            return `Universidad Alejandro de Humboldt (${university})`;
+        case 'UBV':
+            return `Universidad Bolivariana de Venezuela (${university})`;
     }
 };
 
