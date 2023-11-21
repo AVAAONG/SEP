@@ -213,12 +213,12 @@ const page = async ({
   const qrcode = await generateQRCode(pageUrl);
   return (
     <main className="min-h-screen">
-      <section className="flex flex-col md:flex-row gap-4 w-full ">
-        <div className="p-4 lg:w-3/12 dark:bg-gradient-to-b md:min-h-screen dark:from-emerald-950 dark:to-slate-950 items-center flex flex-col gap-4">
+      <section className="flex flex-col md:flex-row w-full ">
+        <div className="p-4 lg:w-3/12 dark:bg-gradient-to-b min-h-screen dark:from-emerald-950 dark:to-slate-950 items-center flex flex-col">
           <div className="block md:hidden self-end">
             <SharePubilcProfile qrCode={qrcode!} profileLink={pageUrl} />
           </div>
-          <div className="w-64 flex items-center justify-center  rounded-full  border-2 border-primary-1 p-1">
+          <div className="w-64 flex items-center justify-center rounded-full border-2 border-primary-1 p-1">
             <Image
               src="https://d2u8k2ocievbld.cloudfront.net/memojis/male/1.png"
               alt="Imagen del facilitador"
@@ -228,8 +228,8 @@ const page = async ({
               className="rounded-full"
             />
           </div>
-          <div className="flex flex-col items-center gap-2">
-            <h1 className="text-3xl text-center text-primary-light font-semibold ">{name}</h1>
+          <div className="flex flex-col items-center gap-4">
+            <h1 className="text-3xl text-center text-primary-light font-semibold mt-4 ">{name}</h1>
             <p className="w-full text-center italic">
               Licenciatura en{' '}
               <span className="font-semibold">{scholar?.collage_information?.career}</span> en la{' '}
@@ -258,14 +258,14 @@ const page = async ({
           </div>
         </div>
 
-        <div className={`w-full flex-1 bg-gray-100 flex flex-col p-4`}>
+        <div className={`w-full flex-1 bg-gray-100 dark:bg-dark min-h-screen flex flex-col p-4`}>
           <div className="hidden md:block self-end">
             <SharePubilcProfile qrCode={qrcode!} profileLink={pageUrl} />
           </div>
           <div
             className={`${
               searchParams?.actividad === undefined ? 'md:py-28' : ''
-            } flex flex-col px-8 gap-8`}
+            } flex flex-col md:px-8 gap-8`}
           >
             {searchParams?.actividad !== undefined && (
               <Link
@@ -289,7 +289,7 @@ const page = async ({
             />
 
             {searchParams?.actividad === 'actividadesFormativas' && (
-              <div className="w-full p-4">
+              <div className="w-full">
                 <Table
                   tableColumns={scholarPublicWorkshopAttendanceColumns}
                   tableData={workshopTableObject}
@@ -298,7 +298,7 @@ const page = async ({
               </div>
             )}
             {searchParams?.actividad === 'chats' && (
-              <div className="11/12">
+              <div className="w-full">
                 <Table
                   tableColumns={scholarPublicChatAttendanceColumns}
                   tableData={chatTableObject}
