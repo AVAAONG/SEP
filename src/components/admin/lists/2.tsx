@@ -44,6 +44,7 @@ const ScheduledWorkshopsList: React.FC<WorkshopsListProps> = ({ workshops }) => 
             <Checkbox
               radius="sm"
               aria-label={title}
+              key={id}
               classNames={{
                 base: cn(
                   'inline-flex max-w-full w-full bg-content1 m-0',
