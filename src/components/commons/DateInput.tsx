@@ -41,7 +41,7 @@ const DateInput: React.FC<Props> = ({ register }) => {
         const { id, date, startHour, endHour } = input;
         const isLastInput = index === inputs.length - 1;
         return (
-          <>
+          <React.Fragment key={id}>
             <div className="col-span-2 md:col-span-1">
               <div className="min-h-0 h-0 flex justify-end w-full">
                 <Button
@@ -49,11 +49,10 @@ const DateInput: React.FC<Props> = ({ register }) => {
                   isIconOnly
                   radius="full"
                   onClick={isLastInput ? addInput : () => deleteInput(id)}
-                  className={`translate-x-4 translate-y-2 text-white z-50  ${
-                    isLastInput
-                      ? 'bg-gray-300 hover:bg-primary-light'
-                      : 'bg-red-200 hover:bg-red-700'
-                  }`}
+                  className={`translate-x-4 translate-y-2 text-white z-50  ${isLastInput
+                    ? 'bg-gray-300 hover:bg-primary-light'
+                    : 'bg-red-200 hover:bg-red-700'
+                    }`}
                 >
                   {isLastInput ? '+' : '-'}
                 </Button>
@@ -90,7 +89,7 @@ const DateInput: React.FC<Props> = ({ register }) => {
               isRequired
               {...register(`endHour.${id}` as const)}
             />
-          </>
+          </React.Fragment>
         );
       })}
     </>
