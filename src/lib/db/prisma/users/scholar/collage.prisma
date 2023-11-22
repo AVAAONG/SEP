@@ -10,6 +10,7 @@ enum EvaluationScale {
 enum StudyRegime {
     SEMESTER
     QUARTER
+    QUARTIER
     ANNUAL
 }
 
@@ -50,6 +51,8 @@ enum Collages {
 model ScholarCollageInformation {
     id                      String                 @id @default(nanoid())
     academic_load_completed Boolean?
+    inscription_comprobant  String?
+    career_schedule         String?
     collage                 Collages?
     career                  String
     study_area              StudyArea?
