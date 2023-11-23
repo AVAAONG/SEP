@@ -12,11 +12,7 @@ import {
   useDisclosure,
 } from '@nextui-org/react';
 import { StudyRegime } from '@prisma/client';
-import { useForm } from 'react-hook-form';
-
-interface EditScholarFormProps {
-  isOpen: boolean;
-}
+import { Controller, useForm } from 'react-hook-form';
 
 type ScholarForm = {
   first_names: string;
@@ -48,18 +44,22 @@ type ScholarForm = {
   cva_modality: 'VIRTUAL' | 'PRESENCIAL';
 };
 
-const EditScholarForm: React.FC<EditScholarFormProps> = ({ isOpen }) => {
-  const { onOpenChange } = useDisclosure();
-  const { register, handleSubmit, reset } = useForm<ScholarForm>();
+const EditScholarForm = ({ modalIsOpen, set, scholar }) => {
+  const { isOpen, onOpenChange, onOpen } = useDisclosure();
+  const { register, handleSubmit, reset, control } = useForm<ScholarForm>({
+    defaultValues: {
+      ...scholar,
+    },
+  });
+
   const updateScholar = async (data: any, event: any) => {
     event.preventDefault();
-    console.log(data);
     reset();
   };
 
   return (
     <>
-      <Modal size="5xl" isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false}>
+      <Modal size="5xl" isOpen={modalIsOpen} onOpenChange={onOpenChange} isDismissable={false}>
         <ModalContent>
           {(onClose) => (
             <>
@@ -69,162 +69,284 @@ const EditScholarForm: React.FC<EditScholarFormProps> = ({ isOpen }) => {
                   onSubmit={handleSubmit(async (data, event) => await updateScholar(data, event!))}
                   className="grid grid-cols-12 gap-4"
                 >
-                  <Input
-                    className="col-span-6"
-                    type="text"
-                    label="Nombres"
-                    {...register('first_names')}
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Input className="col-span-6" type="text" label="Nombres" {...field} />
+                    )}
+                    name="first_names"
                   />
-                  <Input
-                    className="col-span-6"
-                    type="text"
-                    label="Apellidos"
-                    {...register('last_names')}
-                  />
-                  <Input
-                    className="col-span-10"
-                    type="text"
-                    label="Correo electronico"
-                    {...register('allowedEmail')}
-                  />
-                  <Select className="col-span-2" label="Genero" {...register('gender')}>
-                    <SelectItem key={'m'} value="M">
-                      Masculino
-                    </SelectItem>
-                    <SelectItem key={'f'} value="F">
-                      Femenino
-                    </SelectItem>
-                  </Select>
-                  <Input type="text" label="Cédula" {...register('dni')} className="col-span-3" />
-                  <Input
-                    type="date"
-                    label="Fecha de nacimiento"
-                    {...register('birthdate')}
-                    className="col-span-3"
-                  />
-                  <Input
-                    type="date"
-                    label="Año de ingreso a AVAA"
-                    {...register('avaa_admission_year')}
-                    className="col-span-3"
-                  />
-                  <Select
-                    label="Actualmente trabaja"
-                    {...register('is_working')}
-                    className="col-span-3"
-                  >
-                    <SelectItem key={'m'} value="true">
-                      Sí
-                    </SelectItem>
-                    <SelectItem key={'f'} value="false">
-                      No
-                    </SelectItem>
-                  </Select>
 
-                  <Input
-                    type="text"
-                    label="Lugar de trabajo"
-                    {...register('job_company')}
-                    className="col-span-6"
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Input className="col-span-6" type="text" label="Apellidos" {...field} />
+                    )}
+                    name="last_names"
                   />
-                  <Input
-                    type="text"
-                    label="Cargo"
-                    {...register('job_title')}
-                    className="col-span-6"
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Input
+                        className="col-span-10"
+                        type="text"
+                        label="Correo electronico"
+                        {...field}
+                      />
+                    )}
+                    name="allowedEmail"
                   />
-                  <Input
-                    type="text"
-                    label="Telefono local"
-                    {...register('local_phone_number')}
-                    className="col-span-4"
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select className="col-span-2" label="Genero" {...field}>
+                        <SelectItem key={'m'} value="M">
+                          Masculino
+                        </SelectItem>
+                        <SelectItem key={'f'} value="F">
+                          Femenino
+                        </SelectItem>
+                      </Select>
+                    )}
+                    name="gender"
                   />
-                  <Input
-                    type="text"
-                    label="Telefono celular"
-                    {...register('cell_phone_Number')}
-                    className="col-span-4"
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Input type="text" label="Cédula" {...field} className="col-span-3" />
+                    )}
+                    name="dni"
                   />
-                  <Input
-                    type="text"
-                    label="Whatsapp"
-                    {...register('whatsapp_number')}
-                    className="col-span-4"
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Input
+                        type="date"
+                        label="Fecha de nacimiento"
+                        {...field}
+                        className="col-span-3"
+                        placeholder="dd/mm/aaaa"
+                      />
+                    )}
+                    name="birthdate"
                   />
-                  <Input
-                    type="text"
-                    label="Usuario de instagram"
-                    {...register('instagram_user')}
-                    className="col-span-3"
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Input
+                        type="date"
+                        label="Año de ingreso a AVAA"
+                        {...field}
+                        className="col-span-3"
+                        placeholder="dd/mm/aaaa"
+                      />
+                    )}
+                    name="avaa_admission_year"
                   />
-                  <Input
-                    type="text"
-                    label="Usuario de facebook"
-                    {...register('twitter_user')}
-                    className="col-span-3"
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select className="col-span-3" label="Actualmente trabaja" {...field}>
+                        <SelectItem key={'m'} value="true">
+                          Sí
+                        </SelectItem>
+                        <SelectItem key={'f'} value="false">
+                          No
+                        </SelectItem>
+                      </Select>
+                    )}
+                    name="is_working"
                   />
-                  <Input
-                    type="text"
-                    label="Usuario de twitter"
-                    {...register('facebook_user')}
-                    className="col-span-3"
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Input
+                        className="col-span-6"
+                        type="text"
+                        label="Lugar de trabajo"
+                        {...field}
+                      />
+                    )}
+                    name="job_company"
                   />
-                  <Input
-                    type="text"
-                    label="Usuario de linkedin"
-                    {...register('linkedin_user')}
-                    className="col-span-3"
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Input className="col-span-6" type="text" label="Cargo" {...field} />
+                    )}
+                    name="job_title"
                   />
-                  <Input
-                    type="text"
-                    label="Estado de origen"
-                    {...register('state_of_origin')}
-                    className="col-span-3"
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Input className="col-span-4" type="text" label="Telefono local" {...field} />
+                    )}
+                    name="local_phone_number"
                   />
-                  <Input
-                    type="text"
-                    label="Dirección"
-                    {...register('address')}
-                    className="col-span-9"
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Input
+                        className="col-span-4"
+                        type="text"
+                        label="Telefono celular"
+                        {...field}
+                      />
+                    )}
+                    name="cell_phone_number"
                   />
-                  <Input
-                    type="text"
-                    label="Carrera"
-                    {...register('career')}
-                    className="col-span-3"
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Input className="col-span-4" type="text" label="Whatsapp" {...field} />
+                    )}
+                    name="whatsapp_number"
                   />
-                  <Input
-                    type="text"
-                    label="Universidad"
-                    {...register('collage')}
-                    className="col-span-3"
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Input
+                        className="col-span-3"
+                        type="text"
+                        label="Usuario de instagram"
+                        {...field}
+                      />
+                    )}
+                    name="instagram_user"
                   />
-                  <Input
-                    type="text"
-                    label="Area de estudio"
-                    {...register('study_area')}
-                    className="col-span-3"
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Input
+                        className="col-span-3"
+                        type="text"
+                        label="Usuario de facebook"
+                        {...field}
+                      />
+                    )}
+                    name="twitter_user"
                   />
-                  <Input
-                    type="text"
-                    label="Escala de evaluación"
-                    {...register('evaluation_scale')}
-                    className="col-span-3"
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Input
+                        className="col-span-3"
+                        type="text"
+                        label="Usuario de linkedin"
+                        {...field}
+                      />
+                    )}
+                    name="linkedin_user"
                   />
-                  <Input
-                    type="date"
-                    label="¿Se encuentra en el CVA?"
-                    {...register('is_in_cva')}
-                    className="col-span-4"
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Input
+                        className="col-span-3"
+                        type="text"
+                        label="Estado de origen"
+                        {...field}
+                      />
+                    )}
+                    name="state_of_origin"
                   />
-                  <Select label="Cede del CVA" {...register('cva_location')} className="col-span-4">
-                    <SelectItem key={'centro'} value="CENTRO">
-                      El centro
-                    </SelectItem>
-                    <SelectItem key={'mercedes'} value="MERCEDES">
-                      Las mercedes
-                    </SelectItem>
-                  </Select>
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Input className="col-span-9" type="text" label="Dirección" {...field} />
+                    )}
+                    name="address"
+                  />
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Input className="col-span-3" type="text" label="Carrera" {...field} />
+                    )}
+                    name="career"
+                  />
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Input className="col-span-3" type="text" label="Universidad" {...field} />
+                    )}
+                    name="collage"
+                  />
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Input
+                        className="col-span-3"
+                        type="text"
+                        label="Area de estudio"
+                        {...field}
+                      />
+                    )}
+                    name="study_area"
+                  />
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Input
+                        className="col-span-3"
+                        type="text"
+                        label="Escala de evaluación"
+                        {...field}
+                      />
+                    )}
+                    name="evaluation_scale"
+                  />
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select className="col-span-3" label="Actualmente trabaja" {...field}>
+                        <SelectItem key={'m'} value="true">
+                          Sí
+                        </SelectItem>
+                        <SelectItem key={'f'} value="false">
+                          No
+                        </SelectItem>
+                      </Select>
+                    )}
+                    name="is_in_cva"
+                  />
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select className="col-span-4" label="Cede del CVA" {...field}>
+                        <SelectItem key={'centro'} value="CENTRO">
+                          El centro
+                        </SelectItem>
+                        <SelectItem key={'mercedes'} value="MERCEDES">
+                          Las mercedes
+                        </SelectItem>
+                      </Select>
+                    )}
+                    name="cva_location"
+                  />
                   <Select label="Modalidad" {...register('cva_modality')} className="col-span-4">
                     <SelectItem key={'virtual'} value="VIRTUAL">
                       Virtual
@@ -236,10 +358,18 @@ const EditScholarForm: React.FC<EditScholarFormProps> = ({ isOpen }) => {
                 </form>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
+                <Button
+                  color="danger"
+                  variant="light"
+                  onPress={() => {
+                    set(false);
+                  }}
+                >
                   Cancelar
                 </Button>
-                <Button onPress={onClose}>Editar</Button>
+                <Button onClick={handleSubmit(async (data, event) => updateScholar(data, event))}>
+                  Editar
+                </Button>
               </ModalFooter>
             </>
           )}

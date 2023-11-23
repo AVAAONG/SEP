@@ -247,12 +247,29 @@ const page = async ({
     });
   }
 
+  const ObjectForEdtiModal = {
+    first_names,
+    last_names,
+    allowedEmail,
+    dni,
+    birthdate,
+    collage,
+    career,
+    study_area,
+    study_regime,
+    is_in_cva,
+    not_started_cva_reason,
+    cva_location,
+    cva_modality,
+    certificate,
+  };
+
   return (
     <section className="flex flex-col gap-4 lg:p-6 pt-0">
       <div className="flex flex-col items-center lg:items-start lg:flex-row justify-center lg:justify-start gap-2 lg:gap-6 w-full">
         <div className="flex lg:hidden items-center justify-between w-full gap-4 px-6 lg:p-0">
           <ScholarStatus status={scholar_status || 'NORMAL'} scholarId={scholarId} />
-          <ScholarDropdown />
+          <ScholarDropdown scholar={ObjectForEdtiModal} />
         </div>
         <div className="w-52 h-fit flex items-center justify-center rounded-full shadow-lg border-3 border-green-500 p-1">
           <Image
@@ -278,7 +295,7 @@ const page = async ({
             </div>
             <div className="hidden lg:flex items-center gap-4">
               <ScholarStatus status={scholar_status || 'NORMAL'} scholarId={scholarId} />
-              <ScholarDropdown />
+              <ScholarDropdown scholar={ObjectForEdtiModal} />
             </div>
           </div>
           <div className="flex w-full justify-between ">
