@@ -1,3 +1,4 @@
+import defailProfilePic from '@/../public/defaultProfilePic.png';
 import PublicAccordion from '@/components/PublicAccordion';
 import SharePubilcProfile from '@/components/ShareModal';
 import Table from '@/components/table/Table';
@@ -10,7 +11,6 @@ import { getScholarWithAllData } from '@/lib/db/utils/users';
 import { getCollageName } from '@/lib/parseFromDatabase';
 import generateQRCode from '@/lib/utils/createQrCode';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
-import { Button } from '@nextui-org/react';
 import moment from 'moment';
 import { headers } from 'next/headers';
 import Image from 'next/image';
@@ -100,7 +100,11 @@ const page = async ({
   const scholarId = params?.scholarId;
   const pageUrl = `https://${host}/perfilBecario/${scholarId}`;
   const scholar = await getScholarWithAllData(scholarId);
-  const name = `${scholar?.first_names.split(' ')[0]} ${scholar?.last_names.split(' ')[0]} `;
+  const lastNames = scholar?.last_names?.split(' ')!;
+
+  const name = `${scholar?.first_names.split(' ')[0]} ${
+    lastNames[0].length < 3 ? `${lastNames[0]} ${lastNames[1]}` : lastNames[0]
+  } `;
   const {
     twitter_user,
     facebook_user,
@@ -220,8 +224,8 @@ const page = async ({
           </div>
           <div className="w-64 flex items-center justify-center rounded-full border-2 border-primary-1 p-1">
             <Image
-              src="https://d2u8k2ocievbld.cloudfront.net/memojis/male/1.png"
-              alt="Imagen del facilitador"
+              src={defailProfilePic}
+              alt="Foto del becario"
               width={250}
               height={250}
               priority
@@ -237,9 +241,9 @@ const page = async ({
                 {getCollageName(scholar?.collage_information?.collage!)}
               </span>
             </p>
-            <Button variant="ghost" color="success">
+            {/* <Button variant="ghost" color="success">
               Ver certificado
-            </Button>
+            </Button> */}
             <div className="flex w-full gap-2 justify-center">
               {scholarSocialNetworks.map(
                 ({ url, icon, username }, index) =>
