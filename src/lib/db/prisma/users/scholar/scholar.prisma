@@ -18,32 +18,32 @@ import { Modality } from "..\..\activities\type-activities"
 
 model Scholar {
     id                            String                     @id @default(nanoid())
-    allowedEmail                  String?                    @unique
-    first_names                   String
-    last_names                    String
-    dni                           String                     @unique
-    gender                        Gender
-    birthdate                     DateTime
-    is_working                    Boolean                    @default(false)
-    job_title                     String?
-    job_company                   String?
-    job_modality                  Modality?
-    job_amount_of_hours           String?
+    // allowedEmail                  String?                    @unique
+    // first_names                   String
+    // last_names                    String
+    // dni                           String                     @unique
+    // gender                        Gender
+    // birthdate                     DateTime
+    // is_working                    Boolean                    @default(false)
+    // job_title                     String?
+    // job_company                   String?
+    // job_modality                  Modality?
+    // job_amount_of_hours           String?
     have_entrepreneurship         Boolean                    @default(false)
     entrepreneurship_name         String?
     entrepreneurship_kind         String?
     entrepreneurship_services     String?
     entrepreneurship_social_media String?
     kind_of_job                   String?
-    local_phone_number            String?
-    cell_phone_Number             String?
-    whatsapp_number               String?
-    state_of_origin               String?
-    address                       String?
-    instagram_user                String?
-    twitter_user                  String?
-    facebook_user                 String?
-    linkedin_user                 String?
+    // local_phone_number            String?
+    // cell_phone_Number             String?
+    // whatsapp_number               String?
+    // state_of_origin               String?
+    // address                       String?
+    // instagram_user                String?
+    // twitter_user                  String?
+    // facebook_user                 String?
+    // linkedin_user                 String?
     program_information           ScholarProgramInformation? @relation(fields: [program_information_id], references: [id])
     collage_information           ScholarCollageInformation? @relation(fields: [collage_information_id], references: [id])
     cva_information               ScholarCVAInformation?     @relation(fields: [cva_information_id], references: [id])

@@ -64,7 +64,7 @@ const ScholarDropdown = ({ scholar }) => {
             </DropdownItem>
           </DropdownSection>
           <DropdownSection title="Acciones especiales">
-            <DropdownItem key="cert" description="Renuncias, Retiros, Egreso">
+            <DropdownItem key="condition" description="Renuncias, Retiros, Egreso">
               Cambiar condición
             </DropdownItem>
           </DropdownSection>

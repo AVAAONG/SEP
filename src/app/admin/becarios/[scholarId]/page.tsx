@@ -126,16 +126,11 @@ const page = async ({
     local_phone_number,
     whatsapp_number,
     cell_phone_Number,
-    collage_information,
-    address,
-    cva_information,
     dni,
     birthdate,
+    address,
   } = scholar || {};
-  const { attended_workshops, scholar_status } = program_information || {};
-  const { collage, career, study_area, study_regime } = collage_information || {};
-  const { is_in_cva, not_started_cva_reason, cva_location, cva_modality, certificate } =
-    cva_information || {};
+  const { attended_workshops, scholar_status, avaa_admission_year } = program_information || {};
   const chats = await getChatsByScholar(program_information_id!, scholarId);
   const workshops = await getWorkhsopsByScholar(program_information_id!, scholarId);
   const workshopObj = createWorkshopObject(workshops);
@@ -247,29 +242,12 @@ const page = async ({
     });
   }
 
-  const ObjectForEdtiModal = {
-    first_names,
-    last_names,
-    allowedEmail,
-    dni,
-    birthdate,
-    collage,
-    career,
-    study_area,
-    study_regime,
-    is_in_cva,
-    not_started_cva_reason,
-    cva_location,
-    cva_modality,
-    certificate,
-  };
-
   return (
     <section className="flex flex-col gap-4 lg:p-6 pt-0">
       <div className="flex flex-col items-center lg:items-start lg:flex-row justify-center lg:justify-start gap-2 lg:gap-6 w-full">
         <div className="flex lg:hidden items-center justify-between w-full gap-4 px-6 lg:p-0">
           <ScholarStatus status={scholar_status || 'NORMAL'} scholarId={scholarId} />
-          <ScholarDropdown scholar={ObjectForEdtiModal} />
+          <ScholarDropdown scholar={scholar} />
         </div>
         <div className="w-52 h-fit flex items-center justify-center rounded-full shadow-lg border-3 border-green-500 p-1">
           <Image
@@ -295,7 +273,7 @@ const page = async ({
             </div>
             <div className="hidden lg:flex items-center gap-4">
               <ScholarStatus status={scholar_status || 'NORMAL'} scholarId={scholarId} />
-              <ScholarDropdown scholar={ObjectForEdtiModal} />
+              <ScholarDropdown scholar={scholar} />
             </div>
           </div>
           <div className="flex w-full justify-between ">
@@ -333,63 +311,6 @@ const page = async ({
                 </div>
               </div>
             </div>
-
-            {/* <div className="flex gap-8">
-              <div className="flex flex-col gap-2">
-                <div>
-                  <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">
-                    Universidad
-                  </h3>
-                  <p className="text-sm font-medium">{getCollageName(collage!)}</p>
-                </div>
-                <div>
-                  <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">
-                    Area de estudio
-                  </h3>
-                  <p className="text-sm font-medium">{parseStudyAreaFromDatabase(study_area!)}</p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-2">
-                <div>
-                  <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">
-                    Carrera
-                  </h3>
-                  <p className="text-sm font-medium">{career}</p>
-                </div>
-                <div>
-                  <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">
-                    Regimen de estudio
-                  </h3>
-                  <p className="text-sm font-medium">{study_regime}</p>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <div>
-                <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">
-                  ¿Se encuentra en el CVA?
-                </h3>
-                <p className="text-sm font-medium">{is_in_cva}</p>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">
-                  Razon por la cual no ha iniciado el CVA
-                </h3>
-                <p className="text-sm font-medium">{not_started_cva_reason}</p>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">
-                  Cede del CVA
-                </h3>
-                <p className="text-sm font-medium">{cva_location}</p>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium uppercase tracking-wider text-primary-light dark:text-primary-dark">
-                  Modalidad
-                </h3>
-                <p className="text-sm font-medium">{cva_modality}</p>
-              </div>
-            </div> */}
           </div>
         </div>
       </div>
@@ -413,11 +334,6 @@ const page = async ({
         <div className="mt-6 p-2 rounded-lg bg-white">
           <AreaChart series={areaChartSeries} title="Actividades realizadas" xAxysType="datetime" />
         </div>
-        {/* <div className="w-1/3 mt-6 p-2 rounded-lg bg-white">
-          <RadarChart dataSeries={dataSeries} />
-        </div> */}
-        {/* horarios en donde mas participa */}
-        {/* tipos de chats que mas partici */}
       </div>
       {searchParams?.actividad === 'talleres' && (
         <div className="flex justify-center items-center ">

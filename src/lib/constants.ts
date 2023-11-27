@@ -70,3 +70,32 @@ export const CHAT_LEVELS = [
   { label: 'Intermedio', value: 'INTERMEDIATE' },
   { label: 'Avanzado', value: 'ADVANCED' },
 ];
+
+export const STATES_OF_VENEZUELA = [
+  "Amazonas",
+  "Anzoátegui",
+  "Apure",
+  "Aragua",
+  "Barinas",
+  "Bolívar",
+  "Carabobo",
+  "Cojedes",
+  "Delta Amacuro",
+  "Distrito Capital",
+  "Falcón",
+  "Guárico",
+  "Lara",
+  "Mérida",
+  "Miranda",
+  "Monagas",
+  "Nueva Esparta",
+  "Portuguesa",
+  "Sucre",
+  "Táchira",
+  "Trujillo",
+  "Vargas",
+  "Yaracuy",
+  "Zulia"
+];
+
+export const COLLAGES = ["ENAHP", "UCSAR", "UCV", "UNIMET", "IUPSM", "UCAB", "USB", "UNE", "UNEXPO", "UNESR", "UMA", "UNEARTE", "UJMV", "UMC", "UPEL", "CUR", "USM", "UNEFA", "UNEXCA", "UAH", "UBV"];
