@@ -4,48 +4,14 @@ import { WORKSHOP_CALENDAR_EVENT_COLORS } from '@/lib/constants';
 import { getWorkshopByStatus } from '@/lib/db/utils/Workshops';
 import { getDoneActivities } from '@/lib/db/utils/activities';
 import { getScholarsCountByCondition } from '@/lib/db/utils/users';
-import { createDataCardsContent, formatEventObjectForBigCalendar } from '@/lib/utils';
+import { formatEventObjectForBigCalendar } from '@/lib/utils';
 import { Link } from '@nextui-org/react';
-import { chatIcon, userIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs';
+import { chatIcon, userIcon, workshopIcon } from 'public/svgs/svgs';
 
 const page = async () => {
   const [workshopDoneCount, chatsDoneCount] = await getDoneActivities();
   const activeScholarsCount = await getScholarsCountByCondition('ACTIVE');
 
-  const cardContent = createDataCardsContent([
-    // {
-    //   icon: workshopIcon,
-    //   text: 'Actividades formativas realizadas',
-    //   number: workshopDoneCount,
-    //   bg: 'bg-gradient-to-r from-blue-700  to-indigo-900',
-    //   cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
-    //   activity: 'talleres',
-    // },
-    {
-      icon: chatIcon,
-      text: 'Chats Realizados',
-      number: chatsDoneCount,
-      bg: 'bg-gradient-to-r from-red-500  to-red-900',
-      cardButtonBg: 'bg-indigo-950 active:bg-blue-700',
-      activity: 'chats',
-    },
-    {
-      icon: volunterIcon,
-      text: 'Horas de voluntariado realizadas',
-      number: 0,
-      bg: ' from-green-600  to-emerald-800',
-      cardButtonBg: 'bg-indigo-950 active:bg-blue-700',
-      activity: 'voluntariado',
-    },
-    {
-      icon: userIcon,
-      text: 'Becarios activos',
-      number: activeScholarsCount,
-      bg: 'from-yellow-500  to-yellow-700',
-      cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
-      activity: 'talleres',
-    },
-  ]);
   const scheduledWorkshops = await getWorkshopByStatus('SCHEDULED');
   const sentWorkshops = await getWorkshopByStatus('SENT');
   const events = () => {
@@ -56,6 +22,7 @@ const page = async () => {
     );
     return workshopEvents;
   };
+
   return (
     <div className="flex flex-col gap-4 h-full w-full">
       <div className="w-full flex flex-col md:flex-row gap-3 items-center">
