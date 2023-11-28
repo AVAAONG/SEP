@@ -119,8 +119,6 @@ const page = async () => {
       }).length!,
     };
   });
-  console.log(scholarTableData);
-
   return (
     <div className="flex flex-col w-full gap-4">
       <StatsCard
