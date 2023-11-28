@@ -68,7 +68,7 @@ const page = async () => {
               Actividades formativas realizadas
             </p>
           </dt>
-          <dd className="ml-16 pb-6 flex items-baseline sm:pb-7">
+          <dd className="ml-16 pb-3 flex items-baseline ">
             <p className="text-3xl font-semibold">{workshopDoneCount}</p>
 
             <div className="absolute bottom-0 inset-x-0 bg-blue-50 dark:bg-black px-4 py-3">
@@ -90,7 +90,7 @@ const page = async () => {
               Chat clubs de inglés realizados
             </p>
           </dt>
-          <dd className="ml-16 pb-6 flex items-baseline sm:pb-7">
+          <dd className="ml-16 pb-3 flex items-baseline">
             <p className="text-3xl font-semibold ">{chatsDoneCount}</p>
 
             <div className="absolute bottom-0 inset-x-0 bg-red-50 dark:bg-black px-4 py-3">
@@ -111,7 +111,7 @@ const page = async () => {
             </div>
             <p className="ml-16 font-medium text-yellow-500 truncate">Total de becarios activos</p>
           </dt>
-          <dd className="ml-16 pb-6 flex items-baseline sm:pb-7">
+          <dd className="ml-16 pb-3  flex items-baseline  ">
             <p className="text-3xl font-semibold ">{activeScholarsCount}</p>
 
             <div className="absolute bottom-0 inset-x-0 bg-yellow-50 dark:bg-black px-4 py-3">
