@@ -6,10 +6,10 @@
  */
 'use client';
 import handler from '@/lib/serverAction';
+import { Button, Input } from '@nextui-org/react';
 import { signIn } from 'next-auth/react';
 import { BaseSyntheticEvent } from 'react';
 import { useForm } from 'react-hook-form';
-import useSWR from 'swr';
 
 interface SigninFormProps {
   callbackUrl: string;
@@ -25,9 +25,6 @@ interface SigninFormProps {
  */
 const SigninForm = ({ callbackUrl, cookieValue }: SigninFormProps) => {
   const { register, handleSubmit } = useForm();
-  const fetcher = (...args: RequestInfo[] | URL[]) => fetch([...args]).then((res) => res.json());
-
-  const crsfToken = useSWR('../api/crfToken', fetcher, { fallbackData: '' });
 
   const onSubmit = async (data: { email: string }, event: BaseSyntheticEvent) => {
     event.preventDefault();
@@ -42,26 +39,26 @@ const SigninForm = ({ callbackUrl, cookieValue }: SigninFormProps) => {
   return (
     <form onSubmit={handleSubmit(async (data, event) => await onSubmit(data, event!))}>
       <div className="mb-3 flex flex-col gap-2">
-        {/* <input type="hidden" name="csrfToken" value={crsfToken.data.csrfToken} /> */}
-        <label htmlFor="user_email" className="text-sm dark:text-gray-400 text-gray-600">
-          Correo electrónico
-        </label>
-        <input
+        <Input
+          label="Correo electrónico"
           autoFocus={true}
+          radius='sm'
           autoComplete="email"
           type="email"
+          labelPlacement='outside'
           required={true}
           {...register('email', { required: true })}
           placeholder="kevinbravo@gmail.com"
         />
       </div>
-      <button
+      <Button
         name="button"
         type="submit"
-        className="bg-transparent border border-primary-light  hover:bg-primary-light hover:text-white font-medium py-1 px-3 rounded-md w-full flex justify-center gap-4"
+        radius='sm'
+        className="bg-transparent border border-primary-light  hover:bg-primary-light hover:text-white font-medium w-full  "
       >
         Entrar con email
-      </button>
+      </Button>
     </form>
   );
 };
