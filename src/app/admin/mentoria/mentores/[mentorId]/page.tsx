@@ -1,11 +1,6 @@
 import defailProfilePic from '@/../public/defaultProfilePic.png';
-import NormalCard from '@/components/scholar/card/NormalCard';
-import Table from '@/components/table/Table';
-import speakerWorkshopsColumn from '@/components/table/columns/singleWorkshopSpeakerColumns';
 
-import ChartComponent from '@/components/charts/AreaChart';
-import { getWorkshopSpeakerWithWorkshops } from '@/lib/db/utils/speaker';
-import { createDataCardsContent } from '@/lib/utils';
+import { getMentor } from '@/lib/db/utils/mentors';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -14,14 +9,7 @@ import {
   LinkedinIcon,
   TwitterIcon,
 } from '../../../../../../public/svgs/SocialNetworks';
-import {
-  CurriculumIcon,
-  EmailIcon,
-  PhoneIcon,
-  Star,
-  chatIcon,
-  workshopIcon,
-} from '../../../../../../public/svgs/svgs';
+import { CurriculumIcon, EmailIcon, PhoneIcon } from '../../../../../../public/svgs/svgs';
 
 const speakerSearchOptions = [
   {
@@ -37,34 +25,22 @@ const speakerSearchOptions = [
     label: 'Organización',
   },
 ];
-const page = async ({ params }: { params: { speakerId: string } }) => {
-  const { speakerId } = params;
-  const [workshopSpeaker, workshops] = await getWorkshopSpeakerWithWorkshops(speakerId);
+const page = async ({ params }: { params: { mentorId: string } }) => {
+  const { mentorId } = params;
+  const mentor = await getMentor(mentorId);
   const {
-    first_names,
-    last_names,
-    phone_number,
-    job_company,
-    email,
-    description,
-    curriculum,
-    image,
+    first_name,
+    last_name,
     twitter_user,
     facebook_user,
     instagram_user,
     linkedin_user,
-  } = workshopSpeaker || {};
-
-  const uniqueScholars = [
-    ...new Set(
-      workshops?.flatMap(
-        (workshop) =>
-          workshop.scholar_attendance?.map((attendance) => {
-            if (attendance.attendance === 'ATTENDED') return attendance.scholar_id;
-          })
-      ) ?? []
-    ),
-  ];
+    image,
+    curriculum,
+    company,
+    cell_phone,
+    email,
+  } = mentor;
 
   const workshopSpeakerSocialNetwork = [
     {
@@ -92,50 +68,6 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
       username: linkedin_user,
     },
   ];
-  const cardContent = createDataCardsContent([
-    {
-      icon: workshopIcon,
-      text: 'Actividades formativas',
-      number: workshops?.length || 0,
-      bg: 'bg-gradient-to-r from-blue-700  to-indigo-900',
-      cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
-    },
-    {
-      icon: chatIcon,
-      text: 'Becarios unicos impactados',
-      number: uniqueScholars?.length || 0,
-      bg: 'bg-gradient-to-r from-red-500  to-red-900',
-      cardButtonBg: 'bg-indigo-950 active:bg-blue-700',
-    },
-    {
-      icon: Star,
-      text: 'Calificación promedio',
-      number: 4.5,
-      bg: 'from-yellow-500  to-yellow-700',
-      cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
-    },
-  ]);
-
-  const workshopsByMonth: Record<number, number> =
-    workshops?.reduce((acc, workshop) => {
-      const month = new Date(workshop.start_dates[0]).getMonth();
-      acc[month] = (acc[month] || 0) + 1;
-      return acc;
-    }, {}) || {};
-
-  // Add null values for months without workshops
-  for (let month = 0; month < 12; month++) {
-    if (!(month in workshopsByMonth)) {
-      workshopsByMonth[month] = 0;
-    }
-  }
-  const AreaSeries = {
-    name: 'Meses de actividad',
-    data: Object.entries(workshopsByMonth).map(([month, count]) => ({
-      x: new Date(0, month),
-      y: count,
-    })),
-  };
 
   return (
     <section className="flex flex-col gap-4">
@@ -155,7 +87,7 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
             <div className="flex flex-col justify-center items-center gap-1 sm:gap-1 w-full px-4">
               <h1 className="text-2xl text-green-700 font-bold text-center flex items-center justify-center gap-2">
                 <span>
-                  {first_names} {last_names}{' '}
+                  {first_name} {last_name}{' '}
                 </span>
                 {curriculum && (
                   <Link href={curriculum} target="_blank" className="w-6 block">
@@ -164,16 +96,16 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
                 )}
               </h1>{' '}
               <span className="text-gray-400 dark:text-gray-300 font-semibold uppercase text-center w-full ">
-                {job_company}
+                {company}
               </span>
             </div>
-            {description && (
+            {/* {description && (
               <div className="flex flex-col justify-center items-center gap-2 sm:gap-1 sm:justify-start sm:items-start ">
                 <span className="text-base text-gray-400 dark:text-gray-300 font-semibold ">
                   adsfknlkjdsa{' '}
                 </span>
               </div>
-            )}
+            )} */}
             <div className="flex flex-row gap-4">
               {workshopSpeakerSocialNetwork.map(
                 ({ url, icon, username }, index) =>
@@ -190,12 +122,12 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
               )}
             </div>
             <div className="flex flex-col w-full text-sm gap-2 items-center justify-center">
-              {phone_number && (
+              {cell_phone && (
                 <div className="w-full flex gap-2 items-center justify-center ">
                   <div className="bg-gray-100 dark:bg-slate-600 p-2 w-9 rounded-full">
                     <PhoneIcon />
                   </div>
-                  <span>{phone_number}</span>
+                  <span>{cell_phone}</span>
                 </div>
               )}
               {email && (
@@ -210,26 +142,12 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
           </div>
         </div>
         <div className="flex flex-col  w-full lg:w-3/4 pl-4">
-          <div className="flex gap-2 justify-center items-center mt-4">
+          {/* <div className="flex gap-2 justify-center items-center mt-4">
             {cardContent.map(({ icon, text, number, bg }) => {
               return <NormalCard key={text} stat={number} Icon={icon} text={text} bg={bg} />;
             })}
-          </div>
-          <div className="mt-6">
-            <ChartComponent
-              series={[AreaSeries]}
-              title="Talleres realizados"
-              xAxysType="datetime"
-            />
-          </div>
+          </div> */}
         </div>
-      </div>
-      <div className="flex justify-center items-center ">
-        <Table
-          tableColumns={speakerWorkshopsColumn}
-          tableData={workshops || []}
-          tableHeadersForSearch={speakerSearchOptions}
-        />
       </div>
     </section>
   );

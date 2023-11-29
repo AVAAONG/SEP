@@ -1,4 +1,5 @@
 import { ScholarProgramInformation,  } from "users\scholar\scholar"
+import { Gender } from "activities\type-activities"
 
 enum MentorProgramStatus {
     PENDING
@@ -18,6 +19,7 @@ model Mentor {
     birthdate         DateTime?
     city_of_residence String?
     profession        String?
+    gender            Gender?
     company           String?
     company_position  String?
     other_activities  String?

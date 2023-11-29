@@ -393,6 +393,7 @@ model Mentor {
   birthdate         DateTime?
   city_of_residence String?
   profession        String?
+  gender            Gender?
   company           String?
   company_position  String?
   other_activities  String?
