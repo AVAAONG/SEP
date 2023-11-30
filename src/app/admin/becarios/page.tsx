@@ -3,7 +3,7 @@ import Table from '@/components/table/Table';
 import scholarAllInformationCollumn from '@/components/table/columns/scholarAllInformationColumns';
 import createSocialMediaIcons from '@/lib/createSocialInfo';
 import { getScholarcountByGender, getScholarsWithAllData } from '@/lib/db/utils/users';
-import { parseAvaaAdmisionYear } from '@/lib/parseFromDatabase';
+import { parseAvaaAdmisionYear, parseStudyAreaFromDatabase } from '@/lib/parseFromDatabase';
 import { createArrayFromObject, reduceByProperty } from '@/lib/utils';
 import moment from 'moment';
 import dynamic from 'next/dynamic';
@@ -44,7 +44,12 @@ const page = async () => {
     'program_information',
     'scholar_status'
   );
+
   const activeScholarsByStudyAreaArray = createArrayFromObject(activeScholarsByStudyArea);
+  const data = activeScholarsByStudyAreaArray.map((area) => {
+    area.label = area.label === 'Unknown' ? 'Sin información' : parseStudyAreaFromDatabase(area.label);
+    return area;
+  })
   const activeScholarsByAvaYear = scholars.reduce(
     (acc, scholar) => {
       const year = scholar.program_information?.avaa_admission_year ?? 'Unknown';
@@ -162,7 +167,7 @@ const page = async () => {
               Distribución de becarios area de estudio
             </h3>
             <div className="w-full h-full">
-              <PieChartComponent data={activeScholarsByStudyAreaArray} />
+              <PieChartComponent data={data} />
             </div>
           </div>
           <div className="w-full md:w-1/3 flex flex-col items-center gap-2 h-full">
