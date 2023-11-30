@@ -165,7 +165,7 @@ export const getScholarsWithAllData = async () => {
 };
 
 export const getScholars = async () => {
-  const scholars = prisma.scholar.findMany({
+  const scholars = await prisma.scholar.findMany({
     where: {
       program_information: {
         scholar_condition: {
@@ -173,6 +173,10 @@ export const getScholars = async () => {
         },
       },
     },
+    include: {
+      collage_information: true,
+      program_information: true,
+    }
   })
   return scholars;
 }
