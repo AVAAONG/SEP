@@ -1,6 +1,6 @@
 'use client';
 import { parseModalityFromDatabase } from '@/lib/utils2';
-import { Modality, Skill } from '@prisma/client';
+import { Level, Modality } from '@prisma/client';
 import { CellProps, Column } from 'react-table';
 
 type ChatDataTable = {
@@ -8,7 +8,7 @@ type ChatDataTable = {
   title: string;
   duration: number;
   modality: Modality;
-  category: Skill;
+  category: Level;
   condition: string;
 };
 

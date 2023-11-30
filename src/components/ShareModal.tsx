@@ -22,7 +22,14 @@ const SharePubilcProfile: React.FC<ShareModalProps> = ({ qrCode, profileLink }) 
 
   return (
     <>
-      <Button radius="lg" variant="ghost" onPress={onOpen} isIconOnly className="p-2">
+      <Button
+        radius="lg"
+        variant="ghost"
+        onClick={onOpen}
+        onPress={onOpen}
+        isIconOnly
+        className="p-2"
+      >
         <ShareIcon />
       </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -32,7 +39,7 @@ const SharePubilcProfile: React.FC<ShareModalProps> = ({ qrCode, profileLink }) 
               <ModalHeader className="w-full text-center">Compartir perfil</ModalHeader>
               <ModalBody>
                 <div className="flex flex-col items-center gap-6 w-full">
-                  <div className="w-full flex rounded-full items-center justify-between gap-2 p-1 bg-gray-100">
+                  <div className="w-full flex rounded-full items-center justify-between gap-2 p-1 bg-gray-100 dark:bg-slate-800">
                     <p className="font-semibold truncate ml-4">{profileLink}</p>
                     <Button radius="full" isIconOnly className="p-2">
                       <ClipboardIcon />
@@ -49,6 +56,7 @@ const SharePubilcProfile: React.FC<ShareModalProps> = ({ qrCode, profileLink }) 
                         alt="Codigo QR"
                         width={350}
                         height={300}
+                        sizes="(max-width: 350px)  100px"
                       />
                     </Button>
                   </CopyToClipboard>

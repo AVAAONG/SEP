@@ -9,10 +9,19 @@ import {
   DropdownTrigger,
 } from '@nextui-org/react';
 import { useState } from 'react';
+import EditScholarForm from './EditScholarForm';
 import ProbationForm from './ProbationForm';
 
+type ModalsOpen = {
+  probation: boolean;
+  edit: boolean;
+};
+
 const ScholarDropdown = () => {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState<ModalsOpen>({
+    probation: false,
+    edit: false,
+  });
   const [probationKind, setProbationKind] = useState<'PROBATION_I' | 'PROBATION_II'>();
   return (
     <>
@@ -26,11 +35,18 @@ const ScholarDropdown = () => {
           aria-label="Dropdown menu with description"
           onAction={(key) => {
             setProbationKind(key as 'PROBATION_I' | 'PROBATION_II');
-            setModalOpen(true);
+            setModalOpen({ ...modalOpen, probation: true });
           }}
         >
           <DropdownSection title="Actions" showDivider>
-            <DropdownItem key="edit" description="Edita los datos del becario">
+            <DropdownItem
+              key="edit"
+              description="Edita los datos del becario"
+              onAction={(key) => {
+                setProbationKind(key as 'PROBATION_I' | 'PROBATION_II');
+                setModalOpen({ ...modalOpen, edit: true });
+              }}
+            >
               Editar informacion de becario
             </DropdownItem>
           </DropdownSection>
@@ -57,7 +73,8 @@ const ScholarDropdown = () => {
           </DropdownSection>
         </DropdownMenu>
       </Dropdown>
-      <ProbationForm isOpen={modalOpen} probationKind={probationKind} />
+      <ProbationForm isOpen={modalOpen.probation} probationKind={probationKind} />
+      <EditScholarForm isOpen={modalOpen.edit} />
     </>
   );
 };

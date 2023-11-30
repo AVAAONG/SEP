@@ -372,6 +372,68 @@ datasource db {
 // }
 
 //
+// mentors.prisma
+//
+
+enum MentorStaus {
+  ACCEPTED
+  NOT_ACCEPTED
+  PENDING
+}
+
+model Mentor {
+  id                   String          @id @default(nanoid())
+  first_name           String
+  last_name            String
+  email                String          @unique
+  dni                  String          @unique
+  cell_phone           String
+  created_at           DateTime        @default(now())
+  updated_at           DateTime        @updatedAt
+  birthdate            DateTime
+  city_of_residence    String
+  profession           String
+  company              String
+  company_position     String
+  other_activities     String
+  image                String
+  hobbies              String
+  instagram_profile    String
+  linkedin_profile     String
+  facebook_profile     String
+  twitter_profile      String
+  personal_qualities   String
+  areas_of_interest    String
+  areas_of_improvement String
+  how_know_us          String
+  motivation           String
+  main_qualities       String
+  curriculum           String
+  status               MentorStaus
+  mentor_mentee        Mentor_mentee[]
+}
+
+enum MentorStatus {
+  ACTIVE
+  INACTIVE
+  CHANGED
+}
+
+model Mentee_mentor_activities {
+  id              String        @id @default(nanoid())
+  mentee_mentor   Mentor_mentee @relation(fields: [mentor_menteeId], references: [id])
+  mentor_menteeId String
+}
+
+model Mentor_mentee {
+  id                       String                     @id @default(nanoid())
+  mentor_mentee_activities Mentee_mentor_activities[]
+  status                   MentorStatus
+  Mentor                   Mentor?                    @relation(fields: [mentorId], references: [id])
+  mentorId                 String?
+}
+
+//
 // chapter.prisma
 //
 
@@ -518,6 +580,7 @@ enum EvaluationScale {
 enum StudyRegime {
   SEMESTER
   QUARTER
+  QUARTIER
   ANNUAL
 }
 
@@ -558,6 +621,8 @@ enum Collages {
 model ScholarCollageInformation {
   id                      String                 @id @default(nanoid())
   academic_load_completed Boolean?
+  inscription_comprobant  String?
+  career_schedule         String?
   collage                 Collages?
   career                  String
   study_area              StudyArea?
@@ -614,34 +679,42 @@ model ScholarCvaModule {
 /// @author Kevin Bravo (kevinbravo.me)
 
 model Scholar {
-  id                     String                     @id @default(nanoid())
-  allowedEmail           String?                    @unique
-  first_names            String
-  last_names             String
-  dni                    String                     @unique
-  gender                 Gender
-  birthdate              DateTime
-  is_working             Boolean                    @default(false)
-  job_title              String?
-  job_company            String?
-  local_phone_number     String?
-  cell_phone_Number      String?
-  whatsapp_number        String?
-  state_of_origin        String?
-  address                String?
-  instagram_user         String?
-  twitter_user           String?
-  facebook_user          String?
-  linkedin_user          String?
-  program_information    ScholarProgramInformation? @relation(fields: [program_information_id], references: [id])
-  collage_information    ScholarCollageInformation? @relation(fields: [collage_information_id], references: [id])
-  cva_information        ScholarCVAInformation?     @relation(fields: [cva_information_id], references: [id])
-  program_information_id String?
-  collage_information_id String?
-  cva_information_id     String?
-  is_chat_speaker        Boolean                    @default(false)
-  chat_speaker_id        String?
-  user                   User?
+  id                            String                     @id @default(nanoid())
+  allowedEmail                  String?                    @unique
+  first_names                   String
+  last_names                    String
+  dni                           String                     @unique
+  gender                        Gender
+  birthdate                     DateTime
+  is_working                    Boolean                    @default(false)
+  job_title                     String?
+  job_company                   String?
+  job_modality                  Modality?
+  job_amount_of_hours           String?
+  have_entrepreneurship         Boolean                    @default(false)
+  entrepreneurship_name         String?
+  entrepreneurship_kind         String?
+  entrepreneurship_services     String?
+  entrepreneurship_social_media String?
+  kind_of_job                   String?
+  local_phone_number            String?
+  cell_phone_Number             String?
+  whatsapp_number               String?
+  state_of_origin               String?
+  address                       String?
+  instagram_user                String?
+  twitter_user                  String?
+  facebook_user                 String?
+  linkedin_user                 String?
+  program_information           ScholarProgramInformation? @relation(fields: [program_information_id], references: [id])
+  collage_information           ScholarCollageInformation? @relation(fields: [collage_information_id], references: [id])
+  cva_information               ScholarCVAInformation?     @relation(fields: [cva_information_id], references: [id])
+  program_information_id        String?
+  collage_information_id        String?
+  cva_information_id            String?
+  is_chat_speaker               Boolean                    @default(false)
+  chat_speaker_id               String?
+  user                          User?
 
   @@unique([program_information_id, collage_information_id, cva_information_id])
   @@index([program_information_id])

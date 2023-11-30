@@ -34,14 +34,14 @@ const WorkshopsAccordion: React.FC<WorkshopAccordionProps> = ({ workshopInfo }) 
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className=" text-blue-600  h-14 w-14"
+          className=" text-blue-600  h-10 w-10 md:w-14 md:h-14"
         >
           <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
           <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
         </svg>
-        <h3 className="col-span-full text-3xl font-semibold">Actividades formativas</h3>
+        <h3 className="col-span-full text-2xl md:text-3xl font-semibold">Actividades formativas</h3>
       </div>
-      <Accordion variant="splitted">
+      <Accordion variant="splitted" className="p-0">
         <AccordionItem
           key="1"
           aria-label="Actividades académicas"
@@ -55,8 +55,8 @@ const WorkshopsAccordion: React.FC<WorkshopAccordionProps> = ({ workshopInfo }) 
           title={
             <div className="flex-col gap-1.5 flex justify-between items-center px-2">
               <div className="flex items-center gap-4">
-                <p className="text-4xl font-bold">{workshopTotalHours}</p>
-                <h3 className="text-xl md:text-2xl font-semibold leading-none tracking-tight">
+                <p className="text-2xl md:text-4xl font-bold">{workshopTotalHours}</p>
+                <h3 className="text-base md:text-2xl font-semibold leading-none tracking-tight">
                   Horas académicas realizadas en actividades formativas
                 </h3>
               </div>
@@ -77,7 +77,7 @@ const WorkshopsAccordion: React.FC<WorkshopAccordionProps> = ({ workshopInfo }) 
           <Link
             replace={false}
             href="?actividad=actividadesFormativas"
-            className="p-2 block rounded-b-lg text-sm font-semibold text-light  transition-transform duration-75 hover:bg-blue-600"
+            className="text-center md:text-start p-2 block rounded-b-lg text-sm font-semibold text-light  transition-transform duration-75 hover:bg-blue-600"
           >
             Ver actividades realizadas
           </Link>
@@ -91,12 +91,12 @@ const ChatsAccordion: React.FC<ChatAccordionProps> = ({ chatInfo }) => {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex gap-4 px-4 items-center">
-        <div className="w-14 h-14 text-red-600">{chatIcon()}</div>
-        <h3 className="col-span-full text-3xl font-semibold text-gray-900 dark:text-white">
+        <div className="h-10 w-10 md:w-14 md:h-14 text-red-600">{chatIcon()}</div>
+        <h3 className="col-span-full text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white">
           Inglés
         </h3>
       </div>
-      <Accordion variant="splitted">
+      <Accordion variant="splitted" className="p-0">
         <AccordionItem
           key="1"
           aria-label="Inglés"
@@ -108,10 +108,10 @@ const ChatsAccordion: React.FC<ChatAccordionProps> = ({ chatInfo }) => {
             indicator: '-mt-2 opacity-100 text-white text-center pr-4',
           }}
           title={
-            <div className="flex-col space-y-1.5 flex justify-between items-center">
+            <div className="px-2 flex-col space-y-1.5 flex justify-between items-center">
               <div className="flex items-center space-x-4">
-                <p className="text-4xl font-bold">{chatTotalHours}</p>
-                <h3 className="text-2xl font-semibold leading-none tracking-tight">
+                <p className="text-2xl md:text-4xl font-bold">{chatTotalHours}</p>
+                <h3 className="text-base md:text-2xl font-semibold leading-none tracking-tight">
                   Horas académicas realizadas en chat clubs
                 </h3>
               </div>
@@ -127,11 +127,11 @@ const ChatsAccordion: React.FC<ChatAccordionProps> = ({ chatInfo }) => {
               </div>
             ))}
           </div>
-          <div>Completo el CVA EN iandsfndsafjdsalf</div>
+          {/* <div>Completo el CVA EN iandsfndsafjdsalf</div> */}
           <Link
             replace={false}
             href="?actividad=chats"
-            className="p-2 block rounded-b-lg text-sm font-semibold text-light  transition-transform duration-75 hover:bg-red-600"
+            className="text-center md:text-start p-2 block rounded-b-lg text-sm font-semibold text-light  transition-transform duration-75 hover:bg-red-600"
           >
             Ver actividades realizadas
           </Link>

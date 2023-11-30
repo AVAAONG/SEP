@@ -1,3 +1,4 @@
+import defailProfilePic from '@/../public/defaultProfilePic.png';
 import PublicAccordion from '@/components/PublicAccordion';
 import SharePubilcProfile from '@/components/ShareModal';
 import Table from '@/components/table/Table';
@@ -10,7 +11,6 @@ import { getScholarWithAllData } from '@/lib/db/utils/users';
 import { getCollageName } from '@/lib/parseFromDatabase';
 import generateQRCode from '@/lib/utils/createQrCode';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
-import { Button } from '@nextui-org/react';
 import moment from 'moment';
 import { headers } from 'next/headers';
 import Image from 'next/image';
@@ -100,7 +100,11 @@ const page = async ({
   const scholarId = params?.scholarId;
   const pageUrl = `https://${host}/perfilBecario/${scholarId}`;
   const scholar = await getScholarWithAllData(scholarId);
-  const name = `${scholar?.first_names.split(' ')[0]} ${scholar?.last_names.split(' ')[0]} `;
+  const lastNames = scholar?.last_names?.split(' ')!;
+
+  const name = `${scholar?.first_names.split(' ')[0]} ${
+    lastNames[0].length < 3 ? `${lastNames[0]} ${lastNames[1]}` : lastNames[0]
+  } `;
   const {
     twitter_user,
     facebook_user,
@@ -213,23 +217,23 @@ const page = async ({
   const qrcode = await generateQRCode(pageUrl);
   return (
     <main className="min-h-screen">
-      <section className="flex flex-col md:flex-row gap-4 w-full ">
-        <div className="p-4 lg:w-3/12 dark:bg-gradient-to-b md:min-h-screen dark:from-emerald-950 dark:to-slate-950 items-center flex flex-col gap-4">
+      <section className="flex flex-col md:flex-row w-full ">
+        <div className="p-4 lg:w-3/12 dark:bg-gradient-to-b min-h-screen dark:from-emerald-950 dark:to-slate-950 items-center flex flex-col">
           <div className="block md:hidden self-end">
             <SharePubilcProfile qrCode={qrcode!} profileLink={pageUrl} />
           </div>
-          <div className="w-64 flex items-center justify-center  rounded-full  border-2 border-primary-1 p-1">
+          <div className="w-64 flex items-center justify-center rounded-full border-2 border-primary-1 p-1">
             <Image
-              src="https://d2u8k2ocievbld.cloudfront.net/memojis/male/1.png"
-              alt="Imagen del facilitador"
+              src={defailProfilePic}
+              alt="Foto del becario"
               width={250}
               height={250}
               priority
               className="rounded-full"
             />
           </div>
-          <div className="flex flex-col items-center gap-2">
-            <h1 className="text-3xl text-center text-primary-light font-semibold ">{name}</h1>
+          <div className="flex flex-col items-center gap-4">
+            <h1 className="text-3xl text-center text-primary-light font-semibold mt-4 ">{name}</h1>
             <p className="w-full text-center italic">
               Licenciatura en{' '}
               <span className="font-semibold">{scholar?.collage_information?.career}</span> en la{' '}
@@ -237,9 +241,9 @@ const page = async ({
                 {getCollageName(scholar?.collage_information?.collage!)}
               </span>
             </p>
-            <Button variant="ghost" color="success">
+            {/* <Button variant="ghost" color="success">
               Ver certificado
-            </Button>
+            </Button> */}
             <div className="flex w-full gap-2 justify-center">
               {scholarSocialNetworks.map(
                 ({ url, icon, username }, index) =>
@@ -258,14 +262,14 @@ const page = async ({
           </div>
         </div>
 
-        <div className={`w-full flex-1 bg-gray-100 flex flex-col p-4`}>
+        <div className={`w-full flex-1 bg-gray-100 dark:bg-dark min-h-screen flex flex-col p-4`}>
           <div className="hidden md:block self-end">
             <SharePubilcProfile qrCode={qrcode!} profileLink={pageUrl} />
           </div>
           <div
             className={`${
               searchParams?.actividad === undefined ? 'md:py-28' : ''
-            } flex flex-col px-8 gap-8`}
+            } flex flex-col md:px-8 gap-8`}
           >
             {searchParams?.actividad !== undefined && (
               <Link
@@ -289,7 +293,7 @@ const page = async ({
             />
 
             {searchParams?.actividad === 'actividadesFormativas' && (
-              <div className="w-full p-4">
+              <div className="w-full">
                 <Table
                   tableColumns={scholarPublicWorkshopAttendanceColumns}
                   tableData={workshopTableObject}
@@ -298,7 +302,7 @@ const page = async ({
               </div>
             )}
             {searchParams?.actividad === 'chats' && (
-              <div className="11/12">
+              <div className="w-full">
                 <Table
                   tableColumns={scholarPublicChatAttendanceColumns}
                   tableData={chatTableObject}
