@@ -1,8 +1,8 @@
 'use client';
 import { scholarSidebarAtom } from '@/lib/state/mainState';
+import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
 import { useAtom } from 'jotai';
 import ThemeToggleButton from './NavigationBar/ThemeToggleButton';
-import ProfileDropdown from './ProfileDropdown';
 import SolicitudeDropdown from './SolicitudeDropdown';
 interface NavigationBarProps {
   image: string | null | undefined;
@@ -63,7 +63,25 @@ const NavigationBar = ({ image, name, email }: NavigationBarProps) => {
             {/* <HighlightsForm /> */}
           </button>
           <ThemeToggleButton />
-          <ProfileDropdown name={name} email={email} image={image} />
+          <Dropdown placement="bottom-end">
+            <DropdownTrigger>
+              <Avatar
+                as="button"
+                className="transition-transform"
+                src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+              />
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Profile Actions" variant="flat">
+              <DropdownItem key="profile" className="h-14 gap-2">
+                <p className="font-semibold">Registrada como</p>
+                <p className="font-semibold">zoey@example.com</p>
+              </DropdownItem>
+              <DropdownItem key="configurations">Configuracion</DropdownItem>
+              <DropdownItem key="logout" color="danger">
+                Cerrar sesión
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </div>
       </div>
     </nav>

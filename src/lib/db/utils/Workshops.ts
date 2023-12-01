@@ -10,6 +10,22 @@ import shortUUID from 'short-uuid';
 import { prisma } from './prisma';
 
 
+export const getWorkshopsByScholar = async (scholarId: string) => {
+  const workshops = await prisma.scholar.findUniqueOrThrow({
+    where: {
+      id: scholarId,
+    },
+    select: {
+      program_information: {
+        include: {
+          attended_workshops: true,
+        }
+      },
+    },
+  });
+  return workshops;
+}
+
 /**
  * Gets the number of workshops with the specified activity status.
  * @param status - The activity status to filter by.
@@ -295,15 +311,24 @@ export const getWorkhsopsByScholar = async (programInformationId: string, schola
           scholar_id: programInformationId,
         },
       },
-      speaker: {
-        where: {
-          id: scholarId,
-        },
-      },
     },
   });
   return chats;
 }
+
+
+export const getWorkshopsByScholar2 = async (scholarProgramInformationId: string) => {
+  const workshops = await prisma.workshopAttendance.findMany({
+    where: {
+      scholar_id: scholarProgramInformationId,
+    },
+    include: {
+      workshop: true,
+    },
+  })
+  return workshops;
+}
+
 
 export const addAttendaceToScholar = async (
   workshopId: string,
