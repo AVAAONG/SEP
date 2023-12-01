@@ -1,15 +1,19 @@
-import { Workshop } from '@prisma/client';
+import { Chat, Volunteer, Workshop } from '@prisma/client';
 import Link from 'next/link';
 import ActivityListIcon from './scholar/dashboard/ActivityListIcon';
 
-const NextEventsList = ({ activities }: { activities: Workshop[] }) => {
+const NextEventsList = ({
+  activities,
+}: {
+  activities: Workshop[] | Chat[] | Volunteer[] | null;
+}) => {
   return (
     <>
       <h3 className="flex items-center mb-2 text-lg font-medium ">Próximos Eventos</h3>
       <div className="border-t border-gray-200 dark:border-gray-600">
         <div className="">
           <ul role="list" className="divide-y divide-gray-200 dark:divide-gray-700">
-            {activities.map((activity, index: number) => (
+            {activities?.map((activity, index: number) => (
               <li className="py-2.5 overflow-hidden" key={index}>
                 <Link href={`/admin/actividadesFormativas/${activity.id}`}>
                   <div className="flex items-center w-full">
