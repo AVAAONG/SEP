@@ -2,7 +2,7 @@
 /// @author Kevin Bravo (kevinbravo.me)
 
 enum Level {
-    BASICO
-    INTERMEDIO
-    AVANZADO
+    BASIC
+    INTERMEDIATE
+    ADVANCED
 }

@@ -18,7 +18,6 @@ model Chat {
     calendar_id        String?
     start_dates        DateTime[]
     end_dates          DateTime[]
-    rating             Float?
     modality           Modality
     level              Level
     activity_status    ActivityStatus
@@ -36,6 +35,7 @@ model ChatAttendance {
     chat_id                  String
     chat                     Chat                      @relation(fields: [chat_id], references: [id])
     attendance               ScholarAttendance
+    raiting                  Float?
     justification            String?
     satisfaction_form_filled Boolean?
 }
@@ -44,7 +44,6 @@ model ChatsTempData {
     id               String  @id @default(nanoid())
     chat             Chat    @relation(fields: [chat_id], references: [id])
     chat_id          String  @unique
-    form_link        String?
     meeting_link     String?
     meeting_id       String?
     meeting_password String?
