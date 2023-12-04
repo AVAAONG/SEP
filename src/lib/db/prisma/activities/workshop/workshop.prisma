@@ -20,7 +20,6 @@ model Workshop {
     calendar_id        String?
     start_dates        DateTime[]
     end_dates          DateTime[]
-    hours              Float
     year               WorkshopYear[]
     modality           Modality
     asociated_skill    Skill
@@ -28,6 +27,7 @@ model Workshop {
     activity_status    ActivityStatus
     scholar_attendance WorkshopAttendance[]
     speaker            Speaker[]
+    slides             String?
 
     @@index([title, modality, activity_status, asociated_skill])
 }
@@ -37,7 +37,6 @@ model WorkshopTempData {
     id               String   @id @default(nanoid())
     workshop         Workshop @relation(fields: [workshop_id], references: [id])
     workshop_id      String   @unique
-    form_link        String
     meeting_link     String?
     meeting_id       String?
     meeting_password String?
@@ -45,16 +44,31 @@ model WorkshopTempData {
 
 //  Intermediate table to store the attendance of the scholars to the workshops
 model WorkshopAttendance {
-    id                       String                    @id @default(nanoid())
-    scholar                  ScholarProgramInformation @relation(fields: [scholar_id], references: [id])
-    scholar_id               String
-    workshop_id              String
-    workshop                 Workshop                  @relation(fields: [workshop_id], references: [id])
-    attendance               ScholarAttendance
-    justification            String?
-    satisfaction_form_filled Boolean?
-    raiting                  Float?
+    id                             String                    @id @default(nanoid())
+    scholar                        ScholarProgramInformation @relation(fields: [program_information_scholar_id], references: [id])
+    program_information_scholar_id String
+    workshop_id                    String
+    workshop                       Workshop                  @relation(fields: [workshop_id], references: [id])
+    attendance                     ScholarAttendance
+    justification                  String?
+    satisfaction_form_filled       Boolean?
+    satisfaction_form              WorkshopSafisfactionForm?
 
-    @@index([scholar_id])
+    @@index([program_information_scholar_id])
     @@index([workshop_id])
+}
+
+model WorkshopSafisfactionForm {
+    id                              String             @id @default(nanoid())
+    suggestions                     String //Escribe algunas sugerencias que permitan mejorar el desarrollo de las actividades de formación.
+    speaker_satisfaction            Float //Consideras que el desempeño del facilitador, en general, fue:
+    speaker_strategies_satisfaction Float // Consideras que las estrategias aplicadas por el especialista facilitaron tu aprendizaje y el desarrollo de la competencia prevista.
+    meeting_software_satisfaction   Float //El uso de la plataforma para videoconferencias utilizada fue:
+    activity_satisfaction           Float //¿Cuál es tu nivel de satisfacción con el desarrollo de la actividad?
+    activity_pourpose_satisfaction  Float //La actividad evidenció un propósito formativo de utilidad para tu desempeño personal y profesional.
+    activity_duration               Float // 2. El tiempo programado para el desarrollo de la actividad de formación fue:
+    activity_schedule               Float //El horario propuesto para la actividad fue:
+    acivity_anticipation_time       Float // Recibiste la convocatoria para la actividad con suficiente anticipación:
+    workshop_attendance             WorkshopAttendance @relation(fields: [workshop_attendance_id], references: [id])
+    workshop_attendance_id          String             @unique
 }

@@ -48,23 +48,45 @@ enum Collages {
     UBV
 }
 
+enum KindOfCollage {
+    PUBLIC
+    PRIVATE
+}
+
 model ScholarCollageInformation {
-    id                      String                 @id @default(nanoid())
-    academic_load_completed Boolean?
-    inscription_comprobant  String?
-    career_schedule         String?
-    collage                 Collages?
-    career                  String
-    study_area              StudyArea?
-    evaluation_scale        EvaluationScale
-    study_regime            StudyRegime
-    collage_period          ScholarCollagePeriod[]
-    Scholar                 Scholar[]
+    id                            String                 @id @default(nanoid())
+    academic_load_completed       Boolean?
+    have_schooolarship            Boolean                @default(false)
+    scholarship_percentage        Int?
+    collage_start_date            DateTime?
+    collage_end_date              DateTime?
+    grade_special_mention         String?
+    collage_opinion_study_quality String
+    inscription_comprobant        String?
+    career_schedule               String?
+    kind_of_collage               KindOfCollage
+    collage                       Collages?
+    career                        String
+    mention                       String?
+    study_area                    StudyArea?
+    evaluation_scale              EvaluationScale
+    study_regime                  StudyRegime
+    collage_period                ScholarCollagePeriod[]
+    collage_acceptance_scan       String?
+    collage_study_proof           String?
+    collage_proffessor_card1      String?
+    collage_proffessor_card2      String?
+    scholar                       Scholar?               @relation(fields: [scholar_id], references: [id])
+    scholar_id                    String?                @unique
+
+    @@index([scholar_id])
 }
 
 model ScholarCollagePeriod {
     id                            String                     @id @default(nanoid())
     current_academic_period       Int
+    inscription_proof             String?
+    collage_schedule              String?
     grade                         Float
     class_modality                Modality
     record                        String?

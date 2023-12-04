@@ -7,23 +7,47 @@ enum Region {
   CARACAS
 }
 
-
 enum ScholarStatus {
   PROBATORIO_1
   PROBATORIO_2
   NORMAL
 }
 
+enum JobHours {
+  PART_TIME
+  FULL_TIME
+  WEEKENDS
+}
+
+enum KindOfJob {
+  FREELANCE
+  FORMAL
+  INFORMAL
+}
 
 enum ScholarCanAssist {
   YES
   NO
 }
 
-
 enum ScholarCondition {
-    ACTIVE
-    RESIGNATION
-    WITHDRAWAL
-    ALUMNI
+  ACTIVE
+  RESIGNATION
+  WITHDRAWAL
+  ALUMNI
+}
+
+enum RecruitmentStatus {
+  PHASE_1_PENDING
+  PHASE_1_APPROVED
+  PHASE_1_REJECTED
+  PHASE_2_PENDING
+  PHASE_2_APPROVED
+  PHASE_2_REJECTED
+  PHASE_3_PENDING
+  PHASE_3_APPROVED
+  PHASE_3_REJECTED
+  PHASE_4_PENDING
+  PHASE_4_APPROVED
+  PHASE_4_REJECTED
 }

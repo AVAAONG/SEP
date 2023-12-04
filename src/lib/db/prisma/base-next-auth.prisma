@@ -34,22 +34,21 @@ model Session {
 }
 
 model User {
-  id            String        @id @default(cuid())
-  name          String?
-  email         String?       @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  created_at    DateTime      @default(now())
-  last_login    DateTime?     @default(now())
-  kind_of_user  KinOfUser
-  admin         AdminProfile? @relation(fields: [adminId], references: [id])
-  adminId       String?       @unique
-  scholar       Scholar?      @relation(fields: [scholarId], references: [id])
-  scholarId     String?       @unique
+    id            String        @id @default(cuid())
+    name          String?
+    email         String?       @unique
+    emailVerified DateTime?
+    image         String?
+    accounts      Account[]
+    sessions      Session[]
+    created_at    DateTime      @default(now())
+    last_login    DateTime?     @default(now())
+    kind_of_user  KinOfUser
+    admin         AdminProfile? @relation(fields: [adminId], references: [id])
+    adminId       String?       @unique
+    scholar       Scholar?      @relation(fields: [scholarId], references: [id])
+    scholarId     String?       @unique
 }
-
 
 model VerificationToken {
     identifier String

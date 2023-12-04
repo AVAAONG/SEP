@@ -24,20 +24,22 @@ model Chat {
     temp_data          ChatsTempData?
     scholar_attendance ChatAttendance[]
     speaker            Speaker[]
+    slides             String?
 
     @@index([title, modality, activity_status, level])
 }
 
 model ChatAttendance {
-    id                       String                    @id @default(nanoid())
-    scholar                  ScholarProgramInformation @relation(fields: [scholar_id], references: [id])
-    scholar_id               String
-    chat_id                  String
-    chat                     Chat                      @relation(fields: [chat_id], references: [id])
-    attendance               ScholarAttendance
-    raiting                  Float?
-    justification            String?
-    satisfaction_form_filled Boolean?
+    id                             String                    @id @default(nanoid())
+    scholar                        ScholarProgramInformation @relation(fields: [program_information_scholar_id], references: [id])
+    program_information_scholar_id String
+    chat_id                        String
+    chat                           Chat                      @relation(fields: [chat_id], references: [id])
+    attendance                     ScholarAttendance
+    raiting                        Float?
+    justification                  String?
+    satisfaction_form_filled       Boolean?
+    ChatSafisfactionForm           ChatSafisfactionForm?
 }
 
 model ChatsTempData {
@@ -48,4 +50,19 @@ model ChatsTempData {
     meeting_id       String?
     meeting_password String?
     whatsapp_link    String?
+}
+
+model ChatSafisfactionForm {
+    id                              String         @id @default(nanoid())
+    suggestions                     String //Escribe algunas sugerencias que permitan mejorar el desarrollo de las actividades de formación.
+    speaker_satisfaction            Float //Consideras que el desempeño del facilitador, en general, fue:
+    speaker_strategies_satisfaction Float // Consideras que las estrategias aplicadas por el especialista facilitaron tu aprendizaje y el desarrollo de la competencia prevista.
+    meeting_software_satisfaction   Float //El uso de la plataforma para videoconferencias utilizada fue:
+    activity_satisfaction           Float //¿Cuál es tu nivel de satisfacción con el desarrollo de la actividad?
+    activity_pourpose_satisfaction  Float //La actividad evidenció un propósito formativo de utilidad para tu desempeño personal y profesional.
+    activity_duration               Float // 2. El tiempo programado para el desarrollo de la actividad de formación fue:
+    activity_schedule               Float //El horario propuesto para la actividad fue:
+    acivity_anticipation_time       Float // Recibiste la convocatoria para la actividad con suficiente anticipación:
+    chat_attendance                 ChatAttendance @relation(fields: [chat_attendance_id], references: [id])
+    chat_attendance_id              String         @unique
 }

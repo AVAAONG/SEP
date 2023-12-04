@@ -15,66 +15,64 @@ import { User } from "..\..\base-next-auth"
 import { Chat, Chat, Chat } from "..\..\activities\chat\chat"
 import { VolunteerAttendance } from "..\..\activities\volunteer\volunteer"
 import { Modality } from "..\..\activities\type-activities"
+import { Level, Scholar } from "..\..\schema"
+import { JobHours, KindOfJob, RecruitmentStatus } from "types-scholar"
+
+enum JobSector {
+    PRIVATE
+    PUBLIC
+}
 
 model Scholar {
-    id                            String                     @id @default(nanoid())
-    allowedEmail                  String?                    @unique
-    first_names                   String
-    last_names                    String
-    dni                           String                     @unique
-    gender                        Gender
-    birthdate                     DateTime
-    is_working                    Boolean                    @default(false)
-    job_title                     String?
-    job_company                   String?
-    job_modality                  Modality?
-    job_amount_of_hours           String?
-    have_entrepreneurship         Boolean                    @default(false)
-    entrepreneurship_name         String?
-    entrepreneurship_kind         String?
-    entrepreneurship_services     String?
-    entrepreneurship_social_media String?
-    kind_of_job                   String?
-    local_phone_number            String?
-    cell_phone_Number             String?
-    whatsapp_number               String?
-    state_of_origin               String?
-    address                       String?
-    instagram_user                String?
-    twitter_user                  String?
-    facebook_user                 String?
-    linkedin_user                 String?
-    program_information           ScholarProgramInformation? @relation(fields: [program_information_id], references: [id])
-    collage_information           ScholarCollageInformation? @relation(fields: [collage_information_id], references: [id])
-    cva_information               ScholarCVAInformation?     @relation(fields: [cva_information_id], references: [id])
-    program_information_id        String?
-    collage_information_id        String?
-    cva_information_id            String?
-    is_chat_speaker               Boolean                    @default(false)
-    chat_speaker_id               String?
-    user                          User?
-
-    @@unique([program_information_id, collage_information_id, cva_information_id])
-    @@index([program_information_id])
-    @@index([collage_information_id])
-    @@index([cva_information_id])
+    id                         String                      @id @default(nanoid())
+    photo                      String?
+    first_names                String
+    last_names                 String
+    dni                        String                      @unique
+    gender                     Gender
+    birthdate                  DateTime
+    local_phone_number         String?
+    cell_phone_Number          String?
+    whatsapp_number            String?
+    email                      String?                     @unique
+    country                    String?
+    state                      String?
+    city                       String?
+    address                    String?
+    instagram_user             String?
+    twitter_user               String?
+    facebook_user              String?
+    linkedin_user              String?
+    tiktok_user                String?
+    youtube_user               String?
+    user                       User?
+    program_information        ScholarProgramInformation?
+    collage_information        ScholarCollageInformation[]
+    cva_information            ScholarCVAInformation?
+    job_information            JobInformation[]
+    recruitment_information    RecruitmentInformation?
+    entrepenourshipInformation EntrepenourshipInformation?
 }
 
 model ScholarProgramInformation {
     id                       String                @id @default(nanoid())
-    avaa_admission_year      DateTime
+    program_admission_date   DateTime
+    program_end_date         DateTime
+    is_chat_speaker          Boolean               @default(false)
     scholar_status           ScholarStatus         @default(NORMAL)
-    scholar_condition        ScholarCondition?
+    scholar_condition        ScholarCondition?     @default(ACTIVE)
     can_assist_to_chats      ScholarCanAssist      @default(YES)
     can_assist_to_workshops  ScholarCanAssist      @default(YES)
     can_assist_to_volunteers ScholarCanAssist      @default(YES)
-    chapter                  Chapter?              @relation(fields: [chapter_id], references: [id])
-    chapter_id               String?
+    probation                Probation[]
+    volunteerAttendance      VolunteerAttendance[]
     attended_workshops       WorkshopAttendance[]
     attended_chats           ChatAttendance[]
-    Scholar                  Scholar[]
-    probation                Probation[]
-    VolunteerAttendance      VolunteerAttendance[]
+    scholar                  Scholar               @relation(fields: [scholarId], references: [id])
+    chapter                  Chapter?              @relation(fields: [chapter_id], references: [id])
+    chapter_id               String?
+    scholarId                String                @unique
+    chat_speaker_id          String?               @unique
 
     @@index([chapter_id])
 }
@@ -93,4 +91,109 @@ model Probation {
     scholar_id         String
 
     @@index([scholar_id])
+}
+
+model RecruitmentInformation {
+    id                            String            @id @default(nanoid())
+    infomation_fill               DateTime
+    information_update            DateTime
+    recruitmentStatus             RecruitmentStatus
+    contribute_to_family_income   Boolean           @default(false)
+    average_family_income         String?
+    whit_who_do_you_live          String?
+    kind_of_house                 String?
+    family_members                String?
+    father_job                    String?
+    fathers_company_name          String?
+    fathers_yearsof_experience    String?
+    mother_job                    String?
+    mothers_company_name          String?
+    mothers_yearsof_experience    String?
+    parent_phone_number           String?
+    parent_name                   String?
+    high_school_name              String?
+    high_school_address           String?
+    high_school_title             String?
+    high_school_director_name     String?
+    high_school_average_grade     String?
+    high_school_grade_proof       String?
+    extracurricular_activities    String?
+    social_labour_place           String?
+    social_labour_learning        String?
+    speaked_other_languages       Boolean?
+    speaked_languages             String?
+    how_knows_program             String?
+    internet_connection           Boolean           @default(false)
+    internet_connection_stability String?
+    why_wants_to_be_scholar       String?
+    dni_scan                      String?
+    rif_scan                      String?
+    cnu_opsu_scan                 String?
+    esay                          String?
+    last_tax_declaration          String?
+    receipt_of_payment            String?
+    speaked_languages_level       Level?
+    referred_by                   String?
+    scholar_id                    String            @unique
+    scholar                       Scholar           @relation(fields: [scholar_id], references: [id])
+
+    @@index([scholar_id])
+}
+
+model AlumniSatisfactionForm {
+    id                                      String    @id @default(nanoid())
+    do_interships                           Boolean   @default(true)
+    company                                 String?
+    company_sector                          JobSector
+    intership_start_date                    DateTime
+    intership_end_date                      DateTime
+    stipend_satisfaction                    Float
+    intership_comments                      String
+    intership_specialty                     String
+    english_chats                           Float
+    workshops                               Float
+    Volunteer                               Float
+    Mentorship                              Float
+    intership__and_job_placement            Float
+    comments_about_program_component        String
+    skills_developed_during_the_program     String
+    values_developed_during_the_program     String
+    program_suggestions                     String
+    program_support                         String
+    how_would_like_to_participate_as_alumni String
+    future_activities                       String
+}
+
+model JobInformation {
+    id                                  String     @id @default(nanoid())
+    is_working                          Boolean?   @default(false)
+    job_title                           String?
+    job_company                         String?
+    job_modality                        Modality?
+    job_schedule                        JobHours?
+    kind_of_job                         KindOfJob?
+    job_sector                          JobSector?
+    aspects_that_influenced_getting_job String?
+    job_start_date                      DateTime
+    job_end_date                        DateTime
+    laboral_conditions                  String?
+    actions_to_get_job                  String?
+    why_dint_get_job                    String?
+    scholar                             Scholar    @relation(fields: [scholarId], references: [id])
+    scholarId                           String     @unique
+}
+
+model EntrepenourshipInformation {
+    id                            String    @id @default(nanoid())
+    have_entrepreneurship         Boolean   @default(false)
+    entrepreneurship_name         String?
+    entrepreneurship_kind         String?
+    entrepreneurship_services     String?
+    entrepreneurship_social_media String?
+    motivations_to_be_entrepeneur String?
+    proexcelencia_motivates_it    String?
+    entrepreneurship_start_date   DateTime?
+
+    scholar   Scholar @relation(fields: [scholarId], references: [id])
+    scholarId String  @unique
 }

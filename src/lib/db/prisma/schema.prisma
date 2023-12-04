@@ -61,9 +61,9 @@ model ChatsTempData {
 /// @author Kevin Bravo (kevinbravo.me)
 
 enum Level {
-  BASICO
-  INTERMEDIO
-  AVANZADO
+  BASIC
+  INTERMEDIATE
+  ADVANCED
 }
 
 //
@@ -681,42 +681,94 @@ model ScholarCvaModule {
 /// @author Kevin Bravo (kevinbravo.me)
 
 model Scholar {
-  id                            String                     @id @default(nanoid())
-  allowedEmail                  String?                    @unique
-  first_names                   String
-  last_names                    String
-  dni                           String                     @unique
-  gender                        Gender
-  birthdate                     DateTime
-  is_working                    Boolean                    @default(false)
-  job_title                     String?
-  job_company                   String?
-  job_modality                  Modality?
-  job_amount_of_hours           String?
-  have_entrepreneurship         Boolean                    @default(false)
+  id                 String            @id @default(nanoid())
+  photo              String?
+  first_names        String
+  last_names         String
+  dni                String            @unique
+  gender             Gender
+  birthdate          DateTime
+  local_phone_number String?
+  cell_phone_Number  String?
+  whatsapp_number    String?
+  email              String?           @unique
+  state              String?
+  address            String?
+  recruitmentStatus  RecruitmentStatus
+
+  is_working   Boolean       @default(false)
+  job_title    String?
+  job_company  String?
+  job_modality Modality?
+  job_schedule job_schedule?
+  kind_of_job  KindOfJob?
+
+  have_entrepreneurship         Boolean @default(false)
   entrepreneurship_name         String?
   entrepreneurship_kind         String?
   entrepreneurship_services     String?
   entrepreneurship_social_media String?
-  kind_of_job                   String?
-  local_phone_number            String?
-  cell_phone_Number             String?
-  whatsapp_number               String?
-  state_of_origin               String?
-  address                       String?
-  instagram_user                String?
-  twitter_user                  String?
-  facebook_user                 String?
-  linkedin_user                 String?
-  program_information           ScholarProgramInformation? @relation(fields: [program_information_id], references: [id])
-  collage_information           ScholarCollageInformation? @relation(fields: [collage_information_id], references: [id])
-  cva_information               ScholarCVAInformation?     @relation(fields: [cva_information_id], references: [id])
-  program_information_id        String?
-  collage_information_id        String?
-  cva_information_id            String?
-  is_chat_speaker               Boolean                    @default(false)
-  chat_speaker_id               String?
-  user                          User?
+
+  instagram_user String?
+  twitter_user   String?
+  facebook_user  String?
+  linkedin_user  String?
+  tiktok_user    String?
+  youtube_user   String?
+
+  contribute_to_family_income Boolean @default(false)
+  average_family_income       String?
+  whit_who_do_you_live        String?
+  kind_of_house               String?
+  family_members              String?
+
+  father_job                 String?
+  fathers_company_name       String?
+  fathers_yearsof_experience String?
+  mother_job                 String?
+  mothers_company_name       String?
+  mothers_yearsof_experience String?
+
+  parent_phone_number String?
+  parent_name         String?
+
+  high_school_name           String?
+  high_school_address        String?
+  high_school_title          String?
+  high_school_director_name  String?
+  high_school_average_grade  String?
+  high_school_grade_proof    String?
+  extracurricular_activities String?
+  social_labour_place        String?
+  social_labour_learning     String?
+
+  speaked_other_languages Boolean?
+  speaked_languages       String?
+  speaked_languages_level Level?
+
+  have_schooolarship     Boolean @default(false)
+  scholarship_percentage Int?
+
+  how_knows_program             String?
+  internet_connection           Boolean @default(false)
+  internet_connection_stability String?
+  why_wants_to_be_scholar       String?
+  referred_by                   String?
+
+  dni_scan             String?
+  rif_scan             String?
+  cnu_opsu_scan        String?
+  esay                 String?
+  last_tax_declaration String?
+  receipt_of_payment   String?
+
+  user                   User?
+  program_information    ScholarProgramInformation? @relation(fields: [program_information_id], references: [id])
+  collage_information    ScholarCollageInformation? @relation(fields: [collage_information_id], references: [id])
+  cva_information        ScholarCVAInformation?     @relation(fields: [cva_information_id], references: [id])
+  program_information_id String?
+  collage_information_id String?
+  cva_information_id     String?
 
   @@unique([program_information_id, collage_information_id, cva_information_id])
   @@index([program_information_id])
