@@ -663,7 +663,7 @@ model ScholarCollageInformation {
   collage_start_date            DateTime?
   collage_end_date              DateTime?
   grade_special_mention         String?
-  collage_opinion_study_quality String
+  collage_opinion_study_quality String?
   inscription_comprobant        String?
   career_schedule               String?
   kind_of_collage               KindOfCollage
@@ -711,7 +711,7 @@ model ScholarCVAInformation {
   id                     String             @id @default(nanoid())
   is_in_cva              Boolean            @default(false)
   not_started_cva_reason String?            @db.Text
-  cva_location           CvaLocation
+  cva_location           CvaLocation?
   certificate            String?
   modules                ScholarCvaModule[]
   scholar                Scholar            @relation(fields: [scholarId], references: [id])
@@ -777,13 +777,13 @@ model Scholar {
 model ScholarProgramInformation {
   id                       String                @id @default(nanoid())
   program_admission_date   DateTime
-  program_end_date         DateTime
+  program_end_date         DateTime?
   is_chat_speaker          Boolean               @default(false)
   scholar_status           ScholarStatus         @default(NORMAL)
   scholar_condition        ScholarCondition?     @default(ACTIVE)
-  can_assist_to_chats      ScholarCanAssist      @default(YES)
-  can_assist_to_workshops  ScholarCanAssist      @default(YES)
-  can_assist_to_volunteers ScholarCanAssist      @default(YES)
+  quitted_chats_count      Int                   @default(0)
+  quitted_volunteers_count Int                   @default(0)
+  quitted_workshops_count  Int                   @default(0)
   probation                Probation[]
   volunteerAttendance      VolunteerAttendance[]
   attended_workshops       WorkshopAttendance[]
@@ -886,7 +886,7 @@ model AlumniSatisfactionForm {
 
 model JobInformation {
   id                                  String     @id @default(nanoid())
-  is_working                          Boolean?   @default(false)
+  is_working                          Boolean    @default(false)
   job_title                           String?
   job_company                         String?
   job_modality                        Modality?
@@ -894,8 +894,8 @@ model JobInformation {
   kind_of_job                         KindOfJob?
   job_sector                          JobSector?
   aspects_that_influenced_getting_job String?
-  job_start_date                      DateTime
-  job_end_date                        DateTime
+  job_start_date                      DateTime?
+  job_end_date                        DateTime?
   laboral_conditions                  String?
   actions_to_get_job                  String?
   why_dint_get_job                    String?
@@ -947,11 +947,6 @@ enum KindOfJob {
   FREELANCE
   FORMAL
   INFORMAL
-}
-
-enum ScholarCanAssist {
-  YES
-  NO
 }
 
 enum ScholarCondition {

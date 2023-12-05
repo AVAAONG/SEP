@@ -61,7 +61,7 @@ model ScholarCollageInformation {
     collage_start_date            DateTime?
     collage_end_date              DateTime?
     grade_special_mention         String?
-    collage_opinion_study_quality String
+    collage_opinion_study_quality String?
     inscription_comprobant        String?
     career_schedule               String?
     kind_of_collage               KindOfCollage

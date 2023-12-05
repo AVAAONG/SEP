@@ -4,9 +4,8 @@
 
 import { WorkshopAttendance } from "..\..\activities\workshop\workshop"
 import { ChatAttendance } from "..\..\activities\chat\chat"
-import { Region, ScholarCanAssist, ScholarStatus } from "types-scholar"
+import { Region, ScholarStatus } from "types-scholar"
 import { Chapter } from "..\..\organization\chapter"
-import { ScholarCanAssist } from "types-scholar"
 import { Gender } from "..\..\activities\type-activities"
 import { ScholarCollageInformation } from "collage"
 import { ScholarCVAInformation } from "cva"
@@ -57,13 +56,13 @@ model Scholar {
 model ScholarProgramInformation {
     id                       String                @id @default(nanoid())
     program_admission_date   DateTime
-    program_end_date         DateTime
+    program_end_date         DateTime?
     is_chat_speaker          Boolean               @default(false)
     scholar_status           ScholarStatus         @default(NORMAL)
     scholar_condition        ScholarCondition?     @default(ACTIVE)
-    can_assist_to_chats      ScholarCanAssist      @default(YES)
-    can_assist_to_workshops  ScholarCanAssist      @default(YES)
-    can_assist_to_volunteers ScholarCanAssist      @default(YES)
+    quitted_chats_count      Int                   @default(0)
+    quitted_volunteers_count Int                   @default(0)
+    quitted_workshops_count  Int                   @default(0)
     probation                Probation[]
     volunteerAttendance      VolunteerAttendance[]
     attended_workshops       WorkshopAttendance[]
@@ -166,7 +165,7 @@ model AlumniSatisfactionForm {
 
 model JobInformation {
     id                                  String     @id @default(nanoid())
-    is_working                          Boolean?   @default(false)
+    is_working                          Boolean    @default(false)
     job_title                           String?
     job_company                         String?
     job_modality                        Modality?
@@ -174,8 +173,8 @@ model JobInformation {
     kind_of_job                         KindOfJob?
     job_sector                          JobSector?
     aspects_that_influenced_getting_job String?
-    job_start_date                      DateTime
-    job_end_date                        DateTime
+    job_start_date                      DateTime?
+    job_end_date                        DateTime?
     laboral_conditions                  String?
     actions_to_get_job                  String?
     why_dint_get_job                    String?

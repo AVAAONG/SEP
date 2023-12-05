@@ -9,7 +9,7 @@ model ScholarCVAInformation {
     id                     String             @id @default(nanoid())
     is_in_cva              Boolean            @default(false)
     not_started_cva_reason String?            @db.Text
-    cva_location           CvaLocation
+    cva_location           CvaLocation?
     certificate            String?
     modules                ScholarCvaModule[]
     scholar                Scholar            @relation(fields: [scholarId], references: [id])
