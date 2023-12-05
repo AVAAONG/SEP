@@ -250,7 +250,7 @@ export const getChatsByScholar = async (programInformationId: string, scholarId:
         {
           scholar_attendance: {
             some: {
-              scholar_id: programInformationId,
+              program_information_scholar_id: programInformationId,
             },
           },
         },
@@ -260,7 +260,7 @@ export const getChatsByScholar = async (programInformationId: string, scholarId:
     include: {
       scholar_attendance: {
         where: {
-          scholar_id: programInformationId,
+          program_information_scholar_id: programInformationId,
         },
       },
       speaker: {

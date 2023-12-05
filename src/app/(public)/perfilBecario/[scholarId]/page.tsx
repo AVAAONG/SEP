@@ -105,16 +105,10 @@ const page = async ({
   const name = `${scholar?.first_names.split(' ')[0]} ${
     lastNames[0].length < 3 ? `${lastNames[0]} ${lastNames[1]}` : lastNames[0]
   } `;
-  const {
-    twitter_user,
-    facebook_user,
-    instagram_user,
-    linkedin_user,
-    program_information,
-    program_information_id,
-  } = scholar || {};
+  const { twitter_user, facebook_user, instagram_user, linkedin_user, program_information } =
+    scholar || {};
 
-  const allchatsByScholar = await getChatsByScholar(program_information_id!, scholarId);
+  const allchatsByScholar = await getChatsByScholar(program_information!.id, scholarId);
   const chats = createChatObject(allchatsByScholar).filter((chat) => {
     return (
       (chat.attendance === 'ATTENDED' || chat.attendance === 'SPEAKER') &&
@@ -236,9 +230,9 @@ const page = async ({
             <h1 className="text-3xl text-center text-primary-light font-semibold mt-4 ">{name}</h1>
             <p className="w-full text-center italic">
               Licenciatura en{' '}
-              <span className="font-semibold">{scholar?.collage_information?.career}</span> en la{' '}
+              <span className="font-semibold">{scholar?.collage_information[0]?.career}</span> en la{' '}
               <span className="font-semibold">
-                {getCollageName(scholar?.collage_information?.collage!)}
+                {getCollageName(scholar?.collage_information[0]?.collage!)}
               </span>
             </p>
             {/* <Button variant="ghost" color="success">
