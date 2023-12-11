@@ -41,11 +41,10 @@ const page = () => (
           <div className="space-x-4  w-full">
             <Button
               href="#requisitos"
-              className="font-bold"
+              className="font-bold text-white"
               as={Link}
               color="success"
               radius="sm"
-              variant="ghost"
             >
               Ver requisitos
             </Button>
@@ -63,7 +62,10 @@ const page = () => (
         </div>
       </div>
     </section>
-    <section className="bg-white min-h-screen w-full flex items-center p-24" id="requisitos">
+    <section
+      className="bg-white dark:bg-secondary-dark min-h-screen w-full flex items-center p-24"
+      id="requisitos"
+    >
       <div className="space-y-4 w-1/2 ">
         <h2 className="text-3xl font-bold tracking-tighter text-primary-light sm:text-4xl md:text-5xl ">
           ¿Que necesitas para ser parte de ProExcelencia?
@@ -224,7 +226,7 @@ const page = () => (
       </div>
     </section>
     <section
-      className="bg-white min-h-screen w-full flex flex-col items-center gap-16 p-24"
+      className="bg-white dark:bg-secondary-dark min-h-screen w-full flex flex-col items-center gap-16 p-24"
       id="requisitos"
     >
       <div className="space-y-2 w-1/2 ">
@@ -275,7 +277,7 @@ const page = () => (
             <p className="text-gray-500">0212 2357821</p>
             <p className="flex items-center gap-2">
               Llamanos
-              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none ">
+              <span className="inline-block  transition-transform group-hover:translate-x-1 motion-reduce:transform-none ">
                 <svg
                   fill="none"
                   stroke="currentColor"
@@ -331,6 +333,115 @@ const page = () => (
         <h2 className="text-3xl font-bold tracking-tighter text-center sm:text-4xl md:text-5xl ">
           Preguntas frecuentes
         </h2>
+      </div>
+    </section>
+    <section
+      className="min-h-screen bg-white dark:bg-secondary-dark flex flex-col items-center justify-around w-full p-24"
+      id="aplicacion"
+    >
+      <div className="w-full flex flex-col items-center justify-center gap-3">
+        <h1 className="text-3xl font-bold tracking-tighter text-primary-light sm:text-4xl md:text-5xl lg:text-6xl">
+          Aplica al programa
+        </h1>
+        <p className=" mt-auto text-lg w-full text-gray-500 text-center ">
+          Selecciona el capitulo en base a donde se encuentre el campus de tu universidad
+        </p>
+      </div>
+      <div className="flex flex-col md:flex-row gap-6 justify-center w-full  ">
+        <Link
+          href="/signin/admin"
+          className="w-full md:max-w-[35ch] h-min relative group rounded-lg p-2 sm:p-5 text-dark dark:text-light border-primary-light border transition-all dark:hover:bg-primary-light dark:focus:bg-primary-light hover:bg-primary-1 focus:bg-primary-1"
+          rel="noopener noreferrer"
+        >
+          <h2 className={`text-2xl font-medium`}>
+            <span className="hidden md:inline-block">Capitulo Zulia</span>
+            <span className="inline-block md:hidden">Zulia</span>
+
+            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+              <svg
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                width="50"
+                height="20"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                ></path>
+              </svg>
+            </span>
+          </h2>
+          <p className={`hidden sm:block m-0 max-w-[30ch] text-xs lg:text-sm`}>
+            Si el campus de tu universidad se encuentra en el estado de Zulia, ingresa aqui
+          </p>
+        </Link>
+        <Link
+          href="/signin/admin"
+          className="w-full md:max-w-[35ch] h-min  relative group rounded-lg p-2 sm:p-5 text-dark dark:text-light border-primary-light border transition-all dark:hover:bg-primary-light dark:focus:bg-primary-light hover:bg-primary-1 focus:bg-primary-1"
+          rel="noopener noreferrer"
+        >
+          <h2 className={`text-2xl font-medium`}>
+            <span className="hidden md:inline-block">Capitulo Carabobo</span>
+            <span className="inline-block md:hidden">Carabobo</span>
+            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+              <svg
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                width="50"
+                height="20"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                ></path>
+              </svg>
+            </span>
+          </h2>
+          <p className={`hidden sm:block m-0 max-w-[30ch] text-xs lg:text-sm`}>
+            Si el campus de tu universidad se encuentra en el estado de Carabobo, ingresa aqui
+          </p>
+        </Link>
+        <Link
+          href="/signin/admin"
+          className="w-full md:max-w-[35ch] h-min relative group rounded-lg p-2 sm:p-5 text-dark dark:text-light border-primary-light border transition-all dark:hover:bg-primary-light dark:focus:bg-primary-light hover:bg-primary-1 focus:bg-primary-1"
+          rel="noopener noreferrer"
+        >
+          <h2 className={`text-2xl font-medium`}>
+            <span className="hidden md:inline-block">Capitulo Caracas</span>
+            <span className="inline-block md:hidden">Caracas</span>
+            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+              <svg
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                width="50"
+                height="20"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                ></path>
+              </svg>
+            </span>
+          </h2>
+          <p className={`hidden sm:block m-0 max-w-[30ch] text-xs lg:text-sm`}>
+            Si el campus de tu universidad se encuentra en la Region Capital, ingresa aqui
+          </p>
+        </Link>
       </div>
     </section>
   </main>
