@@ -9,8 +9,7 @@ import {
   insertSpreadsheetValue,
 } from '@/lib/googleAPI/sheets';
 import { Platform } from '@/types/General';
-import { ActivityStatus, Modality, Scholar, ScholarAttendance, WorkshopYear } from '@prisma/client';
-import moment from 'moment';
+import { ActivityStatus, Modality, ScholarAttendance, WorkshopYear } from '@prisma/client';
 import { nanoid } from 'nanoid';
 import { NextApiRequest } from 'next';
 import { getToken } from 'next-auth/jwt';
@@ -28,7 +27,7 @@ export async function GET(req: NextApiRequest) {
 }
 const WORKSHOP_SPREADSHEET = '1u-fDi_uggUCvK1v4DPPCwfx3pu8-Q2-VHnQ6ivbTi4k';
 const WORKSHOP_SHEET = 'Registro de talleres';
-const WORKSHOP_RANGE = `'${WORKSHOP_SHEET}'!A${100}:N116`;
+const WORKSHOP_RANGE = `'${WORKSHOP_SHEET}'!A${2}:N128`;
 
 const createWorkshopsInbulkFromSpreadsheet = async () => {
   console.log('\x1b[36m%s\x1b[0m', '++++++ COMENZANDO EJECICION ++++++')
@@ -40,6 +39,7 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
   for (const [index, value] of values.entries()) {
     const [
       title,
+      kindOfActivity,
       skill,
       date,
       startHour,
@@ -58,9 +58,8 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
     let spreadsheetForErrors: null | string = null; // dejamos la variable en null hasta que ocurra un problema, en caso de apareceer. colocamos la spreadsheet aqui.
 
     //parseamos los datos del taller
-
-    const [dates, hours] = parseDates(date, startHour, endHour);
     const workshopId = nanoid();
+    const dates = parseDates(date, startHour, endHour);
     const asociated_skill = parseSkill(skill);
     const avalible_spots = parseInt(spots);
     const modality = parseWorkshopModality(workshopModality) as Modality;
@@ -75,7 +74,6 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
           title,
           asociated_skill,
           ...dates,
-          hours: hours,
           speaker: {
             connect: speakersId.map((id) => ({ id })),
           },
@@ -94,6 +92,8 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
       continue;
     }
     if (activity_status === 'SUSPENDED' || activity_status === 'SCHEDULED') continue;
+
+
     //asistencia de la lista principal
     console.log('\x1b[34m%s\x1b[0m', 'Obteniendo datos de la lista principal')
     const attendanceRangeMainList = `'${sheetName}'!B8:G${avalible_spots + 8}`;
@@ -102,14 +102,14 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
       attendanceRangeMainList
     )) as string[][];
 
-    if (mainListAttendance === undefined || mainListAttendance.length === 0) {
-      console.log('   No hay asistencia en lista principal');
+    if (mainListAttendance.length === 0) {
+      console.log('No hay asistencia en lista principal');
       continue;
     }
     console.log('\x1b[34m%s\x1b[0m', 'Colocando asistencia de lista principal');
     for (const a of mainListAttendance) {
-      if (a === undefined) continue;
-      const dni = parseDni(a[2] ?? 'NOEXISTE');
+      if (a === undefined || a.length === 0) continue;
+      const dni = parseDni(a[2] ?? 0);
       let attendaci = parseScholarAttendace(status, a[5] as 'Si' | 'No');
       let scholar;
       try {
@@ -117,6 +117,9 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
           where: {
             dni,
           },
+          include: {
+            program_information: true,
+          }
         });
       } catch (e) {
         if (spreadsheetForErrors === null) {
@@ -129,7 +132,7 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
       }
       console.log('     Dando asistencia a ' + a[0]);
       const formFilled = attendaci === 'ATTENDED' ? true : false;
-      await addAttendaceToScholar(workshopId, scholar!, attendaci as ScholarAttendance, formFilled);
+      await addAttendaceToScholar(workshopId, scholar.program_information?.id, attendaci as ScholarAttendance, formFilled);
     }
 
     //ASISTENCIA DE LA LSITA DE ESPERA.
@@ -158,6 +161,9 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
             where: {
               dni,
             },
+            include: {
+              program_information: true,
+            }
           });
         } catch (e) {
           if (spreadsheetForErrors === null) {
@@ -171,7 +177,7 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
         if (attendance === "ATTENDED") {
           console.log('     Dando asistencia a ' + a[0]);
           const formFilled = attendance === 'ATTENDED' ? true : false;
-          await addAttendaceToScholar(workshopId, user, attendance as ScholarAttendance, formFilled);
+          await addAttendaceToScholar(workshopId, user.program_information.id, attendance as ScholarAttendance, formFilled);
         }
       }
     }
@@ -230,21 +236,16 @@ const parseDates = (
   date: string,
   startHour: string,
   endHour: string
-): [
-    {
-      start_dates: string[];
-      end_dates: string[];
-    },
-    number,
-  ] => {
+): {
+  start_dates: string[];
+  end_dates: string[];
+} => {
   const dates = date.includes(',') ? date.split(',') : [date];
-  let hours: number = 0;
   const start_dates: string[] = [];
   const end_dates: string[] = [];
   dates.forEach((d) => {
     d = d.trim();
     const [startDate, endDate] = getFormatedDate(d, startHour.trim(), endHour.trim());
-    hours = hours + moment(endDate).diff(moment(startDate), 'minutes') / 60;
     start_dates.push(startDate);
     end_dates.push(endDate);
   });
@@ -252,7 +253,7 @@ const parseDates = (
     start_dates,
     end_dates,
   };
-  return [newDates, hours];
+  return newDates;
 };
 
 const parseScholarAttendaceWaitingList = (status: string, attendance: 'Si' | 'No') => {
@@ -282,7 +283,7 @@ const parseDni = (dni: string) =>
 
 const addAttendaceToScholar = async (
   workshopId: string,
-  user: Scholar,
+  programInformationIdScholar: string,
   attendance: ScholarAttendance,
   formFilled?: boolean
 ) => {
@@ -294,10 +295,9 @@ const addAttendaceToScholar = async (
         },
       },
       satisfaction_form_filled: formFilled,
-      raiting: getRandomFloat(),
       scholar: {
         connect: {
-          id: user.program_information_id!,
+          id: programInformationIdScholar,
         },
       },
       attendance: attendance as ScholarAttendance,
