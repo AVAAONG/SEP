@@ -26,8 +26,8 @@ export async function GET(req: NextApiRequest) {
   return NextResponse.json({ message: "ok" });
 }
 const WORKSHOP_SPREADSHEET = '1u-fDi_uggUCvK1v4DPPCwfx3pu8-Q2-VHnQ6ivbTi4k';
-const WORKSHOP_SHEET = 'Registro de talleres';
-const WORKSHOP_RANGE = `'${WORKSHOP_SHEET}'!A${2}:N128`;
+const WORKSHOP_SHEET = 'Registro de actividades formativas';
+const WORKSHOP_RANGE = `'${WORKSHOP_SHEET}'!A${2}:O128`;
 
 const createWorkshopsInbulkFromSpreadsheet = async () => {
   console.log('\x1b[36m%s\x1b[0m', '++++++ COMENZANDO EJECICION ++++++')
@@ -73,6 +73,7 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
           id: workshopId,
           title,
           asociated_skill,
+          kindOfWorkshop: kindOfActivity,
           ...dates,
           speaker: {
             connect: speakersId.map((id) => ({ id })),
@@ -92,8 +93,6 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
       continue;
     }
     if (activity_status === 'SUSPENDED' || activity_status === 'SCHEDULED') continue;
-
-
     //asistencia de la lista principal
     console.log('\x1b[34m%s\x1b[0m', 'Obteniendo datos de la lista principal')
     const attendanceRangeMainList = `'${sheetName}'!B8:G${avalible_spots + 8}`;
@@ -147,8 +146,8 @@ const createWorkshopsInbulkFromSpreadsheet = async () => {
       console.log('No hay asistencia en lista de espera');
       continue;
     } else {
+      console.log('Colocando asistencia de lista de espera');
       for (const a of attendanceWhaitingList) {
-        console.log('Colocando asistencia de lista de espera');
         if (a === undefined || a[2] === undefined || a[2].length === 0) {
           console.log('Asistencia finalizada');
           break;
@@ -312,7 +311,7 @@ const parseSpeakerId = (speakersId: string) => {
 
 
 const createSpreadsheetForErrors = async (activityTitle: string, index: number) => {
-  const cellToPutSpreadsheet = `'${WORKSHOP_SHEET}'!O${index + 100}:O${index + 100}`;
+  const cellToPutSpreadsheet = `'${WORKSHOP_SHEET}'!${index + 2}:P${index + 2}`;
   console.log('\x1b[36m%s\x1b[0m', 'Creando Spreadsheet de errores');
   const spreadsheetForErrors = (await createSpreadsheetAndReturnUrl(activityTitle)) as string;
   await insertSpreadsheetValue(

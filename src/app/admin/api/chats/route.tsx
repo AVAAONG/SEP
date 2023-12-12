@@ -8,8 +8,7 @@ import {
   getSpreadsheetValuesByUrl,
   insertSpreadsheetValue,
 } from '@/lib/googleAPI/sheets';
-import { Level, Modality, Scholar, ScholarAttendance, WorkshopYear } from '@prisma/client';
-import moment from 'moment';
+import { Level, Modality, ScholarAttendance } from '@prisma/client';
 import { nanoid } from 'nanoid';
 import { NextApiRequest } from 'next';
 import { getToken } from 'next-auth/jwt';
@@ -19,35 +18,40 @@ export async function GET(req: NextApiRequest) {
   const token = await getToken({ req });
   if (token === null) return NextResponse.redirect('/api/auth/signin');
   setTokens(token.accessToken as string, token.refreshToken as string);
-  // await prisma.chatAttendance.deleteMany();
-  // await prisma.chat.deleteMany();
-  // await prisma.chatsTempData.deleteMany();
-  // await createChatsInBulkFromSpreadsheet();
+  await prisma.chatAttendance.deleteMany();
+  await prisma.chat.deleteMany();
+  await prisma.chatsTempData.deleteMany();
+  await createChatsInBulkFromSpreadsheet();
   return NextResponse.json({ message: 'ok' });
 }
 //TENER EN CUENTA TAMBIEN EL RANGO DONDE SE COLOCA EL SPREADSHEET DE ERRORES
 const FIRST_RANGE = 'B2:K48';
-const FIRST_RANGE_MAIN_LIST = `A12:D${15 + 11}`;
-const FIRST_RANGE_WAITING_LIST = `A${12 + 16}:D`;
+const FIRST_RANGE_MAIN_LIST = `A12:D26`;
+const FIRST_RANGE_WAITING_LIST = `A28:D`;
+//##########################################################################
 
+//##########################################################################
 const SECOND_RANGE = 'B49:K77';
 const SECOND_RANGE_MAIN_LIST = `A9:D21`;
 const SECOND_RANGE_WAITING_LIST = `A23:D`;
+//##########################################################################
 
+//##########################################################################
 const LAST_RANGE = 'B78:K';
 const LAST_RANGE_MAIN_LIST = `A9:E21`;
 const LAST_RANGE_WAITING_LIST = `A23:E`;
+//##########################################################################
 
-const WORKSHOP_SPREADSHEET = '1y4lTjgqSQvBNtoWF_v6G2UR3a4eS-Et_dDD9XoQcYlM';
-const WORKSHOP_SHEET = 'Sheet1';
-const WORKSHOP_RANGE = `'${WORKSHOP_SHEET}'!${LAST_RANGE}`;
+const CHAT_SPREADSHEET = '1y4lTjgqSQvBNtoWF_v6G2UR3a4eS-Et_dDD9XoQcYlM';
+const CHAT_SHEET = 'Sheet1';
+const CHAT_RANGE = `'${CHAT_SHEET}'!${FIRST_RANGE}`;
 
 const createChatsInBulkFromSpreadsheet = async () => {
   console.log('\x1b[36m%s\x1b[0m', '++++++ COMENZANDO EJECICION ++++++');
   // indice desde donde se empieza a extraer los datos de los talleres (se coloca la fila 2 porque la fila 1 son los titulos de las columnas)
   console.log('\x1b[34m%s\x1b[0m', 'Extrayendo datos');
 
-  const values = (await getSpreadsheetValues(WORKSHOP_SPREADSHEET, WORKSHOP_RANGE)) as string[][];
+  const values = (await getSpreadsheetValues(CHAT_SPREADSHEET, CHAT_RANGE)) as string[][];
   //   console.log(values);
 
   for (const [index, value] of values.entries()) {
@@ -67,7 +71,7 @@ const createChatsInBulkFromSpreadsheet = async () => {
     let spreadsheetForErrors: null | string = null; // dejamos la variable en null hasta que ocurra un problema, en caso de apareceer. colocamos la spreadsheet aqui.
     //parseamos los datos del taller
 
-    const [dates, hours] = parseDates(date, startHour);
+    const [dates] = parseDates(date, startHour);
     const chatId = nanoid();
     const chatLevel = parseLevel(level);
     const modality = parseChatModality(chatModality) as Modality;
@@ -108,31 +112,32 @@ const createChatsInBulkFromSpreadsheet = async () => {
       console.log('\x1b[31m%s\x1b[0m', '❌❌❌ No se pudo crear el chat ', title);
       continue;
     }
-    if (activity_status === 'SUSPENDED' || spreadsheet === 'NO_LINK') continue;
+    if (activity_status === 'SUSPENDED') continue;
     //asistencia de la lista principal
     console.log('\x1b[34m%s\x1b[0m', 'Obteniendo datos de la lista principal');
-    const attendanceRangeMainList = LAST_RANGE_MAIN_LIST;
+    const attendanceRangeMainList = FIRST_RANGE_MAIN_LIST;
     const mainListAttendance = (await getSpreadsheetValuesByUrl(
       spreadsheet,
       attendanceRangeMainList
     )) as string[][];
 
-    if (mainListAttendance === undefined || mainListAttendance.length === 0) {
+    if (mainListAttendance.length === 0) {
       console.log('   No hay asistencia en lista principal');
       continue;
     }
     console.log('\x1b[34m%s\x1b[0m', 'Colocando asistencia de lista principal');
     for (const a of mainListAttendance) {
-      if (a === undefined) continue;
-      const email = a[2] ?? 'NOEXISTE';
-      let attendaci;
-      if (speakerId === 'h3hPNMMFtpkrGEBQ8kq8M3') attendaci = 'ATTENDED';
-      else attendaci = parseScholarAttendace(status, a[4] as 'TRUE' | 'FALSE');
+      if (a.length === 0) continue;
+      const email = a[2].trim() ?? 'NOEXISTE';
+      let attendaci = parseScholarAttendace(status, a[3] as 'TRUE' | 'FALSE');
       let scholar;
       try {
         scholar = await prisma.scholar.findUniqueOrThrow({
           where: {
-            allowedEmail: email,
+            email: email,
+          },
+          include: {
+            program_information: true,
           },
         });
       } catch (e) {
@@ -145,15 +150,17 @@ const createChatsInBulkFromSpreadsheet = async () => {
         continue;
       }
       console.log('     Dando asistencia a ' + a[0]);
-      await addAttendaceToScholar(chatId, scholar!, attendaci as ScholarAttendance);
+      await addAttendaceToScholar(
+        chatId,
+        scholar.program_information?.id!,
+        attendaci as ScholarAttendance
+      );
     }
 
-    //ASISTENCIA DE LA LSITA DE ESPERA.
-    const attendanceRangeWaitingList = LAST_RANGE_WAITING_LIST;
-
+    //ASISTENCIA DE LA LSITA DE ESPERA
     const attendanceWhaitingList = (await getSpreadsheetValuesByUrl(
       spreadsheet,
-      attendanceRangeWaitingList
+      FIRST_RANGE_WAITING_LIST
     )) as string[][];
 
     if (attendanceWhaitingList === undefined || attendanceWhaitingList.length === 0) {
@@ -172,7 +179,10 @@ const createChatsInBulkFromSpreadsheet = async () => {
         try {
           user = await prisma.scholar.findUniqueOrThrow({
             where: {
-              allowedEmail: email,
+              email: email,
+            },
+            include: {
+              program_information: true,
             },
           });
         } catch (e) {
@@ -185,7 +195,11 @@ const createChatsInBulkFromSpreadsheet = async () => {
           continue;
         }
         console.log('     Dando asistencia a ' + a[0]);
-        await addAttendaceToScholar(chatId, user, attendance as ScholarAttendance);
+        await addAttendaceToScholar(
+          chatId,
+          user.program_information?.id!,
+          attendance as ScholarAttendance
+        );
       }
     }
   }
@@ -193,37 +207,19 @@ const createChatsInBulkFromSpreadsheet = async () => {
 };
 
 // ======================================================= UTILS
-const parseWorkshopYear = (year: string) => {
-  const years = year.includes(',') ? year.split(',') : [year];
-  return years.map((y) => y.trim().toLocaleUpperCase() as WorkshopYear);
-};
 const parseLevel = (skill: string): Level => {
   switch (skill.trim()) {
     case 'BASICO':
-      return 'BASICO';
+      return 'BASIC';
     case 'INTERMEDIO':
-      return 'INTERMEDIO';
+      return 'INTERMEDIATE';
     case 'AVANZADO':
-      return 'AVANZADO';
+      return 'ADVANCED';
     default:
-      return 'BASICO';
+      return 'BASIC';
   }
 };
 
-const parseWorkshopStatus = (statuss: string) => {
-  switch (statuss) {
-    case 'AGENDADO':
-      return 'SCHEDULED';
-    case 'SUSPENDIDO':
-      return 'SUSPENDED';
-    case 'REALIZADO':
-      return 'ATTENDANCE_CHECKED';
-    case 'ENVIADO':
-      return 'SENT';
-    case 'SIN_ASISTENCIA':
-      return 'DONE';
-  }
-};
 const parseChatModality = (modality: string) => {
   switch (modality) {
     case 'PRESENCIAL':
@@ -243,16 +239,13 @@ const parseDates = (
     start_dates: string[];
     end_dates: string[];
   },
-  number,
 ] => {
   const dates = date.includes(',') ? date.split(',') : [date];
-  let hours: number = 0;
   const start_dates: string[] = [];
   const end_dates: string[] = [];
   dates.forEach((d) => {
     d = d.trim();
     const [startDate, endDate] = getFormatedDate(d, startHour.trim());
-    hours = hours + moment(endDate).diff(moment(startDate), 'minutes') / 60;
     start_dates.push(startDate);
     end_dates.push(endDate);
   });
@@ -260,7 +253,7 @@ const parseDates = (
     start_dates,
     end_dates,
   };
-  return [newDates, hours];
+  return [newDates];
 };
 
 const parseScholarAttendaceWaitingList = (status: string, attendance: 'TRUE' | 'FALSE') => {
@@ -285,20 +278,22 @@ const parseDni = (dni: string) =>
     .replace(/[^0-9]/g, '');
 
 const addAttendaceToScholar = async (
-  workshopId: string,
-  user: Scholar,
-  attendance: ScholarAttendance
+  chatId: string,
+  programInformationIdScholar: string,
+  attendance: ScholarAttendance,
+  formFilled?: boolean
 ) => {
   await prisma.chatAttendance.create({
     data: {
       chat: {
         connect: {
-          id: workshopId,
+          id: chatId,
         },
       },
+      satisfaction_form_filled: formFilled,
       scholar: {
         connect: {
-          id: user.program_information_id!,
+          id: programInformationIdScholar,
         },
       },
       attendance: attendance as ScholarAttendance,
@@ -314,11 +309,9 @@ const parseSpeakerId = (speakersId: string) => {
 
 const createSpreadsheetForErrors = async (activityTitle: string, index: number) => {
   // colocamos ese mas 2 porque la fila 1 son los titulos de las columnas y el indice comienza desde 0
-  const cellToPutSpreadsheet = `'${WORKSHOP_SHEET}'!L${index + 78}:L${index + 78}`;
+  const cellToPutSpreadsheet = `'${CHAT_SHEET}'!L${index + 2}:L${index + 2}`;
   console.log('\x1b[36m%s\x1b[0m', 'Creando Spreadsheet de errores');
   const spreadsheetForErrors = (await createSpreadsheetAndReturnUrl(activityTitle)) as string;
-  await insertSpreadsheetValue(WORKSHOP_SPREADSHEET, cellToPutSpreadsheet, [
-    [spreadsheetForErrors],
-  ]);
+  await insertSpreadsheetValue(CHAT_SPREADSHEET, cellToPutSpreadsheet, [[spreadsheetForErrors]]);
   return spreadsheetForErrors;
 };

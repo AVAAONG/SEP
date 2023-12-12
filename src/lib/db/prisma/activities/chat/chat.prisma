@@ -15,7 +15,7 @@ model Chat {
     avalible_spots     Int
     platform           String
     description        String
-    calendar_id        String?
+    calendar_ids       String[]
     start_dates        DateTime[]
     end_dates          DateTime[]
     modality           Modality

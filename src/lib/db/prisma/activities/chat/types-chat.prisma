@@ -5,4 +5,5 @@ enum Level {
     BASIC
     INTERMEDIATE
     ADVANCED
+    STAFF_ONLY // Para los chats que vayan dirigidos al staff. En estos chats no se puede inscribir ningun becario.
 }
