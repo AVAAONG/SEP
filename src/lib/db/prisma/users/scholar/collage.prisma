@@ -46,6 +46,13 @@ enum Collages {
     UNEXCA
     UAH
     UBV
+    //zulia
+    UNICA
+    URBE
+    UJGH
+    URU
+    LUZ
+    PSM
 }
 
 enum KindOfCollage {
@@ -69,7 +76,7 @@ model ScholarCollageInformation {
     career                        String
     mention                       String?
     study_area                    StudyArea?
-    evaluation_scale              EvaluationScale
+    evaluation_scale              EvaluationScale?
     study_regime                  StudyRegime
     collage_period                ScholarCollagePeriod[]
     collage_acceptance_scan       String?

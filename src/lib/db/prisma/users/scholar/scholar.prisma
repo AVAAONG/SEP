@@ -29,7 +29,7 @@ model Scholar {
     last_names                 String
     dni                        String                      @unique
     gender                     Gender
-    birthdate                  DateTime
+    birthdate                  DateTime?
     local_phone_number         String?
     cell_phone_Number          String?
     whatsapp_number            String?

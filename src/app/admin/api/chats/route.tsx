@@ -32,8 +32,8 @@ const FIRST_RANGE_WAITING_LIST = `A28:D`;
 
 //##########################################################################
 const SECOND_RANGE = 'B49:K77';
-const SECOND_RANGE_MAIN_LIST = `A9:D21`;
-const SECOND_RANGE_WAITING_LIST = `A23:D`;
+const SECOND_RANGE_MAIN_LIST = `A9:D23`;
+const SECOND_RANGE_WAITING_LIST = `A25:D`;
 //##########################################################################
 
 //##########################################################################
@@ -77,6 +77,7 @@ const createChatsInBulkFromSpreadsheet = async () => {
     const modality = parseChatModality(chatModality) as Modality;
     const activity_status = status === 'TRUE' ? 'ATTENDANCE_CHECKED' : 'SUSPENDED';
     const speakersDni = parseSpeakerId(speakerId);
+
     const speakersId = speakersDni.map(async (dni) => {
       const speaker = await prisma.scholar.findUnique({
         where: {
@@ -86,6 +87,7 @@ const createChatsInBulkFromSpreadsheet = async () => {
       if (speaker === null) return dni;
       else return speaker?.id;
     });
+
     console.log('\x1b[34m%s\x1b[0m', 'Parseando datos del taller de ' + title);
 
     try {
@@ -128,6 +130,7 @@ const createChatsInBulkFromSpreadsheet = async () => {
     console.log('\x1b[34m%s\x1b[0m', 'Colocando asistencia de lista principal');
     for (const a of mainListAttendance) {
       if (a.length === 0) continue;
+      if (a[2] === undefined || a[2].trim().length === 0) continue;
       const email = a[2].trim() ?? 'NOEXISTE';
       let attendaci = parseScholarAttendace(status, a[3] as 'TRUE' | 'FALSE');
       let scholar;
@@ -169,10 +172,7 @@ const createChatsInBulkFromSpreadsheet = async () => {
     } else {
       console.log('Colocando asistencia de lista de espera');
       for (const a of attendanceWhaitingList) {
-        if (a === undefined || a[4] === undefined || a[2].length === 0) {
-          console.log('Asistencia finalizada');
-          break;
-        }
+        if (a[2] === undefined || a[2].trim().length === 0) continue;
         const email = a[2] ?? 'NOEXISTE';
         const attendance = parseScholarAttendaceWaitingList(status, a[4] as 'TRUE' | 'FALSE');
         let user;
