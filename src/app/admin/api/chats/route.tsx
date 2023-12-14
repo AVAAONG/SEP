@@ -18,12 +18,15 @@ export async function GET(req: NextApiRequest) {
   const token = await getToken({ req });
   if (token === null) return NextResponse.redirect('/api/auth/signin');
   setTokens(token.accessToken as string, token.refreshToken as string);
-  await prisma.chatAttendance.deleteMany();
-  await prisma.chat.deleteMany();
-  await prisma.chatsTempData.deleteMany();
+  // await prisma.chatAttendance.deleteMany();
+  // await prisma.chat.deleteMany();
+  // await prisma.chatsTempData.deleteMany();
   await createChatsInBulkFromSpreadsheet();
   return NextResponse.json({ message: 'ok' });
 }
+
+const ERROR_START_NUMBER = 78;
+
 //TENER EN CUENTA TAMBIEN EL RANGO DONDE SE COLOCA EL SPREADSHEET DE ERRORES
 const FIRST_RANGE = 'B2:K48';
 const FIRST_RANGE_MAIN_LIST = `A12:D26`;
@@ -44,7 +47,7 @@ const LAST_RANGE_WAITING_LIST = `A23:E`;
 
 const CHAT_SPREADSHEET = '1y4lTjgqSQvBNtoWF_v6G2UR3a4eS-Et_dDD9XoQcYlM';
 const CHAT_SHEET = 'Sheet1';
-const CHAT_RANGE = `'${CHAT_SHEET}'!${FIRST_RANGE}`;
+const CHAT_RANGE = `'${CHAT_SHEET}'!${SECOND_RANGE}`;
 
 const createChatsInBulkFromSpreadsheet = async () => {
   console.log('\x1b[36m%s\x1b[0m', '++++++ COMENZANDO EJECICION ++++++');
@@ -117,7 +120,7 @@ const createChatsInBulkFromSpreadsheet = async () => {
     if (activity_status === 'SUSPENDED') continue;
     //asistencia de la lista principal
     console.log('\x1b[34m%s\x1b[0m', 'Obteniendo datos de la lista principal');
-    const attendanceRangeMainList = FIRST_RANGE_MAIN_LIST;
+    const attendanceRangeMainList = SECOND_RANGE_MAIN_LIST;
     const mainListAttendance = (await getSpreadsheetValuesByUrl(
       spreadsheet,
       attendanceRangeMainList
@@ -131,7 +134,8 @@ const createChatsInBulkFromSpreadsheet = async () => {
     for (const a of mainListAttendance) {
       if (a.length === 0) continue;
       if (a[2] === undefined || a[2].trim().length === 0) continue;
-      const email = a[2].trim() ?? 'NOEXISTE';
+      const email = a[2].trim().toLocaleLowerCase();
+
       let attendaci = parseScholarAttendace(status, a[3] as 'TRUE' | 'FALSE');
       let scholar;
       try {
@@ -163,7 +167,7 @@ const createChatsInBulkFromSpreadsheet = async () => {
     //ASISTENCIA DE LA LSITA DE ESPERA
     const attendanceWhaitingList = (await getSpreadsheetValuesByUrl(
       spreadsheet,
-      FIRST_RANGE_WAITING_LIST
+      SECOND_RANGE_WAITING_LIST
     )) as string[][];
 
     if (attendanceWhaitingList === undefined || attendanceWhaitingList.length === 0) {
@@ -173,7 +177,8 @@ const createChatsInBulkFromSpreadsheet = async () => {
       console.log('Colocando asistencia de lista de espera');
       for (const a of attendanceWhaitingList) {
         if (a[2] === undefined || a[2].trim().length === 0) continue;
-        const email = a[2] ?? 'NOEXISTE';
+        const email = a[2].trim().toLocaleLowerCase();
+
         const attendance = parseScholarAttendaceWaitingList(status, a[4] as 'TRUE' | 'FALSE');
         let user;
         try {
@@ -309,7 +314,9 @@ const parseSpeakerId = (speakersId: string) => {
 
 const createSpreadsheetForErrors = async (activityTitle: string, index: number) => {
   // colocamos ese mas 2 porque la fila 1 son los titulos de las columnas y el indice comienza desde 0
-  const cellToPutSpreadsheet = `'${CHAT_SHEET}'!L${index + 2}:L${index + 2}`;
+  const cellToPutSpreadsheet = `'${CHAT_SHEET}'!L${index + ERROR_START_NUMBER}:L${
+    index + ERROR_START_NUMBER
+  }`;
   console.log('\x1b[36m%s\x1b[0m', 'Creando Spreadsheet de errores');
   const spreadsheetForErrors = (await createSpreadsheetAndReturnUrl(activityTitle)) as string;
   await insertSpreadsheetValue(CHAT_SPREADSHEET, cellToPutSpreadsheet, [[spreadsheetForErrors]]);

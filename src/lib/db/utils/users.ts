@@ -130,6 +130,11 @@ export const getScholarsWithAllData = async () => {
         scholar_condition: {
           equals: 'ACTIVE',
         },
+        chapter: {
+          id: {
+            equals: 'Rokk6_XCAJAg45heOEzYb',
+          },
+        },
       },
     },
     include: {

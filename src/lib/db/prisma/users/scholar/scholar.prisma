@@ -71,7 +71,6 @@ model ScholarProgramInformation {
     chapter                  Chapter?              @relation(fields: [chapter_id], references: [id])
     chapter_id               String?
     scholarId                String                @unique
-    chat_speaker_id          String?               @unique
 
     @@index([chapter_id])
 }

@@ -10,17 +10,6 @@
 //   const token = await getToken({ req });
 //   if (token === null) return NextResponse.redirect('/api/auth/signin');
 //   setTokens(token.accessToken as string, token.refreshToken as string);
-//   await prisma.jobInformation.deleteMany();
-//   await prisma.scholarCVAInformation.deleteMany();
-//   await prisma.scholarCollageInformation.deleteMany();
-//   await prisma.scholarProgramInformation.deleteMany();
-//   await prisma.speaker.deleteMany({
-//     where: {
-//       speaker_kind: 'CHATS',
-//     },
-//   });
-
-//   await prisma.scholar.deleteMany();
 //   await createScholarsInBulkFromSheet();
 
 //   return NextResponse.json({ message: 'ok' });

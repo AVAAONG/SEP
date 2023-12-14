@@ -120,9 +120,8 @@ const page = async ({
   const {
     first_names,
     last_names,
-    allowedEmail,
+    email,
     program_information,
-    program_information_id,
     local_phone_number,
     whatsapp_number,
     cell_phone_Number,
@@ -130,9 +129,9 @@ const page = async ({
     birthdate,
     address,
   } = scholar || {};
-  const { attended_workshops, scholar_status, avaa_admission_year } = program_information || {};
-  const chats = await getChatsByScholar(program_information_id!, scholarId);
-  const workshops = await getWorkhsopsByScholar(program_information_id!, scholarId);
+  const { attended_workshops, scholar_status, program_admission_date } = program_information || {};
+  const chats = await getChatsByScholar(program_information?.id!, scholarId);
+  const workshops = await getWorkhsopsByScholar(program_information?.id!, scholarId);
   const workshopObj = createWorkshopObject(workshops);
   const chatObject = createChatObject(chats);
 
@@ -154,7 +153,7 @@ const page = async ({
     },
     {
       name: 'Correo',
-      value: allowedEmail,
+      value: email,
       icon: <EmailIcon />,
     },
   ];

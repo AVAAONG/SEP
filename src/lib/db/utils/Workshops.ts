@@ -301,14 +301,14 @@ export const getWorkhsopsByScholar = async (programInformationId: string, schola
     where: {
       scholar_attendance: {
         some: {
-          scholar_id: programInformationId,
+          program_information_scholar_id: programInformationId,
         },
       },
     },
     include: {
       scholar_attendance: {
         where: {
-          scholar_id: programInformationId,
+          program_information_scholar_id: programInformationId,
         },
       },
     },
@@ -320,7 +320,7 @@ export const getWorkhsopsByScholar = async (programInformationId: string, schola
 export const getWorkshopsByScholar2 = async (scholarProgramInformationId: string) => {
   const workshops = await prisma.workshopAttendance.findMany({
     where: {
-      scholar_id: scholarProgramInformationId,
+      program_information_scholar_id: scholarProgramInformationId,
     },
     include: {
       workshop: true,
