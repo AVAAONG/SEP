@@ -192,11 +192,12 @@ export const getScholars = async () => {
  * @param condition The ScholarCondition object used to filter the users based on their program information.
  * @returns A Promise that resolves to the count of users that match the condition.
  */
-export const getScholarsCountByCondition = async (condition: ScholarCondition) => {
+export const getScholarsCountByCondition = async (condition: ScholarCondition, chaptherId: string) => {
   const scholars = await prisma.scholar.count({
     where: {
       program_information: {
         scholar_condition: condition,
+        chapter_id: chaptherId
       },
     },
   });

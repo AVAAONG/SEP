@@ -1,11 +1,8 @@
-import authAdminOptions from '@/lib/auth/nextAuthAdminOptions/authAdminOptions';
-import { CALENDAR_IDS } from '@/lib/constants';
-import { setTokens } from '@/lib/googleAPI/auth';
-import { getCalendarEvents } from '@/lib/googleAPI/calendar/calendar';
 import { BigCalendarEventType } from '@/types/Calendar';
 import { calendar_v3 } from '@googleapis/calendar';
 import { Chat, Workshop } from '@prisma/client';
-import { getServerSession } from 'next-auth';
+import { headers } from 'next/headers';
+import { ACTIVITIES_CALENDAR_COLORS } from './constants';
 
 /**
  * @description Formats the event object to the format required by the BigCalendar component
@@ -38,54 +35,55 @@ export const formatEventObject = (
   return formatedEvents;
 };
 
-export const formatEventObjectForBigCalendar = (
-  calendarEvents: Workshop[] | Chat[],
-  bgColor: string,
-  textColor: string
-): BigCalendarEventType[] => {
-  const formatedEvents: BigCalendarEventType[] = [];
 
-  calendarEvents.forEach((event) => {
-    const { title, start_dates, end_dates, description, platform } = event;
-    const obj = {
-      title,
+const getBgColor = (colors: any, activity_status: string) => {
+  let bgColor;
+  if (activity_status === 'SCHEDULED' || activity_status === "SENT") {
+    bgColor = colors?.comingActivities;
+  } else if (activity_status === 'ATTENDANCE_CHECKED' || activity_status === "DONE" || activity_status === "IN_PROGRESS" || activity_status === "SUSPENDED") {
+    bgColor = colors?.pastActivities;
+  }
+  return bgColor;
+}
+
+const getActivityUrl = (id: string, route: 'actividadesFormativas' | 'chats') => {
+  const host = headers().get('host');
+  const pageUrl = `https://${host}/admin/${route}/${id}`;
+  return pageUrl;
+}
+
+
+export const formatActivityEventsForBigCalendar = (activities: Workshop[] | Chat[]): BigCalendarEventType[] => {
+  return activities.flatMap((activity) => {
+    const { id, title, start_dates, end_dates, description, modality, activity_status } = activity;
+    let colors;
+    let eventUrl: string;
+    if ('year' in activity) {
+      colors = ACTIVITIES_CALENDAR_COLORS.find(activity => activity.activity === 'workshop');
+      eventUrl = getActivityUrl(id, 'actividadesFormativas');
+    } else if ('level' in activity) {
+      colors = ACTIVITIES_CALENDAR_COLORS.find(activity => activity.activity === 'chat');
+      eventUrl = getActivityUrl(id, 'chats');
+    }
+
+    const bgColor = getBgColor(colors, activity_status);
+
+    const eventModalityTitle = modality === 'ONLINE' ? 'Virtual' : 'Presencial';
+
+    return start_dates.map((startDate, index) => ({
+      title: index > 0 ? `(${eventModalityTitle}) ${title} (${index + 1})` : `(${eventModalityTitle}) ${title}`,
       allDay: false,
-      start: new Date(start_dates[0]),
-      end: new Date(end_dates[0]),
+      start: new Date(startDate),
+      end: new Date(end_dates[index] || end_dates[0]),
       description: description as string,
       bgColor,
-      location: platform as string,
-      textColor,
-    };
-    formatedEvents.push(obj);
+      isSuspended: activity_status === 'SUSPENDED',
+      url: eventUrl,
+    }));
   });
-  return formatedEvents;
 };
 
-/*
- * Gets the events from Google Calendar for each calendar ID and formats them to match the React Big Calendar event type.
- * @returns A promise that resolves to an array of arrays of BigCalendarEventType objects.
- * @todo Add error handling
- * @todo allow to return a single array of events.
- */
-export const getAndFormatCalendarEvents = async (): Promise<BigCalendarEventType[][]> => {
-  const session = await getServerSession(authAdminOptions);
 
-  const accessToken = session?.user?.accessToken;
-  const refreshToken = session?.user?.refreshToken;
-
-  setTokens(accessToken as string, refreshToken as string);
-
-  const formatedEvents = CALENDAR_IDS.map(async (calendar) => {
-    const { calendarId, eventColor, textColor } = calendar;
-    const events = await getCalendarEvents(calendarId);
-    const formatedEvents = formatEventObject(events!, eventColor, textColor);
-
-    return formatedEvents;
-  });
-
-  return Promise.all(formatedEvents);
-};
 
 interface CardProps {
   icon: () => JSX.Element;

@@ -1,27 +1,17 @@
-import NextEventsList from '@/components/NextEventsList';
 import Calendar from '@/components/calendar/Calendar';
-import { WORKSHOP_CALENDAR_EVENT_COLORS } from '@/lib/constants';
-import { getWorkshopByStatus } from '@/lib/db/utils/Workshops';
+import { getAllActivities } from '@/lib/db/utils/Workshops';
 import { getDoneActivities } from '@/lib/db/utils/activities';
 import { getScholarsCountByCondition } from '@/lib/db/utils/users';
-import { formatEventObjectForBigCalendar } from '@/lib/utils';
+import { formatActivityEventsForBigCalendar } from '@/lib/utils';
 import { Link } from '@nextui-org/react';
 import { chatIcon, userIcon, workshopIcon } from 'public/svgs/svgs';
 
 const page = async () => {
   const [workshopDoneCount, chatsDoneCount] = await getDoneActivities();
-  const activeScholarsCount = await getScholarsCountByCondition('ACTIVE');
+  const activeScholarsCount = await getScholarsCountByCondition('ACTIVE', 'Rokk6_XCAJAg45heOEzYb');
+  const [workshops, chats, volunteer] = await getAllActivities();
 
-  const scheduledWorkshops = await getWorkshopByStatus('SCHEDULED');
-  const sentWorkshops = await getWorkshopByStatus('SENT');
-  const events = () => {
-    const workshopEvents = formatEventObjectForBigCalendar(
-      [...scheduledWorkshops, ...sentWorkshops],
-      WORKSHOP_CALENDAR_EVENT_COLORS,
-      '#3B82F6'
-    );
-    return workshopEvents;
-  };
+  const events = formatActivityEventsForBigCalendar([...workshops, ...chats]);
 
   return (
     <div className="flex flex-col gap-4 h-full w-full">
@@ -94,11 +84,11 @@ const page = async () => {
       </div>
       <div className="flex flex-col lg:flex-row gap-2 ">
         <div className="h-full max-h-[680px] w-full overflow-x-clip rounded-md backdrop-filter backdrop-blur-3xl bg-white dark:bg-black shadow-md p-2">
-          <Calendar events={events()} />
+          <Calendar events={events} />
         </div>
-        <div className="w-full lg:w-1/4 p-4 bg-white rounded-lg shadow-md backdrop-filter backdrop-blur-3xl dark:bg-black max-h-[680px] overflow-y-scroll">
+        {/* <div className="w-full lg:w-1/4 p-4 bg-white rounded-lg shadow-md backdrop-filter backdrop-blur-3xl dark:bg-black max-h-[680px] overflow-y-scroll">
           <NextEventsList activities={[...scheduledWorkshops, ...sentWorkshops]} />
-        </div>
+        </div> */}
       </div>
     </div>
   );

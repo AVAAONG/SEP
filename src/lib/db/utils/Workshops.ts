@@ -180,6 +180,16 @@ export const getWorkshopByStatus = async (status: ActivityStatus) => {
   return workshops;
 };
 
+export const getAllActivities = async () => {
+  const [workshops, chats, volunteer] = await prisma.$transaction([
+    prisma.workshop.findMany(),
+    prisma.chat.findMany(),
+    prisma.volunteer.findMany(),
+  ]);
+  return [workshops, chats, volunteer];
+}
+
+
 // export const getWorkshopsByScholar = async (scholarId: string) => {
 //   const workshops = await prisma.user.findUnique({
 //     where: { id: scholarId },
