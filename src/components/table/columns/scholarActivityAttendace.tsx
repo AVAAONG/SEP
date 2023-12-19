@@ -12,7 +12,7 @@ const scholarWithActivities = Prisma.validator<Prisma.WorkshopAttendanceDefaultA
   include: {
     scholar: {
       include: {
-        Scholar: {
+        scholar: {
           include: {
             collage_information: true,
           },
@@ -35,9 +35,9 @@ const ScholarActivityAttendance: Column<ScholarWithActivities>[] = [
     Header: 'Nombre',
     accessor: 'scholar',
     Cell: ({ value, cell }: { value: CellValue; cell: Cell<ScholarWithActivities> }) => {
-      const name = `${value.Scholar[0].first_names} ${value.Scholar[0].last_names}`;
-      const id = value.Scholar[0].id;
-      const career = value.Scholar[0].collage_information.career;
+      const name = `${value.scholar[0].first_names} ${value.scholar[0].last_names}`;
+      const id = value.scholar[0].id;
+      const career = value.scholar[0].collage_information.career;
       return (
         <Link
           href={cell.row.original.id ? `/admin/becarios/${id}` : ''}
@@ -95,7 +95,7 @@ const ScholarActivityAttendance: Column<ScholarWithActivities>[] = [
     accessor: 'scholar',
     id: 'years',
     Cell: ({ value }) => {
-      const birthdate = new Date(value.Scholar[0].birthdate).getFullYear();
+      const birthdate = new Date(value.scholar[0].birthdate).getFullYear();
       const age = new Date().getFullYear() - birthdate;
       return <span>{age}</span>;
     },
@@ -111,12 +111,12 @@ const ScholarActivityAttendance: Column<ScholarWithActivities>[] = [
             attendace === 'ATTENDED'
               ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
               : attendace === 'NOT_ATTENDED'
-              ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
-              : attendace === 'WAITING_LIST'
-              ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
-              : attendace === 'ENROLLED'
-              ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
-              : ''
+                ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+                : attendace === 'WAITING_LIST'
+                  ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
+                  : attendace === 'ENROLLED'
+                    ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
+                    : ''
           }`}
           value={attendace}
           onChange={async (event) => {
@@ -138,7 +138,7 @@ const ScholarActivityAttendance: Column<ScholarWithActivities>[] = [
     accessor: 'scholar',
     id: 'cellphoneNumber',
     Cell: ({ value }) => {
-      const number = value.Scholar[0].cell_phone_Number;
+      const number = value.scholar[0].cell_phone_Number;
       return <span>{number}</span>;
     },
   },
@@ -147,7 +147,7 @@ const ScholarActivityAttendance: Column<ScholarWithActivities>[] = [
     accessor: 'scholar',
     id: 'whatsAppNumber',
     Cell: ({ value }) => {
-      const number = value.Scholar[0].whatsapp_number;
+      const number = value.scholar[0].whatsapp_number;
 
       return <span>{number}</span>;
     },
@@ -157,7 +157,7 @@ const ScholarActivityAttendance: Column<ScholarWithActivities>[] = [
     accessor: 'scholar',
     id: 'email',
     Cell: ({ value }) => {
-      const email = value.Scholar[0].allowedEmail;
+      const email = value.scholar[0].email;
       return <span>{email}</span>;
     },
   },

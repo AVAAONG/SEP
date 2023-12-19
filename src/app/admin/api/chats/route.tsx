@@ -18,9 +18,6 @@ export async function GET(req: NextApiRequest) {
   const token = await getToken({ req });
   if (token === null) return NextResponse.redirect('/api/auth/signin');
   setTokens(token.accessToken as string, token.refreshToken as string);
-  // await prisma.chatAttendance.deleteMany();
-  // await prisma.chat.deleteMany();
-  // await prisma.chatsTempData.deleteMany();
   await createChatsInBulkFromSpreadsheet();
   return NextResponse.json({ message: 'ok' });
 }
@@ -40,14 +37,14 @@ const SECOND_RANGE_WAITING_LIST = `A25:D`;
 //##########################################################################
 
 //##########################################################################
-const LAST_RANGE = 'B78:K';
+const LAST_RANGE = 'B78:K245';
 const LAST_RANGE_MAIN_LIST = `A9:E21`;
 const LAST_RANGE_WAITING_LIST = `A23:E`;
 //##########################################################################
 
 const CHAT_SPREADSHEET = '1y4lTjgqSQvBNtoWF_v6G2UR3a4eS-Et_dDD9XoQcYlM';
 const CHAT_SHEET = 'Sheet1';
-const CHAT_RANGE = `'${CHAT_SHEET}'!${SECOND_RANGE}`;
+const CHAT_RANGE = `'${CHAT_SHEET}'!${LAST_RANGE}`;
 
 const createChatsInBulkFromSpreadsheet = async () => {
   console.log('\x1b[36m%s\x1b[0m', '++++++ COMENZANDO EJECICION ++++++');
@@ -120,7 +117,7 @@ const createChatsInBulkFromSpreadsheet = async () => {
     if (activity_status === 'SUSPENDED') continue;
     //asistencia de la lista principal
     console.log('\x1b[34m%s\x1b[0m', 'Obteniendo datos de la lista principal');
-    const attendanceRangeMainList = SECOND_RANGE_MAIN_LIST;
+    const attendanceRangeMainList = LAST_RANGE_MAIN_LIST;
     const mainListAttendance = (await getSpreadsheetValuesByUrl(
       spreadsheet,
       attendanceRangeMainList
@@ -136,7 +133,7 @@ const createChatsInBulkFromSpreadsheet = async () => {
       if (a[2] === undefined || a[2].trim().length === 0) continue;
       const email = a[2].trim().toLocaleLowerCase();
 
-      let attendaci = parseScholarAttendace(status, a[3] as 'TRUE' | 'FALSE');
+      let attendaci = parseScholarAttendace(status, a[4] as 'TRUE' | 'FALSE');
       let scholar;
       try {
         scholar = await prisma.scholar.findUniqueOrThrow({
@@ -167,7 +164,7 @@ const createChatsInBulkFromSpreadsheet = async () => {
     //ASISTENCIA DE LA LSITA DE ESPERA
     const attendanceWhaitingList = (await getSpreadsheetValuesByUrl(
       spreadsheet,
-      SECOND_RANGE_WAITING_LIST
+      LAST_RANGE_WAITING_LIST
     )) as string[][];
 
     if (attendanceWhaitingList === undefined || attendanceWhaitingList.length === 0) {
@@ -178,33 +175,36 @@ const createChatsInBulkFromSpreadsheet = async () => {
       for (const a of attendanceWhaitingList) {
         if (a[2] === undefined || a[2].trim().length === 0) continue;
         const email = a[2].trim().toLocaleLowerCase();
-
         const attendance = parseScholarAttendaceWaitingList(status, a[4] as 'TRUE' | 'FALSE');
-        let user;
-        try {
-          user = await prisma.scholar.findUniqueOrThrow({
-            where: {
-              email: email,
-            },
-            include: {
-              program_information: true,
-            },
-          });
-        } catch (e) {
-          if (spreadsheetForErrors === null) {
-            spreadsheetForErrors = await createSpreadsheetForErrors(title, index);
+        if (attendance === 'ATTENDED') {
+          let user;
+          try {
+            user = await prisma.scholar.findUniqueOrThrow({
+              where: {
+                email: email,
+              },
+              include: {
+                program_information: true,
+              },
+            });
+          } catch (e) {
+            if (spreadsheetForErrors === null) {
+              spreadsheetForErrors = await createSpreadsheetForErrors(title, index);
+            }
+            console.log('colocando a ' + a[0] + ' en el spreadsheet de errores');
+            a.push('WAITING_LIST');
+            await appendSpreadsheetValuesByRange(spreadsheetForErrors, [a]);
+            continue;
           }
-          console.log('colocando a ' + a[0] + ' en el spreadsheet de errores');
-          a.push('WAITING_LIST');
-          await appendSpreadsheetValuesByRange(spreadsheetForErrors, [a]);
+          console.log('     Dando asistencia a ' + a[0]);
+          await addAttendaceToScholar(
+            chatId,
+            user.program_information?.id!,
+            attendance as ScholarAttendance
+          );
+        } else {
           continue;
         }
-        console.log('     Dando asistencia a ' + a[0]);
-        await addAttendaceToScholar(
-          chatId,
-          user.program_information?.id!,
-          attendance as ScholarAttendance
-        );
       }
     }
   }
