@@ -1,18 +1,23 @@
+import NextEventsList from '@/components/NextEventsList';
 import Calendar from '@/components/calendar/Calendar';
 import { getAllActivities } from '@/lib/db/utils/Workshops';
 import { getDoneActivities } from '@/lib/db/utils/activities';
 import { getScholarsCountByCondition } from '@/lib/db/utils/users';
 import { formatActivityEventsForBigCalendar } from '@/lib/utils';
 import { Link } from '@nextui-org/react';
+import { Chat, Workshop } from '@prisma/client';
 import { chatIcon, userIcon, workshopIcon } from 'public/svgs/svgs';
 
 const page = async () => {
   const [workshopDoneCount, chatsDoneCount] = await getDoneActivities();
   const activeScholarsCount = await getScholarsCountByCondition('ACTIVE', 'Rokk6_XCAJAg45heOEzYb');
-  const [workshops, chats, volunteer] = await getAllActivities();
-
+  const [workshops, chats] = await getAllActivities();
   const events = formatActivityEventsForBigCalendar([...workshops, ...chats]);
-
+  const scheduledAndSentActivities: (Workshop | Chat)[] = [...workshops, ...chats]
+    .filter(
+      (activity) => activity.activity_status === 'SENT' || activity.activity_status === 'SCHEDULED'
+    )
+    .sort((a, b) => new Date(a.start_dates[0]).getTime() - new Date(b.start_dates[0]).getTime());
   return (
     <div className="flex flex-col gap-4 h-full w-full">
       <div className="w-full flex flex-col md:flex-row gap-3 items-center">
@@ -86,9 +91,9 @@ const page = async () => {
         <div className="h-full max-h-[680px] w-full overflow-x-clip rounded-md backdrop-filter backdrop-blur-3xl bg-white dark:bg-black shadow-md p-2">
           <Calendar events={events} />
         </div>
-        {/* <div className="w-full lg:w-1/4 p-4 bg-white rounded-lg shadow-md backdrop-filter backdrop-blur-3xl dark:bg-black max-h-[680px] overflow-y-scroll">
-          <NextEventsList activities={[...scheduledWorkshops, ...sentWorkshops]} />
-        </div> */}
+        <div className="w-full lg:w-1/4 p-4 bg-white rounded-lg shadow-md backdrop-filter backdrop-blur-3xl dark:bg-black max-h-[680px] overflow-y-scroll">
+          <NextEventsList activities={scheduledAndSentActivities as (Workshop | Chat)[]} />
+        </div>
       </div>
     </div>
   );

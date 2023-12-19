@@ -2,14 +2,19 @@ import { Chat, Volunteer, Workshop } from '@prisma/client';
 import Link from 'next/link';
 import ActivityListIcon from './scholar/dashboard/ActivityListIcon';
 
-const NextEventsList = ({
-  activities,
-}: {
-  activities: Workshop[] | Chat[] | Volunteer[] | null;
-}) => {
+const NextEventsList = ({ activities }: { activities: (Workshop | Chat | Volunteer)[] }) => {
+  const kindOfActivity = (activity: Workshop | Chat | Volunteer) => {
+    if ('year' in activity) {
+      return 'workshop';
+    } else if ('level' in activity) {
+      return 'chat';
+    } else {
+      return 'volunteer';
+    }
+  };
   return (
     <>
-      <h3 className="flex items-center mb-2 text-lg font-medium ">Próximos Eventos</h3>
+      <h3 className="flex items-center mb-2 text-lg font-medium ">Próximas actividades</h3>
       <div className="border-t border-gray-200 dark:border-gray-600">
         <div className="">
           <ul role="list" className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -17,7 +22,7 @@ const NextEventsList = ({
               <li className="py-2.5 overflow-hidden" key={index}>
                 <Link href={`/admin/actividadesFormativas/${activity.id}`}>
                   <div className="flex items-center w-full">
-                    <ActivityListIcon kindOfActivity="workshop" />
+                    <ActivityListIcon kindOfActivity={kindOfActivity(activity)} />
                     <div className="flex flex-col ml-3 ">
                       <p className="font-medium truncate text-sm">{activity.title}</p>
                       <div className="flex items-center justify-start text-sm text-green-500 dark:text-green-400 font-medium">

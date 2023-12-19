@@ -5,7 +5,7 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { ActivityStatus, ScholarAttendance, Speaker, Workshop, WorkshopTempData } from '@prisma/client';
+import { ActivityStatus, Chat, ScholarAttendance, Speaker, Volunteer, Workshop, WorkshopTempData } from '@prisma/client';
 import shortUUID from 'short-uuid';
 import { prisma } from './prisma';
 
@@ -180,7 +180,7 @@ export const getWorkshopByStatus = async (status: ActivityStatus) => {
   return workshops;
 };
 
-export const getAllActivities = async () => {
+export const getAllActivities = async (): Promise<[Workshop[], Chat[], Volunteer[]]> => {
   const [workshops, chats, volunteer] = await prisma.$transaction([
     prisma.workshop.findMany(),
     prisma.chat.findMany(),
