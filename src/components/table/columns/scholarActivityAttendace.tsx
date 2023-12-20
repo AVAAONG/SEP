@@ -66,7 +66,7 @@ const ScholarActivityAttendance: Column<ScholarWithActivities>[] = [
     accessor: 'scholar',
     id: 'dni',
     Cell: ({ value }: { value: CellValue }) => {
-      const dni = formatDni(value.Scholar[0].dni);
+      const dni = formatDni(value.scholar[0].dni);
       return <span>V-{dni}</span>;
     },
   },

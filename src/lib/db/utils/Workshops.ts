@@ -254,7 +254,7 @@ export const getWorkshop = async (id: shortUUID.SUUID) => {
         include: {
           scholar: {
             include: {
-              Scholar: {
+              scholar: {
                 include: {
                   collage_information: true,
                 }

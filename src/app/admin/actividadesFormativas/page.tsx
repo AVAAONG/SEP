@@ -8,6 +8,7 @@ import {
   parseSkillFromDatabase,
   parseWorkshopStatusFromDatabase,
 } from '@/lib/utils2';
+import { Tooltip } from '@nextui-org/react';
 import { Workshop, WorkshopYear } from '@prisma/client';
 import dynamic from 'next/dynamic';
 
@@ -149,34 +150,43 @@ const page = async ({
     };
   });
 
+  const doneWorkshopsPercentage = Number(
+    ((doneWorkshops.length / workshops.length) * 100).toFixed(0)
+  );
+  const suspendedWorkshopsPercentage = Number(
+    ((suspendedWorkshops.length / workshops.length) * 100).toFixed(0)
+  );
+
   const stats = [
     {
       name: 'Actividades formativas ofertadas',
       stat: workshops.length || 0,
       previousStat: 250,
-      change: Number((((150 - workshops.length) / 150) * 100).toFixed(2)),
       changeType: 'decrease',
+      comparationText: null,
+      tooltipText: null,
     },
     {
       name: 'Actividades formativas realizadas',
       stat: doneWorkshops.length || 0,
-      previousStat: 250,
-      change: 0,
       changeType: 'increase',
+      comparationText: `De ${workshops.length || 0} actividades ofertadas`,
+      comparation: doneWorkshopsPercentage,
+      tooltipText: `${doneWorkshopsPercentage}% de las actividades fueron realizadas`,
     },
     {
       name: 'Actividades formativas agendadas',
       stat: scheduledWorkshops.length || 0,
-      previousStat: 250,
-      change: 0,
       changeType: 'increase',
+      comparationText: null,
     },
     {
       name: 'Actividades formativas canceladas',
       stat: suspendedWorkshops.length || 0,
-      previousStat: 250,
-      change: 0,
       changeType: 'increase',
+      comparationText: `De ${workshops.length || 0} actividades ofertadas`,
+      comparation: suspendedWorkshopsPercentage,
+      tooltipText: `${suspendedWorkshopsPercentage}% de las actividades fueron canceladas`,
     },
   ];
 
@@ -222,10 +232,13 @@ const page = async ({
     doneWorkshops?.reduce(
       (acc, workshop) => {
         const month = new Date(workshop.start_dates[0]).getMonth();
-        const attendance = (workshop as WorkshopWithAttendance).scholar_attendance?.filter(
-          (a: { attendance: string }) => a.attendance === 'ATTENDED'
-        )?.length;
-        if (attendance && attendance > 15) acc[month.toString()] = (acc[month.toString()] || 0) + 1;
+        const totalScholars = workshop.scholar_attendance?.length || 0;
+        const attendedScholars =
+          workshop.scholar_attendance?.filter(
+            (a: { attendance: string }) => a.attendance === 'ATTENDED'
+          )?.length || 0;
+        const attendancePercentage = (attendedScholars / totalScholars) * 100;
+        if (attendancePercentage >= 60) acc[month.toString()] = (acc[month.toString()] || 0) + 1;
         return acc;
       },
       {} as Record<string, number>
@@ -268,22 +281,35 @@ const page = async ({
             className={`grid grid-cols-1 rounded-lg bg-white dark:bg-black shadow-md overflow-hidden  divide-y divide-gray-200 dark:divide-gray-700 md:grid-cols-4  justify-center md:divide-y-0 md:divide-x`}
           >
             {stats.map((item) => (
-              <div key={item.name} className="p-5">
-                {/* <dt className="text-base font-medium ">{item.name}</dt> */}
+              <div key={item.name} className="p-5 overflow-hidden">
+                <dt className="text-base font-medium ">{item.name}</dt>
                 <dd className="mt-1 flex justify-between items-baseline md:block lg:flex">
                   <div className="flex items-baseline text-4xl font-semibold text-primary-light">
                     {item.stat}
                     <span className="ml-2 text-sm truncate font-medium text-gray-500">
-                      {item.name}
+                      {item.comparationText}
                     </span>
                   </div>
+                  {item.comparation && (
+                    <Tooltip content={item.tooltipText}>
+                      <div
+                        className={
+                          ' cursor-pointer bg-light dark:bg-dark text-dark inline-flex items-baseline px-2.5 py-0.5 rounded-full text-sm font-medium md:mt-2 lg:mt-0'
+                        }
+                      >
+                        <span className="sr-only">
+                          {item.changeType === 'increase' ? 'Increased' : 'Decreased'} by
+                        </span>
+                        {item.comparation}%
+                      </div>
+                    </Tooltip>
+                  )}
                 </dd>
               </div>
             ))}
           </dl>
         </div>
       </div>
-
       <div className="w-full  rounded-lg bg-white">
         <MixedAreaChartComponent areaSeries={areaSeries} barSeries={barSeries} />
       </div>

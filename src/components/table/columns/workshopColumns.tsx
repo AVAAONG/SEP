@@ -45,7 +45,7 @@ const WorkshopColumns: Column<WorkshopDetails>[] = [
     accessor: 'title',
     Cell: ({ value, cell }) => {
       return (
-        <Link href={cell.row.original.id ? `${cell.row.original.id}` : ''}>
+        <Link href={cell.row.original.id ? `actividadesFormativas/${cell.row.original.id}` : ''}>
           <div className="block w-80 overflow-x-scroll">{value}</div>
         </Link>
       );
