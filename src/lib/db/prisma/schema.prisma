@@ -730,13 +730,13 @@ model ScholarCVAInformation {
 model ScholarCvaModule {
   id                         String                 @id @default(nanoid())
   module                     Int
-  cva_modality               String?
+  modality                   Modality?
   qualification              Float
   record                     String?
   scholar_cva_information    ScholarCVAInformation? @relation(fields: [scholar_cva_information_id], references: [id])
   scholar_cva_information_id String?
 
-  @@unique([scholar_cva_information_id, module])
+  @@unique([scholar_cva_information_id])
 }
 
 //
@@ -893,22 +893,21 @@ model AlumniSatisfactionForm {
 }
 
 model JobInformation {
-  id                                  String     @id @default(nanoid())
-  is_working                          Boolean    @default(false)
-  job_title                           String?
-  job_company                         String?
-  job_modality                        Modality?
-  job_schedule                        JobHours?
-  kind_of_job                         KindOfJob?
-  job_sector                          JobSector?
+  id                                  String      @id @default(nanoid())
+  job_title                           String
+  job_company                         String
+  job_modality                        Modality
+  job_schedule                        JobSchedule
+  kind_of_job                         KindOfJob
+  job_sector                          JobSector
   aspects_that_influenced_getting_job String?
-  job_start_date                      DateTime?
+  job_start_date                      DateTime
   job_end_date                        DateTime?
   laboral_conditions                  String?
   actions_to_get_job                  String?
-  why_dint_get_job                    String?
-  scholar                             Scholar    @relation(fields: [scholarId], references: [id])
-  scholarId                           String     @unique
+  why_didnt_get_job                   String?
+  scholar                             Scholar     @relation(fields: [scholar_id], references: [id])
+  scholar_id                          String      @unique
 }
 
 model EntrepenourshipInformation {
@@ -945,7 +944,7 @@ enum ScholarStatus {
   NORMAL
 }
 
-enum JobHours {
+enum JobSchedule {
   PART_TIME
   FULL_TIME
   WEEKENDS

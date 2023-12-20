@@ -13,7 +13,7 @@ enum ScholarStatus {
   NORMAL
 }
 
-enum JobHours {
+enum JobSchedule {
   PART_TIME
   FULL_TIME
   WEEKENDS

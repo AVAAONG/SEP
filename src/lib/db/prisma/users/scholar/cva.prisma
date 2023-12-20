@@ -1,4 +1,5 @@
 import { Scholar, Scholar, } from "scholar"
+import { Modality } from "..\..\schema"
 
 enum CvaLocation {
     MERCEDES
@@ -19,11 +20,11 @@ model ScholarCVAInformation {
 model ScholarCvaModule {
     id                         String                 @id @default(nanoid())
     module                     Int
-    cva_modality               String?
+    modality                   Modality?
     qualification              Float
     record                     String?
     scholar_cva_information    ScholarCVAInformation? @relation(fields: [scholar_cva_information_id], references: [id])
     scholar_cva_information_id String?
 
-    @@unique([scholar_cva_information_id, module])
+    @@unique([scholar_cva_information_id])
 }
