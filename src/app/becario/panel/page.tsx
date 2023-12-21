@@ -1,20 +1,9 @@
 import NextEventsList from '@/components/NextEventsList';
 import Card from '@/components/admin/dashboard/Card';
 import Calendar from '@/components/calendar/Calendar';
-import { BigCalendarEventType } from '@/types/Calendar';
-import { SUUID } from 'short-uuid';
 import { chatIcon, volunterIcon, workshopIcon } from '../../../../public/svgs/svgs';
 
-const ExampleEvents: BigCalendarEventType[] = [
-  {
-    title: 'All Day Event very long title',
-    start: new Date(2023, 7, 13),
-    end: new Date(2023, 7, 13),
-    allDay: true,
-  },
-];
-
-const page = async ({ params }: { params: { scholarId: SUUID } }) => {
+const page = async () => {
   const CARD_CONTENT = [
     {
       icon: workshopIcon,
@@ -60,7 +49,7 @@ const page = async ({ params }: { params: { scholarId: SUUID } }) => {
         </div>
         <div className="flex flex-col lg:flex-row gap-4 ">
           <div className="h-full max-h-[680px] min-h-screen text-gray-800 capitalize dark:text-gray-300 shadow-sm overflow-x-clip w-full bg-white border border-gray-200  shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 p-2">
-            <Calendar events={ExampleEvents} />
+            <Calendar events={[{}]} />
           </div>
           <div className="w-full lg:w-1/4 p-4 sm:p-6 bg-white border border-gray-200 rounded-lg shadow-sm shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950">
             <NextEventsList activities={null} />

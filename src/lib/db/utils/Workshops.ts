@@ -245,6 +245,22 @@ export const getAllActivities = async (): Promise<[Workshop[], Chat[], Volunteer
 
 // };
 
+export const getScholarEnrolledActivities = async (scholarId: string) => {
+  const activities = await prisma.scholar.findUnique({
+    where: {
+      id: scholarId,
+    },
+    select: {
+      program_information: {
+        include: {
+          attended_workshops: true,
+        }
+      },
+    },
+  });
+  return activities;
+}
+
 export const getWorkshop = async (id: shortUUID.SUUID) => {
   const workshop = await prisma.workshop.findUnique({
     where: { id },
@@ -306,7 +322,7 @@ export const getScheduledWorkshops = async () => {
   return workshops;
 };
 
-export const getWorkhsopsByScholar = async (programInformationId: string, scholarId: string) => {
+export const getWorkhsopsByScholar = async (programInformationId: string) => {
   const chats = await prisma.workshop.findMany({
     where: {
       scholar_attendance: {

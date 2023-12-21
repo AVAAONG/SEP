@@ -61,55 +61,52 @@ const formatDate = (date: string) => {
  */
 const getScholarData = async (id: string) => {
   const prisma = new PrismaClient();
-  const scholar = await prisma.user.findUnique({
+  const scholar = await prisma.scholar.findUnique({
     where: {
       id: id,
-    },
-    include: {
-      scholar: true,
     },
   });
 
   const scholarGeneralInfo = {
-    firstNames: scholar?.scholar?.first_names,
-    lastNames: scholar?.scholar?.last_names,
-    dni: scholar?.scholar?.dni,
-    gender: scholar?.scholar?.gender,
-    birthDate: formatDate(scholar?.scholar?.birthdate),
-    cellPhoneNumber: scholar?.scholar?.cell_phone_number,
-    localPhoneNumber: scholar?.scholar?.local_phone_number,
-    avaaAdmissionYear: formatDate(scholar?.scholar?.avaa_admission_year),
-    email: scholar?.scholar?.email,
+    firstNames: scholar?.first_names,
+    lastNames: scholar?.last_names,
+    dni: scholar?.dni,
+    gender: scholar?.gender,
+    birthDate: formatDate(scholar?.birthdate),
+    cellPhoneNumber: scholar?.cell_phone_number,
+    localPhoneNumber: scholar?.local_phone_number,
+    avaaAdmissionYear: formatDate(scholar?.avaa_admission_year),
+    email: scholar?.email,
   };
 
   const scholarAddressInfo = {
-    currentZone: scholar?.scholar?.current_zone,
-    stateOfOrigin: scholar?.scholar?.state_of_origin,
+    currentZone: scholar?.current_zone,
+    stateOfOrigin: scholar?.state_of_origin,
   };
   const scholarCollageInfo = {
-    collage: scholar?.scholar?.collage,
-    carrer: scholar?.scholar?.carrer,
-    studyArea: scholar?.scholar?.study_area,
-    currentAcademicPeriod: scholar?.scholar?.current_academic_period,
-    grade: scholar?.scholar?.grade,
-    gradeKind: scholar?.scholar?.grade_kind,
-    classModality: scholar?.scholar?.class_modality,
-    academicPeriodType: scholar?.scholar?.academic_period_type,
+    collage: scholar?.collage,
+    carrer: scholar?.carrer,
+    studyArea: scholar?.study_area,
+    currentAcademicPeriod: scholar?.current_academic_period,
+    grade: scholar?.grade,
+    gradeKind: scholar?.grade_kind,
+    classModality: scholar?.class_modality,
+    academicPeriodType: scholar?.academic_period_type,
   };
 
   const workScholarInformation = {
-    isCurrentlyWorking: scholar?.scholar?.is_currently_working ? 'TRUE' : 'FALSE',
-    organizationName: scholar?.scholar?.organization_name,
-    positionHeld: scholar?.scholar?.position_held,
-    workModality: scholar?.scholar?.work_modality,
-    weeklyHours: scholar?.scholar?.weekly_hours,
+    isCurrentlyWorking: scholar?.is_currently_working ? 'TRUE' : 'FALSE',
+    organizationName: scholar?.organization_name,
+    positionHeld: scholar?.position_held,
+    workModality: scholar?.work_modality,
+    weeklyHours: scholar?.weekly_hours,
   };
   const scholarCVAInfo = {
-    isInCVA: scholar?.scholar?.is_in_cva ? 'TRUE' : 'FALSE',
-    cvaLocation: scholar?.scholar?.cva_location,
-    cvaModality: scholar?.scholar?.cva_modality,
-    englishLevel: scholar?.scholar?.english_level,
-    notStartedCvaReason: scholar?.scholar?.not_started_cva_reason,
+    isInCVA: scholar?.is_in_cva ? 'TRUE' : 'FALSE',
+    cvaLocation: scholar?.cva_location,
+    cvaModality: scholar?.cva_modality,
+    englishLevel: scholar?.english_level,
+    notStartedCvaReason: scholar?.not_started_cva_reason,
   };
   return {
     scholarGeneralInfo,
@@ -139,45 +136,45 @@ const page = async () => {
   });
 
   const scholarGeneralInfo = {
-    firstNames: scholar?.scholar?.first_names,
-    lastNames: scholar?.scholar?.last_names,
-    dni: scholar?.scholar?.dni,
-    gender: scholar?.scholar?.gender,
-    birthDate: formatDate(scholar?.scholar?.birthdate),
-    cellPhoneNumber: scholar?.scholar?.cell_phone_number,
-    localPhoneNumber: scholar?.scholar?.local_phone_number,
-    avaaAdmissionYear: formatDate(scholar?.scholar?.avaa_admission_year),
-    email: scholar?.scholar?.email,
+    firstNames: scholar?.first_names,
+    lastNames: scholar?.last_names,
+    dni: scholar?.dni,
+    gender: scholar?.gender,
+    birthDate: formatDate(scholar?.birthdate),
+    cellPhoneNumber: scholar?.cell_phone_number,
+    localPhoneNumber: scholar?.local_phone_number,
+    avaaAdmissionYear: formatDate(scholar?.avaa_admission_year),
+    email: scholar?.email,
   };
 
   const scholarAddressInfo = {
-    currentZone: scholar?.scholar?.current_zone,
-    stateOfOrigin: scholar?.scholar?.state_of_origin,
+    currentZone: scholar?.current_zone,
+    stateOfOrigin: scholar?.state_of_origin,
   };
   const scholarCollageInfo = {
-    collage: scholar?.scholar?.collage,
-    carrer: scholar?.scholar?.carrer,
-    studyArea: scholar?.scholar?.study_area,
-    currentAcademicPeriod: scholar?.scholar?.current_academic_period,
-    grade: scholar?.scholar?.grade,
-    gradeKind: scholar?.scholar?.grade_kind,
-    classModality: scholar?.scholar?.class_modality,
-    academicPeriodType: scholar?.scholar?.academic_period_type,
+    collage: scholar?.collage,
+    carrer: scholar?.carrer,
+    studyArea: scholar?.study_area,
+    currentAcademicPeriod: scholar?.current_academic_period,
+    grade: scholar?.grade,
+    gradeKind: scholar?.grade_kind,
+    classModality: scholar?.class_modality,
+    academicPeriodType: scholar?.academic_period_type,
   };
 
   const workScholarInformation = {
-    isCurrentlyWorking: scholar?.scholar?.is_currently_working ? 'TRUE' : 'FALSE',
-    organizationName: scholar?.scholar?.organization_name,
-    positionHeld: scholar?.scholar?.position_held,
-    workModality: scholar?.scholar?.work_modality,
-    weeklyHours: scholar?.scholar?.weekly_hours,
+    isCurrentlyWorking: scholar?.is_currently_working ? 'TRUE' : 'FALSE',
+    organizationName: scholar?.organization_name,
+    positionHeld: scholar?.position_held,
+    workModality: scholar?.work_modality,
+    weeklyHours: scholar?.weekly_hours,
   };
   const scholarCVAInfo = {
-    isInCVA: scholar?.scholar?.is_in_cva ? 'TRUE' : 'FALSE',
-    cvaLocation: scholar?.scholar?.cva_location,
-    cvaModality: scholar?.scholar?.cva_modality,
-    englishLevel: scholar?.scholar?.english_level,
-    notStartedCvaReason: scholar?.scholar?.not_started_cva_reason,
+    isInCVA: scholar?.is_in_cva ? 'TRUE' : 'FALSE',
+    cvaLocation: scholar?.cva_location,
+    cvaModality: scholar?.cva_modality,
+    englishLevel: scholar?.english_level,
+    notStartedCvaReason: scholar?.not_started_cva_reason,
   };
   return (
     <div>
