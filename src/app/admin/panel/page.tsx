@@ -1,7 +1,6 @@
 import NextEventsList from '@/components/NextEventsList';
 import Calendar from '@/components/calendar/Calendar';
-import { getAllActivities } from '@/lib/db/utils/Workshops';
-import { getDoneActivities } from '@/lib/db/utils/activities';
+import { getActivitiesByYear } from '@/lib/db/utils/Workshops';
 import { getScholarsCountByCondition } from '@/lib/db/utils/users';
 import { formatActivityEventsForBigCalendar } from '@/lib/utils';
 import { Link } from '@nextui-org/react';
@@ -9,15 +8,17 @@ import { Chat, Workshop } from '@prisma/client';
 import { chatIcon, userIcon, workshopIcon } from 'public/svgs/svgs';
 
 const page = async () => {
-  const [workshopDoneCount, chatsDoneCount] = await getDoneActivities();
+  const actualYear = new Date().getFullYear();
   const activeScholarsCount = await getScholarsCountByCondition('ACTIVE', 'Rokk6_XCAJAg45heOEzYb');
-  const [workshops, chats] = await getAllActivities();
+  const [workshops, chats] = await getActivitiesByYear(actualYear);
   const events = formatActivityEventsForBigCalendar([...workshops, ...chats]);
   const scheduledAndSentActivities: (Workshop | Chat)[] = [...workshops, ...chats]
     .filter(
       (activity) => activity.activity_status === 'SENT' || activity.activity_status === 'SCHEDULED'
     )
     .sort((a, b) => new Date(a.start_dates[0]).getTime() - new Date(b.start_dates[0]).getTime());
+  const workshopDoneCount = workshops.filter((workshop) => workshop.activity_status === 'DONE' || workshop.activity_status === 'ATTENDANCE_CHECKED').length;
+  const chatsDoneCount = chats.filter((chat) => chat.activity_status === 'DONE' || chat.activity_status === 'ATTENDANCE_CHECKED').length;
   return (
     <div className="flex flex-col gap-4 h-full w-full">
       <div className="w-full flex flex-col md:flex-row gap-3 items-center">

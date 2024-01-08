@@ -189,6 +189,23 @@ export const getAllActivities = async (): Promise<[Workshop[], Chat[], Volunteer
   return [workshops, chats, volunteer];
 }
 
+export const getActivitiesByYear = async (year: number): Promise<[Workshop[], Chat[], Volunteer[]]> => {
+  const [allWorkshops, allChats, allVolunteers] = await prisma.$transaction([
+    prisma.workshop.findMany(),
+    prisma.chat.findMany(),
+    prisma.volunteer.findMany(),
+  ]);
+
+  const yearStart = new Date(year, 0, 1);
+  const yearEnd = new Date(year, 11, 31);
+
+  const workshops = allWorkshops.filter(workshop => workshop.start_dates.some(date => date >= yearStart && date <= yearEnd));
+  const chats = allChats.filter(chat => chat.start_dates.some(date => date >= yearStart && date <= yearEnd));
+  const volunteers = allVolunteers.filter(volunteer => volunteer.start_dates.some(date => date >= yearStart && date <= yearEnd));
+
+  return [workshops, chats, volunteers];
+}
+
 
 // export const getWorkshopsByScholar = async (scholarId: string) => {
 //   const workshops = await prisma.user.findUnique({
