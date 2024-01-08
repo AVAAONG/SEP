@@ -32,7 +32,6 @@ const authOptions: NextAuthOptions = {
    * @see https://next-auth.js.org/providers/ to see the complete list of options to authenticate users.
    */
   providers: [
-    // GoogleProvider(googleAdminProviderConfig),
     GoogleProvider(googleUserProviderConfig),
     Email(emailUserProviderConfig),
   ],
@@ -63,59 +62,45 @@ const authOptions: NextAuthOptions = {
   callbacks: {
     signIn: async ({ user, account, profile }) => {
       let email: string | undefined = '';
-
       if (account?.provider === 'email') email = account.providerAccountId;
       else email = profile!.email;
-
-      // const name = profile.name
-
-      // const SUBJECT_MESSAGE =  encodeURIComponent(`Problemas al ingresar al SEP - ${name}`)
-
-      // const emailBasedPath= `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${email}&su=${SUBJECT_MESSAGE}&body=${encodedMessage}&bcc=${recipients}`
-
-      //   const userExists = await prisma.scholar.findUnique({
-      //     where: { email },
-      //   });
-
-      //   if (!userExists) throw 'notAllowed';
-      //   else return true;
-      return true;
+      const userExists = await prisma.scholar.findUnique({
+        where: { email },
+      });
+      if (!userExists) throw 'notAllowed';
+      else return true;
     },
-    jwt: ({ token, user }) => {
+    session: async ({ session, token }) => {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token,
+          accessToken: token.accessToken,
+          randomKey: token.randomKey,
+          refreshToken: token.refreshToken,
+          kind_of_user: 'SCHOLAR',
+        },
+      };
+    },
+    jwt: ({ token, user, account, profile }) => {
       if (user) {
         const u = user as unknown as any;
+        const accessToken = account?.access_token;
+        const refreshToken = account?.refresh_token;
         return {
           ...token,
           id: u.id,
-          kindOfUser: 'SCHOLAR',
+          accessToken,
+          refreshToken,
+          kind_of_user: 'SCHOLAR',
         };
       }
       return token;
     },
-    session: ({ session, token }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        //the token.sub obj contains the user id
-        id: token.sub,
-      },
-    }),
-  },
-  events: {
-    createUser: async (data) => {
-      await prisma.user.update({
-        where: {
-          id: data.user.id,
-        },
-        data: {
-          email: data.user.email!!,
-          first_names: 'Kevin Jose',
-          last_names: 'Bravo Mota',
-        },
-      });
-    },
   },
   pages: PAGES,
+
 };
 
 export default authOptions;

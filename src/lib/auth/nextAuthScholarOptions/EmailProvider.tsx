@@ -101,7 +101,6 @@ export default function Email(options: EmailUserConfig): EmailConfig {
       if (failed.length) {
         throw new Error(`Email (${failed.join(', ')}) could not be sent`);
       }
-      console.log(result);
     },
     options,
   };
