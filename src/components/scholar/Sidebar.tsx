@@ -80,7 +80,7 @@ const Sidebar = () => {
     <aside
       className={`${
         isSidebarOpen ? 'fixed  w-full md:w-72' : 'hidden'
-      } top-0 left-0 z-40 h-screen pt-4  bg-gray-50  md:translate-x-0 dark:bg-black`}
+      } top-0 left-0 z-40 h-screen pt-4  bg-primary-light  md:translate-x-0 dark:bg-black`}
     >
       <div className={`flex items-center mt-2 px-5 ${isSidebarOpen ? 'justify-between' : ''} `}>
         <Link href="/becario/dashboard">
@@ -121,7 +121,7 @@ const Sidebar = () => {
           </button>
         </div>
       </div>
-      <div className="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-black mt-4">
+      <div className="overflow-y-auto py-5 px-3 h-full mt-4">
         <ul className="space-y-2">
           {SCHOLAR_SIDEBAR_ITEMS.map((item, index) => (
             <DropdownButton {...item} key={index} />

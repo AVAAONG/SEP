@@ -238,6 +238,7 @@ export const getScholarWithAllData = async (scholar_id: string) => {
             include: {
               chat: {
                 include: {
+
                   scholar_attendance: {
                     include: {
                       chat: true,
@@ -269,3 +270,11 @@ export const getScholarWithAllData = async (scholar_id: string) => {
 
   return scholar;
 };
+
+
+export const getUser = async (id: shortUUID.SUUID): Promise<User | null> => {
+  const user = await prisma.user.findUnique({
+    where: { id },
+  });
+  return user;
+}
