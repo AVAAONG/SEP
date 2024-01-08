@@ -7,6 +7,7 @@ const nextConfig = {
       'i.imgur.com',
       'lh3.googleusercontent.com',
       'd2u8k2ocievbld.cloudfront.net',
+      'drive.google.com',
     ],
   },
   eslint: {

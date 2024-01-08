@@ -1,23 +1,30 @@
 import { Scholar, Scholar, } from "scholar"
+import { Modality } from "..\..\schema"
+
+enum CvaLocation {
+    MERCEDES
+    CENTRO
+}
 
 model ScholarCVAInformation {
     id                     String             @id @default(nanoid())
     is_in_cva              Boolean            @default(false)
     not_started_cva_reason String?            @db.Text
-    cva_location           String?
-    cva_modality           String?
+    cva_location           CvaLocation?
     certificate            String?
     modules                ScholarCvaModule[]
-    scholar                Scholar[]
+    scholar                Scholar            @relation(fields: [scholarId], references: [id])
+    scholarId              String             @unique
 }
 
 model ScholarCvaModule {
     id                         String                 @id @default(nanoid())
     module                     Int
+    modality                   Modality?
     qualification              Float
     record                     String?
     scholar_cva_information    ScholarCVAInformation? @relation(fields: [scholar_cva_information_id], references: [id])
     scholar_cva_information_id String?
 
-    @@unique([scholar_cva_information_id, module])
+    @@unique([scholar_cva_information_id])
 }

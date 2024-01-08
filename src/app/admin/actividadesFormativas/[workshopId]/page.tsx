@@ -1,6 +1,4 @@
 import defailProfilePic from '@/../public/defaultProfilePic.png';
-import Table from '@/components/table/Table';
-import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
 import { getWorkshop } from '@/lib/db/utils/Workshops';
 import Image from 'next/image';
 import shortUUID from 'short-uuid';
@@ -18,6 +16,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
     platform,
     scholar_attendance,
   } = workshop || {};
+  console.log(scholar_attendance);
   return (
     <div className="space-y-6  min-h-screen">
       <section className="flex bg-white rounded-lg p-8">
@@ -100,22 +99,20 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
             </div>
           </div>
         </div>
-        <div className="w-1/2">
-
-        </div>
+        <div className="w-1/2"></div>
       </section>
       <section className="w-full space-y-3">
         <h2 className="px-8 text-2xl leading-none tracking-tight text-primary-light font-semibold">
           Becarios
         </h2>
         <div className="flex flex-row items-center space-x-2">
-          <div className="overflow-x-scroll md:overflow-x-clip rounded-lg w-full">
+          {/* <div className="overflow-x-scroll md:overflow-x-clip rounded-lg w-full">
             <Table
               tableColumns={ScholarActivityAttendance}
               tableData={scholar_attendance || []}
               tableHeadersForSearch={[]}
             />
-          </div>
+          </div> */}
         </div>
       </section>
     </div>

@@ -5,10 +5,26 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { ActivityStatus, ScholarAttendance, Speaker, Workshop, WorkshopTempData } from '@prisma/client';
+import { ActivityStatus, Chat, ScholarAttendance, Speaker, Volunteer, Workshop, WorkshopTempData } from '@prisma/client';
 import shortUUID from 'short-uuid';
 import { prisma } from './prisma';
 
+
+export const getWorkshopsByScholar = async (scholarId: string) => {
+  const workshops = await prisma.scholar.findUniqueOrThrow({
+    where: {
+      id: scholarId,
+    },
+    select: {
+      program_information: {
+        include: {
+          attended_workshops: true,
+        }
+      },
+    },
+  });
+  return workshops;
+}
 
 /**
  * Gets the number of workshops with the specified activity status.
@@ -164,6 +180,33 @@ export const getWorkshopByStatus = async (status: ActivityStatus) => {
   return workshops;
 };
 
+export const getAllActivities = async (): Promise<[Workshop[], Chat[], Volunteer[]]> => {
+  const [workshops, chats, volunteer] = await prisma.$transaction([
+    prisma.workshop.findMany(),
+    prisma.chat.findMany(),
+    prisma.volunteer.findMany(),
+  ]);
+  return [workshops, chats, volunteer];
+}
+
+export const getActivitiesByYear = async (year: number): Promise<[Workshop[], Chat[], Volunteer[]]> => {
+  const [allWorkshops, allChats, allVolunteers] = await prisma.$transaction([
+    prisma.workshop.findMany(),
+    prisma.chat.findMany(),
+    prisma.volunteer.findMany(),
+  ]);
+
+  const yearStart = new Date(year, 0, 1);
+  const yearEnd = new Date(year, 11, 31);
+
+  const workshops = allWorkshops.filter(workshop => workshop.start_dates.some(date => date >= yearStart && date <= yearEnd));
+  const chats = allChats.filter(chat => chat.start_dates.some(date => date >= yearStart && date <= yearEnd));
+  const volunteers = allVolunteers.filter(volunteer => volunteer.start_dates.some(date => date >= yearStart && date <= yearEnd));
+
+  return [workshops, chats, volunteers];
+}
+
+
 // export const getWorkshopsByScholar = async (scholarId: string) => {
 //   const workshops = await prisma.user.findUnique({
 //     where: { id: scholarId },
@@ -219,6 +262,22 @@ export const getWorkshopByStatus = async (status: ActivityStatus) => {
 
 // };
 
+export const getScholarEnrolledActivities = async (scholarId: string) => {
+  const activities = await prisma.scholar.findUnique({
+    where: {
+      id: scholarId,
+    },
+    select: {
+      program_information: {
+        include: {
+          attended_workshops: true,
+        }
+      },
+    },
+  });
+  return activities;
+}
+
 export const getWorkshop = async (id: shortUUID.SUUID) => {
   const workshop = await prisma.workshop.findUnique({
     where: { id },
@@ -228,7 +287,7 @@ export const getWorkshop = async (id: shortUUID.SUUID) => {
         include: {
           scholar: {
             include: {
-              Scholar: {
+              scholar: {
                 include: {
                   collage_information: true,
                 }
@@ -280,30 +339,39 @@ export const getScheduledWorkshops = async () => {
   return workshops;
 };
 
-export const getWorkhsopsByScholar = async (programInformationId: string, scholarId: string) => {
+export const getWorkhsopsByScholar = async (programInformationId: string) => {
   const chats = await prisma.workshop.findMany({
     where: {
       scholar_attendance: {
         some: {
-          scholar_id: programInformationId,
+          program_information_scholar_id: programInformationId,
         },
       },
     },
     include: {
       scholar_attendance: {
         where: {
-          scholar_id: programInformationId,
-        },
-      },
-      speaker: {
-        where: {
-          id: scholarId,
+          program_information_scholar_id: programInformationId,
         },
       },
     },
   });
   return chats;
 }
+
+
+export const getWorkshopsByScholar2 = async (scholarProgramInformationId: string) => {
+  const workshops = await prisma.workshopAttendance.findMany({
+    where: {
+      program_information_scholar_id: scholarProgramInformationId,
+    },
+    include: {
+      workshop: true,
+    },
+  })
+  return workshops;
+}
+
 
 export const addAttendaceToScholar = async (
   workshopId: string,

@@ -1,7 +1,7 @@
 import { chatIcon, volunterIcon, workshopIcon } from '../../../../public/svgs/svgs';
 
 interface ActivityListIconProps {
-  kindOfActivity: 'workshop' | 'chat' | 'volunteering';
+  kindOfActivity: 'workshop' | 'chat' | 'volunteer';
 }
 
 const ActivityListIcon = ({ kindOfActivity }: ActivityListIconProps) => {
@@ -19,7 +19,7 @@ const ActivityListIcon = ({ kindOfActivity }: ActivityListIconProps) => {
         <span className="sr-only">Check icon</span>
       </div>
     );
-  } else if (kindOfActivity === 'volunteering') {
+  } else if (kindOfActivity === 'volunteer') {
     return (
       <div className="p-1 text-white inline-flex items-center justify-center flex-shrink-0 w-8 h-8 bg-green-600 rounded-md dark:bg-green-800">
         {volunterIcon()}

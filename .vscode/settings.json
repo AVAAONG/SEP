@@ -3,8 +3,8 @@
   "editor.formatOnSave": true,
   "files.autoSave": "onFocusChange",
   "editor.codeActionsOnSave": {
-    "source.fixAll": true,
-    "source.organizeImports": true
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
   },
   "typescript.tsdk": "node_modules\\.pnpm\\typescript@5.0.3\\node_modules\\typescript\\lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,

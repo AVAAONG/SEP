@@ -1,23 +1,10 @@
 'use client';
 import defailProfilePic from '@/../public/defaultProfilePic.png';
 import formatDni from '@/lib/db/utils/formatDni';
-import { Prisma } from '@prisma/client';
+import { Gender, Prisma } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Cell, CellValue, Column } from 'react-table';
-
-const scholarWithActivities = Prisma.validator<Prisma.ScholarDefaultArgs>()({
-  include: {
-    program_information: {
-      include: {
-        attended_chats: true,
-        attended_workshops: true,
-      },
-    },
-    collage_information: true,
-  },
-});
-type ScholarWithActivities = Prisma.ScholarGetPayload<typeof scholarWithActivities>;
 
 interface ScholarTableData {
   id: string;
@@ -26,7 +13,7 @@ interface ScholarTableData {
   dni: string;
   birthdate: Date;
   years: number;
-  gender: 'F' | 'M' | 'O';
+  gender: Gender;
   local_phone_number: string;
   cell_phone_Number: string;
   whatsapp_number: string;

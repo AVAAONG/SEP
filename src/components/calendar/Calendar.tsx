@@ -23,6 +23,7 @@ const styleEvent = (event: BigCalendarEventType) => {
     display: 'block',
     fontSize: '13px',
     color: '#ffffff',
+    textDecoration: event.isSuspended ? 'line-through' : 'none',
   };
   return {
     style: style,
@@ -57,6 +58,9 @@ const Calendar = ({ events }: { events: BigCalendarEventType[] }) => {
       showMultiDayTimes
       eventPropGetter={styleEvent}
       popup
+      onDoubleClickEvent={(event) => {
+        window.open(event.url, '_blank');
+      }}
       messages={{
         month: 'Mes',
         day: 'Día',

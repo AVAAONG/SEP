@@ -7,4 +7,6 @@ export type BigCalendarEventType = {
   location?: string;
   allDay: boolean;
   textColor?: string;
+  isSuspended: boolean;
+  url: string;
 };

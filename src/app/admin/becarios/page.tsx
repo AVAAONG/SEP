@@ -38,21 +38,15 @@ const tableHeaders = [
 const page = async () => {
   const scholars = await getScholarsWithAllData();
   const [womenScholars, menScholars] = await getScholarcountByGender();
-  const activeScholarsByStudyArea = reduceByProperty(scholars, 'collage_information', 'study_area');
+
   const activeScholarsByStatus = reduceByProperty(
     scholars,
     'program_information',
     'scholar_status'
   );
-
-  const activeScholarsByStudyAreaArray = createArrayFromObject(activeScholarsByStudyArea);
-  const data = activeScholarsByStudyAreaArray.map((area) => {
-    area.label = area.label === 'Unknown' ? 'Sin información' : parseStudyAreaFromDatabase(area.label);
-    return area;
-  })
   const activeScholarsByAvaYear = scholars.reduce(
     (acc, scholar) => {
-      const year = scholar.program_information?.avaa_admission_year ?? 'Unknown';
+      const year = scholar.program_information?.program_admission_date ?? 'Unknown';
       const avaaYears = year ? moment().diff(moment(year), 'years') : 0;
       const accValue = parseAvaaAdmisionYear(avaaYears);
       acc[accValue] = (acc[accValue] || 0) + 1;
@@ -83,7 +77,7 @@ const page = async () => {
       local_phone_number,
       cell_phone_Number,
       whatsapp_number,
-      allowedEmail,
+      email,
       collage_information,
       program_information,
       socialMedia,
@@ -101,12 +95,12 @@ const page = async () => {
       cell_phone_Number: cell_phone_Number!,
       whatsapp_number: whatsapp_number!,
       gender: gender!,
-      allowedEmail,
-      collage: collage_information?.collage!,
-      career: collage_information?.career!,
-      avaaStarteYear: program_information?.avaa_admission_year!,
+      email,
+      collage: collage_information[0]?.collage!,
+      career: collage_information[0]?.career!,
+      avaaStarteYear: program_information?.program_admission_date!,
       yearsInAvaa: parseAvaaAdmisionYear(
-        moment().diff(moment(program_information?.avaa_admission_year), 'years')
+        moment().diff(moment(program_information?.program_admission_date), 'years')
       ),
       atendedChats: program_information?.attended_chats.filter((attendance) => {
         return (
@@ -124,7 +118,16 @@ const page = async () => {
       }).length!,
     };
   });
-  console.log(scholarTableData);
+
+  // const activeScholarsByStudyArea = scholars.reduce(
+  //   (acc, value) => {
+  //     const filter = value[collage_information[0]]?.['study_area'] ?? 'Unknown';
+  //     acc[filter] = (acc[filter] || 0) + 1;
+  //     return acc;
+  //   },
+  //   {} as Record<string, number>
+  // );
+  // const activeScholarsByStudyAreaArray = createArrayFromObject(activeScholarsByStudyArea);
 
   return (
     <div className="flex flex-col w-full gap-4">
@@ -167,7 +170,7 @@ const page = async () => {
               Distribución de becarios area de estudio
             </h3>
             <div className="w-full h-full">
-              <PieChartComponent data={data} />
+              {/* <PieChartComponent data={activeScholarsByStudyAreaArray}  */}
             </div>
           </div>
           <div className="w-full md:w-1/3 flex flex-col items-center gap-2 h-full">

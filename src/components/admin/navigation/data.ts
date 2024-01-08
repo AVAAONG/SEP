@@ -1,22 +1,22 @@
 import { chatIcon, userIcon, workshopIcon } from '../../../../public/svgs/svgs';
 
-export const SIDEBAR_ACTIVITIES_ACTIONS = [
+export const PROGRAM_COMPONENTS = [
   {
     icon: workshopIcon,
     buttonName: 'Actividades de formación',
     itemList: [
-      { name: 'Crear', link: '/admin/actividadesFormativas/crear' },
-      // { name: "Estadísticas de talleres", link: "/talleres/estadisticas" },
-      { name: 'Registro', link: '/admin/actividadesFormativas/lista' },
+      // { name: 'Crear', link: '/admin/actividadesFormativas/crear' },
+      { name: "Facilitadores", link: "/admin/actividadesFormativas/facilitadores" },
+      { name: 'Registro', link: '/admin/actividadesFormativas' },
     ],
   },
   {
     icon: chatIcon,
     buttonName: 'Chat clubs',
     itemList: [
-      { name: 'Crear', link: '/admin/chats/crear' },
-      // { name: "Estadísticas de chats", link: "/chats/estadisticas" },
-      { name: 'Registro', link: '/admin/chats/lista' },
+      // { name: 'Crear', link: '/admin/chats/crear' },
+      { name: "Facilitadores", link: "/admin/chats/facilitadores" },
+      { name: 'Registro', link: '/admin/chats' },
     ],
   },
   // {
@@ -30,21 +30,18 @@ export const SIDEBAR_ACTIVITIES_ACTIONS = [
   // },
 ];
 
-export const SIDEBAR_DB_BUTTONS = [
+export const SCHOLARS = [
   {
-    icon: userIcon,
     buttonName: 'Becarios',
-    itemList: [
-      { name: 'Becarios activos', link: '/admin/becarios' },
-      { name: 'Estadísticas', link: '/admin/bd/becarios/estadisticas' },
-    ],
-  },
-  {
     icon: userIcon,
-    buttonName: 'Facilitadores',
-    itemList: [{ name: 'Actividades formativas', link: '/admin/facilitadores/actividadesFormativas' }, { name: 'Chat clubs', link: '/admin/facilitadores/chats' }],
+    itemList: [
+      { name: "Activos", link: "/admin/becarios" },
+      { name: 'Retirados', link: '/admin/becarios/retirados' },
+      { name: 'Renuncias', link: '/admin/becarios/renuncias' },
+      { name: 'Alumni', link: '/admin/becarios/alumni' },
+    ],
+    link: null,
   },
-
 ];
 
 export const SIDEBAR_ADMIN_ACTIONS = [

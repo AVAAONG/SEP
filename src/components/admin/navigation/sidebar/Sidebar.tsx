@@ -6,14 +6,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
-import { MenuIcon, dashboardComponent } from '../../../../../public/svgs/svgs';
+import { MenuIcon, dashboardComponent, linkIcon, userIcon } from '../../../../../public/svgs/svgs';
 import DropdownButton from '../../../scholar/DropdownButton';
-import { SIDEBAR_ACTIVITIES_ACTIONS, SIDEBAR_ADMIN_ACTIONS, SIDEBAR_DB_BUTTONS } from '../data';
+import { PROGRAM_COMPONENTS, SCHOLARS } from '../data';
 import SidebarSeparator from './SidebarSeparator';
 
 const Sidebar = () => {
   const pathname = usePathname();
-
   const [isOpen, setSidebarOpen] = useAtom(sidebarAtom);
   const toggleSidebar = () => setSidebarOpen(!isOpen);
   useEffect(() => {
@@ -24,9 +23,8 @@ const Sidebar = () => {
   }, [pathname]);
   return (
     <aside
-      className={`${
-        isOpen ? 'fixed xl:flex xl:relative' : 'hidden'
-      } flex-col gap-4 justify-start items-center z-50 xl:z-0 w-full sm:w-72 py-8 px-2 bg-primary-light dark:bg-secondary-dark transition-all min-h-full`}
+      className={`${isOpen ? 'fixed xl:flex xl:relative' : 'hidden'
+        } flex-col gap-4 justify-start items-center z-50 xl:z-0 w-full sm:w-72 py-8 px-2 bg-primary-light dark:bg-secondary-dark transition-all min-h-full`}
     >
       <div className="flex justify-between xl:justify-start items-center mb-8 xl:mb-2">
         <Link href="/admin/panel">
@@ -54,7 +52,7 @@ const Sidebar = () => {
       </div>
       <SidebarSeparator text="Componentes" />
       <div className="w-full flex flex-col gap-2 justify-between">
-        {SIDEBAR_ACTIVITIES_ACTIONS.map(({ buttonName, icon, itemList }) => {
+        {PROGRAM_COMPONENTS.map(({ buttonName, icon, itemList }) => {
           return (
             <DropdownButton
               key={buttonName}
@@ -66,22 +64,35 @@ const Sidebar = () => {
           );
         })}
       </div>
-      <SidebarSeparator text="Bases de datos" />
+      <SidebarSeparator text="Participantes" />
       <div className="w-full flex flex-col gap-2 justify-between">
-        {SIDEBAR_DB_BUTTONS.map(({ buttonName, icon, itemList }) => {
+        {SCHOLARS.map(({ buttonName, icon, itemList, link }) => {
           return (
             <DropdownButton
-              key={buttonName}
               buttonName={buttonName}
               Icon={icon()}
               itemList={itemList}
-              link={null}
+              link={link}
             />
           );
         })}
       </div>
       <SidebarSeparator text="Mentoria" />
-      <SidebarSeparator text="Configuración" />
+      <div className="w-full flex flex-col gap-2 justify-between">
+        <DropdownButton
+          buttonName="Mentores"
+          Icon={userIcon()}
+          itemList={[]}
+          link="/admin/mentoria/mentores"
+        />
+        <DropdownButton
+          buttonName="Formulario de postulación"
+          Icon={linkIcon()}
+          itemList={[]}
+          link="/mentores/registro"
+        />
+      </div>
+      {/* <SidebarSeparator text="Configuración" />
       {SIDEBAR_ADMIN_ACTIONS.map(({ buttonName, icon, itemList }) => {
         return (
           <DropdownButton
@@ -92,10 +103,17 @@ const Sidebar = () => {
             link={null}
           />
         );
-      })}
+      })} */}
       <SidebarSeparator text="Captacion" />
-      <SidebarSeparator text="Red de egresados" />
-    </aside>
+      <div className="w-full flex flex-col gap-2 justify-between">
+        <DropdownButton
+          buttonName="Formulario de postulación"
+          Icon={linkIcon()}
+          itemList={[]}
+          link="/postulantes/registro"
+        />
+      </div>
+    </aside >
   );
 };
 

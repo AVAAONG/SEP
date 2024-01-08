@@ -1,47 +1,41 @@
 import { ScholarProgramInformation,  } from "users\scholar\scholar"
+import { Gender } from "activities\type-activities"
 
-enum MentorStaus {
+enum MentorProgramStatus {
+    PENDING
     ACCEPTED
     NOT_ACCEPTED
-    PENDING
 }
 
 model Mentor {
-    id                   String          @id @default(nanoid())
-    first_name           String
-    last_name            String
-    email                String          @unique
-    dni                  String          @unique
-    cell_phone           String
-    created_at           DateTime        @default(now())
-    updated_at           DateTime        @updatedAt
-    birthdate            DateTime
-    city_of_residence    String
-    profession           String
-    company              String
-    company_position     String
-    other_activities     String
-    image                String
-    hobbies              String
-    instagram_profile    String
-    linkedin_profile     String
-    facebook_profile     String
-    twitter_profile      String
-    personal_qualities   String
-    areas_of_interest    String
-    areas_of_improvement String
-    how_know_us          String
-    motivation           String
-    main_qualities       String
-    curriculum           String
-    status               MentorStaus
-    mentor_mentee        Mentor_mentee[]
-}
-
-enum MentorStatus {
-    ACTIVE
-    INACTIVE
-    CHANGED
+    id                String              @id @default(nanoid())
+    first_name        String
+    last_name         String
+    email             String              @unique
+    dni               String              @unique
+    cell_phone        String
+    created_at        DateTime            @default(now())
+    updated_at        DateTime            @updatedAt
+    birthdate         DateTime?
+    city_of_residence String?
+    profession        String?
+    gender            Gender?
+    company           String?
+    company_position  String?
+    other_activities  String?
+    image             String?
+    hobbies           String?
+    instagram_profile String?
+    linkedin_profile  String?
+    facebook_profile  String?
+    twitter_profile   String?
+    tiktok_profile    String?
+    areas_of_interest String?
+    how_know_avaa     String?
+    motivation        String?
+    curriculum        String?
+    status            MentorProgramStatus
+    mentor_mentee     Mentor_mentee[]
 }
 
 model Mentee_mentor_activities {
@@ -50,10 +44,17 @@ model Mentee_mentor_activities {
     mentor_menteeId String
 }
 
+enum MentorMenteeStatus {
+    ACTIVE
+    INACTIVE
+}
+
 model Mentor_mentee {
     id                       String                     @id @default(nanoid())
     mentor_mentee_activities Mentee_mentor_activities[]
-    status                   MentorStatus
     Mentor                   Mentor?                    @relation(fields: [mentorId], references: [id])
+    startDate                DateTime                   @default(now())
+    endDate                  DateTime
     mentorId                 String?
+    status                   MentorMenteeStatus
 }

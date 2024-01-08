@@ -23,12 +23,13 @@ export default async function wrapMiddlewareFunction(req: NextRequestWithAuth, r
   ///@ts-expect-error
   return withAuth(
     async (request: NextRequestWithAuth) => {
+      // if (
+      //   request.nextUrl.pathname.startsWith('/becario') &&
+      //   request.nextauth.token?.kind_of_user !== 'SCHOLAR'
+      // ) {
+      //   return NextResponse.rewrite(new URL('/accessDenied', request.url));
+      // } 
       if (
-        request.nextUrl.pathname.startsWith('/becario') &&
-        request.nextauth.token?.kind_of_user !== 'SCHOLAR'
-      ) {
-        return NextResponse.rewrite(new URL('/accessDenied', request.url));
-      } else if (
         request.nextUrl.pathname.startsWith('/admin') &&
         request.nextauth.token?.kind_of_user !== 'ADMIN'
       ) {
@@ -49,5 +50,5 @@ export default async function wrapMiddlewareFunction(req: NextRequestWithAuth, r
  * @see https://nextjs.org/docs/pages/building-your-application/routing/middleware for more information
  */
 export const config = {
-  matcher: ['/admin/:path*', '/becario/:path*'],
+  matcher: ['/admin/:path*',],
 };

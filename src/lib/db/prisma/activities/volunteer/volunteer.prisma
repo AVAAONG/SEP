@@ -15,7 +15,8 @@ model Volunteer {
     title                String
     spots                Int
     description          String
-    hours                Float
+    start_dates          DateTime[]
+    end_dates            DateTime[]
     raiting              Float?
     place                String
     photoAlbum           String?
@@ -37,6 +38,7 @@ model VolunteerAttendance {
     scholar       ScholarProgramInformation @relation(fields: [scholarId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     scholarId     String
     volunteerId   String
+    hours         Float
     volnuteer     Volunteer                 @relation(fields: [volunteerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     attendance    ScholarAttendance
     justification String?

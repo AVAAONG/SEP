@@ -21,9 +21,9 @@ const defineActivity = (kindOfActivity: string) => {
 const Stats = ({ activitiesDone, kindOfActivity, first, second }: StatsProps) => {
   const [activityName, number] = defineActivity(kindOfActivity);
 
-  const pendingWorkshops = Number(number) - activitiesDone;
-  const donePercentage = (activitiesDone / 20) * 100;
-  const pendingPercentage = 100 - donePercentage;
+  const pendingWorkshops = Math.max(0, Number(number) - activitiesDone);
+  const donePercentage = (activitiesDone / 10) * 100;
+  const pendingPercentage = Math.max(0, 100 - donePercentage);
 
   return (
     <div>

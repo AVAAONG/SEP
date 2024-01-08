@@ -130,6 +130,11 @@ export const getScholarsWithAllData = async () => {
         scholar_condition: {
           equals: 'ACTIVE',
         },
+        chapter: {
+          id: {
+            equals: 'Rokk6_XCAJAg45heOEzYb',
+          },
+        },
       },
     },
     include: {
@@ -165,7 +170,7 @@ export const getScholarsWithAllData = async () => {
 };
 
 export const getScholars = async () => {
-  const scholars = prisma.scholar.findMany({
+  const scholars = await prisma.scholar.findMany({
     where: {
       program_information: {
         scholar_condition: {
@@ -173,6 +178,10 @@ export const getScholars = async () => {
         },
       },
     },
+    include: {
+      collage_information: true,
+      program_information: true,
+    }
   })
   return scholars;
 }
@@ -183,11 +192,12 @@ export const getScholars = async () => {
  * @param condition The ScholarCondition object used to filter the users based on their program information.
  * @returns A Promise that resolves to the count of users that match the condition.
  */
-export const getScholarsCountByCondition = async (condition: ScholarCondition) => {
+export const getScholarsCountByCondition = async (condition: ScholarCondition, chaptherId: string) => {
   const scholars = await prisma.scholar.count({
     where: {
       program_information: {
         scholar_condition: condition,
+        chapter_id: chaptherId
       },
     },
   });

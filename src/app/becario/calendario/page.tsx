@@ -1,25 +1,14 @@
 import Calendar from '@/components/calendar/Calendar';
-import { BigCalendarEventType } from '@/types/Calendar';
+import { getAllActivities } from '@/lib/db/utils/Workshops';
+import { formatActivityEventsForBigCalendar } from '@/lib/utils';
 
 /**
- * The ExampleEvents constant is an array of BigCalendarEventType objects that represent the events to be displayed in the calendar.
- * @remarks The BigCalendarEventType type is defined in the src/types/Calendar.ts file.
+ * Renders a page component with the calendar of activities
+ * @remarks this page is willing to show the calendar of activities that proexcelencia will offer to the students. All of them, no matter if the scholar is enrrolled or not in activities.
  */
-const ExampleEvents: BigCalendarEventType[] = [
-  {
-    title: 'Acampada en Lagunazo',
-    start: new Date(2023, 8, 13),
-    end: new Date(2023, 8, 13),
-    allDay: true,
-  },
-];
-
-/**
- * Renders the page component with the calendar of activities
- * @remarks this page is willing to show the calendar of activities that proexcelencia will offer to the students. All of them, no matter if the scholar is registered or not in activities.
- * @returns The HTML document with the rendered page component.
- */
-const page = () => {
+const page = async () => {
+  const [workshops, chats] = await getAllActivities();
+  const events = formatActivityEventsForBigCalendar([...workshops, ...chats]);
   return (
     <div className="flex flex-col px-2 pt-6 justify-center items-center w-full text-center gap-2 sm:gap-0">
       <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white mb-2">
@@ -30,16 +19,15 @@ const page = () => {
         !
       </h1>
       <h2 className="text-xs font-semibold text-gray-900 sm:text-base dark:text-gray-400 italic">
-        En esta pagina podras visualizar todas las actividades que proexcelencia oferto y estara
-        ofertando
+        En esta página podrás ver todas las actividades que ProExcelencia ha ofrecido y ofrecerá
       </h2>
       <h3 className="text-xs font-semibold text-emerald-700 sm:text-sm dark:text-emerald-500">
         {' '}
-        Ten en consideracion que laas fechas y horarios de estas actividades estan sujeto a cambio.
+        Ten en cuenta que las fechas y horarios de estas actividades pueden cambiar
       </h3>
       <div className="w-full mt-6">
         <div className="h-full min-h-[600px] text-gray-800 capitalize dark:text-gray-300 shadow-sm overflow-x-clip w-full bg-white border border-gray-200  shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 p-2">
-          <Calendar events={ExampleEvents} />
+          <Calendar events={events} />
         </div>
       </div>
     </div>

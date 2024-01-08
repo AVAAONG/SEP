@@ -10,24 +10,22 @@ import {
 } from '@nextui-org/react';
 import { useState } from 'react';
 import EditScholarForm from './EditScholarForm';
-import ProbationForm from './ProbationForm';
 
 type ModalsOpen = {
   probation: boolean;
   edit: boolean;
 };
 
-const ScholarDropdown = () => {
-  const [modalOpen, setModalOpen] = useState<ModalsOpen>({
-    probation: false,
-    edit: false,
-  });
+const ScholarDropdown = ({ scholar }) => {
   const [probationKind, setProbationKind] = useState<'PROBATION_I' | 'PROBATION_II'>();
+  const [dropdownIsOpen, setDropdownOpen] = useState(false);
+  const [editModalIsOpen, setEditModalOpen] = useState(false);
+
   return (
     <>
-      <Dropdown>
+      <Dropdown isOpen={dropdownIsOpen} onOpenChange={(open) => setDropdownOpen(open)}>
         <DropdownTrigger>
-          <Button radius="full" isIconOnly variant="bordered" className="p-1">
+          <Button radius="full" isIconOnly color="success" variant="bordered" className="p-1 w-8">
             <EllipsisVerticalIcon />
           </Button>
         </DropdownTrigger>
@@ -35,19 +33,18 @@ const ScholarDropdown = () => {
           aria-label="Dropdown menu with description"
           onAction={(key) => {
             setProbationKind(key as 'PROBATION_I' | 'PROBATION_II');
-            setModalOpen({ ...modalOpen, probation: true });
           }}
         >
-          <DropdownSection title="Actions" showDivider>
+          <DropdownSection title="Acciones" showDivider>
             <DropdownItem
               key="edit"
               description="Edita los datos del becario"
-              onAction={(key) => {
-                setProbationKind(key as 'PROBATION_I' | 'PROBATION_II');
-                setModalOpen({ ...modalOpen, edit: true });
+              onPress={() => {
+                setDropdownOpen(false);
+                setEditModalOpen(true);
               }}
             >
-              Editar informacion de becario
+              Editar información del becario
             </DropdownItem>
           </DropdownSection>
           <DropdownSection title="Acciones peligrosas" showDivider>
@@ -67,14 +64,15 @@ const ScholarDropdown = () => {
             </DropdownItem>
           </DropdownSection>
           <DropdownSection title="Acciones especiales">
-            <DropdownItem key="cert" description="Pasar becario al estatus de probatorio I">
-              Crear certificado de becario
+            <DropdownItem key="condition" description="Renuncias, Retiros, Egreso">
+              Cambiar condición
             </DropdownItem>
           </DropdownSection>
         </DropdownMenu>
       </Dropdown>
-      <ProbationForm isOpen={modalOpen.probation} probationKind={probationKind} />
-      <EditScholarForm isOpen={modalOpen.edit} />
+      {/* <ProbationForm isOpen={modalOpen.probation} probationKind={probationKind} />
+       */}
+      <EditScholarForm modalIsOpen={editModalIsOpen} set={setEditModalOpen} scholar={scholar} />
     </>
   );
 };
