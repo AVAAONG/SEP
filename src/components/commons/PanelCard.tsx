@@ -38,7 +38,7 @@ export interface PanelCardProps {
 
 const PanelCard: React.FC<PanelCardProps> = ({ title, subtitle, data, link, icon, kind }) => {
   return (
-    <div className="w-full relative border-1 border-gray-300 dark:border-secondary-dark bg-white dark:bg-black pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden">
+    <div className="w-full relative border-1 border-gray-300 dark:border-green-800 bg-white dark:bg-black pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden">
       <dt>
         <div className={`absolute ${colorVariants[kind]['iconColor']} rounded-md p-3`}>
           <div className="w-6 h-6 text-white">{icon}</div>
