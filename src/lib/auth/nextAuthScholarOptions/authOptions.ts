@@ -72,28 +72,23 @@ const authOptions: NextAuthOptions = {
     },
     session: async ({ session, token }) => {
       return {
+        scholarId: token.scholarId,
+        userId: token.userId,
+        kind_of_user: 'SCHOLAR',
         ...session,
-        user: {
-          ...session.user,
-          id: token,
-          accessToken: token.accessToken,
-          randomKey: token.randomKey,
-          refreshToken: token.refreshToken,
-          kind_of_user: 'SCHOLAR',
-        },
       };
     },
     jwt: ({ token, user, account, profile }) => {
       if (user) {
         const u = user as unknown as any;
-        const accessToken = account?.access_token;
-        const refreshToken = account?.refresh_token;
+        const userId = u?.id;
+        const scholarId = u?.scholarId;
+        const kindOfUser = u?.kind_of_user;
         return {
           ...token,
-          id: u.id,
-          accessToken,
-          refreshToken,
-          kind_of_user: 'SCHOLAR',
+          userId,
+          scholarId,
+          kindOfUser,
         };
       }
       return token;
