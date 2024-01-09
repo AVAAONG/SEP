@@ -339,19 +339,24 @@ export const getScheduledWorkshops = async () => {
   return workshops;
 };
 
-export const getWorkhsopsByScholar = async (programInformationId: string) => {
+export const getWorkhsopsByScholar = async (scholarId: string) => {
   const chats = await prisma.workshop.findMany({
     where: {
       scholar_attendance: {
         some: {
-          program_information_scholar_id: programInformationId,
+          scholar: {
+            scholarId: scholarId,
+          }
         },
       },
     },
     include: {
+      speaker: true,
       scholar_attendance: {
         where: {
-          program_information_scholar_id: programInformationId,
+          scholar: {
+            scholarId: scholarId,
+          }
         },
       },
     },

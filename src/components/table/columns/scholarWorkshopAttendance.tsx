@@ -1,17 +1,19 @@
 'use client';
-import { IScholarWorkshopColumn } from '@/app/admin/becarios/[scholarId]/page';
+import { IScholarWorkshopColumns } from '@/app/becario/actividadesFormativas/page';
+import SpeakersColumnWidget from '@/components/SpeakerColumnWidget';
 import {
   parseModalityFromDatabase,
   parseSkillFromDatabase,
   parseWorkshopStatusFromDatabase,
 } from '@/lib/utils2';
 import Link from 'next/link';
+
 import { CellProps, Column } from 'react-table';
 
-const scholarWorkshopAttendanceColumns: Column<IScholarWorkshopColumn>[] = [
+const scholarWorkshopAttendanceColumns: Column<IScholarWorkshopColumns>[] = [
   {
     Header: '#',
-    Cell: ({ cell }: CellProps<IScholarWorkshopColumn>) => {
+    Cell: ({ cell }: CellProps<IScholarWorkshopColumns>) => {
       return <span>{cell.row.index + 1}</span>;
     },
     disableSortBy: true,
@@ -26,6 +28,23 @@ const scholarWorkshopAttendanceColumns: Column<IScholarWorkshopColumn>[] = [
         <div className="block text-center overflow-x-scroll">{value}</div>
       </Link>
     ),
+  },
+
+  {
+    Header: 'Facilitador',
+    accessor: 'speakerNames',
+    Cell: ({ cell, value }) => {
+      console.log(cell.row.original);
+      return (
+        <SpeakersColumnWidget
+          speakerNames={cell.row.original.speakerNames}
+          speakerIds={cell.row.original.speakerIds}
+          speakersCompany={cell.row.original.speakerCompany}
+          speakerImages={cell.row.original.speakerImages}
+        />
+      );
+    },
+    disableSortBy: true,
   },
   {
     Header: 'Fecha',

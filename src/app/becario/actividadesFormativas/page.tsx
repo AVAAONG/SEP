@@ -3,9 +3,12 @@ import Stats from '@/components/scholar/ScholarStats';
 import Table from '@/components/table/Table';
 import scholarWorkshopAttendanceColumns from '@/components/table/columns/scholarWorkshopAttendance';
 import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
+import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { getWorkhsopsByScholar } from '@/lib/db/utils/Workshops';
 import { createArrayFromObject } from '@/lib/utils';
 import { parseSkillFromDatabase } from '@/lib/utils2';
+import { ActivityStatus, Modality, Skill, WorkshopYear } from '@prisma/client';
+import { getServerSession } from 'next-auth';
 import dynamic from 'next/dynamic';
 
 /**
@@ -14,8 +17,25 @@ import dynamic from 'next/dynamic';
  */
 const PieChartComponent = dynamic(() => import('@/components/charts/Pie'), { ssr: false });
 
-const createWorkshopObject = (workshops: WorkshopWithAllData[]) => {
-  return workshops.map((workshop) => {
+export interface IScholarWorkshopColumns {
+  id: string;
+  title: string;
+  platform: string;
+  start_dates: Date[];
+  end_dates: Date[];
+  modality: Modality;
+  skill: Skill;
+  activity_status: ActivityStatus;
+  attendance: string;
+  year: WorkshopYear[];
+  speakerNames: string[];
+  speakerImages: (string | null)[];
+  speakerIds: (string | null)[];
+  speakerCompany: (string | null)[];
+}
+
+const createWorkshopObject = (workshops: WorkshopWithAllData[]): IScholarWorkshopColumns[] => {
+  return workshops.map((workshop): IScholarWorkshopColumns => {
     return {
       id: workshop.id,
       title: workshop.title,
@@ -27,16 +47,23 @@ const createWorkshopObject = (workshops: WorkshopWithAllData[]) => {
       activity_status: workshop.activity_status,
       attendance: workshop.scholar_attendance[0].attendance,
       year: workshop.year,
+      speakerNames: workshop.speaker.map(
+        (speaker) => `${speaker.first_names.split(' ')[0]} ${speaker.last_names.split(' ')[0]}`
+      ),
+      speakerImages: workshop.speaker.map((speaker) => speaker.image),
+      speakerIds: workshop.speaker.map((speaker) => speaker.id),
+      speakerCompany: workshop.speaker.map((speaker) => speaker.job_company),
     };
   });
 };
+
 const page = async ({
   searchParams,
 }: {
   searchParams?: { year: string; month: string; quarter: string };
 }) => {
-  const scholarId = '2KKH5q6Lw7zcpcUT8PngD';
-  const workshops = await getWorkhsopsByScholar(scholarId);
+  const session = await getServerSession(authOptions);
+  const workshops = await getWorkhsopsByScholar(session?.scholarId);
   const workshopsAttended = workshops.filter(
     (workshop) => workshop.scholar_attendance[0].attendance === 'ATTENDED'
   );
