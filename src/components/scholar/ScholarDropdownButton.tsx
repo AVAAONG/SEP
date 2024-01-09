@@ -4,15 +4,9 @@ import { Link } from '@nextui-org/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { ChevronIcon } from '../../../public/svgs/svgs';
+import { DropdownButtonProps } from './DropdownButton';
 
-export type DropdownButtonProps = {
-  buttonName: string;
-  itemList: { name: string; link: string }[];
-  Icon: JSX.Element;
-  link: string | null;
-};
-
-const DropdownButton = (props: DropdownButtonProps) => {
+const ScholarDropdownButton = (props: DropdownButtonProps) => {
   const { buttonName, itemList, Icon, link } = props;
   const pathname = usePathname();
 
@@ -31,10 +25,12 @@ const DropdownButton = (props: DropdownButtonProps) => {
         <Button
           href={link ? link : ''}
           as={Link}
-          className="flex items-center p-2 text-sm font-medium text-white dark:text-gray-300 hover:text-gray-300 dark:hover:text-white"
+          className=" flex items-center font-medium w-full"
+          radius="md"
+          variant="light"
         >
           <div className="w-6 h-6">{Icon}</div>
-          <span className="ml-3">{buttonName}</span>
+          <span className="flex-1 ml-2 text-left whitespace-nowrap">{buttonName}</span>
         </Button>
       </ul>
     );
@@ -43,7 +39,7 @@ const DropdownButton = (props: DropdownButtonProps) => {
       <ul>
         <Button
           type="button"
-          className="text-white dark:text-gray-300 font-medium w-full "
+          className=" font-medium w-full"
           radius="md"
           variant="light"
           onClick={toggleDropdown}
@@ -64,9 +60,10 @@ const DropdownButton = (props: DropdownButtonProps) => {
             <li className="flex gap-2 justify-center items-center" key={index}>
               <Link
                 href={item.link}
-                className="flex items-center gap-4 p-2 pl-11 w-full text-sm rounded-lg text-white dark:text-gray-300 hover:text-gray-300 dark:hover:text-white"
+                isBlock={true}
+                className="flex items-center gap-4 p-2 pl-11 w-full text-sm rounded-lg "
               >
-                <div className="rounded-full bg-gray-200 hover:bg-white w-1.5 h-1.5"></div>
+                <div className="rounded-full bg-black w-1.5 h-1.5"></div>
                 {item.name}
               </Link>
             </li>
@@ -77,4 +74,4 @@ const DropdownButton = (props: DropdownButtonProps) => {
   }
 };
 
-export default DropdownButton;
+export default ScholarDropdownButton;

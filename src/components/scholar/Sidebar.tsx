@@ -11,7 +11,7 @@ import {
   volunterIcon,
   workshopIcon,
 } from '../../../public/svgs/svgs';
-import DropdownButton from './DropdownButton';
+import ScholarDropdownButton from './ScholarDropdownButton';
 
 const SCHOLAR_PREFIX = 'becario';
 
@@ -20,7 +20,7 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
     Icon: dashboardComponent(),
     buttonName: 'Panel general',
     itemList: [],
-    link: `/${SCHOLAR_PREFIX}/dashboard`,
+    link: `/${SCHOLAR_PREFIX}/panel`,
   },
   {
     Icon: workshopIcon(),
@@ -80,10 +80,10 @@ const Sidebar = () => {
     <aside
       className={`${
         isSidebarOpen ? 'fixed  w-full md:w-72' : 'hidden'
-      } top-0 left-0 z-40 h-screen pt-4  bg-primary-light  md:translate-x-0 dark:bg-black`}
+      } top-0 left-0 z-40 h-screen pt-4   md:translate-x-0 dark:bg-black`}
     >
       <div className={`flex items-center mt-2 px-5 ${isSidebarOpen ? 'justify-between' : ''} `}>
-        <Link href="/becario/dashboard">
+        <Link href="/becario/dashboard" className="flex justify-center w-full">
           <Image src={logo} width={190} alt="Logo Proexcelencia" />
         </Link>
         <div className="flex justify-start items-center md:hidden">
@@ -121,10 +121,10 @@ const Sidebar = () => {
           </button>
         </div>
       </div>
-      <div className="overflow-y-auto py-5 px-3 h-full mt-4">
+      <div className="overflow-y-auto py-6 px-3 h-full">
         <ul className="space-y-2">
           {SCHOLAR_SIDEBAR_ITEMS.map((item, index) => (
-            <DropdownButton {...item} key={index} />
+            <ScholarDropdownButton {...item} key={index} />
           ))}
         </ul>
         <div className="p-4 mt-6 rounded-lg bg-emerald-100 dark:bg-emerald-900 dark:border-emerald-950 border-green-600">
