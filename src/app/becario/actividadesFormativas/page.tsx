@@ -86,9 +86,9 @@ const page = async ({
     workshops = workshopsDbList;
   }
 
-  const workshopsAttended = workshops.filter(
-    (workshop) => workshop.scholar_attendance[0].attendance === 'ATTENDED'
-  );
+  const workshopsAttended = workshops.filter((workshop) => {
+    workshop.scholar_attendance[0]?.attendance === 'ATTENDED';
+  });
   const in_personWorkshops = workshopsAttended.filter(
     (workshop) => workshop.modality === 'IN_PERSON'
   ).length;

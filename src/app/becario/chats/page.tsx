@@ -1,18 +1,18 @@
 import DateSelector from '@/components/commons/datePicker';
 import Stats from '@/components/scholar/ScholarStats';
 import Table from '@/components/table/Table';
-import scholarWorkshopAttendanceColumns from '@/components/table/columns/scholarWorkshopAttendance';
-import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
+import { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
+import scholarChatAttendaceColumns from '@/components/table/columns/scholarChatAttendance';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import {
   filterActivityByMonth,
   filterActivityByQuarter,
   filterActivityByYear,
 } from '@/lib/datePickerFilters';
-import { getWorkhsopsByScholar } from '@/lib/db/utils/Workshops';
+import { getChatsByScholar } from '@/lib/db/utils/Workshops';
 import { createArrayFromObject } from '@/lib/utils';
 import { parseSkillFromDatabase } from '@/lib/utils2';
-import { ActivityStatus, Modality, Skill, WorkshopYear } from '@prisma/client';
+import { ActivityStatus, Level, Modality } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import dynamic from 'next/dynamic';
 
@@ -29,35 +29,33 @@ export interface IScholarWorkshopColumns {
   start_dates: Date[];
   end_dates: Date[];
   modality: Modality;
-  skill: Skill;
-  activity_status: ActivityStatus;
+  level: Level;
   attendance: string;
-  year: WorkshopYear[];
+  activity_status: ActivityStatus;
   speakerNames: string[];
   speakerImages: (string | null)[];
   speakerIds: (string | null)[];
   speakerCompany: (string | null)[];
 }
 
-const createWorkshopObject = (workshops: WorkshopWithAllData[]): IScholarWorkshopColumns[] => {
-  return workshops.map((workshop): IScholarWorkshopColumns => {
+const createChatObject = (chats: ChatsWithAllData[]): IScholarWorkshopColumns[] => {
+  return chats.map((chat): IScholarWorkshopColumns => {
     return {
-      id: workshop.id,
-      title: workshop.title,
-      platform: workshop.platform,
-      start_dates: workshop.start_dates,
-      end_dates: workshop.end_dates,
-      modality: workshop.modality,
-      skill: workshop.asociated_skill,
-      activity_status: workshop.activity_status,
-      attendance: workshop.scholar_attendance[0].attendance,
-      year: workshop.year,
-      speakerNames: workshop.speaker.map(
+      id: chat.id,
+      title: chat.title,
+      platform: chat.platform,
+      start_dates: chat.start_dates,
+      end_dates: chat.end_dates,
+      modality: chat.modality,
+      level: chat.level,
+      activity_status: chat.activity_status,
+      attendance: chat.scholar_attendance[0] ? chat.scholar_attendance[0].attendance : 'SPEAKER',
+      speakerNames: chat.speaker.map(
         (speaker) => `${speaker.first_names.split(' ')[0]} ${speaker.last_names.split(' ')[0]}`
       ),
-      speakerImages: workshop.speaker.map((speaker) => speaker.image),
-      speakerIds: workshop.speaker.map((speaker) => speaker.id),
-      speakerCompany: workshop.speaker.map((speaker) => speaker.job_company),
+      speakerImages: chat.speaker.map((speaker) => speaker.image),
+      speakerIds: chat.speaker.map((speaker) => speaker.id),
+      speakerCompany: chat.speaker.map((speaker) => speaker.job_company),
     };
   });
 };
@@ -68,35 +66,37 @@ const page = async ({
   searchParams?: { year: string; month: string; quarter: string };
 }) => {
   const session = await getServerSession(authOptions);
-  const workshopsDbList = await getWorkhsopsByScholar(session?.scholarId);
-  let workshops;
-  if (!searchParams?.year) {
-    workshops = filterActivityByYear(workshopsDbList, new Date().getFullYear());
-  }
+  const chatDbList = await getChatsByScholar(session?.scholarId);
+  let workshops = [];
   if (searchParams?.year) {
-    workshops = filterActivityByYear(workshopsDbList, Number(searchParams?.year));
-  }
-  if (searchParams?.quarter) {
-    workshops = filterActivityByQuarter(workshopsDbList, Number(searchParams?.quarter));
-  }
-  if (searchParams?.month) {
-    workshops = filterActivityByMonth(workshopsDbList, Number(searchParams?.month));
-  }
-  if (!searchParams?.year && !searchParams?.quarter && !searchParams?.month) {
-    workshops = workshops;
+    const workshopsFilteredByYear = filterActivityByYear(chatDbList, Number(searchParams?.year));
+    workshops = workshopsFilteredByYear;
+    if (searchParams?.quarter) {
+      workshops = filterActivityByQuarter(workshopsFilteredByYear, Number(searchParams?.quarter));
+    }
+    if (searchParams?.month) {
+      workshops = filterActivityByMonth(workshopsFilteredByYear, Number(searchParams?.month));
+    }
+  } else {
+    workshops = chatDbList;
   }
 
-  const workshopsAttended = workshops.filter(
-    (workshop) => workshop.scholar_attendance[0].attendance === 'ATTENDED'
-  );
-  const in_personWorkshops = workshopsAttended.filter(
-    (workshop) => workshop.modality === 'IN_PERSON'
-  ).length;
+  console.log(workshops);
+
+  const workshopsAttended = workshops.filter((workshop) => {
+    const scholarAttendance = workshop.scholar_attendance[0];
+
+    return scholarAttendance ? scholarAttendance.attendance === 'ATTENDED' : 'ATTENDED';
+  });
   const onlineWorkhops = workshopsAttended.filter(
     (workshop) => workshop.modality === 'ONLINE'
   ).length;
 
-  const w = createWorkshopObject(workshops);
+  const in_personWorkshops = workshopsAttended.filter(
+    (workshop) => workshop.modality === 'IN_PERSON'
+  ).length;
+
+  const w = createChatObject(workshops);
   const workshopsBySkillObj =
     workshopsAttended?.reduce(
       (acc, workshop) => {
@@ -120,17 +120,6 @@ const page = async ({
     ) || {};
 
   const workshopsByKind = createArrayFromObject(workshopsByKindObj);
-  const workshopsByYearObj =
-    workshopsAttended?.reduce(
-      (acc, workshop) => {
-        const skill = workshop.year.toString();
-        acc[skill] = (acc[skill] || 0) + 1;
-        return acc;
-      },
-      {} as Record<string, number>
-    ) || {};
-
-  const workshopsByYear = createArrayFromObject(workshopsByYearObj);
 
   return (
     <div className="flex flex-col md:p-4 gap-1">
@@ -138,16 +127,17 @@ const page = async ({
       <h1 className="text-xl font-medium sm:text-2xl mb-3 ">Listado de actividades formativas</h1>
       <div className="h-full w-full flex flex-col gap-4">
         <Stats
-          kindOfActivity="workshop"
+          kindOfActivity="chat"
           activitiesDone={workshopsAttended?.length}
           first={in_personWorkshops}
           second={onlineWorkhops}
         />
         {workshops && workshops.length >= 1 && (
-          <div className="w-full  grid grid-cols-3 justify-center items-center rounded-lg">
+          <div className="w-full  grid grid-cols-4 justify-center items-center rounded-lg">
+            <div></div>
             <div className="w-full">
               <h3 className="truncate font-semibold text-center text-sm">
-                Distribucion de actividades según su competencia
+                Distribucion de actividades según su nivel
               </h3>
               <PieChartComponent data={workshopsBySkill} />
             </div>
@@ -157,16 +147,10 @@ const page = async ({
               </h3>
               <PieChartComponent data={workshopsByKind} />
             </div>
-            <div className="w-full">
-              <h3 className="truncate font-semibold text-center text-sm">
-                Distribucion de actividades según su año
-              </h3>
-              <PieChartComponent data={workshopsByYear} />
-            </div>
           </div>
         )}
         <Table
-          tableColumns={scholarWorkshopAttendanceColumns}
+          tableColumns={scholarChatAttendaceColumns}
           tableData={w || []}
           tableHeadersForSearch={[]}
         />

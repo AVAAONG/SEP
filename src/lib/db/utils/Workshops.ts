@@ -364,6 +364,43 @@ export const getWorkhsopsByScholar = async (scholarId: string) => {
   return chats;
 }
 
+export const getChatsByScholar = async (scholarId: string) => {
+  const chats = await prisma.chat.findMany({
+    where: {
+      OR: [
+        {
+          scholar_attendance: {
+            some: {
+              scholar: {
+                scholarId: scholarId,
+              }
+            },
+          },
+        },
+        {
+          speaker: {
+            some: {
+              id: scholarId,
+            }
+          }
+        }
+
+      ]
+    },
+    include: {
+      speaker: true,
+      scholar_attendance: {
+        where: {
+          scholar: {
+            scholarId: scholarId,
+          }
+        },
+      },
+    },
+  });
+  return chats;
+}
+
 
 export const getWorkshopsByScholar2 = async (scholarProgramInformationId: string) => {
   const workshops = await prisma.workshopAttendance.findMany({
