@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@nextui-org/react';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 
@@ -15,8 +16,10 @@ const ThemeToggleButton = () => {
   }
 
   return (
-    <button
-      type="button"
+    <Button
+      isIconOnly
+      variant="light"
+      radius="full"
       onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
       className="text-primary-light dark:text-primary-dark"
     >
@@ -43,7 +46,7 @@ const ThemeToggleButton = () => {
           ></path>
         </svg>
       )}
-    </button>
+    </Button>
   );
 };
 

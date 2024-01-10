@@ -1,9 +1,17 @@
 'use client';
 import { scholarSidebarAtom } from '@/lib/state/mainState';
-import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
+import {
+  Avatar,
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from '@nextui-org/react';
 import { useAtom } from 'jotai';
+import { signOut } from 'next-auth/react';
+import { MenuIcon } from 'public/svgs/svgs';
 import ThemeToggleButton from './NavigationBar/ThemeToggleButton';
-import SolicitudeDropdown from './SolicitudeDropdown';
 interface NavigationBarProps {
   image: string | null | undefined;
   name: string | null | undefined;
@@ -24,37 +32,25 @@ const NavigationBar = ({ image, name, email }: NavigationBarProps) => {
             onClick={toggleSidebar}
             className="p-2 mr-2 text-green-600 rounded-lg cursor-pointer  hover:text-green-900 dark:text-green-700  dark:hover:text-emerald-950 focus:bg-transparent hover:bg-green-100 dark:hover:bg-emerald-900 focus:outline-none focus:ring-1 focus:ring-green-200 hover:bg-transparent"
           >
-            <svg
-              aria-hidden="true"
-              className="w-6 h-6"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-            <svg
-              aria-hidden="true"
-              className="hidden w-6 h-6"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
+            <div className="w-6 h-6">
+              <MenuIcon />
+            </div>
             <span className="sr-only">Toggle sidebar</span>
           </button>
         </div>
         <div className="flex gap-4 md:gap-8 items-center justify-start">
-          <SolicitudeDropdown />
+          <Dropdown placement="bottom-end">
+            <DropdownTrigger>
+              <Button variant="light" color="success">
+                Solicitudes
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Solicitudes" variant="flat">
+              <DropdownItem key="constancia de becario">Carta de recomendación</DropdownItem>
+              <DropdownItem key="CVA">Carta de incorporación al CVA</DropdownItem>
+              <DropdownItem key="constancia de becario">Constancia de becario</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
           <button className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-xs md:text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
             <span className="relative px-4 py-2 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
               <span className="hidden md:flex">Registra tus higlights</span>
@@ -68,16 +64,18 @@ const NavigationBar = ({ image, name, email }: NavigationBarProps) => {
               <Avatar
                 as="button"
                 className="transition-transform"
-                src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                src={image as string | undefined}
               />
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
               <DropdownItem key="profile" className="h-14 gap-2">
-                <p className="font-semibold">Registrada como</p>
-                <p className="font-semibold">zoey@example.com</p>
+                <p className="font-semibold">Registrad@ con</p>
+                <p className="font-semibold">{email}</p>
               </DropdownItem>
-              <DropdownItem key="configurations">Configuracion</DropdownItem>
-              <DropdownItem key="logout" color="danger">
+              <DropdownItem key="configurations" href="/becario/configuracion">
+                Configuracion
+              </DropdownItem>
+              <DropdownItem key="logout" color="danger" onClick={async () => signOut()}>
                 Cerrar sesión
               </DropdownItem>
             </DropdownMenu>
