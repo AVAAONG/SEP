@@ -1,4 +1,4 @@
-import DateSelector from '@/components/DateSelector';
+import DateSelector from '@/components/commons/datePicker';
 import Table from '@/components/table/Table';
 import WorkshopColumns, { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
 import { getWorkshops } from '@/lib/db/utils/Workshops';

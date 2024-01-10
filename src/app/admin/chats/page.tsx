@@ -1,4 +1,4 @@
-import DateSelector from '@/components/DateSelector';
+import DateSelector from '@/components/commons/datePicker';
 import Table from '@/components/table/Table';
 import ChatColumns, { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
 import { getChats } from '@/lib/db/utils/chats';

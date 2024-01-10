@@ -1,4 +1,4 @@
-import DateSelector from '@/components/DateSelector';
+import DateSelector from '@/components/commons/datePicker';
 import Stats from '@/components/scholar/ScholarStats';
 import Table from '@/components/table/Table';
 import scholarWorkshopAttendanceColumns from '@/components/table/columns/scholarWorkshopAttendance';
