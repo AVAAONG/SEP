@@ -1,15 +1,14 @@
 import Calendar from '@/components/calendar/Calendar';
 import PanelCard, { PanelCardProps } from '@/components/commons/PanelCard';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
-import { getScholarWithAllData, getUser } from '@/lib/db/utils/users';
+import { getScholarWithAllData } from '@/lib/db/utils/users';
 import { getServerSession } from 'next-auth';
 import { chatIcon, workshopIcon } from '../../../../public/svgs/svgs';
 
 const page = async () => {
   const session = await getServerSession(authOptions);
-  const id = session?.user?.id.id;
-  const user = await getUser(id);
-  const scholar = await getScholarWithAllData(user?.scholarId);
+  const id = session?.scholarId;
+  const scholar = await getScholarWithAllData(id);
 
   const cardContent: PanelCardProps[] = [
     {
