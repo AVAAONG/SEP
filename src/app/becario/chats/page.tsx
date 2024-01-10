@@ -1,67 +1,175 @@
+import DateSelector from '@/components/commons/datePicker';
+import Stats from '@/components/scholar/ScholarStats';
+import Table from '@/components/table/Table';
+import scholarWorkshopAttendanceColumns from '@/components/table/columns/scholarWorkshopAttendance';
+import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
+import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
+import {
+  filterActivityByMonth,
+  filterActivityByQuarter,
+  filterActivityByYear,
+} from '@/lib/datePickerFilters';
+import { getWorkhsopsByScholar } from '@/lib/db/utils/Workshops';
+import { createArrayFromObject } from '@/lib/utils';
+import { parseSkillFromDatabase } from '@/lib/utils2';
+import { ActivityStatus, Modality, Skill, WorkshopYear } from '@prisma/client';
+import { getServerSession } from 'next-auth';
+import dynamic from 'next/dynamic';
+
 /**
  * Renders the page component with a list of workshops for a specific scholar.
  * @returns The HTML document with the rendered page component.
  */
-const page = async () => {
-  // const scholarId = 'cljwyi8hl0008uwmkjo6dktty';
-  // const workshops = await getWorkshopsByScholar2(scholarId);
+const PieChartComponent = dynamic(() => import('@/components/charts/Pie'), { ssr: false });
 
-  const workshopDataPlaceholder = [
-    {
-      title: "Let's learn grammar",
-      first_names: 'Atenea',
-      last_names: 'Gimenez',
-      start_date: '01/08/2023',
-      end_date: '01/08/2023',
-      level: 'Basico',
-      modality: 'Presencial',
-      platform: 'Oficinas de AVAA',
-      scholarAttendance: 'Asistio',
-    },
-    {
-      title: 'Love Languages',
-      first_names: 'Asxel',
-      last_names: 'Ramirez',
-      start_date: '12/08/2023',
-      end_date: '01/08/2023',
-      level: 'Basico',
-      modality: 'Presencial',
-      platform: 'Oficinas de AVAA',
-      scholarAttendance: 'Asistio',
-    },
-    {
-      title: 'SUSI experience',
-      first_names: 'Noris',
-      last_names: 'Moreno',
-      start_date: '2/08/2023',
-      end_date: '01/08/2023',
-      level: 'Intermedio',
-      modality: 'Presencial',
-      platform: 'Oficinas de AVAA',
-      scholarAttendance: 'No asistio',
-    },
-    {
-      title: "Let's learn grammar",
-      first_names: 'Atenea',
-      last_names: 'Gimenez',
-      start_date: '10/08/2023',
-      end_date: '01/08/2023',
-      level: 'Avanzado',
-      modality: 'Presencial',
-      platform: 'Oficinas de AVAA',
-      scholarAttendance: 'Asistio',
-    },
-  ];
+export interface IScholarWorkshopColumns {
+  id: string;
+  title: string;
+  platform: string;
+  start_dates: Date[];
+  end_dates: Date[];
+  modality: Modality;
+  skill: Skill;
+  activity_status: ActivityStatus;
+  attendance: string;
+  year: WorkshopYear[];
+  speakerNames: string[];
+  speakerImages: (string | null)[];
+  speakerIds: (string | null)[];
+  speakerCompany: (string | null)[];
+}
+
+const createWorkshopObject = (workshops: WorkshopWithAllData[]): IScholarWorkshopColumns[] => {
+  return workshops.map((workshop): IScholarWorkshopColumns => {
+    return {
+      id: workshop.id,
+      title: workshop.title,
+      platform: workshop.platform,
+      start_dates: workshop.start_dates,
+      end_dates: workshop.end_dates,
+      modality: workshop.modality,
+      skill: workshop.asociated_skill,
+      activity_status: workshop.activity_status,
+      attendance: workshop.scholar_attendance[0].attendance,
+      year: workshop.year,
+      speakerNames: workshop.speaker.map(
+        (speaker) => `${speaker.first_names.split(' ')[0]} ${speaker.last_names.split(' ')[0]}`
+      ),
+      speakerImages: workshop.speaker.map((speaker) => speaker.image),
+      speakerIds: workshop.speaker.map((speaker) => speaker.id),
+      speakerCompany: workshop.speaker.map((speaker) => speaker.job_company),
+    };
+  });
+};
+
+const page = async ({
+  searchParams,
+}: {
+  searchParams?: { year: string; month: string; quarter: string };
+}) => {
+  const session = await getServerSession(authOptions);
+  const workshopsDbList = await getWorkhsopsByScholar(session?.scholarId);
+  let workshops;
+  if (!searchParams?.year) {
+    workshops = filterActivityByYear(workshopsDbList, new Date().getFullYear());
+  }
+  if (searchParams?.year) {
+    workshops = filterActivityByYear(workshopsDbList, Number(searchParams?.year));
+  }
+  if (searchParams?.quarter) {
+    workshops = filterActivityByQuarter(workshopsDbList, Number(searchParams?.quarter));
+  }
+  if (searchParams?.month) {
+    workshops = filterActivityByMonth(workshopsDbList, Number(searchParams?.month));
+  }
+  if (!searchParams?.year && !searchParams?.quarter && !searchParams?.month) {
+    workshops = workshops;
+  }
+
+  const workshopsAttended = workshops.filter(
+    (workshop) => workshop.scholar_attendance[0].attendance === 'ATTENDED'
+  );
+  const in_personWorkshops = workshopsAttended.filter(
+    (workshop) => workshop.modality === 'IN_PERSON'
+  ).length;
+  const onlineWorkhops = workshopsAttended.filter(
+    (workshop) => workshop.modality === 'ONLINE'
+  ).length;
+
+  const w = createWorkshopObject(workshops);
+  const workshopsBySkillObj =
+    workshopsAttended?.reduce(
+      (acc, workshop) => {
+        const skill = parseSkillFromDatabase(workshop.asociated_skill);
+        acc[skill] = (acc[skill] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    ) || {};
+
+  const workshopsBySkill = createArrayFromObject(workshopsBySkillObj);
+
+  const workshopsByKindObj =
+    workshopsAttended?.reduce(
+      (acc, workshop) => {
+        const skill = workshop.kindOfWorkshop;
+        acc[skill] = (acc[skill] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    ) || {};
+
+  const workshopsByKind = createArrayFromObject(workshopsByKindObj);
+  const workshopsByYearObj =
+    workshopsAttended?.reduce(
+      (acc, workshop) => {
+        const skill = workshop.year.toString();
+        acc[skill] = (acc[skill] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    ) || {};
+
+  const workshopsByYear = createArrayFromObject(workshopsByYearObj);
 
   return (
-    <div>
-      <div className="flex flex-col px-2 pt-6 xl:gap-4">
-        <div className="mb-4 col-span-full xl:mb-2">
-          <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
-            Listado de talleres
-          </h1>
-          <div className="h-full w-full flex flex-col gap-4 pt-4"></div>
-        </div>
+    <div className="flex flex-col md:p-4 gap-1">
+      <DateSelector />
+      <h1 className="text-xl font-medium sm:text-2xl mb-3 ">Listado de actividades formativas</h1>
+      <div className="h-full w-full flex flex-col gap-4">
+        <Stats
+          kindOfActivity="workshop"
+          activitiesDone={workshopsAttended?.length}
+          first={in_personWorkshops}
+          second={onlineWorkhops}
+        />
+        {workshops && workshops.length >= 1 && (
+          <div className="w-full  grid grid-cols-3 justify-center items-center rounded-lg">
+            <div className="w-full">
+              <h3 className="truncate font-semibold text-center text-sm">
+                Distribucion de actividades según su competencia
+              </h3>
+              <PieChartComponent data={workshopsBySkill} />
+            </div>
+            <div className="w-full">
+              <h3 className="truncate font-semibold text-center text-sm">
+                Distribucion de actividades según su tipo
+              </h3>
+              <PieChartComponent data={workshopsByKind} />
+            </div>
+            <div className="w-full">
+              <h3 className="truncate font-semibold text-center text-sm">
+                Distribucion de actividades según su año
+              </h3>
+              <PieChartComponent data={workshopsByYear} />
+            </div>
+          </div>
+        )}
+        <Table
+          tableColumns={scholarWorkshopAttendanceColumns}
+          tableData={w || []}
+          tableHeadersForSearch={[]}
+        />
       </div>
     </div>
   );

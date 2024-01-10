@@ -4,6 +4,11 @@ import Table from '@/components/table/Table';
 import scholarWorkshopAttendanceColumns from '@/components/table/columns/scholarWorkshopAttendance';
 import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
+import {
+  filterActivityByMonth,
+  filterActivityByQuarter,
+  filterActivityByYear,
+} from '@/lib/datePickerFilters';
 import { getWorkhsopsByScholar } from '@/lib/db/utils/Workshops';
 import { createArrayFromObject } from '@/lib/utils';
 import { parseSkillFromDatabase } from '@/lib/utils2';
@@ -63,7 +68,24 @@ const page = async ({
   searchParams?: { year: string; month: string; quarter: string };
 }) => {
   const session = await getServerSession(authOptions);
-  const workshops = await getWorkhsopsByScholar(session?.scholarId);
+  const workshopsDbList = await getWorkhsopsByScholar(session?.scholarId);
+  let workshops;
+  if (!searchParams?.year) {
+    workshops = filterActivityByYear(workshopsDbList, new Date().getFullYear());
+  }
+  if (searchParams?.year) {
+    workshops = filterActivityByYear(workshopsDbList, Number(searchParams?.year));
+  }
+  if (searchParams?.quarter) {
+    workshops = filterActivityByQuarter(workshopsDbList, Number(searchParams?.quarter));
+  }
+  if (searchParams?.month) {
+    workshops = filterActivityByMonth(workshopsDbList, Number(searchParams?.month));
+  }
+  if (!searchParams?.year && !searchParams?.quarter && !searchParams?.month) {
+    workshops = workshops;
+  }
+
   const workshopsAttended = workshops.filter(
     (workshop) => workshop.scholar_attendance[0].attendance === 'ATTENDED'
   );
@@ -121,26 +143,28 @@ const page = async ({
           first={in_personWorkshops}
           second={onlineWorkhops}
         />
-        <div className="w-full  grid grid-cols-3 justify-center items-center rounded-lg">
-          <div className="w-full">
-            <h3 className="truncate font-semibold text-center text-sm">
-              Distribucion de actividades según su competencia
-            </h3>
-            <PieChartComponent data={workshopsBySkill} />
+        {workshops && workshops.length >= 1 && (
+          <div className="w-full  grid grid-cols-3 justify-center items-center rounded-lg">
+            <div className="w-full">
+              <h3 className="truncate font-semibold text-center text-sm">
+                Distribucion de actividades según su competencia
+              </h3>
+              <PieChartComponent data={workshopsBySkill} />
+            </div>
+            <div className="w-full">
+              <h3 className="truncate font-semibold text-center text-sm">
+                Distribucion de actividades según su tipo
+              </h3>
+              <PieChartComponent data={workshopsByKind} />
+            </div>
+            <div className="w-full">
+              <h3 className="truncate font-semibold text-center text-sm">
+                Distribucion de actividades según su año
+              </h3>
+              <PieChartComponent data={workshopsByYear} />
+            </div>
           </div>
-          <div className="w-full">
-            <h3 className="truncate font-semibold text-center text-sm">
-              Distribucion de actividades según su tipo
-            </h3>
-            <PieChartComponent data={workshopsByKind} />
-          </div>
-          <div className="w-full">
-            <h3 className="truncate font-semibold text-center text-sm">
-              Distribucion de actividades según su año
-            </h3>
-            <PieChartComponent data={workshopsByYear} />
-          </div>
-        </div>
+        )}
         <Table
           tableColumns={scholarWorkshopAttendanceColumns}
           tableData={w || []}
