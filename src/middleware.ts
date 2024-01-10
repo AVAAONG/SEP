@@ -23,12 +23,12 @@ export default async function wrapMiddlewareFunction(req: NextRequestWithAuth, r
   ///@ts-expect-error
   return withAuth(
     async (request: NextRequestWithAuth) => {
-      // if (
-      //   request.nextUrl.pathname.startsWith('/becario') &&
-      //   request.nextauth.token?.kind_of_user !== 'SCHOLAR'
-      // ) {
-      //   return NextResponse.rewrite(new URL('/accessDenied', request.url));
-      // } 
+      if (
+        request.nextUrl.pathname.startsWith('/becario') &&
+        request.nextauth.token?.kind_of_user !== 'SCHOLAR'
+      ) {
+        return NextResponse.rewrite(new URL('/accessDenied', request.url));
+      }
       if (
         request.nextUrl.pathname.startsWith('/admin') &&
         request.nextauth.token?.kind_of_user !== 'ADMIN'
