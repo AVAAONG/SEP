@@ -69,21 +69,21 @@ const page = async ({
 }) => {
   const session = await getServerSession(authOptions);
   const workshopsDbList = await getWorkhsopsByScholar(session?.scholarId);
-  let workshops;
-  if (!searchParams?.year) {
-    workshops = filterActivityByYear(workshopsDbList, new Date().getFullYear());
-  }
+  let workshops = [];
   if (searchParams?.year) {
-    workshops = filterActivityByYear(workshopsDbList, Number(searchParams?.year));
-  }
-  if (searchParams?.quarter) {
-    workshops = filterActivityByQuarter(workshopsDbList, Number(searchParams?.quarter));
-  }
-  if (searchParams?.month) {
-    workshops = filterActivityByMonth(workshopsDbList, Number(searchParams?.month));
-  }
-  if (!searchParams?.year && !searchParams?.quarter && !searchParams?.month) {
-    workshops = workshops;
+    const workshopsFilteredByYear = filterActivityByYear(
+      workshopsDbList,
+      Number(searchParams?.year)
+    );
+    workshops = workshopsFilteredByYear;
+    if (searchParams?.quarter) {
+      workshops = filterActivityByQuarter(workshopsFilteredByYear, Number(searchParams?.quarter));
+    }
+    if (searchParams?.month) {
+      workshops = filterActivityByMonth(workshopsFilteredByYear, Number(searchParams?.month));
+    }
+  } else {
+    workshops = workshopsDbList;
   }
 
   const workshopsAttended = workshops.filter(
