@@ -4,7 +4,13 @@ import Sidebar from '@/components/scholar/Sidebar';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { getServerSession } from 'next-auth';
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({
+  modals,
+  children,
+}: {
+  modals: React.ReactNode;
+  children: React.ReactNode;
+}) {
   const session = await getServerSession(authOptions);
   return (
     <>
@@ -15,7 +21,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           email={session?.user?.email}
         />
         <Sidebar />
-        <MainLayout>{children}</MainLayout>
+        <MainLayout>
+          {modals}
+          {children}
+        </MainLayout>
       </div>
     </>
   );

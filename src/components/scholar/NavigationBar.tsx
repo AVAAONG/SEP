@@ -47,7 +47,9 @@ const NavigationBar = ({ image, name, email }: NavigationBarProps) => {
             </DropdownTrigger>
             <DropdownMenu aria-label="Solicitudes" variant="flat">
               <DropdownItem key="constancia de becario">Carta de recomendación</DropdownItem>
-              <DropdownItem key="CVA">Carta de incorporación al CVA</DropdownItem>
+              <DropdownItem key="CVA" href="solicitudCva">
+                Carta de incorporación al CVA
+              </DropdownItem>
               <DropdownItem key="constancia de becario">Constancia de becario</DropdownItem>
             </DropdownMenu>
           </Dropdown>
