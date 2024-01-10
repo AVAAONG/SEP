@@ -277,3 +277,138 @@ export const getUser = async (id: shortUUID.SUUID): Promise<User | null> => {
   });
   return user;
 }
+
+export const getScholarDoneActivitiesCount = async (scholar_id: string) => {
+  const [chats, workshops] = await prisma.$transaction([
+    prisma.workshopAttendance.count({
+      where: {
+        AND: [
+          {
+            scholar: {
+              scholarId: scholar_id
+            }
+          },
+          {
+            attendance: 'ATTENDED'
+          },
+          {
+            workshop: {
+              activity_status: 'ATTENDANCE_CHECKED'
+            }
+          }
+        ]
+      }
+    }),
+    prisma.chat.count({
+      where: {
+        OR: [
+          {
+            AND: [
+              {
+                scholar_attendance: {
+                  some: {
+                    scholar: {
+                      scholarId: scholar_id,
+                    }
+                  },
+                },
+              },
+              {
+                scholar_attendance: {
+                  some: {
+                    attendance: 'ATTENDED'
+                  }
+                }
+              },
+              {
+                activity_status: 'ATTENDANCE_CHECKED'
+              }]
+          },
+          {
+            speaker: {
+              some: {
+                id: scholar_id,
+              }
+            }
+          }
+
+        ]
+      }
+    }),
+  ]);
+  return [chats, workshops];
+}
+
+
+export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) => {
+  const [workshops, chats] = await prisma.$transaction([
+
+    prisma.workshop.findMany({
+      where: {
+        AND: [
+          {
+            scholar_attendance: {
+              some: {
+                scholar: {
+                  scholarId: scholar_id,
+                }
+              },
+            },
+          },
+          {
+            scholar_attendance: {
+              some: {
+                attendance: 'ENROLLED'
+              }
+            }
+          },
+          {
+            activity_status: 'SENT'
+          }]
+      },
+    }),
+    prisma.chat.findMany({
+      where: {
+        OR: [
+          {
+            AND: [
+              {
+                scholar_attendance: {
+                  some: {
+                    scholar: {
+                      scholarId: scholar_id,
+                    }
+                  },
+                },
+              },
+              {
+                scholar_attendance: {
+                  some: {
+                    attendance: 'ENROLLED'
+                  }
+                }
+              },
+              {
+                activity_status: 'SENT'
+              }]
+          },
+          {
+            AND: [
+              {
+                speaker: {
+                  some: {
+                    id: scholar_id,
+                  }
+                }
+              },
+              {
+                activity_status: 'SENT'
+              }
+            ]
+          }
+        ]
+      }
+    }),
+  ]);
+  return [chats, workshops];
+}

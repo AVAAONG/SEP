@@ -1,29 +1,35 @@
+import NextEventsList from '@/components/NextEventsList';
 import Calendar from '@/components/calendar/Calendar';
 import PanelCard, { PanelCardProps } from '@/components/commons/PanelCard';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
-import { getScholarWithAllData } from '@/lib/db/utils/users';
+import {
+  getActivitiesWhenScholarItsEnrolled,
+  getScholarDoneActivitiesCount,
+} from '@/lib/db/utils/users';
+import { formatActivityEventsForBigCalendar } from '@/lib/utils';
 import { getServerSession } from 'next-auth';
 import { chatIcon, workshopIcon } from '../../../../public/svgs/svgs';
 
 const page = async () => {
   const session = await getServerSession(authOptions);
   const id = session?.scholarId;
-  const scholar = await getScholarWithAllData(id);
-
+  const [doneWorkshopsCount, doneChatsCount] = await getScholarDoneActivitiesCount(id);
+  const [enrrolledWorkshops, enrrolledCHats] = await getActivitiesWhenScholarItsEnrolled(id);
+  const events = formatActivityEventsForBigCalendar([...enrrolledWorkshops, ...enrrolledCHats]);
   const cardContent: PanelCardProps[] = [
     {
       title: 'Actividades formativas realizadas',
       subtitle: 'Ver todas las actividades',
-      data: 1,
-      link: 'actividadesFormativas/lista',
+      data: doneWorkshopsCount,
+      link: 'actividadesFormativas',
       icon: workshopIcon(),
       kind: 'workshop',
     },
     {
       title: 'Chat clubs de inglés realizados',
       subtitle: 'Ver todos los chats',
-      data: 1,
-      link: 'chats/lista',
+      data: doneChatsCount,
+      link: 'chats',
       icon: chatIcon(),
       kind: 'chat',
     },
@@ -31,7 +37,7 @@ const page = async () => {
       title: 'Horas de voluntariado realizadas',
       subtitle: 'Ver todas las actividades',
       data: 1,
-      link: 'actividadesFormativas/lista',
+      link: 'actividadesFormativas',
       icon: workshopIcon(),
       kind: 'volunteer',
     },
@@ -47,11 +53,11 @@ const page = async () => {
           {cardContent.map((card) => PanelCard(card))}
         </div>
         <div className="flex flex-col lg:flex-row gap-4 ">
-          <div className="h-full max-h-[680px] min-h-screen text-gray-800 capitalize dark:text-gray-300 shadow-sm overflow-x-clip w-full bg-white border border-gray-200  shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 p-2">
-            <Calendar events={[{}]} />
+          <div className="h-full max-h-[680px] text-gray-800 capitalize dark:text-gray-300 shadow-sm overflow-x-clip w-full bg-white border border-gray-200  shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 p-2">
+            <Calendar events={events} />
           </div>
           <div className="w-full lg:w-1/4 p-4 sm:p-6 bg-white border border-gray-200 rounded-lg shadow-sm shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950">
-            {/* <NextEventsList activities={scheduledAndSentActivities as (Workshop | Chat)[]} />{' '} */}
+            <NextEventsList activities={[...enrrolledWorkshops, ...enrrolledCHats]} />{' '}
           </div>
         </div>
       </div>
