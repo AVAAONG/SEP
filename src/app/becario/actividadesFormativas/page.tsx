@@ -113,7 +113,7 @@ const page = async ({
   return (
     <div className="flex flex-col md:p-4 gap-1">
       <DateSelector />
-      <h1 className="text-xl font-medium sm:text-2xl ">Listado de actividades formativas</h1>
+      <h1 className="text-xl font-medium sm:text-2xl mb-3 ">Listado de actividades formativas</h1>
       <div className="h-full w-full flex flex-col gap-4">
         <Stats
           kindOfActivity="workshop"
@@ -121,14 +121,23 @@ const page = async ({
           first={in_personWorkshops}
           second={onlineWorkhops}
         />
-        <div className="w-full grid grid-cols-3 justify-center items-center rounded-lg">
+        <div className="w-full  grid grid-cols-3 justify-center items-center rounded-lg">
           <div className="w-full">
+            <h3 className="truncate font-semibold text-center text-sm">
+              Distribucion de actividades según su competencia
+            </h3>
             <PieChartComponent data={workshopsBySkill} />
           </div>
           <div className="w-full">
+            <h3 className="truncate font-semibold text-center text-sm">
+              Distribucion de actividades según su tipo
+            </h3>
             <PieChartComponent data={workshopsByKind} />
           </div>
           <div className="w-full">
+            <h3 className="truncate font-semibold text-center text-sm">
+              Distribucion de actividades según su año
+            </h3>
             <PieChartComponent data={workshopsByYear} />
           </div>
         </div>

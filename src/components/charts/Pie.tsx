@@ -14,7 +14,7 @@ const PieChart = ({ data }: PieChartProps) => {
       enabled: false,
     },
     legend: {
-      show: true,
+      show: false,
     },
 
     colors: ['#23a217', '#eab308', '#1d4ed8', '#b91c1c', '#062e05', '#d97706', '#0e3fa9'],
