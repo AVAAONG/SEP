@@ -31,10 +31,12 @@ const DropdownButton = (props: DropdownButtonProps) => {
         <Button
           href={link ? link : ''}
           as={Link}
-          className="flex items-center p-2 text-sm font-medium text-white dark:text-gray-300 hover:text-gray-300 dark:hover:text-white"
+          className=" text-white dark:text-gray-300 flex items-center font-medium w-full"
+          radius="md"
+          variant="light"
         >
           <div className="w-6 h-6">{Icon}</div>
-          <span className="ml-3">{buttonName}</span>
+          <span className="flex-1 ml-2 text-left whitespace-nowrap">{buttonName}</span>
         </Button>
       </ul>
     );
