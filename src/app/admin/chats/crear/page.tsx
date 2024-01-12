@@ -1,6 +1,5 @@
 'use client';
 import ChatCreationForm from '@/components/admin/ChatFormCreation';
-import ScheduledWorkshopsList from '@/components/admin/lists/2';
 import { Workshop } from '@/types/Workshop';
 import { BaseSyntheticEvent } from 'react';
 import { useForm } from 'react-hook-form';

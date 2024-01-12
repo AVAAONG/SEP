@@ -13,7 +13,7 @@ import {
 } from '@nextui-org/react';
 import { EditIcon } from 'public/svgs/svgs';
 import { useState } from 'react';
-import { WorkshopWithSpeaker } from '../WorkshopForm';
+import { WorkshopWithSpeaker } from './admin/WorkshopForm';
 
 type WorkshopsListProps = {
   workshops: WorkshopWithSpeaker[];
