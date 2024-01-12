@@ -44,7 +44,19 @@ const PlatformInput = ({ modality, registerFunction }: PlatformInputProps) => {
       </>
     );
   } else {
-    return <p>Selecciona la modalidad 👀</p>;
+    return (
+      <Input
+        radius="sm"
+        isRequired
+        type="text"
+        label="Plataforma"
+        labelPlacement="outside"
+        color="danger"
+        disabled={true}
+        placeholder="Selecciona primero la modalidad"
+        id={'Lugar'}
+      />
+    );
   }
 };
 

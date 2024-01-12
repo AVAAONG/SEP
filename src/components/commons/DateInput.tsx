@@ -2,13 +2,13 @@ import { Input } from '@nextui-org/input';
 import { Button } from '@nextui-org/react';
 import { nanoid } from 'nanoid';
 import React, { useState } from 'react';
-import { UseFormRegister } from 'react-hook-form';
+import { Control, Controller } from 'react-hook-form';
 
 type Props = {
-  register: UseFormRegister<any>;
+  control: Control<any, any>;
 };
 
-const DateInput: React.FC<Props> = ({ register }) => {
+const DateInput: React.FC<Props> = ({ control }) => {
   const [inputs, setInputs] = useState([{ id: nanoid(), date: '', startHour: '', endHour: '' }]);
 
   const addInput = () => {
@@ -49,45 +49,81 @@ const DateInput: React.FC<Props> = ({ register }) => {
                   isIconOnly
                   radius="full"
                   onClick={isLastInput ? addInput : () => deleteInput(id)}
-                  className={`translate-x-4 translate-y-2 text-white z-50  ${isLastInput
-                    ? 'bg-gray-300 hover:bg-primary-light'
-                    : 'bg-red-200 hover:bg-red-700'
-                    }`}
+                  className={`translate-x-4 translate-y-2 text-white z-50  ${
+                    isLastInput
+                      ? 'bg-gray-300 hover:bg-primary-light'
+                      : 'bg-red-200 hover:bg-red-700'
+                  }`}
                 >
                   {isLastInput ? '+' : '-'}
                 </Button>
               </div>
-              <Input
-                min={new Date().toISOString().split('T')[0]}
-                radius="sm"
-                type="date"
-                label={`Fecha (${index + 1})`}
-                placeholder="Fecha"
-                labelPlacement="outside"
-                classNames={{ base: 'col-span-2 md:col-span-1' }}
-                isRequired
-                {...register(`date.${id}` as const)}
+              <Controller
+                name={`dates.${id}`}
+                control={control}
+                rules={{ required: true }}
+                shouldUnregister={true}
+                render={({ field, fieldState, formState }) => {
+                  return (
+                    <Input
+                      isInvalid={!!formState.errors?.[`date.${id}`]?.message}
+                      errorMessage={formState.errors?.[`date.${id}`]?.message?.toString()}
+                      radius="sm"
+                      type="date"
+                      label={`Fecha (${index + 1})`}
+                      placeholder="Fecha"
+                      labelPlacement="outside"
+                      classNames={{ base: 'col-span-2 md:col-span-1' }}
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  );
+                }}
               />
             </div>
-            <Input
-              radius="sm"
-              type="time"
-              label={`Hora de inicio (${index + 1})`}
-              placeholder="Hora de inicio"
-              labelPlacement="outside"
-              classNames={{ base: 'col-span-2 md:col-span-1' }}
-              isRequired
-              {...register(`startHour.${id}` as const)}
+            <Controller
+              name={`startHours.${id}`}
+              control={control}
+              rules={{ required: true }}
+              shouldUnregister={true}
+              render={({ field, fieldState, formState }) => {
+                return (
+                  <Input
+                    isInvalid={!!formState.errors?.[`date.${id}`]?.message}
+                    errorMessage={formState.errors?.[`date.${id}`]?.message?.toString()}
+                    radius="sm"
+                    type="time"
+                    label={`Hora de inicio (${index + 1})`}
+                    placeholder="Hora de inicio"
+                    labelPlacement="outside"
+                    classNames={{ base: 'col-span-2 md:col-span-1' }}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                );
+              }}
             />
-            <Input
-              radius="sm"
-              label={`Hora de cierre (${index + 1})`}
-              placeholder="Hora de cierre"
-              labelPlacement="outside"
-              classNames={{ base: 'col-span-2 md:col-span-1' }}
-              type="time"
-              isRequired
-              {...register(`endHour.${id}` as const)}
+            <Controller
+              name={`endHours.${id}`}
+              control={control}
+              rules={{ required: true }}
+              shouldUnregister={true}
+              render={({ field, fieldState, formState }) => {
+                return (
+                  <Input
+                    isInvalid={!!formState.errors?.[`date.${id}`]?.message}
+                    errorMessage={formState.errors?.[`date.${id}`]?.message?.toString()}
+                    radius="sm"
+                    label={`Hora de cierre (${index + 1})`}
+                    placeholder="Hora de cierre"
+                    labelPlacement="outside"
+                    classNames={{ base: 'col-span-2 md:col-span-1' }}
+                    type="time"
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                );
+              }}
             />
           </React.Fragment>
         );

@@ -1,6 +1,6 @@
 'use client';
 import ScheduledWorkshopsList from '@/components/ScheduleActivityCard';
-import WorkshopCreationForm from '@/components/admin/WorkshopForm';
+import WorkshopCreationForm from '@/components/admin/WorkshopCreationForm';
 import { Workshop } from '@/types/Workshop';
 import { BaseSyntheticEvent } from 'react';
 import { useForm } from 'react-hook-form';
@@ -129,11 +129,11 @@ const Page = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-8">
+    <div className="min-h-screen flex flex-col md:flex-row gap-8 p-4">
       <div className=" w-full md:w-1/2">
         <WorkshopCreationForm />
       </div>
-      <div className="w-full md:w-1/2 p-4 pt-0 flex flex-col items-center">
+      <div className="w-full md:w-1/2 pt-0 flex flex-col items-center">
         {/* {workshopResponse.isLoading || workshopResponse.data.length === 0 ? (
           <></>
         ) : ( */}
