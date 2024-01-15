@@ -205,3 +205,28 @@ export const mapModality = (skill: Modality): string => {
       return 'N/A';
   }
 };
+
+
+export const formatDates = (
+  date: string,
+  startHour: string,
+  endHour: string
+): {
+  start_dates: string[];
+  end_dates: string[];
+} => {
+  const dates = date.includes(',') ? date.split(',') : [date];
+  const start_dates: string[] = [];
+  const end_dates: string[] = [];
+  dates.forEach((d) => {
+    d = d.trim();
+    const [startDate, endDate] = getFormatedDate(d, startHour.trim(), endHour.trim());
+    start_dates.push(startDate);
+    end_dates.push(endDate);
+  });
+  const newDates = {
+    start_dates,
+    end_dates,
+  };
+  return newDates;
+};

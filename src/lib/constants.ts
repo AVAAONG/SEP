@@ -45,6 +45,13 @@ export const PROGRAM_COMPONENTS = [
   { label: 'Emprendimiento', value: 'ENTREPRENEURSHIP' },
 ];
 
+export const WORKSHOP_TYPES = [
+  { label: 'Taller', value: 'WORKSHOP' },
+  { label: 'Cine Foro', value: 'CINEMA_FORUM' },
+  { label: 'Foro', value: 'FORUM' },
+  { label: 'Webinar', value: 'WEBINAR' },
+];
+
 export const MODALITY = [
   { label: 'Presencial', value: 'IN_PERSON' },
   { label: 'Virtual', value: 'ONLINE' },
