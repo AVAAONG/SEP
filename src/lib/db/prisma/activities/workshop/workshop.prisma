@@ -16,7 +16,7 @@ model Workshop {
     title              String
     avalible_spots     Int
     platform           String
-    description        String
+    description        String?
     kindOfWorkshop     String // Aun no esta completamente definido cuales seran los tipos de actividad formativa que se van a realizar, por lo cual se dejo como string para que se pueda cambiar facilmente
     calendar_ids       String[]
     start_dates        DateTime[]
