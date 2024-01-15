@@ -1,45 +1,120 @@
 import { PLATFORMS } from '@/lib/constants';
 import { Input, Select, SelectItem } from '@nextui-org/react';
-import { UseFormRegister } from 'react-hook-form';
-import { WorkshopWithSpeaker } from '../admin/WorkshopForm';
+import { Control, Controller } from 'react-hook-form';
 
 interface PlatformInputProps {
   modality: string;
-  registerFunction: UseFormRegister<WorkshopWithSpeaker>;
+  control: Control<any, any>;
 }
 
-const PlatformInput = ({ modality, registerFunction }: PlatformInputProps) => {
-  if (modality === 'NONE') {
-    return <p>ERROR</p>;
-  } else if (modality === 'ONLINE' || modality === 'HYBRID') {
+const PlatformInput = ({ modality, control }: PlatformInputProps) => {
+  if (modality === 'ONLINE') {
     return (
       <>
-        <Select
-          isRequired
-          label="Plataforma"
-          radius="sm"
-          {...registerFunction('platform')}
-          labelPlacement="outside"
-        >
-          {PLATFORMS.map((animal) => (
-            <SelectItem key={animal} value={animal}>
-              {animal}
-            </SelectItem>
-          ))}
-        </Select>
+        <Controller
+          name="platformOnline"
+          control={control}
+          rules={{ required: true }}
+          shouldUnregister={true}
+          render={({ field, formState }) => {
+            return (
+              <Select
+                value={field.value}
+                onChange={field.onChange}
+                isInvalid={!!formState.errors?.['platformOnline']?.message}
+                errorMessage={formState.errors?.['platformOnline']?.message?.toString()}
+                classNames={{ base: 'col-span-2 md:col-span-1' }}
+                radius="sm"
+                label="Plataforma"
+                labelPlacement="outside"
+              >
+                {PLATFORMS.map((platform) => (
+                  <SelectItem key={platform} value={platform}>
+                    {platform}
+                  </SelectItem>
+                ))}
+              </Select>
+            );
+          }}
+        />
       </>
     );
   } else if (modality === 'IN_PERSON') {
     return (
       <>
-        <Input
-          radius="sm"
-          isRequired
-          type="text"
-          label="Lugar"
-          labelPlacement="outside"
-          {...registerFunction('platform')}
-          id={'Lugar'}
+        <Controller
+          name="platformInPerson"
+          control={control}
+          rules={{ required: true }}
+          shouldUnregister={true}
+          render={({ field, formState }) => {
+            return (
+              <Input
+                value={field.value}
+                onChange={field.onChange}
+                isInvalid={!!formState.errors?.['platformInPerson']?.message}
+                errorMessage={formState.errors?.['platformInPerson']?.message?.toString()}
+                type="text"
+                label="Lugar"
+                radius="sm"
+                classNames={{ base: 'col-span-2 md:col-span-1' }}
+                labelPlacement="outside"
+              />
+            );
+          }}
+        />
+      </>
+    );
+  } else if (modality === 'HYBRID') {
+    return (
+      <>
+        <Controller
+          name="platformOnline"
+          control={control}
+          rules={{ required: true }}
+          shouldUnregister={true}
+          render={({ field, formState }) => {
+            return (
+              <Select
+                value={field.value}
+                onChange={field.onChange}
+                isInvalid={!!formState.errors?.['platformOnline']?.message}
+                errorMessage={formState.errors?.['platformOnline']?.message?.toString()}
+                classNames={{ base: 'col-span-2 md:col-span-1' }}
+                radius="sm"
+                label="Plataforma (Virtual)"
+                labelPlacement="outside"
+              >
+                {PLATFORMS.map((platform) => (
+                  <SelectItem key={platform} value={platform}>
+                    {platform}
+                  </SelectItem>
+                ))}
+              </Select>
+            );
+          }}
+        />
+
+        <Controller
+          name="platformInPerson"
+          control={control}
+          rules={{ required: true }}
+          shouldUnregister={true}
+          render={({ field, formState }) => {
+            return (
+              <Input
+                value={field.value}
+                onChange={field.onChange}
+                isInvalid={!!formState.errors?.['platformInPerson']?.message}
+                errorMessage={formState.errors?.['platformInPerson']?.message?.toString()}
+                type="text"
+                label="Lugar (Presencial)"
+                radius="sm"
+                classNames={{ base: 'col-span-2 md:col-span-1' }}
+                labelPlacement="outside"
+              />
+            );
+          }}
         />
       </>
     );
@@ -51,8 +126,7 @@ const PlatformInput = ({ modality, registerFunction }: PlatformInputProps) => {
         type="text"
         label="Plataforma"
         labelPlacement="outside"
-        color="danger"
-        disabled={true}
+        isDisabled
         placeholder="Selecciona primero la modalidad"
         id={'Lugar'}
       />

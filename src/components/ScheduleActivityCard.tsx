@@ -1,3 +1,4 @@
+'use client';
 import Modal from '@/components/commons/ModalV2';
 import { parseModalityFromDatabase, parseSkillFromDatabase } from '@/lib/utils2';
 import {
