@@ -16,10 +16,6 @@ import {
   TwitterIcon,
 } from '../../../../../public/svgs/SocialNetworks';
 
-/**
- * @see https://stackoverflow.com/questions/67784672/react-next-js-doesnt-seem-to-work-with-apexcharts for more info
- */
-const PieChartComponent = dynamic(() => import('@/components/charts/Pie'), { ssr: false });
 const tableHeaders = [
   {
     option: 'first_names',
@@ -95,31 +91,45 @@ const page = async () => {
     await getWorkshopSpeakersCountByGender();
   return (
     <div className="flex flex-col items-center w-full gap-6 min-h-screen">
-      <div className="flex flex-1 flex-col md:flex-row gap-4 w-full">
-        <div className="relative bg-white py-5 px-4  sm:px-6 shadow rounded-lg overflow-hidden h-fit">
+      <div className="px-4 flex justify-center items-center  flex-col md:flex-row gap-4 w-full">
+        <div className="w-full relative bg-white py-5 px-4  sm:px-6 shadow rounded-lg overflow-hidden h-fit">
           <dt>
             <div className="absolute bg-primary-light rounded-md p-2">
               <div className="w-5 h-5 text-white">{userIcon()}</div>
             </div>
-            <p className="ml-16 text-sm font-medium text-gray-500 truncate">
+            <p className="ml-14 text-sm font-medium text-gray-500 truncate">
               Total de facilitadores
             </p>
           </dt>
-          <dd className="ml-16 flex items-baseline ">
+          <dd className="ml-14 flex items-baseline ">
             <p className="text-2xl font-semibold text-gray-900">{workshopSpeakers?.length}</p>
           </dd>
         </div>
-
-        <div className="flex flex-col justify-center bg-white rounded-lg p-4 shadow-md">
-          <h2 className="text-sm font-semibold truncate">
-            Distribución de facilitadores según su género
-          </h2>
-          <PieChartComponent
-            data={[
-              { label: 'Mujeres', value: workshopSpeakersWomanCount },
-              { label: 'Hombres', value: workshopSpeakerMenCount },
-            ]}
-          />
+        <div className="w-full relative bg-white py-5 px-4  sm:px-6 shadow rounded-lg overflow-hidden h-fit">
+          <dt>
+            <div className="absolute bg-rose-500 rounded-md p-2">
+              <div className="w-5 h-5 text-white">{userIcon()}</div>
+            </div>
+            <p className="ml-14 text-sm font-medium text-gray-500 truncate">
+              Total de facilitadores femeninos
+            </p>
+          </dt>
+          <dd className="ml-14 flex items-baseline ">
+            <p className="text-2xl font-semibold text-gray-900">{workshopSpeakersWomanCount}</p>
+          </dd>
+        </div>
+        <div className="w-full relative bg-white py-5 px-4  sm:px-6 shadow rounded-lg overflow-hidden h-fit">
+          <dt>
+            <div className="absolute bg-blue-500 rounded-md p-2">
+              <div className="w-5 h-5 text-white">{userIcon()}</div>
+            </div>
+            <p className="ml-14 text-sm font-medium text-gray-500 truncate">
+              Total de facilitadores masculinos
+            </p>
+          </dt>
+          <dd className="ml-14 flex items-baseline ">
+            <p className="text-2xl font-semibold text-gray-900">{workshopSpeakerMenCount}</p>
+          </dd>
         </div>
         <div>
           <SpeakerCreationForm />
