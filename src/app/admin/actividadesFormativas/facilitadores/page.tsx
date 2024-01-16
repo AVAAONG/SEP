@@ -4,6 +4,8 @@ import {
   getWorkshopSpeakersCountByGender,
   getWorkshopSpeakersWithParams,
 } from '@/lib/db/utils/speaker';
+
+import SpeakerCreationForm from '@/components/admin/SpeakerCreationForm/SpeakerCreationForm';
 import { Prisma } from '@prisma/client';
 import dynamic from 'next/dynamic';
 import { userIcon } from 'public/svgs/svgs';
@@ -118,6 +120,9 @@ const page = async () => {
               { label: 'Hombres', value: workshopSpeakerMenCount },
             ]}
           />
+        </div>
+        <div>
+          <SpeakerCreationForm />
         </div>
       </div>
       <div className="w-full h-fit">

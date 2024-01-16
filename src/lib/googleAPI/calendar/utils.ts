@@ -1,3 +1,4 @@
+'use server'
 /**
  * @file This file contains utils functions related to calendar, such as creating the event object, the event description, the event link, etc.
  * @author Kevin Bravo (kevinbravo.me)

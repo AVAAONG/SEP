@@ -90,6 +90,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers })
         },
       },
     };
+    console.log(workshop);
 
     if (buttonType === 'schedule') {
       //creamos el evento o los eventos en el calendario

@@ -33,3 +33,13 @@ model Speaker {
     workshops      Workshop[]
     chats          Chat[]
 }
+
+// <div className="col-span-2 h-fit flex gap-4">
+// <Button
+// type="submit"
+// name="schedule"
+// radius="sm"
+// className="bg-gradient-to-tr from-primary-1 to-emerald-500 text-white w-1/2"
+// >
+// Agendar
+// </Button>

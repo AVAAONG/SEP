@@ -1,5 +1,7 @@
+import ChatSpeakerFormCreation from '@/components/admin/SpeakerCreationForm/ChatSpeakerFormCreation';
 import Table from '@/components/table/Table';
 import chatSpeakerColumns from '@/components/table/columns/chatSpeakerColumns';
+import { prisma } from '@/lib/db/utils/prisma';
 import { getChatSpeakersCountByGender, getChatSpeakersWithParams } from '@/lib/db/utils/speaker';
 import { Prisma } from '@prisma/client';
 import dynamic from 'next/dynamic';
@@ -60,6 +62,11 @@ const toSelect: Prisma.SpeakerSelect = {
 
 const page = async () => {
   const chatSpeakers = await getChatSpeakersWithParams(toSelect);
+  const scholars = await prisma.scholar.findMany({
+    orderBy: {
+      first_names: 'asc',
+    },
+  });
   const chattSpeakersWithSocialNetworks = chatSpeakers?.map((workshopSpeaker) => {
     const { twitter_user, facebook_user, instagram_user, linkedin_user } = workshopSpeaker;
     const socialNetworks = [
@@ -114,6 +121,9 @@ const page = async () => {
               { label: 'Hombres', value: chatSpeakerManCount },
             ]}
           />
+        </div>
+        <div>
+          <ChatSpeakerFormCreation scholars={scholars} />
         </div>
       </div>
       <div className="w-full h-fit">
