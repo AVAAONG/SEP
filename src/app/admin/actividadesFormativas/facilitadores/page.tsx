@@ -7,7 +7,6 @@ import {
 
 import SpeakerCreationForm from '@/components/admin/SpeakerCreationForm/SpeakerCreationForm';
 import { Prisma } from '@prisma/client';
-import dynamic from 'next/dynamic';
 import { userIcon } from 'public/svgs/svgs';
 import {
   FacebookIcon,
@@ -90,7 +89,7 @@ const page = async () => {
   const [workshopSpeakersWomanCount, workshopSpeakerMenCount] =
     await getWorkshopSpeakersCountByGender();
   return (
-    <div className="flex flex-col items-center w-full gap-6 min-h-screen">
+    <div className="flex flex-col items-center w-full gap-6">
       <div className="px-4 flex justify-center items-center  flex-col md:flex-row gap-4 w-full">
         <div className="w-full relative bg-white py-5 px-4  sm:px-6 shadow rounded-lg overflow-hidden h-fit">
           <dt>
@@ -131,7 +130,7 @@ const page = async () => {
             <p className="text-2xl font-semibold text-gray-900">{workshopSpeakerMenCount}</p>
           </dd>
         </div>
-        <div>
+        <div className="flex">
           <SpeakerCreationForm />
         </div>
       </div>

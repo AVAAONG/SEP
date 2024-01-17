@@ -4,14 +4,15 @@ import { Select, SelectItem } from '@nextui-org/select';
 import React from 'react';
 import { Control, Controller } from 'react-hook-form';
 import { z } from 'zod';
+
 export const SpeakerCreationFormSchema = z.object({
   first_names: z.string().min(1, { message: 'El facilitador debe de tener minimo un nombre' }),
   last_names: z.string().min(1, { message: 'El facilitador debe de tener minimo un apellido' }),
   email: z.string().email().min(1, { message: 'Debes especificar el correo del facilitador' }),
-  birthdate: z.string().refine((date) => new Date(date) <= new Date(), {
+  birthdate: z.coerce.date().refine((date) => new Date(date) <= new Date(), {
     message: 'La fecha no puede ser mayor a la actual',
   }),
-  years_of_exp: z.string().optional(),
+  years_of_exp: z.coerce.number().optional(),
   job_title: z.string().optional(),
   job_company: z.string().optional(),
   actual_city: z.string().optional(),
@@ -48,7 +49,7 @@ const d = [
   {
     label: 'Número de Teléfono',
     name: 'phone_number',
-    kindOfInput: 'text',
+    kindOfInput: 'tel',
   },
   {
     label: 'Fecha de Nacimiento',

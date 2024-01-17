@@ -90,7 +90,7 @@ const page = async () => {
   });
   const [chatSpeakerWomanCount, chatSpeakerManCount] = await getChatSpeakersCountByGender();
   return (
-    <div className="flex flex-col items-center w-full gap-6 min-h-screen">
+    <div className="flex flex-col items-center w-full gap-6">
       <div className="px-4 flex items-center justify-center  flex-col md:flex-row gap-4 w-full">
         <div className="w-full relative bg-white py-5 px-4  sm:px-6 shadow rounded-lg overflow-hidden h-fit">
           <dt>
@@ -131,7 +131,9 @@ const page = async () => {
             <p className="text-2xl font-semibold text-gray-900">{chatSpeakerManCount}</p>
           </dd>
         </div>
-        <ChatSpeakerFormCreation scholars={scholars} />
+        <div className="flex">
+          <ChatSpeakerFormCreation scholars={scholars} />
+        </div>
       </div>
       <div className="w-full h-fit">
         <Table

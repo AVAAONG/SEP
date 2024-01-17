@@ -1,8 +1,9 @@
+'use server';
 /**
  * @file This file contains all the necesary logic to interact with the database for the users collection.
  * @author Kevin Bravo (kevinbravo.me)
  */
-import { Chat, Speaker, Workshop } from '@prisma/client';
+import { Chat, Prisma, Speaker, Workshop } from '@prisma/client';
 import { prisma } from './prisma';
 /**
  * Get speakers with parameters
@@ -136,3 +137,28 @@ export const getChatSpeakersWithChats = async (
   ]);
   return [speaker, chat];
 };
+export const createSpeaker = async (data: Prisma.SpeakerCreateInput) => {
+  try {
+    const speaker = await prisma.speaker.create({
+      data,
+    });
+    return speaker;
+
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+
+export const setScholarAsChatSpeaker = async (scholarId: string) => {
+  try {
+    prisma.scholarProgramInformation.update({
+      where: { scholarId: scholarId },
+      data: {
+        is_chat_speaker: true
+      }
+    })
+  } catch (e) {
+    console.log(e)
+  }
+}

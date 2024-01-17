@@ -14,28 +14,36 @@ import {
   Tabs,
   useDisclosure,
 } from '@nextui-org/react';
-import { Scholar } from '@prisma/client';
+import { Prisma, Scholar } from '@prisma/client';
 import moment from 'moment';
 import React, { BaseSyntheticEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import BaseSpeakerFormCreation, { SpeakerCreationFormSchema } from './BaseForm';
+import { createSpeaker, setScholarAsChatSpeaker } from '@/lib/db/utils/speaker';
 
 interface ChatSpeakerFormCreationProps {
   scholars: Scholar[];
 }
 
 const ChatSpeakerFormCreation: React.FC<ChatSpeakerFormCreationProps> = ({ scholars }) => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [selected, setSelected] = useState<React.Key>('SCHOLAR');
   const memoizedScholars = React.useMemo(() => scholars, [scholars]);
   const [scholar, setScholar] = useState<Scholar | null>();
 
-  const { control, handleSubmit, reset } = useForm<z.infer<typeof SpeakerCreationFormSchema>>({
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting, isValid },
+  } = useForm<z.infer<typeof SpeakerCreationFormSchema>>({
     resolver: zodResolver(SpeakerCreationFormSchema),
+
     defaultValues: {
       last_names: scholar?.last_names,
       email: scholar?.email!,
+      ///@ts-ignore
       birthdate: scholar?.birthdate ? moment(scholar?.birthdate).format('YYYY-MM-DD') : undefined,
       actual_city: scholar?.city || undefined,
       first_names: scholar?.first_names,
@@ -48,21 +56,31 @@ const ChatSpeakerFormCreation: React.FC<ChatSpeakerFormCreationProps> = ({ schol
       gender: scholar?.gender,
     },
   });
-  const handleFormSubmit = (
+  const handleFormSubmit = async (
     data: z.infer<typeof SpeakerCreationFormSchema>,
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
-    let speaker = selected === 'SCHOLAR' ? { id: scholar?.id, ...data } : data;
-
-    console.log(speaker);
+    event?.preventDefault();
+    let speaker: Prisma.SpeakerCreateInput =
+      selected === 'SCHOLAR'
+        ? { speaker_kind: 'CHATS', id: scholar?.id, ...data }
+        : { speaker_kind: 'CHATS', ...data };
+    console.log(selected);
+    await createSpeaker(speaker);
+    await setScholarAsChatSpeaker(scholar?.id!);
+    reset();
+    onClose();
   };
   return (
     <>
-      <Button onPress={onOpen}>Crear facilitador</Button>
+      <Button color="success" onPress={onOpen}>
+        Crear facilitador
+      </Button>
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         size="5xl"
+        radius="sm"
         scrollBehavior="outside"
         classNames={{
           backdrop: 'bg-secondary-dark bg-opacity-80',
@@ -80,10 +98,11 @@ const ChatSpeakerFormCreation: React.FC<ChatSpeakerFormCreationProps> = ({ schol
                   <ModalBody className="flex flex-col items-center">
                     <div className="flex flex-wrap gap-4">
                       <Tabs
+                        color="success"
                         selectedKey={selected}
                         onSelectionChange={(key) => {
-                          setScholar(null);
                           reset();
+                          setScholar(null);
                           setSelected(key);
                         }}
                         aria-label="Tabs colors"
@@ -147,6 +166,7 @@ const ChatSpeakerFormCreation: React.FC<ChatSpeakerFormCreationProps> = ({ schol
                       color="danger"
                       radius="sm"
                       variant="light"
+                      isDisabled={isSubmitting}
                       onPress={() => {
                         reset();
                         setScholar(null);
@@ -158,6 +178,7 @@ const ChatSpeakerFormCreation: React.FC<ChatSpeakerFormCreationProps> = ({ schol
                     <Button
                       type="submit"
                       radius="sm"
+                      isDisabled={!isValid || isSubmitting}
                       className=" bg-gradient-to-tr from-primary-1 to-emerald-500 text-white "
                     >
                       Crear facilitador
