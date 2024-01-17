@@ -2,10 +2,10 @@ import defailProfilePic from '@/../public/defaultProfilePic.png';
 import NormalCard from '@/components/scholar/card/NormalCard';
 import Table from '@/components/table/Table';
 
+import SpeakerPageDropdown from '@/components/SpeakerPageDropdown';
 import ChartComponent from '@/components/charts/AreaChart';
 import singleChatSpeakerColumns from '@/components/table/columns/SinglechatSpeakerColumns';
 import { getChatSpeakersWithChats } from '@/lib/db/utils/speaker';
-import { createDataCardsContent } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -93,7 +93,7 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
       username: linkedin_user,
     },
   ];
-  const cardContent = createDataCardsContent([
+  const cardContent = [
     {
       icon: workshopIcon,
       text: 'Chat clubs realizados',
@@ -118,7 +118,7 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
       cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
       activity: 'chats',
     },
-  ]);
+  ];
 
   const workshopsByMonth: Record<number, number> =
     workshops?.reduce((acc, workshop) => {
@@ -160,16 +160,12 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
               />
             </div>
             <div className="flex flex-col justify-center items-center gap-1 sm:gap-1 w-full px-4">
-              <h1 className="text-2xl text-green-700 font-bold text-center flex items-center justify-center gap-2">
-                <span>
+              <div className="flex items-center justify-center gap-1 w-full">
+                <h1 className="text-2xl text-green-700 font-bold text-center flex items-center justify-center gap-2">
                   {first_names} {last_names}{' '}
-                </span>
-                {curriculum && (
-                  <Link href={curriculum} target="_blank" className="w-6 block">
-                    <CurriculumIcon />
-                  </Link>
-                )}
-              </h1>{' '}
+                </h1>{' '}
+                <SpeakerPageDropdown speaker={workshopSpeaker} />
+              </div>
               <span className="text-gray-400 dark:text-gray-300 font-semibold uppercase text-center w-full ">
                 {job_company}
               </span>
@@ -203,6 +199,16 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
                     <PhoneIcon />
                   </div>
                   <span>{phone_number}</span>
+                </div>
+              )}
+              {curriculum && (
+                <div className="w-full flex gap-2 items-center justify-center ">
+                  <div className="bg-gray-100 dark:bg-slate-600 p-2 w-9 rounded-full">
+                    <Link href={curriculum} target="_blank" className="w-6 block">
+                      <CurriculumIcon />
+                    </Link>
+                  </div>
+                  <span>Curriculum</span>
                 </div>
               )}
               {email && (

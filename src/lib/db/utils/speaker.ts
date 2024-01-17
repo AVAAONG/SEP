@@ -149,6 +149,20 @@ export const createSpeaker = async (data: Prisma.SpeakerCreateInput) => {
   }
 }
 
+export const updateSpeaker = async (speaker: Prisma.SpeakerCreateInput) => {
+  try {
+    await prisma.speaker.update({
+      where: { id: speaker.id },
+      data: {
+        ...speaker
+      }
+    });
+    return
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 
 export const setScholarAsChatSpeaker = async (scholarId: string) => {
   try {

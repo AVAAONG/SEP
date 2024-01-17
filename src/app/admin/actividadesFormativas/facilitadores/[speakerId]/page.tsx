@@ -5,7 +5,6 @@ import speakerWorkshopsColumn from '@/components/table/columns/singleWorkshopSpe
 
 import ChartComponent from '@/components/charts/AreaChart';
 import { getWorkshopSpeakerWithWorkshops } from '@/lib/db/utils/speaker';
-import { createDataCardsContent } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -92,7 +91,7 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
       username: linkedin_user,
     },
   ];
-  const cardContent = createDataCardsContent([
+  const cardContent = [
     {
       icon: workshopIcon,
       text: 'Actividades formativas',
@@ -114,7 +113,7 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
       bg: 'from-yellow-500  to-yellow-700',
       cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
     },
-  ]);
+  ];
 
   const workshopsByMonth: Record<number, number> =
     workshops?.reduce((acc, workshop) => {
@@ -170,7 +169,7 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
             {description && (
               <div className="flex flex-col justify-center items-center gap-2 sm:gap-1 sm:justify-start sm:items-start ">
                 <span className="text-base text-gray-400 dark:text-gray-300 font-semibold ">
-                  adsfknlkjdsa{' '}
+                  {description}
                 </span>
               </div>
             )}
