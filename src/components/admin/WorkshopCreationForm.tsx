@@ -1,6 +1,6 @@
 'use client';
+import { formatDates } from '@/lib/calendar/utils';
 import { MODALITY, PROGRAM_COMPONENTS, WORKSHOP_TYPES, WORKSHOP_YEAR } from '@/lib/constants';
-import { formatDates } from '@/lib/googleAPI/calendar/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Avatar } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
@@ -65,6 +65,10 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers })
     data: z.infer<typeof workshopCreationFormSchema>,
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
+    //1. Parseamos el speakers
+    // guardamos los nombres de los facilitadores en una variable
+    //2. Parseamos las fechas (al momento de devolver las fechas asegurarse de devolveras usando toISOsTRING)
+    //3. Creamos el evento en el calendario
     const buttonType = ((event?.nativeEvent as SubmitEvent)?.submitter as HTMLButtonElement)?.name;
     const workshopSpeakersId = data.speakersId.split(',');
     const dates = formatDates(data.dates, data.startHours, data.endHours);

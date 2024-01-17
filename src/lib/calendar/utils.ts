@@ -4,11 +4,10 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { Platform } from '@/types/General';
 import { Modality, Skill } from '@prisma/client';
 import axios, { AxiosRequestConfig } from 'axios';
 import moment from 'moment';
-import { Calendar } from '../auth';
+import { Calendar } from '../googleAPI/auth';
 
 /**
  * It creates an 'Add to my calendar' Link
@@ -23,7 +22,7 @@ import { Calendar } from '../auth';
  */
 export const getPublicEventLink = async (
   name: string,
-  platform: Platform,
+  platform: string,
   calendarDescription: string,
   startDate: string,
   endDate: string

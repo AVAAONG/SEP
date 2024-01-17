@@ -64,7 +64,13 @@ export const MODALITY = [
   { label: 'Virtual', value: 'ONLINE' },
   { label: 'Híbrido', value: 'HYBRID' },
 ];
-export const PLATFORMS = ['Zoom', 'Google Meet', 'Padlet', 'MS Teams', 'Otra',];
+
+export const ONLINE_PLATFORMS = [
+  { label: 'Zoom', value: 'ZOOM' },
+  { label: 'Google Meet', value: 'GOOGLE_MEET' },
+  { label: 'Padlet', value: 'PADLET' },
+  { label: 'Otra', value: 'OTHER' },
+];
 export const WORKSHOP_YEAR = ['I', 'II', 'III', 'IV', 'V',];
 
 export const CHAT_LEVELS = [

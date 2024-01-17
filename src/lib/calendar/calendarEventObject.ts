@@ -1,10 +1,11 @@
 import { calendar_v3 } from '@googleapis/calendar';
 import { Modality } from '@prisma/client';
+import { nanoid } from 'nanoid';
 
 /**
  * Creates the default event object with all the details about the activitie
  *
- * @param name - The name of the activity
+ * @param title - The title of the activity
  * @param platform - platform where the activity will happen (A place in the case `activityMode` is "presencial" or a link in the case `activityMode` is "virtual" | "hibrida" )
  * @param calendarDescription - decsription with all the details of the activity
  * @param start - the start hour of the activity (in aaaa-mm-dd format)
@@ -14,7 +15,7 @@ import { Modality } from '@prisma/client';
  * @see {@link https://developers.google.com/calendar/api/v3/reference/events} for the event schema
  */
 const createDefaultEvent = (
-  name: string,
+  title: string,
   platform: string,
   calendarDescription: string,
   start: string,
@@ -22,10 +23,9 @@ const createDefaultEvent = (
   attendees?: calendar_v3.Schema$EventAttendee[]
 ) => {
   const defaultEvent: calendar_v3.Schema$Event = {
-    summary: name,
+    summary: title,
     description: calendarDescription,
     location: platform,
-
     start: {
       dateTime: start,
       timeZone: 'America/Caracas',
@@ -35,7 +35,7 @@ const createDefaultEvent = (
       timeZone: 'America/Caracas',
     },
     visibility: 'public',
-    guestsCanSeeOtherGuests: true,
+    guestsCanSeeOtherGuests: false,
     reminders: {
       useDefault: false,
       overrides: [
@@ -66,6 +66,7 @@ const createDefaultEvent = (
           method: 'popup',
           minutes: 30,
         },
+        // remainder 15 minutes before the event
         {
           method: 'popup',
           minutes: 15,
@@ -87,7 +88,7 @@ const createDefaultEvent = (
  * If the platform of the activitiy is 'padlet', iit sets the start and end date to all day event
  *
  *
- * @param name - The name of the activity
+ * @param title - The title of the activity
  * @param platform - platform where the activity will happen (A place in the case `activityMode` is "presencial" or a link in the case `activityMode` is "virtual" | "hibrida" )
  * @param activityMode - the mode of the activity
  * @param calendarDescription - decsription with all the details of the activity
@@ -98,8 +99,8 @@ const createDefaultEvent = (
  * @see {@link https://developers.google.com/calendar/api/v3/reference/events} for the event schema
  */
 const createEventObject = (
-  name: string,
-  Modality: Modality,
+  title: string,
+  modality: Modality,
   platform: string,
   calendarDescription: string,
   start: string,
@@ -109,7 +110,7 @@ const createEventObject = (
   let event: calendar_v3.Schema$Event = {};
 
   const defaultEvent = createDefaultEvent(
-    name,
+    title,
     platform,
     calendarDescription,
     start,
@@ -117,21 +118,28 @@ const createEventObject = (
     attendees
   );
 
-  if (Modality === 'IN_PERSON') event = defaultEvent;
-  else if (Modality === 'ONLINE') {
-    if (platform === 'google meet') {
+  if (modality === 'IN_PERSON') event = defaultEvent;
+
+  else if (modality === 'ONLINE') {
+    if (platform === 'GOOGLE_MEET') {
       event = {
         ...defaultEvent,
         conferenceData: {
+          conferenceSolution: {
+            key: {
+              type: 'hangoutsMeet',
+            },
+            name: title,
+          },
           createRequest: {
             conferenceSolutionKey: {
               type: 'hangoutsMeet',
             },
-            requestId: '7qxalsvy0e',
+            requestId: nanoid(),
           },
         },
       };
-    } else if (platform === 'padlet') {
+    } else if (platform === 'PADLET') {
       event = {
         ...defaultEvent,
       };
@@ -146,7 +154,9 @@ const createEventObject = (
     } else {
       event = defaultEvent;
     }
-  } else event = defaultEvent;
+  } else {
+    throw new Error('No se especificó un tipo de modalidad válido');
+  };
   return event;
 };
 

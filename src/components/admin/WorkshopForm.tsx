@@ -11,7 +11,7 @@ import {
   Textarea,
 } from '@nextui-org/react';
 
-import { formatDates, sumHours } from '@/lib/googleAPI/calendar/utils';
+import { formatDates, sumHours } from '@/lib/calendar/utils';
 import { Modality, Prisma, Skill, Speaker, Workshop, WorkshopYear } from '@prisma/client';
 import { BaseSyntheticEvent, Key, useState } from 'react';
 import { useForm } from 'react-hook-form';

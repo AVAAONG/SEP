@@ -1,4 +1,4 @@
-import { PLATFORMS } from '@/lib/constants';
+import { ONLINE_PLATFORMS, PLATFORMS } from '@/lib/constants';
 import { Input, Select, SelectItem } from '@nextui-org/react';
 import { Control, Controller } from 'react-hook-form';
 
@@ -85,9 +85,9 @@ const PlatformInput = ({ modality, control }: PlatformInputProps) => {
                 label="Plataforma (Virtual)"
                 labelPlacement="outside"
               >
-                {PLATFORMS.map((platform) => (
-                  <SelectItem key={platform} value={platform}>
-                    {platform}
+                {ONLINE_PLATFORMS.map(({ label, value }) => (
+                  <SelectItem key={value} value={value}>
+                    {label}
                   </SelectItem>
                 ))}
               </Select>
