@@ -16,7 +16,7 @@ import DateInput from '../commons/DateInput';
 import PlatformInput from '../commons/PlatformInput';
 
 const workshopCreationFormSchema = z.object({
-  title: z.string().min(1, { message: 'El titulo no puede estar vacio' }),
+  title: z.string().min(1, { message: 'El titulo no puede estar vacio' }).trim(),
   kindOfWorkshop: z.string().min(1, { message: 'Debes especificar el tipo de actividad' }),
   dates: z.string().refine((date) => new Date(date) >= new Date(), {
     message: 'La fecha no puede ser menor a la actual',
@@ -25,15 +25,16 @@ const workshopCreationFormSchema = z.object({
   endHours: z.string(),
   modality: z.nativeEnum(Modality),
   asociated_skill: z.nativeEnum(Skill),
-  avalible_spots: z.string().min(1, { message: 'Debes tener al menos un cupo disponible' }),
-  platformOnline: z.string().min(1, { message: 'Debes elegir una plataforma' }).optional(),
+  avalible_spots: z.string().min(1, { message: 'Debes tener al menos un cupo disponible' }).trim(),
+  platformOnline: z.string().min(1, { message: 'Debes elegir una plataforma' }).trim().optional(),
   platformInPerson: z
     .string()
     .min(1, { message: 'Debes colocar el lugar de la actividad' })
+    .trim()
     .optional(),
-  speakersId: z.string().min(1, { message: 'Debes elegir al menos un facilitador' }),
+  speakersId: z.string().min(1, { message: 'Debes elegir al menos un facilitador' }).trim(),
   year: z.nativeEnum(WorkshopYear).array().min(1, { message: 'Debes elegir al menos un año' }),
-  description: z.string().optional(),
+  description: z.string().trim().optional(),
 });
 
 interface WorkshopCreationFormProps {
@@ -46,7 +47,12 @@ interface WorkshopCreationFormProps {
   }[];
 }
 const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers }) => {
-  const { control, handleSubmit, watch } = useForm<z.infer<typeof workshopCreationFormSchema>>({
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: { isSubmitting, isValid },
+  } = useForm<z.infer<typeof workshopCreationFormSchema>>({
     resolver: zodResolver(workshopCreationFormSchema),
     defaultValues: {
       title: 'Taller de prueba',
@@ -55,9 +61,12 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers })
       endHours: '12:00',
       avalible_spots: '20',
       asociated_skill: 'SELF_MANAGEMENT',
-      modality: 'ONLINE',
+      modality: 'IN_PERSON',
       kindOfWorkshop: 'WORKSHOP',
+      speakersId: 'pEsSon3-arJyIQ7vxURmj',
       year: ['I'],
+      platformInPerson: 'Oficinas de avaa',
+      description: 'Taller de prueba',
     },
   });
   const modality = watch('modality');
@@ -94,14 +103,17 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers })
         },
       },
     };
-    console.log(workshop);
 
     if (buttonType === 'schedule') {
+      console.log(workshop);
+      console.log('schedule');
       //creamos el evento o los eventos en el calendario
       //le mandamos al facilitador una invitacion a la reunion
       //agregamos los ids al workshop
       //creamos el workshop en la base de datos
     } else if (buttonType === 'send') {
+      console.log(workshop);
+      console.log('send');
       //creamos la reunion en zoom, si existe
       //creamos el evento o los eventos en el calendario
       //creamos la runion
@@ -158,6 +170,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers })
                 classNames={{ base: 'col-span-2 md:col-span-1' }}
                 radius="sm"
                 label="Competencia asociada"
+                defaultSelectedKeys={[field.value]}
                 labelPlacement="outside"
               >
                 {PROGRAM_COMPONENTS.map((programComponent) => (
@@ -190,6 +203,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers })
                 radius="sm"
                 label="Facilitador(es)"
                 labelPlacement="outside"
+                defaultSelectedKeys={[field.value]}
                 renderValue={(items) => {
                   return (
                     <div className="flex flex-wrap gap-2">
@@ -263,6 +277,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers })
                 radius="sm"
                 label="Modalidad"
                 labelPlacement="outside"
+                defaultSelectedKeys={[field.value]}
               >
                 {MODALITY.map((modality) => (
                   <SelectItem key={modality.value} value={modality.value}>
@@ -288,6 +303,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers })
                 classNames={{ base: 'col-span-2 md:col-span-1' }}
                 radius="sm"
                 label="Tipo de actividad formativa"
+                defaultSelectedKeys={[field.value]}
                 labelPlacement="outside"
               >
                 {WORKSHOP_TYPES.map((modality) => (
@@ -359,11 +375,17 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers })
             name="schedule"
             radius="sm"
             className="bg-gradient-to-tr from-primary-1 to-emerald-500 text-white w-1/2"
+            isDisabled={!isValid || isSubmitting}
           >
             Agendar
           </Button>
-
-          <Button type="submit" name="send" radius="sm" className=" w-1/2">
+          <Button
+            type="submit"
+            name="send"
+            radius="sm"
+            isDisabled={!isValid || isSubmitting}
+            className=" w-1/2"
+          >
             Enviar
           </Button>
         </div>
