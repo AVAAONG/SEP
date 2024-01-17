@@ -7,6 +7,7 @@
 import { Platform } from '@/types/General';
 import { Modality, Skill } from '@prisma/client';
 import axios, { AxiosRequestConfig } from 'axios';
+import moment from 'moment';
 import { Calendar } from '../auth';
 
 /**
@@ -147,7 +148,7 @@ export const getFormatedDate = (date: string, startingHour: string, endHour?: st
   const start = new Date(date + ',' + startingHour);
   if (endHour === undefined) end = addHours(start, 2);
   else end = new Date(date + ',' + endHour);
-  return [start.toISOString(), end.toISOString()];
+  return [start.toISOString(), end.toISOString()]
 };
 
 /**
@@ -230,4 +231,31 @@ export const formatDates = (
     end_dates,
   };
   return newDates;
+};
+
+
+export const formatDates = (
+  datesObj: { [key: string]: string },
+  startDatesObj: { [key: string]: string },
+  endDatesObj: { [key: string]: string }
+) => {
+  const start_dates: string[] = [];
+  const end_dates: string[] = [];
+  Object.entries(datesObj).forEach(async ([key, value]) => {
+    const [start, end] = await getFormatedDate(value, startDatesObj[key], endDatesObj[key]);
+    start_dates.push(start);
+    end_dates.push(end);
+  });
+  return { start_dates, end_dates };
+};
+
+export const sumHours = (startHours: string[], endHours: string[]) => {
+  let hours: number = 0;
+  startHours.forEach((startDate, index) => {
+    const endDate = endHours[index];
+    hours = hours + moment(endDate).diff(moment(startDate), 'minutes') / 60;
+    startHours.push(startDate);
+    endHours.push(endDate);
+  });
+  return hours;
 };

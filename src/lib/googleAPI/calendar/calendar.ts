@@ -7,14 +7,11 @@
  * @description Functions related to the calendar API v3 main functionalities in the system.
  */
 
-import { calendar_v3 } from '@googleapis/calendar';
-
-import { Chat } from '@/types/Chat';
-
+import { WORKSHOP_CALENDAR_ID } from '@/lib/constants';
 import createZoomMeeting from '@/lib/zoom';
-import { KindOfActivity } from '@/types/General';
-import { Workshop } from '@/types/Workshop';
-import { Skill } from '@prisma/client';
+import { Platform } from '@/types/General';
+import { calendar_v3 } from '@googleapis/calendar';
+import { Chat, Workshop } from '@prisma/client';
 import { Calendar } from '../auth';
 import {
   createChatCalendarDescription,
@@ -29,32 +26,24 @@ import {
   substractMonths,
 } from './utils';
 
-const WORKSHOP_CALENDAR_ID =
-  '3bd2458b588a28274518ba4e7a45f44db6a04c33377cc8c008c986a72dc36cdb@group.calendar.google.com';
-const CHAT_CALENDAR_ID =
-  'e8e9c5e4d30d349b75f6061c8641fa2577ed9928403c4bd12b6bd6687291e7a9@group.calendar.google.com';
-const VOLUNTEERS_CALENDAR_ID =
-  '66c8bfc0379b164b2d4104d235933b8507228ea39a0f6301f7f3a1a7e878e204@group.calendar.google.com';
-
-export const createEvent = async (kindOfActivity: KindOfActivity, values: Workshop | Chat) => {
-  const calendarId = 'primary';
+export const createCalendarEvent = async (values: Workshop | Chat) => {
   let addUrl: string | null = null;
   let meetLink: string | null = null;
   let meetId: string | null = null;
   let meetingPassword: string | null = null;
 
-  if (kindOfActivity.toLocaleLowerCase().trim() === 'workshop') {
-    const { title, date, startHour, endHour, platform } = values as Workshop;
-
-    const [start, end] = getFormatedDate(date, startHour, endHour);
+  if ('asociated_skill' in values) {
+    values as Workshop;
+    const { title, start_dates, end_dates, platform } = values;
     const [eventDetails, eventDescription, zoomMeetLink, zoomMeetId, zoomMetPassword] =
       await createWorkshopEventDetails(values as Workshop);
-    addUrl = await getPublicEventLink(title, platform, eventDescription, start, end);
+    addUrl = await getPublicEventLink(title, platform, eventDescription, start_dates, end_dates);
 
     const event = await Calendar.events.insert({
       calendarId: WORKSHOP_CALENDAR_ID,
       conferenceDataVersion: 1,
       requestBody: eventDetails,
+      sendUpdates: 'all',
     });
     const eventId = event.data.id!;
 
@@ -68,7 +57,11 @@ export const createEvent = async (kindOfActivity: KindOfActivity, values: Worksh
       meetingPassword = zoomMetPassword!;
     }
     return [eventId, addUrl, meetLink, meetId, meetingPassword];
-  } else if (kindOfActivity.toLowerCase().trim() === 'chat') {
+
+
+
+  } else if ('level' in values) {
+    values as Chat;
     const { name, platform, date, startHour } = values as Chat;
     const endHour = addHours(new Date(startHour), 2);
     const [start, end] = getFormatedDate(date, startHour, endHour.toLocaleString());
@@ -101,35 +94,43 @@ const createWorkshopEventDetails = async (
 ): Promise<[calendar_v3.Schema$Event, string, string?, string?, string?]> => {
   const {
     title,
-    pensum,
-    date,
-    startHour,
-    endHour,
+    asociated_skill,
+    start_dates,
+    end_dates
     speaker,
     modality,
     platform,
     description,
-    workshopYear,
+    year,
   } = values;
-
-  const [start, end] = getFormatedDate(date, startHour, endHour);
   let calendarDescription: string;
   let eventDetails: calendar_v3.Schema$Event;
   let zoomMeetLink = null;
   let zoomMeetId = null;
   let zoomMetPassword = null;
 
-  if (modality === 'IN_PERSON' || platform.toLowerCase().trim() === 'padlet') {
+  if (modality === 'IN_PERSON') {
     calendarDescription = createWorkshopCalendarDescription(
-      mapWorkshopSkill(pensum),
-      splitSpeakerValues(speaker).speakerName,
+      asociated_skill,
+      "FEUAFADS",
       modality,
-      platform,
+      platform as Platform,
       description,
-      workshopYear
+      year
     );
-    eventDetails = createEventObject(title, modality, platform, calendarDescription, start, end);
-  } else if (modality === 'ONLINE' || modality === 'HIBRID') {
+    eventDetails start_dates.map((startDate, index) => {
+      const endstartDate = end_dates[index];
+      eventDetails = createEventObject(
+        title,
+        modality,
+        platform,
+        calendarDescription,
+        startDate,
+        endDate
+      );
+    }
+    );
+  } else if (modality === 'ONLINE') {
     if (platform === 'ZOOM') {
       const [join_url, id, password] = await createZoomMeeting(title, new Date(start));
       zoomMeetLink = join_url;
@@ -287,21 +288,4 @@ const splitSpeakerValues = (value: string) => {
   const speakerName = speakerValues[1];
   const speakerEmail = speakerValues[2];
   return { speakerId, speakerName, speakerEmail };
-};
-
-export const mapWorkshopSkill = (skill: Skill): string => {
-  switch (skill) {
-    case 'CITIZEN_EXERCISE':
-      return 'Ejercicio Ciudadano';
-    case 'ENTREPRENEURSHIP':
-      return 'Emprendimiento';
-    case 'ICT':
-      return 'TIC';
-    case 'LEADERSHIP':
-      return 'Liderazgo';
-    case 'SELF_MANAGEMENT':
-      return 'Gerencia de si mismo';
-    default:
-      return 'N/A';
-  }
 };
