@@ -4,7 +4,7 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { Modality, Skill } from '@prisma/client';
+import { Skill } from '@prisma/client';
 import axios, { AxiosRequestConfig } from 'axios';
 import moment from 'moment';
 import { Calendar } from '../googleAPI/auth';
@@ -137,9 +137,12 @@ export const substractMonths = (montsTosubstract: number) => {
 /**
  * it formats the date passed as argument to the format needed by the calendar api
  *
- * @param date the date of the event
- * @param startingHour the start hour of the event
- * @param endHour the end hour of the event
+ * @remarks the format needed by the calendar api is `aaaa-mm-ddThh:mm:ss-hh:mm`
+ * @remarks If the end hour is not passed as argument, it will add 2 hours to the start hour and set it as the end hour
+ * 
+ * @param date the date of the event (the format should be passed as `aaaa-mm-dd`)
+ * @param startingHour the start hour of the event (the format should be passed as `hh:mm`)
+ * @param endHour the end hour of the event (the format should be passed as `hh:mm`)
  * @returns the date object of the start and end hour in ISO string format
  */
 export const getFormatedDate = (date: string, startingHour: string, endHour?: string) => {
@@ -156,10 +159,11 @@ export const getFormatedDate = (date: string, startingHour: string, endHour?: st
  * @param eventId the id of the event we want get the meet meeting
  * @returns the meet link and its id
  */
-export const getMeetEventLink = async (calendarId: string, eventId: string): Promise<string[]> => {
+export const getMeetEventLink = async (calendarId: string, eventId: string) => {
   const event = await Calendar.events.get({ calendarId, eventId });
-  const meetLink = event.data.hangoutLink;
-  return [meetLink];
+  const meetingLink = event.data.hangoutLink;
+  const meetingId = event.data.hangoutLink?.split('/')[3];
+  return { meetingLink, meetingId };
 };
 
 export const getDate = () => {
@@ -194,60 +198,30 @@ export const mapWorkshopSkill = (skill: Skill): string => {
   }
 };
 
-export const mapModality = (skill: Modality): string => {
-  switch (skill) {
-    case 'HYBRID':
-      return 'Híbrido';
-    case 'VIRTUAL':
-      return 'Virtual';
-    case 'IN_PERSON':
-      return 'Presencial';
-    default:
-      return 'N/A';
-  }
-};
-
 
 export const formatDates = (
-  date: string,
-  startHour: string,
-  endHour: string
+  dates: string[],
+  startHours: string[],
+  endHours: string[]
 ): {
   start_dates: string[];
   end_dates: string[];
 } => {
-  const dates = date.includes(',') ? date.split(',') : [date];
-  const start_dates: string[] = [];
-  const end_dates: string[] = [];
-  dates.forEach((d) => {
-    d = d.trim();
-    const [startDate, endDate] = getFormatedDate(d, startHour.trim(), endHour.trim());
-    start_dates.push(startDate);
-    end_dates.push(endDate);
-  });
-  const newDates = {
-    start_dates,
-    end_dates,
-  };
-  return newDates;
-};
+  const start_dates = dates.map((date, index) => getFormatedDate(
+    date.trim(),
+    startHours[index].trim(),
+    endHours[index].trim()
+  )[0]);
 
+  const end_dates = dates.map((date, index) => getFormatedDate(
+    date.trim(),
+    startHours[index].trim(),
+    endHours[index].trim()
+  )[1]);
+  console.log(start_dates, end_dates)
 
-export const formatDates = (
-  datesObj: { [key: string]: string },
-  startDatesObj: { [key: string]: string },
-  endDatesObj: { [key: string]: string }
-) => {
-  const start_dates: string[] = [];
-  const end_dates: string[] = [];
-  Object.entries(datesObj).forEach(async ([key, value]) => {
-    const [start, end] = await getFormatedDate(value, startDatesObj[key], endDatesObj[key]);
-    start_dates.push(start);
-    end_dates.push(end);
-  });
   return { start_dates, end_dates };
 };
-
 export const sumHours = (startHours: string[], endHours: string[]) => {
   let hours: number = 0;
   startHours.forEach((startDate, index) => {

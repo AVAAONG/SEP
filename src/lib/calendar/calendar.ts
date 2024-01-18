@@ -1,3 +1,4 @@
+'use server';
 /**
  * @file Calendar API v3 functions
  * @author Kevin Bravo (kevinbravo.me)
@@ -10,80 +11,40 @@
 import { WORKSHOP_CALENDAR_ID } from '@/lib/constants';
 import createZoomMeeting from '@/lib/zoom';
 import { calendar_v3 } from '@googleapis/calendar';
-import { Chat, Volunteer, Workshop } from '@prisma/client';
 import { Calendar } from '../googleAPI/auth';
-import {
-  createChatCalendarDescription,
-  createWorkshopCalendarDescription,
-} from './calendarDescription';
+import createCalendarDescription from './calendarDescription';
 import createEventObject from './calendarEventObject';
-import { IWorkshopCalendar } from './d';
+import { IChatCalendar, IWorkshopCalendar } from './d';
 import {
-  addHours,
-  getFormatedDate,
   getMeetEventLink,
-  getPublicEventLink,
-  substractMonths,
+  substractMonths
 } from './utils';
 
-export const createCalendarEvent = async (values: IWorkshopCalendar | Chat | Volunteer) => {
-  let addUrl: string | null = null;
-  let meetLink: string | null = null;
-  let meetId: string | null = null;
-  let meetingPassword: string | null = null;
-  if ('asociated_skill' in values) {
+interface MeetingDetails {
+  meetingLink: string | null | undefined;
+  meetingId: string | null | undefined;
+  meetingPassword?: string | null | undefined;
+}
 
-    values as Workshop;
-    const { title, start_dates, end_dates, platform } = values;
-
-    const [eventDetails, eventDescription, zoomMeetLink, zoomMeetId, zoomMetPassword] =
-      await createWorkshopEventDetails(values);
-
-    //remplazar con un invite
-    addUrl = await getPublicEventLink(title, platform, eventDescription, start_dates, end_dates);
-
-    const events = eventDetails.map(async (event) => {
-      return await Calendar.events.insert({
-        calendarId: WORKSHOP_CALENDAR_ID,
-        conferenceDataVersion: 1,
-        requestBody: event,
-        sendUpdates: 'all',
-      });
-    });
-
-    const eventsIds = (await Promise.all(events)).map((event) => event.data.id!);
-    if (platform.toLowerCase().trim() === 'google meet') {
-      const [googleMeetLink, googleMeetId] = await getMeetEventLink(calendarId, event.data.id!);
-      meetLink = googleMeetLink;
-      meetId = googleMeetId;
-    } else if (platform.toLowerCase().trim() === 'zoom') {
-      meetLink = zoomMeetLink!;
-      meetId = zoomMeetId!;
-      meetingPassword = zoomMetPassword!;
-    }
-    return [eventsIds, addUrl, meetLink, meetId, meetingPassword];
-
-
-
-  } else if ('level' in values) {
-    values as Chat;
-    const { name, platform, date, startHour } = values as Chat;
-    const endHour = addHours(new Date(startHour), 2);
-    const [start, end] = getFormatedDate(date, startHour, endHour.toLocaleString());
-    const [eventDetails, eventDescription] = await createChatEventDetails(values as Chat);
-    addUrl = await getPublicEventLink(name, platform, eventDescription, start, end);
-
-    const event = await Calendar.events.insert({
-      calendarId,
+export const createCalendarEvent = async (values: IWorkshopCalendar | IChatCalendar): Promise<[string[], MeetingDetails[]]> => {
+  let meetingDetails: MeetingDetails[] = []
+  const { platform } = values;
+  const [eventDetails, zoomMeetDetails] = await createEventDetails(values);
+  const events = eventDetails.map(async (event) => {
+    return await Calendar.events.insert({
+      calendarId: WORKSHOP_CALENDAR_ID,
       conferenceDataVersion: 1,
-      requestBody: eventDetails,
-    });
-    const eventId = event.data.id!;
+      requestBody: event,
+      sendUpdates: 'all',
 
-    return [eventId, addUrl];
-  } else {
-    throw new Error('Invalid kind of activity');
-  }
+    });
+  });
+  const eventsIds = (await Promise.all(events)).map((event) => event.data.id!);
+  if (platform.toLowerCase().trim() === 'GOOGLE_MEET') {
+    const googleMeetEventDetails = eventsIds.map(async (eventId) => await getMeetEventLink(WORKSHOP_CALENDAR_ID, eventId))
+    meetingDetails = await Promise.all(googleMeetEventDetails);
+  } else if (platform.toLowerCase().trim() === 'ZOOM') meetingDetails = [...zoomMeetDetails]
+  return [eventsIds, meetingDetails];
 };
 
 // // --------------------------------------------------- Calendar Main function ---------------------------------------------------
@@ -94,25 +55,34 @@ export const createCalendarEvent = async (values: IWorkshopCalendar | Chat | Vol
  * @see {@link https://developers.google.com/calendar/api/v3/reference/events/insert} for reference about the {insert} method
  * @returns the event id
  */
-const createWorkshopEventDetails = async (
-  values: IWorkshopCalendar
-): Promise<[calendar_v3.Schema$Event[], string, string?, string?, string?]> => {
+const createEventDetails = async (
+  values: IWorkshopCalendar | IChatCalendar
+): Promise<[calendar_v3.Schema$Event[], {
+  meetingLink: string | null | undefined
+  meetingId: string | null | undefined
+  meetingPassword?: string | null | undefined
+}[]]> => {
   const {
     title,
     start_dates,
     end_dates,
     modality,
     platform,
-    description,
   } = values
   let calendarDescription: string = ''
   let eventDetails: calendar_v3.Schema$Event[];
-  let zoomMeetLink;
-  let zoomMeetId;
-  let zoomMetPassword;
+  const zoomMeetDetails: {
+    meetingLink: string | null | undefined
+    meetingId: string | null | undefined
+    meetingPassword?: string | null | undefined
+  }[] = [];
+
+  const attendees = values.speakersData.map(speaker => {
+    return { email: speaker.speakerEmail, displayName: speaker.speakerName }
+  })
 
   if (modality === 'IN_PERSON') {
-    calendarDescription = createWorkshopCalendarDescription(values);
+    calendarDescription = createCalendarDescription(values);
     eventDetails = start_dates.map((startDate, index) => {
       const endDate = end_dates![index];
       return createEventObject(
@@ -120,35 +90,35 @@ const createWorkshopEventDetails = async (
         modality,
         platform,
         calendarDescription,
-        startDate.toISOString(),
-        endDate.toISOString()
+        startDate,
+        endDate,
+        attendees
       );
     });
   } else if (modality === 'ONLINE') {
     if (platform === 'ZOOM') {
       eventDetails = await Promise.all(start_dates.map(async (startDate, index) => {
-        const [join_url, id, password] = await createZoomMeeting(title, startDate);
-        zoomMeetLink = join_url;
-        zoomMeetId = id;
-        zoomMetPassword = password;
-        calendarDescription = createWorkshopCalendarDescription(values,
-          join_url,
-          id,
-          password
+        const [meetingLink, meetingId, meetingPassword] = await createZoomMeeting(title, startDate);
+        zoomMeetDetails.push({
+          meetingLink, meetingId, meetingPassword
+        })
+        calendarDescription = createCalendarDescription(values,
+          meetingLink, meetingId, meetingPassword
         );
         const endDate = end_dates![index];
         return createEventObject(
           title,
           modality,
-          zoomMeetLink,
+          meetingLink,
           calendarDescription,
-          startDate.toISOString(),
-          endDate.toISOString()
+          startDate,
+          endDate,
+          attendees
         );
       }))
 
     } else {
-      calendarDescription = createWorkshopCalendarDescription(values);
+      calendarDescription = createCalendarDescription(values);
       eventDetails = start_dates.map((startDate, index) => {
         const endDate = end_dates![index];
         return createEventObject(
@@ -156,13 +126,14 @@ const createWorkshopEventDetails = async (
           modality,
           platform,
           calendarDescription,
-          startDate.toISOString(),
-          endDate.toISOString()
+          startDate,
+          endDate,
+          attendees
         );
       });
     }
   } else {
-    calendarDescription = createWorkshopCalendarDescription(values);
+    calendarDescription = createCalendarDescription(values);
     eventDetails = start_dates.map((startDate, index) => {
       const endDate = end_dates![index];
       return createEventObject(
@@ -170,31 +141,14 @@ const createWorkshopEventDetails = async (
         modality,
         platform,
         calendarDescription,
-        startDate.toISOString(),
-        endDate.toISOString()
+        startDate,
+        endDate,
+        attendees
       );
     });
   }
-  return [eventDetails, calendarDescription, zoomMeetLink, zoomMeetId, zoomMetPassword];
+  return [eventDetails, zoomMeetDetails];
 };
-
-const createChatEventDetails = async (
-  values: Chat
-): Promise<[calendar_v3.Schema$Event, string]> => {
-  const { name, description, speaker, level, kindOfChat, platform, date, startHour } = values;
-  const endHour = addHours(new Date(startHour), 2);
-  const [start, end] = getFormatedDate(date, startHour, endHour.toLocaleString());
-  let calendarDescription = createChatCalendarDescription(
-    level,
-    speaker,
-    kindOfChat,
-    platform,
-    description
-  );
-  let eventDetails = createEventObject(name, kindOfChat, platform, calendarDescription, start, end);
-  return [eventDetails, calendarDescription];
-};
-
 /**
  * Lists the events of a calendar of the last 3 months.
  * @see https://developers.google.com/calendar/v3/reference/events/list - for more information about the API
@@ -277,12 +231,4 @@ export const getDate = () => {
   let search = date.indexOf(':');
   date = date.slice(0, search - 3);
   return date;
-};
-
-const splitSpeakerValues = (value: string) => {
-  const speakerValues = value.split('+/+');
-  const speakerId = speakerValues[0];
-  const speakerName = speakerValues[1];
-  const speakerEmail = speakerValues[2];
-  return { speakerId, speakerName, speakerEmail };
 };

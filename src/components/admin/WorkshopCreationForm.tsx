@@ -1,6 +1,9 @@
 'use client';
+import { createCalendarEvent } from '@/lib/calendar/calendar';
+import { IWorkshopCalendar } from '@/lib/calendar/d';
 import { formatDates } from '@/lib/calendar/utils';
 import { MODALITY, PROGRAM_COMPONENTS, WORKSHOP_TYPES, WORKSHOP_YEAR } from '@/lib/constants';
+import { prisma } from '@/lib/db/utils/prisma';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Avatar } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
@@ -9,6 +12,7 @@ import { Chip } from '@nextui-org/chip';
 import { Input, Textarea } from '@nextui-org/input';
 import { Select, SelectItem } from '@nextui-org/select';
 import { Modality, Prisma, Skill, WorkshopYear } from '@prisma/client';
+import { useSession } from 'next-auth/react';
 import { BaseSyntheticEvent } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -25,16 +29,12 @@ const workshopCreationFormSchema = z.object({
   endHours: z.string(),
   modality: z.nativeEnum(Modality),
   asociated_skill: z.nativeEnum(Skill),
-  avalible_spots: z.string().min(1, { message: 'Debes tener al menos un cupo disponible' }).trim(),
-  platformOnline: z.string().min(1, { message: 'Debes elegir una plataforma' }).trim().optional(),
-  platformInPerson: z
-    .string()
-    .min(1, { message: 'Debes colocar el lugar de la actividad' })
-    .trim()
-    .optional(),
+  avalible_spots: z.coerce.number().min(1, { message: 'Debe tener al menos un cupo disponible' }),
+  platformOnline: z.string().trim().optional(),
+  platformInPerson: z.string().trim().optional(),
   speakersId: z.string().min(1, { message: 'Debes elegir al menos un facilitador' }).trim(),
   year: z.nativeEnum(WorkshopYear).array().min(1, { message: 'Debes elegir al menos un año' }),
-  description: z.string().trim().optional(),
+  description: z.string().trim().nullable(),
 });
 
 interface WorkshopCreationFormProps {
@@ -47,11 +47,13 @@ interface WorkshopCreationFormProps {
   }[];
 }
 const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers }) => {
+  const session = useSession();
   const {
     control,
     handleSubmit,
     watch,
     formState: { isSubmitting, isValid },
+    reset,
   } = useForm<z.infer<typeof workshopCreationFormSchema>>({
     resolver: zodResolver(workshopCreationFormSchema),
     defaultValues: {
@@ -59,7 +61,6 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers })
       dates: '2024-09-30',
       startHours: '10:00',
       endHours: '12:00',
-      avalible_spots: '20',
       asociated_skill: 'SELF_MANAGEMENT',
       modality: 'IN_PERSON',
       kindOfWorkshop: 'WORKSHOP',
@@ -70,21 +71,37 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers })
     },
   });
   const modality = watch('modality');
-  const handleFormSubmit = (
+  const handleFormSubmit = async (
     data: z.infer<typeof workshopCreationFormSchema>,
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
-    //1. Parseamos el speakers
-    // guardamos los nombres de los facilitadores en una variable
-    //2. Parseamos las fechas (al momento de devolver las fechas asegurarse de devolveras usando toISOsTRING)
-    //3. Creamos el evento en el calendario
     const buttonType = ((event?.nativeEvent as SubmitEvent)?.submitter as HTMLButtonElement)?.name;
+
+    const workshopDates = data.dates.includes(',') ? data.dates.split(',') : [data.dates];
+    const startHours = data.startHours.includes(',')
+      ? data.startHours.split(',')
+      : [data.startHours];
+    const endHours = data.endHours.includes(',') ? data.endHours.split(',') : [data.endHours];
+    const dates = await formatDates(workshopDates, startHours, endHours);
+
     const workshopSpeakersId = data.speakersId.split(',');
-    const dates = formatDates(data.dates, data.startHours, data.endHours);
-    const workshopSpeakers = workshopSpeakersId.map((speakerId) => {
-      const s = speakers.find((speaker) => speaker.id === speakerId);
-      return { id: s?.id, name: `${s?.first_names} ${s?.last_names}`, email: s?.email };
-    });
+
+    const calendarWorkshop: IWorkshopCalendar = {
+      platform: data.platformInPerson ? data.platformInPerson : data.platformOnline!,
+      speakersData: workshopSpeakersId.map((speakerId: string) => {
+        const speaker = speakers.find((speaker) => speaker.id === speakerId);
+        return {
+          id: speaker?.id!,
+          speakerName: `${speaker?.first_names} ${speaker?.last_names}` || '',
+          speakerEmail: speaker?.email || '',
+        };
+      }),
+      ...dates,
+      ...data,
+    };
+
+    const [eventsIds, meetingDetails] = await createCalendarEvent(calendarWorkshop);
+
     const workshop: Prisma.WorkshopCreateArgs = {
       data: {
         title: data.title,
@@ -92,35 +109,27 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers })
         platform: data.platformInPerson ? data.platformInPerson : data.platformOnline!,
         description: data.description ? data.description : null,
         kindOfWorkshop: data.kindOfWorkshop,
-        calendar_ids: [],
+        calendar_ids: [...eventsIds],
         ...dates,
         year: data.year as unknown as WorkshopYear[],
         modality: data.modality,
         asociated_skill: data.asociated_skill,
         activity_status: 'SCHEDULED',
         speaker: {
-          connect: workshopSpeakers.map((speaker) => ({ id: speaker.id })),
+          connect: calendarWorkshop.speakersData.map((speaker) => ({ id: speaker.id })),
         },
       },
     };
 
     if (buttonType === 'schedule') {
-      console.log(workshop);
-      console.log('schedule');
-      //creamos el evento o los eventos en el calendario
-      //le mandamos al facilitador una invitacion a la reunion
-      //agregamos los ids al workshop
-      //creamos el workshop en la base de datos
+      workshop.data.activity_status = 'SCHEDULED';
+      await prisma.workshop.create(workshop);
     } else if (buttonType === 'send') {
-      console.log(workshop);
-      console.log('send');
-      //creamos la reunion en zoom, si existe
-      //creamos el evento o los eventos en el calendario
-      //creamos la runion
-      //agregamos los ids al workshop
-      //creamos el workshop en la base de datos
+      workshop.data.activity_status = 'SENT';
+      await prisma.workshop.create(workshop);
     } else {
     }
+    reset();
   };
 
   return (
@@ -248,7 +257,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers })
           render={({ field, formState }) => {
             return (
               <Input
-                value={field.value}
+                value={field.value?.toString()}
                 onChange={field.onChange}
                 isInvalid={!!formState.errors?.['avalible_spots']?.message}
                 errorMessage={formState.errors?.['avalible_spots']?.message?.toString()}
@@ -354,7 +363,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers })
             return (
               <Textarea
                 radius="sm"
-                value={field.value}
+                value={field.value || undefined}
                 onChange={field.onChange}
                 isInvalid={!!formState.errors?.['description']?.message}
                 errorMessage={formState.errors?.['description']?.message?.toString()}

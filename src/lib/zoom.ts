@@ -51,8 +51,8 @@ export const authenticateWithZoom = async (): Promise<ZoomAuthResponse> => {
  * @see link https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#operation/meetingCreate for more information about the Zoom API
  * @returns A Promise that resolves to an array containing the join URL, ID, and password of the meeting.
  */
-const createZoomMeeting = async (name: string, startTime: Date) => {
-  const date = startTime.toLocaleString('en-US', {
+const createZoomMeeting = async (name: string, startTime: string) => {
+  const date = new Date(startTime).toLocaleString('en-US', {
     timeZone: 'America/Caracas',
   });
 
