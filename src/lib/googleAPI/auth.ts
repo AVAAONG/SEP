@@ -6,6 +6,8 @@ import { auth } from '@googleapis/oauth2';
 import { people } from '@googleapis/people';
 import { sheets } from '@googleapis/sheets';
 
+import { getServerSession } from 'next-auth';
+import authAdminOptions from '../auth/nextAuthAdminOptions/authAdminOptions';
 import { CLIENT_ID, CLIENT_SECRET, REDIRECT_URL } from '../constants';
 
 const oauth2Client = new auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL);
@@ -16,11 +18,12 @@ const oauth2Client = new auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL);
  * @param refresh_token the refresh token of the user who is logged in
  * @see https://github.com/googleapis/google-api-nodejs-client#retrieve-access-token for more information
  */
-export const setTokens = (access_token: string, refresh_token: string) => {
+export const setTokens = async () => {
+  const u = await getServerSession(authAdminOptions)
   try {
     oauth2Client.setCredentials({
-      access_token,
-      refresh_token,
+      access_token: u?.user.accessToken,
+      refresh_token: u?.user.refreshToken,
     });
   } catch (err) {
     console.log('A ocurrido el siguiente error al intentar setear los tokens: ', err);

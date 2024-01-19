@@ -5,7 +5,7 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { ActivityStatus, Chat, ScholarAttendance, Speaker, Volunteer, Workshop, WorkshopTempData } from '@prisma/client';
+import { ActivityStatus, Chat, Prisma, ScholarAttendance, Speaker, Volunteer, Workshop } from '@prisma/client';
 import shortUUID from 'short-uuid';
 import { prisma } from './prisma';
 
@@ -71,33 +71,6 @@ export const getWorkshopsCount = async (): Promise<number> => {
   }
 };
 
-export const createWorkshop = async (
-  data: Workshop,
-  speakerId: string,
-  tempData?: WorkshopTempData
-) => {
-  try {
-    const workshop = await prisma.workshop.create({
-      data: {
-        ...data,
-        speaker: {
-          connect: {
-            id: speakerId,
-          },
-        },
-        temp_data: {
-          create: tempData,
-        },
-      },
-    });
-    console.log(`${workshop.title} created`);
-    return workshop;
-  } catch (err) {
-    console.log(err);
-  } finally {
-    await prisma.$disconnect();
-  }
-};
 
 const updateWorkshop = async (id: shortUUID.SUUID, data: Workshop) => {
   const workshop = await prisma.workshop.update({
@@ -436,3 +409,8 @@ export const addAttendaceToScholar = async (
     },
   });
 };
+
+export const createWorkshop = async (workshop: Prisma.WorkshopCreateArgs) => {
+  const createdWorkshop = await prisma.workshop.create(workshop);
+  return createdWorkshop;
+}

@@ -53,15 +53,7 @@ const createDefaultEvent = (
           method: 'popup',
           minutes: 60,
         },
-        {
-          method: 'email',
-          minutes: 60,
-        },
-        // remainder 30 minutes before the event
-        {
-          method: 'email',
-          minutes: 30,
-        },
+        // remainder 30 minutes before the events
         {
           method: 'popup',
           minutes: 30,

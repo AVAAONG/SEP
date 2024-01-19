@@ -28,6 +28,9 @@ dependencies:
   '@heroicons/react':
     specifier: ^2.0.18
     version: 2.0.18(react@18.2.0)
+  '@hookform/resolvers':
+    specifier: ^3.3.4
+    version: 3.3.4(react-hook-form@7.48.2)
   '@microsoft/microsoft-graph-client':
     specifier: ^3.0.7
     version: 3.0.7
@@ -585,6 +588,14 @@ packages:
       react: '>= 16'
     dependencies:
       react: 18.2.0
+    dev: false
+
+  /@hookform/resolvers@3.3.4(react-hook-form@7.48.2):
+    resolution: {integrity: sha512-o5cgpGOuJYrd+iMKvkttOclgwRW86EsWJZZRC23prf0uU2i48Htq4PuT73AVb9ionFyZrwYEITuOFGF+BydEtQ==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
+    dependencies:
+      react-hook-form: 7.48.2(react@18.2.0)
     dev: false
 
   /@humanwhocodes/config-array@0.11.13:
@@ -5595,8 +5606,8 @@ packages:
       - supports-color
     dev: false
 
-  /google-auth-library@9.2.0(encoding@0.1.13):
-    resolution: {integrity: sha512-1oV3p0JhNEhVbj26eF3FAJcv9MXXQt4S0wcvKZaDbl4oHq5V3UJoSbsGZGQNcjoCdhW4kDSwOs11wLlHog3fgQ==}
+  /google-auth-library@9.4.2(encoding@0.1.13):
+    resolution: {integrity: sha512-rTLO4gjhqqo3WvYKL5IdtlCvRqeQ4hxUx/p4lObobY2xotFW3bCQC+Qf1N51CYOfiqfMecdMwW9RIo7dFWYjqw==}
     engines: {node: '>=14'}
     dependencies:
       base64-js: 1.5.1
@@ -5639,7 +5650,7 @@ packages:
     dependencies:
       extend: 3.0.2
       gaxios: 6.1.1(encoding@0.1.13)
-      google-auth-library: 9.2.0(encoding@0.1.13)
+      google-auth-library: 9.4.2(encoding@0.1.13)
       qs: 6.11.2
       url-template: 2.0.8
       uuid: 9.0.1

@@ -3,7 +3,7 @@ import { createCalendarEvent } from '@/lib/calendar/calendar';
 import { IWorkshopCalendar } from '@/lib/calendar/d';
 import { formatDates } from '@/lib/calendar/utils';
 import { MODALITY, PROGRAM_COMPONENTS, WORKSHOP_TYPES, WORKSHOP_YEAR } from '@/lib/constants';
-import { prisma } from '@/lib/db/utils/prisma';
+import { createWorkshop } from '@/lib/db/utils/Workshops';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Avatar } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
@@ -12,7 +12,6 @@ import { Chip } from '@nextui-org/chip';
 import { Input, Textarea } from '@nextui-org/input';
 import { Select, SelectItem } from '@nextui-org/select';
 import { Modality, Prisma, Skill, WorkshopYear } from '@prisma/client';
-import { useSession } from 'next-auth/react';
 import { BaseSyntheticEvent } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -47,7 +46,6 @@ interface WorkshopCreationFormProps {
   }[];
 }
 const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers }) => {
-  const session = useSession();
   const {
     control,
     handleSubmit,
@@ -58,7 +56,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers })
     resolver: zodResolver(workshopCreationFormSchema),
     defaultValues: {
       title: 'Taller de prueba',
-      dates: '2024-09-30',
+      dates: '2024-01-30',
       startHours: '10:00',
       endHours: '12:00',
       asociated_skill: 'SELF_MANAGEMENT',
@@ -123,10 +121,10 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers })
 
     if (buttonType === 'schedule') {
       workshop.data.activity_status = 'SCHEDULED';
-      await prisma.workshop.create(workshop);
+      await createWorkshop(workshop);
     } else if (buttonType === 'send') {
       workshop.data.activity_status = 'SENT';
-      await prisma.workshop.create(workshop);
+      await createWorkshop(workshop);
     } else {
     }
     reset();

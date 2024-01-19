@@ -20,11 +20,11 @@ const createWorkshopCalendarDescription = (workshop: IWorkshopCalendar,
 ${speakersData.length === 1 ? `<b>Facilitador:</b> ${speakersNames[0]}` : `<b>Facilitadores:</b> ${speakersNames.join(', ')}`}
 ${modality === 'ONLINE' ? `<b>Plataforma:</b> ${platform}` : `<b>Lugar:</b> ${platform}`}
 <b>Competencia Asociada:</b> ${parseSkillFromDatabase(asociated_skill)}
-${meetingLink ? `<b>Link de la reunion:</b> ${meetingLink}` : null}
-${meetingId ? `<b>Id de la reunion:</b> ${meetingId}` : null}
-${meetingPassword ? `<b>Contraseña de la reunion:</b> ${meetingPassword}` : null}}
+${meetingLink ?? `<b>Link de la reunion:</b> ${meetingLink}`}
+${meetingId ?? `<b>Id de la reunion:</b> ${meetingId}`}
+${meetingPassword ?? `<b>Contraseña de la reunion:</b> ${meetingPassword}`}
 
-${description ? description : null}
+${description ?? description}
 `
   return calendarDescription;
 }
@@ -48,11 +48,11 @@ ${modality === 'ONLINE'
       ? `<b>Plataforma:</b> ${platform}`
       : `<b>Lugar:</b> ${platform}`
     }
-    ${meetingLink ? `<b>Link de la reunion:</b> ${meetingLink}` : null}
-    ${meetingId ? `<b>Id de la reunion:</b> ${meetingId}` : null}
-    ${meetingPassword ? `<b>Contraseña de la reunion:</b> ${meetingPassword}` : null}}
+    ${meetingLink ?? `<b>Link de la reunion:</b> ${meetingLink}`}
+    ${meetingId ?? `<b>Id de la reunion:</b> ${meetingId}`}
+    ${meetingPassword ?? `<b>Contraseña de la reunion:</b> ${meetingPassword}`}
     
-    ${description ? description : null}
+    ${description ?? description}
     `
   return calendarDescription;
 };

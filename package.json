@@ -40,6 +40,7 @@
     "@googleapis/sheets": "^4.0.2",
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
+    "@hookform/resolvers": "^3.3.4",
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "@next-auth/prisma-adapter": "^1.0.7",
     "@nextui-org/react": "^2.2.9",
