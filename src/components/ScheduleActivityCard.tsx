@@ -3,8 +3,6 @@ import Modal from '@/components/commons/ModalV2';
 import { parseModalityFromDatabase, parseSkillFromDatabase } from '@/lib/utils2';
 import {
   Button,
-  Checkbox,
-  CheckboxGroup,
   ModalBody,
   ModalContent,
   ModalFooter,
@@ -12,16 +10,22 @@ import {
   Tooltip,
   cn,
 } from '@nextui-org/react';
+
+import { Checkbox, CheckboxGroup } from '@nextui-org/checkbox';
+
+import { Prisma } from '@prisma/client';
 import { EditIcon } from 'public/svgs/svgs';
-import { useState } from 'react';
-import { WorkshopWithSpeaker } from './admin/WorkshopForm';
+import React, { useState } from 'react';
 
 type WorkshopsListProps = {
-  workshops: WorkshopWithSpeaker[];
+  workshops:  Prisma.WorkshopInclude = {
+    speaker: true,
+  };
 };
 
+
 const ScheduledWorkshopsList: React.FC<WorkshopsListProps> = ({ workshops }) => {
-  const [groupSelected, setGroupSelected] = useState<string[]>([]);
+  const [groupSelected, setGroupSelected] = useState<string[]>();
 
   return (
     <div className="flex flex-col w-full items-center">
@@ -31,7 +35,7 @@ const ScheduledWorkshopsList: React.FC<WorkshopsListProps> = ({ workshops }) => 
       <CheckboxGroup
         label="Selecciona las actividades que deseas enviar"
         value={groupSelected}
-        onChange={(value: string[]) => setGroupSelected(value)}
+        onValueChange={setGroupSelected}
         color="success"
         classNames={{
           label: ' italic text-sm w-full text-center text-primary-1',
@@ -39,8 +43,7 @@ const ScheduledWorkshopsList: React.FC<WorkshopsListProps> = ({ workshops }) => 
         }}
       >
         {workshops.map((workshop) => {
-          const { title, speaker, id, avalible_spots, platform, asociated_skill, year, modality } =
-            workshop;
+          const { title, id, avalible_spots, platform, asociated_skill, year, modality } = workshop;
           return (
             <Checkbox
               radius="sm"
