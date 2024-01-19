@@ -1,5 +1,5 @@
 'use client';
-import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
+import { EllipsisHorizontalCircleIcon } from '@heroicons/react/24/outline';
 import {
   Button,
   Dropdown,
@@ -9,7 +9,6 @@ import {
   DropdownTrigger,
 } from '@nextui-org/react';
 import { useState } from 'react';
-import EditScholarForm from './EditScholarForm';
 
 type ModalsOpen = {
   probation: boolean;
@@ -25,8 +24,8 @@ const ScholarDropdown = ({ scholar }) => {
     <>
       <Dropdown isOpen={dropdownIsOpen} onOpenChange={(open) => setDropdownOpen(open)}>
         <DropdownTrigger>
-          <Button radius="full" isIconOnly color="success" variant="bordered" className="p-1 w-8">
-            <EllipsisVerticalIcon />
+          <Button radius="full" isIconOnly color="success" variant="light" className="w-8">
+            <EllipsisHorizontalCircleIcon className="rotate-90 w-full" />
           </Button>
         </DropdownTrigger>
         <DropdownMenu
@@ -62,6 +61,9 @@ const ScholarDropdown = ({ scholar }) => {
             >
               Pasar a Probatorio II
             </DropdownItem>
+            <DropdownItem key="NORMAL" description="Pasar becario a estatus normal" color="default">
+              Pasar a estado normal
+            </DropdownItem>
           </DropdownSection>
           <DropdownSection title="Acciones especiales">
             <DropdownItem key="condition" description="Renuncias, Retiros, Egreso">
@@ -72,7 +74,7 @@ const ScholarDropdown = ({ scholar }) => {
       </Dropdown>
       {/* <ProbationForm isOpen={modalOpen.probation} probationKind={probationKind} />
        */}
-      <EditScholarForm modalIsOpen={editModalIsOpen} set={setEditModalOpen} scholar={scholar} />
+      {/* <EditScholarForm modalIsOpen={editModalIsOpen} set={setEditModalOpen} scholar={scholar} /> */}
     </>
   );
 };

@@ -165,7 +165,7 @@ const page = async ({
       chat.attendance === 'ATTENDED' ||
       (chat.attendance === 'SPEAKER' && chat.activity_status !== 'SUSPENDED')
   );
-  const cardContent = createDataCardsContent([
+  const cardContent = [
     {
       icon: workshopIcon,
       text: 'Actividades formativas',
@@ -190,7 +190,7 @@ const page = async ({
       cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
       activity: 'voluntariado',
     },
-  ]);
+  ];
 
   const workshopsByMonth: Record<number, number> =
     atendedWorkshops?.reduce((acc, workshop) => {
