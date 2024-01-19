@@ -7,6 +7,7 @@
  */
 
 import axios from 'axios';
+import moment from 'moment';
 
 const ZOOM_API_CLIENT_KEY = process.env.ZOOM_CLIENT_ID;
 const ZOOM_API_CLIENT_SECRET = process.env.ZOOM_CLIENT_SECRET;
@@ -52,15 +53,13 @@ export const authenticateWithZoom = async (): Promise<ZoomAuthResponse> => {
  * @returns A Promise that resolves to an array containing the join URL, ID, and password of the meeting.
  */
 const createZoomMeeting = async (name: string, startTime: string) => {
-  const date = new Date(startTime).toLocaleString('en-US', {
-    timeZone: 'America/Caracas',
-  });
+  const start_time: string = moment(startTime).format('YYYY-MM-DDTHH:mm:ss');
 
   // console.log(access_token)
   const meetingOptions = {
     topic: name,
     type: 2,
-    start_time: date,
+    start_time,
     duration: 120,
     timezone: 'America/Caracas',
     default_password: true,
