@@ -99,4 +99,14 @@ export async function getUserInfo() {
   return response.data;
 }
 
+const deleteZoomMeeting = async (meetingId: string) => {
+  const { access_token } = await authenticateWithZoom();
+  const response = await axios.delete(`https://api.zoom.us/v2/meetings/${meetingId}`, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
+  return response.data;
+}
+
 export default createZoomMeeting;

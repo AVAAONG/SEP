@@ -1,32 +1,62 @@
 'use client';
-import Modal from '@/components/commons/ModalV2';
+import { deleteCalendarEvent } from '@/lib/calendar/calendar';
+import { WORKSHOP_CALENDAR_ID } from '@/lib/constants';
+import { deleteWorkshopFromDatabase, sendWorkshopsToScholar } from '@/lib/db/utils/Workshops';
+import { revalidateSpecificPath } from '@/lib/serverAction';
 import { parseModalityFromDatabase, parseSkillFromDatabase } from '@/lib/utils2';
-import {
-  Button,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  Tooltip,
-  cn,
-} from '@nextui-org/react';
-
+import { PencilSquareIcon } from '@heroicons/react/24/outline';
+import { Button } from '@nextui-org/button';
 import { Checkbox, CheckboxGroup } from '@nextui-org/checkbox';
-
-import { Prisma } from '@prisma/client';
-import { EditIcon } from 'public/svgs/svgs';
-import React, { useState } from 'react';
+import { useDisclosure } from '@nextui-org/modal';
+import { cn } from '@nextui-org/react';
+import { Tooltip } from '@nextui-org/tooltip';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useRef, useState } from 'react';
+import BasicModal from './BasicModal';
+import { WorkshopWithSpeaker } from './admin/ChatFormCreation';
 
 type WorkshopsListProps = {
-  workshops:  Prisma.WorkshopInclude = {
-    speaker: true,
-  };
+  workshops: WorkshopWithSpeaker[];
 };
-
 
 const ScheduledWorkshopsList: React.FC<WorkshopsListProps> = ({ workshops }) => {
   const [groupSelected, setGroupSelected] = useState<string[]>();
+  const [buttonIsDisabled, setbuttonIsDisabled] = useState(false);
+  const editModal = useDisclosure();
+  const deleteModal = useDisclosure();
+  const sendModal = useDisclosure();
+  let router;
 
+  const mounted = useRef(false);
+
+  useEffect(() => {
+    mounted.current = true;
+  }, []);
+  if (mounted.current) {
+    router = useRouter();
+  }
+
+  const sendWorkshops = async () => {
+    if (groupSelected) {
+      groupSelected.map(async (id) => {
+        await sendWorkshopsToScholar(id);
+      });
+    }
+  };
+
+  const editWorkshop = async (workshopId: string) => {
+    router.push(`?editWorkshopId=${workshopId}`);
+  };
+  const deleteWorkshop = async (workshopId: string) => {
+    //borrar del calendario
+    //borar del zoom (si existe)
+    // borrar de la base de datos.
+    const workshop = workshops.find((workshop) => workshop.id === workshopId);
+    workshop?.calendar_ids.map(async (eventId) => {
+      await deleteCalendarEvent(WORKSHOP_CALENDAR_ID, eventId);
+    });
+    await deleteWorkshopFromDatabase(shortUUID.SUUID);
+  };
   return (
     <div className="flex flex-col w-full items-center">
       <h1 className="col-span-2 mb-3 text-center w-full font-semibold text-2xl text-primary-light uppercase tracking-widest">
@@ -42,8 +72,19 @@ const ScheduledWorkshopsList: React.FC<WorkshopsListProps> = ({ workshops }) => 
           base: 'w-full',
         }}
       >
-        {workshops.map((workshop) => {
-          const { title, id, avalible_spots, platform, asociated_skill, year, modality } = workshop;
+        {workshops.map((workshop: WorkshopWithSpeaker, index) => {
+          const {
+            title,
+            id,
+            avalible_spots,
+            platform,
+            asociated_skill,
+            year,
+            modality,
+            speaker,
+            start_dates,
+            end_dates,
+          } = workshop;
           return (
             <Checkbox
               radius="sm"
@@ -73,26 +114,26 @@ const ScheduledWorkshopsList: React.FC<WorkshopsListProps> = ({ workshops }) => 
                       content={`${speaker[0].first_names + ' ' + speaker[0].last_names}`}
                     >
                       <Button className="bg-transparent p-0 h-unit-4" variant="flat">
-                        Por: {speaker[0].first_names + ' ' + speaker[0].last_names} kdsjlakj
+                        Por: {speaker[0].first_names + ' ' + speaker[0].last_names}
                       </Button>
                     </Tooltip>
                   </p>
                 </div>
                 <div className="flex-1 min-w-0 text-center">
                   <p className="text-sm font-medium ">
-                    {new Date().toLocaleString('es-ES', {
+                    {new Date(start_dates[0]).toLocaleString('es-ES', {
                       month: 'long',
                       day: 'numeric',
                     })}
                   </p>
                   <p className="text-xs   ">
                     De{' '}
-                    {new Date().toLocaleString('es-ES', {
+                    {new Date(start_dates[0]).toLocaleString('es-ES', {
                       hour: '2-digit',
                       minute: '2-digit',
                     })}{' '}
                     a{' '}
-                    {new Date().toLocaleString('es-ES', {
+                    {new Date(end_dates[0]).toLocaleString('es-ES', {
                       hour: '2-digit',
                       minute: '2-digit',
                     })}
@@ -115,37 +156,57 @@ const ScheduledWorkshopsList: React.FC<WorkshopsListProps> = ({ workshops }) => 
                     size="sm"
                     isIconOnly
                     className="w-4 font-medium"
+                    onPress={deleteModal.onOpen}
                   >
-                    X<span className="sr-only">Eliminar taller</span>
+                    X<span className="sr-only">Eliminar actividad formativa</span>
                   </Button>
-                  <Modal
-                    whenNoModal={
-                      <div className="w-4">
-                        <EditIcon />
-                      </div>
-                    }
-                  >
-                    <ModalContent>
-                      {(onClose) => (
+                  <BasicModal
+                    isOpen={deleteModal.isOpen}
+                    onOpenChange={deleteModal.onOpenChange}
+                    title="¿Estas seguro que deseas eliminar esta actividad formativa?"
+                    isButtonDisabled={buttonIsDisabled}
+                    Content={() => {
+                      return (
                         <>
-                          <ModalHeader className="flex flex-col gap-1">
-                            ¿Estas seguro que deseas editar este taller?
-                          </ModalHeader>
-                          <ModalBody>
-                            <div className="text-9xl w-full text-center">🤨</div>
-                          </ModalBody>
-                          <ModalFooter>
-                            <Button variant="light" onPress={onClose}>
-                              Cerrar
-                            </Button>
-                            <Button color="danger" onPress={onClose}>
-                              Editar
-                            </Button>
-                          </ModalFooter>
+                          <div className="text-9xl w-full text-center">🤨</div>
                         </>
-                      )}
-                    </ModalContent>
-                  </Modal>
+                      );
+                    }}
+                    onConfirm={deleteModal.onClose}
+                    confirmText="Eliminar"
+                  />
+                  <Button
+                    variant="light"
+                    color="success"
+                    radius="full"
+                    size="sm"
+                    isIconOnly
+                    className="w-4 font-medium"
+                    onPress={() => {
+                      editWorkshop(id);
+                    }}
+                  >
+                    <PencilSquareIcon className="w-5 h-5" />{' '}
+                    <span className="sr-only">Editar actividad formativa</span>
+                  </Button>
+
+                  <BasicModal
+                    isOpen={editModal.isOpen}
+                    onOpenChange={editModal.onOpenChange}
+                    title="¿Estas seguro que deseas editar esta actividad formativa?"
+                    Content={() => {
+                      return (
+                        <>
+                          <div className="text-9xl w-full text-center">🤨</div>
+                        </>
+                      );
+                    }}
+                    isButtonDisabled={buttonIsDisabled}
+                    onConfirm={() => {
+                      editWorkshop(id);
+                    }}
+                    confirmText="Editar"
+                  />
                 </div>
               </div>
             </Checkbox>
@@ -153,11 +214,41 @@ const ScheduledWorkshopsList: React.FC<WorkshopsListProps> = ({ workshops }) => 
         })}
       </CheckboxGroup>
       <Button
+        isDisabled={groupSelected?.length === 0}
         className="bg-gradient-to-tr from-primary-1 to-emerald-500 text-white w-1/2 mt-12"
         radius="sm"
+        onPress={sendModal.onOpen}
       >
         Enviar
       </Button>
+      <BasicModal
+        isOpen={sendModal.isOpen}
+        onOpenChange={sendModal.onOpenChange}
+        title="¿Estas seguro que deseas enviar las sigientes actividades formativas? 🤨"
+        Content={() => {
+          return (
+            <ul className="flex flex-col gap-3">
+              {groupSelected?.map((id) => {
+                const workshop = workshops.find((workshop) => workshop.id === id);
+                return (
+                  <li key={workshop?.id}>
+                    <p>✔ {workshop?.title}</p>
+                  </li>
+                );
+              })}
+            </ul>
+          );
+        }}
+        isButtonDisabled={buttonIsDisabled}
+        onConfirm={async () => {
+          setbuttonIsDisabled(true);
+          await sendWorkshops();
+          sendModal.onClose();
+          setbuttonIsDisabled(false);
+          await revalidateSpecificPath('/admin/actividadesFormativas/crear');
+        }}
+        confirmText="Enviar"
+      />
     </div>
   );
 };

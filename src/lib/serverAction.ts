@@ -1,4 +1,5 @@
 'use server';
+import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 
 const handler = async (cookieValue: string) => {
@@ -25,3 +26,8 @@ const handler = async (cookieValue: string) => {
 };
 
 export default handler;
+
+
+export const revalidateSpecificPath = async (path: string) => {
+  await revalidatePath(path)
+}

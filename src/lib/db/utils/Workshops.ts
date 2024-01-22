@@ -303,11 +303,14 @@ export const getScheduledWorkshops = async () => {
   const workshops = await prisma.workshop.findMany({
     include: {
       speaker: true,
-      temp_data: true,
     },
     where: {
       activity_status: 'SCHEDULED',
     },
+    orderBy: {
+      start_dates: 'asc',
+    }
+
   });
   return workshops;
 };
@@ -413,4 +416,15 @@ export const addAttendaceToScholar = async (
 export const createWorkshop = async (workshop: Prisma.WorkshopCreateArgs) => {
   const createdWorkshop = await prisma.workshop.create(workshop);
   return createdWorkshop;
+}
+
+export const sendWorkshopsToScholar = async (workshopId: string) => {
+  await prisma.workshop.update({
+    where: {
+      id: workshopId,
+    },
+    data: {
+      activity_status: 'SENT',
+    }
+  })
 }

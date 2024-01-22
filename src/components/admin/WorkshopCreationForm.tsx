@@ -4,6 +4,7 @@ import { IWorkshopCalendar } from '@/lib/calendar/d';
 import { formatDates } from '@/lib/calendar/utils';
 import { MODALITY, PROGRAM_COMPONENTS, WORKSHOP_TYPES, WORKSHOP_YEAR } from '@/lib/constants';
 import { createWorkshop } from '@/lib/db/utils/Workshops';
+import { revalidateSpecificPath } from '@/lib/serverAction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Avatar } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
@@ -18,7 +19,7 @@ import { z } from 'zod';
 import DateInput from '../commons/DateInput';
 import PlatformInput from '../commons/PlatformInput';
 
-const workshopCreationFormSchema = z.object({
+export const workshopCreationFormSchema = z.object({
   title: z.string().min(1, { message: 'El titulo no puede estar vacio' }).trim(),
   kindOfWorkshop: z.string().min(1, { message: 'Debes especificar el tipo de actividad' }),
   dates: z.string().refine((date) => new Date(date) >= new Date(), {
@@ -41,11 +42,15 @@ interface WorkshopCreationFormProps {
     id: string;
     first_names: string;
     last_names: string;
-    email: string;
-    image?: string;
+    email: string | null;
+    image?: string | null;
   }[];
+  workshopForEdit: z.infer<typeof workshopCreationFormSchema> | null;
 }
-const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers }) => {
+const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
+  speakers,
+  workshopForEdit,
+}) => {
   const {
     control,
     handleSubmit,
@@ -54,19 +59,20 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers })
     reset,
   } = useForm<z.infer<typeof workshopCreationFormSchema>>({
     resolver: zodResolver(workshopCreationFormSchema),
-    defaultValues: {
-      title: 'Taller de prueba',
-      dates: '2024-01-30',
-      startHours: '10:00',
-      endHours: '12:00',
-      asociated_skill: 'SELF_MANAGEMENT',
-      modality: 'IN_PERSON',
-      kindOfWorkshop: 'WORKSHOP',
-      speakersId: 'pEsSon3-arJyIQ7vxURmj',
-      year: ['I'],
-      platformInPerson: 'Oficinas de avaa',
-      description: 'Taller de prueba',
-    },
+    defaultValues: workshopForEdit!,
+    // defaultValues: {
+    //   title: 'Taller de prueba',
+    //   dates: '2024-01-30',
+    //   startHours: '10:00',
+    //   endHours: '12:00',
+    //   asociated_skill: 'SELF_MANAGEMENT',
+    //   modality: 'IN_PERSON',
+    //   kindOfWorkshop: 'WORKSHOP',
+    //   speakersId: 'pEsSon3-arJyIQ7vxURmj',
+    //   year: ['I'],
+    //   platformInPerson: 'Oficinas de avaa',
+    //   description: 'Taller de prueba',
+    // },
   });
   const modality = watch('modality');
   const handleFormSubmit = async (
@@ -128,6 +134,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({ speakers })
     } else {
     }
     reset();
+    await revalidateSpecificPath('/admin/actividadesFormativas/crear');
   };
 
   return (
