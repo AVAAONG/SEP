@@ -14,7 +14,7 @@ import { Input, Textarea } from '@nextui-org/input';
 import { Select, SelectItem } from '@nextui-org/select';
 import { Modality, Prisma, Skill, WorkshopYear } from '@prisma/client';
 import { BaseSyntheticEvent } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 import DateInput from '../commons/DateInput';
 import PlatformInput from '../commons/PlatformInput';
@@ -74,7 +74,10 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
     //   description: 'Taller de prueba',
     // },
   });
-  const modality = watch('modality');
+  const modality = useWatch({
+    control,
+    name: 'modality',
+  });
   const handleFormSubmit = async (
     data: z.infer<typeof workshopCreationFormSchema>,
     event: BaseSyntheticEvent<object, any, any> | undefined
