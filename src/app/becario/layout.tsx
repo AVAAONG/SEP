@@ -5,7 +5,6 @@ import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { getServerSession } from 'next-auth';
 
 export default async function RootLayout({
-  modals,
   children,
 }: {
   modals: React.ReactNode;
@@ -21,10 +20,7 @@ export default async function RootLayout({
           email={session?.user?.email}
         />
         <Sidebar />
-        <MainLayout>
-          {modals}
-          {children}
-        </MainLayout>
+        <MainLayout>{children}</MainLayout>
       </div>
     </>
   );
