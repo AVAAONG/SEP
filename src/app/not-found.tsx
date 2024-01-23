@@ -30,7 +30,7 @@ const NotFound = () => {
                 Página no encontrada. <span className="font-normal">🤔</span>
               </h1>
               <p className="mt-1 text-base text-gray-500">
-                Verifique la URL en la barra de direcciones y vuelva a intentarlo.
+                Verifique la URL en la barra de dirección y vuelva a intentarlo.
               </p>
             </div>
             <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">
