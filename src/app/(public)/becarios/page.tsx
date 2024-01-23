@@ -21,8 +21,8 @@ const page = async () => {
                       {name}
                     </h4>
                     <h5 className="text-small tracking-tight text-default-400">
-                      Estudiante de {scholar.collage_information?.career} en la{' '}
-                      {scholar.collage_information?.collage}
+                      Estudiante de {scholar.collage_information[0]?.career} en la{' '}
+                      {scholar.collage_information[0]?.collage}
                     </h5>
                   </div>
                 </div>
