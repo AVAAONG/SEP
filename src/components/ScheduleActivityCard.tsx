@@ -4,6 +4,7 @@ import { WORKSHOP_CALENDAR_ID } from '@/lib/constants';
 import { deleteWorkshopFromDatabase, sendWorkshopsToScholar } from '@/lib/db/utils/Workshops';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { parseModalityFromDatabase, parseSkillFromDatabase } from '@/lib/utils2';
+import { deleteZoomMeeting } from '@/lib/zoom';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { Button } from '@nextui-org/button';
 import { Checkbox, CheckboxGroup } from '@nextui-org/checkbox';
@@ -48,14 +49,16 @@ const ScheduledWorkshopsList: React.FC<WorkshopsListProps> = ({ workshops }) => 
     router.push(`?editWorkshopId=${workshopId}`);
   };
   const deleteWorkshop = async (workshopId: string) => {
-    //borrar del calendario
-    //borar del zoom (si existe)
-    // borrar de la base de datos.
     const workshop = workshops.find((workshop) => workshop.id === workshopId);
     workshop?.calendar_ids.map(async (eventId) => {
       await deleteCalendarEvent(WORKSHOP_CALENDAR_ID, eventId);
     });
-    await deleteWorkshopFromDatabase(shortUUID.SUUID);
+    await deleteWorkshopFromDatabase(workshopId);
+    if (workshop?.modality === 'ONLINE') {
+      if (workshop.platform === 'ZOOM') {
+        await deleteZoomMeeting(workshopId);
+      }
+    }
   };
   return (
     <div className="flex flex-col w-full items-center">

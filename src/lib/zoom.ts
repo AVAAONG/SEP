@@ -55,7 +55,6 @@ export const authenticateWithZoom = async (): Promise<ZoomAuthResponse> => {
 const createZoomMeeting = async (name: string, startTime: string) => {
   const start_time: string = moment(startTime).format('YYYY-MM-DDTHH:mm:ss');
 
-  // console.log(access_token)
   const meetingOptions = {
     topic: name,
     type: 2,
@@ -99,7 +98,7 @@ export async function getUserInfo() {
   return response.data;
 }
 
-const deleteZoomMeeting = async (meetingId: string) => {
+export const deleteZoomMeeting = async (meetingId: string) => {
   const { access_token } = await authenticateWithZoom();
   const response = await axios.delete(`https://api.zoom.us/v2/meetings/${meetingId}`, {
     headers: {

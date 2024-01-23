@@ -79,7 +79,7 @@ const updateWorkshop = async (id: shortUUID.SUUID, data: Workshop) => {
   });
 };
 
-export const deleteWorkshopFromDatabase = async (id: shortUUID.SUUID) => {
+export const deleteWorkshopFromDatabase = async (id: string) => {
   const workshop = await prisma.workshop.delete({
     where: { id },
   });
