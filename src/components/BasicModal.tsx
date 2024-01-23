@@ -34,8 +34,9 @@ const BasicModal: React.FC<BasicModalProps> = ({
                 Cerrar
               </Button>
               <Button
+                className="text-white "
                 isDisabled={isButtonDisabled}
-                color={confirmText === 'Editar' ? 'success' : 'danger'}
+                color={confirmText === 'Eliminar' ? 'danger' : 'success'}
                 onPress={onConfirm}
               >
                 {confirmText}
