@@ -3,12 +3,13 @@
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './calendar.css';
 
+import { BigCalendarEventType } from '@/types/Calendar';
+import { useDisclosure } from '@nextui-org/react';
 import moment from 'moment';
 import 'moment/locale/es';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Calendar as BigCalendar, Views, momentLocalizer } from 'react-big-calendar';
-
-import { BigCalendarEventType } from '@/types/Calendar';
+import BasicModal from '../BasicModal';
 
 /**
  * Defines the style for each event in the calendar.
@@ -37,6 +38,9 @@ const styleEvent = (event: BigCalendarEventType) => {
  * @returns The Calendar component.
  */
 const Calendar = ({ events }: { events: BigCalendarEventType[] }) => {
+  const [selectedEvent, setSelectedEvent] = useState<BigCalendarEventType | null>(null);
+
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   type T = keyof typeof Views;
   const localizer = momentLocalizer(moment);
   const { defaultDate, views } = useMemo(
@@ -47,30 +51,65 @@ const Calendar = ({ events }: { events: BigCalendarEventType[] }) => {
     []
   );
   return (
-    <BigCalendar
-      className="h-full w-full overflow-y-scroll overflow:-moz-scrollbars-none"
-      localizer={localizer}
-      events={events}
-      startAccessor="start"
-      endAccessor="end"
-      defaultDate={defaultDate}
-      views={views}
-      showMultiDayTimes
-      eventPropGetter={styleEvent}
-      popup
-      onDoubleClickEvent={(event) => {
-        window.open(event.url, '_blank');
-      }}
-      messages={{
-        month: 'Mes',
-        day: 'Día',
-        today: 'Hoy',
-        week: 'Semana',
-        work_week: 'Semana Laboral',
-        previous: 'Atrás',
-        next: 'Siguiente',
-      }}
-    />
+    <>
+      <BigCalendar
+        className="h-full w-full overflow-y-scroll overflow:-moz-scrollbars-none"
+        localizer={localizer}
+        events={events}
+        startAccessor="start"
+        endAccessor="end"
+        defaultDate={defaultDate}
+        views={views}
+        showMultiDayTimes
+        eventPropGetter={styleEvent}
+        popup
+        onSelectEvent={(event) => {
+          setSelectedEvent(event);
+          onOpen();
+        }}
+        messages={{
+          month: 'Mes',
+          day: 'Día',
+          today: 'Hoy',
+          week: 'Semana',
+          work_week: 'Semana Laboral',
+          previous: 'Atrás',
+          next: 'Siguiente',
+        }}
+      />
+
+      <BasicModal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        title={selectedEvent?.title!}
+        Content={() => {
+          return (
+            <div>
+              <p>{selectedEvent?.description}</p>
+              <p>
+                {' '}
+                {selectedEvent.start.toLocaleDateString('es-ES', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric',
+                })}
+              </p>
+              <p>
+                {' '}
+                {selectedEvent.end.toLocaleDateString('es-ES', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric',
+                })}
+              </p>
+            </div>
+          );
+        }}
+        isButtonDisabled={false}
+        onConfirm={() => {}}
+        confirmText="Confirmar inscripción"
+      />
+    </>
   );
 };
 
