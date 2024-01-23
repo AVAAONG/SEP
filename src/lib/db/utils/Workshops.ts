@@ -86,11 +86,10 @@ export const deleteWorkshopFromDatabase = async (id: string) => {
 };
 
 export const changeScholarAttendance = async (
-
   workshopAttendanceId: string,
   attendance: ScholarAttendance
 ) => {
-  const workshopAttendance = await prisma.workshopAttendance.update({
+  await prisma.workshopAttendance.update({
     where: {
       id: workshopAttendanceId,
     },
@@ -98,34 +97,27 @@ export const changeScholarAttendance = async (
       attendance: attendance,
     }
   })
-  console.log(workshopAttendance)
+}
 
-  // const workshop = await prisma.workshop.findUnique({
-  //   where: {
-  //     id: workshopId,
-  //     AND: {
-  //       scholar_attendance: {
-  //         some: {
-  //           scholar_id: scholarId,
-  //         },
-  //       },
-  //     }
-
-  //   },
-  //   include: {
-  //     scholar_attendance: true
-  //   }
-  // });
-  // console.log(workshop?.scholar_attendance)
-
-  // await prisma.workshopAttendance.update({
-  //   where: {
-  //     id: workshop?.scholar_attendance[0].id,
-  //   },
-  //   data: {
-  //     attendance: attendance,
-  //   }
-  // })
+export const enrrrollScholarToWorkshop = async (
+  workshopId: string,
+  scholarId: string,
+) => {
+  await prisma.workshopAttendance.create({
+    data: {
+      workshop: {
+        connect: {
+          id: workshopId,
+        },
+      },
+      attendance: 'ENROLLED',
+      scholar: {
+        connect: {
+          id: scholarId,
+        },
+      },
+    },
+  });
 }
 
 
@@ -157,6 +149,22 @@ export const getAllActivities = async (): Promise<[Workshop[], Chat[], Volunteer
   const [workshops, chats, volunteer] = await prisma.$transaction([
     prisma.workshop.findMany(),
     prisma.chat.findMany(),
+    prisma.volunteer.findMany(),
+  ]);
+  return [workshops, chats, volunteer];
+}
+export const getActivitiesByStatus = async (status: ActivityStatus): Promise<[Workshop[], Chat[], Volunteer[]]> => {
+  const [workshops, chats, volunteer] = await prisma.$transaction([
+    prisma.workshop.findMany({
+      where: {
+        activity_status: status,
+      }
+    }),
+    prisma.chat.findMany({
+      where: {
+        activity_status: status,
+      }
+    }),
     prisma.volunteer.findMany(),
   ]);
   return [workshops, chats, volunteer];
