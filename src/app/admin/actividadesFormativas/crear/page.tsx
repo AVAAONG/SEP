@@ -1,9 +1,8 @@
 import ScheduledWorkshopsList from '@/components/ScheduleActivityCard';
-import WorkshopCreationForm, {
-  workshopCreationFormSchema,
-} from '@/components/admin/WorkshopCreationForm';
+import WorkshopCreationForm from '@/components/admin/WorkshopCreationForm';
 import { getScheduledWorkshops } from '@/lib/db/utils/Workshops';
 import { getWorkshopSpeakersWithParams } from '@/lib/db/utils/speaker';
+import workshopCreationFormSchema from '@/lib/schemas/workshopCreationFormSchema';
 import { Speaker } from '@prisma/client';
 import moment from 'moment';
 import { z } from 'zod';
@@ -25,13 +24,15 @@ const Page = async ({ searchParams }: { searchParams: { editWorkshopId: string |
       );
       return {
         title: workshopForEdit?.title ?? '',
-        dates: moment(workshopForEdit?.start_dates[0]).format('YYYY-MM-DD'),
-        startHours: moment(workshopForEdit?.start_dates[0]).format('HH:mm'),
-        endHours: moment(workshopForEdit?.end_dates[0]).format('HH:mm'),
+        dates: [{
+          date: moment(workshopForEdit?.start_dates[0]).format('YYYY-MM-DD'),
+          startHour: moment(workshopForEdit?.start_dates[0]).format('HH:mm'),
+          endHour: moment(workshopForEdit?.end_dates[0]).format('HH:mm'),
+        }],
         asociated_skill: workshopForEdit?.asociated_skill!, // replace DEFAULT_VALUE with an actual default value
         modality: workshopForEdit?.modality!, // replace DEFAULT_VALUE with an actual default value
         kindOfWorkshop: workshopForEdit?.kindOfWorkshop ?? '',
-        speakersId: workshopForEdit?.speaker.map((speaker) => speaker.id).toString(),
+        speakersId: workshopForEdit?.speaker.map((speaker) => speaker.id).toString()!,
         year: workshopForEdit?.year ?? [],
         platformInPerson: workshopForEdit?.platform ?? '',
         description: workshopForEdit?.description ?? null,

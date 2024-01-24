@@ -4,6 +4,7 @@ import { IWorkshopCalendar } from '@/lib/calendar/d';
 import { formatDates } from '@/lib/calendar/utils';
 import { MODALITY, PROGRAM_COMPONENTS, WORKSHOP_TYPES, WORKSHOP_YEAR } from '@/lib/constants';
 import { createWorkshop } from '@/lib/db/utils/Workshops';
+import workshopCreationFormSchema from '@/lib/schemas/workshopCreationFormSchema';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Avatar } from '@nextui-org/avatar';
@@ -12,30 +13,12 @@ import { Checkbox, CheckboxGroup } from '@nextui-org/checkbox';
 import { Chip } from '@nextui-org/chip';
 import { Input, Textarea } from '@nextui-org/input';
 import { Select, SelectItem } from '@nextui-org/select';
-import { Modality, Prisma, Skill, WorkshopYear } from '@prisma/client';
+import { Prisma, WorkshopYear } from '@prisma/client';
 import { BaseSyntheticEvent } from 'react';
-import { Controller, useForm, useWatch } from 'react-hook-form';
+import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 import DateInput from '../commons/DateInput';
 import PlatformInput from '../commons/PlatformInput';
-
-export const workshopCreationFormSchema = z.object({
-  title: z.string().min(1, { message: 'El titulo no puede estar vacio' }).trim(),
-  kindOfWorkshop: z.string().min(1, { message: 'Debes especificar el tipo de actividad' }),
-  dates: z.string().refine((date) => new Date(date) >= new Date(), {
-    message: 'La fecha no puede ser menor a la actual',
-  }),
-  startHours: z.string(),
-  endHours: z.string(),
-  modality: z.nativeEnum(Modality),
-  asociated_skill: z.nativeEnum(Skill),
-  avalible_spots: z.coerce.number().min(1, { message: 'Debe tener al menos un cupo disponible' }),
-  platformOnline: z.string().trim().optional(),
-  platformInPerson: z.string().trim().optional(),
-  speakersId: z.string().min(1, { message: 'Debes elegir al menos un facilitador' }).trim(),
-  year: z.nativeEnum(WorkshopYear).array().min(1, { message: 'Debes elegir al menos un año' }),
-  description: z.string().trim().nullable(),
-});
 
 interface WorkshopCreationFormProps {
   speakers: {
@@ -59,38 +42,39 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
     reset,
   } = useForm<z.infer<typeof workshopCreationFormSchema>>({
     resolver: zodResolver(workshopCreationFormSchema),
-    defaultValues: workshopForEdit!,
-    // defaultValues: {
-    //   title: 'Taller de prueba',
-    //   dates: '2024-01-30',
-    //   startHours: '10:00',
-    //   endHours: '12:00',
-    //   asociated_skill: 'SELF_MANAGEMENT',
-    //   modality: 'IN_PERSON',
-    //   kindOfWorkshop: 'WORKSHOP',
-    //   speakersId: 'pEsSon3-arJyIQ7vxURmj',
-    //   year: ['I'],
-    //   platformInPerson: 'Oficinas de avaa',
-    //   description: 'Taller de prueba',
-    // },
+    // defaultValues: workshopForEdit!,
+    defaultValues: {
+      title: 'Taller de prueba',
+      dates: [
+        {
+          date: '2021-10-10',
+          startHour: '13:00',
+          endHour: '12:00',
+        },
+      ],
+      asociated_skill: 'SELF_MANAGEMENT',
+      modality: 'IN_PERSON',
+      kindOfWorkshop: 'WORKSHOP',
+      speakersId: 'pEsSon3-arJyIQ7vxURmj',
+      year: ['I'],
+      platformInPerson: 'Oficinas de avaa',
+    },
   });
   const modality = useWatch({
     control,
     name: 'modality',
   });
+  const fieldArray = useFieldArray({
+    control,
+    name: 'dates',
+  });
+
   const handleFormSubmit = async (
     data: z.infer<typeof workshopCreationFormSchema>,
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
     const buttonType = ((event?.nativeEvent as SubmitEvent)?.submitter as HTMLButtonElement)?.name;
-
-    const workshopDates = data.dates.includes(',') ? data.dates.split(',') : [data.dates];
-    const startHours = data.startHours.includes(',')
-      ? data.startHours.split(',')
-      : [data.startHours];
-    const endHours = data.endHours.includes(',') ? data.endHours.split(',') : [data.endHours];
-    const dates = await formatDates(workshopDates, startHours, endHours);
-
+    const dates = await formatDates(data.dates);
     const workshopSpeakersId = data.speakersId.split(',');
 
     const calendarWorkshop: IWorkshopCalendar = {
@@ -171,7 +155,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
             );
           }}
         />
-        <DateInput control={control} />
+        <DateInput control={control} fieldArray={fieldArray} />
         <Controller
           name="asociated_skill"
           control={control}
@@ -267,8 +251,8 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
               <Input
                 value={field.value?.toString()}
                 onChange={field.onChange}
-                isInvalid={!!formState.errors?.['avalible_spots']?.message}
-                errorMessage={formState.errors?.['avalible_spots']?.message?.toString()}
+                isInvalid={!!formState.errors?.avalible_spots?.message}
+                errorMessage={formState.errors?.avalible_spots?.message?.toString()}
                 type="number"
                 label="Cupos disponibles"
                 radius="sm"

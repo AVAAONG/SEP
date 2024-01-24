@@ -141,16 +141,12 @@ export const substractMonths = (montsTosubstract: number) => {
  * @remarks If the end hour is not passed as argument, it will add 2 hours to the start hour and set it as the end hour
  * 
  * @param date the date of the event (the format should be passed as `aaaa-mm-dd`)
- * @param startingHour the start hour of the event (the format should be passed as `hh:mm`)
- * @param endHour the end hour of the event (the format should be passed as `hh:mm`)
+ * @param startingHour the hour of the event (the format should be passed as `hh:mm`)
  * @returns the date object of the start and end hour in ISO string format
  */
-export const getFormatedDate = (date: string, startingHour: string, endHour?: string) => {
-  let end;
-  const start = new Date(date + ',' + startingHour);
-  if (endHour === undefined) end = addHours(start, 2);
-  else end = new Date(date + ',' + endHour);
-  return [start.toISOString(), end.toISOString()]
+export const getISOStringDate = (date: string, hour: string) => {
+  const start = new Date(date + ',' + hour);
+  return start.toISOString()
 };
 
 /**
@@ -200,28 +196,21 @@ export const mapWorkshopSkill = (skill: Skill): string => {
 
 
 export const formatDates = (
-  dates: string[],
-  startHours: string[],
-  endHours: string[]
+  dates: {
+    date: string;
+    startHour: string;
+    endHour: string;
+  }[]
 ): {
   start_dates: string[];
   end_dates: string[];
 } => {
-  const start_dates = dates.map((date, index) => getFormatedDate(
-    date.trim(),
-    startHours[index].trim(),
-    endHours[index].trim()
-  )[0]);
-
-  const end_dates = dates.map((date, index) => getFormatedDate(
-    date.trim(),
-    startHours[index].trim(),
-    endHours[index].trim()
-  )[1]);
-  console.log(start_dates, end_dates)
-
+  const start_dates = dates.map(({ date, startHour }) => getISOStringDate(date.trim(), startHour.trim()));
+  const end_dates = dates.map(({ date, endHour }) => getISOStringDate(date.trim(), endHour.trim()));
   return { start_dates, end_dates };
 };
+
+
 export const sumHours = (startHours: string[], endHours: string[]) => {
   let hours: number = 0;
   startHours.forEach((startDate, index) => {
