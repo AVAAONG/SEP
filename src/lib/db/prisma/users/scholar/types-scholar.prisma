@@ -8,8 +8,8 @@ enum Region {
 }
 
 enum ScholarStatus {
-  PROBATORIO_1
-  PROBATORIO_2
+  PROBATION_I
+  PROBATION_II
   NORMAL
 }
 

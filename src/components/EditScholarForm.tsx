@@ -8,7 +8,6 @@ import {
   ModalFooter,
   ModalHeader,
   ScrollShadow,
-  useDisclosure,
 } from '@nextui-org/react';
 import { Prisma } from '@prisma/client';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -28,8 +27,12 @@ interface EditScholarFormProps {
   scholar: ScholarWithAllData;
 }
 
-const EditScholarForm: React.FC<EditScholarFormProps> = ({ modalIsOpen, set, scholar }) => {
-  const { isOpen, onOpenChange, onOpen } = useDisclosure();
+const EditScholarForm: React.FC<EditScholarFormProps> = ({
+  isOpen,
+  onOpenChange,
+  set,
+  scholar,
+}) => {
   const { register, handleSubmit, control } = useForm<ScholarWithAllData>({
     defaultValues: {
       ...scholar,
@@ -39,7 +42,7 @@ const EditScholarForm: React.FC<EditScholarFormProps> = ({ modalIsOpen, set, sch
 
   return (
     <>
-      <Modal size="5xl" isOpen={true} onOpenChange={onOpenChange} isDismissable={false}>
+      <Modal size="5xl" isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false}>
         <ModalContent>
           {(onClose) => (
             <>

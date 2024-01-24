@@ -79,12 +79,12 @@ model Probation {
     id                 String                    @id @default(nanoid())
     kind_of_probation  ScholarStatus
     starting_date      DateTime
-    ending_date        DateTime
+    ending_date        DateTime?
     done_at_the_moment Json
     probation_reason   String
-    agreement          Json
-    meetings           DateTime[]
+    agreement          String
     next_meeting       DateTime
+    observations       String?
     scholar            ScholarProgramInformation @relation(fields: [scholar_id], references: [id])
     scholar_id         String
 

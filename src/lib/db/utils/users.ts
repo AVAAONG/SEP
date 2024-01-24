@@ -1,9 +1,10 @@
+'use server';
 /**
  * @file This file contains all the necesary logic to interact with the database for the users collection.
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { ScholarCondition, User, WorkshopAttendance } from '@prisma/client';
+import { Prisma, Probation, ScholarCondition, User, WorkshopAttendance } from '@prisma/client';
 import shortUUID from 'short-uuid';
 import { prisma } from './prisma';
 /**
@@ -411,4 +412,31 @@ export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) =>
     }),
   ]);
   return [chats, workshops];
+}
+
+export const setProbationToScholar = async (scholarId: string, data: Probation) => {
+  await prisma.scholar.update({
+    where: {
+      id: scholarId
+    },
+    data: {
+      program_information: {
+        update: {
+          scholar_status: data.kind_of_probation,
+          probation: {
+            create: {
+              kind_of_probation: data.kind_of_probation,
+              starting_date: data.starting_date,
+              ending_date: data.ending_date,
+              done_at_the_moment: data.done_at_the_moment as Prisma.InputJsonValue,
+              agreement: data.agreement,
+              next_meeting: data.next_meeting,
+              probation_reason: data.probation_reason,
+              observations: data.observations,
+            }
+          }
+        }
+      }
+    }
+  })
 }
