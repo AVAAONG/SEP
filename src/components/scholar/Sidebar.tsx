@@ -83,7 +83,7 @@ const Sidebar = () => {
       } top-0 left-0 z-40 h-screen pt-4 bg-gray-50 md:translate-x-0 dark:bg-black`}
     >
       <div className={`flex items-center mt-2 px-5 ${isSidebarOpen ? 'justify-between' : ''} `}>
-        <Link href="/becario/dashboard" className="flex justify-center w-full">
+        <Link href="/becario/panel" className="flex justify-center w-full">
           <Image src={logo} width={190} alt="Logo Proexcelencia" />
         </Link>
         <div className="flex justify-start items-center md:hidden">

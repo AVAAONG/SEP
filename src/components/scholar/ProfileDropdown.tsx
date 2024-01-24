@@ -45,7 +45,7 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
           <ul className="py-1 text-gray-700 dark:text-gray-300">
             <li>
               <a
-                href={`/becario/config`}
+                href={`/becario/configuracion`}
                 className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-green-600 dark:text-gray-300 dark:hover:text-white"
               >
                 Mi perfil
@@ -53,7 +53,7 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
             </li>
             <li>
               <a
-                href={`/becario/config`}
+                href={`/becario/configuracion`}
                 className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-green-600 dark:text-gray-400 dark:hover:text-white"
               >
                 Configuración de la cuenta

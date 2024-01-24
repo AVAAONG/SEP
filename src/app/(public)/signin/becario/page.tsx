@@ -29,7 +29,7 @@ const page = async ({
    * Specify to which URL the user will be redirected after signing in. Defaults to the page URL the sign-in is initiated from.
    * @summary The URL to redirect to after a successful sign in or sign up.
    */
-  const scholarCallbackUrl = (searchParams!.callbackUrl as string) || '/becario/dashboard';
+  const scholarCallbackUrl = (searchParams!.callbackUrl as string) || '/becario/panel';
 
   if (session) {
     redirect(scholarCallbackUrl);
@@ -57,7 +57,7 @@ const page = async ({
           )}
           <h2 className="text-xl font-semibold md:text-2xl">¡Entra!</h2>
           <div className="my-4">
-            <SigninForm callbackUrl="/becario/config" cookieValue="scholar" />
+            <SigninForm callbackUrl="/becario/panel" cookieValue="scholar" />
           </div>
           <div className="inline-flex items-center justify-around w-full ">
             <hr className="w-40 h-px my-8 border-0 bg-primary-light opacity-40" />
@@ -66,7 +66,7 @@ const page = async ({
           </div>
           <div className="flex">
             <GoogleSignInButton
-              callbackUrl="/becario/config"
+              callbackUrl="/becario/panel"
               providerId="userGoogle"
               cookieValue="scholar"
             />
