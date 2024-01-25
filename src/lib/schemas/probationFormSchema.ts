@@ -79,8 +79,7 @@ const probationFormSchema = z.object({
     }),
     probation_reason: z.string().min(1, { message: 'Debes especificar la razón' }),
     next_meeting: z
-        .string()
-        .min(1, { message: 'Debes especificar la fecha' })
+        .coerce.date()
         .refine((date) => new Date(date) >= new Date(), {
             message: 'La fecha no puede ser menor a la actual',
         }),

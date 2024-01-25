@@ -248,6 +248,7 @@ export const getScholarWithAllData = async (scholar_id: string) => {
               },
             },
           },
+          probation: true,
           attended_workshops: {
             include: {
               workshop: {
@@ -440,3 +441,45 @@ export const setProbationToScholar = async (scholarId: string, data: Probation) 
     }
   })
 }
+
+export const getScholarsInProbationByYear = async (year: string) => {
+  const scholars = await prisma.scholar.findMany({
+    where: {
+      program_information: {
+        OR: [{
+          scholar_status: 'PROBATION_I',
+        },
+        {
+          scholar_status: 'PROBATION_II',
+        }],
+        probation: {
+          every: {
+            starting_date: {
+              gte: new Date(`${year}-01-01`),
+              lte: new Date(`${year}-12-31`),
+            }
+          }
+        }
+      },
+    },
+    include: {
+      collage_information: true,
+      program_information: {
+        include: {
+          probation: {
+            orderBy: {
+              starting_date: 'desc'
+            },
+            take: 1
+          }
+        },
+        // probation: true
+
+      },
+      cva_information: true,
+    }
+  })
+  return scholars;
+}
+
+export type ScholarsInProbationByYearReturnType = Prisma.PromiseReturnType<typeof getScholarsInProbationByYear>;

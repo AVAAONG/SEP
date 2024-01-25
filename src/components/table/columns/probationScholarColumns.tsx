@@ -1,24 +1,19 @@
 'use client';
-import defailProfilePic from '@/../public/defaultProfilePic.png';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Cell, CellValue, Column } from 'react-table';
 
-const scholarAllInformationCollumn: Column<any>[] = [
+const probationScholarColumns: Column<any>[] = [
   {
     Header: 'Nombre',
     accessor: (row: any) => `${row.first_names} ${row.last_names}`,
     Cell: ({ value, cell }: { value: CellValue; cell: Cell<any> }) => (
-      <Link
-        href={cell.row.original.id ? `becarios/${cell.row.original.id}` : ''}
-        className="flex items-center"
-      >
+      <Link href={cell.row.original.id} className="flex items-center">
         <div className="flex-shrink-0 w-8 h-8">
-          <Image
+          {/* <Image
             className="w-full h-full rounded-full"
-            src={defailProfilePic}
+            src={cell.row.original.profileImage}
             alt="Foto de perfil"
-          />
+          /> */}
         </div>
         <div className="ml-4 text-start">
           <span className="text-sm font-medium text-gray-900 dark:text-slate-100">{value}</span>
@@ -26,22 +21,17 @@ const scholarAllInformationCollumn: Column<any>[] = [
       </Link>
     ),
   },
-
-  {
-    Header: 'Telefono local',
-    accessor: 'local_phone_number',
-  },
   {
     Header: 'Telefono celular',
     accessor: 'cell_phone_Number',
   },
   {
-    Header: 'Whatsapp',
-    accessor: 'whatsapp_number',
+    Header: 'Correo',
+    accessor: 'email',
   },
   {
-    Header: 'Correo',
-    accessor: 'allowedEmail',
+    Header: 'Tipo de probatorio',
+    accessor: 'prbationKind',
   },
   {
     Header: 'Universidad',
@@ -52,33 +42,37 @@ const scholarAllInformationCollumn: Column<any>[] = [
     },
   },
   {
-    Header: 'Tipo de probatorio',
-    accessor: '',
+    Header: 'Carerra',
+    accessor: 'career',
+  },
+  {
+    Header: 'Promedio',
+    accessor: 'probation_average',
   },
   {
     Header: 'Fecha de inicio de probatorio',
-    accessor: '',
+    accessor: 'probation_starting_date',
   },
   {
-    Header: 'Horas de voluntariado internas realizadas',
-    accessor: 'career',
+    Header: 'Voluntariado interno realizado',
+    accessor: 'd',
   },
   {
-    Header: 'Horas de voluntariado externas realizadas',
-    accessor: 'career',
-  },
-  {
-    Header: 'Carrera',
-    accessor: 'career',
+    Header: 'Voluntariado externo realizado',
+    accessor: 'f',
   },
   {
     Header: 'Actividades formativas realizadas',
     accessor: 'atendedWorkshops',
   },
   {
-    Header: 'Chat clubs  realizadas',
+    Header: 'Chats realizados',
     accessor: 'atendedChats',
+  },
+  {
+    Header: 'Status en el CVA',
+    accessor: 'jhjkk',
   },
 ];
 
-export default scholarAllInformationCollumn;
+export default probationScholarColumns;

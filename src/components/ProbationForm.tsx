@@ -12,16 +12,17 @@ import {
   ModalHeader,
   Textarea,
 } from '@nextui-org/react';
-import { Scholar, ScholarStatus } from '@prisma/client';
+import { ScholarStatus } from '@prisma/client';
 import React, { BaseSyntheticEvent } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { ScholarWithAllData } from './EditScholarForm';
 interface ProbationFormProps {
   isOpen: boolean;
   onOpenChange: () => void;
   onConfirm: () => void;
   probationKind: ScholarStatus;
-  scholar: Scholar;
+  scholar: ScholarWithAllData;
 }
 
 const ProbationForm: React.FC<ProbationFormProps> = ({
@@ -368,7 +369,7 @@ const ProbationForm: React.FC<ProbationFormProps> = ({
                           const errorMessage = formState.errors?.next_meeting?.message;
                           return (
                             <Input
-                              value={field.value}
+                              value={field.value?.toString()}
                               onChange={field.onChange}
                               isInvalid={!!errorMessage}
                               errorMessage={errorMessage?.toString()}

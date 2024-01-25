@@ -16,7 +16,6 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
     platform,
     scholar_attendance,
   } = workshop || {};
-  console.log(scholar_attendance);
   return (
     <div className="space-y-6  min-h-screen">
       <section className="flex bg-white rounded-lg p-8">

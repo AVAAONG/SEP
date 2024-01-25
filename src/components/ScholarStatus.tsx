@@ -14,7 +14,7 @@ const ScholarStatus: React.FC<ScholarStatusProps> = ({ status, scholarId }) => {
         Normal
       </span>
     );
-  } else if (status === 'PROBATORIO_1') {
+  } else if (status === 'PROBATION_I') {
     return (
       <Link
         href={`/admin/probatorio/${scholarId}`}
@@ -24,7 +24,7 @@ const ScholarStatus: React.FC<ScholarStatusProps> = ({ status, scholarId }) => {
         Probatorio I
       </Link>
     );
-  } else if (status === 'PROBATORIO_2') {
+  } else if (status === 'PROBATION_II') {
     return (
       <Link
         href={`/admin/probatorio/${scholarId}`}

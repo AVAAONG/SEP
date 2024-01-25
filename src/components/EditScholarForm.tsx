@@ -19,7 +19,7 @@ const scholarWithAllData = Prisma.validator<Prisma.ScholarDefaultArgs>()({
     cva_information: true,
   },
 });
-type ScholarWithAllData = Prisma.ScholarGetPayload<typeof scholarWithAllData>;
+export type ScholarWithAllData = Prisma.ScholarGetPayload<typeof scholarWithAllData>;
 
 interface EditScholarFormProps {
   modalIsOpen: boolean;
