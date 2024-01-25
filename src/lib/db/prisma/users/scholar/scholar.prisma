@@ -82,7 +82,7 @@ model Probation {
     ending_date        DateTime?
     done_at_the_moment Json
     probation_reason   String
-    agreement          String
+    agreement          Json
     next_meeting       DateTime
     observations       String?
     scholar            ScholarProgramInformation @relation(fields: [scholar_id], references: [id])

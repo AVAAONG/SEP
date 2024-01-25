@@ -56,198 +56,332 @@ const ProbationForm: React.FC<ProbationFormProps> = ({
 
   return (
     <>
-      <Modal size="5xl" isOpen={isOpen} onOpenChange={onOpenChange} className="bg-light">
+      <Modal
+        scrollBehavior="outside"
+        size="5xl"
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        className="bg-light"
+      >
         <form onSubmit={handleSubmit((data, event) => handleFormSubmit(data, event))}>
           <ModalContent>
             {(onClose) => (
               <>
                 <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
                 <ModalBody>
-                  <div className="grid grid-cols-3 gap-4">
-                    <Controller
-                      name="done_at_the_moment.year_in_career"
-                      control={control}
-                      rules={{ required: true }}
-                      shouldUnregister={true}
-                      render={({ field, formState }) => {
-                        const errorMessage =
-                          formState.errors?.done_at_the_moment?.year_in_career?.message;
-                        return (
-                          <Input
-                            value={field.value}
-                            onChange={field.onChange}
-                            isInvalid={!!errorMessage}
-                            errorMessage={errorMessage?.toString()}
-                            autoFocus
-                            type="text"
-                            label="Año en la carrera"
-                            radius="sm"
-                            classNames={{ base: ' h-fit' }}
-                            labelPlacement="outside"
-                          />
-                        );
-                      }}
-                    />
-                    <Controller
-                      name="done_at_the_moment.average"
-                      control={control}
-                      rules={{ required: true }}
-                      shouldUnregister={true}
-                      render={({ field, formState }) => {
-                        const errorMessage = formState.errors?.done_at_the_moment?.average?.message;
-                        return (
-                          <Input
-                            value={field.value}
-                            onChange={field.onChange}
-                            isInvalid={!!errorMessage}
-                            errorMessage={errorMessage?.toString()}
-                            type="text"
-                            label="Promedio hasta la fecha"
-                            radius="sm"
-                            classNames={{ base: 'h-fit' }}
-                            labelPlacement="outside"
-                          />
-                        );
-                      }}
-                    />
-                    <Controller
-                      name="done_at_the_moment.workshops"
-                      control={control}
-                      rules={{ required: true }}
-                      shouldUnregister={true}
-                      render={({ field, formState }) => {
-                        const errorMessage =
-                          formState.errors?.done_at_the_moment?.workshops?.message;
-                        return (
-                          <Input
-                            value={field.value?.toString()}
-                            onChange={field.onChange}
-                            isInvalid={!!errorMessage}
-                            errorMessage={errorMessage?.toString()}
-                            type="number"
-                            label="Actividades formativas realizadas"
-                            radius="sm"
-                            classNames={{ base: 'h-fit' }}
-                            labelPlacement="outside"
-                          />
-                        );
-                      }}
-                    />
-                    <Controller
-                      name="done_at_the_moment.chats"
-                      control={control}
-                      rules={{ required: true }}
-                      shouldUnregister={true}
-                      render={({ field, formState }) => {
-                        const errorMessage = formState.errors?.done_at_the_moment?.chats?.message;
-                        return (
-                          <Input
-                            value={field.value?.toString()}
-                            onChange={field.onChange}
-                            isInvalid={!!errorMessage}
-                            errorMessage={errorMessage?.toString()}
-                            type="number"
-                            label="Chat clubs realizadas"
-                            radius="sm"
-                            classNames={{ base: 'h-fit' }}
-                            labelPlacement="outside"
-                          />
-                        );
-                      }}
-                    />
-                    <Controller
-                      name="done_at_the_moment.internal_volunteering_hours"
-                      control={control}
-                      rules={{ required: true }}
-                      shouldUnregister={true}
-                      render={({ field, formState }) => {
-                        const errorMessage =
-                          formState.errors?.done_at_the_moment?.internal_volunteering_hours
-                            ?.message;
-                        return (
-                          <Input
-                            value={field.value?.toString()}
-                            onChange={field.onChange}
-                            isInvalid={!!errorMessage}
-                            errorMessage={errorMessage?.toString()}
-                            type="number"
-                            label="Horas de voluntariado internas realizadas"
-                            radius="sm"
-                            classNames={{ base: 'h-fit' }}
-                            labelPlacement="outside"
-                          />
-                        );
-                      }}
-                    />
-                    <Controller
-                      name="done_at_the_moment.external_volunteering_hours"
-                      control={control}
-                      rules={{ required: true }}
-                      shouldUnregister={true}
-                      render={({ field, formState }) => {
-                        const errorMessage =
-                          formState.errors?.done_at_the_moment?.external_volunteering_hours
-                            ?.message;
-                        return (
-                          <Input
-                            value={field.value?.toString()}
-                            onChange={field.onChange}
-                            isInvalid={!!errorMessage}
-                            errorMessage={errorMessage?.toString()}
-                            type="number"
-                            label="Horas de voluntariado externas realizadas"
-                            radius="sm"
-                            classNames={{ base: 'h-fit' }}
-                            labelPlacement="outside"
-                          />
-                        );
-                      }}
-                    />
-                    <Controller
-                      name="done_at_the_moment.cva"
-                      control={control}
-                      rules={{ required: true }}
-                      shouldUnregister={true}
-                      render={({ field, formState }) => {
-                        const errorMessage = formState.errors?.done_at_the_moment?.cva?.message;
-                        return (
-                          <Input
-                            value={field.value}
-                            onChange={field.onChange}
-                            isInvalid={!!errorMessage}
-                            errorMessage={errorMessage?.toString()}
-                            type="string"
-                            label="CVA"
-                            radius="sm"
-                            classNames={{ base: 'h-fit' }}
-                            labelPlacement="outside"
-                          />
-                        );
-                      }}
-                    />
-                    <Controller
-                      name="next_meeting"
-                      control={control}
-                      rules={{ required: true }}
-                      shouldUnregister={true}
-                      render={({ field, formState }) => {
-                        const errorMessage = formState.errors?.next_meeting?.message;
-                        return (
-                          <Input
-                            value={field.value}
-                            onChange={field.onChange}
-                            isInvalid={!!errorMessage}
-                            errorMessage={errorMessage?.toString()}
-                            type="datetime-local"
-                            label="Fecha de la siguiente reunión"
-                            radius="sm"
-                            placeholder="date"
-                            classNames={{ base: 'h-fit' }}
-                            labelPlacement="outside"
-                          />
-                        );
-                      }}
-                    />
+                  <div className="flex flex-col gap-4">
+                    <h3 className="block font-bold truncate">Realizado hasta la fecha</h3>
+                    <div className="grid lg:grid-cols-4 gap-2">
+                      <Controller
+                        name="done_at_the_moment.year_in_career"
+                        control={control}
+                        rules={{ required: true }}
+                        shouldUnregister={true}
+                        render={({ field, formState }) => {
+                          const errorMessage =
+                            formState.errors?.done_at_the_moment?.year_in_career?.message;
+                          return (
+                            <Input
+                              value={field.value}
+                              onChange={field.onChange}
+                              isInvalid={!!errorMessage}
+                              errorMessage={errorMessage?.toString()}
+                              type="text"
+                              label="Año en carrera"
+                              radius="sm"
+                              classNames={{ base: 'h-fit' }}
+                            />
+                          );
+                        }}
+                      />
+                      <Controller
+                        name="done_at_the_moment.average"
+                        control={control}
+                        rules={{ required: true }}
+                        shouldUnregister={true}
+                        render={({ field, formState }) => {
+                          const errorMessage =
+                            formState.errors?.done_at_the_moment?.average?.message;
+                          return (
+                            <Input
+                              value={field.value}
+                              onChange={field.onChange}
+                              isInvalid={!!errorMessage}
+                              errorMessage={errorMessage?.toString()}
+                              type="text"
+                              label="Promedio"
+                              radius="sm"
+                              classNames={{ base: 'h-fit' }}
+                            />
+                          );
+                        }}
+                      />
+                      <Controller
+                        name="done_at_the_moment.workshops"
+                        control={control}
+                        rules={{ required: true }}
+                        shouldUnregister={true}
+                        render={({ field, formState }) => {
+                          const errorMessage =
+                            formState.errors?.done_at_the_moment?.workshops?.message;
+                          return (
+                            <Input
+                              value={field.value?.toString()}
+                              onChange={field.onChange}
+                              isInvalid={!!errorMessage}
+                              errorMessage={errorMessage?.toString()}
+                              type="number"
+                              label="Actividades formativas"
+                              radius="sm"
+                              classNames={{ base: 'h-fit' }}
+                            />
+                          );
+                        }}
+                      />
+                      <Controller
+                        name="done_at_the_moment.chats"
+                        control={control}
+                        rules={{ required: true }}
+                        shouldUnregister={true}
+                        render={({ field, formState }) => {
+                          const errorMessage = formState.errors?.done_at_the_moment?.chats?.message;
+                          return (
+                            <Input
+                              value={field.value?.toString()}
+                              onChange={field.onChange}
+                              isInvalid={!!errorMessage}
+                              errorMessage={errorMessage?.toString()}
+                              type="number"
+                              label="Chat clubs"
+                              radius="sm"
+                              classNames={{ base: 'h-fit' }}
+                            />
+                          );
+                        }}
+                      />
+                      <Controller
+                        name="done_at_the_moment.internal_volunteering_hours"
+                        control={control}
+                        rules={{ required: true }}
+                        shouldUnregister={true}
+                        render={({ field, formState }) => {
+                          const errorMessage =
+                            formState.errors?.done_at_the_moment?.internal_volunteering_hours
+                              ?.message;
+                          return (
+                            <Input
+                              value={field.value?.toString()}
+                              onChange={field.onChange}
+                              isInvalid={!!errorMessage}
+                              errorMessage={errorMessage?.toString()}
+                              type="number"
+                              label="Horas de voluntariado internas"
+                              radius="sm"
+                              classNames={{ base: 'h-fit' }}
+                            />
+                          );
+                        }}
+                      />
+                      <Controller
+                        name="done_at_the_moment.external_volunteering_hours"
+                        control={control}
+                        rules={{ required: true }}
+                        shouldUnregister={true}
+                        render={({ field, formState }) => {
+                          const errorMessage =
+                            formState.errors?.done_at_the_moment?.external_volunteering_hours
+                              ?.message;
+                          return (
+                            <Input
+                              value={field.value?.toString()}
+                              onChange={field.onChange}
+                              isInvalid={!!errorMessage}
+                              errorMessage={errorMessage?.toString()}
+                              type="number"
+                              label="Horas de voluntariado externas"
+                              radius="sm"
+                              classNames={{ base: 'h-fit' }}
+                            />
+                          );
+                        }}
+                      />
+                      <Controller
+                        name="done_at_the_moment.cva"
+                        control={control}
+                        rules={{ required: true }}
+                        shouldUnregister={true}
+                        render={({ field, formState }) => {
+                          const errorMessage = formState.errors?.done_at_the_moment?.cva?.message;
+                          return (
+                            <Input
+                              value={field.value}
+                              onChange={field.onChange}
+                              isInvalid={!!errorMessage}
+                              errorMessage={errorMessage?.toString()}
+                              type="string"
+                              label="CVA"
+                              radius="sm"
+                              classNames={{ base: 'h-fit' }}
+                            />
+                          );
+                        }}
+                      />
+                    </div>
+                    <h3 className="block font-bold truncate">Acuerdo</h3>
+                    <div className="grid lg:grid-cols-3 gap-2">
+                      <Controller
+                        name="agreement.average"
+                        control={control}
+                        rules={{ required: true }}
+                        shouldUnregister={true}
+                        render={({ field, formState }) => {
+                          const errorMessage = formState.errors?.agreement?.average?.message;
+                          return (
+                            <Input
+                              value={field.value}
+                              onChange={field.onChange}
+                              isInvalid={!!errorMessage}
+                              errorMessage={errorMessage?.toString()}
+                              type="text"
+                              label="Promedio"
+                              radius="sm"
+                              classNames={{ base: 'h-fit' }}
+                            />
+                          );
+                        }}
+                      />
+                      <Controller
+                        name="agreement.workshops"
+                        control={control}
+                        rules={{ required: true }}
+                        shouldUnregister={true}
+                        render={({ field, formState }) => {
+                          const errorMessage = formState.errors?.agreement?.workshops?.message;
+                          return (
+                            <Input
+                              value={field.value?.toString()}
+                              onChange={field.onChange}
+                              isInvalid={!!errorMessage}
+                              errorMessage={errorMessage?.toString()}
+                              type="number"
+                              label="Actividades formativas"
+                              radius="sm"
+                              classNames={{ base: 'h-fit' }}
+                            />
+                          );
+                        }}
+                      />
+                      <Controller
+                        name="agreement.chats"
+                        control={control}
+                        rules={{ required: true }}
+                        shouldUnregister={true}
+                        render={({ field, formState }) => {
+                          const errorMessage = formState.errors?.agreement?.chats?.message;
+                          return (
+                            <Input
+                              value={field.value?.toString()}
+                              onChange={field.onChange}
+                              isInvalid={!!errorMessage}
+                              errorMessage={errorMessage?.toString()}
+                              type="number"
+                              label="Chat clubs"
+                              radius="sm"
+                              classNames={{ base: 'h-fit' }}
+                            />
+                          );
+                        }}
+                      />
+                      <Controller
+                        name="agreement.internal_volunteering_hours"
+                        control={control}
+                        rules={{ required: true }}
+                        shouldUnregister={true}
+                        render={({ field, formState }) => {
+                          const errorMessage =
+                            formState.errors?.agreement?.internal_volunteering_hours?.message;
+                          return (
+                            <Input
+                              value={field.value?.toString()}
+                              onChange={field.onChange}
+                              isInvalid={!!errorMessage}
+                              errorMessage={errorMessage?.toString()}
+                              type="number"
+                              label="Horas de voluntariado internas"
+                              radius="sm"
+                              classNames={{ base: 'h-fit' }}
+                            />
+                          );
+                        }}
+                      />
+                      <Controller
+                        name="agreement.external_volunteering_hours"
+                        control={control}
+                        rules={{ required: true }}
+                        shouldUnregister={true}
+                        render={({ field, formState }) => {
+                          const errorMessage =
+                            formState.errors?.agreement?.external_volunteering_hours?.message;
+                          return (
+                            <Input
+                              value={field.value?.toString()}
+                              onChange={field.onChange}
+                              isInvalid={!!errorMessage}
+                              errorMessage={errorMessage?.toString()}
+                              type="number"
+                              label="Horas de voluntariado externas"
+                              radius="sm"
+                              classNames={{ base: 'h-fit' }}
+                            />
+                          );
+                        }}
+                      />
+                      <Controller
+                        name="agreement.cva"
+                        control={control}
+                        rules={{ required: true }}
+                        shouldUnregister={true}
+                        render={({ field, formState }) => {
+                          const errorMessage = formState.errors?.agreement?.cva?.message;
+                          return (
+                            <Input
+                              value={field.value}
+                              onChange={field.onChange}
+                              isInvalid={!!errorMessage}
+                              errorMessage={errorMessage?.toString()}
+                              type="string"
+                              label="CVA"
+                              radius="sm"
+                              classNames={{ base: 'h-fit' }}
+                            />
+                          );
+                        }}
+                      />
+                    </div>
+                    <div className="w-full lg:grid grid-cols-3">
+                      <Controller
+                        name="next_meeting"
+                        control={control}
+                        rules={{ required: true }}
+                        shouldUnregister={true}
+                        render={({ field, formState }) => {
+                          const errorMessage = formState.errors?.next_meeting?.message;
+                          return (
+                            <Input
+                              value={field.value}
+                              onChange={field.onChange}
+                              isInvalid={!!errorMessage}
+                              errorMessage={errorMessage?.toString()}
+                              type="datetime-local"
+                              label="Fecha y hora de la siguiente reunión"
+                              radius="sm"
+                              placeholder="date"
+                              classNames={{ base: 'h-fit' }}
+                            />
+                          );
+                        }}
+                      />
+                    </div>
                     <Controller
                       name="probation_reason"
                       control={control}
@@ -263,25 +397,6 @@ const ProbationForm: React.FC<ProbationFormProps> = ({
                             errorMessage={errorMessage?.toString()}
                             className="col-span-3"
                             label="Motivos por los cuales entra en probatorio"
-                          />
-                        );
-                      }}
-                    />
-                    <Controller
-                      name="agreement"
-                      control={control}
-                      rules={{ required: true }}
-                      shouldUnregister={true}
-                      render={({ field, formState }) => {
-                        const errorMessage = formState.errors?.agreement?.message;
-                        return (
-                          <Textarea
-                            value={field.value}
-                            onChange={field.onChange}
-                            isInvalid={!!errorMessage}
-                            errorMessage={errorMessage?.toString()}
-                            className="col-span-2"
-                            label="Acuerdo"
                           />
                         );
                       }}

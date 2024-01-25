@@ -39,8 +39,45 @@ const probationFormSchema = z.object({
         }),
         cva: z.string().min(1, { message: 'Debes especificar el nivel de CVA' }),
     }),
+    agreement: z.object({
+        average: z.string().min(1, { message: 'Debes especificar el promedio a llegar' }),
+        workshops: z.coerce
+            .number({
+                errorMap: (issue, _ctx) => {
+                    switch (issue.code) {
+                        default:
+                            return { message: 'Debes especificar la cantidad de actividades a realizar' };
+                    }
+                },
+            })
+            .min(1),
+        chats: z.coerce.number({
+            errorMap: (issue, _ctx) => {
+                switch (issue.code) {
+                    default:
+                        return { message: 'Debes especificar la cantidad de chats a realizar' };
+                }
+            },
+        }),
+        external_volunteering_hours: z.coerce.number({
+            errorMap: (issue, _ctx) => {
+                switch (issue.code) {
+                    default:
+                        return { message: 'Debes especificar la cantidad de horas de voluntariado a realizar' };
+                }
+            },
+        }),
+        internal_volunteering_hours: z.coerce.number({
+            errorMap: (issue, _ctx) => {
+                switch (issue.code) {
+                    default:
+                        return { message: 'Debes especificar la cantidad de horas de voluntariado a realizar' };
+                }
+            },
+        }),
+        cva: z.string().min(1, { message: 'Debes especificar el nivel de CVA a llegar' })
+    }),
     probation_reason: z.string().min(1, { message: 'Debes especificar la razón' }),
-    agreement: z.string().min(1, { message: 'Debes especificar el acuerdo' }),
     next_meeting: z
         .string()
         .min(1, { message: 'Debes especificar la fecha' })
