@@ -272,3 +272,20 @@ export const getChatsByScholar = async (programInformationId: string, scholarId:
   });
   return chats;
 }
+
+
+export const getScheduleChats = async () => {
+  const workshops = await prisma.chat.findMany({
+    include: {
+      speaker: true,
+    },
+    where: {
+      activity_status: 'SCHEDULED',
+    },
+    orderBy: {
+      start_dates: 'asc',
+    }
+
+  });
+  return workshops;
+};
