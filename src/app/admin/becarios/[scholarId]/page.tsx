@@ -15,7 +15,6 @@ import formatDni from '@/lib/db/utils/formatDni';
 import { Tooltip } from '@nextui-org/react';
 
 import { getScholarWithAllData } from '@/lib/db/utils/users';
-import { createDataCardsContent } from '@/lib/utils';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import {
   ActivityStatus,
@@ -129,7 +128,7 @@ const page = async ({
     birthdate,
     address,
   } = scholar || {};
-  const { attended_workshops, scholar_status, program_admission_date } = program_information || {};
+  const { attended_workshops, scholar_status, program_admission_date, } = program_information || {};
   const chats = await getChatsByScholar(program_information?.id!, scholarId);
   const workshops = await getWorkhsopsByScholar(program_information?.id!, scholarId);
   const workshopObj = createWorkshopObject(workshops);
@@ -245,7 +244,7 @@ const page = async ({
     <section className="flex flex-col gap-4 lg:p-6 pt-0">
       <div className="flex flex-col items-center lg:items-start lg:flex-row justify-center lg:justify-start gap-2 lg:gap-6 w-full">
         <div className="flex lg:hidden items-center justify-between w-full gap-4 px-6 lg:p-0">
-          <ScholarStatus status={scholar_status || 'NORMAL'} scholarId={scholarId} />
+          <ScholarStatus scholar={scholar} />
           <ScholarDropdown scholar={scholar} />
         </div>
         <div className="w-52 h-fit flex items-center justify-center rounded-full shadow-lg border-3 border-green-500 p-1">
@@ -271,7 +270,7 @@ const page = async ({
               </Tooltip>
             </div>
             <div className="hidden lg:flex items-center gap-4">
-              <ScholarStatus status={scholar_status || 'NORMAL'} scholarId={scholarId} />
+              <ScholarStatus scholar={scholar} />
               <ScholarDropdown scholar={scholar} />
             </div>
           </div>

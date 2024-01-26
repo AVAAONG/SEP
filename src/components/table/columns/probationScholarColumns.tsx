@@ -1,4 +1,5 @@
 'use client';
+import { Avatar } from '@nextui-org/avatar';
 import Link from 'next/link';
 import { Cell, CellValue, Column } from 'react-table';
 
@@ -7,13 +8,13 @@ const probationScholarColumns: Column<any>[] = [
     Header: 'Nombre',
     accessor: (row: any) => `${row.first_names} ${row.last_names}`,
     Cell: ({ value, cell }: { value: CellValue; cell: Cell<any> }) => (
-      <Link href={cell.row.original.id} className="flex items-center">
+      <Link href={`becarios/${cell.row.original.id}`} className="flex items-center">
         <div className="flex-shrink-0 w-8 h-8">
-          {/* <Image
+          <Avatar
             className="w-full h-full rounded-full"
             src={cell.row.original.profileImage}
             alt="Foto de perfil"
-          /> */}
+          />
         </div>
         <div className="ml-4 text-start">
           <span className="text-sm font-medium text-gray-900 dark:text-slate-100">{value}</span>
