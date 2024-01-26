@@ -51,8 +51,8 @@ const ProbationAccordion: React.FC<ProbationAccordionProps> = ({ scholarInProbat
                 </h3>
               </div>
             }>
-            <div className='flex flex-col p-4 gap-8'>
-              <div className='flex gap-10'>
+            <div className='flex flex-col p-4 gap-6'>
+              <div className='flex flex-col md:flex-row gap-4 md:gap-10'>
                 <div>
                   <h3 className='text-base md:text-lg font-semibold leading-none tracking-tight'>
                     Fecha de inicio de probatorio
@@ -94,14 +94,14 @@ const ProbationAccordion: React.FC<ProbationAccordionProps> = ({ scholarInProbat
                 <h3 className='text-base md:text-lg font-semibold leading-none tracking-tight'>
                   Realizado hasta el momento de la evaluación
                 </h3>
-                <div className='flex gap-2 divide-x-4 divide-yellow-800 mt-2 '>
+                <div className='flex flex-col md:flex-row gap-2 divide-x-4 divide-yellow-800 mt-2 '>
                   {Object.keys(probationInfo.done_at_the_moment).map((key, index) => {
                     return (
-                      <div key={index} className='px-2'>
+                      <div key={index} className='px-2 flex flex-col gap-1'>
                         <h4 className='text-base font-semibold leading-none tracking-tight'>
                           {probationKeysMap[key as keyof typeof probationKeysMap]}
                         </h4>
-                        <p>
+                        <p className=''>
                           {probationInfo.done_at_the_moment[key]}
                         </p>
                       </div>
@@ -115,10 +115,10 @@ const ProbationAccordion: React.FC<ProbationAccordionProps> = ({ scholarInProbat
                 <h3 className='text-base md:text-lg font-semibold leading-none tracking-tight'>
                   Acuerdo de compromisos
                 </h3>
-                <div className='flex gap-2 divide-x-4 divide-yellow-800 mt-2 '>
+                <div className='flex flex-col md:flex-row gap-2 divide-x-4 divide-yellow-800 mt-2 '>
                   {Object.keys(probationInfo.agreement).map((key, index) => {
                     return (
-                      <div key={index} className='px-2'>
+                      <div key={index} className='px-2 flex flex-col gap-1'>
                         <h4 className='text-base font-semibold leading-none tracking-tight'>
                           {probationKeysMap[key as keyof typeof probationKeysMap]}
                         </h4>

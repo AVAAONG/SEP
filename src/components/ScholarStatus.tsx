@@ -1,40 +1,53 @@
-import { ScholarStatus as ScholarStatusI } from '@prisma/client';
-import Link from 'next/link';
+'use client';
+import { Button, useDisclosure } from '@nextui-org/react';
+import BasicModal from './BasicModal';
+import ProbationAccordion from './ProbationAccordion';
 
 type ScholarStatusProps = {
-  status: ScholarStatusI;
-  scholarId: string;
+  scholar: any
+};
+const statusConfig = {
+  NORMAL: {
+    color: 'green',
+    text: 'Normal',
+  },
+  PROBATION_I: {
+    color: 'yellow',
+    text: 'Probatorio I',
+  },
+  PROBATION_II: {
+    color: 'red',
+    text: 'Probatorio II',
+  },
 };
 
-const ScholarStatus: React.FC<ScholarStatusProps> = ({ status, scholarId }) => {
-  if (status === 'NORMAL') {
-    return (
-      <span className="inline-flex items-center bg-green-100 text-green-800 text-base font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300 animate-pulse">
-        <span className="w-2 h-2 mr-1 bg-green-500 rounded-full"></span>
-        Normal
-      </span>
-    );
-  } else if (status === 'PROBATION_I') {
-    return (
-      <Link
-        href={`/admin/probatorio/${scholarId}`}
-        className="inline-flex items-center bg-yellow-100 text-yellow-800 text-base font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300 animate-pulse"
+const ScholarStatus: React.FC<ScholarStatusProps> = ({ scholar }) => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const status = scholar.program_information.scholar_status;
+  const config = statusConfig[status];
+
+  if (!config) return null;
+  return (
+    <>
+      <Button
+        onPress={onOpen}
+        className={`inline-flex items-center bg-${config.color}-100 text-${config.color}-800 text-base font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-${config.color}-900 dark:text-${config.color}-300 animate-pulse`}
       >
-        <span className="w-2 h-2 mr-1 bg-yellow-500 rounded-full"></span>
-        Probatorio I
-      </Link>
-    );
-  } else if (status === 'PROBATION_II') {
-    return (
-      <Link
-        href={`/admin/probatorio/${scholarId}`}
-        className="inline-flex items-center bg-red-100 text-red-800 text-base font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300 animate-pulse"
-      >
-        <span className="w-2 h-2 mr-1 bg-red-500 rounded-full"></span>
-        Probatorio II
-      </Link>
-    );
-  } else return <></>;
+        <span className={`w-2 h-2 mr-1 bg-${config.color}-500 rounded-full`}></span>
+        {config.text}
+      </Button>
+      <BasicModal
+        isOpen={isOpen}
+        size='5xl'
+        onOpenChange={onOpenChange}
+        title='Casos de probatorio'
+        Content={() => <ProbationAccordion scholarInProbation={scholar} />}
+        isButtonDisabled={false}
+        onConfirm={async () => { }}
+        confirmText=""
+      />
+    </>
+  );
 };
 
 export default ScholarStatus;
