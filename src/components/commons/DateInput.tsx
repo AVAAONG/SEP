@@ -1,3 +1,4 @@
+import chatCreationFormSchema from '@/lib/schemas/chatCreationFormSchema';
 import workshopCreationFormSchema from '@/lib/schemas/workshopCreationFormSchema';
 import { Input } from '@nextui-org/input';
 import { Button } from '@nextui-org/react';
@@ -12,8 +13,12 @@ import { z } from 'zod';
  * @property {UseFieldArrayReturn<z.infer<typeof workshopCreationFormSchema>>} fieldArray - A UseFieldArrayReturn object from react-hook-form that is used to manage a list of fields.
  */
 interface DateInputProps {
-  control: Control<z.infer<typeof workshopCreationFormSchema>>;
-  fieldArray: UseFieldArrayReturn<z.infer<typeof workshopCreationFormSchema>>;
+  control:
+    | Control<z.infer<typeof workshopCreationFormSchema>>
+    | Control<z.infer<typeof chatCreationFormSchema>>;
+  fieldArray:
+    | UseFieldArrayReturn<z.infer<typeof workshopCreationFormSchema>>
+    | UseFieldArrayReturn<z.infer<typeof chatCreationFormSchema>>;
 }
 
 /**
@@ -43,7 +48,6 @@ const DateInput: React.FC<DateInputProps> = ({ control, fieldArray }) => {
   const addInput = () => {
     appendField({ date: '', startHour: '', endHour: '' });
   };
-
   return (
     <>
       {fields.map((field, index) => {
@@ -57,17 +61,18 @@ const DateInput: React.FC<DateInputProps> = ({ control, fieldArray }) => {
                   isIconOnly
                   radius="full"
                   onClick={isLastInput ? addInput : () => remove(index)}
-                  className={`translate-x-4 translate-y-2 text-white z-50  ${isLastInput
-                    ? 'bg-gray-300 hover:bg-primary-light'
-                    : 'bg-red-200 hover:bg-red-700'
-                    }`}
+                  className={`translate-x-4 translate-y-2 text-white z-50  ${
+                    isLastInput
+                      ? 'bg-gray-300 hover:bg-primary-light'
+                      : 'bg-red-200 hover:bg-red-700'
+                  }`}
                 >
                   {isLastInput ? '+' : '-'}
                 </Button>
               </div>
               <Controller
                 name={`dates.${index}.date`}
-                control={control}
+                control={control as Control<z.infer<typeof workshopCreationFormSchema>>}
                 rules={{ required: true }}
                 render={({ field, fieldState, formState }) => {
                   const errorMessage = formState.errors?.dates?.[index]?.date?.message;
@@ -91,7 +96,7 @@ const DateInput: React.FC<DateInputProps> = ({ control, fieldArray }) => {
             </div>
             <Controller
               name={`dates.${index}.startHour`}
-              control={control}
+              control={control as Control<z.infer<typeof workshopCreationFormSchema>>}
               rules={{ required: true }}
               render={({ field, fieldState, formState }) => {
                 const errorMessage = formState.errors?.dates?.[index]?.startHour?.message;
@@ -113,7 +118,7 @@ const DateInput: React.FC<DateInputProps> = ({ control, fieldArray }) => {
             />
             <Controller
               name={`dates.${index}.endHour`}
-              control={control}
+              control={control as Control<z.infer<typeof workshopCreationFormSchema>>}
               rules={{ required: true }}
               render={({ field, fieldState, formState }) => {
                 const errorMessage = formState.errors?.dates?.[index]?.endHour?.message;

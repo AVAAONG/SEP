@@ -9,7 +9,7 @@
  */
 
 import { CHAT_CALENDAR_ID, WORKSHOP_CALENDAR_ID } from '@/lib/constants';
-import createZoomMeeting from '@/lib/zoom';
+import createZoomMeeting, { updateZoomMeeting } from '@/lib/zoom';
 import { calendar_v3 } from '@googleapis/calendar';
 import { Calendar, setTokens } from '../googleAPI/auth';
 import createCalendarDescription from './calendarDescription';
@@ -150,6 +150,8 @@ const createEventDetails = async (
   }
   return [eventDetails, zoomMeetDetails];
 };
+
+
 /**
  * Lists the events of a calendar of the last 3 months.
  * @see https://developers.google.com/calendar/v3/reference/events/list - for more information about the API
@@ -222,37 +224,101 @@ export const deleteCalendarEvent = async (calendarId: string, eventId: string) =
   });
 };
 
-export const updateCalendarEvent = async (eventId: string, values: IWorkshopCalendar | IChatCalendar) => {
+export const updateCalendarEvent = async (eventsIdForUpdates: string[], values: IWorkshopCalendar | IChatCalendar, meetingEvents: string[]) => {
   await setTokens()
   const calendarId = 'asociated_skill' in values ? WORKSHOP_CALENDAR_ID : CHAT_CALENDAR_ID;
   let meetingDetails: MeetingDetails[] = []
   const { platform } = values;
-  const [eventDetails, zoomMeetDetails] = await createEventDetails(values);
-  const events = eventDetails.map(async (event) => {
-    return await Calendar.events.update({
+  eventsIdForUpdates.map(async (eventId, index) => {
+    const meetingDetails = await updateZoomMeeting(values.title, values.start_dates as unknown as string, meetingEvents[index]);
+    const eventDetails = await updateEventDetails(values, meetingDetails);
+    return await Calendar.events.patch({
       calendarId,
       eventId,
-      requestBody: event
+      requestBody: eventDetails,
     });
-  });
-  const eventsIds = (await Promise.all(events)).map((event) => event.data.id!);
-  if (platform.toLowerCase().trim() === 'GOOGLE_MEET') {
-    const googleMeetEventDetails = eventsIds.map(async (eventId) => await getMeetEventLink(WORKSHOP_CALENDAR_ID, eventId))
-    meetingDetails = await Promise.all(googleMeetEventDetails);
-  } else if (platform.toLowerCase().trim() === 'ZOOM') meetingDetails = [...zoomMeetDetails]
-  return [eventsIds, meetingDetails];
+  })
 
 }
 
-export const addDays = (date: Date, days: number) => {
-  var result = new Date(date);
-  result.setDate(result.getDate() + days);
-  return result.toISOString();
-};
 
 export const getDate = () => {
   let date = new Date().toISOString();
   let search = date.indexOf(':');
   date = date.slice(0, search - 3);
   return date;
+};
+
+const updateEventDetails = async (
+  values: IWorkshopCalendar | IChatCalendar,
+  meetingDetails?: MeetingDetails
+): Promise<calendar_v3.Schema$Event> => {
+  const {
+    title,
+    start_dates,
+    end_dates,
+    modality,
+    platform,
+  } = values
+  let calendarDescription: string = ''
+  let eventDetails: calendar_v3.Schema$Event;
+
+  const attendees = values.speakersData.map(speaker => {
+    return { email: speaker.speakerEmail, displayName: speaker.speakerName }
+  })
+
+  if (modality === 'IN_PERSON') {
+    calendarDescription = createCalendarDescription(values);
+    eventDetails = createEventObject(
+      title,
+      modality,
+      platform,
+      calendarDescription,
+      start_dates as unknown as string,
+      end_dates as unknown as string,
+      attendees
+    );
+
+  } else if (modality === 'ONLINE') {
+    if (platform === 'ZOOM') {
+      calendarDescription = createCalendarDescription(values,
+        meetingDetails?.meetingLink!, meetingDetails?.meetingId!, meetingDetails?.meetingPassword!
+      );
+      eventDetails = createEventObject(
+        title,
+        modality,
+        platform,
+        calendarDescription,
+        start_dates as unknown as string,
+        end_dates as unknown as string,
+        attendees
+      );
+
+
+    } else {
+      calendarDescription = createCalendarDescription(values);
+      eventDetails = createEventObject(
+        title,
+        modality,
+        platform,
+        calendarDescription,
+        start_dates as unknown as string,
+        end_dates as unknown as string,
+        attendees
+      );
+    }
+  } else {
+    calendarDescription = createCalendarDescription(values);
+    eventDetails = createEventObject(
+      title,
+      modality,
+      platform,
+      calendarDescription,
+      start_dates as unknown as string,
+      end_dates as unknown as string,
+      attendees
+    );
+
+  }
+  return eventDetails;
 };

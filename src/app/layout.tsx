@@ -8,8 +8,10 @@
 import favicon from '@/../public/logo-proexcelencia-cap.png';
 import '@/app/globals.css';
 import { ThemeProviderC } from '@/components/commons/ThemeProvider';
+import { ToastContainer } from 'react-toastify';
 import Providers from '../components/commons/Providerz';
 
+import 'react-toastify/dist/ReactToastify.css';
 /**
  * The base metadata of the application.
  * @property title - The title of the application.
@@ -35,7 +37,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="es" className="h-full font-sans">
       <body className="h-full">
         <Providers>
-          <ThemeProviderC>{children}</ThemeProviderC>
+          <ThemeProviderC>
+            {children}
+            <ToastContainer
+              position="bottom-right"
+              autoClose={3000}
+              closeOnClick
+              newestOnTop={true}
+              pauseOnHover
+              stacked
+            />
+          </ThemeProviderC>
         </Providers>
       </body>
     </html>

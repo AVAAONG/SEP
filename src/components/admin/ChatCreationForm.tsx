@@ -1,8 +1,9 @@
 'use client';
-import { createCalendarEvent } from '@/lib/calendar/calendar';
+import { createCalendarEvent, updateCalendarEvent } from '@/lib/calendar/calendar';
 import { IChatCalendar } from '@/lib/calendar/d';
 import { formatDates } from '@/lib/calendar/utils';
 import { CHAT_LEVELS, MODALITY } from '@/lib/constants';
+import { ChatWithSpeakerAndTempdata } from '@/lib/db/types';
 import { createChat, editChat } from '@/lib/db/utils/chats';
 import chatCreationFormSchema from '@/lib/schemas/chatCreationFormSchema';
 import { revalidateSpecificPath } from '@/lib/serverAction';
@@ -13,6 +14,7 @@ import { Chip } from '@nextui-org/chip';
 import { Input, Textarea } from '@nextui-org/input';
 import { Select, SelectItem } from '@nextui-org/select';
 import { Prisma } from '@prisma/client';
+import moment from 'moment';
 import Link from 'next/link';
 import { BaseSyntheticEvent, useEffect } from 'react';
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';
@@ -28,14 +30,9 @@ interface ChatCreationFormProps {
     email: string | null;
     image?: string | null;
   }[];
-  chatForEdit: z.infer<typeof chatCreationFormSchema> | null;
-  chatForEditId?: string
+  chatForEdit: ChatWithSpeakerAndTempdata | undefined;
 }
-const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
-  speakers,
-  chatForEdit,
-  chatForEditId
-}) => {
+const ChatCreationForm: React.FC<ChatCreationFormProps> = ({ speakers, chatForEdit }) => {
   const {
     control,
     handleSubmit,
@@ -54,18 +51,35 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
     name: 'dates',
   });
   useEffect(() => {
+    reset();
     if (chatForEdit) {
-      Object.keys(chatForEdit).forEach((key) => {
-        if (key in chatForEdit) {
-          const valueKey = key as keyof typeof chatForEdit;
-          if (chatForEdit[valueKey] !== undefined) {
-            setValue(valueKey, chatForEdit[valueKey]);
+      const formatedChat: z.infer<typeof chatCreationFormSchema> = {
+        title: chatForEdit?.title ?? '',
+        dates: [
+          {
+            date: moment(chatForEdit?.start_dates[0]).format('YYYY-MM-DD'),
+            startHour: moment(chatForEdit?.start_dates[0]).format('HH:mm'),
+            endHour: moment(chatForEdit?.end_dates[0]).format('HH:mm'),
+          },
+        ],
+        modality: chatForEdit?.modality!,
+        speakersId: chatForEdit?.speaker.map((speaker) => speaker.id).toString()!,
+        platformInPerson: chatForEdit?.platform ?? '',
+        platformOnline: chatForEdit?.platform ?? '',
+        description: chatForEdit?.description ?? undefined,
+        avalible_spots: chatForEdit?.avalible_spots ?? 0,
+        level: chatForEdit?.level!,
+      };
+      Object.keys(formatedChat).forEach((key) => {
+        if (key in formatedChat) {
+          const valueKey = key as keyof typeof formatedChat;
+          if (formatedChat[valueKey] !== undefined) {
+            setValue(valueKey, formatedChat[valueKey]);
           }
         }
       });
     }
   }, [chatForEdit, setValue]);
-
 
   const handleFormSubmit = async (
     data: z.infer<typeof chatCreationFormSchema>,
@@ -74,7 +88,6 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
     const buttonType = ((event?.nativeEvent as SubmitEvent)?.submitter as HTMLButtonElement)?.name;
     const dates = await formatDates(data.dates);
     const chatSpeakersId = data.speakersId.split(',');
-
 
     const calendarChat: IChatCalendar = {
       platform: data.platformInPerson ? data.platformInPerson : data.platformOnline!,
@@ -90,36 +103,35 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
       ...data,
       description: data.description ? data.description : null,
     };
-    const [eventsIds, meetingDetails] = await createCalendarEvent(calendarChat);
 
-    const chat: Prisma.ChatCreateArgs = {
-      data: {
-        title: data.title,
-        avalible_spots: z.coerce.number().parse(data.avalible_spots),
-        platform: data.platformInPerson ? data.platformInPerson : data.platformOnline!,
-        description: data.description ? data.description : null,
-        calendar_ids: [...eventsIds],
-        ...dates,
-        modality: data.modality,
-        level: data.level,
-        activity_status: 'SCHEDULED',
-        speaker: {
-          connect: calendarChat.speakersData.map((speaker) => ({ id: speaker.id })),
-        },
-      },
-    };
+    if (buttonType === 'edit') {
+      await updateCalendarEvent(
+        chatForEdit?.calendar_ids!,
+        calendarChat,
+        chatForEdit?.temp_data?.meeting_id!
+      );
 
-    if (buttonType === 'schedule') {
-      chat.data.activity_status = 'SCHEDULED';
-      await createChat(chat);
-    } else if (buttonType === 'send') {
-      chat.data.activity_status = 'SENT';
-      await createChat(chat);
-    } else if (buttonType === 'edit') {
       const editedChat: Prisma.ChatUpdateArgs = {
         where: {
-          id: chatForEditId!,
+          id: chatForEdit?.id!,
         },
+        data: {
+          title: data.title,
+          avalible_spots: z.coerce.number().parse(data.avalible_spots),
+          platform: data.platformInPerson ? data.platformInPerson : data.platformOnline!,
+          description: data.description ? data.description : null,
+          ...dates,
+          modality: data.modality,
+          level: data.level,
+          speaker: {
+            connect: calendarChat.speakersData.map((speaker) => ({ id: speaker.id })),
+          },
+        },
+      };
+      await editChat(editedChat);
+    } else {
+      const [eventsIds, meetingDetails] = await createCalendarEvent(calendarChat);
+      const chat: Prisma.ChatCreateArgs = {
         data: {
           title: data.title,
           avalible_spots: z.coerce.number().parse(data.avalible_spots),
@@ -133,14 +145,32 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
           speaker: {
             connect: calendarChat.speakersData.map((speaker) => ({ id: speaker.id })),
           },
+          temp_data: {
+            create: {
+              meeting_id: meetingDetails.map(
+                (meetingDetail) => meetingDetail.meetingId
+              ) as string[],
+              meeting_link: meetingDetails.map(
+                (meetingDetail) => meetingDetail.meetingLink
+              ) as string[],
+              meeting_password: meetingDetails.map(
+                (meetingDetail) => meetingDetail.meetingPassword
+              ) as string[],
+            },
+          },
         },
+      };
 
+      if (buttonType === 'schedule') {
+        chat.data.activity_status = 'SCHEDULED';
+        await createChat(chat);
+      } else if (buttonType === 'send') {
+        chat.data.activity_status = 'SENT';
+        await createChat(chat);
+      } else {
       }
-      await editChat(editedChat)
     }
-    else {
-    }
-    reset();
+    reset({});
     await revalidateSpecificPath('/admin/chats/crear');
   };
 
@@ -192,7 +222,6 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
               label="Nivel"
               defaultSelectedKeys={[field.value]}
               selectedKeys={[field.value]}
-
               labelPlacement="outside"
             >
               {CHAT_LEVELS.map((chatLevel) => (
@@ -201,8 +230,7 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
                 </SelectItem>
               ))}
             </Select>
-          )
-          }
+          )}
         />
         <Controller
           name="speakersId"
@@ -214,6 +242,7 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
               <Select
                 value={field.value}
                 onChange={field.onChange}
+                onSelectionChange={field.onChange}
                 items={speakers}
                 isMultiline={true}
                 selectionMode="multiple"
@@ -226,8 +255,7 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
                 label="Facilitador(es)"
                 labelPlacement="outside"
                 defaultSelectedKeys={[field.value]}
-                selectedKeys={[field.value]}
-
+                // selectedKeys={[field.value]}
                 renderValue={(items) => {
                   return (
                     <div className="flex flex-wrap gap-2">
@@ -303,7 +331,6 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
                 labelPlacement="outside"
                 defaultSelectedKeys={[field.value]}
                 selectedKeys={[field.value]}
-
               >
                 {MODALITY.map((modality) => (
                   <SelectItem key={modality.value} value={modality.value}>
@@ -340,24 +367,17 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
         />
         {chatForEdit ? (
           <div className="col-span-2 h-fit flex gap-4">
-            <Button
-              type="submit"
-              name="send"
-              radius="sm"
-              className=" w-1/2"
-              onPress={reset}
-            >
+            <Button type="submit" radius="sm" className=" w-1/2">
               <Link href={'/admin/chats/crear'} replace={false}>
                 Cancelar edición
               </Link>
             </Button>
             <Button
               type="submit"
-              name="send"
+              name="edit"
               radius="sm"
               className="bg-gradient-to-tr from-primary-1 to-emerald-500 text-white w-1/2"
               isDisabled={!isValid || isSubmitting}
-
             >
               Editar
             </Button>
@@ -366,7 +386,7 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
           <div className="col-span-2 h-fit flex gap-4">
             <Button
               type="submit"
-              name="edit"
+              name="schedule"
               radius="sm"
               className="bg-gradient-to-tr from-primary-1 to-emerald-500 text-white w-1/2"
               isDisabled={!isValid || isSubmitting}
@@ -384,8 +404,7 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
             </Button>
           </div>
         )}
-
-      </form >
+      </form>
     </>
   );
 };

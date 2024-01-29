@@ -45,13 +45,13 @@ model ChatAttendance {
 }
 
 model ChatsTempData {
-  id               String  @id @default(nanoid())
-  chat             Chat    @relation(fields: [chat_id], references: [id])
-  chat_id          String  @unique
-  meeting_link     String?
-  meeting_id       String?
-  meeting_password String?
-  whatsapp_link    String?
+  id               String   @id @default(nanoid())
+  chat             Chat     @relation(fields: [chat_id], references: [id])
+  chat_id          String   @unique
+  meeting_link     String[]
+  meeting_id       String[]
+  meeting_password String[]
+  whatsapp_link    String[]
 }
 
 model ChatSafisfactionForm {
@@ -287,9 +287,9 @@ model WorkshopTempData {
   id               String   @id @default(nanoid())
   workshop         Workshop @relation(fields: [workshop_id], references: [id])
   workshop_id      String   @unique
-  meeting_link     String?
-  meeting_id       String?
-  meeting_password String?
+  meeting_link     String[]
+  meeting_id       String[]
+  meeting_password String[]
 }
 
 //  Intermediate table to store the attendance of the scholars to the workshops

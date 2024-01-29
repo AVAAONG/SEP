@@ -39,6 +39,10 @@ export const deleteChatFromDatabase = async (id: string) => {
       where: {
         id: id,
       },
+      include: {
+        scholar_attendance: true,
+        temp_data: true,
+      },
     });
     return chat;
   } catch (error) {
@@ -301,6 +305,7 @@ export const getScheduleChats = async () => {
   const chats = await prisma.chat.findMany({
     include: {
       speaker: true,
+      temp_data: true,
     },
     where: {
       activity_status: 'SCHEDULED',
@@ -321,4 +326,16 @@ export const createChat = async (chat: Prisma.ChatCreateArgs) => {
 export const editChat = async (chat: Prisma.ChatUpdateArgs) => {
   const editedChat = await prisma.chat.update(chat);
   return editedChat;
+}
+
+export const changeChatStatus = async (id: string, status: ActivityStatus) => {
+  const chat = await prisma.chat.update({
+    where: {
+      id: id,
+    },
+    data: {
+      activity_status: status,
+    },
+  });
+  return chat;
 }

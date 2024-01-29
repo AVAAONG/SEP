@@ -14,7 +14,7 @@ import { Tooltip } from '@nextui-org/tooltip';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 import BasicModal from './BasicModal';
-import { WorkshopWithSpeaker } from './admin/ChatCreationForm';
+import WorkshopWithSpeaker from './admin/ChatCreationForm';
 
 type WorkshopsListProps = {
   workshops: WorkshopWithSpeaker[];

@@ -108,4 +108,41 @@ export const deleteZoomMeeting = async (meetingId: string) => {
   return response.data;
 }
 
+
+export const updateZoomMeeting = async (meetingId: string, name: string, startTime: string) => {
+  const start_time: string = moment(startTime).format('YYYY-MM-DDTHH:mm:ss');
+
+  const meetingOptions = {
+    topic: name,
+    type: 2,
+    start_time,
+    duration: 120,
+    timezone: 'America/Caracas',
+    default_password: true,
+    settings: {
+      auto_recording: 'none',
+      mute_upon_entry: true,
+      participant_video: false,
+      waiting_room: true,
+      breakout_room: {
+        enable: true,
+      },
+    },
+  }
+  const { access_token } = await authenticateWithZoom();
+  const response = await axios.patch(
+    `https://api.zoom.us/v2/meetings/${meetingId}`,
+    meetingOptions,
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+  const { join_url, id, password } = response.data;
+  return { meetingLink: join_url, meetingId: id, meetingPassword: password };
+}
+
+
 export default createZoomMeeting;
