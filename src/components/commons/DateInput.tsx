@@ -69,7 +69,6 @@ const DateInput: React.FC<DateInputProps> = ({ control, fieldArray }) => {
                 name={`dates.${index}.date`}
                 control={control}
                 rules={{ required: true }}
-                shouldUnregister={true}
                 render={({ field, fieldState, formState }) => {
                   const errorMessage = formState.errors?.dates?.[index]?.date?.message;
 
@@ -94,7 +93,6 @@ const DateInput: React.FC<DateInputProps> = ({ control, fieldArray }) => {
               name={`dates.${index}.startHour`}
               control={control}
               rules={{ required: true }}
-              shouldUnregister={true}
               render={({ field, fieldState, formState }) => {
                 const errorMessage = formState.errors?.dates?.[index]?.startHour?.message;
                 return (
@@ -117,7 +115,6 @@ const DateInput: React.FC<DateInputProps> = ({ control, fieldArray }) => {
               name={`dates.${index}.endHour`}
               control={control}
               rules={{ required: true }}
-              shouldUnregister={true}
               render={({ field, fieldState, formState }) => {
                 const errorMessage = formState.errors?.dates?.[index]?.endHour?.message;
                 return (

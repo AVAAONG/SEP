@@ -33,6 +33,21 @@ export const getChatsCountByStatus = async (status: ActivityStatus): Promise<num
   }
 };
 
+export const deleteChatFromDatabase = async (id: string) => {
+  try {
+    const chat = await prisma.chat.delete({
+      where: {
+        id: id,
+      },
+    });
+    return chat;
+  } catch (error) {
+    console.error(`Error deleting chat: ${error}`);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
 /**
  * Gets the total number of chats in the database.
  * @returns The number of chats.
@@ -301,4 +316,9 @@ export const getScheduleChats = async () => {
 export const createChat = async (chat: Prisma.ChatCreateArgs) => {
   const createdChat = await prisma.chat.create(chat);
   return createdChat;
+}
+
+export const editChat = async (chat: Prisma.ChatUpdateArgs) => {
+  const editedChat = await prisma.chat.update(chat);
+  return editedChat;
 }

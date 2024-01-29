@@ -33,7 +33,8 @@ const Page = async ({ searchParams }: { searchParams: { editChatId: string | nul
         modality: chatForEdit?.modality!,
         speakersId: chatForEdit?.speaker.map((speaker) => speaker.id).toString()!,
         platformInPerson: chatForEdit?.platform ?? '',
-        description: chatForEdit?.description ?? null,
+        platformOnline: chatForEdit?.platform ?? '',
+        description: chatForEdit?.description ?? undefined,
         avalible_spots: chatForEdit?.avalible_spots ?? 0,
         level: chatForEdit?.level!,
       };
@@ -45,10 +46,10 @@ const Page = async ({ searchParams }: { searchParams: { editChatId: string | nul
   return (
     <div className="min-h-screen flex flex-col md:flex-row gap-8 p-4">
       <div className=" w-full md:w-1/2">
-        <ChatCreationForm speakers={speakers as Speaker[]} chatForEdit={chat} />
+        <ChatCreationForm speakers={speakers as Speaker[]} chatForEdit={chat} chatForEditId={searchParams.editChatId || undefined} />
       </div>
-      <div className="w-full md:w-1/2 pt-0 flex flex-col items-center">
-        <ScheduleChatCard chats={scheduledChats} />
+      <div className='w-full md:w-1/2 pt-0 flex flex-col items-center '>
+        <ScheduleChatCard activities={scheduledChats} />
       </div>
     </div>
   );

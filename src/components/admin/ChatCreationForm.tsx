@@ -3,7 +3,7 @@ import { createCalendarEvent } from '@/lib/calendar/calendar';
 import { IChatCalendar } from '@/lib/calendar/d';
 import { formatDates } from '@/lib/calendar/utils';
 import { CHAT_LEVELS, MODALITY } from '@/lib/constants';
-import { createChat } from '@/lib/db/utils/chats';
+import { createChat, editChat } from '@/lib/db/utils/chats';
 import chatCreationFormSchema from '@/lib/schemas/chatCreationFormSchema';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,7 +13,8 @@ import { Chip } from '@nextui-org/chip';
 import { Input, Textarea } from '@nextui-org/input';
 import { Select, SelectItem } from '@nextui-org/select';
 import { Prisma } from '@prisma/client';
-import { BaseSyntheticEvent } from 'react';
+import Link from 'next/link';
+import { BaseSyntheticEvent, useEffect } from 'react';
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 import DateInput from '../commons/DateInput';
@@ -28,33 +29,21 @@ interface ChatCreationFormProps {
     image?: string | null;
   }[];
   chatForEdit: z.infer<typeof chatCreationFormSchema> | null;
+  chatForEditId?: string
 }
 const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
   speakers,
   chatForEdit,
+  chatForEditId
 }) => {
   const {
     control,
     handleSubmit,
     formState: { isSubmitting, isValid },
     reset,
+    setValue,
   } = useForm<z.infer<typeof chatCreationFormSchema>>({
     resolver: zodResolver(chatCreationFormSchema),
-    // defaultValues: chatForEdit!,
-    defaultValues: {
-      title: 'Chat de prueba',
-      dates: [
-        {
-          date: '2024-01-31',
-          startHour: '13:00',
-          endHour: '14:00',
-        },
-      ],
-      level: 'BASIC',
-      modality: 'IN_PERSON',
-      speakersId: 'pEsSon3-arJyIQ7vxURmj',
-      platformInPerson: 'Oficinas de avaa',
-    },
   });
   const modality = useWatch({
     control,
@@ -64,6 +53,19 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
     control,
     name: 'dates',
   });
+  useEffect(() => {
+    if (chatForEdit) {
+      Object.keys(chatForEdit).forEach((key) => {
+        if (key in chatForEdit) {
+          const valueKey = key as keyof typeof chatForEdit;
+          if (chatForEdit[valueKey] !== undefined) {
+            setValue(valueKey, chatForEdit[valueKey]);
+          }
+        }
+      });
+    }
+  }, [chatForEdit, setValue]);
+
 
   const handleFormSubmit = async (
     data: z.infer<typeof chatCreationFormSchema>,
@@ -86,6 +88,7 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
       }),
       ...dates,
       ...data,
+      description: data.description ? data.description : null,
     };
     const [eventsIds, meetingDetails] = await createCalendarEvent(calendarChat);
 
@@ -112,10 +115,33 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
     } else if (buttonType === 'send') {
       chat.data.activity_status = 'SENT';
       await createChat(chat);
-    } else {
+    } else if (buttonType === 'edit') {
+      const editedChat: Prisma.ChatUpdateArgs = {
+        where: {
+          id: chatForEditId!,
+        },
+        data: {
+          title: data.title,
+          avalible_spots: z.coerce.number().parse(data.avalible_spots),
+          platform: data.platformInPerson ? data.platformInPerson : data.platformOnline!,
+          description: data.description ? data.description : null,
+          calendar_ids: [...eventsIds],
+          ...dates,
+          modality: data.modality,
+          level: data.level,
+          activity_status: 'SCHEDULED',
+          speaker: {
+            connect: calendarChat.speakersData.map((speaker) => ({ id: speaker.id })),
+          },
+        },
+
+      }
+      await editChat(editedChat)
+    }
+    else {
     }
     reset();
-    await revalidateSpecificPath('/admin/actividadesFormativas/crear');
+    await revalidateSpecificPath('/admin/chats/crear');
   };
 
   return (
@@ -155,27 +181,28 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
           control={control}
           rules={{ required: true }}
           shouldUnregister={true}
-          render={({ field, formState }) => {
-            return (
-              <Select
-                value={field.value}
-                onChange={field.onChange}
-                isInvalid={!!formState.errors?.['level']?.message}
-                errorMessage={formState.errors?.['level']?.message?.toString()}
-                classNames={{ base: 'col-span-2 md:col-span-1' }}
-                radius="sm"
-                label="Nivel"
-                defaultSelectedKeys={[field.value]}
-                labelPlacement="outside"
-              >
-                {CHAT_LEVELS.map((chatLevel) => (
-                  <SelectItem key={chatLevel.value} value={chatLevel.value}>
-                    {chatLevel.label}
-                  </SelectItem>
-                ))}
-              </Select>
-            );
-          }}
+          render={({ field, formState }) => (
+            <Select
+              value={field.value}
+              onChange={field.onChange}
+              isInvalid={!!formState.errors?.['level']?.message}
+              errorMessage={formState.errors?.['level']?.message?.toString()}
+              classNames={{ base: 'col-span-2 md:col-span-1' }}
+              radius="sm"
+              label="Nivel"
+              defaultSelectedKeys={[field.value]}
+              selectedKeys={[field.value]}
+
+              labelPlacement="outside"
+            >
+              {CHAT_LEVELS.map((chatLevel) => (
+                <SelectItem key={chatLevel.value} value={chatLevel.value}>
+                  {chatLevel.label}
+                </SelectItem>
+              ))}
+            </Select>
+          )
+          }
         />
         <Controller
           name="speakersId"
@@ -199,6 +226,8 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
                 label="Facilitador(es)"
                 labelPlacement="outside"
                 defaultSelectedKeys={[field.value]}
+                selectedKeys={[field.value]}
+
                 renderValue={(items) => {
                   return (
                     <div className="flex flex-wrap gap-2">
@@ -273,6 +302,8 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
                 label="Modalidad"
                 labelPlacement="outside"
                 defaultSelectedKeys={[field.value]}
+                selectedKeys={[field.value]}
+
               >
                 {MODALITY.map((modality) => (
                   <SelectItem key={modality.value} value={modality.value}>
@@ -307,28 +338,54 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
             );
           }}
         />
+        {chatForEdit ? (
+          <div className="col-span-2 h-fit flex gap-4">
+            <Button
+              type="submit"
+              name="send"
+              radius="sm"
+              className=" w-1/2"
+              onPress={reset}
+            >
+              <Link href={'/admin/chats/crear'} replace={false}>
+                Cancelar edición
+              </Link>
+            </Button>
+            <Button
+              type="submit"
+              name="send"
+              radius="sm"
+              className="bg-gradient-to-tr from-primary-1 to-emerald-500 text-white w-1/2"
+              isDisabled={!isValid || isSubmitting}
 
-        <div className="col-span-2 h-fit flex gap-4">
-          <Button
-            type="submit"
-            name="schedule"
-            radius="sm"
-            className="bg-gradient-to-tr from-primary-1 to-emerald-500 text-white w-1/2"
-            isDisabled={!isValid || isSubmitting}
-          >
-            Agendar
-          </Button>
-          <Button
-            type="submit"
-            name="send"
-            radius="sm"
-            isDisabled={!isValid || isSubmitting}
-            className=" w-1/2"
-          >
-            Enviar
-          </Button>
-        </div>
-      </form>
+            >
+              Editar
+            </Button>
+          </div>
+        ) : (
+          <div className="col-span-2 h-fit flex gap-4">
+            <Button
+              type="submit"
+              name="edit"
+              radius="sm"
+              className="bg-gradient-to-tr from-primary-1 to-emerald-500 text-white w-1/2"
+              isDisabled={!isValid || isSubmitting}
+            >
+              Agendar
+            </Button>
+            <Button
+              type="submit"
+              name="send"
+              radius="sm"
+              isDisabled={!isValid || isSubmitting}
+              className=" w-1/2"
+            >
+              Enviar
+            </Button>
+          </div>
+        )}
+
+      </form >
     </>
   );
 };

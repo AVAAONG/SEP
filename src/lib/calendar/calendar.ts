@@ -8,7 +8,7 @@
  * @description Functions related to the calendar API v3 main functionalities in the system.
  */
 
-import { WORKSHOP_CALENDAR_ID } from '@/lib/constants';
+import { CHAT_CALENDAR_ID, WORKSHOP_CALENDAR_ID } from '@/lib/constants';
 import createZoomMeeting from '@/lib/zoom';
 import { calendar_v3 } from '@googleapis/calendar';
 import { Calendar, setTokens } from '../googleAPI/auth';
@@ -27,12 +27,13 @@ interface MeetingDetails {
 }
 export const createCalendarEvent = async (values: IWorkshopCalendar | IChatCalendar): Promise<[string[], MeetingDetails[]]> => {
   await setTokens()
+  const calendarId = 'asociated_skill' in values ? WORKSHOP_CALENDAR_ID : CHAT_CALENDAR_ID;
   let meetingDetails: MeetingDetails[] = []
   const { platform } = values;
   const [eventDetails, zoomMeetDetails] = await createEventDetails(values);
   const events = eventDetails.map(async (event) => {
     return await Calendar.events.insert({
-      calendarId: WORKSHOP_CALENDAR_ID,
+      calendarId,
       conferenceDataVersion: 1,
       requestBody: event,
       sendUpdates: 'all',
@@ -213,12 +214,35 @@ export const listCalendars = async (): Promise<string[] | null> => {
   }
 };
 
-export const deleteCalendarEvent = (calendarId: string, eventId: string) => {
-  Calendar.events.delete({
+export const deleteCalendarEvent = async (calendarId: string, eventId: string) => {
+  await setTokens()
+  await Calendar.events.delete({
     calendarId,
     eventId,
   });
 };
+
+export const updateCalendarEvent = async (eventId: string, values: IWorkshopCalendar | IChatCalendar) => {
+  await setTokens()
+  const calendarId = 'asociated_skill' in values ? WORKSHOP_CALENDAR_ID : CHAT_CALENDAR_ID;
+  let meetingDetails: MeetingDetails[] = []
+  const { platform } = values;
+  const [eventDetails, zoomMeetDetails] = await createEventDetails(values);
+  const events = eventDetails.map(async (event) => {
+    return await Calendar.events.update({
+      calendarId,
+      eventId,
+      requestBody: event
+    });
+  });
+  const eventsIds = (await Promise.all(events)).map((event) => event.data.id!);
+  if (platform.toLowerCase().trim() === 'GOOGLE_MEET') {
+    const googleMeetEventDetails = eventsIds.map(async (eventId) => await getMeetEventLink(WORKSHOP_CALENDAR_ID, eventId))
+    meetingDetails = await Promise.all(googleMeetEventDetails);
+  } else if (platform.toLowerCase().trim() === 'ZOOM') meetingDetails = [...zoomMeetDetails]
+  return [eventsIds, meetingDetails];
+
+}
 
 export const addDays = (date: Date, days: number) => {
   var result = new Date(date);

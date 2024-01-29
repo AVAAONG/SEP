@@ -27,6 +27,9 @@ const PlatformInput = ({ modality, control }: PlatformInputProps) => {
                 radius="sm"
                 label="Plataforma"
                 labelPlacement="outside"
+                selectedKeys={[field.value]}
+                defaultSelectedKeys={[field.value]}
+
               >
                 {ONLINE_PLATFORMS.map(({ label, value }) => (
                   <SelectItem key={value} value={value}>
@@ -83,6 +86,9 @@ const PlatformInput = ({ modality, control }: PlatformInputProps) => {
                 classNames={{ base: 'col-span-2 md:col-span-1' }}
                 radius="sm"
                 label="Plataforma (Virtual)"
+                selectedKeys={[field.value]}
+                defaultSelectedKeys={[field.value]}
+
                 labelPlacement="outside"
               >
                 {ONLINE_PLATFORMS.map(({ label, value }) => (

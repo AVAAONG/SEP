@@ -9,6 +9,7 @@ interface BasicModalProps {
   onConfirm: () => void;
   confirmText: string;
   isButtonDisabled: boolean;
+  scroll?: boolean;
   size?: "sm" | "md" | "lg" | "xl" | "2xl" | "full" | "xs" | "3xl" | "4xl" | "5xl" | undefined
 }
 
@@ -20,10 +21,16 @@ const BasicModal: React.FC<BasicModalProps> = ({
   onConfirm,
   confirmText,
   isButtonDisabled,
+  scroll,
   size,
 }) => {
   return (
-    <Modal scrollBehavior='outside' size={size || 'md'} isOpen={isOpen} onOpenChange={onOpenChange}>
+    <Modal
+      classNames={{
+        backdrop: 'bg-secondary-dark bg-opacity-30',
+
+      }}
+      scrollBehavior={scroll ? 'outside' : 'normal'} size={size || 'md'} isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalContent>
         {(onClose) => (
           <>
