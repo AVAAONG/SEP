@@ -33,11 +33,11 @@ const ScholarActivityAttendance: Column<ScholarWithActivities>[] = [
   },
   {
     Header: 'Nombre',
-    accessor: 'scholar',
+    accessor: 'first_names',
     Cell: ({ value, cell }: { value: CellValue; cell: Cell<ScholarWithActivities> }) => {
-      const name = `${value.scholar[0].first_names} ${value.scholar[0].last_names}`;
-      const id = value.scholar[0].id;
-      const career = value.scholar[0].collage_information.career;
+      const name = `${value} ${value}`;
+      const id = cell.row.original.id;
+      const career = '';
       return (
         <Link
           href={cell.row.original.id ? `/admin/becarios/${id}` : ''}
@@ -63,19 +63,17 @@ const ScholarActivityAttendance: Column<ScholarWithActivities>[] = [
   },
   {
     Header: 'Cédula',
-    accessor: 'scholar',
-    id: 'dni',
+    accessor: 'dni',
     Cell: ({ value }: { value: CellValue }) => {
-      const dni = formatDni(value.scholar[0].dni);
+      const dni = formatDni(value);
       return <span>V-{dni}</span>;
     },
   },
   {
     Header: 'Género',
-    accessor: 'scholar',
-    id: 'gender',
+    accessor: 'gender',
     Cell: ({ value }: { value: CellValue }) => {
-      if (value.Scholar[0].gender === 'M') {
+      if (value === 'M') {
         return (
           <span className="inline-flex items-center bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
             Masculino
@@ -92,10 +90,9 @@ const ScholarActivityAttendance: Column<ScholarWithActivities>[] = [
   },
   {
     Header: 'Edad',
-    accessor: 'scholar',
-    id: 'years',
+    accessor: 'birthdate',
     Cell: ({ value }) => {
-      const birthdate = new Date(value.scholar[0].birthdate).getFullYear();
+      const birthdate = new Date(value.birthdate).getFullYear();
       const age = new Date().getFullYear() - birthdate;
       return <span>{age}</span>;
     },
@@ -135,31 +132,16 @@ const ScholarActivityAttendance: Column<ScholarWithActivities>[] = [
   },
   {
     Header: 'Telefono celular',
-    accessor: 'scholar',
-    id: 'cellphoneNumber',
-    Cell: ({ value }) => {
-      const number = value.scholar[0].cell_phone_Number;
-      return <span>{number}</span>;
-    },
+    accessor: 'cell_phone_Number',
   },
   {
     Header: 'Whatsapp',
-    accessor: 'scholar',
-    id: 'whatsAppNumber',
-    Cell: ({ value }) => {
-      const number = value.scholar[0].whatsapp_number;
-
-      return <span>{number}</span>;
-    },
+    accessor: 'whatsapp_number',
   },
   {
     Header: 'Correo',
-    accessor: 'scholar',
+    accessor: 'email',
     id: 'email',
-    Cell: ({ value }) => {
-      const email = value.scholar[0].email;
-      return <span>{email}</span>;
-    },
   },
   //   {
   //     Header: 'Universidad',

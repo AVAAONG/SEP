@@ -3,7 +3,11 @@ import Table from '@/components/table/Table';
 import ChatColumns, { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
 import { getChats } from '@/lib/db/utils/chats';
 import { createArrayFromObject } from '@/lib/utils';
-import { parseModalityFromDatabase, parseWorkshopStatusFromDatabase } from '@/lib/utils2';
+import {
+  parseChatLevelFromDatabase,
+  parseModalityFromDatabase,
+  parseWorkshopStatusFromDatabase,
+} from '@/lib/utils2';
 import { Chat } from '@prisma/client';
 import dynamic from 'next/dynamic';
 
@@ -117,7 +121,7 @@ const page = async ({
       status: parseWorkshopStatusFromDatabase(chat.activity_status),
       modality: parseModalityFromDatabase(chat.modality),
       platform: chat.platform,
-      level: chat.level,
+      level: parseChatLevelFromDatabase(chat.level),
       scholarsEnrroled: chat.scholar_attendance.filter(
         (a) => a.attendance === 'ENROLLED' || 'ATTENDED'
       ).length,

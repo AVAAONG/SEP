@@ -112,7 +112,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
           <div className="overflow-x-scroll md:overflow-x-clip rounded-lg w-full">
             <Table
               tableColumns={ScholarActivityAttendance}
-              tableData={scholar_attendance || []}
+              tableData={scholar_attendance?.map((a) => a.scholar.scholar) || []}
               tableHeadersForSearch={[]}
             />
           </div>
