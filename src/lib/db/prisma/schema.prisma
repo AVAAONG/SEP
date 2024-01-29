@@ -16,7 +16,7 @@ model Chat {
   title              String
   avalible_spots     Int
   platform           String
-  description        String
+  description        String?
   calendar_ids       String[]
   start_dates        DateTime[]
   end_dates          DateTime[]

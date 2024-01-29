@@ -1,4 +1,4 @@
-import { ActivityStatus, Modality, Skill } from '@prisma/client';
+import { ActivityStatus, Level, Modality, Skill } from '@prisma/client';
 
 export const parseSkillFromDatabase = (skill: Skill) => {
   switch (skill) {
@@ -43,3 +43,16 @@ export const parseWorkshopStatusFromDatabase = (status: ActivityStatus) => {
       return 'En progreso';
   }
 };
+
+export const parseChatLevelFromDatabase = (level: Level) => {
+  switch (level) {
+    case 'ADVANCED':
+      return 'Avanzado';
+    case 'BASIC':
+      return 'Básico';
+    case 'INTERMEDIATE':
+      return 'Intermedio';
+    default:
+      return 'BASIC';
+  }
+}

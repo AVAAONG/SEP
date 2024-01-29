@@ -19,14 +19,23 @@ const oauth2Client = new auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL);
  * @see https://github.com/googleapis/google-api-nodejs-client#retrieve-access-token for more information
  */
 export const setTokens = async () => {
-  const u = await getServerSession(authAdminOptions)
+  const session = await getServerSession(authAdminOptions);
+  if (!session?.user?.refreshToken) {
+    console.log('No refresh token found in user session');
+    return;
+  }
+
+  oauth2Client.setCredentials({
+    refresh_token: session.user.refreshToken,
+  });
+
   try {
-    oauth2Client.setCredentials({
-      access_token: u?.user.accessToken,
-      refresh_token: u?.user.refreshToken,
-    });
+    const { credentials } = await oauth2Client.refreshAccessToken();
+    // oauth2Client.setCredentials({
+    //   access_token: credentials.access_token,
+    // });
   } catch (err) {
-    console.log('A ocurrido el siguiente error al intentar setear los tokens: ', err);
+    console.log('An error occurred while trying to refresh the access token: ', err);
   }
 };
 

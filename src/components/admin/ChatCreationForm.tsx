@@ -1,9 +1,9 @@
 'use client';
 import { createCalendarEvent } from '@/lib/calendar/calendar';
-import { IWorkshopCalendar } from '@/lib/calendar/d';
+import { IChatCalendar } from '@/lib/calendar/d';
 import { formatDates } from '@/lib/calendar/utils';
-import { MODALITY, PROGRAM_COMPONENTS } from '@/lib/constants';
-import { createWorkshop } from '@/lib/db/utils/Workshops';
+import { CHAT_LEVELS, MODALITY } from '@/lib/constants';
+import { createChat } from '@/lib/db/utils/chats';
 import chatCreationFormSchema from '@/lib/schemas/chatCreationFormSchema';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -19,7 +19,7 @@ import { z } from 'zod';
 import DateInput from '../commons/DateInput';
 import PlatformInput from '../commons/PlatformInput';
 
-interface WorkshopCreationFormProps {
+interface ChatCreationFormProps {
   speakers: {
     id: string;
     first_names: string;
@@ -27,34 +27,32 @@ interface WorkshopCreationFormProps {
     email: string | null;
     image?: string | null;
   }[];
-  workshopForEdit: z.infer<typeof chatCreationFormSchema> | null;
+  chatForEdit: z.infer<typeof chatCreationFormSchema> | null;
 }
-const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
+const ChatCreationForm: React.FC<ChatCreationFormProps> = ({
   speakers,
-  workshopForEdit,
+  chatForEdit,
 }) => {
   const {
     control,
     handleSubmit,
-    watch,
     formState: { isSubmitting, isValid },
     reset,
   } = useForm<z.infer<typeof chatCreationFormSchema>>({
     resolver: zodResolver(chatCreationFormSchema),
-    // defaultValues: workshopForEdit!,
+    // defaultValues: chatForEdit!,
     defaultValues: {
-      title: 'Taller de prueba',
+      title: 'Chat de prueba',
       dates: [
         {
-          date: '2021-10-10',
+          date: '2024-01-31',
           startHour: '13:00',
-          endHour: '12:00',
+          endHour: '14:00',
         },
       ],
       level: 'BASIC',
       modality: 'IN_PERSON',
       speakersId: 'pEsSon3-arJyIQ7vxURmj',
-
       platformInPerson: 'Oficinas de avaa',
     },
   });
@@ -73,11 +71,12 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
   ) => {
     const buttonType = ((event?.nativeEvent as SubmitEvent)?.submitter as HTMLButtonElement)?.name;
     const dates = await formatDates(data.dates);
-    const workshopSpeakersId = data.speakersId.split(',');
+    const chatSpeakersId = data.speakersId.split(',');
 
-    const calendarWorkshop: IWorkshopCalendar = {
+
+    const calendarChat: IChatCalendar = {
       platform: data.platformInPerson ? data.platformInPerson : data.platformOnline!,
-      speakersData: workshopSpeakersId.map((speakerId: string) => {
+      speakersData: chatSpeakersId.map((speakerId: string) => {
         const speaker = speakers.find((speaker) => speaker.id === speakerId);
         return {
           id: speaker?.id!,
@@ -88,10 +87,9 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
       ...dates,
       ...data,
     };
+    const [eventsIds, meetingDetails] = await createCalendarEvent(calendarChat);
 
-    const [eventsIds, meetingDetails] = await createCalendarEvent(calendarWorkshop);
-
-    const workshop: Prisma.ChatCreateArgs = {
+    const chat: Prisma.ChatCreateArgs = {
       data: {
         title: data.title,
         avalible_spots: z.coerce.number().parse(data.avalible_spots),
@@ -103,17 +101,17 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
         level: data.level,
         activity_status: 'SCHEDULED',
         speaker: {
-          connect: calendarWorkshop.speakersData.map((speaker) => ({ id: speaker.id })),
+          connect: calendarChat.speakersData.map((speaker) => ({ id: speaker.id })),
         },
       },
     };
 
     if (buttonType === 'schedule') {
-      workshop.data.activity_status = 'SCHEDULED';
-      await createWorkshop(workshop);
+      chat.data.activity_status = 'SCHEDULED';
+      await createChat(chat);
     } else if (buttonType === 'send') {
-      workshop.data.activity_status = 'SENT';
-      await createWorkshop(workshop);
+      chat.data.activity_status = 'SENT';
+      await createChat(chat);
     } else {
     }
     reset();
@@ -127,7 +125,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
         className="grid grid-cols-2 w-full items-center justify-center gap-4"
       >
         <h1 className="col-span-2 text-center w-full font-semibold text-2xl text-primary-light uppercase tracking-widest">
-          crear actividad formativa
+          crear chat club
         </h1>
         <Controller
           name="title"
@@ -170,9 +168,9 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
                 defaultSelectedKeys={[field.value]}
                 labelPlacement="outside"
               >
-                {PROGRAM_COMPONENTS.map((programComponent) => (
-                  <SelectItem key={programComponent.value} value={programComponent.value}>
-                    {programComponent.label}
+                {CHAT_LEVELS.map((chatLevel) => (
+                  <SelectItem key={chatLevel.value} value={chatLevel.value}>
+                    {chatLevel.label}
                   </SelectItem>
                 ))}
               </Select>
@@ -335,4 +333,4 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
   );
 };
 
-export default WorkshopCreationForm;
+export default ChatCreationForm;

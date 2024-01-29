@@ -1,13 +1,13 @@
-import ScheduledWorkshopsList from '@/components/ScheduleActivityCard';
-import WorkshopCreationForm from '@/components/admin/WorkshopCreationForm';
+import ScheduleChatCard from '@/components/ScheduleChatCard';
+import ChatCreationForm from '@/components/admin/ChatCreationForm';
 import { getChatSpeakerWithParams, getScheduleChats } from '@/lib/db/utils/chats';
-import workshopCreationFormSchema from '@/lib/schemas/workshopCreationFormSchema';
+import chatCreationFormSchema from '@/lib/schemas/chatCreationFormSchema';
 import { Speaker } from '@prisma/client';
 import moment from 'moment';
 import { z } from 'zod';
 
-const Page = async ({ searchParams }: { searchParams: { editWorkshopId: string | null } }) => {
-  const scheduledWorkshops = await getScheduleChats();
+const Page = async ({ searchParams }: { searchParams: { editChatId: string | null } }) => {
+  const scheduledChats = await getScheduleChats();
   const speakers = await getChatSpeakerWithParams({
     id: true,
     first_names: true,
@@ -16,41 +16,39 @@ const Page = async ({ searchParams }: { searchParams: { editWorkshopId: string |
     image: true,
   });
 
-  const getWorkshopForEdit = (): z.infer<typeof workshopCreationFormSchema> | null => {
-    if (searchParams.editWorkshopId) {
-      const workshopForEdit = scheduledWorkshops.find(
-        (workshop) => workshop.id === searchParams.editWorkshopId
+  const getChatsForEdit = (): z.infer<typeof chatCreationFormSchema> | null => {
+    if (searchParams.editChatId) {
+      const chatForEdit = scheduledChats.find(
+        (chat) => chat.id === searchParams.editChatId
       );
       return {
-        title: workshopForEdit?.title ?? '',
+        title: chatForEdit?.title ?? '',
         dates: [
           {
-            date: moment(workshopForEdit?.start_dates[0]).format('YYYY-MM-DD'),
-            startHour: moment(workshopForEdit?.start_dates[0]).format('HH:mm'),
-            endHour: moment(workshopForEdit?.end_dates[0]).format('HH:mm'),
+            date: moment(chatForEdit?.start_dates[0]).format('YYYY-MM-DD'),
+            startHour: moment(chatForEdit?.start_dates[0]).format('HH:mm'),
+            endHour: moment(chatForEdit?.end_dates[0]).format('HH:mm'),
           },
         ],
-        asociated_skill: workshopForEdit?.asociated_skill!, // replace DEFAULT_VALUE with an actual default value
-        modality: workshopForEdit?.modality!, // replace DEFAULT_VALUE with an actual default value
-        kindOfWorkshop: workshopForEdit?.kindOfWorkshop ?? '',
-        speakersId: workshopForEdit?.speaker.map((speaker) => speaker.id).toString()!,
-        year: workshopForEdit?.year ?? [],
-        platformInPerson: workshopForEdit?.platform ?? '',
-        description: workshopForEdit?.description ?? null,
-        avalible_spots: workshopForEdit?.avalible_spots ?? 0,
+        modality: chatForEdit?.modality!,
+        speakersId: chatForEdit?.speaker.map((speaker) => speaker.id).toString()!,
+        platformInPerson: chatForEdit?.platform ?? '',
+        description: chatForEdit?.description ?? null,
+        avalible_spots: chatForEdit?.avalible_spots ?? 0,
+        level: chatForEdit?.level!,
       };
     } else {
       return null;
     }
   };
-  const workshop = getWorkshopForEdit();
+  const chat = getChatsForEdit();
   return (
     <div className="min-h-screen flex flex-col md:flex-row gap-8 p-4">
       <div className=" w-full md:w-1/2">
-        <WorkshopCreationForm speakers={speakers as Speaker[]} workshopForEdit={workshop} />
+        <ChatCreationForm speakers={speakers as Speaker[]} chatForEdit={chat} />
       </div>
       <div className="w-full md:w-1/2 pt-0 flex flex-col items-center">
-        <ScheduledWorkshopsList workshops={scheduledWorkshops} />
+        <ScheduleChatCard chats={scheduledChats} />
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-import chatCreationFormSchema from '@/lib/schemas/chatCreationFormSchema';
 import workshopCreationFormSchema from '@/lib/schemas/workshopCreationFormSchema';
 import { Input } from '@nextui-org/input';
 import { Button } from '@nextui-org/react';
@@ -13,10 +12,7 @@ import { z } from 'zod';
  * @property {UseFieldArrayReturn<z.infer<typeof workshopCreationFormSchema>>} fieldArray - A UseFieldArrayReturn object from react-hook-form that is used to manage a list of fields.
  */
 interface DateInputProps {
-  control: Control<
-    z.infer<typeof workshopCreationFormSchema>,
-    z.infer<typeof chatCreationFormSchema>
-  >;
+  control: Control<z.infer<typeof workshopCreationFormSchema>>;
   fieldArray: UseFieldArrayReturn<z.infer<typeof workshopCreationFormSchema>>;
 }
 
@@ -61,11 +57,10 @@ const DateInput: React.FC<DateInputProps> = ({ control, fieldArray }) => {
                   isIconOnly
                   radius="full"
                   onClick={isLastInput ? addInput : () => remove(index)}
-                  className={`translate-x-4 translate-y-2 text-white z-50  ${
-                    isLastInput
-                      ? 'bg-gray-300 hover:bg-primary-light'
-                      : 'bg-red-200 hover:bg-red-700'
-                  }`}
+                  className={`translate-x-4 translate-y-2 text-white z-50  ${isLastInput
+                    ? 'bg-gray-300 hover:bg-primary-light'
+                    : 'bg-red-200 hover:bg-red-700'
+                    }`}
                 >
                   {isLastInput ? '+' : '-'}
                 </Button>

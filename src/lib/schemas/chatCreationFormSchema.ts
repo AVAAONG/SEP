@@ -42,7 +42,7 @@ const chatCreationFormSchema = z.object({
     platformOnline: z.string().trim().optional(),
     platformInPerson: z.string().trim().optional(),
     speakersId: z.string().min(1, { message: 'Debes elegir al menos un facilitador' }).trim(),
-    description: z.string().trim().nullable(),
+    description: z.string().trim().optional(),
 }).refine(data => {
     let isValid = true;
     data.dates.forEach(date => {
