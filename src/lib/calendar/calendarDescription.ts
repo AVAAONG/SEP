@@ -22,7 +22,7 @@ ${modality === 'ONLINE' ? `<b>Plataforma:</b> ${platform}` : `<b>Lugar:</b> ${pl
       asociated_skill,
     } = activity
     calendarCommonDescription += `<b>Año del taller:</b> ${year.join(', ')}
-    <b>Competencia Asociada:</b> ${parseSkillFromDatabase(asociated_skill)}
+<b>Competencia Asociada:</b> ${parseSkillFromDatabase(asociated_skill)}
 `
   } else if ('level' in activity) {
     const { level } = activity
