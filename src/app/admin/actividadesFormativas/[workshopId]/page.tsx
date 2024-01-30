@@ -1,7 +1,10 @@
 import defailProfilePic from '@/../public/defaultProfilePic.png';
+import Table from '@/components/table/Table';
+import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
 import { getWorkshop } from '@/lib/db/utils/Workshops';
 import Image from 'next/image';
 import shortUUID from 'short-uuid';
+import { formatScholarDataForAttendanceTable } from '../../chats/[chatId]/page';
 
 const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => {
   const workshopId = params.workshopId || ('null' as shortUUID.SUUID);
@@ -16,6 +19,12 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
     platform,
     scholar_attendance,
   } = workshop || {};
+
+  const scholarAttendanceDataForTable = formatScholarDataForAttendanceTable(
+    scholar_attendance?.map((a) => a.scholar.scholar),
+    scholar_attendance
+  );
+
   return (
     <div className="space-y-6  min-h-screen">
       <section className="flex bg-white rounded-lg p-8">
@@ -105,13 +114,13 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
           Becarios
         </h2>
         <div className="flex flex-row items-center space-x-2">
-          {/* <div className="overflow-x-scroll md:overflow-x-clip rounded-lg w-full">
+          <div className="overflow-x-scroll md:overflow-x-clip rounded-lg w-full">
             <Table
               tableColumns={ScholarActivityAttendance}
-              tableData={scholar_attendance || []}
+              tableData={scholarAttendanceDataForTable}
               tableHeadersForSearch={[]}
             />
-          </div> */}
+          </div>
         </div>
       </section>
     </div>
