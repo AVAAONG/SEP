@@ -214,6 +214,9 @@ export const getChats = async () => {
       temp_data: true,
       scholar_attendance: true,
     },
+    orderBy: {
+      start_dates: 'asc',
+    }
   });
   return chats;
 };

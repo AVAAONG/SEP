@@ -1,5 +1,6 @@
 import DateSelector from '@/components/commons/datePicker';
 import Table from '@/components/table/Table';
+import { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
 import WorkshopColumns, { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
 import { getWorkshops } from '@/lib/db/utils/Workshops';
 import { createArrayFromObject } from '@/lib/utils';
@@ -17,17 +18,46 @@ const MixedAreaChartComponent = dynamic(() => import('@/components/charts/MixedA
   ssr: false,
 });
 
-function filterWorkshopsByMonth(
-  workshops: WorkshopWithAllData[],
+export function filterActivitiesByMonth(
+  activities: WorkshopWithAllData[] | ChatsWithAllData[],
   month: number
-): WorkshopWithAllData[] {
-  const filteredWorkshops = workshops.filter((workshop) => {
-    const startMonth = new Date(workshop.start_dates[0]).getMonth();
+): WorkshopWithAllData[] | ChatsWithAllData[] {
+  if (!Array.isArray(activities)) throw new Error('activities must be an array');
+
+  const filteredActivities = activities.filter((activity: WorkshopWithAllData | ChatsWithAllData) => {
+    const startMonth = new Date(activity.start_dates[0]).getMonth();
     return startMonth === month;
+  });
+
+  return filteredActivities;
+}
+
+export function filterActivitiesByQuarter(
+  workshops: WorkshopWithAllData[] | ChatsWithAllData[],
+  quarter: number
+): WorkshopWithAllData[] | ChatsWithAllData[] {
+  const filteredWorkshops = workshops.filter((workshop: WorkshopWithAllData | ChatsWithAllData) => {
+    const startMonth = new Date(workshop.start_dates[0]).getMonth();
+    const workshopQuarter = Math.floor(startMonth / 3) + 1;
+    return workshopQuarter === quarter;
   });
 
   return filteredWorkshops;
 }
+
+export function filterActivitiesByYear(
+  workshops: WorkshopWithAllData[] | ChatsWithAllData[],
+  year: number
+): WorkshopWithAllData[] | ChatsWithAllData[] {
+  const filteredWorkshops = workshops.filter((workshop) => {
+    const startYear = new Date(workshop.start_dates[0]).getFullYear();
+    return startYear === year;
+  });
+
+  return filteredWorkshops;
+}
+
+
 
 const parseWorkshopYearFromDatabase = (years: WorkshopYear[]) => {
   if (years.length === 5) {
@@ -37,49 +67,22 @@ const parseWorkshopYearFromDatabase = (years: WorkshopYear[]) => {
   }
 };
 
-function filterWorkshopsByQuarter(
-  workshops: WorkshopWithAllData[],
-  quarter: number
-): WorkshopWithAllData[] {
-  const filteredWorkshops = workshops.filter((workshop) => {
-    const startMonth = new Date(workshop.start_dates[0]).getMonth();
-    const workshopQuarter = Math.floor(startMonth / 3) + 1;
-    return workshopQuarter === quarter;
-  });
-
-  return filteredWorkshops;
-}
-
-function filterWorkshopsByYear(
-  workshops: WorkshopWithAllData[],
-  year: number
-): WorkshopWithAllData[] {
-  const filteredWorkshops = workshops.filter((workshop) => {
-    const startYear = new Date(workshop.start_dates[0]).getFullYear();
-    return startYear === year;
-  });
-
-  return filteredWorkshops;
-}
-
-function categorizeWorkshops(workshops: Workshop[]): {
-  morning: Workshop[];
-  afternoon: Workshop[];
+export function filterActivitiesBySchedule(workshops: WorkshopWithAllData[] | ChatsWithAllData[]): {
+  morning: WorkshopWithAllData[] | ChatsWithAllData[];
+  afternoon: WorkshopWithAllData[] | ChatsWithAllData[];
 } {
-  const morningWorkshops: Workshop[] = [];
-  const afternoonWorkshops: Workshop[] = [];
-
-  for (const workshop of workshops) {
-    const startHour = new Date(workshop.start_dates[0]).getHours();
-
-    if (startHour < 12) {
-      morningWorkshops.push(workshop);
-    } else {
-      afternoonWorkshops.push(workshop);
+  return workshops.reduce(
+    (acc, workshop) => {
+      const startHour = new Date(workshop.start_dates[0]).getHours();
+      const key = startHour < 12 ? 'morning' : 'afternoon';
+      acc[key].push(workshop);
+      return acc;
+    },
+    {
+      morning: [] as WorkshopWithAllData[] | ChatsWithAllData[],
+      afternoon: [] as WorkshopWithAllData[] | ChatsWithAllData[],
     }
-  }
-
-  return { morning: morningWorkshops, afternoon: afternoonWorkshops };
+  );
 }
 
 const page = async ({
@@ -92,13 +95,13 @@ const page = async ({
   let workshops: WorkshopWithAllData[] = [];
 
   if (searchParams?.year) {
-    workshops = filterWorkshopsByYear(resultWorkshops, Number(searchParams?.year));
+    workshops = filterActivitiesByYear(resultWorkshops, Number(searchParams?.year));
   }
   if (searchParams?.quarter) {
-    workshops = filterWorkshopsByQuarter(resultWorkshops, Number(searchParams?.quarter));
+    workshops = filterActivitiesByQuarter(resultWorkshops, Number(searchParams?.quarter));
   }
   if (searchParams?.month) {
-    workshops = filterWorkshopsByMonth(resultWorkshops, Number(searchParams?.month));
+    workshops = filterActivitiesByMonth(resultWorkshops, Number(searchParams?.month));
   }
   if (!searchParams?.year && !searchParams?.quarter && !searchParams?.month) {
     workshops = resultWorkshops;
@@ -212,7 +215,7 @@ const page = async ({
 
   const workshopsBySkill = createArrayFromObject(workshopsBySkillObj);
   const workshopsByModality = createArrayFromObject(workshopsByModalityObj);
-  const { morning, afternoon } = categorizeWorkshops(doneWorkshops);
+  const { morning, afternoon } = filterActivitiesBySchedule(doneWorkshops);
 
   const workshopsByMonth: Record<number, number> =
     doneWorkshops?.reduce(

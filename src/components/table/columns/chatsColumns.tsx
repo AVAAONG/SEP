@@ -1,7 +1,6 @@
 'use client';
-import defailProfilePic from '@/../public/defaultProfilePic.png';
+import SpeakersColumnWidget from '@/components/SpeakerColumnWidget';
 import { Level, Prisma } from '@prisma/client';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Column } from 'react-table';
 
@@ -45,35 +44,19 @@ const ChatColumns: Column<ChatDataForTable>[] = [
   },
   {
     Header: 'Facilitador',
-    accessor: 'speakerName',
+    accessor: 'speakerNames',
     Cell: ({ cell, value }) => {
+      console.log(cell.row.original);
       return (
-        <Link
-          href={
-            cell.row.original.speakerId
-              ? `actividadesFormativas/${cell.row.original.speakerId}`
-              : ''
-          }
-          className="flex items-center"
-        >
-          <div className="flex-shrink-0 w-8 h-8">
-            <Image
-              className="w-full h-full rounded-full"
-              src={
-                cell.row.original.speakerImage ? cell.row.original.speakerImage : defailProfilePic
-              }
-              alt="Foto de perfil"
-            />
-          </div>
-          <div className="ml-4 text-start">
-            <span className="text-sm font-medium text-gray-900 dark:text-slate-100">{value}</span>
-            <div className="w-32 overflow-x-scroll text-xs font-medium text-gray-400 dark:text-slate-400">
-              {cell.row.original.speakerCompany}
-            </div>
-          </div>
-        </Link>
+        <SpeakersColumnWidget
+          speakerNames={cell.row.original.speakerNames}
+          speakerIds={cell.row.original.speakerIds}
+          speakersCompany={cell.row.original.speakerCompany}
+          speakerImages={cell.row.original.speakerImages}
+        />
       );
     },
+    disableSortBy: true,
   },
   {
     Header: 'Fecha',
