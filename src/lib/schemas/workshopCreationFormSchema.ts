@@ -44,7 +44,7 @@ const workshopCreationFormSchema = z.object({
     platformInPerson: z.string().trim().optional(),
     speakersId: z.string().min(1, { message: 'Debes elegir al menos un facilitador' }).trim(),
     year: z.nativeEnum(WorkshopYear).array().min(1, { message: 'Debes elegir al menos un año' }),
-    description: z.string().trim().nullable(),
+    description: z.string().trim().optional(),
 }).refine(data => {
     let isValid = true;
     data.dates.forEach(date => {
