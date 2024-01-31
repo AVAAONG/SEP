@@ -76,19 +76,23 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
     const buttonType = ((event?.nativeEvent as SubmitEvent)?.submitter as HTMLButtonElement)?.name;
     const dates = await formatDates(data.dates);
     const workshopSpeakersId = data.speakersId.split(',');
-
-    const calendarWorkshop: IWorkshopCalendar = {
-      platform: data.platformInPerson ? data.platformInPerson : data.platformOnline!,
-      speakersData: workshopSpeakersId.map((speakerId: string) => {
+    const speakersData = chatSpeakersId
+      .map((speakerId: string) => {
         const speaker = speakers.find((speaker) => speaker.id === speakerId);
+        if (!speaker) return null;
         return {
-          id: speaker?.id!,
-          speakerName: `${speaker?.first_names} ${speaker?.last_names}` || '',
-          speakerEmail: speaker?.email || '',
+          id: speaker?.id,
+          speakerName: `${speaker?.first_names} ${speaker?.last_names}`,
+          speakerEmail: speaker?.email,
         };
-      }),
+      })
+      .filter((speaker) => speaker !== null) as IChatCalendar['speakersData'];
+    const { platformInPerson, platformOnline, speakersId, ...restData } = data;
+    const calendarWorkshop: IWorkshopCalendar = {
+      platform: platformInPerson ? platformInPerson : platformOnline!,
+      speakersData,
       ...dates,
-      ...data,
+      ...restData,
     };
 
     const [eventsIds, meetingDetails] = await createCalendarEvent(calendarWorkshop);
