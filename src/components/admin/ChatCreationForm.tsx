@@ -3,7 +3,7 @@ import { createCalendarEvent, updateCalendarEvent } from '@/lib/calendar/calenda
 import { IChatCalendar } from '@/lib/calendar/d';
 import { formatDates } from '@/lib/calendar/utils';
 import { CHAT_LEVELS, MODALITY } from '@/lib/constants';
-import { ChatWithSpeakerAndTempdata } from '@/lib/db/types';
+import { ChatWithSpeaker } from '@/lib/db/types';
 import { createChat, editChat } from '@/lib/db/utils/chats';
 import chatCreationFormSchema from '@/lib/schemas/chatCreationFormSchema';
 import { revalidateSpecificPath } from '@/lib/serverAction';
@@ -31,7 +31,7 @@ interface ChatCreationFormProps {
     email: string | null;
     image?: string | null;
   }[];
-  chatForEdit: ChatWithSpeakerAndTempdata | undefined;
+  chatForEdit: ChatWithSpeaker | undefined;
 }
 const ChatCreationForm: React.FC<ChatCreationFormProps> = ({ speakers, chatForEdit }) => {
   const {
