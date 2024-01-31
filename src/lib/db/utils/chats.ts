@@ -41,7 +41,6 @@ export const deleteChatFromDatabase = async (id: string) => {
       },
       include: {
         scholar_attendance: true,
-        temp_data: true,
       },
     });
     return chat;
@@ -211,7 +210,6 @@ export const getChats = async () => {
   const chats = await prisma.chat.findMany({
     include: {
       speaker: true,
-      temp_data: true,
       scholar_attendance: true,
     },
     orderBy: {
@@ -266,7 +264,6 @@ export const getChat = async (id: shortUUID.SUUID) => {
           },
         },
       },
-      temp_data: true,
     },
   });
   return workshop;
@@ -306,16 +303,15 @@ export const getChatsByScholar = async (programInformationId: string, scholarId:
 
 export const getScheduleChats = async () => {
   const chats = await prisma.chat.findMany({
-    include: {
-      speaker: true,
-      temp_data: true,
-    },
     where: {
       activity_status: 'SCHEDULED',
     },
     orderBy: {
       start_dates: 'asc',
-    }
+    },
+    include: {
+      speaker: true,
+    },
 
   });
   return chats;

@@ -21,9 +21,12 @@ model Chat {
     modality           Modality
     level              Level
     activity_status    ActivityStatus
-    temp_data          ChatsTempData?
     scholar_attendance ChatAttendance[]
     speaker            Speaker[]
+    meeting_link       String[]
+    meeting_id         String[]
+    meeting_password   String[]
+    whatsapp_link      String[]
     slides             String?
 
     @@index([title, modality, activity_status, level])
@@ -40,16 +43,6 @@ model ChatAttendance {
     justification                  String?
     satisfaction_form_filled       Boolean?
     ChatSafisfactionForm           ChatSafisfactionForm?
-}
-
-model ChatsTempData {
-    id               String   @id @default(nanoid())
-    chat             Chat     @relation(fields: [chat_id], references: [id])
-    chat_id          String   @unique
-    meeting_link     String[]
-    meeting_id       String[]
-    meeting_password String[]
-    whatsapp_link    String[]
 }
 
 model ChatSafisfactionForm {

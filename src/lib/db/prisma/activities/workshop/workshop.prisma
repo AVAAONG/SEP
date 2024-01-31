@@ -24,23 +24,15 @@ model Workshop {
     year               WorkshopYear[]
     modality           Modality
     asociated_skill    Skill
-    temp_data          WorkshopTempData?
     activity_status    ActivityStatus
     scholar_attendance WorkshopAttendance[]
     speaker            Speaker[]
     slides             String?
+    meeting_link       String[]
+    meeting_id         String[]
+    meeting_password   String[]
 
     @@index([title, modality, activity_status, asociated_skill])
-}
-
-// This model is used to store the data that is not necesary to be stored in the database, but is necesary to be stored temporaly in the server
-model WorkshopTempData {
-    id               String   @id @default(nanoid())
-    workshop         Workshop @relation(fields: [workshop_id], references: [id])
-    workshop_id      String   @unique
-    meeting_link     String[]
-    meeting_id       String[]
-    meeting_password String[]
 }
 
 //  Intermediate table to store the attendance of the scholars to the workshops

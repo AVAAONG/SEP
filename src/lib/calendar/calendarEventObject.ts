@@ -1,6 +1,5 @@
 import { calendar_v3 } from '@googleapis/calendar';
 import { Modality } from '@prisma/client';
-import { nanoid } from 'nanoid';
 
 /**
  * Creates the default event object with all the details about the activitie
@@ -113,25 +112,7 @@ const createEventObject = (
   if (modality === 'IN_PERSON') event = defaultEvent;
 
   else if (modality === 'ONLINE') {
-    if (platform === 'GOOGLE_MEET') {
-      event = {
-        ...defaultEvent,
-        conferenceData: {
-          conferenceSolution: {
-            key: {
-              type: 'hangoutsMeet',
-            },
-            name: title,
-          },
-          createRequest: {
-            conferenceSolutionKey: {
-              type: 'hangoutsMeet',
-            },
-            requestId: nanoid(),
-          },
-        },
-      };
-    } else if (platform === 'PADLET') {
+    if (platform === 'PADLET') {
       event = {
         ...defaultEvent,
       };

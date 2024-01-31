@@ -110,10 +110,10 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({ speakers, chatForEd
       description: data.description ? data.description : null,
     };
     if (buttonType === 'edit') {
-      await updateCalendarEvent(
+      const meetingDetails = await updateCalendarEvent(
         chatForEdit?.calendar_ids!,
         calendarChat,
-        chatForEdit?.temp_data?.meeting_id!
+        chatForEdit?.meeting_id!
       );
 
       const editedChat: Prisma.ChatUpdateArgs = {
@@ -128,6 +128,15 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({ speakers, chatForEd
           ...dates,
           modality: data.modality,
           level: data.level,
+          meeting_id: meetingDetails.map(
+            (meetingDetail) => meetingDetail.meetingId || null
+          ) as string[],
+          meeting_link: meetingDetails.map(
+            (meetingDetail) => meetingDetail.meetingLink || null
+          ) as string[],
+          meeting_password: meetingDetails.map(
+            (meetingDetail) => meetingDetail.meetingPassword || null
+          ) as string[],
           speaker: {
             connect: calendarChat.speakersData.map((speaker) => ({ id: speaker.id })),
           },
@@ -136,7 +145,7 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({ speakers, chatForEd
       await editChat(editedChat);
     } else {
       const [eventsIds, meetingDetails] = await createCalendarEvent(calendarChat);
-      const chat: Prisma.ChatCreateArgs = {
+      let chat: Prisma.ChatCreateArgs = {
         data: {
           title: data.title,
           avalible_spots: z.coerce.number().parse(data.avalible_spots),
@@ -150,21 +159,23 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({ speakers, chatForEd
           speaker: {
             connect: calendarChat.speakersData.map((speaker) => ({ id: speaker.id })),
           },
-          temp_data: {
-            create: {
-              meeting_id: meetingDetails.map(
-                (meetingDetail) => meetingDetail.meetingId
-              ) as string[],
-              meeting_link: meetingDetails.map(
-                (meetingDetail) => meetingDetail.meetingLink
-              ) as string[],
-              meeting_password: meetingDetails.map(
-                (meetingDetail) => meetingDetail.meetingPassword
-              ) as string[],
-            },
-          },
         },
       };
+
+      if (data.modality === 'ONLINE') {
+        chat.data.meeting_id = meetingDetails.map(
+          (meetingDetail) => meetingDetail.meetingId || null
+        ) as string[];
+        chat.data.meeting_link = meetingDetails.map(
+          (meetingDetail) => meetingDetail.meetingLink || null
+        ) as string[];
+        chat.data.meeting_password = null;
+        if (platformOnline === 'ZOOM') {
+          chat.data.meeting_password = meetingDetails.map(
+            (meetingDetail) => meetingDetail.meetingPassword || null
+          ) as string[];
+        }
+      }
 
       if (buttonType === 'schedule') {
         chat.data.activity_status = 'SCHEDULED';
@@ -378,8 +389,8 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({ speakers, chatForEd
         />
         {chatForEdit ? (
           <div className="col-span-2 h-fit flex gap-4">
-            <Button type="submit" radius="sm" className=" w-1/2">
-              <Link href={'/admin/chats/crear'} replace={false}>
+            <Button radius="sm" className=" w-1/2">
+              <Link className="w-full" href={'/admin/chats/crear'} replace={false}>
                 Cancelar edición
               </Link>
             </Button>

@@ -30,15 +30,22 @@ ${modality === 'ONLINE' ? `<b>Plataforma:</b> ${platform}` : `<b>Lugar:</b> ${pl
 `
   }
   if (modality === 'ONLINE') {
-    calendarCommonDescription += `<b>Link de la reunion:</b> ${meetingLink}
+    if (platform === 'ZOOM') {
+      calendarCommonDescription += `<b>Link de la reunion:</b> ${meetingLink}
 <b>Id de la reunion:</b> ${meetingId}
 ${platform === 'ZOOM' ? `<b>Contraseña de la reunion:</b> ${meetingPassword}` : ''}
 `
+    }
   }
 
-
-  return calendarCommonDescription += `
+  if (description) {
+    return calendarCommonDescription;
+  }
+  else {
+    return calendarCommonDescription += `
 ${description}`;
+  }
+
 }
 
 export default createCalendarDescription;

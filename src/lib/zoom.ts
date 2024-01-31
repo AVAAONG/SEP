@@ -1,3 +1,4 @@
+'use server';
 /**
  * @file Zoom API
  * @author Kevin Bravo (kevinbravo.me)
@@ -33,6 +34,7 @@ export const authenticateWithZoom = async (): Promise<ZoomAuthResponse> => {
     {
       grant_type: 'account_credentials',
       account_id: ZOOM_USER_ID,
+
     },
     {
       headers: {
@@ -52,7 +54,7 @@ export const authenticateWithZoom = async (): Promise<ZoomAuthResponse> => {
  * @see link https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#operation/meetingCreate for more information about the Zoom API
  * @returns A Promise that resolves to an array containing the join URL, ID, and password of the meeting.
  */
-const createZoomMeeting = async (name: string, startTime: string) => {
+const createZoomMeeting = async (name: string, startTime: string): Promise<string[]> => {
   const start_time: string = moment(startTime).format('YYYY-MM-DDTHH:mm:ss');
 
   const meetingOptions = {
@@ -84,7 +86,7 @@ const createZoomMeeting = async (name: string, startTime: string) => {
     }
   );
   const { join_url, id, password } = response.data;
-  return [join_url, id, password];
+  return [join_url, id.toString(), password];
 };
 
 export async function getUserInfo() {
@@ -100,12 +102,13 @@ export async function getUserInfo() {
 
 export const deleteZoomMeeting = async (meetingId: string) => {
   const { access_token } = await authenticateWithZoom();
-  const response = await axios.delete(`https://api.zoom.us/v2/meetings/${meetingId}`, {
+  const response = await fetch(`https://api.zoom.us/v2/meetings/${meetingId}`, {
+    method: 'DELETE',
     headers: {
       Authorization: `Bearer ${access_token}`,
     },
   });
-  return response.data;
+  return response;
 }
 
 

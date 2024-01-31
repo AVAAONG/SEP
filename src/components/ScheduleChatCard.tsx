@@ -46,14 +46,13 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
 
   const deleteActivity = async (activityId: string) => {
     const activity = activities.find((activity) => activity.id === activityId);
+    await deleteChatFromDatabase(activityId);
     activity?.calendar_ids.map(async (eventId, index) => {
       await deleteCalendarEvent(CHAT_CALENDAR_ID, eventId);
       if (activity?.modality === 'ONLINE') {
-        if (activity.platform === 'ZOOM')
-          await deleteZoomMeeting(activity.temp_data?.meeting_id[index]!);
+        if (activity.platform === 'ZOOM') await deleteZoomMeeting(activity.meeting_id[index]!);
       }
     });
-    await deleteChatFromDatabase(activityId);
   };
   const sendActivities = async () => {
     setbuttonIsDisabled(true);

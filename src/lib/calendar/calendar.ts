@@ -25,6 +25,8 @@ interface MeetingDetails {
   meetingId: string | null | undefined;
   meetingPassword?: string | null | undefined;
 }
+let googleMeetLink;
+let googleMeetId
 export const createCalendarEvent = async (values: IWorkshopCalendar | IChatCalendar): Promise<[string[], MeetingDetails[]]> => {
   await setTokens()
   const calendarId = 'asociated_skill' in values ? WORKSHOP_CALENDAR_ID : CHAT_CALENDAR_ID;
@@ -37,14 +39,13 @@ export const createCalendarEvent = async (values: IWorkshopCalendar | IChatCalen
       conferenceDataVersion: 1,
       requestBody: event,
       sendUpdates: 'all',
-
     });
   });
   const eventsIds = (await Promise.all(events)).map((event) => event.data.id!);
-  if (platform.toLowerCase().trim() === 'GOOGLE_MEET') {
-    const googleMeetEventDetails = eventsIds.map(async (eventId) => await getMeetEventLink(WORKSHOP_CALENDAR_ID, eventId))
+  if (platform === 'GOOGLE_MEET') {
+    const googleMeetEventDetails = eventsIds.map(async (eventId) => await getMeetEventLink(calendarId, eventId))
     meetingDetails = await Promise.all(googleMeetEventDetails);
-  } else if (platform.toLowerCase().trim() === 'ZOOM') meetingDetails = [...zoomMeetDetails]
+  } else if (platform === 'ZOOM') meetingDetails = [...zoomMeetDetails]
   return [eventsIds, meetingDetails];
 };
 
@@ -79,7 +80,7 @@ const createEventDetails = async (
   }[] = [];
 
   const attendees = values.speakersData.map(speaker => {
-    return { email: speaker.speakerEmail, displayName: speaker.speakerName }
+    return { email: speaker.speakerEmail, displayName: speaker.speakerName, organizer: true, responseStatus: 'accepted', }
   })
 
   if (modality === 'IN_PERSON') {
@@ -117,7 +118,6 @@ const createEventDetails = async (
           attendees
         );
       }))
-
     } else {
       calendarDescription = createCalendarDescription(values);
       eventDetails = start_dates.map((startDate, index) => {
@@ -230,7 +230,25 @@ export const updateCalendarEvent = async (eventsIdForUpdates: string[], values: 
   let meetingDetails: MeetingDetails[] = []
   const { platform } = values;
   eventsIdForUpdates.map(async (eventId, index) => {
-    const meetingDetails = await updateZoomMeeting(values.title, values.start_dates as unknown as string, meetingEvents[index]);
+    let meetingDetails: MeetingDetails = {
+      meetingLink: null,
+      meetingId: null,
+      meetingPassword: null
+
+    };
+    if (platform.toLowerCase().trim() === 'ZOOM') {
+      if (meetingEvents.length === 0) {
+        const zoom = await createZoomMeeting(values.title, values.start_dates as unknown as string);
+        meetingDetails = {
+          meetingId: zoom[1],
+          meetingLink: zoom[0],
+          meetingPassword: zoom[2]
+        }
+      }
+      else {
+        meetingDetails = await updateZoomMeeting(meetingEvents[index], values.title, values.start_dates as unknown as string);
+      }
+    }
     const eventDetails = await updateEventDetails(values, meetingDetails);
     return await Calendar.events.patch({
       calendarId,
@@ -238,6 +256,7 @@ export const updateCalendarEvent = async (eventsIdForUpdates: string[], values: 
       requestBody: eventDetails,
     });
   })
+  return meetingDetails;
 
 }
 

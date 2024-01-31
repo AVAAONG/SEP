@@ -156,9 +156,11 @@ export const getISOStringDate = (date: string, hour: string) => {
  * @returns the meet link and its id
  */
 export const getMeetEventLink = async (calendarId: string, eventId: string) => {
+  console.log('froom google meet')
   const event = await Calendar.events.get({ calendarId, eventId });
   const meetingLink = event.data.hangoutLink;
   const meetingId = event.data.hangoutLink?.split('/')[3];
+  console.log(meetingLink, meetingId)
   return { meetingLink, meetingId };
 };
 
