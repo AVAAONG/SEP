@@ -169,7 +169,7 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({ speakers, chatForEd
         chat.data.meeting_link = meetingDetails.map(
           (meetingDetail) => meetingDetail.meetingLink || null
         ) as string[];
-        chat.data.meeting_password = null;
+        chat.data.meeting_password = ['null'];
         if (platformOnline === 'ZOOM') {
           chat.data.meeting_password = meetingDetails.map(
             (meetingDetail) => meetingDetail.meetingPassword || null
