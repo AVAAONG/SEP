@@ -5,8 +5,10 @@ import ScholarActivityAttendance from '@/components/table/columns/scholarActivit
 import { getChat } from '@/lib/db/utils/chats';
 import { prisma } from '@/lib/db/utils/prisma';
 import { formatScholarDataForAttendanceTable } from '@/lib/tableUtils';
+import ExportButton from '@/lib/temp';
+import { parseChatLevelFromDatabase, parseModalityFromDatabase } from '@/lib/utils2';
 import { Button } from '@nextui-org/react';
-import { ScholarAttendance } from '@prisma/client';
+import { Modality, ScholarAttendance } from '@prisma/client';
 import Image from 'next/image';
 import shortUUID from 'short-uuid';
 
@@ -23,14 +25,13 @@ export interface IScholarForAttendanceTable {
   attendance?: ScholarAttendance;
 }
 
-
-
 const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
   const chatId = params.chatId || ('null' as shortUUID.SUUID);
 
   const chat = await getChat(chatId);
   const {
     title,
+    level,
     start_dates,
     description,
     speaker,
@@ -40,9 +41,18 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
   } = chat || {};
 
   const scholarAttendanceDataForTable = formatScholarDataForAttendanceTable(
-    scholar_attendance?.map((a) => a.scholar.scholar),
-    scholar_attendance
+    scholar_attendance ? scholar_attendance.map((a) => a.scholar.scholar) : [],
+    scholar_attendance ? scholar_attendance : []
   );
+
+  const scholarDataToExport = scholarAttendanceDataForTable.map((scholar) => {
+    return {
+      names: scholar.first_names.split(' ')[0] + ' ' + scholar.last_names.split(' ')[0],
+      dni: scholar.dni,
+      email: scholar.email,
+      phone: scholar.phone_number,
+    };
+  });
 
   const attendedScholarsCount = scholar_attendance?.filter(
     (scholar_att) => scholar_att.attendance === 'ATTENDED'
@@ -54,21 +64,21 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
   const g = [
     {
       title: 'Total de inscritos',
-      value: scholar_attendance?.length
+      value: scholar_attendance?.length,
     },
     {
       title: 'Total de asistentes',
-      value: attendedScholarsCount
+      value: attendedScholarsCount,
     },
     {
       title: 'Total de inasistentes',
-      value: unAttendedScholarsCount
+      value: unAttendedScholarsCount,
     },
     {
       title: 'Total de cancelaciones',
-      value: 0
-    }
-  ]
+      value: 0,
+    },
+  ];
 
   const allowSatisfactionSurvey = async () => {
     if (chat?.activity_status === 'DONE') {
@@ -79,22 +89,21 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
         data: {
           activity_status: 'ATTENDANCE_CHECKED',
         },
-      })
-      return 'Encuesta de satisfacción enviada'
+      });
+      return 'Encuesta de satisfacción enviada';
+    } else if (chat?.activity_status === 'ATTENDANCE_CHECKED') {
+      return 'La encuesta de satisfaccion ya ha sido enviada';
     }
-    else if (chat?.activity_status === 'ATTENDANCE_CHECKED') {
-      return 'La encuesta de satisfaccion ya ha sido enviada'
-    }
-  }
+  };
 
   return (
     <div className="space-y-6  min-h-screen">
       <section className="flex bg-white rounded-lg p-8">
         <div className="space-y-3 w-1/2">
           <div className="flex flex-col space-y-2 ">
-            <div className='flex gap-2 items-center'>
+            <div className="flex gap-2 items-center">
               <div className="w-fit font-medium px-2">Chat club</div>
-              <div >
+              <div>
                 <ActivityStatus value={chat?.activity_status!} />
               </div>
             </div>
@@ -163,7 +172,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
                   <div className="space-y-sm">
                     <div>
                       <h3 className="text-sm font-semibold">
-                        {s.first_names} {s.last_names}
+                        {s.first_names.split(' ')[0]} {s.last_names.split(' ')[0]}
                       </h3>
                       <h4 className="text-xs uppercase">{s.job_company}</h4>
                       <p className="text-sm">{s.description}</p>
@@ -178,16 +187,24 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
           {g.map(({ title, value }) => (
             <div className="rounded-lg border text-card-foreground shadow-sm w-full">
               <div className="flex flex-col space-y-1.5 p-6 ">
-                <h3 className="text-lg font-semibold whitespace-nowrap leading-none tracking-tight">{title}</h3>
+                <h3 className="text-lg font-semibold whitespace-nowrap leading-none tracking-tight">
+                  {title}
+                </h3>
               </div>
-              <p className="text-4xl font-semibold whitespace-nowrap leading-none tracking-tight p-6">{value}</p>
+              <p className="text-4xl font-semibold whitespace-nowrap leading-none tracking-tight p-6">
+                {value}
+              </p>
             </div>
           ))}
           {chat?.activity_status === 'DONE' && (
-            <Button color='success' className='text-white' onPress={async () => allowSatisfactionSurvey()}>Habilitar encuesta de satisfacción</Button>
+            <Button
+              color="success"
+              className="text-white"
+              onPress={async () => allowSatisfactionSurvey()}
+            >
+              Habilitar encuesta de satisfacción
+            </Button>
           )}
-          <div >
-          </div>
         </div>
       </section>
       <section className="w-full space-y-3">
@@ -200,7 +217,28 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
               tableColumns={ScholarActivityAttendance}
               tableData={scholarAttendanceDataForTable}
               tableHeadersForSearch={[]}
-            />
+            >
+              <ExportButton
+                activityTitle={title!}
+                competenceOrLevel={parseChatLevelFromDatabase(level!)}
+                date={start_dates ? new Date(start_dates[0]).toLocaleDateString('ez-VE') : ''}
+                hour={
+                  start_dates
+                    ? new Date(start_dates[0]).toLocaleTimeString('es-VE', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true,
+                      })
+                    : ''
+                }
+                modality={parseModalityFromDatabase(modality as Modality)}
+                platform={platform!}
+                speakerName={
+                  speaker![0].first_names.split(' ')[0] + ' ' + speaker![0].last_names.split(' ')[0]
+                }
+                attendeesData={scholarDataToExport}
+              />
+            </Table>
           </div>
         </div>
       </section>

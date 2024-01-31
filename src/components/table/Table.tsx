@@ -12,18 +12,19 @@ import { SortIcon, SortIconDown, SortIconReverse } from '../../../public/svgs/sv
 import TableFooter from './TableFooter';
 import TableHeader from './TableHeader';
 import ExpandTableButton from './headerComponents/ExpandTableButton';
-import ExportButton from './headerComponents/ExportButton';
 
 interface TableProps<T extends object> {
   tableData: T[];
   tableColumns: Column<T>[];
   tableHeadersForSearch: { option: string; label: string }[];
+  children?: React.ReactNode;
 }
 
 function Table<T extends object>({
   tableData,
   tableColumns,
   tableHeadersForSearch,
+  children,
 }: TableProps<T>) {
   const data = useMemo(() => tableData, [tableData]);
   const columns = useMemo(() => tableColumns, [tableColumns]);
@@ -54,10 +55,11 @@ function Table<T extends object>({
 
   return (
     <div
-      className={`${isExpanded
-        ? 'absolute h-full top-0 bottom-0 left-0 right-0 z-50 min-h-full'
-        : 'relative overflow-hidden '
-        }  bg-white shadow-md shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full min-h-max`}
+      className={`${
+        isExpanded
+          ? 'absolute h-full top-0 bottom-0 left-0 right-0 z-50 min-h-full'
+          : 'relative overflow-hidden '
+      }  bg-white shadow-md shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full min-h-max`}
     >
       <TableHeader
         optionsForFilter={tableHeadersForSearch}
@@ -66,7 +68,7 @@ function Table<T extends object>({
         filterValue={globalFilter}
       >
         <ExpandTableButton isExpanded={isExpanded} toggleExpanded={toggleExpanded} />
-        <ExportButton dataToExport={tableData} />
+        {children && children}
       </TableHeader>
       <div className="flow-root w-full overflow-x-scroll mt-2">
         <table {...getTableProps()} className="w-full  text-sm text-left text-gray-300 ">
