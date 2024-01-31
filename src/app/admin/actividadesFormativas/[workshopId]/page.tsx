@@ -2,9 +2,9 @@ import defailProfilePic from '@/../public/defaultProfilePic.png';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
 import { getWorkshop } from '@/lib/db/utils/Workshops';
+import { formatScholarDataForAttendanceTable } from '@/lib/tableUtils';
 import Image from 'next/image';
 import shortUUID from 'short-uuid';
-import { formatScholarDataForAttendanceTable } from '../../chats/[chatId]/page';
 
 const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => {
   const workshopId = params.workshopId || ('null' as shortUUID.SUUID);
