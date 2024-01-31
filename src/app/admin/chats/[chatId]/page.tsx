@@ -1,8 +1,12 @@
 import defailProfilePic from '@/../public/defaultProfilePic.png';
+import ActivityStatus from '@/components/table/ActivityStatus';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
 import { getChat } from '@/lib/db/utils/chats';
-import { ChatAttendance, Scholar, ScholarAttendance } from '@prisma/client';
+import { prisma } from '@/lib/db/utils/prisma';
+import { formatScholarDataForAttendanceTable } from '@/lib/tableUtils';
+import { Button } from '@nextui-org/react';
+import { ScholarAttendance } from '@prisma/client';
 import Image from 'next/image';
 import shortUUID from 'short-uuid';
 
@@ -10,35 +14,16 @@ export interface IScholarForAttendanceTable {
   id: string;
   first_names: string;
   last_names: string;
-  email: string;
-  phone_number?: string;
-  whatsAppNumber?: string;
+  email: string | null;
+  phone_number: string | null;
+  whatsAppNumber: string | null;
   collage: string;
   dni: string;
   gender: string;
-  attendance: ScholarAttendance;
+  attendance?: ScholarAttendance;
 }
 
-export const formatScholarDataForAttendanceTable = (
-  scholars: Scholar[],
-  scholarAttendance: ChatAttendance[]
-) => {
-  return scholars.map((scholar) => {
-    const attendance = scholarAttendance.find((a) => a.scholar.scholar.id === scholar.id);
-    return {
-      id: scholar.id,
-      first_names: scholar.first_names,
-      last_names: scholar.last_names,
-      email: scholar.email,
-      phone_number: scholar.cell_phone_Number,
-      whatsAppNumber: scholar.whatsapp_number,
-      collage: 'Ejemplo',
-      dni: scholar.dni,
-      gender: scholar.gender,
-      attendance: attendance?.attendance,
-    };
-  });
-};
+
 
 const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
   const chatId = params.chatId || ('null' as shortUUID.SUUID);
@@ -47,12 +32,10 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
   const {
     title,
     start_dates,
-    end_dates,
     description,
     speaker,
     modality,
     platform,
-    level,
     scholar_attendance,
   } = chat || {};
 
@@ -61,12 +44,60 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
     scholar_attendance
   );
 
+  const attendedScholarsCount = scholar_attendance?.filter(
+    (scholar_att) => scholar_att.attendance === 'ATTENDED'
+  ).length;
+  const unAttendedScholarsCount = scholar_attendance?.filter(
+    (scholar_att) => scholar_att.attendance === 'NOT_ATTENDED'
+  ).length;
+
+  const g = [
+    {
+      title: 'Total de inscritos',
+      value: scholar_attendance?.length
+    },
+    {
+      title: 'Total de asistentes',
+      value: attendedScholarsCount
+    },
+    {
+      title: 'Total de inasistentes',
+      value: unAttendedScholarsCount
+    },
+    {
+      title: 'Total de cancelaciones',
+      value: 0
+    }
+  ]
+
+  const allowSatisfactionSurvey = async () => {
+    if (chat?.activity_status === 'DONE') {
+      await prisma.chat.update({
+        where: {
+          id: chatId,
+        },
+        data: {
+          activity_status: 'ATTENDANCE_CHECKED',
+        },
+      })
+      return 'Encuesta de satisfacción enviada'
+    }
+    else if (chat?.activity_status === 'ATTENDANCE_CHECKED') {
+      return 'La encuesta de satisfaccion ya ha sido enviada'
+    }
+  }
+
   return (
     <div className="space-y-6  min-h-screen">
       <section className="flex bg-white rounded-lg p-8">
         <div className="space-y-3 w-1/2">
           <div className="flex flex-col space-y-2 ">
-            <span className="w-fit font-medium px-2">Chat club</span>
+            <div className='flex gap-2 items-center'>
+              <div className="w-fit font-medium px-2">Chat club</div>
+              <div >
+                <ActivityStatus value={chat?.activity_status!} />
+              </div>
+            </div>
             <h1 className="italic text-xl font-bold leading-none tracking-tight text-primary-light md:text-3xl">
               {title}
             </h1>
@@ -114,7 +145,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
           </div>
           <div className="w-full space-y-3">
             <h2 className="text-xl font-semibold text-primary-light">
-              {speaker?.length >= 2 ? 'Facilitadores' : 'Facilitador'}
+              {speaker && speaker.length >= 2 ? 'Facilitadores' : 'Facilitador'}
             </h2>
             <div className="flex flex-col space-y-4">
               {speaker?.map((s) => (
@@ -143,7 +174,21 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
             </div>
           </div>
         </div>
-        <div className="w-1/2"></div>
+        <div className="w-1/2 grid grid-cols-2 gap-4">
+          {g.map(({ title, value }) => (
+            <div className="rounded-lg border text-card-foreground shadow-sm w-full">
+              <div className="flex flex-col space-y-1.5 p-6 ">
+                <h3 className="text-lg font-semibold whitespace-nowrap leading-none tracking-tight">{title}</h3>
+              </div>
+              <p className="text-4xl font-semibold whitespace-nowrap leading-none tracking-tight p-6">{value}</p>
+            </div>
+          ))}
+          {chat?.activity_status === 'DONE' && (
+            <Button color='success' className='text-white' onPress={async () => allowSatisfactionSurvey()}>Habilitar encuesta de satisfacción</Button>
+          )}
+          <div >
+          </div>
+        </div>
       </section>
       <section className="w-full space-y-3">
         <h2 className="px-8 text-2xl leading-none tracking-tight text-primary-light font-semibold">
