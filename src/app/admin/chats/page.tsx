@@ -10,7 +10,12 @@ import {
 } from '@/lib/utils2';
 import { Tooltip } from '@nextui-org/react';
 import dynamic from 'next/dynamic';
-import { filterActivitiesByMonth, filterActivitiesByQuarter, filterActivitiesBySchedule, filterActivitiesByYear } from '../actividadesFormativas/page';
+import {
+  filterActivitiesByMonth,
+  filterActivitiesByQuarter,
+  filterActivitiesBySchedule,
+  filterActivitiesByYear,
+} from '../actividadesFormativas/page';
 
 const PieChartComponent = dynamic(() => import('@/components/charts/Pie'), { ssr: false });
 const MixedAreaChartComponent = dynamic(() => import('@/components/charts/MixedAreaChart'), {
@@ -153,7 +158,6 @@ const page = async ({
       {} as Record<number, number>
     ) || {};
 
-
   const workshopsWithHighAttendancePerMonth: Record<string, number> =
     doneWorkshops?.reduce(
       (acc, workshop) => {
@@ -164,7 +168,7 @@ const page = async ({
             (a: { attendance: string }) => a.attendance === 'ATTENDED'
           )?.length || 0;
         const attendancePercentage = (attendedScholars / totalScholars) * 100;
-        if (attendancePercentage >= 80) acc[month.toString()] = (acc[month.toString()] || 0) + 1;
+        if (attendancePercentage >= 60) acc[month.toString()] = (acc[month.toString()] || 0) + 1;
         return acc;
       },
       {} as Record<string, number>
@@ -241,19 +245,19 @@ const page = async ({
         <MixedAreaChartComponent areaSeries={areaSeries} barSeries={barSeries} />
       </div>
       <div className="w-full flex h-80 gap-6 justify-center items-center rounded-lg bg-white">
-        <div  >
+        <div>
           <h3 className="truncate font-semibold text-center text-sm">
             Distribucion de chats segun su nivel
           </h3>
           <PieChartComponent data={workshopsBySkill} />
         </div>
-        <div >
+        <div>
           <h3 className="truncate font-semibold text-center text-sm">
             Distribucion de chats segun su modalidad
           </h3>
           <PieChartComponent data={workshopsByModality} />
         </div>
-        <div >
+        <div>
           <h3 className="truncate font-semibold text-center text-sm">
             Distribucion de chats segun su horario
           </h3>

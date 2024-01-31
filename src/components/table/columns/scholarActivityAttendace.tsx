@@ -1,41 +1,26 @@
 'use client';
 import defailProfilePic from '@/../public/defaultProfilePic.png';
+import { IScholarForAttendanceTable } from '@/app/admin/chats/[chatId]/page';
 import { changeScholarAttendance } from '@/lib/db/utils/Workshops';
 import formatDni from '@/lib/db/utils/formatDni';
-import { Prisma, ScholarAttendance } from '@prisma/client';
+import { ScholarAttendance } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
-import { Cell, CellValue, Column } from 'react-table';
+import { CellValue, Column } from 'react-table';
 
-const scholarWithActivities = Prisma.validator<Prisma.WorkshopAttendanceDefaultArgs>()({
-  include: {
-    scholar: {
-      include: {
-        scholar: {
-          include: {
-            collage_information: true,
-          },
-        },
-      },
-    },
-  },
-});
-type ScholarWithActivities = Prisma.WorkshopAttendanceGetPayload<typeof scholarWithActivities>;
-
-const ScholarActivityAttendance: Column<ScholarWithActivities>[] = [
+const ScholarActivityAttendance: Column<IScholarForAttendanceTable>[] = [
   {
     Header: '#',
     accessor: 'id',
-    Cell: ({ cell }: { cell: Cell<ScholarWithActivities> }) => {
+    Cell: ({ cell }) => {
       return <span className="font-semibold">{cell.row.index + 1}</span>;
     },
   },
   {
     Header: 'Nombre',
-    accessor: 'first_names',
-    Cell: ({ value, cell }: { value: CellValue; cell: Cell<ScholarWithActivities> }) => {
-      const name = `${value} ${value}`;
+    accessor: (row: IScholarForAttendanceTable) => `${row.first_names} ${row.last_names}`,
+    Cell: ({ value, cell }) => {
       const id = cell.row.original.id;
       const career = '';
       return (
@@ -51,7 +36,7 @@ const ScholarActivityAttendance: Column<ScholarWithActivities>[] = [
             />
           </div>
           <div className="ml-4 text-start">
-            <span className="text-sm font-medium text-gray-900 dark:text-slate-100">{name}</span>
+            <span className="text-sm font-medium text-gray-900 dark:text-slate-100">{value}</span>
             <span className="block text-xs font-medium text-gray-400 dark:text-slate-400">
               {career}
             </span>
@@ -89,15 +74,6 @@ const ScholarActivityAttendance: Column<ScholarWithActivities>[] = [
     },
   },
   {
-    Header: 'Edad',
-    accessor: 'birthdate',
-    Cell: ({ value }) => {
-      const birthdate = new Date(value.birthdate).getFullYear();
-      const age = new Date().getFullYear() - birthdate;
-      return <span>{age}</span>;
-    },
-  },
-  {
     Header: 'Asistencia',
     accessor: 'attendance',
     Cell: ({ value, cell }) => {
@@ -132,70 +108,16 @@ const ScholarActivityAttendance: Column<ScholarWithActivities>[] = [
   },
   {
     Header: 'Telefono celular',
-    accessor: 'cell_phone_Number',
+    accessor: 'phone_number',
   },
   {
     Header: 'Whatsapp',
-    accessor: 'whatsapp_number',
+    accessor: 'whatsAppNumber',
   },
   {
     Header: 'Correo',
     accessor: 'email',
-    id: 'email',
   },
-  //   {
-  //     Header: 'Universidad',
-  //     accessor: 'collage_information',
-  //     id: 'collage',
-  //     Cell: ({ value }: { value: CellValue }) => {
-  //       return <span>{value.collage}</span>;
-  //     },
-  //   },
-  //   {
-  //     Header: 'Area de estudio',
-  //     accessor: 'collage_information',
-  //     id: 'study_area',
-  //     Cell: ({ value }: { value: CellValue }) => {
-  //       return <span>{parseStudyAreaFromDatabase(value.study_area)}</span>;
-  //     },
-  //   },
-  //   {
-  //     Header: 'Carrera',
-  //     accessor: 'collage_information',
-  //     id: 'career',
-  //     Cell: ({ value }: { value: CellValue }) => {
-  //       return <span>{value.career}</span>;
-  //     },
-  //   },
-  //   {
-  //     Header: 'Fecha de ingreso a AVAA',
-  //     accessor: 'program_information',
-  //     id: 'avaa_admission_year',
-
-  //     Cell: ({ value }: { value: CellValue }) => {
-  //       const date = new Date(value.avaa_admission_year);
-  //       return (
-  //         <span>
-  //           {' '}
-  //           {date.toLocaleDateString('es-ES', {
-  //             year: 'numeric',
-  //             month: 'numeric',
-  //             day: 'numeric',
-  //           })}
-  //         </span>
-  //       );
-  //     },
-  //   },
-  //   {
-  //     Header: 'Año actual en AVAA',
-  //     Cell: ({ cell }: { cell: Cell<ScholarWithActivities> }) => {
-  //       const avaaEntryDate = cell.row.original.program_information?.avaa_admission_year
-  //         ? new Date(cell.row.original.program_information.avaa_admission_year).getFullYear()
-  //         : null;
-  //       const age = avaaEntryDate ? new Date().getFullYear() - avaaEntryDate : null;
-  //       return <span>{parseAvaaAdmisionYear(age!)}</span>;
-  //     },
-  //   },
 ];
 
 export default ScholarActivityAttendance;

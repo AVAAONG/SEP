@@ -2,8 +2,43 @@ import defailProfilePic from '@/../public/defaultProfilePic.png';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
 import { getChat } from '@/lib/db/utils/chats';
+import { ChatAttendance, Scholar, ScholarAttendance } from '@prisma/client';
 import Image from 'next/image';
 import shortUUID from 'short-uuid';
+
+export interface IScholarForAttendanceTable {
+  id: string;
+  first_names: string;
+  last_names: string;
+  email: string;
+  phone_number?: string;
+  whatsAppNumber?: string;
+  collage: string;
+  dni: string;
+  gender: string;
+  attendance: ScholarAttendance;
+}
+
+export const formatScholarDataForAttendanceTable = (
+  scholars: Scholar[],
+  scholarAttendance: ChatAttendance[]
+) => {
+  return scholars.map((scholar) => {
+    const attendance = scholarAttendance.find((a) => a.scholar.scholar.id === scholar.id);
+    return {
+      id: scholar.id,
+      first_names: scholar.first_names,
+      last_names: scholar.last_names,
+      email: scholar.email,
+      phone_number: scholar.cell_phone_Number,
+      whatsAppNumber: scholar.whatsapp_number,
+      collage: 'Ejemplo',
+      dni: scholar.dni,
+      gender: scholar.gender,
+      attendance: attendance?.attendance,
+    };
+  });
+};
 
 const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
   const chatId = params.chatId || ('null' as shortUUID.SUUID);
@@ -20,6 +55,12 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
     level,
     scholar_attendance,
   } = chat || {};
+
+  const scholarAttendanceDataForTable = formatScholarDataForAttendanceTable(
+    scholar_attendance?.map((a) => a.scholar.scholar),
+    scholar_attendance
+  );
+
   return (
     <div className="space-y-6  min-h-screen">
       <section className="flex bg-white rounded-lg p-8">
@@ -112,7 +153,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
           <div className="overflow-x-scroll md:overflow-x-clip rounded-lg w-full">
             <Table
               tableColumns={ScholarActivityAttendance}
-              tableData={scholar_attendance?.map((a) => a.scholar.scholar) || []}
+              tableData={scholarAttendanceDataForTable}
               tableHeadersForSearch={[]}
             />
           </div>
