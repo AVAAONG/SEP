@@ -7,7 +7,7 @@ import { ScholarAttendance } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
-import { CellValue, Column } from 'react-table';
+import { Cell, CellValue, Column } from 'react-table';
 
 const ScholarActivityAttendance: Column<IScholarForAttendanceTable>[] = [
   {
@@ -20,7 +20,7 @@ const ScholarActivityAttendance: Column<IScholarForAttendanceTable>[] = [
   {
     Header: 'Nombre',
     accessor: (row: IScholarForAttendanceTable) => `${row.first_names} ${row.last_names}`,
-    Cell: ({ value, cell }) => {
+    Cell: ({ value, cell }: { value: CellValue; cell: Cell<IScholarForAttendanceTable> }) => {
       const id = cell.row.original.id;
       const career = '';
       return (
