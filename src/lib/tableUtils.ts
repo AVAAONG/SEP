@@ -1,11 +1,11 @@
-import { ChatAttendance, Scholar } from "@prisma/client";
+import { ChatAttendance, Scholar, ScholarAttendance, WorkshopAttendance } from "@prisma/client";
 
 export const formatScholarDataForAttendanceTable = (
     scholars: Scholar[],
-    scholarAttendance: ChatAttendance[]
+    scholarAttendance: ChatAttendance[] | WorkshopAttendance[]
 ) => {
     return scholars.map((scholar) => {
-        const attendance = scholarAttendance.find((a) => a.scholar.scholar.id === scholar.id);
+        const attendance = scholarAttendance.find((a: ChatAttendance | WorkshopAttendance) => a.scholar.scholar.id === scholar.id);
         return {
             id: scholar.id,
             first_names: scholar.first_names,
@@ -13,10 +13,9 @@ export const formatScholarDataForAttendanceTable = (
             email: scholar.email,
             phone_number: scholar.cell_phone_Number,
             whatsAppNumber: scholar.whatsapp_number,
-            collage: 'Ejemplo',
             dni: scholar.dni,
             gender: scholar.gender,
-            attendance: attendance?.attendance,
+            attendance: attendance.attendance as ScholarAttendance,
         };
     });
 };

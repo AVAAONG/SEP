@@ -8,7 +8,7 @@ import { formatScholarDataForAttendanceTable } from '@/lib/tableUtils';
 import ExportButton from '@/lib/temp';
 import { parseChatLevelFromDatabase, parseModalityFromDatabase } from '@/lib/utils2';
 import { Button } from '@nextui-org/react';
-import { Modality, ScholarAttendance } from '@prisma/client';
+import { Gender, Modality, ScholarAttendance } from '@prisma/client';
 import Image from 'next/image';
 import shortUUID from 'short-uuid';
 
@@ -19,9 +19,8 @@ export interface IScholarForAttendanceTable {
   email: string | null;
   phone_number: string | null;
   whatsAppNumber: string | null;
-  collage: string;
   dni: string;
-  gender: string;
+  gender: Gender;
   attendance?: ScholarAttendance;
 }
 
