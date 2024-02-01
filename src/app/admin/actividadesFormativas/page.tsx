@@ -24,10 +24,12 @@ export function filterActivitiesByMonth(
 ): WorkshopWithAllData[] | ChatsWithAllData[] {
   if (!Array.isArray(activities)) throw new Error('activities must be an array');
 
-  const filteredActivities = activities.filter((activity: WorkshopWithAllData | ChatsWithAllData) => {
-    const startMonth = new Date(activity.start_dates[0]).getMonth();
-    return startMonth === month;
-  });
+  const filteredActivities = activities.filter(
+    (activity: WorkshopWithAllData | ChatsWithAllData) => {
+      const startMonth = new Date(activity.start_dates[0]).getMonth();
+      return startMonth === month;
+    }
+  );
 
   return filteredActivities;
 }
@@ -56,8 +58,6 @@ export function filterActivitiesByYear(
 
   return filteredWorkshops;
 }
-
-
 
 const parseWorkshopYearFromDatabase = (years: WorkshopYear[]) => {
   if (years.length === 5) {
@@ -316,14 +316,23 @@ const page = async ({
       <div className="w-full  rounded-lg bg-white">
         <MixedAreaChartComponent areaSeries={areaSeries} barSeries={barSeries} />
       </div>
-      <div className="w-full grid grid-cols-3 justify-center items-center rounded-lg bg-white">
-        <div className="w-full">
+      <div className="w-full flex h-80 gap-6 justify-center items-center rounded-lg bg-white">
+        <div>
+          <h3 className="truncate font-semibold text-center text-sm">
+            Distribucion de actividades segun su nivel
+          </h3>
           <PieChartComponent data={workshopsBySkill} />
         </div>
-        <div className="w-11/12">
+        <div>
+          <h3 className="truncate font-semibold text-center text-sm">
+            Distribucion de actividades segun su modalidad
+          </h3>
           <PieChartComponent data={workshopsByModality} />
         </div>
-        <div className="w-11/12">
+        <div>
+          <h3 className="truncate font-semibold text-center text-sm">
+            Distribucion de actividades segun su horario
+          </h3>
           <PieChartComponent
             data={[
               {
