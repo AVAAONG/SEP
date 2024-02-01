@@ -64,7 +64,7 @@ const TableSearhButton = ({
           type="button"
         >
           <div className="flex gap-2 items-center text-sm">
-            Buscar por:
+            Buscar
             <span className="hidden text-xs sm:inline text-green-600">
               {optionsForFilter.find(({ option }) => option === selectedFilter)?.label}
             </span>
