@@ -1,123 +1,109 @@
+import defailProfilePic from '@/../public/defaultProfilePic.png';
 import { getWorkshop } from '@/lib/db/utils/Workshops';
+import { formatScholarDataForAttendanceTable } from '@/lib/tableUtils';
+import Image from 'next/image';
 import shortUUID from 'short-uuid';
 
-const TEMPORAL_DATA = [
-  {
-    id: 1,
-    chatName: 'Two experience at the US',
-    kindOfChat: 'Virtual',
-    chatDate: '14/04/2023',
-    level: 'Basico',
-    scholars: 10,
-  },
-  {
-    id: 2,
-    chatName: "Let's learn grammar thogether",
-    kindOfChat: 'Presencial',
-    chatDate: '14/04/2023',
-    level: 'Intermedio',
-    scholars: 15,
-  },
-  {
-    id: 3,
-    chatName: "Let's learn grammar thogether",
-    kindOfChat: 'Presencial',
-    chatDate: '14/04/2023',
-    level: 'Intermedio',
-    scholars: 8,
-  },
-  {
-    id: 4,
-    chatName: 'The ABC',
-    kindOfChat: 'Presencial',
-    chatDate: '14/04/2023',
-    level: 'Intermedio',
-    scholars: 9,
-  },
-  {
-    id: 5,
-    chatName: 'How to be a good leader',
-    kindOfChat: 'Presencial',
-    chatDate: '14/04/2023',
-    level: 'Intermedio',
-    scholars: 7,
-  },
-];
+const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => {
+  const workshopId = params.workshopId || ('null' as shortUUID.SUUID);
+  const workshop = await getWorkshop(workshopId);
+  const {
+    title,
+    start_dates,
+    end_dates,
+    description,
+    speaker,
+    modality,
+    asociated_skill,
+    platform,
+    scholar_attendance,
+  } = workshop || {};
 
-const page = async ({
-  params,
-  searchParams,
-}: {
-  params: { tallerId: shortUUID.SUUID };
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) => {
-  const workshopId = params.tallerId || null;
-
-  const workshop = await getWorkshop(workshopId!);
-
-  const { title, description, dates, speaker, platform, modality } = workshop;
-  console.log(description);
+  const scholarAttendanceDataForTable = formatScholarDataForAttendanceTable(
+    scholar_attendance ? scholar_attendance.map((a) => a.scholar.scholar) : [],
+    scholar_attendance ? scholar_attendance : []
+  );
+  console.log(scholarAttendanceDataForTable);
 
   return (
-    <div className="space-y-6 text-primary p-8">
-      <div className="flex flex-col space-y-3 items-center">
-        <span className="pipe w-fit text-green-500 text-center font-semibold">
-          Actividad formativa
-        </span>
-        <h1 className="text-2xl font-semibold leading-none tracking-tight text-center text-primary md:text-5xl">
-          {title}
-        </h1>
-        {/* <p className="space-y-2 text-[16px] leading-[1.5] text-secondary">Join us for an upcoming Tech Talk where PlanetScale and Hightouch cover how you can make use of one of your most valuable company assets: product data.</p> */}
-      </div>
-      <section className="space-y-3">
-        <h2 className="text-2xl font-semibold text-green-500">Detalles:</h2>
-        <div className="space-y-2">
-          <div className="-ml-1.5 space-y-2 border-l-2 border-green-500 pl-1.5 sm:-ml-3 sm:pl-3">
-            <div className="space-y-sm">
-              <h3 className="text-sm leading-6 text-secondary">Fecha:</h3>
-              <p className="text-base font-semibold">
-                {new Date(dates[0].start_date).toLocaleDateString()}
-              </p>
+    <div className="space-y-6  min-h-screen">
+      <section className="flex bg-white rounded-lg p-8">
+        <div className="space-y-3 w-1/2">
+          <div className="flex flex-col space-y-2 ">
+            <span className="w-fit font-medium px-2">Actividad formativa</span>
+            <h1 className="italic text-xl font-bold leading-none tracking-tight text-primary-light md:text-3xl">
+              {title}
+            </h1>
+          </div>
+
+          <h2 className="text-xl  font-semibold text-primary-light">Fechas:</h2>
+          <div className="space-y-4">
+            <div className="flex space-x-4">
+              {start_dates?.map((date, index) => {
+                return (
+                  <div className="flex flex-col space-y-2 border-l-2 border-primartext-primary-light pl-1.5 sm:pl-3">
+                    <div className="space-y-sm">
+                      <h3 className="text-sm leading-6 text-secondary">Fecha {index + 1}:</h3>
+                      <p className="text-base font-semibold">
+                        {new Date(date).toLocaleDateString('es-VE')}
+                      </p>
+                    </div>
+                    <div className="space-y-sm">
+                      <h3 className="text-sm leading-6 text-secondary">Hora de inicio:</h3>
+                      <p className="text-base font-semibold">
+                        {new Date(date)
+                          .toLocaleTimeString('es-VE', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })
+                          .toUpperCase()}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-            <div className="space-y-sm">
-              <h3 className="text-sm leading-6 text-secondary">Hora:</h3>
-              <p className="text-base font-semibold">
-                {new Date(dates[0].start_date).toLocaleTimeString()}
-              </p>
-            </div>
-            <div className="space-y-sm">
-              <h3 className="text-sm leading-6 text-secondary">
-                {modality === 'VIRTUAL' ? 'Plataforma' : 'Lugar'}
+            <div className="space-y-1">
+              <h3 className="text-xl font-semibold text-primary-light">
+                {modality === 'ONLINE' ? 'Plataforma' : 'Lugar'}
               </h3>
-              <p className="text-base font-semibold capitalize">
-                {platform} ({modality})
-              </p>
+              <p className="text-base font-semibold capitalize">{platform}</p>
+            </div>
+            <div className="space-y-1">
+              {description && (
+                <h2 className="text-xl  font-semibold text-primary-light">Descripción:</h2>
+              )}{' '}
+              <p className="text-sm list-disc space-y-sm w-full">{description}</p>
             </div>
           </div>
-          {/* <p>The ability to easily access and analyze real-time product data can make a huge impact on your company and strategy. Product data, however, is often one of the most siloed from your data stack, making it difficult to access.</p>
-                    <p>In this Tech Talk, we’ll cover how Hightouch and PlanetScale make it simple to access and utilize your product data — without heavy engineering work. Fill out the form on the right to register.</p> */}
-          <p className="text-xl font-semibold text-green-500">Descripción:</p>
-          <p className="ml-2 list-disc space-y-sm">{description}</p>
-        </div>
-        <div className="w-full space-y-3">
-          <h2 className="text-2xl font-semibold text-green-500">Facilitador</h2>
-          <div className="flex flex-row items-center space-x-2">
-            <div className="h-9 w-9 shrink-0">
-              <img
-                alt="Gabriel Madureira"
-                loading="lazy"
-                src="https://planetscale-images.imgix.net/build/_assets/gabriel-madureira-JI6E4AAH.jpeg?auto=compress%2Cformat"
-                className="max-h-[72px] overflow-hidden rounded-full"
-                width="72"
-                height="72"
-              />
-            </div>
-            <div className="space-y-sm">
-              <div>
-                <h3 className="text-sm font-semibold">{speaker[0].name}</h3>
-                <h4 className="text-sm text-secondary"></h4>
-                <p className="text-sm">Description</p>
-              </div>
+          <div className="w-full space-y-3">
+            <h2 className="text-xl font-semibold text-primary-light">
+              {speaker && speaker.length && speaker.length >= 2 ? 'Facilitadores' : 'Facilitador'}
+            </h2>
+            <div className="flex flex-col space-y-4">
+              {speaker?.map((s) => (
+                <div key={s.email} className="flex items-center space-x-2">
+                  <div className="h-9 w-9 shrink-0">
+                    <Image
+                      alt={s.first_names}
+                      loading="lazy"
+                      src={s.image ?? defailProfilePic}
+                      className="max-h-[72px] overflow-hidden rounded-full"
+                      width="72"
+                      height="72"
+                    />
+                  </div>
+                  <div className="space-y-sm">
+                    <div>
+                      <h3 className="text-sm font-semibold">
+                        {s.first_names} {s.last_names}
+                      </h3>
+                      <h4 className="text-xs uppercase">{s.job_company}</h4>
+                      <p className="text-sm">{s.description}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
