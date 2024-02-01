@@ -27,23 +27,16 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
     buttonName: 'Actividades formativas',
     itemList: [
       {
-        name: 'Reporte',
-        link: `/${SCHOLAR_PREFIX}/talleres/reporte`,
+        name: 'Registro',
+        link: `/${SCHOLAR_PREFIX}/actividadesFormativas`,
       },
-      { name: 'Lista', link: `/${SCHOLAR_PREFIX}/talleres` },
     ],
     link: '',
   },
   {
     Icon: chatIcon(),
     buttonName: 'Chats',
-    itemList: [
-      { name: 'Lista de chats', link: `/${SCHOLAR_PREFIX}/chats` },
-      {
-        name: 'Reporte',
-        link: `/${SCHOLAR_PREFIX}/chats/reporte`,
-      },
-    ],
+    itemList: [{ name: 'Registro', link: `/${SCHOLAR_PREFIX}/chats` }],
     link: '',
   },
   {
