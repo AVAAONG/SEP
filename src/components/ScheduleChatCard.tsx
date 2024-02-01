@@ -1,10 +1,15 @@
 'use client';
 import { deleteCalendarEvent } from '@/lib/calendar/calendar';
-import { CHAT_CALENDAR_ID } from '@/lib/constants';
-import { ChatWithSpeaker, ChatWithSpeakerAndTempdata } from '@/lib/db/types';
+import { CHAT_CALENDAR_ID, WORKSHOP_CALENDAR_ID } from '@/lib/constants';
+import { ChatWithSpeaker, WorkshopWithSpeaker } from '@/lib/db/types';
+import { changeWorkshopStatus, deleteWorkshopFromDatabase } from '@/lib/db/utils/Workshops';
 import { changeChatStatus, deleteChatFromDatabase } from '@/lib/db/utils/chats';
 import { revalidateSpecificPath } from '@/lib/serverAction';
-import { parseChatLevelFromDatabase, parseModalityFromDatabase } from '@/lib/utils2';
+import {
+  parseChatLevelFromDatabase,
+  parseModalityFromDatabase,
+  parseSkillFromDatabase,
+} from '@/lib/utils2';
 import { deleteZoomMeeting } from '@/lib/zoom';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { Button } from '@nextui-org/button';
@@ -19,13 +24,15 @@ import { toast } from 'react-toastify';
 import BasicModal from './BasicModal';
 
 type ScheduleChatCardProps = {
-  activities: ChatWithSpeakerAndTempdata[];
+  activities: ChatWithSpeaker[] | WorkshopWithSpeaker[];
 };
 
 const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
   const [groupSelected, setGroupSelected] = useState<string[]>([]);
   const [buttonIsDisabled, setbuttonIsDisabled] = useState(false);
-  const [selectedActivity, setSelectedActivity] = useState<ChatWithSpeaker | null>(null);
+  const [selectedActivity, setSelectedActivity] = useState<
+    ChatWithSpeaker | WorkshopWithSpeaker | null
+  >(null);
 
   const editModal = useDisclosure();
   const deleteModal = useDisclosure();
@@ -46,9 +53,12 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
 
   const deleteActivity = async (activityId: string) => {
     const activity = activities.find((activity) => activity.id === activityId);
-    await deleteChatFromDatabase(activityId);
-    activity?.calendar_ids.map(async (eventId, index) => {
-      await deleteCalendarEvent(CHAT_CALENDAR_ID, eventId);
+    if ('level' in activity) await deleteChatFromDatabase(activityId);
+    else 'year' in activity && (await deleteWorkshopFromDatabase(activityId));
+
+    activity?.calendar_ids.map(async (eventId: string, index: number) => {
+      const calendarId = 'level' in activity ? CHAT_CALENDAR_ID : WORKSHOP_CALENDAR_ID;
+      await deleteCalendarEvent(calendarId, eventId);
       if (activity?.modality === 'ONLINE') {
         if (activity.platform === 'ZOOM') await deleteZoomMeeting(activity.meeting_id[index]!);
       }
@@ -58,10 +68,13 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
     setbuttonIsDisabled(true);
     sendModal.onClose();
     groupSelected.map(async (id) => {
-      await changeChatStatus(id, 'SENT');
+      if ('level' in activities[0]) await changeChatStatus(id, 'SENT');
+      else if ('year' in activities[0]) await changeWorkshopStatus(id, 'SENT');
     });
     setbuttonIsDisabled(false);
-    await revalidateSpecificPath('/admin/chats/crear');
+    if ('level' in activities[0]) await revalidateSpecificPath('/admin/chats/crear');
+    else if ('year' in activities[0])
+      await revalidateSpecificPath('/admin/actividadesFormativas/crear');
   };
   return (
     <div className="flex flex-col w-full items-center">
@@ -79,18 +92,20 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
             base: 'w-full',
           }}
         >
-          {activities.map((workshop: ChatWithSpeaker, index) => {
+          {activities.map((activity: ChatWithSpeaker | WorkshopWithSpeaker) => {
             const {
               title,
               id,
               avalible_spots,
               platform,
               level,
+              asociated_skill,
+              year,
               modality,
               speaker,
               start_dates,
               end_dates,
-            } = workshop;
+            } = activity;
             return (
               <Checkbox
                 radius="sm"
@@ -163,10 +178,19 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
                       })}
                     </p>
                   </div>
-                  <div className="flex-1 min-w-0 text-center">
-                    <p className="text-xs">{parseChatLevelFromDatabase(level)}</p>
-                    <p className="text-xs">{avalible_spots} cupos</p>
-                  </div>
+                  {asociated_skill && (
+                    <div className="flex-1 min-w-0 text-center">
+                      <p className="text-xs">{parseSkillFromDatabase(asociated_skill)}</p>
+                      <p className="text-xs">{avalible_spots} cupos</p>
+                      <p className="text-xs">{year.join(', ')} Año</p>
+                    </div>
+                  )}
+                  {level && (
+                    <div className="flex-1 min-w-0 text-center">
+                      <p className="text-xs">{parseChatLevelFromDatabase(level)}</p>
+                      <p className="text-xs">{avalible_spots} cupos</p>
+                    </div>
+                  )}
                   <div className="flex-1 min-w-0 text-center">
                     <p className="text-sm font-medium ">{parseModalityFromDatabase(modality)} </p>
                     <p className="text-xs">{platform}</p>
@@ -180,7 +204,7 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
                       isIconOnly
                       className="w-4 font-medium"
                       onPress={() => {
-                        setSelectedActivity(workshop);
+                        setSelectedActivity(activity);
                         deleteModal.onOpen();
                       }}
                     >
@@ -248,7 +272,7 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
                       isIconOnly
                       className="w-4 font-medium"
                       onPress={() => {
-                        setSelectedActivity(workshop);
+                        setSelectedActivity(activity);
                         editModal.onOpen();
                       }}
                     >

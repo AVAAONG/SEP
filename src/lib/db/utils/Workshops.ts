@@ -79,12 +79,6 @@ const updateWorkshop = async (id: shortUUID.SUUID, data: Workshop) => {
   });
 };
 
-export const deleteWorkshopFromDatabase = async (id: string) => {
-  const workshop = await prisma.workshop.delete({
-    where: { id },
-  });
-};
-
 export const changeScholarAttendance = async (
   workshopAttendanceId: string,
   attendance: ScholarAttendance
@@ -432,4 +426,41 @@ export const sendWorkshopsToScholar = async (workshopId: string) => {
       activity_status: 'SENT',
     }
   })
+}
+
+
+export const editWorkshop = async (workshop: Prisma.WorkshopUpdateArgs) => {
+  const editedworkshop = await prisma.workshop.update(workshop);
+  return editedworkshop;
+}
+
+
+export const deleteWorkshopFromDatabase = async (id: string) => {
+  try {
+    const workshop = await prisma.workshop.delete({
+      where: {
+        id: id,
+      },
+      include: {
+        scholar_attendance: true,
+      },
+    });
+    return workshop;
+  } catch (error) {
+    console.error(`Error deleting workshop: ${error}`);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export const changeWorkshopStatus = async (id: string, status: ActivityStatus) => {
+  const workshop = await prisma.workshop.update({
+    where: {
+      id: id,
+    },
+    data: {
+      activity_status: status,
+    },
+  });
+  return workshop;
 }

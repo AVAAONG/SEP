@@ -1,9 +1,10 @@
 'use client';
-import { createCalendarEvent } from '@/lib/calendar/calendar';
+import { createCalendarEvent, updateCalendarEvent } from '@/lib/calendar/calendar';
 import { IWorkshopCalendar } from '@/lib/calendar/d';
 import { formatDates } from '@/lib/calendar/utils';
 import { MODALITY, PROGRAM_COMPONENTS, WORKSHOP_TYPES, WORKSHOP_YEAR } from '@/lib/constants';
-import { createWorkshop } from '@/lib/db/utils/Workshops';
+import { WorkshopWithSpeaker } from '@/lib/db/types';
+import { createWorkshop, editWorkshop } from '@/lib/db/utils/Workshops';
 import workshopCreationFormSchema from '@/lib/schemas/workshopCreationFormSchema';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,7 +15,9 @@ import { Chip } from '@nextui-org/chip';
 import { Input, Textarea } from '@nextui-org/input';
 import { Select, SelectItem } from '@nextui-org/select';
 import { Prisma, WorkshopYear } from '@prisma/client';
-import { BaseSyntheticEvent } from 'react';
+import moment from 'moment';
+import Link from 'next/link';
+import { BaseSyntheticEvent, useEffect } from 'react';
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 import DateInput from '../commons/DateInput';
@@ -28,7 +31,7 @@ interface WorkshopCreationFormProps {
     email: string | null;
     image?: string | null;
   }[];
-  workshopForEdit: z.infer<typeof workshopCreationFormSchema> | null;
+  workshopForEdit: WorkshopWithSpeaker | undefined;
 }
 const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
   speakers,
@@ -37,29 +40,45 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
   const {
     control,
     handleSubmit,
-    watch,
     formState: { isSubmitting, isValid },
     reset,
+    setValue,
   } = useForm<z.infer<typeof workshopCreationFormSchema>>({
     resolver: zodResolver(workshopCreationFormSchema),
-    // defaultValues: workshopForEdit!,
-    defaultValues: {
-      title: 'Taller de prueba',
-      dates: [
-        {
-          date: '2021-10-10',
-          startHour: '13:00',
-          endHour: '12:00',
-        },
-      ],
-      asociated_skill: 'SELF_MANAGEMENT',
-      modality: 'IN_PERSON',
-      kindOfWorkshop: 'WORKSHOP',
-      speakersId: 'pEsSon3-arJyIQ7vxURmj',
-      year: ['I'],
-      platformInPerson: 'Oficinas de avaa',
-    },
   });
+  useEffect(() => {
+    reset();
+    if (workshopForEdit) {
+      const formatedChat: z.infer<typeof workshopCreationFormSchema> = {
+        title: workshopForEdit?.title ?? '',
+        dates: [
+          {
+            date: moment(workshopForEdit?.start_dates[0]).format('YYYY-MM-DD'),
+            startHour: moment(workshopForEdit?.start_dates[0]).format('HH:mm'),
+            endHour: moment(workshopForEdit?.end_dates[0]).format('HH:mm'),
+          },
+        ],
+        modality: workshopForEdit?.modality!,
+        speakersId: workshopForEdit?.speaker.map((speaker) => speaker.id).toString()!,
+        platformInPerson: workshopForEdit?.platform ?? '',
+        platformOnline: workshopForEdit?.platform ?? '',
+        description: workshopForEdit?.description ?? undefined,
+        avalible_spots: workshopForEdit?.avalible_spots ?? 0,
+        asociated_skill: workshopForEdit?.asociated_skill!,
+        kindOfWorkshop: workshopForEdit?.kindOfWorkshop!,
+        year: workshopForEdit?.year as unknown as WorkshopYear[],
+      };
+      Object.keys(formatedChat).forEach((key) => {
+        if (key in formatedChat) {
+          const valueKey = key as keyof typeof formatedChat;
+          if (formatedChat[valueKey] !== undefined) {
+            setValue(valueKey, formatedChat[valueKey]);
+          }
+        }
+      });
+    }
+  }, [workshopForEdit, setValue]);
+
   const modality = useWatch({
     control,
     name: 'modality',
@@ -76,7 +95,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
     const buttonType = ((event?.nativeEvent as SubmitEvent)?.submitter as HTMLButtonElement)?.name;
     const dates = await formatDates(data.dates);
     const workshopSpeakersId = data.speakersId.split(',');
-    const speakersData = chatSpeakersId
+    const speakersData = workshopSpeakersId
       .map((speakerId: string) => {
         const speaker = speakers.find((speaker) => speaker.id === speakerId);
         if (!speaker) return null;
@@ -86,43 +105,96 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
           speakerEmail: speaker?.email,
         };
       })
-      .filter((speaker) => speaker !== null) as IChatCalendar['speakersData'];
+      .filter((speaker) => speaker !== null) as IWorkshopCalendar['speakersData'];
     const { platformInPerson, platformOnline, speakersId, ...restData } = data;
     const calendarWorkshop: IWorkshopCalendar = {
       platform: platformInPerson ? platformInPerson : platformOnline!,
       speakersData,
       ...dates,
       ...restData,
+      description: data.description ? data.description : null,
     };
 
-    const [eventsIds, meetingDetails] = await createCalendarEvent(calendarWorkshop);
+    if (buttonType === 'edit') {
+      const meetingDetails = await updateCalendarEvent(
+        workshopForEdit?.calendar_ids!,
+        calendarWorkshop,
+        workshopForEdit?.meeting_id!
+      );
 
-    const workshop: Prisma.WorkshopCreateArgs = {
-      data: {
-        title: data.title,
-        avalible_spots: z.coerce.number().parse(data.avalible_spots),
-        platform: data.platformInPerson ? data.platformInPerson : data.platformOnline!,
-        description: data.description ? data.description : null,
-        kindOfWorkshop: data.kindOfWorkshop,
-        calendar_ids: [...eventsIds],
-        ...dates,
-        year: data.year as unknown as WorkshopYear[],
-        modality: data.modality,
-        asociated_skill: data.asociated_skill,
-        activity_status: 'SCHEDULED',
-        speaker: {
-          connect: calendarWorkshop.speakersData.map((speaker) => ({ id: speaker.id })),
+      const editedWorkshop: Prisma.WorkshopUpdateArgs = {
+        where: {
+          id: workshopForEdit?.id!,
         },
-      },
-    };
-
-    if (buttonType === 'schedule') {
-      workshop.data.activity_status = 'SCHEDULED';
-      await createWorkshop(workshop);
-    } else if (buttonType === 'send') {
-      workshop.data.activity_status = 'SENT';
-      await createWorkshop(workshop);
+        data: {
+          title: data.title,
+          avalible_spots: z.coerce.number().parse(data.avalible_spots),
+          platform: data.platformInPerson ? data.platformInPerson : data.platformOnline!,
+          description: data.description ? data.description : null,
+          ...dates,
+          modality: data.modality,
+          asociated_skill: data.asociated_skill,
+          activity_status: 'SCHEDULED',
+          calendar_ids: workshopForEdit?.calendar_ids!,
+          kindOfWorkshop: data.kindOfWorkshop,
+          year: data.year as unknown as WorkshopYear[],
+          meeting_id: meetingDetails.map(
+            (meetingDetail) => meetingDetail.meetingId || null
+          ) as string[],
+          meeting_link: meetingDetails.map(
+            (meetingDetail) => meetingDetail.meetingLink || null
+          ) as string[],
+          meeting_password: meetingDetails.map(
+            (meetingDetail) => meetingDetail.meetingPassword || null
+          ) as string[],
+          speaker: {
+            connect: calendarWorkshop.speakersData.map((speaker) => ({ id: speaker.id })),
+          },
+        },
+      };
+      await editWorkshop(editedWorkshop);
     } else {
+      const [eventsIds, meetingDetails] = await createCalendarEvent(calendarWorkshop);
+      const workshop: Prisma.WorkshopCreateArgs = {
+        data: {
+          title: data.title,
+          avalible_spots: z.coerce.number().parse(data.avalible_spots),
+          platform: data.platformInPerson ? data.platformInPerson : data.platformOnline!,
+          description: data.description ? data.description : null,
+          kindOfWorkshop: data.kindOfWorkshop,
+          calendar_ids: [...eventsIds],
+          ...dates,
+          year: data.year as unknown as WorkshopYear[],
+          modality: data.modality,
+          asociated_skill: data.asociated_skill,
+          activity_status: 'SCHEDULED',
+          speaker: {
+            connect: calendarWorkshop.speakersData.map((speaker) => ({ id: speaker.id })),
+          },
+        },
+      };
+      if (data.modality === 'ONLINE') {
+        workshop.data.meeting_id = meetingDetails.map(
+          (meetingDetail) => meetingDetail.meetingId || null
+        ) as string[];
+        workshop.data.meeting_link = meetingDetails.map(
+          (meetingDetail) => meetingDetail.meetingLink || null
+        ) as string[];
+        workshop.data.meeting_password = ['null'];
+        if (platformOnline === 'ZOOM') {
+          workshop.data.meeting_password = meetingDetails.map(
+            (meetingDetail) => meetingDetail.meetingPassword || null
+          ) as string[];
+        }
+      }
+      if (buttonType === 'schedule') {
+        workshop.data.activity_status = 'SCHEDULED';
+        await createWorkshop(workshop);
+      } else if (buttonType === 'send') {
+        workshop.data.activity_status = 'SENT';
+        await createWorkshop(workshop);
+      } else {
+      }
     }
     reset();
     await revalidateSpecificPath('/admin/actividadesFormativas/crear');
@@ -373,27 +445,45 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
             );
           }}
         />
-
-        <div className="col-span-2 h-fit flex gap-4">
-          <Button
-            type="submit"
-            name="schedule"
-            radius="sm"
-            className="bg-gradient-to-tr from-primary-1 to-emerald-500 text-white w-1/2"
-            isDisabled={!isValid || isSubmitting}
-          >
-            Agendar
-          </Button>
-          <Button
-            type="submit"
-            name="send"
-            radius="sm"
-            isDisabled={!isValid || isSubmitting}
-            className=" w-1/2"
-          >
-            Enviar
-          </Button>
-        </div>
+        {workshopForEdit ? (
+          <div className="col-span-2 h-fit flex gap-4">
+            <Button radius="sm" className=" w-1/2">
+              <Link className="w-full" href={'/admin/actividadesFormativas/crear'} replace={false}>
+                Cancelar edición
+              </Link>
+            </Button>
+            <Button
+              type="submit"
+              name="edit"
+              radius="sm"
+              className="bg-gradient-to-tr from-primary-1 to-emerald-500 text-white w-1/2"
+              isDisabled={!isValid || isSubmitting}
+            >
+              Editar
+            </Button>
+          </div>
+        ) : (
+          <div className="col-span-2 h-fit flex gap-4">
+            <Button
+              type="submit"
+              name="schedule"
+              radius="sm"
+              className="bg-gradient-to-tr from-primary-1 to-emerald-500 text-white w-1/2"
+              isDisabled={!isValid || isSubmitting}
+            >
+              Agendar
+            </Button>
+            <Button
+              type="submit"
+              name="send"
+              radius="sm"
+              isDisabled={!isValid || isSubmitting}
+              className=" w-1/2"
+            >
+              Enviar
+            </Button>
+          </div>
+        )}
       </form>
     </>
   );
