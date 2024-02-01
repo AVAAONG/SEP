@@ -3,7 +3,7 @@ import Table from '@/components/table/Table';
 import scholarAllInformationCollumn from '@/components/table/columns/scholarAllInformationColumns';
 import createSocialMediaIcons from '@/lib/createSocialInfo';
 import { getScholarcountByGender, getScholarsWithAllData } from '@/lib/db/utils/users';
-import { parseAvaaAdmisionYear, parseStudyAreaFromDatabase } from '@/lib/parseFromDatabase';
+import { parseAvaaAdmisionYear } from '@/lib/parseFromDatabase';
 import { createArrayFromObject, reduceByProperty } from '@/lib/utils';
 import moment from 'moment';
 import dynamic from 'next/dynamic';
@@ -15,25 +15,6 @@ import { ExternalStatsIcon } from 'public/svgs/svgs';
  */
 const DonutChartComponent = dynamic(() => import('@/components/charts/DonutChart'), { ssr: false });
 const PieChartComponent = dynamic(() => import('@/components/charts/Pie'), { ssr: false });
-
-const tableHeaders = [
-  {
-    option: 'first_names',
-    label: 'Nombre',
-  },
-  {
-    option: 'last_names',
-    label: 'Apellidos',
-  },
-  {
-    option: 'email',
-    label: 'Correo',
-  },
-  {
-    option: 'phone_number',
-    label: 'Telefono',
-  },
-];
 
 const page = async () => {
   const scholars = await getScholarsWithAllData();
@@ -118,16 +99,14 @@ const page = async () => {
       }).length!,
     };
   });
-
-  // const activeScholarsByStudyArea = scholars.reduce(
-  //   (acc, value) => {
-  //     const filter = value[collage_information[0]]?.['study_area'] ?? 'Unknown';
-  //     acc[filter] = (acc[filter] || 0) + 1;
-  //     return acc;
-  //   },
-  //   {} as Record<string, number>
-  // );
-  // const activeScholarsByStudyAreaArray = createArrayFromObject(activeScholarsByStudyArea);
+  const studyAreaCounts: Record<string, number> = {};
+  scholars.forEach((scholar) => {
+    scholar.collage_information.forEach((collage) => {
+      const studyArea = collage.study_area;
+      studyAreaCounts[studyArea] = (studyAreaCounts[studyArea] || 0) + 1;
+    });
+  });
+  const studyAreaData = Object.entries(studyAreaCounts).map(([label, value]) => ({ label, value }));
 
   return (
     <div className="flex flex-col w-full gap-4">
@@ -169,8 +148,8 @@ const page = async () => {
             <h3 className="text-sm font-bold uppercase">
               Distribución de becarios area de estudio
             </h3>
-            <div className="w-full h-full">
-              {/* <PieChartComponent data={activeScholarsByStudyAreaArray}  */}
+            <div className="w-7/12 h-full min-w-max">
+              <PieChartComponent data={studyAreaData} />
             </div>
           </div>
           <div className="w-full md:w-1/3 flex flex-col items-center gap-2 h-full">
@@ -197,7 +176,7 @@ const page = async () => {
         <Table
           tableColumns={scholarAllInformationCollumn}
           tableData={scholarTableData}
-          tableHeadersForSearch={tableHeaders}
+          tableHeadersForSearch={[]}
         />
       </div>
     </div>
