@@ -17,13 +17,13 @@ import { Select, SelectItem } from '@nextui-org/select';
 import { Prisma, WorkshopYear } from '@prisma/client';
 import moment from 'moment';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { BaseSyntheticEvent, useEffect } from 'react';
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 import DateInput from '../commons/DateInput';
 import PlatformInput from '../commons/PlatformInput';
-
 interface WorkshopCreationFormProps {
   speakers: {
     id: string;
@@ -88,6 +88,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
     control,
     name: 'dates',
   });
+  const router = useRouter();
 
   const handleFormSubmit = async (
     data: z.infer<typeof workshopCreationFormSchema>,
@@ -199,6 +200,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
     }
     reset();
     await revalidateSpecificPath('/admin/actividadesFormativas/crear');
+    router.push('/admin/actividadesFormativas/crear');
   };
 
   return (
