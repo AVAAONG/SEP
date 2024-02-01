@@ -125,7 +125,6 @@ export const getWorkshops = async () => {
   const workshops = await prisma.workshop.findMany({
     include: {
       speaker: true,
-      temp_data: true,
       scholar_attendance: true,
     },
   });
@@ -139,7 +138,6 @@ export const getWorkshopByStatus = async (status: ActivityStatus) => {
     },
     include: {
       speaker: true,
-      temp_data: true,
     },
   });
   return workshops;
@@ -277,7 +275,6 @@ export const getWorkshop = async (id: shortUUID.SUUID) => {
           },
         },
       },
-      temp_data: true,
     },
   });
   return workshop;
