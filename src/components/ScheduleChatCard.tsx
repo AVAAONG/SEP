@@ -160,7 +160,7 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
                   </div>
                   <div className="flex-1 min-w-0 text-center">
                     <p className="text-sm font-medium ">
-                      {new Date(start_dates[0]).toLocaleString('es-ES', {
+                      {new Date(start_dates[0]).toLocaleDateString('es-ES', {
                         month: 'long',
                         day: 'numeric',
                       })}
@@ -169,12 +169,14 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
                       De{' '}
                       {new Date(start_dates[0]).toLocaleString('es-ES', {
                         hour: '2-digit',
+                        hour12: true,
                         minute: '2-digit',
                       })}{' '}
                       a{' '}
                       {new Date(end_dates[0]).toLocaleString('es-ES', {
                         hour: '2-digit',
                         minute: '2-digit',
+                        hour12: true,
                       })}
                     </p>
                   </div>

@@ -15,7 +15,6 @@ const Page = async ({ searchParams }: { searchParams: { activityToEdit: string |
   });
 
   const workshop = scheduledWorkshops.find((chat) => chat.id === searchParams.activityToEdit);
-
   return (
     <div className="min-h-screen flex flex-col md:flex-row gap-8 p-4">
       <div className=" w-full md:w-1/2">
