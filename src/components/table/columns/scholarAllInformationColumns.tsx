@@ -1,7 +1,7 @@
 'use client';
 import defailProfilePic from '@/../public/defaultProfilePic.png';
 import formatDni from '@/lib/db/utils/formatDni';
-import { Gender, Prisma } from '@prisma/client';
+import { Gender } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Cell, CellValue, Column } from 'react-table';
@@ -11,17 +11,18 @@ interface ScholarTableData {
   first_names: string;
   last_names: string;
   dni: string;
-  birthdate: Date;
+  birthdate: string;
   years: number;
   gender: Gender;
   local_phone_number: string;
   cell_phone_Number: string;
   whatsapp_number: string;
-  allowedEmail: string;
+  email: string;
   collage: string;
   career: string;
   avaaStarteYear: Date;
   yearsInAvaa: number;
+  studyArea: string;
   socialMedia: any[]; // Replace any with the actual type
   atendedChats: number;
   atendedWorkshops: number;
@@ -61,19 +62,6 @@ const scholarAllInformationCollumn: Column<ScholarTableData>[] = [
   {
     Header: 'Fecha de nacimiento',
     accessor: 'birthdate',
-    Cell: ({ value }: { value: CellValue }) => {
-      const date = new Date(value);
-      return (
-        <span>
-          {' '}
-          {date.toLocaleDateString('es-ES', {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-          })}
-        </span>
-      );
-    },
   },
   {
     Header: 'Edad',
@@ -112,7 +100,7 @@ const scholarAllInformationCollumn: Column<ScholarTableData>[] = [
   },
   {
     Header: 'Correo',
-    accessor: 'allowedEmail',
+    accessor: 'email',
   },
   {
     Header: 'Universidad',
@@ -122,10 +110,10 @@ const scholarAllInformationCollumn: Column<ScholarTableData>[] = [
       return <span>{value}</span>;
     },
   },
-  // {
-  //   Header: 'Area de estudio',
-  //   accessor: '',
-  // },
+  {
+    Header: 'Area de estudio',
+    accessor: 'studyArea',
+  },
   {
     Header: 'Carrera',
     accessor: 'career',
@@ -133,19 +121,6 @@ const scholarAllInformationCollumn: Column<ScholarTableData>[] = [
   {
     Header: 'Fecha de ingreso a AVAA',
     accessor: 'avaaStarteYear',
-    Cell: ({ value }: { value: CellValue }) => {
-      const date = new Date(value.avaa_admission_year);
-      return (
-        <span>
-          {' '}
-          {date.toLocaleDateString('es-ES', {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-          })}
-        </span>
-      );
-    },
   },
   {
     Header: 'Año actual en AVAA',

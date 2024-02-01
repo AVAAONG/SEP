@@ -3,7 +3,7 @@ import Table from '@/components/table/Table';
 import scholarAllInformationCollumn from '@/components/table/columns/scholarAllInformationColumns';
 import createSocialMediaIcons from '@/lib/createSocialInfo';
 import { getScholarcountByGender, getScholarsWithAllData } from '@/lib/db/utils/users';
-import { parseAvaaAdmisionYear } from '@/lib/parseFromDatabase';
+import { parseAvaaAdmisionYear, parseStudyAreaFromDatabase } from '@/lib/parseFromDatabase';
 import { createArrayFromObject, reduceByProperty } from '@/lib/utils';
 import moment from 'moment';
 import dynamic from 'next/dynamic';
@@ -70,7 +70,7 @@ const page = async () => {
       socialMedia,
       last_names,
       dni,
-      birthdate,
+      birthdate: moment(birthdate).format('DD/MM/YYYY'),
       years: moment().diff(moment(birthdate), 'years'),
       local_phone_number: local_phone_number!,
       cell_phone_Number: cell_phone_Number!,
@@ -79,7 +79,8 @@ const page = async () => {
       email,
       collage: collage_information[0]?.collage!,
       career: collage_information[0]?.career!,
-      avaaStarteYear: program_information?.program_admission_date!,
+      studyArea: parseStudyAreaFromDatabase(collage_information[0]?.study_area!),
+      avaaStarteYear: moment(program_information?.program_admission_date).format('DD/MM/YYYY'),
       yearsInAvaa: parseAvaaAdmisionYear(
         moment().diff(moment(program_information?.program_admission_date), 'years')
       ),
@@ -102,7 +103,7 @@ const page = async () => {
   const studyAreaCounts: Record<string, number> = {};
   scholars.forEach((scholar) => {
     scholar.collage_information.forEach((collage) => {
-      const studyArea = collage.study_area;
+      const studyArea = parseStudyAreaFromDatabase(collage.study_area!);
       studyAreaCounts[studyArea] = (studyAreaCounts[studyArea] || 0) + 1;
     });
   });
