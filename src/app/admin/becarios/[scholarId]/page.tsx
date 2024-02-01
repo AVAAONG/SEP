@@ -81,7 +81,6 @@ const createChatObject = (chat: ChatsWithAllData[]) => {
       platform: chat.platform,
       start_dates: chat.start_dates,
       end_dates: chat.end_dates,
-      rating: chat.rating,
       modality: chat.modality,
       level: chat.level,
       activity_status: chat.activity_status,
@@ -100,6 +99,12 @@ const createWorkshopObject = (workshops: WorkshopWithAllData[]) => {
       end_dates: workshop.end_dates,
       modality: workshop.modality,
       skill: workshop.asociated_skill,
+      speakerNames: workshop.speaker.map(
+        (speaker) => speaker.first_names.split(' ')[0] + speaker.last_names.split(' ')[0]
+      ),
+      speakerIds: workshop.speaker.map((speaker) => speaker.id),
+      speakerCompany: workshop.speaker.map((speaker) => speaker.job_company),
+      speakerImages: workshop.speaker.map((speaker) => speaker.image),
       activity_status: workshop.activity_status,
       attendance: workshop.scholar_attendance[0].attendance,
       year: workshop.year,
@@ -128,12 +133,11 @@ const page = async ({
     birthdate,
     address,
   } = scholar || {};
-  const { attended_workshops, scholar_status, program_admission_date, } = program_information || {};
+  const { attended_workshops, scholar_status, program_admission_date } = program_information || {};
   const chats = await getChatsByScholar(program_information?.id!, scholarId);
-  const workshops = await getWorkhsopsByScholar(program_information?.id!, scholarId);
+  const workshops = await getWorkhsopsByScholar(scholarId);
   const workshopObj = createWorkshopObject(workshops);
   const chatObject = createChatObject(chats);
-
   const scholarContactData = [
     {
       name: 'Celular',
@@ -338,7 +342,7 @@ const page = async ({
           <Table
             tableColumns={scholarWorkshopAttendanceColumns}
             tableData={workshopObj || []}
-            tableHeadersForSearch={[{ option: 'adsf', label: 'adsfadsf' }]}
+            tableHeadersForSearch={[]}
           />
         </div>
       )}
@@ -347,7 +351,7 @@ const page = async ({
           <Table
             tableColumns={scholarChatAttendaceColumns}
             tableData={chatObject || []}
-            tableHeadersForSearch={[{ option: 'adsf', label: 'adsfadsf' }]}
+            tableHeadersForSearch={[]}
           />
         </div>
       )}

@@ -34,7 +34,6 @@ const scholarWorkshopAttendanceColumns: Column<IScholarWorkshopColumns>[] = [
     Header: 'Facilitador',
     accessor: 'speakerNames',
     Cell: ({ cell, value }) => {
-      console.log(cell.row.original);
       return (
         <SpeakersColumnWidget
           speakerNames={cell.row.original.speakerNames}
