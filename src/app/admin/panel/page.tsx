@@ -12,11 +12,10 @@ const page = async () => {
   const activeScholarsCount = await getScholarsCountByCondition('ACTIVE', 'Rokk6_XCAJAg45heOEzYb');
   const [workshops, chats] = await getActivitiesByYear(actualYear);
   const events = formatActivityEventsForBigCalendar([...workshops, ...chats]);
-  const scheduledAndSentActivities: (Workshop | Chat)[] = [...workshops, ...chats]
-    .filter(
-      (activity) => activity.activity_status === 'SENT' || activity.activity_status === 'SCHEDULED'
-    )
+  const sentActivities: (Workshop | Chat)[] = [...workshops, ...chats]
+    .filter((activity) => activity.activity_status === 'SENT')
     .sort((a, b) => new Date(a.start_dates[0]).getTime() - new Date(b.start_dates[0]).getTime());
+
   const workshopDoneCount = workshops.filter(
     (workshop) =>
       workshop.activity_status === 'DONE' || workshop.activity_status === 'ATTENDANCE_CHECKED'
@@ -69,7 +68,7 @@ const page = async () => {
           <Calendar events={events} />
         </div>
         <div className="w-full lg:w-1/4 p-4 bg-white rounded-lg shadow-md backdrop-filter backdrop-blur-3xl dark:bg-black max-h-[680px] overflow-y-scroll">
-          <NextEventsList activities={scheduledAndSentActivities as (Workshop | Chat)[]} />
+          <NextEventsList activities={sentActivities as (Workshop | Chat)[]} />
         </div>
       </div>
     </div>
