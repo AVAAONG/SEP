@@ -12,7 +12,7 @@ const chatSpeakerColumns: Column<WorkshopSpeaker>[] = [
     accessor: (row: WorkshopSpeaker) => `${row.first_names} ${row.last_names} ${row.job_company}`,
     Cell: ({ cell }: { cell: Cell<WorkshopSpeaker> }) => (
       <Link
-        href={cell.row.original.id ? `${cell.row.original.id}` : ''}
+        href={`facilitadores/${cell.row.original.id ? `${cell.row.original.id}` : ''}`}
         className="flex items-center"
       >
         <div className="flex-shrink-0 w-8 h-8">
