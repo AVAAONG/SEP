@@ -42,9 +42,9 @@ const exportAttendanceData = async (
   writeToCell(workbook, 'B4', speakerName);
   writeToCell(workbook, 'B5', modality);
   writeToCell(workbook, 'B6', platform);
-  writeToCell(workbook, 'E4', date);
-  writeToCell(workbook, 'E5', hour);
-  writeToCell(workbook, 'E6', attendeesData.length);
+  writeToCell(workbook, 'D4', date);
+  writeToCell(workbook, 'D5', hour);
+  writeToCell(workbook, 'D6', attendeesData.length);
 
   const worksheet = workbook.getWorksheet(1);
   attendeesData.forEach((attendee, index) => {

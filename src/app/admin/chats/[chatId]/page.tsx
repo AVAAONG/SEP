@@ -48,8 +48,6 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
     return {
       names: scholar.first_names.split(' ')[0] + ' ' + scholar.last_names.split(' ')[0],
       dni: scholar.dni,
-      email: scholar.email,
-      phone: scholar.phone_number,
     };
   });
 
