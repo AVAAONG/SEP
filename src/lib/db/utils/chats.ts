@@ -312,7 +312,6 @@ export const getScheduleChats = async () => {
     include: {
       speaker: true,
     },
-
   });
   return chats;
 };

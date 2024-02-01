@@ -11,54 +11,6 @@ import UniversityInformation from '@/components/scholar/config/UniversityInforma
 import VolunteeringInformation from '@/components/scholar/config/VolunteeringInformation';
 import WorkInformation from '@/components/scholar/config/WorkInformation';
 
-const formatDate = (date: string) => {
-  return moment(date).format('YYYY-MM-DD');
-};
-/**
- * Retrieves scholar data from the database.
- * @param id The ID of the scholar to retrieve data for.
- * @returns {{
- *   scholarGeneralInfo: {
- *     firstNames: string | null,
- *     lastNames: string | null,
- *     dni: string | null,
- *     gender: string | null,
- *     birthDate: string | null,
- *     cellPhoneNumber: string | null,
- *     localPhoneNumber: string | null,
- *     avaaAdmissionYear: string | null,
- *     email: string | null,
- *   },
- *   scholarAddressInfo: {
- *     currentZone: string | null,
- *     stateOfOrigin: string | null,
- *   },
- *   scholarCollageInfo: {
- *     collage: string | null,
- *     carrer: string | null,
- *     studyArea: string | null,
- *     currentAcademicPeriod: string | null,
- *     grade: string | null,
- *     gradeKind: string | null,
- *     classModality: string | null,
- *     academicPeriodType: string | null,
- *   },
- *   workScholarInformation: {
- *     isCurrentlyWorking: string,
- *     organizationName: string | null,
- *     positionHeld: string | null,
- *     workModality: string | null,
- *     weeklyHours: number | null,
- *   },
- *   scholarCVAInfo: {
- *     isInCVA: string,
- *     cvaLocation: string | null,
- *     cvaModality: string | null,
- *     englishLevel: string | null,
- *     notStartedCvaReason: string | null,
- *   },
- * }} - The scholar data.
- */
 const getScholarData = async (id: string) => {
   const prisma = new PrismaClient();
   const scholar = await prisma.scholar.findUnique({
