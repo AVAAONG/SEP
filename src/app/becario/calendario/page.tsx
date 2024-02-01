@@ -1,5 +1,5 @@
 import Calendar from '@/components/calendar/Calendar';
-import { getAllActivities } from '@/lib/db/utils/Workshops';
+import { getActivitiesByStatus } from '@/lib/db/utils/Workshops';
 import { formatActivityEventsForBigCalendar } from '@/lib/utils';
 
 /**
@@ -7,7 +7,7 @@ import { formatActivityEventsForBigCalendar } from '@/lib/utils';
  * @remarks this page is willing to show the calendar of activities that proexcelencia will offer to the students. All of them, no matter if the scholar is enrrolled or not in activities.
  */
 const page = async () => {
-  const [workshops, chats] = await getAllActivities();
+  const [workshops, chats] = await getActivitiesByStatus('SENT');
   const events = formatActivityEventsForBigCalendar([...workshops, ...chats]);
   return (
     <div className="flex flex-col px-2 pt-6 justify-center items-center w-full text-center gap-2 sm:gap-0">

@@ -51,6 +51,8 @@ export const formatActivityEventsForBigCalendar = (activities: (Workshop | Chat)
     const eventModalityTitle = modality === 'ONLINE' ? 'Virtual' : 'Presencial';
 
     return start_dates.map((startDate, index) => ({
+      id: id,
+
       title: index > 0 ? `(${eventModalityTitle}) ${title} (${index + 1})` : `(${eventModalityTitle}) ${title}`,
       allDay: false,
       start: new Date(startDate),

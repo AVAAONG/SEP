@@ -335,7 +335,7 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
         isDisabled={groupSelected?.length === 0}
         className="bg-gradient-to-tr from-primary-1 to-emerald-500 text-white w-1/2 mt-12"
         radius="sm"
-        onPress={() => {}}
+        onPress={sendModal.onOpen}
       >
         Enviar
       </Button>

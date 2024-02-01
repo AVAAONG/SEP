@@ -19,6 +19,7 @@ import moment from 'moment';
 import Link from 'next/link';
 import { BaseSyntheticEvent, useEffect } from 'react';
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
 import DateInput from '../commons/DateInput';
 import PlatformInput from '../commons/PlatformInput';
@@ -203,7 +204,13 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
   return (
     <>
       <form
-        onSubmit={handleSubmit((data, event) => handleFormSubmit(data, event))}
+        onSubmit={handleSubmit((data, event) =>
+          toast.promise(handleFormSubmit(data, event), {
+            pending: 'Creando actividad...',
+            success: 'Actividad creada con éxito',
+            error: 'Ocurrió un error al crear la actividad',
+          })
+        )}
         className="grid grid-cols-2 w-full items-center justify-center gap-4"
       >
         <h1 className="col-span-2 text-center w-full font-semibold text-2xl text-primary-light uppercase tracking-widest">
