@@ -5,7 +5,7 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { ActivityStatus, Chat, Prisma, ScholarAttendance, Speaker, Volunteer, Workshop } from '@prisma/client';
+import { ActivityStatus, Chat, Prisma, ScholarAttendance, Volunteer, Workshop } from '@prisma/client';
 import shortUUID from 'short-uuid';
 import { prisma } from './prisma';
 
@@ -273,30 +273,28 @@ export const getWorkshop = async (id: shortUUID.SUUID) => {
   });
   return workshop;
 };
+export const getWorkshopWithSpecificScholarAttendance = async (activityId: shortUUID.SUUID, scholarId: string) => {
+  const workshop = await prisma.workshopAttendance.findFirst({
+    where: {
+      workshop_id: activityId,
+      scholar: {
+        scholarId: scholarId,
+      }
+    },
+    include: {
+      workshop: {
+        include: {
+          speaker: true
+        }
+      }
+    },
+  });
 
-export const createWorkshopSpeaker = async (data: Speaker) => {
-  try {
-    await prisma.speaker.create({
-      data,
-    });
-
-  } catch (err) {
-    console.log('\x1b[31m%s\x1b[0m', err);
-  } finally {
-    await prisma.$disconnect();
-  }
+  return workshop;
 };
 
-export const deleteWorkshopSpeakers = async () => {
-  try {
-    await prisma.speaker.deleteMany({});
-    console.log('\x1b[32m%s\x1b[0m', `Speakers deleted successfully`);
-  } catch (err) {
-    console.log('\x1b[31m%s\x1b[0m', err);
-  } finally {
-    await prisma.$disconnect();
-  }
-};
+
+
 
 export const getScheduledWorkshops = async () => {
   const workshops = await prisma.workshop.findMany({

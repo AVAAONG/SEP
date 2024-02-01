@@ -1,12 +1,16 @@
 import defailProfilePic from '@/../public/defaultProfilePic.png';
-import { getWorkshop } from '@/lib/db/utils/Workshops';
-import { formatScholarDataForAttendanceTable } from '@/lib/tableUtils';
+import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
+import { getWorkshopWithSpecificScholarAttendance } from '@/lib/db/utils/Workshops';
+import { getServerSession } from 'next-auth';
 import Image from 'next/image';
 import shortUUID from 'short-uuid';
 
 const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => {
+  const se = await getServerSession(authOptions);
+
   const workshopId = params.workshopId || ('null' as shortUUID.SUUID);
-  const workshop = await getWorkshop(workshopId);
+  const attendance = await getWorkshopWithSpecificScholarAttendance(workshopId, se?.user?.id);
+  const { workshop } = attendance || {};
   const {
     title,
     start_dates,
@@ -16,14 +20,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
     modality,
     asociated_skill,
     platform,
-    scholar_attendance,
   } = workshop || {};
-
-  const scholarAttendanceDataForTable = formatScholarDataForAttendanceTable(
-    scholar_attendance ? scholar_attendance.map((a) => a.scholar.scholar) : [],
-    scholar_attendance ? scholar_attendance : []
-  );
-  console.log(scholarAttendanceDataForTable);
 
   return (
     <div className="space-y-6  min-h-screen">
@@ -31,6 +28,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
         <div className="space-y-3 w-1/2">
           <div className="flex flex-col space-y-2 ">
             <span className="w-fit font-medium px-2">Actividad formativa</span>
+            {attendance?.attendance}
             <h1 className="italic text-xl font-bold leading-none tracking-tight text-primary-light md:text-3xl">
               {title}
             </h1>

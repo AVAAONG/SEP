@@ -70,6 +70,7 @@ const page = async ({
   const session = await getServerSession(authOptions);
   const workshopsDbList = await getWorkhsopsByScholar(session?.scholarId);
   let workshops = [];
+
   if (searchParams?.year) {
     const workshopsFilteredByYear = filterActivityByYear(
       workshopsDbList,
