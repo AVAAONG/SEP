@@ -52,14 +52,16 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
     facebook_user,
     instagram_user,
     linkedin_user,
-  } = workshopSpeaker || {};
+  } = workshopSpeaker;
 
   const uniqueScholars = [
     ...new Set(
       workshops?.flatMap(
         (workshop) =>
           workshop.scholar_attendance?.map((attendance) => {
-            if (attendance.attendance === 'ATTENDED') return attendance.scholar_id;
+            console.log(attendance);
+            if (attendance.attendance === 'ATTENDED')
+              return attendance.program_information_scholar_id;
           })
       ) ?? []
     ),
@@ -109,7 +111,7 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
     {
       icon: Star,
       text: 'Calificación promedio',
-      number: 4.5,
+      number: 0,
       bg: 'from-yellow-500  to-yellow-700',
       cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
     },

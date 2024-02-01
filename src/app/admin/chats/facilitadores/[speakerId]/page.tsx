@@ -60,12 +60,13 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
       workshops?.flatMap(
         (workshop) =>
           workshop.scholar_attendance?.map((attendance) => {
-            if (attendance.attendance === 'ATTENDED') return attendance.scholar_id;
+            console.log(attendance);
+            if (attendance.attendance === 'ATTENDED')
+              return attendance.program_information_scholar_id;
           })
       ) ?? []
     ),
   ];
-  console.log(workshops);
 
   const workshopSpeakerSocialNetwork = [
     {

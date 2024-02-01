@@ -3,7 +3,7 @@
  * @file This file contains all the necesary logic to interact with the database for the users collection.
  * @author Kevin Bravo (kevinbravo.me)
  */
-import { Chat, Prisma, Speaker, Workshop } from '@prisma/client';
+import { Chat, Prisma, Speaker } from '@prisma/client';
 import { prisma } from './prisma';
 /**
  * Get speakers with parameters
@@ -97,7 +97,7 @@ export const getChatSpeakersCountByGender = async () => {
 
 export const getWorkshopSpeakerWithWorkshops = async (
   speakerId: string
-): Promise<[Speaker | null, Workshop[] | null]> => {
+) => {
   const [speaker, workshops] = await prisma.$transaction([
     prisma.speaker.findUnique({
       where: { id: speakerId },
