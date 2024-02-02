@@ -1,6 +1,7 @@
 'use server';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
+import { CHAT_CALENDAR_ID, WORKSHOP_CALENDAR_ID } from './constants';
 import { getScholarByEmail } from './db/utils/users';
 
 const handler = async (cookieValue: string) => {
@@ -55,3 +56,23 @@ export const createCVACard = async (email: string | undefined | null, sede: 'cen
 }
 
 
+export const handleEnrollment = async (activityId: string, scholarId: string, eventId: string, kindOfActivity: 'workshop' | 'chat', email: string) => {
+  // if (kindOfActivity === 'workshop') await addAttendaceToScholar(activityId, scholarId, 'ENROLLED')
+  // if (kindOfActivity === 'chat') await addChatAttendaceToScholar(activityId, scholarId, 'ENROLLED')
+  const result = await fetch('https://script.google.com/macros/s/AKfycbzSiMKnlwygmcPdvdGvmeLlvXc_bcdm4tcWcpZ2H7QBbz-g3dBqxgFfzd_G44YaEeKkZA/exec',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        newAttendees: {
+          email,
+        },
+        eventId,
+        calendarId: kindOfActivity === 'workshop' ? WORKSHOP_CALENDAR_ID : CHAT_CALENDAR_ID,
+      })
+    })
+  console.log(await result.json())
+  if (result.status !== 200) throw new Error('Error al inscribirte en la actividad')
+}

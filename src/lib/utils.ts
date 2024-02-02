@@ -104,20 +104,25 @@ export const formatActivityEventsForBigCalendarEnrlled = (activities: (WorkshopW
     const { id, title, start_dates, end_dates, description, modality, activity_status } = activity;
     let colors;
     let eventUrl: string;
+    let kindOfActivity: string;
     if ('year' in activity) {
       colors = ACTIVITIES_CALENDAR_COLORS.find(activity => activity.activity === 'workshop');
       eventUrl = getActivityUrl(id, 'actividadesFormativas');
+      kindOfActivity = 'workshop';
     } else if ('level' in activity) {
       colors = ACTIVITIES_CALENDAR_COLORS.find(activity => activity.activity === 'chat');
       eventUrl = getActivityUrl(id, 'chats');
+      kindOfActivity = 'chat';
     }
     const bgColor = getBgColor(colors, activity_status);
     const eventModalityTitle = parseModalityFromDatabase(modality);
-    const isFull = 21 >= activity.avalible_spots;
+    const isFull = activity.scholar_attendance.length >= activity.avalible_spots;
     return start_dates.map((startDate, index) => ({
       id: id,
       originalTitle: title,
       modality,
+      kindOfActivity,
+      eventId: activity.calendar_ids[0],
       skill: activity.asociated_skill,
       isFull,
       attendees: activity.scholar_attendance.length,

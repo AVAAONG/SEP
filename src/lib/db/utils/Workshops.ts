@@ -444,8 +444,30 @@ export const addAttendaceToScholar = async (
       },
       scholar: {
         connect: {
-          id: scholarId
+          scholarId
+        }
+      },
+      attendance: attendance as ScholarAttendance,
+    },
+  });
+};
+
+export const addChatAttendaceToScholar = async (
+  chatId: string,
+  scholarId: string,
+  attendance: ScholarAttendance,
+) => {
+  await prisma.chatAttendance.create({
+    data: {
+      chat: {
+        connect: {
+          id: chatId,
         },
+      },
+      scholar: {
+        connect: {
+          scholarId
+        }
       },
       attendance: attendance as ScholarAttendance,
     },

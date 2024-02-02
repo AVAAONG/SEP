@@ -3,7 +3,7 @@
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './calendar.css';
 
-import { addAttendaceToScholar } from '@/lib/db/utils/Workshops';
+import { handleEnrollment } from '@/lib/serverAction';
 import { parseChatLevelFromDatabase, parseModalityFromDatabase, parseSkillFromDatabase } from '@/lib/utils2';
 import { BigCalendarEventType } from '@/types/Calendar';
 import { useDisclosure } from '@nextui-org/react';
@@ -159,7 +159,8 @@ const CalendarForEnrrolling = ({ events, modal }: { events: any[], modal?: React
                 )}
                 isButtonDisabled={selectedEvent?.isFull}
                 onConfirm={async () => {
-                    toast.promise(addAttendaceToScholar(selectedEvent.id, 'inhj', 'ENROLLED'), {
+                    console.log(d.data)
+                    toast.promise(handleEnrollment(selectedEvent.id, d.data.scholarId, selectedEvent.eventId, selectedEvent.kindOfActivity, d.data.user?.email), {
                         pending: 'Confirmando',
                         success: 'Inscripción exitosa',
                         error: 'Error al inscribirte en la actividad. Inténtalo de nuevo más tarde.',
