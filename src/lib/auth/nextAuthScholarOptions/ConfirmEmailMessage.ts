@@ -455,7 +455,7 @@ const createConfirmMessage = (signin_url: string, email: string, base_url: strin
                   <tr>
                     <td class="content-cell" align="center">
                       <p class="f-fallback sub align-center">
-                        &copy; 2023 Proexcelencia. Todos los derechos reservados.
+                        &copy; ${new Date().getFullYear()} Proexcelencia - AVAA.
                       </p>
                     </td>
                   </tr>

@@ -83,12 +83,12 @@ const authOptions: NextAuthOptions = {
         const u = user as unknown as any;
         const userId = u?.id;
         const scholarId = u?.scholarId;
-        const kindOfUser = u?.kind_of_user;
+        const kind_of_user = u?.kind_of_user;
         return {
           ...token,
           userId,
           scholarId,
-          kindOfUser,
+          kind_of_user,
         };
       }
       return token;

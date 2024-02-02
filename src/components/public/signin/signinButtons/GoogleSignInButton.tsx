@@ -10,7 +10,7 @@ import { signIn } from 'next-auth/react';
 interface GoogleSignInButtonProps {
   providerId: string;
   callbackUrl: string;
-  cookieValue: 'admin' | 'scholar';
+  cookieValue: 'admin' | 'SCHOLAR';
 }
 
 /**

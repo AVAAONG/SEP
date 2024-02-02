@@ -13,7 +13,7 @@ import React from 'react';
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 interface AsideProps {
-  cookieValue: 'admin' | 'scholar';
+  cookieValue: 'admin' | 'SCHOLAR';
 }
 
 /**
