@@ -280,6 +280,15 @@ export const getUser = async (id: shortUUID.SUUID): Promise<User | null> => {
   return user;
 }
 
+
+export const getScholarByEmail = async (email: string) => {
+  const scholar = await prisma.scholar.findUnique({
+    where: { email },
+  });
+  return scholar;
+}
+
+
 export const getScholarDoneActivitiesCount = async (scholar_id: string) => {
   const [chats, workshops] = await prisma.$transaction([
     prisma.workshopAttendance.count({
