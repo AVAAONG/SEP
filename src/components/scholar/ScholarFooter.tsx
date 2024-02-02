@@ -8,13 +8,13 @@ const ScholarFooter = () => {
           <li>
             <Link
               target="_blank"
-              href="#"
+              href="https://avaa.org/terminos-y-condiciones/"
               className="mr-4 text-sm font-normal text-gray-500 hover:text-green-700 dark:hover:text-green-500 md:mr-6 dark:text-gray-400"
             >
               Terminos y condiciones
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link
               target="_blank"
               href="#"
@@ -22,8 +22,8 @@ const ScholarFooter = () => {
             >
               Politica de Privacidad
             </Link>
-          </li>
-          <li>
+          </li> */}
+          {/* <li>
             <Link
               target="_blank"
               href="#"
@@ -31,11 +31,11 @@ const ScholarFooter = () => {
             >
               Contacto
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link
               target="_blank"
-              href="#"
+              href="https://docs.google.com/forms/d/e/1FAIpQLSfNSCD8ixmPrUkwilvK7w9S1QQu8fqIcBuy4q5M6mszXsDeAA/viewform?usp=sf_link"
               className="mr-4 text-sm font-semibold text-red-500 hover:text-red-700  dark:hover:text-red-500 md:mr-6 dark:text-red-700"
             >
               Reportar error
