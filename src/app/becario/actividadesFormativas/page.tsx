@@ -86,10 +86,10 @@ const page = async ({
   } else {
     workshops = workshopsDbList;
   }
-
   const workshopsAttended = workshops.filter((workshop) => {
-    workshop.scholar_attendance[0]?.attendance === 'ATTENDED';
+    return workshop.scholar_attendance[0]?.attendance === 'ATTENDED';
   });
+  console.log(workshopsAttended);
   const in_personWorkshops = workshopsAttended.filter(
     (workshop) => workshop.modality === 'IN_PERSON'
   ).length;
@@ -136,7 +136,7 @@ const page = async ({
   return (
     <div className="flex flex-col md:p-4 gap-1">
       <DateSelector />
-      <h1 className="text-xl font-medium sm:text-2xl mb-3 ">Listado de actividades formativas</h1>
+      <h1 className="text-xl font-medium sm:text-2xl mb-3 ">Registro de actividades formativas</h1>
       <div className="h-full w-full flex flex-col gap-4">
         <Stats
           kindOfActivity="workshop"

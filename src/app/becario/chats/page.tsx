@@ -11,7 +11,7 @@ import {
 } from '@/lib/datePickerFilters';
 import { getChatsByScholar } from '@/lib/db/utils/Workshops';
 import { createArrayFromObject } from '@/lib/utils';
-import { parseSkillFromDatabase } from '@/lib/utils2';
+import { parseChatLevelFromDatabase, parseModalityFromDatabase } from '@/lib/utils2';
 import { ActivityStatus, Level, Modality } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import dynamic from 'next/dynamic';
@@ -81,13 +81,11 @@ const page = async ({
     workshops = chatDbList;
   }
 
-  console.log(workshops);
-
   const workshopsAttended = workshops.filter((workshop) => {
     const scholarAttendance = workshop.scholar_attendance[0];
-
-    return scholarAttendance ? scholarAttendance.attendance === 'ATTENDED' : 'ATTENDED';
+    return scholarAttendance ? scholarAttendance.attendance === 'ATTENDED' : 'NOT_ATTENDED';
   });
+
   const onlineWorkhops = workshopsAttended.filter(
     (workshop) => workshop.modality === 'ONLINE'
   ).length;
@@ -100,7 +98,7 @@ const page = async ({
   const workshopsBySkillObj =
     workshopsAttended?.reduce(
       (acc, workshop) => {
-        const skill = parseSkillFromDatabase(workshop.asociated_skill);
+        const skill = parseChatLevelFromDatabase(workshop.level);
         acc[skill] = (acc[skill] || 0) + 1;
         return acc;
       },
@@ -112,7 +110,7 @@ const page = async ({
   const workshopsByKindObj =
     workshopsAttended?.reduce(
       (acc, workshop) => {
-        const skill = workshop.kindOfWorkshop;
+        const skill = parseModalityFromDatabase(workshop.modality);
         acc[skill] = (acc[skill] || 0) + 1;
         return acc;
       },
@@ -124,7 +122,7 @@ const page = async ({
   return (
     <div className="flex flex-col md:p-4 gap-1">
       <DateSelector />
-      <h1 className="text-xl font-medium sm:text-2xl mb-3 ">Listado de actividades formativas</h1>
+      <h1 className="text-xl font-medium sm:text-2xl mb-3 ">Registro de chat clubs de inglés</h1>
       <div className="h-full w-full flex flex-col gap-4">
         <Stats
           kindOfActivity="chat"
@@ -143,7 +141,7 @@ const page = async ({
             </div>
             <div className="w-full">
               <h3 className="truncate font-semibold text-center text-sm">
-                Distribucion de actividades según su tipo
+                Distribucion de actividades según su modalidad
               </h3>
               <PieChartComponent data={workshopsByKind} />
             </div>

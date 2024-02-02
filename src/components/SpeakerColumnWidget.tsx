@@ -17,7 +17,7 @@ const SpeakersColumnWidget: React.FC<SpeakersColumnWidgetProps> = ({
   if (speakerNames.length < 2)
     return (
       <Link
-        href={speakerIds[0] ? `actividadesFormativas/${speakerIds[0]}` : ''}
+        href={speakerIds[0] ? `actividadesFormativas/facilitadores/${speakerIds[0]}` : ''}
         className="flex items-center"
       >
         <div className="flex-shrink-0 w-8 h-8">
@@ -43,6 +43,7 @@ const SpeakersColumnWidget: React.FC<SpeakersColumnWidgetProps> = ({
         {speakerNames.map((speakerName: string, index: number) => {
           return (
             <Tooltip
+              key={index}
               showArrow
               content={
                 <SpeakerColumnWidgetCard
@@ -53,7 +54,7 @@ const SpeakersColumnWidget: React.FC<SpeakersColumnWidgetProps> = ({
               }
             >
               <AvatarGroup max={2}>
-                <Link href={speakerIds[index] ? `actividadesFormativas/${speakerIds[index]}` : ''}>
+                <Link href={speakerIds[index] ? `facilitadores/${speakerIds[index]}` : ''}>
                   <Avatar
                     classNames={{ base: 'text-white dark:text-secondary-dark' }}
                     className="w-8 h-8"

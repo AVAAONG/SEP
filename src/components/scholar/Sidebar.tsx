@@ -10,7 +10,6 @@ import {
   CalendarIcon,
   chatIcon,
   dashboardComponent,
-  volunterIcon,
   workshopIcon,
 } from '../../../public/svgs/svgs';
 import ScholarDropdownButton from './ScholarDropdownButton';
@@ -41,25 +40,25 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
     itemList: [{ name: 'Registro', link: `/${SCHOLAR_PREFIX}/chats` }],
     link: '',
   },
-  {
-    Icon: volunterIcon(),
-    buttonName: 'Voluntariado',
-    itemList: [
-      {
-        name: 'Lista de voluntariado',
-        link: `/${SCHOLAR_PREFIX}/voluntariado`,
-      },
-      {
-        name: 'Reporte de horas',
-        link: `/${SCHOLAR_PREFIX}/voluntariado/reporte`,
-      },
-      {
-        name: 'Subir voluntariado externo',
-        link: `/${SCHOLAR_PREFIX}/voluntariado/externo`,
-      },
-    ],
-    link: '',
-  },
+  // {
+  //   Icon: volunterIcon(),
+  //   buttonName: 'Voluntariado',
+  //   itemList: [
+  //     {
+  //       name: 'Lista de voluntariado',
+  //       link: `/${SCHOLAR_PREFIX}/voluntariado`,
+  //     },
+  //     {
+  //       name: 'Reporte de horas',
+  //       link: `/${SCHOLAR_PREFIX}/voluntariado/reporte`,
+  //     },
+  //     {
+  //       name: 'Subir voluntariado externo',
+  //       link: `/${SCHOLAR_PREFIX}/voluntariado/externo`,
+  //     },
+  //   ],
+  //   link: '',
+  // },
   {
     Icon: CalendarIcon(),
     buttonName: 'Calendario',
