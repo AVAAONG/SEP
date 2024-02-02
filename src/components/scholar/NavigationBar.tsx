@@ -25,7 +25,6 @@ const NavigationBar = ({ image, name, email }: NavigationBarProps) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [selected, setSelected] = useState<React.Key>('centro');
 
-
   return (
     <nav className="bg-gray-50  px-4 py-2 dark:bg-black  left-0 right-0 top-0 z-30">
       <div
@@ -78,9 +77,9 @@ const NavigationBar = ({ image, name, email }: NavigationBarProps) => {
                 <p className="font-semibold">Registrad@ con</p>
                 <p className="font-semibold">{email}</p>
               </DropdownItem>
-              <DropdownItem key="configurations" href="/becario/configuracion">
+              {/* <DropdownItem key="configurations" href="/becario/configuracion">
                 Configuracion
-              </DropdownItem>
+              </DropdownItem> */}
               <DropdownItem key="logout" color="danger" onClick={async () => signOut()}>
                 Cerrar sesión
               </DropdownItem>
@@ -97,7 +96,7 @@ const NavigationBar = ({ image, name, email }: NavigationBarProps) => {
                 <h1 className="text-center font-bold">
                   ¿En cual sede del CVA te gustaria cursar estudios?
                 </h1>
-                <div className='flex justify-center items-center'>
+                <div className="flex justify-center items-center">
                   <Tabs
                     color="success"
                     selectedKey={selected}
@@ -114,18 +113,18 @@ const NavigationBar = ({ image, name, email }: NavigationBarProps) => {
                     <Tab key="mercedes" title="Las mercedes" />
                   </Tabs>
                 </div>
-
               </div>
             );
           }}
           isButtonDisabled={false}
           onConfirm={async () => {
-            onClose()
+            onClose();
             toast.promise(createCVACard(email, selected.toString() as 'mercedes' | 'centro'), {
               pending: 'Creando carta del CVA',
-              success: 'Carta de CVA creada correctamente, revisa tu correo para descargar la carta',
+              success:
+                'Carta de CVA creada correctamente, revisa tu correo para descargar la carta',
               error: 'Error al crear carta de incorporación',
-            })
+            });
           }}
           confirmText="Confirmar solicitud"
         />
