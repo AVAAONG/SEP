@@ -153,13 +153,17 @@ const CalendarForEnrrolling = ({ events, scholarName }: { events: any[]; scholar
               </div>
             )}
             {selectedEvent.skill && (
-              <div className="flex gap-1">
-                <p className="font-bold">Competencia:</p>
-                <span>{parseSkillFromDatabase(selectedEvent.skill)}</span>
-                <p className="font-bold">Año:</p>
-                <span>{selectedEvent.year.join(', ')}</span>
-                <p>{selectedEvent?.description}</p>
-              </div>
+              <>
+                <div className="flex gap-1">
+                  <p className="font-bold">Competencia:</p>
+                  <p>{parseSkillFromDatabase(selectedEvent.skill)}</p>
+                  <p>{selectedEvent?.description}</p>
+                </div>
+                <div className="flex gap-1">
+                  <p className="font-bold">Año:</p>
+                  <p>{selectedEvent.year.join(', ')}</p>
+                </div>
+              </>
             )}
             <div className="flex gap-1">
               <p className="font-bold">Cupos disponibles:</p>
