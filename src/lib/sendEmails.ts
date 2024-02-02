@@ -26,3 +26,26 @@ const sendEmailWithDevAccount = async (name: string, html: string, to: string, g
   }
 };
 export default sendEmailWithDevAccount;
+
+export const sendGenericEmail = async (htmlMessage: string, to: string, subject: string) => {
+  const transport = createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'avaatecnologia@gmail.com',
+      pass: 'cfkrwmcaslabwukf',
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
+  });
+  const result = await transport.sendMail({
+    to,
+    from: 'ProExcelencia <avaatecnologia@gmail.com>',
+    subject,
+    html: htmlMessage,
+  });
+  const failed = result.rejected.concat(result.pending).filter(Boolean);
+  if (failed.length) {
+    throw new Error(`Email (${failed.join(', ')}) could not be sent`);
+  }
+}

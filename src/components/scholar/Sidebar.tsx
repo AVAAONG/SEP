@@ -4,6 +4,8 @@ import { scholarSidebarAtom } from '@/lib/state/mainState';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useEffect } from 'react';
 import {
   CalendarIcon,
   chatIcon,
@@ -69,6 +71,13 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
 const Sidebar = () => {
   const [isSidebarOpen, setSidebarOpen] = useAtom(scholarSidebarAtom);
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
+  const pathname = usePathname();
+  useEffect(() => {
+    // Function to handle route changes
+    if (window.innerWidth <= 768) {
+      setSidebarOpen(false);
+    }
+  }, [pathname]);
   return (
     <aside
       className={`${

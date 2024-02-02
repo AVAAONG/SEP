@@ -1,5 +1,6 @@
 import CalendarForEnrrolling from '@/components/calendar/CalendarForEnrolling';
 import { getSentActivitiesWhereScholarIsNotEnrroled } from '@/lib/db/utils/Workshops';
+import { prisma } from '@/lib/db/utils/prisma';
 import { formatActivityEventsForBigCalendarEnrlled } from '@/lib/utils';
 import { getServerSession } from 'next-auth';
 
@@ -8,8 +9,21 @@ import { getServerSession } from 'next-auth';
  * @remarks this page is willing to show the calendar of activities that proexcelencia will offer to the students. All of them, no matter if the scholar is enrrolled or not in activities.
  */
 const page = async () => {
-  const sesion = await getServerSession()
-  const [workshops, chats] = await getSentActivitiesWhereScholarIsNotEnrroled(sesion?.user.scholarId);
+  const sesion = await getServerSession();
+  const [workshops, chats] = await getSentActivitiesWhereScholarIsNotEnrroled(sesion?.scholarId);
+  console.log(sesion);
+  const scholar = await prisma.scholar.findUnique({
+    where: {
+      email: sesion?.user?.email!,
+    },
+    select: {
+      first_names: true,
+      last_names: true,
+    },
+  });
+
+  const scholarNames = `${scholar?.first_names.split(' ')[0]} ${scholar?.last_names.split(' ')[0]}`;
+
   const events = formatActivityEventsForBigCalendarEnrlled([...workshops, ...chats]);
   return (
     <div className="flex flex-col px-2 pt-6 justify-center items-center w-full text-center gap-2 sm:gap-0">
@@ -29,11 +43,9 @@ const page = async () => {
       </h3>
       <div className="w-full mt-6">
         <div className="h-full min-h-[600px] text-gray-800 capitalize dark:text-gray-300 shadow-sm overflow-x-clip w-full bg-white border border-gray-200  shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 p-2">
-          <CalendarForEnrrolling events={events} />
+          <CalendarForEnrrolling events={events} scholarName={scholarNames} />
         </div>
       </div>
-
-
     </div>
   );
 };

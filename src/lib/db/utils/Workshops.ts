@@ -145,9 +145,7 @@ export const getAllActivities = async (): Promise<[Workshop[], Chat[], Volunteer
   ]);
   return [workshops, chats, volunteer];
 }
-export const getActivitiesByStatus = async (status: ActivityStatus): Promise<[Workshop[], Chat[], Volunteer[]]> => {
 
-}
 
 export const getSentActivitiesWhereScholarIsNotEnrroled = async (scholarId: string): Promise<[Workshop[], Chat[], Volunteer[]]> => {
   const [workshops, chats, volunteer] = await prisma.$transaction([

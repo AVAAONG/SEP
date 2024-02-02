@@ -73,6 +73,6 @@ export const handleEnrollment = async (activityId: string, scholarId: string, ev
         calendarId: kindOfActivity === 'workshop' ? WORKSHOP_CALENDAR_ID : CHAT_CALENDAR_ID,
       })
     })
-  console.log(await result.json())
+  console.log(await result.text())
   if (result.status !== 200) throw new Error('Error al inscribirte en la actividad')
 }

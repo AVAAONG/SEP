@@ -8,7 +8,6 @@ import moment from 'moment';
 import 'moment/locale/es';
 import { useMemo } from 'react';
 import { Calendar as BigCalendar, Views, momentLocalizer } from 'react-big-calendar';
-
 /**
  * Defines the style for each event in the calendar.
  * @param event The event to style.
@@ -35,7 +34,7 @@ const styleEvent = (event: BigCalendarEventType) => {
  * @see {@link https://github.com/jquense/react-big-calendar} for more information about the react-big-calendar component.
  * @returns The Calendar component.
  */
-const Calendar = ({ events }: { events: BigCalendarEventType[], }) => {
+const Calendar = ({ events }: { events: BigCalendarEventType[] }) => {
   type T = keyof typeof Views;
   const localizer = momentLocalizer(moment);
   const { defaultDate, views } = useMemo(

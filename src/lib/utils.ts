@@ -31,7 +31,7 @@ const getBgColor = (colors: any, activity_status: string) => {
 
 const getActivityUrl = (id: string, route: 'actividadesFormativas' | 'chats') => {
   const host = headers().get('host');
-  const pageUrl = `https://${host}/admin/${route}/${id}`;
+  const pageUrl = `https://${host}/becario/${route}/${id}`;
   return pageUrl;
 }
 
