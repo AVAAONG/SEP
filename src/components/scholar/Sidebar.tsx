@@ -135,9 +135,9 @@ const Sidebar = () => {
             </span>
           </div>
           <p className="mb-3 text-xs text-green-800 dark:text-green-400">
-            El SEP actualmente sigue en proceso de desarrolo, seria genial para nosotros escuchar
+            El SEP actualmente sigue en proceso de desarrollo, seria genial para nosotros escuchar
             tus comentarios con respecto a mejoras, cambios o nuevas funcionalidades que te gustaria
-            ver en el sistema.
+            ver en el sistema. 💚
           </p>
           <a
             className="bg-orange-100 text-red-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-90"
