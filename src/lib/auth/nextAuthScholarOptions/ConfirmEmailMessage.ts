@@ -29,7 +29,7 @@ const createConfirmMessage = (signin_url: string, email: string, base_url: strin
       }
 
       a {
-        color: #3b82f6;
+        color: #23a217;
       }
 
       a img {
@@ -116,11 +116,11 @@ const createConfirmMessage = (signin_url: string, email: string, base_url: strin
       /* Buttons ------------------------------ */
 
       .button {
-        background-color: #3b82f6;
-        border-top: 10px solid #3b82f6;
-        border-right: 18px solid #3b82f6;
-        border-bottom: 10px solid #3b82f6;
-        border-left: 18px solid #3b82f6;
+        background-color: #23a217;
+        border-top: 10px solid #23a217;
+        border-right: 18px solid #23a217;
+        border-bottom: 10px solid #23a217;
+        border-left: 18px solid #23a217;
         display: inline-block;
         color: #fff !important;
         text-decoration: none;
