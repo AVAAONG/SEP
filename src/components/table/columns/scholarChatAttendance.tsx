@@ -16,7 +16,7 @@ const scholarChatAttendaceColumns: Column<ScholarChatColumnT>[] = [
     Header: 'Chat Club',
     accessor: 'title',
     Cell: ({ value, cell }) => (
-      <Link href={cell.row.original.id ? `/chats/${cell.row.original.id}` : ''}>
+      <Link href={cell.row.original.id ? `chats/${cell.row.original.id}` : ''}>
         <div className="block text-center overflow-x-scroll">{value}</div>
       </Link>
     ),

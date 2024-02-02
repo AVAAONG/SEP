@@ -332,6 +332,26 @@ export const getWorkshopWithSpecificScholarAttendance = async (activityId: short
 
   return workshop;
 };
+export const getChatWithSpecificScholarAttendance = async (activityId: shortUUID.SUUID, scholarId: string) => {
+  const workshop = await prisma.chatAttendance.findFirst({
+    where: {
+      chat_id: activityId,
+      scholar: {
+        scholarId: scholarId,
+      }
+    },
+    include: {
+      chat: {
+        include: {
+          speaker: true
+        }
+      }
+    },
+  });
+  return workshop;
+};
+
+
 
 
 
