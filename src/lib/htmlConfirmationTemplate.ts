@@ -89,10 +89,8 @@ export const createEnrollementConfirmationMessage = (scholarName: string, activi
   table, td { color: #000000; } #u_body a { color: #09d118; text-decoration: underline; } @media (max-width: 480px) { #u_content_image_6 .v-container-padding-padding { padding: 20px 10px 30px !important; } }
       </style>
     
-    
-  
   <!--[if !mso]><!--><link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@500&display=swap" rel="stylesheet" type="text/css"><!--<![endif]-->
-  
+  <!--[if !mso]><!--><link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@500&display=swap" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@500&display=swap" rel="stylesheet" type="text/css"><!--<![endif]-->
   </head>
   
   <body class="clean-body u_body" style="margin: 0;padding: 0;-webkit-text-size-adjust: 100%;background-color: #e7e7e7;color: #000000">
@@ -122,7 +120,7 @@ export const createEnrollementConfirmationMessage = (scholarName: string, activi
         <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:30px 10px 10px;font-family:Epilogue;" align="left">
           
     <!--[if mso]><table width="100%"><tr><td><![endif]-->
-      <h1 style="margin: 0px; color: #09d118; line-height: 140%; text-align: center; word-wrap: break-word; font-family: Epilogue; font-size: 40px; font-weight: 700;"><span><span>Confirmación de inscripción</span></span></h1>
+      <h1 style="margin: 0px; color: #09d118; line-height: 140%; text-align: center; word-wrap: break-word; font-family: Epilogue; font-size: 40px; font-weight: 500;"><span><span>Confirmación de inscripción</span></span></h1>
     <!--[if mso]></td></tr></table><![endif]-->
   
         </td>
@@ -212,7 +210,7 @@ export const createEnrollementConfirmationMessage = (scholarName: string, activi
         <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:Epilogue;" align="left">
           
     <!--[if mso]><table width="100%"><tr><td><![endif]-->
-      <h1 style="margin: 0px; color: #09d118; line-height: 140%; text-align: center; word-wrap: break-word; font-family: Epilogue; font-size: 22px; font-weight: 700;"><span><span><span><span><span><strong>Este correo confirma tu inscripción a la actividad:<br />${activityName}<br /></strong></span></span></span></span></span></h1>
+      <h1 style="margin: 0px; color: #09d118; line-height: 140%; text-align: center; word-wrap: break-word; font-family: Epilogue; font-size: 22px; font-weight: 500;"><span><span><span><span><span><strong>Este correo confirma tu inscripción a la actividad:<br />${activityName}<br /></strong></span></span></span></span></span></h1>
     <!--[if mso]></td></tr></table><![endif]-->
   
         </td>
@@ -249,7 +247,7 @@ export const createEnrollementConfirmationMessage = (scholarName: string, activi
         <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:3px;font-family:Epilogue;" align="left">
           
     <!--[if mso]><table width="100%"><tr><td><![endif]-->
-      <h1 style="margin: 0px; color: #09d118; line-height: 140%; text-align: center; word-wrap: break-word; font-family: Epilogue; font-size: 22px; font-weight: 700;"><p>Recuerda 👀</p></h1>
+      <h1 style="margin: 0px; color: #09d118; line-height: 140%; text-align: center; word-wrap: break-word; font-family: Epilogue; font-size: 22px; font-weight: 500;"><p>Recuerda 👀</p></h1>
     <!--[if mso]></td></tr></table><![endif]-->
   
         </td>
@@ -330,7 +328,7 @@ export const createEnrollementConfirmationMessage = (scholarName: string, activi
         <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:Epilogue;" align="left">
           
     <!--[if mso]><table width="100%"><tr><td><![endif]-->
-      <h1 style="margin: 0px; color: #09d118; line-height: 140%; text-align: left; word-wrap: break-word; font-family: Epilogue; font-size: 22px; font-weight: 700;"><span><span>Cesión de cupos</span></span></h1>
+      <h1 style="margin: 0px; color: #09d118; line-height: 140%; text-align: left; word-wrap: break-word; font-family: Epilogue; font-size: 22px; font-weight: 500;"><span><span>Cesión de cupos</span></span></h1>
     <!--[if mso]></td></tr></table><![endif]-->
   
         </td>
