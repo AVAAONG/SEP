@@ -145,7 +145,7 @@ const page = async ({
           second={onlineWorkhops}
         />
         {workshops && workshops.length >= 1 && (
-          <div className="w-full  grid grid-cols-3 justify-center items-center rounded-lg">
+          <div className="w-full grid md:grid-cols-3 justify-center items-center rounded-lg">
             <div className="w-full">
               <h3 className="truncate font-semibold text-center text-sm">
                 Distribucion de actividades según su competencia
