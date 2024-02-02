@@ -1,4 +1,5 @@
 import CalendarForEnrrolling from '@/components/calendar/CalendarForEnrolling';
+import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { getSentActivitiesWhereScholarIsNotEnrroled } from '@/lib/db/utils/Workshops';
 import { prisma } from '@/lib/db/utils/prisma';
 import { formatActivityEventsForBigCalendarEnrlled } from '@/lib/utils';
@@ -9,12 +10,11 @@ import { getServerSession } from 'next-auth';
  * @remarks this page is willing to show the calendar of activities that proexcelencia will offer to the students. All of them, no matter if the scholar is enrrolled or not in activities.
  */
 const page = async () => {
-  const sesion = await getServerSession();
+  const sesion = await getServerSession(authOptions);
   const [workshops, chats] = await getSentActivitiesWhereScholarIsNotEnrroled(sesion?.scholarId);
-  console.log(sesion);
   const scholar = await prisma.scholar.findUnique({
     where: {
-      email: sesion?.user?.email!,
+      id: sesion?.scholarId!,
     },
     select: {
       first_names: true,
