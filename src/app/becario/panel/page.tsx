@@ -66,7 +66,7 @@ const page = async () => {
             <InformationCircleIcon className="cursor-pointer w-6 h-6 text-emerald-600 dark:text-emerald-400" />
           </Tooltip>
           <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
-            ¡Hola, {session?.user?.name?.split(' ')[0]}! 💚
+            ¡Hola! 💚
           </h1>
         </div>
 

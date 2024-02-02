@@ -1,7 +1,10 @@
+import { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
+import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
 import { BigCalendarEventType } from '@/types/Calendar';
 import { Chat, Workshop } from '@prisma/client';
 import { headers } from 'next/headers';
 import { ACTIVITIES_CALENDAR_COLORS } from './constants';
+import { parseModalityFromDatabase } from './utils2';
 
 
 
@@ -92,5 +95,52 @@ export const reduceByProperty = <T extends Record<string, any>, D extends Record
     {} as Record<string, number>
   );
   return reducedValues;
+};
+
+
+
+export const formatActivityEventsForBigCalendarEnrlled = (activities: (WorkshopWithAllData | ChatsWithAllData)[]): any[] => {
+  return activities.flatMap((activity) => {
+    const { id, title, start_dates, end_dates, description, modality, activity_status } = activity;
+    let colors;
+    let eventUrl: string;
+    if ('year' in activity) {
+      colors = ACTIVITIES_CALENDAR_COLORS.find(activity => activity.activity === 'workshop');
+      eventUrl = getActivityUrl(id, 'actividadesFormativas');
+    } else if ('level' in activity) {
+      colors = ACTIVITIES_CALENDAR_COLORS.find(activity => activity.activity === 'chat');
+      eventUrl = getActivityUrl(id, 'chats');
+    }
+    const bgColor = getBgColor(colors, activity_status);
+    const eventModalityTitle = parseModalityFromDatabase(modality);
+    const isFull = 21 >= activity.avalible_spots;
+    return start_dates.map((startDate, index) => ({
+      id: id,
+      originalTitle: title,
+      modality,
+      skill: activity.asociated_skill,
+      isFull,
+      attendees: activity.scholar_attendance.length,
+      spots: activity.avalible_spots,
+      year: activity.year,
+      platform: activity.platform,
+      level: activity.level,
+      enrolledCount: activity.scholar_attendance.length,
+      title: index > 0 ? `(${eventModalityTitle}) ${title} (${index + 1})` : `(${eventModalityTitle}) ${title}`,
+      allDay: false,
+      start: new Date(startDate),
+      end: new Date(end_dates[index] || end_dates[0]),
+      description: description as string,
+      bgColor,
+      isSuspended: activity_status === 'SUSPENDED',
+      url: eventUrl,
+      speakerNames: activity.speaker.map(
+        (speaker) => `${speaker.first_names.split(' ')[0]} ${speaker.last_names.split(' ')[0]}`
+      ),
+      speakerImages: activity.speaker.map((speaker) => speaker.image),
+      speakerIds: activity.speaker.map((speaker) => speaker.id),
+      speakersCompany: activity.speaker.map((speaker) => speaker.job_company),
+    }));
+  });
 };
 

@@ -53,3 +53,5 @@ export const createCVACard = async (email: string | undefined | null, sede: 'cen
     })
   if (result.status !== 200) throw new Error('Error al crear la carta CVA')
 }
+
+

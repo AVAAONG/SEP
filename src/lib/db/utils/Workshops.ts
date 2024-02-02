@@ -146,16 +146,58 @@ export const getAllActivities = async (): Promise<[Workshop[], Chat[], Volunteer
   return [workshops, chats, volunteer];
 }
 export const getActivitiesByStatus = async (status: ActivityStatus): Promise<[Workshop[], Chat[], Volunteer[]]> => {
+
+}
+
+export const getSentActivitiesWhereScholarIsNotEnrroled = async (scholarId: string): Promise<[Workshop[], Chat[], Volunteer[]]> => {
   const [workshops, chats, volunteer] = await prisma.$transaction([
     prisma.workshop.findMany({
       where: {
-        activity_status: status,
+        activity_status: 'SENT',
+        scholar_attendance: {
+          none: {
+            scholar: {
+              scholarId: scholarId,
+            }
+          }
+        },
+      },
+      include: {
+        speaker: {
+          select: {
+            first_names: true,
+            last_names: true,
+            id: true,
+            image: true,
+            job_company: true,
+          }
+        },
+        scholar_attendance: true,
       }
     }),
     prisma.chat.findMany({
       where: {
-        activity_status: status,
-      }
+        activity_status: 'SENT',
+        scholar_attendance: {
+          none: {
+            scholar: {
+              scholarId: scholarId,
+            }
+          }
+        },
+      },
+      include: {
+        speaker: {
+          select: {
+            first_names: true,
+            last_names: true,
+            id: true,
+            image: true,
+            job_company: true,
+          },
+        },
+        scholar_attendance: true,
+      },
     }),
     prisma.volunteer.findMany(),
   ]);

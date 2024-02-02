@@ -418,7 +418,7 @@ export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) =>
             ]
           }
         ]
-      }
+      },
     }),
   ]);
   return [chats, workshops];

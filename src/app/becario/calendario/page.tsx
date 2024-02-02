@@ -1,14 +1,16 @@
-import Calendar from '@/components/calendar/Calendar';
-import { getActivitiesByStatus } from '@/lib/db/utils/Workshops';
-import { formatActivityEventsForBigCalendar } from '@/lib/utils';
+import CalendarForEnrrolling from '@/components/calendar/CalendarForEnrolling';
+import { getSentActivitiesWhereScholarIsNotEnrroled } from '@/lib/db/utils/Workshops';
+import { formatActivityEventsForBigCalendarEnrlled } from '@/lib/utils';
+import { getServerSession } from 'next-auth';
 
 /**
  * Renders a page component with the calendar of activities
  * @remarks this page is willing to show the calendar of activities that proexcelencia will offer to the students. All of them, no matter if the scholar is enrrolled or not in activities.
  */
 const page = async () => {
-  const [workshops, chats] = await getActivitiesByStatus('SENT');
-  const events = formatActivityEventsForBigCalendar([...workshops, ...chats]);
+  const sesion = await getServerSession()
+  const [workshops, chats] = await getSentActivitiesWhereScholarIsNotEnrroled(sesion?.user.scholarId);
+  const events = formatActivityEventsForBigCalendarEnrlled([...workshops, ...chats]);
   return (
     <div className="flex flex-col px-2 pt-6 justify-center items-center w-full text-center gap-2 sm:gap-0">
       <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white mb-2">
@@ -27,9 +29,11 @@ const page = async () => {
       </h3>
       <div className="w-full mt-6">
         <div className="h-full min-h-[600px] text-gray-800 capitalize dark:text-gray-300 shadow-sm overflow-x-clip w-full bg-white border border-gray-200  shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 p-2">
-          <Calendar events={events} />
+          <CalendarForEnrrolling events={events} />
         </div>
       </div>
+
+
     </div>
   );
 };

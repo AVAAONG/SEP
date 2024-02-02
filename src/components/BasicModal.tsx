@@ -39,7 +39,7 @@ const BasicModal: React.FC<BasicModalProps> = ({
               <Content />
             </ModalBody>
             <ModalFooter>
-              <Button isDisabled={isButtonDisabled} variant="light" onPress={onClose}>
+              <Button variant="light" onPress={onClose}>
                 Cerrar
               </Button>
               {confirmText !== '' && (

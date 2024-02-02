@@ -3,16 +3,11 @@
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './calendar.css';
 
-import { addAttendaceToScholar } from '@/lib/db/utils/Workshops';
 import { BigCalendarEventType } from '@/types/Calendar';
-import { useDisclosure } from '@nextui-org/react';
 import moment from 'moment';
 import 'moment/locale/es';
-import { useSession } from 'next-auth/react';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Calendar as BigCalendar, Views, momentLocalizer } from 'react-big-calendar';
-import { toast } from 'react-toastify';
-import BasicModal from '../BasicModal';
 
 /**
  * Defines the style for each event in the calendar.
@@ -40,11 +35,7 @@ const styleEvent = (event: BigCalendarEventType) => {
  * @see {@link https://github.com/jquense/react-big-calendar} for more information about the react-big-calendar component.
  * @returns The Calendar component.
  */
-const Calendar = ({ events }: { events: BigCalendarEventType[] }) => {
-  const [selectedEvent, setSelectedEvent] = useState<BigCalendarEventType | null>(null);
-  const d = useSession();
-
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+const Calendar = ({ events }: { events: BigCalendarEventType[], }) => {
   type T = keyof typeof Views;
   const localizer = momentLocalizer(moment);
   const { defaultDate, views } = useMemo(
@@ -68,8 +59,7 @@ const Calendar = ({ events }: { events: BigCalendarEventType[] }) => {
         eventPropGetter={styleEvent}
         popup
         onSelectEvent={(event) => {
-          setSelectedEvent(event);
-          onOpen();
+          window.open(event.url, '_blank');
         }}
         messages={{
           month: 'Mes',
@@ -80,38 +70,6 @@ const Calendar = ({ events }: { events: BigCalendarEventType[] }) => {
           previous: 'Atrás',
           next: 'Siguiente',
         }}
-      />
-
-      <BasicModal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        title={selectedEvent?.title!}
-        Content={() => {
-          console.log(selectedEvent.id);
-          return (
-            <div>
-              <p>{selectedEvent?.description}</p>
-              <p>
-                {' '}
-                {selectedEvent.start?.toLocaleDateString('es-ES', {
-                  month: 'long',
-                  day: 'numeric',
-                  year: 'numeric',
-                })}
-              </p>
-              <p> {selectedEvent.end?.toLocaleTimeString('es-ES', {})}</p>
-            </div>
-          );
-        }}
-        isButtonDisabled={false}
-        onConfirm={async () => {
-          toast.promise(addAttendaceToScholar(selectedEvent.id, d.data?.user.id, 'ENROLLED'), {
-            pending: 'Confirmando',
-            success: 'Inscripción exitosa',
-            error: 'Error al inscribirte en la actividad. Inténtalo de nuevo más tarde.',
-          });
-        }}
-        confirmText="Confirmar inscripción"
       />
     </>
   );
