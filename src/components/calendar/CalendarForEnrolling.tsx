@@ -157,7 +157,6 @@ const CalendarForEnrrolling = ({ events, scholarName }: { events: any[]; scholar
                 <div className="flex gap-1">
                   <p className="font-bold">Competencia:</p>
                   <p>{parseSkillFromDatabase(selectedEvent.skill)}</p>
-                  <p>{selectedEvent?.description}</p>
                 </div>
                 <div className="flex gap-1">
                   <p className="font-bold">Año:</p>
@@ -173,6 +172,7 @@ const CalendarForEnrrolling = ({ events, scholarName }: { events: any[]; scholar
               <p className="font-bold">Cupos ocupados:</p>
               <p>{selectedEvent.attendees}</p>
             </div>
+            <p>{selectedEvent?.description}</p>
           </div>
         )}
         isButtonDisabled={selectedEvent?.isFull}
