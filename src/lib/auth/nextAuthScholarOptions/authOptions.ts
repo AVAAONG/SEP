@@ -4,10 +4,10 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 import { prisma } from '@/lib/db/utils/prisma';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import type { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
-import Email from './EmailProvider';
+import CustomEmailProvider from './EmailProvider';
+import { customPrismaAdapter } from './PrismCustomAdapter';
 import {
   NEXT_SECRET,
   PAGES,
@@ -15,7 +15,7 @@ import {
   googleUserProviderConfig,
 } from './authConfig';
 
-const adapter = PrismaAdapter(prisma);
+const adapter = customPrismaAdapter(prisma);
 
 /**
  *
@@ -33,7 +33,7 @@ const authOptions: NextAuthOptions = {
    */
   providers: [
     GoogleProvider(googleUserProviderConfig),
-    Email(emailUserProviderConfig),
+    CustomEmailProvider(emailUserProviderConfig),
   ],
   /**
    * @see https://authjs.dev/reference/adapters for adapters information

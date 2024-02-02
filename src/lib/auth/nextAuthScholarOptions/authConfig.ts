@@ -3,9 +3,8 @@
  * @module lib/auth/nextAuthOptions/authOptions
  * @author Kevin Bravo (kevinbravo.me)
  */
-import { KinOfUser } from '@prisma/client';
 import { PagesOptions } from 'next-auth';
-import { OAuthUserConfig } from 'next-auth/providers';
+import { EmailUserConfig, OAuthUserConfig, } from 'next-auth/providers';
 import shortUUID from 'short-uuid';
 
 export const NEXT_SECRET = process.env.NEXTAUTH_SECRET || shortUUID.generate();
@@ -57,23 +56,12 @@ export const googleUserProviderConfig: OAuthUserConfig<any> = {
   id: 'userGoogle',
   clientId: GOOGLE_USER_API_CLIENT_ID,
   clientSecret: GOOGLE_USER_API_CLIENT_SECRET,
-  async profile(profile) {
-    return {
-      id: profile.sub,
-      name: profile.name,
-      email: profile.email,
-      image: profile.picture,
-      kind_of_user: 'SCHOLAR' as KinOfUser,
-      scholar: {
-        connect: {
-          email: profile.email,
-        },
-      },
-    };
-  },
+  /// @see https://github.com/nextauthjs/next-auth/issues/519#issuecomment-1500498874 for more information
+  allowDangerousEmailAccountLinking: true,
+
 };
 
-export const emailUserProviderConfig = {
+export const emailUserProviderConfig: EmailUserConfig = {
   type: 'email',
   server: {
     host: process.env.EMAIL_SERVER_HOST,

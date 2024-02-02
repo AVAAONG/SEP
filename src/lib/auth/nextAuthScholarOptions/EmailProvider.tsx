@@ -68,7 +68,7 @@ export type EmailUserConfig = Partial<Omit<EmailConfig, 'options'>>;
 
 export type EmailProvider = (options: EmailUserConfig) => EmailConfig;
 
-export default function Email(options: EmailUserConfig): EmailConfig {
+export default function CustomEmailProvider(options: EmailUserConfig): EmailConfig {
   return {
     id: 'email',
     type: 'email',
