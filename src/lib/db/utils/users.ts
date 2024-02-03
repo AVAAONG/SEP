@@ -182,23 +182,25 @@ export const getScholars = async () => {
     include: {
       collage_information: true,
       program_information: true,
-    }
-  })
+    },
+  });
   return scholars;
-}
-
+};
 
 /**
  * Returns the count of users that match the given ScholarCondition.
  * @param condition The ScholarCondition object used to filter the users based on their program information.
  * @returns A Promise that resolves to the count of users that match the condition.
  */
-export const getScholarsCountByCondition = async (condition: ScholarCondition, chaptherId: string) => {
+export const getScholarsCountByCondition = async (
+  condition: ScholarCondition,
+  chaptherId: string
+) => {
   const scholars = await prisma.scholar.count({
     where: {
       program_information: {
         scholar_condition: condition,
-        chapter_id: chaptherId
+        chapter_id: chaptherId,
       },
     },
   });
@@ -208,10 +210,16 @@ export const getScholarsCountByCondition = async (condition: ScholarCondition, c
 export const getScholarcountByGender = async () => {
   const [womenScholars, menScholars] = await prisma.$transaction([
     prisma.scholar.count({
-      where: { gender: 'F', program_information: { scholar_condition: 'ACTIVE', chapter_id: 'Rokk6_XCAJAg45heOEzYb' } },
+      where: {
+        gender: 'F',
+        program_information: { scholar_condition: 'ACTIVE', chapter_id: 'Rokk6_XCAJAg45heOEzYb' },
+      },
     }),
     prisma.scholar.count({
-      where: { gender: 'M', program_information: { scholar_condition: 'ACTIVE', chapter_id: 'Rokk6_XCAJAg45heOEzYb' } },
+      where: {
+        gender: 'M',
+        program_information: { scholar_condition: 'ACTIVE', chapter_id: 'Rokk6_XCAJAg45heOEzYb' },
+      },
     }),
   ]);
   return [womenScholars, menScholars];
@@ -272,22 +280,19 @@ export const getScholarWithAllData = async (scholar_id: string) => {
   return scholar;
 };
 
-
 export const getUser = async (id: shortUUID.SUUID): Promise<User | null> => {
   const user = await prisma.user.findUnique({
     where: { id },
   });
   return user;
-}
-
+};
 
 export const getScholarByEmail = async (email: string) => {
   const scholar = await prisma.scholar.findUnique({
     where: { email },
   });
   return scholar;
-}
-
+};
 
 export const getScholarDoneActivitiesCount = async (scholar_id: string) => {
   const [chats, workshops] = await prisma.$transaction([
@@ -296,19 +301,19 @@ export const getScholarDoneActivitiesCount = async (scholar_id: string) => {
         AND: [
           {
             scholar: {
-              scholarId: scholar_id
-            }
+              scholarId: scholar_id,
+            },
           },
           {
-            attendance: 'ATTENDED'
+            attendance: 'ATTENDED',
           },
           {
             workshop: {
-              activity_status: 'ATTENDANCE_CHECKED'
-            }
-          }
-        ]
-      }
+              activity_status: 'ATTENDANCE_CHECKED',
+            },
+          },
+        ],
+      },
     }),
     prisma.chat.count({
       where: {
@@ -320,40 +325,38 @@ export const getScholarDoneActivitiesCount = async (scholar_id: string) => {
                   some: {
                     scholar: {
                       scholarId: scholar_id,
-                    }
+                    },
                   },
                 },
               },
               {
                 scholar_attendance: {
                   some: {
-                    attendance: 'ATTENDED'
-                  }
-                }
+                    attendance: 'ATTENDED',
+                  },
+                },
               },
               {
-                activity_status: 'ATTENDANCE_CHECKED'
-              }]
+                activity_status: 'ATTENDANCE_CHECKED',
+              },
+            ],
           },
           {
             speaker: {
               some: {
                 id: scholar_id,
-              }
-            }
-          }
-
-        ]
-      }
+              },
+            },
+          },
+        ],
+      },
     }),
   ]);
   return [chats, workshops];
-}
-
+};
 
 export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) => {
   const [workshops, chats] = await prisma.$transaction([
-
     prisma.workshop.findMany({
       where: {
         AND: [
@@ -362,20 +365,21 @@ export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) =>
               some: {
                 scholar: {
                   scholarId: scholar_id,
-                }
+                },
               },
             },
           },
           {
             scholar_attendance: {
               some: {
-                attendance: 'ENROLLED'
-              }
-            }
+                attendance: 'ENROLLED',
+              },
+            },
           },
           {
-            activity_status: 'SENT'
-          }]
+            activity_status: 'SENT',
+          },
+        ],
       },
     }),
     prisma.chat.findMany({
@@ -388,20 +392,21 @@ export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) =>
                   some: {
                     scholar: {
                       scholarId: scholar_id,
-                    }
+                    },
                   },
                 },
               },
               {
                 scholar_attendance: {
                   some: {
-                    attendance: 'ENROLLED'
-                  }
-                }
+                    attendance: 'ENROLLED',
+                  },
+                },
               },
               {
-                activity_status: 'SENT'
-              }]
+                activity_status: 'SENT',
+              },
+            ],
           },
           {
             AND: [
@@ -409,25 +414,25 @@ export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) =>
                 speaker: {
                   some: {
                     id: scholar_id,
-                  }
-                }
+                  },
+                },
               },
               {
-                activity_status: 'SENT'
-              }
-            ]
-          }
-        ]
+                activity_status: 'SENT',
+              },
+            ],
+          },
+        ],
       },
     }),
   ]);
   return [chats, workshops];
-}
+};
 
 export const setProbationToScholar = async (scholarId: string, data: Probation) => {
   await prisma.scholar.update({
     where: {
-      id: scholarId
+      id: scholarId,
     },
     data: {
       program_information: {
@@ -443,32 +448,34 @@ export const setProbationToScholar = async (scholarId: string, data: Probation) 
               next_meeting: data.next_meeting,
               probation_reason: data.probation_reason,
               observations: data.observations,
-            }
-          }
-        }
-      }
-    }
-  })
-}
+            },
+          },
+        },
+      },
+    },
+  });
+};
 
 export const getScholarsInProbationByYear = async (year: string) => {
   const scholars = await prisma.scholar.findMany({
     where: {
       program_information: {
-        OR: [{
-          scholar_status: 'PROBATION_I',
-        },
-        {
-          scholar_status: 'PROBATION_II',
-        }],
+        OR: [
+          {
+            scholar_status: 'PROBATION_I',
+          },
+          {
+            scholar_status: 'PROBATION_II',
+          },
+        ],
         probation: {
           every: {
             starting_date: {
               gte: new Date(`${year}-01-01`),
               lte: new Date(`${year}-12-31`),
-            }
-          }
-        }
+            },
+          },
+        },
       },
     },
     include: {
@@ -477,18 +484,19 @@ export const getScholarsInProbationByYear = async (year: string) => {
         include: {
           probation: {
             orderBy: {
-              starting_date: 'desc'
+              starting_date: 'desc',
             },
-            take: 1
-          }
+            take: 1,
+          },
         },
         // probation: true
-
       },
       cva_information: true,
-    }
-  })
+    },
+  });
   return scholars;
-}
+};
 
-export type ScholarsInProbationByYearReturnType = Prisma.PromiseReturnType<typeof getScholarsInProbationByYear>;
+export type ScholarsInProbationByYearReturnType = Prisma.PromiseReturnType<
+  typeof getScholarsInProbationByYear
+>;

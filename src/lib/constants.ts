@@ -27,21 +27,21 @@ export const MONTHS = [
 
 export const ACTIVITIES_CALENDAR_COLORS = [
   {
-    activity: "workshop",
+    activity: 'workshop',
     comingActivities: '#295594',
     pastActivities: '#98b7e1',
   },
   {
-    activity: "chat",
+    activity: 'chat',
     comingActivities: '#d82f20',
     pastActivities: '#fdaba4',
   },
   {
-    activity: "volunteer",
+    activity: 'volunteer',
     comingActivities: '#295594',
     pastActivities: '#98b7e1',
   },
-]
+];
 // ======================= CONSTANTS FOR WORKSHOP =======================
 
 export const PROGRAM_COMPONENTS = [
@@ -71,7 +71,7 @@ export const ONLINE_PLATFORMS = [
   { label: 'Padlet', value: 'PADLET' },
   { label: 'Otra', value: 'OTHER' },
 ];
-export const WORKSHOP_YEAR = ['I', 'II', 'III', 'IV', 'V',];
+export const WORKSHOP_YEAR = ['I', 'II', 'III', 'IV', 'V'];
 
 export const CHAT_LEVELS = [
   { label: 'Básico', value: 'BASIC' },
@@ -80,30 +80,52 @@ export const CHAT_LEVELS = [
 ];
 
 export const STATES_OF_VENEZUELA = [
-  "Amazonas",
-  "Anzoátegui",
-  "Apure",
-  "Aragua",
-  "Barinas",
-  "Bolívar",
-  "Carabobo",
-  "Cojedes",
-  "Delta Amacuro",
-  "Distrito Capital",
-  "Falcón",
-  "Guárico",
-  "Lara",
-  "Mérida",
-  "Miranda",
-  "Monagas",
-  "Nueva Esparta",
-  "Portuguesa",
-  "Sucre",
-  "Táchira",
-  "Trujillo",
-  "Vargas",
-  "Yaracuy",
-  "Zulia"
+  'Amazonas',
+  'Anzoátegui',
+  'Apure',
+  'Aragua',
+  'Barinas',
+  'Bolívar',
+  'Carabobo',
+  'Cojedes',
+  'Delta Amacuro',
+  'Distrito Capital',
+  'Falcón',
+  'Guárico',
+  'Lara',
+  'Mérida',
+  'Miranda',
+  'Monagas',
+  'Nueva Esparta',
+  'Portuguesa',
+  'Sucre',
+  'Táchira',
+  'Trujillo',
+  'Vargas',
+  'Yaracuy',
+  'Zulia',
 ];
 
-export const COLLAGES = ["ENAHP", "UCSAR", "UCV", "UNIMET", "IUPSM", "UCAB", "USB", "UNE", "UNEXPO", "UNESR", "UMA", "UNEARTE", "UJMV", "UMC", "UPEL", "CUR", "USM", "UNEFA", "UNEXCA", "UAH", "UBV"];
+export const COLLAGES = [
+  'ENAHP',
+  'UCSAR',
+  'UCV',
+  'UNIMET',
+  'IUPSM',
+  'UCAB',
+  'USB',
+  'UNE',
+  'UNEXPO',
+  'UNESR',
+  'UMA',
+  'UNEARTE',
+  'UJMV',
+  'UMC',
+  'UPEL',
+  'CUR',
+  'USM',
+  'UNEFA',
+  'UNEXCA',
+  'UAH',
+  'UBV',
+];

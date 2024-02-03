@@ -10,8 +10,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const cookieValue = cookieStore.get('fromWhereYouCome')?.value;
   if (cookieValue === 'SCHOLAR') return await NextAuth(req, res, authOptions);
   else if (cookieValue === 'admin') return await NextAuth(req, res, authAdminOptions);
-  else return NextResponse.json({ message: 'The cookie was not specified' })
+  else return NextResponse.json({ message: 'The cookie was not specified' });
 };
 
 export { handler as GET, handler as POST };
-

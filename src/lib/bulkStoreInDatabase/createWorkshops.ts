@@ -309,7 +309,6 @@
 //     return speakersIdArr.map((speaker) => speaker.trim() as string);
 // };
 
-
 // const createSpreadsheetForErrors = async (activityTitle: string, index: number) => {
 //     const cellToPutSpreadsheet = `'${WORKSHOP_SHEET}'!${index + 2}:P${index + 2}`;
 //     console.log('\x1b[36m%s\x1b[0m', 'Creando Spreadsheet de errores');

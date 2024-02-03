@@ -10,7 +10,7 @@ interface BasicModalProps {
   confirmText: string;
   isButtonDisabled: boolean;
   scroll?: boolean;
-  size?: "sm" | "md" | "lg" | "xl" | "2xl" | "full" | "xs" | "3xl" | "4xl" | "5xl" | undefined
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full' | 'xs' | '3xl' | '4xl' | '5xl' | undefined;
 }
 
 const BasicModal: React.FC<BasicModalProps> = ({
@@ -28,9 +28,12 @@ const BasicModal: React.FC<BasicModalProps> = ({
     <Modal
       classNames={{
         backdrop: 'bg-secondary-dark bg-opacity-30',
-
       }}
-      scrollBehavior={scroll ? 'outside' : 'normal'} size={size || 'md'} isOpen={isOpen} onOpenChange={onOpenChange}>
+      scrollBehavior={scroll ? 'outside' : 'normal'}
+      size={size || 'md'}
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+    >
       <ModalContent>
         {(onClose) => (
           <>
@@ -52,7 +55,6 @@ const BasicModal: React.FC<BasicModalProps> = ({
                   {confirmText}
                 </Button>
               )}
-
             </ModalFooter>
           </>
         )}

@@ -55,4 +55,4 @@ export const parseChatLevelFromDatabase = (level: Level) => {
     default:
       return 'BASIC';
   }
-}
+};

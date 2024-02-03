@@ -91,7 +91,7 @@ const authAdminOptions: NextAuthOptions = {
       return token;
     },
   },
-  adapter
+  adapter,
 };
 
 export default authAdminOptions;

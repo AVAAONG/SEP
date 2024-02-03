@@ -6,7 +6,7 @@ export const PROGRAM_COMPONENTS = [
     buttonName: 'Actividades formativas',
     itemList: [
       { name: 'Crear', link: '/admin/actividadesFormativas/crear' },
-      { name: "Facilitadores", link: "/admin/actividadesFormativas/facilitadores" },
+      { name: 'Facilitadores', link: '/admin/actividadesFormativas/facilitadores' },
       { name: 'Registro', link: '/admin/actividadesFormativas' },
     ],
   },
@@ -15,7 +15,7 @@ export const PROGRAM_COMPONENTS = [
     buttonName: 'Chat clubs de inglés',
     itemList: [
       { name: 'Crear', link: '/admin/chats/crear' },
-      { name: "Facilitadores", link: "/admin/chats/facilitadores" },
+      { name: 'Facilitadores', link: '/admin/chats/facilitadores' },
       { name: 'Registro', link: '/admin/chats' },
     ],
   },
@@ -35,7 +35,7 @@ export const SCHOLARS = [
     buttonName: 'Becarios',
     icon: userIcon,
     itemList: [
-      { name: "Activos", link: "/admin/becarios" },
+      { name: 'Activos', link: '/admin/becarios' },
       // { name: 'Retirados', link: '/admin/becarios/retirados' },
       // { name: 'Renuncias', link: '/admin/becarios/renuncias' },
       // { name: 'Alumni', link: '/admin/becarios/alumni' },

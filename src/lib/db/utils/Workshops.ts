@@ -5,10 +5,16 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { ActivityStatus, Chat, Prisma, ScholarAttendance, Volunteer, Workshop } from '@prisma/client';
+import {
+  ActivityStatus,
+  Chat,
+  Prisma,
+  ScholarAttendance,
+  Volunteer,
+  Workshop,
+} from '@prisma/client';
 import shortUUID from 'short-uuid';
 import { prisma } from './prisma';
-
 
 export const getWorkshopsByScholar = async (scholarId: string) => {
   const workshops = await prisma.scholar.findUniqueOrThrow({
@@ -19,12 +25,12 @@ export const getWorkshopsByScholar = async (scholarId: string) => {
       program_information: {
         include: {
           attended_workshops: true,
-        }
+        },
       },
     },
   });
   return workshops;
-}
+};
 
 /**
  * Gets the number of workshops with the specified activity status.
@@ -71,7 +77,6 @@ export const getWorkshopsCount = async (): Promise<number> => {
   }
 };
 
-
 const updateWorkshop = async (id: shortUUID.SUUID, data: Workshop) => {
   const workshop = await prisma.workshop.update({
     where: { id },
@@ -89,14 +94,11 @@ export const changeScholarAttendance = async (
     },
     data: {
       attendance: attendance,
-    }
-  })
-}
+    },
+  });
+};
 
-export const enrrrollScholarToWorkshop = async (
-  workshopId: string,
-  scholarId: string,
-) => {
+export const enrrrollScholarToWorkshop = async (workshopId: string, scholarId: string) => {
   await prisma.workshopAttendance.create({
     data: {
       workshop: {
@@ -112,8 +114,7 @@ export const enrrrollScholarToWorkshop = async (
       },
     },
   });
-}
-
+};
 
 export const getWorkshops = async () => {
   const workshops = await prisma.workshop.findMany({
@@ -144,10 +145,11 @@ export const getAllActivities = async (): Promise<[Workshop[], Chat[], Volunteer
     prisma.volunteer.findMany(),
   ]);
   return [workshops, chats, volunteer];
-}
+};
 
-
-export const getSentActivitiesWhereScholarIsNotEnrroled = async (scholarId: string): Promise<[Workshop[], Chat[], Volunteer[]]> => {
+export const getSentActivitiesWhereScholarIsNotEnrroled = async (
+  scholarId: string
+): Promise<[Workshop[], Chat[], Volunteer[]]> => {
   const [workshops, chats, volunteer] = await prisma.$transaction([
     prisma.workshop.findMany({
       where: {
@@ -156,8 +158,8 @@ export const getSentActivitiesWhereScholarIsNotEnrroled = async (scholarId: stri
           none: {
             scholar: {
               scholarId: scholarId,
-            }
-          }
+            },
+          },
         },
       },
       include: {
@@ -168,10 +170,10 @@ export const getSentActivitiesWhereScholarIsNotEnrroled = async (scholarId: stri
             id: true,
             image: true,
             job_company: true,
-          }
+          },
         },
         scholar_attendance: true,
-      }
+      },
     }),
     prisma.chat.findMany({
       where: {
@@ -180,8 +182,8 @@ export const getSentActivitiesWhereScholarIsNotEnrroled = async (scholarId: stri
           none: {
             scholar: {
               scholarId: scholarId,
-            }
-          }
+            },
+          },
         },
       },
       include: {
@@ -200,9 +202,11 @@ export const getSentActivitiesWhereScholarIsNotEnrroled = async (scholarId: stri
     prisma.volunteer.findMany(),
   ]);
   return [workshops, chats, volunteer];
-}
+};
 
-export const getActivitiesByYear = async (year: number): Promise<[Workshop[], Chat[], Volunteer[]]> => {
+export const getActivitiesByYear = async (
+  year: number
+): Promise<[Workshop[], Chat[], Volunteer[]]> => {
   const [allWorkshops, allChats, allVolunteers] = await prisma.$transaction([
     prisma.workshop.findMany(),
     prisma.chat.findMany(),
@@ -212,13 +216,18 @@ export const getActivitiesByYear = async (year: number): Promise<[Workshop[], Ch
   const yearStart = new Date(year, 0, 1);
   const yearEnd = new Date(year, 11, 31);
 
-  const workshops = allWorkshops.filter(workshop => workshop.start_dates.some(date => date >= yearStart && date <= yearEnd));
-  const chats = allChats.filter(chat => chat.start_dates.some(date => date >= yearStart && date <= yearEnd));
-  const volunteers = allVolunteers.filter(volunteer => volunteer.start_dates.some(date => date >= yearStart && date <= yearEnd));
+  const workshops = allWorkshops.filter((workshop) =>
+    workshop.start_dates.some((date) => date >= yearStart && date <= yearEnd)
+  );
+  const chats = allChats.filter((chat) =>
+    chat.start_dates.some((date) => date >= yearStart && date <= yearEnd)
+  );
+  const volunteers = allVolunteers.filter((volunteer) =>
+    volunteer.start_dates.some((date) => date >= yearStart && date <= yearEnd)
+  );
 
   return [workshops, chats, volunteers];
-}
-
+};
 
 // export const getWorkshopsByScholar = async (scholarId: string) => {
 //   const workshops = await prisma.user.findUnique({
@@ -284,12 +293,12 @@ export const getScholarEnrolledActivities = async (scholarId: string) => {
       program_information: {
         include: {
           attended_workshops: true,
-        }
+        },
       },
     },
   });
   return activities;
-}
+};
 
 export const getWorkshop = async (id: shortUUID.SUUID) => {
   const workshop = await prisma.workshop.findUnique({
@@ -303,9 +312,9 @@ export const getWorkshop = async (id: shortUUID.SUUID) => {
               scholar: {
                 include: {
                   collage_information: true,
-                }
+                },
               },
-            }
+            },
           },
         },
       },
@@ -313,48 +322,49 @@ export const getWorkshop = async (id: shortUUID.SUUID) => {
   });
   return workshop;
 };
-export const getWorkshopWithSpecificScholarAttendance = async (activityId: shortUUID.SUUID, scholarId: string) => {
+export const getWorkshopWithSpecificScholarAttendance = async (
+  activityId: shortUUID.SUUID,
+  scholarId: string
+) => {
   const workshop = await prisma.workshopAttendance.findFirst({
     where: {
       workshop_id: activityId,
       scholar: {
         scholarId: scholarId,
-      }
+      },
     },
     include: {
       workshop: {
         include: {
-          speaker: true
-        }
-      }
+          speaker: true,
+        },
+      },
     },
   });
 
   return workshop;
 };
-export const getChatWithSpecificScholarAttendance = async (activityId: shortUUID.SUUID, scholarId: string) => {
+export const getChatWithSpecificScholarAttendance = async (
+  activityId: shortUUID.SUUID,
+  scholarId: string
+) => {
   const workshop = await prisma.chatAttendance.findFirst({
     where: {
       chat_id: activityId,
       scholar: {
         scholarId: scholarId,
-      }
+      },
     },
     include: {
       chat: {
         include: {
-          speaker: true
-        }
-      }
+          speaker: true,
+        },
+      },
     },
   });
   return workshop;
 };
-
-
-
-
-
 
 export const getScheduledWorkshops = async () => {
   const workshops = await prisma.workshop.findMany({
@@ -366,8 +376,7 @@ export const getScheduledWorkshops = async () => {
     },
     orderBy: {
       start_dates: 'asc',
-    }
-
+    },
   });
   return workshops;
 };
@@ -379,7 +388,7 @@ export const getWorkhsopsByScholar = async (scholarId: string) => {
         some: {
           scholar: {
             scholarId: scholarId,
-          }
+          },
         },
       },
     },
@@ -389,13 +398,13 @@ export const getWorkhsopsByScholar = async (scholarId: string) => {
         where: {
           scholar: {
             scholarId: scholarId,
-          }
+          },
         },
       },
     },
   });
   return chats;
-}
+};
 
 export const getChatsByScholar = async (scholarId: string) => {
   const chats = await prisma.chat.findMany({
@@ -406,7 +415,7 @@ export const getChatsByScholar = async (scholarId: string) => {
             some: {
               scholar: {
                 scholarId: scholarId,
-              }
+              },
             },
           },
         },
@@ -414,11 +423,10 @@ export const getChatsByScholar = async (scholarId: string) => {
           speaker: {
             some: {
               id: scholarId,
-            }
-          }
-        }
-
-      ]
+            },
+          },
+        },
+      ],
     },
     include: {
       speaker: true,
@@ -426,14 +434,13 @@ export const getChatsByScholar = async (scholarId: string) => {
         where: {
           scholar: {
             scholarId: scholarId,
-          }
+          },
         },
       },
     },
   });
   return chats;
-}
-
+};
 
 export const getWorkshopsByScholar2 = async (scholarProgramInformationId: string) => {
   const workshops = await prisma.workshopAttendance.findMany({
@@ -443,15 +450,14 @@ export const getWorkshopsByScholar2 = async (scholarProgramInformationId: string
     include: {
       workshop: true,
     },
-  })
+  });
   return workshops;
-}
-
+};
 
 export const addAttendaceToScholar = async (
   workshopId: string,
   scholarId: string,
-  attendance: ScholarAttendance,
+  attendance: ScholarAttendance
 ) => {
   await prisma.workshopAttendance.create({
     data: {
@@ -462,8 +468,8 @@ export const addAttendaceToScholar = async (
       },
       scholar: {
         connect: {
-          scholarId
-        }
+          scholarId,
+        },
       },
       attendance: attendance as ScholarAttendance,
     },
@@ -473,7 +479,7 @@ export const addAttendaceToScholar = async (
 export const addChatAttendaceToScholar = async (
   chatId: string,
   scholarId: string,
-  attendance: ScholarAttendance,
+  attendance: ScholarAttendance
 ) => {
   await prisma.chatAttendance.create({
     data: {
@@ -484,8 +490,8 @@ export const addChatAttendaceToScholar = async (
       },
       scholar: {
         connect: {
-          scholarId
-        }
+          scholarId,
+        },
       },
       attendance: attendance as ScholarAttendance,
     },
@@ -495,7 +501,7 @@ export const addChatAttendaceToScholar = async (
 export const createWorkshop = async (workshop: Prisma.WorkshopCreateArgs) => {
   const createdWorkshop = await prisma.workshop.create(workshop);
   return createdWorkshop;
-}
+};
 
 export const sendWorkshopsToScholar = async (workshopId: string) => {
   await prisma.workshop.update({
@@ -504,16 +510,14 @@ export const sendWorkshopsToScholar = async (workshopId: string) => {
     },
     data: {
       activity_status: 'SENT',
-    }
-  })
-}
-
+    },
+  });
+};
 
 export const editWorkshop = async (workshop: Prisma.WorkshopUpdateArgs) => {
   const editedworkshop = await prisma.workshop.update(workshop);
   return editedworkshop;
-}
-
+};
 
 export const deleteWorkshopFromDatabase = async (id: string) => {
   try {
@@ -531,7 +535,7 @@ export const deleteWorkshopFromDatabase = async (id: string) => {
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
 export const changeWorkshopStatus = async (id: string, status: ActivityStatus) => {
   const workshop = await prisma.workshop.update({
@@ -543,4 +547,4 @@ export const changeWorkshopStatus = async (id: string, status: ActivityStatus) =
     },
   });
   return workshop;
-}
+};

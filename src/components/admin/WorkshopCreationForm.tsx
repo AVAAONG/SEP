@@ -79,6 +79,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
       });
     }
   }, [workshopForEdit, setValue]);
+  const router = useRouter();
 
   const modality = useWatch({
     control,
@@ -88,7 +89,6 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
     control,
     name: 'dates',
   });
-  const router = useRouter();
 
   const handleFormSubmit = async (
     data: z.infer<typeof workshopCreationFormSchema>,
@@ -96,6 +96,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
   ) => {
     const buttonType = ((event?.nativeEvent as SubmitEvent)?.submitter as HTMLButtonElement)?.name;
     const dates = await formatDates(data.dates);
+    console.log(dates, 'dates');
     const workshopSpeakersId = data.speakersId.split(',');
     const speakersData = workshopSpeakersId
       .map((speakerId: string) => {

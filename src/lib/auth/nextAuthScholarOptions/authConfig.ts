@@ -4,7 +4,7 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 import { PagesOptions } from 'next-auth';
-import { EmailUserConfig, OAuthUserConfig, } from 'next-auth/providers';
+import { EmailUserConfig, OAuthUserConfig } from 'next-auth/providers';
 import shortUUID from 'short-uuid';
 
 export const NEXT_SECRET = process.env.NEXTAUTH_SECRET || shortUUID.generate();
@@ -58,7 +58,6 @@ export const googleUserProviderConfig: OAuthUserConfig<any> = {
   clientSecret: GOOGLE_USER_API_CLIENT_SECRET,
   /// @see https://github.com/nextauthjs/next-auth/issues/519#issuecomment-1500498874 for more information
   allowDangerousEmailAccountLinking: true,
-
 };
 
 export const emailUserProviderConfig: EmailUserConfig = {

@@ -1,4 +1,4 @@
-'use server'
+'use server';
 /**
  * @file This file contains utils functions related to calendar, such as creating the event object, the event description, the event link, etc.
  * @author Kevin Bravo (kevinbravo.me)
@@ -139,14 +139,14 @@ export const substractMonths = (montsTosubstract: number) => {
  *
  * @remarks the format needed by the calendar api is `aaaa-mm-ddThh:mm:ss-hh:mm`
  * @remarks If the end hour is not passed as argument, it will add 2 hours to the start hour and set it as the end hour
- * 
+ *
  * @param date the date of the event (the format should be passed as `aaaa-mm-dd`)
  * @param startingHour the hour of the event (the format should be passed as `hh:mm`)
  * @returns the date object of the start and end hour in ISO string format
  */
 export const getISOStringDate = (date: string, hour: string) => {
   const start = new Date(date + ',' + hour);
-  return start.toISOString()
+  return start.toISOString();
 };
 
 /**
@@ -156,11 +156,11 @@ export const getISOStringDate = (date: string, hour: string) => {
  * @returns the meet link and its id
  */
 export const getMeetEventLink = async (calendarId: string, eventId: string) => {
-  console.log('froom google meet')
+  console.log('froom google meet');
   const event = await Calendar.events.get({ calendarId, eventId });
   const meetingLink = event.data.hangoutLink;
   const meetingId = event.data.hangoutLink?.split('/')[3];
-  console.log(meetingLink, meetingId)
+  console.log(meetingLink, meetingId);
   return { meetingLink, meetingId };
 };
 
@@ -196,7 +196,6 @@ export const mapWorkshopSkill = (skill: Skill): string => {
   }
 };
 
-
 export const formatDates = (
   dates: {
     date: string;
@@ -207,11 +206,12 @@ export const formatDates = (
   start_dates: string[];
   end_dates: string[];
 } => {
-  const start_dates = dates.map(({ date, startHour }) => getISOStringDate(date.trim(), startHour.trim()));
+  const start_dates = dates.map(({ date, startHour }) =>
+    getISOStringDate(date.trim(), startHour.trim())
+  );
   const end_dates = dates.map(({ date, endHour }) => getISOStringDate(date.trim(), endHour.trim()));
   return { start_dates, end_dates };
 };
-
 
 export const sumHours = (startHours: string[], endHours: string[]) => {
   let hours: number = 0;

@@ -15,10 +15,7 @@ import { Calendar, setTokens } from '../googleAPI/auth';
 import createCalendarDescription from './calendarDescription';
 import createEventObject from './calendarEventObject';
 import { IChatCalendar, IWorkshopCalendar } from './d';
-import {
-  getMeetEventLink,
-  substractMonths
-} from './utils';
+import { getMeetEventLink, substractMonths } from './utils';
 
 interface MeetingDetails {
   meetingLink: string | null | undefined;
@@ -26,11 +23,13 @@ interface MeetingDetails {
   meetingPassword?: string | null | undefined;
 }
 let googleMeetLink;
-let googleMeetId
-export const createCalendarEvent = async (values: IWorkshopCalendar | IChatCalendar): Promise<[string[], MeetingDetails[]]> => {
-  await setTokens()
+let googleMeetId;
+export const createCalendarEvent = async (
+  values: IWorkshopCalendar | IChatCalendar
+): Promise<[string[], MeetingDetails[]]> => {
+  await setTokens();
   const calendarId = 'asociated_skill' in values ? WORKSHOP_CALENDAR_ID : CHAT_CALENDAR_ID;
-  let meetingDetails: MeetingDetails[] = []
+  let meetingDetails: MeetingDetails[] = [];
   const { platform } = values;
   const [eventDetails, zoomMeetDetails] = await createEventDetails(values);
   const events = eventDetails.map(async (event) => {
@@ -43,9 +42,11 @@ export const createCalendarEvent = async (values: IWorkshopCalendar | IChatCalen
   });
   const eventsIds = (await Promise.all(events)).map((event) => event.data.id!);
   if (platform === 'GOOGLE_MEET') {
-    const googleMeetEventDetails = eventsIds.map(async (eventId) => await getMeetEventLink(calendarId, eventId))
+    const googleMeetEventDetails = eventsIds.map(
+      async (eventId) => await getMeetEventLink(calendarId, eventId)
+    );
     meetingDetails = await Promise.all(googleMeetEventDetails);
-  } else if (platform === 'ZOOM') meetingDetails = [...zoomMeetDetails]
+  } else if (platform === 'ZOOM') meetingDetails = [...zoomMeetDetails];
   return [eventsIds, meetingDetails];
 };
 
@@ -59,29 +60,33 @@ export const createCalendarEvent = async (values: IWorkshopCalendar | IChatCalen
  */
 const createEventDetails = async (
   values: IWorkshopCalendar | IChatCalendar
-): Promise<[calendar_v3.Schema$Event[], {
-  meetingLink: string | null | undefined
-  meetingId: string | null | undefined
-  meetingPassword?: string | null | undefined
-}[]]> => {
-  const {
-    title,
-    start_dates,
-    end_dates,
-    modality,
-    platform,
-  } = values
-  let calendarDescription: string = ''
+): Promise<
+  [
+    calendar_v3.Schema$Event[],
+    {
+      meetingLink: string | null | undefined;
+      meetingId: string | null | undefined;
+      meetingPassword?: string | null | undefined;
+    }[],
+  ]
+> => {
+  const { title, start_dates, end_dates, modality, platform } = values;
+  let calendarDescription: string = '';
   let eventDetails: calendar_v3.Schema$Event[];
   const zoomMeetDetails: {
-    meetingLink: string | null | undefined
-    meetingId: string | null | undefined
-    meetingPassword?: string | null | undefined
+    meetingLink: string | null | undefined;
+    meetingId: string | null | undefined;
+    meetingPassword?: string | null | undefined;
   }[] = [];
 
-  const attendees = values.speakersData.map(speaker => {
-    return { email: speaker.speakerEmail, displayName: speaker.speakerName, organizer: true, responseStatus: 'accepted', }
-  })
+  const attendees = values.speakersData.map((speaker) => {
+    return {
+      email: speaker.speakerEmail,
+      displayName: speaker.speakerName,
+      organizer: true,
+      responseStatus: 'accepted',
+    };
+  });
 
   if (modality === 'IN_PERSON') {
     calendarDescription = createCalendarDescription(values);
@@ -99,25 +104,35 @@ const createEventDetails = async (
     });
   } else if (modality === 'ONLINE') {
     if (platform === 'ZOOM') {
-      eventDetails = await Promise.all(start_dates.map(async (startDate, index) => {
-        const [meetingLink, meetingId, meetingPassword] = await createZoomMeeting(title, startDate);
-        zoomMeetDetails.push({
-          meetingLink, meetingId, meetingPassword
+      eventDetails = await Promise.all(
+        start_dates.map(async (startDate, index) => {
+          const [meetingLink, meetingId, meetingPassword] = await createZoomMeeting(
+            title,
+            startDate
+          );
+          zoomMeetDetails.push({
+            meetingLink,
+            meetingId,
+            meetingPassword,
+          });
+          calendarDescription = createCalendarDescription(
+            values,
+            meetingLink,
+            meetingId,
+            meetingPassword
+          );
+          const endDate = end_dates![index];
+          return createEventObject(
+            title,
+            modality,
+            meetingLink,
+            calendarDescription,
+            startDate,
+            endDate,
+            attendees
+          );
         })
-        calendarDescription = createCalendarDescription(values,
-          meetingLink, meetingId, meetingPassword
-        );
-        const endDate = end_dates![index];
-        return createEventObject(
-          title,
-          modality,
-          meetingLink,
-          calendarDescription,
-          startDate,
-          endDate,
-          attendees
-        );
-      }))
+      );
     } else {
       calendarDescription = createCalendarDescription(values);
       eventDetails = start_dates.map((startDate, index) => {
@@ -150,7 +165,6 @@ const createEventDetails = async (
   }
   return [eventDetails, zoomMeetDetails];
 };
-
 
 /**
  * Lists the events of a calendar of the last 3 months.
@@ -217,24 +231,27 @@ export const listCalendars = async (): Promise<string[] | null> => {
 };
 
 export const deleteCalendarEvent = async (calendarId: string, eventId: string) => {
-  await setTokens()
+  await setTokens();
   await Calendar.events.delete({
     calendarId,
     eventId,
   });
 };
 
-export const updateCalendarEvent = async (eventsIdForUpdates: string[], values: IWorkshopCalendar | IChatCalendar, meetingEvents: string[]) => {
-  await setTokens()
+export const updateCalendarEvent = async (
+  eventsIdForUpdates: string[],
+  values: IWorkshopCalendar | IChatCalendar,
+  meetingEvents: string[]
+) => {
+  await setTokens();
   const calendarId = 'asociated_skill' in values ? WORKSHOP_CALENDAR_ID : CHAT_CALENDAR_ID;
-  let meetingDetails: MeetingDetails[] = []
+  let meetingDetails: MeetingDetails[] = [];
   const { platform } = values;
   eventsIdForUpdates.map(async (eventId, index) => {
     let meetingDetails: MeetingDetails = {
       meetingLink: null,
       meetingId: null,
-      meetingPassword: null
-
+      meetingPassword: null,
     };
     if (platform.toLowerCase().trim() === 'ZOOM') {
       if (meetingEvents.length === 0) {
@@ -242,11 +259,14 @@ export const updateCalendarEvent = async (eventsIdForUpdates: string[], values: 
         meetingDetails = {
           meetingId: zoom[1],
           meetingLink: zoom[0],
-          meetingPassword: zoom[2]
-        }
-      }
-      else {
-        meetingDetails = await updateZoomMeeting(meetingEvents[index], values.title, values.start_dates as unknown as string);
+          meetingPassword: zoom[2],
+        };
+      } else {
+        meetingDetails = await updateZoomMeeting(
+          meetingEvents[index],
+          values.title,
+          values.start_dates as unknown as string
+        );
       }
     }
     const eventDetails = await updateEventDetails(values, meetingDetails);
@@ -255,11 +275,9 @@ export const updateCalendarEvent = async (eventsIdForUpdates: string[], values: 
       eventId,
       requestBody: eventDetails,
     });
-  })
+  });
   return meetingDetails;
-
-}
-
+};
 
 export const getDate = () => {
   let date = new Date().toISOString();
@@ -272,19 +290,13 @@ const updateEventDetails = async (
   values: IWorkshopCalendar | IChatCalendar,
   meetingDetails?: MeetingDetails
 ): Promise<calendar_v3.Schema$Event> => {
-  const {
-    title,
-    start_dates,
-    end_dates,
-    modality,
-    platform,
-  } = values
-  let calendarDescription: string = ''
+  const { title, start_dates, end_dates, modality, platform } = values;
+  let calendarDescription: string = '';
   let eventDetails: calendar_v3.Schema$Event;
 
-  const attendees = values.speakersData.map(speaker => {
-    return { email: speaker.speakerEmail, displayName: speaker.speakerName }
-  })
+  const attendees = values.speakersData.map((speaker) => {
+    return { email: speaker.speakerEmail, displayName: speaker.speakerName };
+  });
 
   if (modality === 'IN_PERSON') {
     calendarDescription = createCalendarDescription(values);
@@ -297,11 +309,13 @@ const updateEventDetails = async (
       end_dates as unknown as string,
       attendees
     );
-
   } else if (modality === 'ONLINE') {
     if (platform === 'ZOOM') {
-      calendarDescription = createCalendarDescription(values,
-        meetingDetails?.meetingLink!, meetingDetails?.meetingId!, meetingDetails?.meetingPassword!
+      calendarDescription = createCalendarDescription(
+        values,
+        meetingDetails?.meetingLink!,
+        meetingDetails?.meetingId!,
+        meetingDetails?.meetingPassword!
       );
       eventDetails = createEventObject(
         title,
@@ -312,8 +326,6 @@ const updateEventDetails = async (
         end_dates as unknown as string,
         attendees
       );
-
-
     } else {
       calendarDescription = createCalendarDescription(values);
       eventDetails = createEventObject(
@@ -337,7 +349,6 @@ const updateEventDetails = async (
       end_dates as unknown as string,
       attendees
     );
-
   }
   return eventDetails;
 };

@@ -110,7 +110,6 @@ const createEventObject = (
   );
 
   if (modality === 'IN_PERSON') event = defaultEvent;
-
   else if (modality === 'ONLINE') {
     if (platform === 'PADLET') {
       event = {
@@ -129,7 +128,7 @@ const createEventObject = (
     }
   } else {
     throw new Error('No se especificó un tipo de modalidad válido');
-  };
+  }
   return event;
 };
 

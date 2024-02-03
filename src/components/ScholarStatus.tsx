@@ -4,7 +4,7 @@ import BasicModal from './BasicModal';
 import ProbationAccordion from './ProbationAccordion';
 
 type ScholarStatusProps = {
-  scholar: any
+  scholar: any;
 };
 const statusConfig = {
   NORMAL: {
@@ -38,12 +38,12 @@ const ScholarStatus: React.FC<ScholarStatusProps> = ({ scholar }) => {
       </Button>
       <BasicModal
         isOpen={isOpen}
-        size='5xl'
+        size="5xl"
         onOpenChange={onOpenChange}
-        title='Casos de probatorio'
+        title="Casos de probatorio"
         Content={() => <ProbationAccordion scholarInProbation={scholar} />}
         isButtonDisabled={false}
-        onConfirm={async () => { }}
+        onConfirm={async () => {}}
         confirmText=""
       />
     </>

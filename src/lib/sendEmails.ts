@@ -48,4 +48,4 @@ export const sendGenericEmail = async (htmlMessage: string, to: string, subject:
   if (failed.length) {
     throw new Error(`Email (${failed.join(', ')}) could not be sent`);
   }
-}
+};
