@@ -6,7 +6,7 @@
 
 import { Skill } from '@prisma/client';
 import axios, { AxiosRequestConfig } from 'axios';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { Calendar } from '../googleAPI/auth';
 
 /**
@@ -161,7 +161,7 @@ function combineDateAndTime(dateString: string, timeString: string): string {
   });
 
   // Format the combined date and time as an ISO string
-  const combinedDateTime = date.toISOString();
+  const combinedDateTime = date.tz("America/Caracas").toISOString();
 
   return combinedDateTime;
 }
