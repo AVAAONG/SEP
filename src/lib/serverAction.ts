@@ -67,9 +67,7 @@ export const handleEnrollment = async (activityId: string, scholarId: string, ev
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        newAttendees: {
-          email,
-        },
+        newAttende: email,
         eventId,
         calendarId: kindOfActivity === 'workshop' ? WORKSHOP_CALENDAR_ID : CHAT_CALENDAR_ID,
       })
