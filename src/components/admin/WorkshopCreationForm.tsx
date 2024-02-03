@@ -96,7 +96,6 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
   ) => {
     const buttonType = ((event?.nativeEvent as SubmitEvent)?.submitter as HTMLButtonElement)?.name;
     const dates = await formatDates(data.dates);
-    console.log(dates, 'dates');
     const workshopSpeakersId = data.speakersId.split(',');
     const speakersData = workshopSpeakersId
       .map((speakerId: string) => {

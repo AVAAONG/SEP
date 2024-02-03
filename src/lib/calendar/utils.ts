@@ -149,6 +149,23 @@ export const getISOStringDate = (date: string, hour: string) => {
   return start.toISOString();
 };
 
+function combineDateAndTime(dateString: string, timeString: string): string {
+  // Parse the date string (e.g., '2024/03/10') and time string (e.g., '13:00')
+  const date = moment(dateString, 'YYYY/MM/DD');
+  const time = moment(timeString, 'HH:mm');
+
+  // Set the hours and minutes of the date
+  date.set({
+    hour: time.hour(),
+    minute: time.minute(),
+  });
+
+  // Format the combined date and time as an ISO string
+  const combinedDateTime = date.toISOString();
+
+  return combinedDateTime;
+}
+
 /**
  * gets the google meet meeting link of an specific event
  *
@@ -207,9 +224,9 @@ export const formatDates = (
   end_dates: string[];
 } => {
   const start_dates = dates.map(({ date, startHour }) =>
-    getISOStringDate(date.trim(), startHour.trim())
+    combineDateAndTime(date.trim(), startHour.trim())
   );
-  const end_dates = dates.map(({ date, endHour }) => getISOStringDate(date.trim(), endHour.trim()));
+  const end_dates = dates.map(({ date, endHour }) => combineDateAndTime(date.trim(), endHour.trim()));
   return { start_dates, end_dates };
 };
 

@@ -18,16 +18,18 @@ import { useDisclosure } from '@nextui-org/modal';
 import { cn } from '@nextui-org/react';
 import { ScrollShadow } from '@nextui-org/scroll-shadow';
 import { Tooltip } from '@nextui-org/tooltip';
+import moment from 'moment';
+import 'moment/locale/es';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import BasicModal from './BasicModal';
-
 type ScheduleChatCardProps = {
   activities: ChatWithSpeaker[] | WorkshopWithSpeaker[];
 };
 
 const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
+  const router = useRouter();
   const [groupSelected, setGroupSelected] = useState<string[]>([]);
   const [buttonIsDisabled, setbuttonIsDisabled] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<
@@ -37,16 +39,9 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
   const editModal = useDisclosure();
   const deleteModal = useDisclosure();
   const sendModal = useDisclosure();
-  let router;
 
-  const mounted = useRef(false);
 
-  useEffect(() => {
-    mounted.current = true;
-  }, []);
-  if (mounted.current) {
-    router = useRouter();
-  }
+
   const editWorkshop = async (chatId: string) => {
     router.push(`?activityToEdit=${chatId}`);
   };
@@ -160,24 +155,13 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
                   </div>
                   <div className="flex-1 min-w-0 text-center">
                     <p className="text-sm font-medium ">
-                      {new Date(start_dates[0]).toLocaleDateString('es-ES', {
-                        month: 'long',
-                        day: 'numeric',
-                      })}
+                      {moment(start_dates[0]).locale('es').format('D MMMM')}
                     </p>
                     <p className="text-xs   ">
                       De{' '}
-                      {new Date(start_dates[0]).toLocaleString('es-ES', {
-                        hour: '2-digit',
-                        hour12: true,
-                        minute: '2-digit',
-                      })}{' '}
+                      {moment(start_dates[0]).format('hh:mm A')}{' '}
                       a{' '}
-                      {new Date(end_dates[0]).toLocaleString('es-ES', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: true,
-                      })}
+                      {moment(end_dates[0]).format('hh:mm A')}
                     </p>
                   </div>
                   {asociated_skill && (
@@ -297,21 +281,11 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
                                 </span>{' '}
                                 pautada para el dia{' '}
                                 <span className="font-medium ">
-                                  {new Date(selectedActivity!.start_dates[0]).toLocaleDateString(
-                                    'es-ES',
-                                    { day: 'numeric', month: 'long', year: 'numeric' }
-                                  )}
+                                  {moment(selectedActivity!.start_dates[0]).locale('es').format('LL')}
                                 </span>{' '}
                                 a las{' '}
                                 <span className="font-medium ">
-                                  {new Date(selectedActivity!.start_dates[0]).toLocaleTimeString(
-                                    'es-ES',
-                                    {
-                                      hour: '2-digit',
-                                      minute: '2-digit',
-                                      hour12: true,
-                                    }
-                                  )}
+                                  {moment(selectedActivity!.start_dates[0]).format('hh:mm A')}
                                 </span>{' '}
                                 sera editada
                               </p>
