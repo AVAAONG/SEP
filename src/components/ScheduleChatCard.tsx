@@ -8,6 +8,7 @@ import { revalidateSpecificPath } from '@/lib/serverAction';
 import {
   parseChatLevelFromDatabase,
   parseModalityFromDatabase,
+  parsePlatformFromDatabase,
   parseSkillFromDatabase,
 } from '@/lib/utils2';
 import { deleteZoomMeeting } from '@/lib/zoom';
@@ -179,7 +180,7 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
                   )}
                   <div className="flex-1 min-w-0 text-center">
                     <p className="text-sm font-medium ">{parseModalityFromDatabase(modality)} </p>
-                    <p className="text-xs">{platform}</p>
+                    <p className="text-xs">{parsePlatformFromDatabase(platform)}</p>
                   </div>
                   <div className=" flex flex-col w-6">
                     <Button
