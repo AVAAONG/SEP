@@ -81,7 +81,7 @@ const createEventDetails = async (
 
   const attendees = values.speakersData.map((speaker) => {
     return {
-      email: speaker.speakerEmail,
+      email: speaker.speakerEmail ? speaker.speakerEmail : 'avaatecnologia@gmail.com',
       displayName: speaker.speakerName,
       organizer: true,
       responseStatus: 'accepted',
