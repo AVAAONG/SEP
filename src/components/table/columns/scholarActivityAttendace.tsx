@@ -3,6 +3,7 @@ import defailProfilePic from '@/../public/defaultProfilePic.png';
 import { IScholarForAttendanceTable } from '@/app/admin/chats/[chatId]/page';
 import { changeScholarAttendance } from '@/lib/db/utils/Workshops';
 import formatDni from '@/lib/db/utils/formatDni';
+import { Chip } from '@nextui-org/react';
 import { ScholarAttendance } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -78,32 +79,42 @@ const ScholarActivityAttendance: Column<IScholarForAttendanceTable>[] = [
     accessor: 'attendance',
     Cell: ({ value, cell }) => {
       const [attendace, setAttendance] = useState(value);
-      return (
-        <select
-          className={`border-0 cursor-pointer rounded-full font-medium w-24 text-xs  p-0 outline-transparent ${
-            attendace === 'ATTENDED'
+      if (attendace === 'CANCELLED') {
+        return (
+          <Chip color='danger'>
+            Canceló
+          </Chip>
+        )
+      }
+      else if (attendace === 'ENROLLED') {
+        return (
+          <Chip >
+            Inscrito
+          </Chip>
+        )
+      }
+      else {
+        return (
+          <select
+            className={`border-0 cursor-pointer rounded-full font-medium w-24 text-xs  p-0 outline-transparent ${attendace === 'ATTENDED'
               ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
               : attendace === 'NOT_ATTENDED'
                 ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
-                : attendace === 'WAITING_LIST'
-                  ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
-                  : attendace === 'ENROLLED'
-                    ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
-                    : ''
-          }`}
-          value={attendace}
-          onChange={async (event) => {
-            const attendance = event.target.value as ScholarAttendance;
-            await changeScholarAttendance(cell.row.original.id, attendance);
-            return setAttendance(attendance);
-          }}
-        >
-          <option value="ATTENDED">Asistió</option>
-          <option value="NOT_ATTENDED">No asistió</option>
-          <option value="WAITING_LIST">Lista de espera</option>
-          <option value="ENROLLED">Inscrito</option>
-        </select>
-      );
+                : ''
+              }`}
+            value={attendace}
+            onChange={async (event) => {
+              const attendance = event.target.value as ScholarAttendance;
+              await changeScholarAttendance(cell.row.original.id, attendance);
+              return setAttendance(attendance);
+            }}
+          >
+            <option value="ATTENDED">Asistió</option>
+            <option value="NOT_ATTENDED">No asistió</option>
+          </select>
+        );
+      }
+
     },
   },
   {
