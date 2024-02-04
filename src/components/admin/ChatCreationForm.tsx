@@ -1,7 +1,7 @@
 'use client';
 import { createCalendarEvent, updateCalendarEvent } from '@/lib/calendar/calendar';
+import { formatDates } from '@/lib/calendar/clientUtils';
 import { IChatCalendar } from '@/lib/calendar/d';
-import { formatDates } from '@/lib/calendar/utils';
 import { CHAT_LEVELS, MODALITY } from '@/lib/constants';
 import { ChatWithSpeaker } from '@/lib/db/types';
 import { createChat, editChat } from '@/lib/db/utils/chats';

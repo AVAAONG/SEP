@@ -144,11 +144,6 @@ export const substractMonths = (montsTosubstract: number) => {
  * @param startingHour the hour of the event (the format should be passed as `hh:mm`)
  * @returns the date object of the start and end hour in ISO string format
  */
-export const getISOStringDate = (date: string, hour: string) => {
-  const start = new Date(date + ',' + hour);
-  return start.toISOString();
-};
-
 function combineDateAndTime(dateString: string, timeString: string): string {
   // Parse the input date and time
   const parsedDate = moment(dateString, 'YYYY-MM-DD');
@@ -162,8 +157,7 @@ function combineDateAndTime(dateString: string, timeString: string): string {
     millisecond: 0, // Optional: Set milliseconds to 0
   });
   // Convert to UTC based on the specified time zone
-  const utcDateTime = combinedDateTime.tz('America/Caracas').utc();
-
+  const utcDateTime = combinedDateTime.utc();
   // Return the ISO string
   return utcDateTime.toISOString();
 }
