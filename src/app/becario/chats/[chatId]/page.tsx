@@ -2,6 +2,7 @@ import ActivityPanelInfo from '@/components/ActivityPanelInfo';
 import ActivityScholarActions from '@/components/ActivityScholarActions';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
+import ScholarActivityAttendanceForScholarTemp from '@/components/table/columns/scholatActivityAttendanceForScholarTemp';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { ChatWithSpeaker } from '@/lib/db/types';
 import { getChatWithSpecificScholarAttendance } from '@/lib/db/utils/Workshops';
@@ -30,28 +31,34 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
     chatForSpeaker?.scholar_attendance ? chatForSpeaker.scholar_attendance : []
   );
 
-
   return (
     <div className="min-h-screen">
       <ActivityPanelInfo activity={chat as ChatWithSpeaker}  >
-        <div className='w-full flex  items-center justify-end'>
-          Estatus de asistencia = {attendance?.attendance!}
-          <ActivityScholarActions activityId={chatId} attendanceId={attendance?.id!} kindOfActivity='chat' scholars={scholars} isButtonDisabled={isDisabled()} />
-        </div>
-      </ActivityPanelInfo>
-      {chat?.speaker[0].id === se?.scholarId && (
-        <section className="w-full space-y-3">
-          <h2 className="px-8 text-2xl leading-none tracking-tight text-primary-light font-semibold">
-            Becarios
-          </h2>
-          <div className="flex flex-row items-center space-x-2">
-            <div className="overflow-x-scroll md:overflow-x-clip rounded-lg w-full">
-              <Table
-                tableColumns={ScholarActivityAttendance}
-                tableData={scholarAttendanceDataForTable}
-                tableHeadersForSearch={[]}
-              >
-                {/* <ExportButton
+        {chat?.speaker[0].id === se?.scholarId ? (
+          <></>
+        ) : (
+          <div className='w-full flex  items-center justify-end'>
+            Estatus de asistencia = {attendance?.attendance!}
+            <ActivityScholarActions activityId={chatId} attendanceId={attendance?.id!} kindOfActivity='chat' scholars={scholars} isButtonDisabled={isDisabled()} />
+          </div>
+
+        )
+        }
+      </ActivityPanelInfo >
+      {
+        chat?.speaker[0].id === se?.scholarId ? (
+          <section className="w-full space-y-3">
+            <h2 className="px-8 text-2xl leading-none tracking-tight text-primary-light font-semibold">
+              Becarios
+            </h2>
+            <div className="flex flex-row items-center space-x-2">
+              <div className="overflow-x-scroll md:overflow-x-clip rounded-lg w-full">
+                <Table
+                  tableColumns={ScholarActivityAttendance}
+                  tableData={scholarAttendanceDataForTable}
+                  tableHeadersForSearch={[]}
+                >
+                  {/* <ExportButton
                   activityTitle={chat.title!}
                   competenceOrLevel={parseChatLevelFromDatabase(chat.level!)}
                   date={chat.start_dates ? new Date(chat.start_dates[0]).toLocaleDateString('ez-VE') : ''}
@@ -71,12 +78,28 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
                   }
                   attendeesData={scholarDataToExport}
                 /> */}
-              </Table>
+                </Table>
+              </div>
             </div>
-          </div>
-        </section>
-      )}
-    </div>
+          </section>
+        ) : (
+          <section className="w-full space-y-3">
+            <h2 className="px-8 text-2xl leading-none tracking-tight text-primary-light font-semibold">
+              Becarios inscritos
+            </h2>
+            <div className="flex flex-row items-center space-x-2">
+              <div className="overflow-x-scroll md:overflow-x-clip rounded-lg w-full">
+                <Table
+                  tableColumns={ScholarActivityAttendanceForScholarTemp}
+                  tableData={scholarAttendanceDataForTable}
+                  tableHeadersForSearch={[]}
+                />
+              </div>
+            </div>
+          </section>
+        )
+      }
+    </div >
   );
 };
 
