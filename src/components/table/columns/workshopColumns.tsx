@@ -25,12 +25,12 @@ interface WorkshopDetails {
   startHour: Date;
   endHour: Date;
   status:
-    | 'Asistencia no pasada'
-    | 'Realizado'
-    | 'Programado'
-    | 'Enviado'
-    | 'En progreso'
-    | 'Suspendido';
+  | 'Asistencia no pasada'
+  | 'Realizado'
+  | 'Programado'
+  | 'Enviado'
+  | 'En progreso'
+  | 'Suspendido';
   skill: Skill;
   modality: Modality;
   platform: string;
@@ -87,6 +87,14 @@ const WorkshopColumns: Column<WorkshopDetails>[] = [
   {
     Header: 'Inicio',
     accessor: 'startHour',
+    Cell: ({ value }) => {
+      console.log(value)
+      return <>{new Date(value).toLocaleTimeString('es-ES', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+      })}</>
+    }
   },
   {
     accessor: 'status',

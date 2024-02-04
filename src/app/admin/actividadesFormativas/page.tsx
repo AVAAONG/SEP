@@ -135,11 +135,7 @@ const page = async ({
         day: 'numeric',
         year: 'numeric',
       }),
-      startHour: new Date(workshop.start_dates[0]).toLocaleTimeString('es-ES', {
-        hour: 'numeric',
-        minute: 'numeric',
-        hourCycle: 'h12',
-      }),
+      startHour: new Date(workshop.start_dates[0]).toISOString(),
       status: parseWorkshopStatusFromDatabase(workshop.activity_status),
       skill: parseSkillFromDatabase(workshop.asociated_skill),
       modality: parseModalityFromDatabase(workshop.modality),
