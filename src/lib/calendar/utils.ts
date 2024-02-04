@@ -151,8 +151,8 @@ export const getISOStringDate = (date: string, hour: string) => {
 
 function combineDateAndTime(dateString: string, timeString: string): string {
   // Parse the date string (e.g., '2024/03/10') and time string (e.g., '13:00')
-  const date = moment(dateString, 'YYYY/MM/DD');
-  const time = moment(timeString, 'HH:mm');
+  const date = moment.utc(dateString, 'YYYY/MM/DD');
+  const time = moment.utc(timeString, 'HH:mm');
 
   // Set the hours and minutes of the date
   date.set({
@@ -163,6 +163,7 @@ function combineDateAndTime(dateString: string, timeString: string): string {
   // Format the combined date and time as an ISO string
   const combinedDateTime = date.toISOString();
   console.log(combinedDateTime)
+  console.log(date)
 
   return combinedDateTime;
 }
