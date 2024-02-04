@@ -64,8 +64,8 @@ export const formatActivityEventsForBigCalendar = (
           ? `(${eventModalityTitle}) ${title} (${index + 1})`
           : `(${eventModalityTitle}) ${title}`,
       allDay: false,
-      start: new Date(new Date(startDate).toLocaleDateString('es-ES')),
-      end: new Date(new Date(end_dates[index] || end_dates[0]).toLocaleDateString('es-ES')),
+      start: new Date(startDate),
+      end: new Date(end_dates[index] || end_dates[0]),
       description: description as string,
       bgColor,
       isSuspended: activity_status === 'SUSPENDED',
