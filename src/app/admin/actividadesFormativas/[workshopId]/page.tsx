@@ -44,6 +44,10 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
   const unAttendedScholarsCount = scholar_attendance?.filter(
     (scholar_att) => scholar_att.attendance === 'NOT_ATTENDED'
   ).length;
+  const cancelledScholarsCount = scholar_attendance?.filter(
+    (scholar_att) => scholar_att.attendance === 'CANCELLED'
+  ).length;
+
 
   const g = [
     {
@@ -60,7 +64,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
     },
     {
       title: 'Total de cancelaciones',
-      value: 0,
+      value: cancelledScholarsCount,
     },
   ];
 
