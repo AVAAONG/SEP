@@ -1,10 +1,10 @@
+import defailProfilePic from '@/../public/defaultProfilePic.png';
 import { ChatWithSpeaker, WorkshopWithSpeaker } from "@/lib/db/types";
 import { parsePlatformFromDatabase } from "@/lib/utils2";
 import moment from "moment";
-// import 'moment/locale/es-ve'; // import the locale
 import Image from "next/image";
 import ActivityStatusIndicator from "./table/ActivityStatus";
-// moment.locale('es-ve');
+
 interface ActivityPanelInfoProps {
 	activity: WorkshopWithSpeaker | ChatWithSpeaker;
 	children: React.ReactNode;
@@ -79,7 +79,7 @@ const ActivityPanelInfo: React.FC<ActivityPanelInfoProps> = ({ activity, childre
 									<Image
 										alt={s.first_names}
 										loading="lazy"
-										src={s.image || ''}
+										src={s.image || defailProfilePic}
 										className="max-h-[72px] overflow-hidden rounded-full"
 										width="72"
 										height="72"
