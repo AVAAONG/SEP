@@ -1,5 +1,6 @@
 'use client';
 import { createCalendarEvent, updateCalendarEvent } from '@/lib/calendar/calendar';
+import { formatDatesClient } from '@/lib/calendar/clientUtils';
 import { IWorkshopCalendar } from '@/lib/calendar/d';
 import { formatDates } from '@/lib/calendar/utils';
 import { MODALITY, PROGRAM_COMPONENTS, WORKSHOP_TYPES, WORKSHOP_YEAR } from '@/lib/constants';
@@ -95,7 +96,8 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
     const buttonType = ((event?.nativeEvent as SubmitEvent)?.submitter as HTMLButtonElement)?.name;
-    const dates = await formatDates(data.dates);
+    const dates = formatDatesClient(data.dates); //client formating
+    const calendarDates = await formatDates(data.dates); //server formating
     const workshopSpeakersId = data.speakersId.split(',');
     const speakersData = workshopSpeakersId
       .map((speakerId: string) => {
@@ -112,7 +114,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
     const calendarWorkshop: IWorkshopCalendar = {
       platform: platformInPerson ? platformInPerson : platformOnline!,
       speakersData,
-      ...dates,
+      ...calendarDates,
       ...restData,
       description: data.description ? data.description : null,
     };

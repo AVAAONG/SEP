@@ -34,7 +34,7 @@ function combineDateAndTime(dateString: string, timeString: string): string {
     return utcDateTime.toISOString();
 }
 
-export const formatDates = (
+export const formatDatesClient = (
     dates: {
         date: string;
         startHour: string;
