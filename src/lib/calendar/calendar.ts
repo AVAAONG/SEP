@@ -295,7 +295,7 @@ const updateEventDetails = async (
   let eventDetails: calendar_v3.Schema$Event;
 
   const attendees = values.speakersData.map((speaker) => {
-    return { email: speaker.speakerEmail, displayName: speaker.speakerName };
+    return { email: speaker.speakerEmail ? speaker.speakerEmail : 'avaatecnologia@gmail.com', displayName: speaker.speakerName };
   });
 
   if (modality === 'IN_PERSON') {
