@@ -1,12 +1,12 @@
 import ActivityPanelInfo from '@/components/ActivityPanelInfo';
 import ActivityScholarActions from '@/components/ActivityScholarActions';
+import Table from '@/components/table/Table';
 import ScholarActivityAttendanceForScholarTemp from '@/components/table/columns/scholatActivityAttendanceForScholarTemp';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { WorkshopWithSpeaker } from '@/lib/db/types';
 import { getWorkshop, getWorkshopWithSpecificScholarAttendance } from '@/lib/db/utils/Workshops';
 import { getNotEnrolledScholarsInWorkshop } from '@/lib/db/utils/users';
 import { formatScholarDataForAttendanceTable } from '@/lib/tableUtils';
-import { Table } from '@nextui-org/react';
 import { getServerSession } from 'next-auth';
 import shortUUID from 'short-uuid';
 
@@ -30,7 +30,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
 
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col gap-4">
       <ActivityPanelInfo activity={workshop as WorkshopWithSpeaker}  >
         <div className='w-full flex  items-center justify-end'>
           Estatus de asistencia = {attendance?.attendance!}

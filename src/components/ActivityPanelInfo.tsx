@@ -1,3 +1,4 @@
+'use client'
 import defailProfilePic from '@/../public/defaultProfilePic.png';
 import { ChatWithSpeaker, WorkshopWithSpeaker } from "@/lib/db/types";
 import { parsePlatformFromDatabase } from "@/lib/utils2";
@@ -43,7 +44,7 @@ const ActivityPanelInfo: React.FC<ActivityPanelInfoProps> = ({ activity, childre
 									<div className="space-y-sm">
 										<h3 className="text-sm leading-6 text-secondary">Hora de inicio {index + 1}:</h3>
 										<p className="text-base font-semibold">
-											{moment(date).format('HH:mm').toUpperCase()}
+											<DisplayTime time={date.toISOString()} />
 										</p>
 									</div>
 									<div className="space-y-sm">

@@ -32,7 +32,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
   );
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col gap-4">
       <ActivityPanelInfo activity={chat as ChatWithSpeaker}  >
         {chat?.speaker[0].id === se?.scholarId ? (
           <></>
