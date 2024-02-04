@@ -3,6 +3,8 @@
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './calendar.css';
 
+import { createEnrollementConfirmationMessage } from '@/lib/htmlConfirmationTemplate';
+import { sendGenericEmail } from '@/lib/sendEmails';
 import { handleEnrollment } from '@/lib/serverAction';
 import {
   parseChatLevelFromDatabase,
@@ -189,15 +191,15 @@ const CalendarForEnrrolling = ({ events, scholarName }: { events: any[]; scholar
               error: 'Error al inscribirte en la actividad. Inténtalo de nuevo más tarde.',
             }
           );
-          // await sendGenericEmail(
-          //   createEnrollementConfirmationMessage(
-          //     scholarName,
-          //     `www.programaexcelencia.org/becario/actividadesFormativas/${selectedEvent.id}`,
-          //     selectedEvent.originalTitle
-          //   ),
-          //   d.data.user?.email,
-          //   'Confirmacion de inscripción'
-          // );
+          await sendGenericEmail(
+            createEnrollementConfirmationMessage(
+              scholarName,
+              `www.programaexcelencia.org/becario/actividadesFormativas/${selectedEvent.id}`,
+              selectedEvent.originalTitle
+            ),
+            d.data.user?.email,
+            'Confirmacion de inscripción'
+          );
           onClose();
 
         }}
