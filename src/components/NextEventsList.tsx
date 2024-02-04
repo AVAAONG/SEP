@@ -1,3 +1,4 @@
+'use client'
 import { Tooltip } from '@nextui-org/tooltip';
 import { Chat, Volunteer, Workshop } from '@prisma/client';
 import Link from 'next/link';
@@ -53,11 +54,15 @@ const NextEventsList = ({ activities }: { activities: (Workshop | Chat | Volunte
                             />
                           </svg>
                           <span className="ml-1 text-gray-500 dark:text-gray-400">
-                            {activity.start_dates[0].toLocaleDateString()}
+                            {activity.start_dates[0]?.toLocaleDateString('es-ES', {
+                              day: 'numeric',
+                              month: 'short',
+                              year: 'numeric',
+                            })}
                           </span>
                           <span className="ml-1 text-gray-500 dark:text-gray-400">
-                            {activity.start_dates[0].toLocaleTimeString('es-ES', {
-                              hour: '2-digit',
+                            {activity.start_dates[0]?.toLocaleTimeString('es-ES', {
+                              hour: 'numeric',
                               minute: '2-digit',
                               hour12: true,
                             })}

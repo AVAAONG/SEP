@@ -118,14 +118,14 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
                     <div className="space-y-sm">
                       <h3 className="text-sm leading-6 text-secondary">Fecha {index + 1}:</h3>
                       <p className="text-base font-semibold">
-                        {new Date(date).toLocaleDateString('es-VE')}
+                        {new Date(date).toLocaleDateString('es-ES')}
                       </p>
                     </div>
                     <div className="space-y-sm">
                       <h3 className="text-sm leading-6 text-secondary">Hora de inicio:</h3>
                       <p className="text-base font-semibold">
                         {new Date(date)
-                          .toLocaleTimeString('es-VE', {
+                          .toLocaleTimeString('es-ES', {
                             hour: '2-digit',
                             minute: '2-digit',
                           })
@@ -221,7 +221,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
                 date={start_dates ? new Date(start_dates[0]).toLocaleDateString('ez-VE') : ''}
                 hour={
                   start_dates
-                    ? new Date(start_dates[0]).toLocaleTimeString('es-VE', {
+                    ? new Date(start_dates[0]).toLocaleTimeString('es-ES', {
                       hour: '2-digit',
                       minute: '2-digit',
                       hour12: true,

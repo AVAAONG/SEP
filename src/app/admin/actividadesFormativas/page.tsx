@@ -135,7 +135,7 @@ const page = async ({
         day: 'numeric',
         year: 'numeric',
       }),
-      startHour: new Date(workshop.start_dates[0]).toLocaleTimeString('es-VE', {
+      startHour: new Date(workshop.start_dates[0]).toLocaleTimeString('es-ES', {
         hour: 'numeric',
         minute: 'numeric',
         hourCycle: 'h12',

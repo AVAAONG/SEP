@@ -43,7 +43,7 @@ const scholarChatAttendaceColumns: Column<ScholarChatColumnT>[] = [
     Header: 'Inicio',
     accessor: 'start_dates',
     Cell: ({ value }) => {
-      const date = new Date(value[0]).toLocaleTimeString('es-VE', {
+      const date = new Date(value[0]).toLocaleTimeString('es-ES', {
         hour: 'numeric',
         minute: 'numeric',
         hourCycle: 'h12',

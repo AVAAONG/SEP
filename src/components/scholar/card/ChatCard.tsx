@@ -1,6 +1,4 @@
 import { ChatLevel } from '@/types/Chat';
-import Link from 'next/link';
-import React from 'react';
 
 interface ChatCardProps {
   chatName: String;
