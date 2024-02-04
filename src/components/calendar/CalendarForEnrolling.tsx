@@ -99,16 +99,28 @@ const CalendarForEnrrolling = ({ events, scholarName }: { events: any[]; scholar
             <div className="flex gap-2">
               <p className="font-bold">Fecha:</p>
               <p>
-                {moment(selectedEvent!.start).tz("America/Caracas").locale('es').format('LL')}
+                {selectedEvent?.start?.toLocaleDateString('es-ES', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric',
+                })}
               </p>
             </div>
             <div className="flex gap-1">
               <p className="font-bold">Horario:</p>
               <p>
                 de{' '}
-                {moment(selectedEvent?.start).tz("America/Caracas").format('hh:mm A')}{' '}
+                {selectedEvent?.start?.toLocaleTimeString('es-ES', {
+                  hour: 'numeric',
+                  minute: '2-digit',
+                  hour12: true,
+                })}{' '}
                 hasta las{' '}
-                {moment(selectedEvent?.start).tz("America/Caracas").format('hh:mm A')}
+                {selectedEvent?.end?.toLocaleTimeString('es-ES', {
+                  hour: 'numeric',
+                  minute: '2-digit',
+                  hour12: true,
+                })}
               </p>
             </div>
 
@@ -189,6 +201,7 @@ const CalendarForEnrrolling = ({ events, scholarName }: { events: any[]; scholar
             'Confirmacion de inscripción'
           );
           onClose();
+
         }}
         confirmText={selectedEvent?.isFull ? 'Cupos agotados' : 'Inscribirse'}
       />
