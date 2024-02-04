@@ -84,6 +84,6 @@ export const handleEnrollment = async (
       }),
     }
   );
-  revalidatePath('becario/calendario')
+  revalidatePath('/becario/calendario')
   if (result.status !== 200) throw new Error('Error al inscribirte en la actividad');
 };

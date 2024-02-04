@@ -177,6 +177,7 @@ const CalendarForEnrrolling = ({ events, scholarName }: { events: any[]; scholar
         )}
         isButtonDisabled={selectedEvent?.isFull}
         onConfirm={async () => {
+          onClose();
           toast.promise(
             handleEnrollment(
               selectedEvent.id,
@@ -200,7 +201,6 @@ const CalendarForEnrrolling = ({ events, scholarName }: { events: any[]; scholar
             d.data.user?.email,
             'Confirmacion de inscripción'
           );
-          onClose();
         }}
         confirmText={selectedEvent?.isFull ? 'Cupos agotados' : 'Inscribirse'}
       />
