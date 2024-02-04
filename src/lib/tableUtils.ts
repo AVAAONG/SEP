@@ -8,6 +8,7 @@ export const formatScholarDataForAttendanceTable = (
     const attendance = scholarAttendance.find(
       (a: ChatAttendance | WorkshopAttendance) => a.scholar.scholar.id === scholar.id
     );
+    const kindOfActivity = 'chat_id' in attendance ? 'chat' : 'workshop';
     return {
       id: scholar.id,
       first_names: scholar.first_names,
@@ -17,7 +18,9 @@ export const formatScholarDataForAttendanceTable = (
       whatsAppNumber: scholar.whatsapp_number,
       dni: scholar.dni,
       gender: scholar.gender,
+      kindOfActivity,
       attendance: attendance.attendance as ScholarAttendance,
+      attendanceId: attendance.id,
     };
   });
 };

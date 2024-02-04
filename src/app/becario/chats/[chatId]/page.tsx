@@ -46,7 +46,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
         }
       </ActivityPanelInfo >
       {
-        chat?.speaker[0].id === se?.scholarId ? (
+        chat?.speaker[0].id === se?.scholarId || chat?.speaker[1].id === se?.scholarId ? (
           <section className="w-full space-y-3">
             <h2 className="px-8 text-2xl leading-none tracking-tight text-primary-light font-semibold">
               Becarios

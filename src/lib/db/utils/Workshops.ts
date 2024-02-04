@@ -98,6 +98,20 @@ export const changeScholarAttendance = async (
   });
 };
 
+export const changeScholarAttendanceChat = async (
+  chatAttendanceId: string,
+  attendance: ScholarAttendance
+) => {
+  await prisma.chatAttendance.update({
+    where: {
+      id: chatAttendanceId,
+    },
+    data: {
+      attendance: attendance,
+    },
+  });
+};
+
 export const enrrrollScholarToWorkshop = async (workshopId: string, scholarId: string) => {
   await prisma.workshopAttendance.create({
     data: {
@@ -328,14 +342,34 @@ export const getWorkshopWithSpecificScholarAttendance = async (
 ) => {
   const workshop = await prisma.workshopAttendance.findFirst({
     where: {
-      AND: [
+      OR: [
         {
-          workshop_id: activityId,
+          AND: [
+            {
+              workshop_id: activityId,
+            },
+            {
+              scholar: {
+                scholarId: scholarId,
+              },
+            }
+          ]
         },
         {
-          scholar: {
-            scholarId: scholarId,
-          },
+          AND: [
+            {
+              workshop_id: activityId,
+            },
+            {
+              workshop: {
+                speaker: {
+                  some: {
+                    id: scholarId,
+                  }
+                },
+              },
+            }
+          ]
         }
       ]
     },
@@ -357,16 +391,37 @@ export const getChatWithSpecificScholarAttendance = async (
 ) => {
   const workshop = await prisma.chatAttendance.findFirst({
     where: {
-      AND: [
+      OR: [
         {
-          chat_id: activityId,
+          AND: [
+            {
+              chat_id: activityId,
+            },
+            {
+              scholar: {
+                scholarId: scholarId,
+              },
+            }
+          ]
         },
         {
-          scholar: {
-            scholarId: scholarId,
-          },
+          AND: [
+            {
+              chat_id: activityId,
+            },
+            {
+              chat: {
+                speaker: {
+                  some: {
+                    id: scholarId,
+                  }
+                },
+              },
+            }
+          ]
         }
       ]
+
     },
     include: {
       chat: {

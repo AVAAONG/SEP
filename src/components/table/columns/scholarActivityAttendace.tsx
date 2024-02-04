@@ -1,7 +1,7 @@
 'use client';
 import defailProfilePic from '@/../public/defaultProfilePic.png';
 import { IScholarForAttendanceTable } from '@/app/admin/chats/[chatId]/page';
-import { changeScholarAttendance } from '@/lib/db/utils/Workshops';
+import { changeScholarAttendance, changeScholarAttendanceChat } from '@/lib/db/utils/Workshops';
 import formatDni from '@/lib/db/utils/formatDni';
 import { Chip } from '@nextui-org/react';
 import { ScholarAttendance } from '@prisma/client';
@@ -9,6 +9,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Cell, CellValue, Column } from 'react-table';
+import { toast } from 'react-toastify';
 
 const ScholarActivityAttendance: Column<IScholarForAttendanceTable>[] = [
   {
@@ -79,6 +80,11 @@ const ScholarActivityAttendance: Column<IScholarForAttendanceTable>[] = [
     accessor: 'attendance',
     Cell: ({ value, cell }) => {
       const [attendace, setAttendance] = useState(value);
+      const handleAttendance = async (attendance: ScholarAttendance) => {
+        if (cell.row.original.kindOfActivity === 'workshop') await changeScholarAttendance(cell.row.original.attendanceId, attendance);
+        else if (cell.row.original.kindOfActivity === 'chat') await changeScholarAttendanceChat(cell.row.original.attendanceId, attendance);
+        return setAttendance(attendance);
+      }
       if (attendace === 'CANCELLED') {
         return (
           <Chip color='danger'>
@@ -100,8 +106,11 @@ const ScholarActivityAttendance: Column<IScholarForAttendanceTable>[] = [
             value={attendace}
             onChange={async (event) => {
               const attendance = event.target.value as ScholarAttendance;
-              await changeScholarAttendance(cell.row.original.id, attendance);
-              return setAttendance(attendance);
+              toast.promise(handleAttendance(attendance), {
+                pending: 'Colocando asistencia...',
+                success: 'Asistencia colocada exitosamente',
+                error: 'Error al colocar asistencia'
+              })
             }}
           >
             <option value="ATTENDED">Asistió</option>

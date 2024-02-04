@@ -18,10 +18,12 @@ export interface IScholarForAttendanceTable {
   first_names: string;
   last_names: string;
   email: string | null;
+  kindOfActivity: 'workshop' | 'chat'
   phone_number: string | null;
   whatsAppNumber: string | null;
   dni: string;
   gender: Gender;
+  attendanceId: string;
   attendance?: ScholarAttendance;
 }
 
