@@ -476,25 +476,82 @@ export const addAttendaceToScholar = async (
   });
 };
 
-export const addChatAttendaceToScholar = async (
-  chatId: string,
+
+export const enroleScholarInWorkshop = async (
+  workshopId: string,
   scholarId: string,
-  attendance: ScholarAttendance
 ) => {
-  await prisma.chatAttendance.create({
-    data: {
-      chat: {
-        connect: {
-          id: chatId,
+  // Start a transaction
+  await prisma.$transaction(async (prisma) => {
+    // Check if the scholar is already enrolled in the workshop
+    const existingAttendance = await prisma.workshopAttendance.findFirst({
+      where: {
+        workshop: {
+          id: workshopId,
         },
-      },
-      scholar: {
-        connect: {
+        scholar: {
           scholarId,
         },
       },
-      attendance: attendance as ScholarAttendance,
-    },
+    });
+
+    // If the scholar is not already enrolled, add the attendance
+    if (!existingAttendance) {
+      await prisma.workshopAttendance.create({
+        data: {
+          workshop: {
+            connect: {
+              id: workshopId,
+            },
+          },
+          scholar: {
+            connect: {
+              scholarId,
+            },
+          },
+          attendance: 'ENROLLED',
+        },
+      });
+    }
+  });
+};
+
+export const enroleScholarInChat = async (
+  chatId: string,
+  scholarId: string,
+) => {
+  // Start a transaction
+  await prisma.$transaction(async (prisma) => {
+    // Check if the scholar is already enrolled in the workshop
+    const existingAttendance = await prisma.chatAttendance.findFirst({
+      where: {
+        chat: {
+          id: chatId,
+        },
+        scholar: {
+          scholarId,
+        },
+      },
+    });
+
+    // If the scholar is not already enrolled, add the attendance
+    if (!existingAttendance) {
+      await prisma.chatAttendance.create({
+        data: {
+          chat: {
+            connect: {
+              id: chatId,
+            },
+          },
+          scholar: {
+            connect: {
+              scholarId,
+            },
+          },
+          attendance: 'ENROLLED',
+        },
+      });
+    }
   });
 };
 

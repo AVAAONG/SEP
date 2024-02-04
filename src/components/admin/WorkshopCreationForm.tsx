@@ -103,7 +103,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
         if (!speaker) return null;
         return {
           id: speaker?.id,
-          speakerName: `${speaker?.first_names} ${speaker?.last_names}`,
+          speakerName: `${speaker?.first_names.split(' ')[0]} ${speaker?.last_names.split(' ')[0]}`,
           speakerEmail: speaker?.email,
         };
       })
@@ -141,13 +141,13 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
           kindOfWorkshop: data.kindOfWorkshop,
           year: data.year as unknown as WorkshopYear[],
           meeting_id: meetingDetails.map(
-            (meetingDetail) => meetingDetail.meetingId || null
+            (meetingDetail) => meetingDetail.meetingId || ''
           ) as string[],
           meeting_link: meetingDetails.map(
-            (meetingDetail) => meetingDetail.meetingLink || null
+            (meetingDetail) => meetingDetail.meetingLink || ''
           ) as string[],
           meeting_password: meetingDetails.map(
-            (meetingDetail) => meetingDetail.meetingPassword || null
+            (meetingDetail) => meetingDetail.meetingPassword || ''
           ) as string[],
           speaker: {
             connect: calendarWorkshop.speakersData.map((speaker) => ({ id: speaker.id })),

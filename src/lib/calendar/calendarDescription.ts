@@ -1,6 +1,7 @@
 import {
   parseChatLevelFromDatabase,
   parseModalityFromDatabase,
+  parsePlatformFromDatabase,
   parseSkillFromDatabase,
 } from '@/lib/utils2';
 import { IChatCalendar, IWorkshopCalendar } from './d';
@@ -15,12 +16,11 @@ const createCalendarDescription = (
   const speakersNames = speakersData.map((speaker) => speaker.speakerName);
 
   let calendarCommonDescription = `<b>Modalidad:</b> ${parseModalityFromDatabase(modality)}
-${
-  speakersData.length === 1
-    ? `<b>Facilitador:</b> ${speakersNames[0]}`
-    : `<b>Facilitadores:</b> ${speakersNames.join(', ')}`
-}
-${modality === 'ONLINE' ? `<b>Plataforma:</b> ${platform}` : `<b>Lugar:</b> ${platform}`}
+${speakersData.length === 1
+      ? `<b>Facilitador:</b> ${speakersNames[0]}`
+      : `<b>Facilitadores:</b> ${speakersNames.join(', ')}`
+    }
+${modality === 'ONLINE' ? `<b>Plataforma:</b> ${parsePlatformFromDatabase(platform)}` : `<b>Lugar:</b> ${platform}`}
 `;
   if ('asociated_skill' in activity) {
     const { year, asociated_skill } = activity;

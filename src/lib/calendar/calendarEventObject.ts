@@ -1,5 +1,6 @@
 import { calendar_v3 } from '@googleapis/calendar';
 import { Modality } from '@prisma/client';
+import { parsePlatformFromDatabase } from '../utils2';
 
 /**
  * Creates the default event object with all the details about the activitie
@@ -24,7 +25,7 @@ const createDefaultEvent = (
   const defaultEvent: calendar_v3.Schema$Event = {
     summary: title,
     description: calendarDescription,
-    location: platform,
+    location: parsePlatformFromDatabase(platform),
     start: {
       dateTime: start,
       timeZone: 'America/Caracas',

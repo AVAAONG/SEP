@@ -2,7 +2,7 @@
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { CHAT_CALENDAR_ID, WORKSHOP_CALENDAR_ID } from './constants';
-import { addAttendaceToScholar, addChatAttendaceToScholar } from './db/utils/Workshops';
+import { enroleScholarInChat, enroleScholarInWorkshop } from './db/utils/Workshops';
 import { getScholarByEmail } from './db/utils/users';
 
 const handler = async (cookieValue: string) => {
@@ -68,8 +68,8 @@ export const handleEnrollment = async (
   kindOfActivity: 'workshop' | 'chat',
   email: string
 ) => {
-  if (kindOfActivity === 'workshop') await addAttendaceToScholar(activityId, scholarId, 'ENROLLED');
-  if (kindOfActivity === 'chat') await addChatAttendaceToScholar(activityId, scholarId, 'ENROLLED');
+  if (kindOfActivity === 'workshop') await enroleScholarInWorkshop(activityId, scholarId);
+  else if (kindOfActivity === 'chat') await enroleScholarInChat(activityId, scholarId);
   const result = await fetch(
     'https://script.google.com/macros/s/AKfycbzSiMKnlwygmcPdvdGvmeLlvXc_bcdm4tcWcpZ2H7QBbz-g3dBqxgFfzd_G44YaEeKkZA/exec',
     {
@@ -84,6 +84,6 @@ export const handleEnrollment = async (
       }),
     }
   );
-  console.log(await result.text());
+  revalidatePath('becario/calendario')
   if (result.status !== 200) throw new Error('Error al inscribirte en la actividad');
 };

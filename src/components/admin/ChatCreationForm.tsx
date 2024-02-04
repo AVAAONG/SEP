@@ -97,7 +97,7 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({ speakers, chatForEd
         if (!speaker) return null;
         return {
           id: speaker?.id,
-          speakerName: `${speaker?.first_names} ${speaker?.last_names}`,
+          speakerName: `${speaker?.first_names.split(' ')[0]} ${speaker?.last_names.split(' ')[0]}`,
           speakerEmail: speaker?.email,
         };
       })
@@ -166,15 +166,15 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({ speakers, chatForEd
 
       if (data.modality === 'ONLINE') {
         chat.data.meeting_id = meetingDetails.map(
-          (meetingDetail) => meetingDetail.meetingId || null
+          (meetingDetail) => meetingDetail.meetingId || ''
         ) as string[];
         chat.data.meeting_link = meetingDetails.map(
-          (meetingDetail) => meetingDetail.meetingLink || null
+          (meetingDetail) => meetingDetail.meetingLink || ''
         ) as string[];
         chat.data.meeting_password = ['null'];
         if (platformOnline === 'ZOOM') {
           chat.data.meeting_password = meetingDetails.map(
-            (meetingDetail) => meetingDetail.meetingPassword || null
+            (meetingDetail) => meetingDetail.meetingPassword || ''
           ) as string[];
         }
       }
