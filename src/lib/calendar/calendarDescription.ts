@@ -42,10 +42,10 @@ ${platform === 'ZOOM' ? `<b>Contraseña de la reunion:</b> ${meetingPassword}` :
   }
 
   if (description) {
-    return calendarCommonDescription;
+    return calendarCommonDescription += `
+${description}`
   } else {
-    return (calendarCommonDescription += `
-${description}`);
+    return calendarCommonDescription;
   }
 };
 
