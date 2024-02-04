@@ -4,6 +4,7 @@ import { CHAT_CALENDAR_ID, WORKSHOP_CALENDAR_ID } from '@/lib/constants';
 import { ChatWithSpeaker, WorkshopWithSpeaker } from '@/lib/db/types';
 import { changeWorkshopStatus, deleteWorkshopFromDatabase } from '@/lib/db/utils/Workshops';
 import { changeChatStatus, deleteChatFromDatabase } from '@/lib/db/utils/chats';
+import { sendActivitiesEmail } from '@/lib/sendEmails';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import {
   parseChatLevelFromDatabase,
@@ -25,6 +26,7 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import BasicModal from './BasicModal';
+import createWorkshopInvitationMessage from './emailTemplateMessage/WorkshopInvitationMessage';
 type ScheduleChatCardProps = {
   activities: ChatWithSpeaker[] | WorkshopWithSpeaker[];
 };
@@ -62,7 +64,6 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
   };
   const sendActivities = async () => {
     setbuttonIsDisabled(true);
-    sendModal.onClose();
     groupSelected.map(async (id) => {
       if ('level' in activities[0]) await changeChatStatus(id, 'SENT');
       else if ('year' in activities[0]) await changeWorkshopStatus(id, 'SENT');
@@ -71,6 +72,13 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
     if ('level' in activities[0]) await revalidateSpecificPath('/admin/chats/crear');
     else if ('year' in activities[0])
       await revalidateSpecificPath('/admin/actividadesFormativas/crear');
+    if ('level' in activities[0]) {
+    }
+    if ('year' in activities[0]) {
+      const workshopInvitationMessage = createWorkshopInvitationMessage()
+      await sendActivitiesEmail(workshopInvitationMessage, '¡Se han agregado actividades formativas!')
+      setbuttonIsDisabled(false);
+    }
   };
   return (
     <div className="flex flex-col w-full items-center">
@@ -341,6 +349,7 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
             success: 'Actividades enviadas de forma correcta 👌',
             error: 'ERROR: No se pudieron enviar las actividades 🤯',
           });
+          sendModal.onClose()
         }}
         confirmText="Enviar"
       />

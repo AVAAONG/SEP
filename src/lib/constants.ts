@@ -57,6 +57,7 @@ export const WORKSHOP_TYPES = [
   { label: 'Cine Foro', value: 'CINEMA_FORUM' },
   { label: 'Foro', value: 'FORUM' },
   { label: 'Webinar', value: 'WEBINAR' },
+  { label: 'Charla', value: 'TALK' },
 ];
 
 export const MODALITY = [

@@ -635,7 +635,7 @@ export const getNotEnrolledScholarsInChat = async (workshopId: string) => {
         scholar_condition: 'ACTIVE',
         attended_chats: {
           none: {
-            workshop_id: workshopId,
+            chat_id: workshopId,
           },
         },
       },
@@ -643,3 +643,24 @@ export const getNotEnrolledScholarsInChat = async (workshopId: string) => {
   });
   return scholars;
 }
+
+export const getOnlyCaracasScholar = async () => {
+  const scholars = await prisma.scholar.findMany({
+    where: {
+      program_information: {
+        scholar_condition: {
+          equals: 'ACTIVE',
+        },
+        chapter: {
+          id: {
+            equals: 'Rokk6_XCAJAg45heOEzYb',
+          },
+        },
+      },
+    },
+    select: {
+      email: true,
+    }
+  });
+  return scholars;
+};
