@@ -32,11 +32,11 @@ const createDefaultEvent = (
     location: parsePlatformFromDatabase(platform),
     start: {
       dateTime: startDateWithNoOffset,
-      timeZone: 'America/Caracas',
+      // timeZone: 'America/Caracas',
     },
     end: {
       dateTime: endDateWithNoOffset,
-      timeZone: 'America/Caracas',
+      // timeZone: 'America/Caracas',
     },
     visibility: 'public',
     guestsCanSeeOtherGuests: false,
