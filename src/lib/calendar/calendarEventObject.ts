@@ -22,8 +22,8 @@ const createDefaultEvent = (
   end: string,
   attendees?: calendar_v3.Schema$EventAttendee[]
 ) => {
-  const startDateWithNoOffset = start.split('T')[0];
-  const endDateWithNoOffset = end.split('T')[0];
+  const startDateWithNoOffset = start.split('Z')[0];
+  const endDateWithNoOffset = end.split('Z')[0];
   const defaultEvent: calendar_v3.Schema$Event = {
     summary: title,
     description: calendarDescription,
