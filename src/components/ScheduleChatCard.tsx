@@ -19,7 +19,7 @@ import { useDisclosure } from '@nextui-org/modal';
 import { cn } from '@nextui-org/react';
 import { ScrollShadow } from '@nextui-org/scroll-shadow';
 import { Tooltip } from '@nextui-org/tooltip';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import 'moment/locale/es';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -156,13 +156,13 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
                   </div>
                   <div className="flex-1 min-w-0 text-center">
                     <p className="text-sm font-medium ">
-                      {moment(start_dates[0]).locale('es').format('D MMMM')}
+                      {moment(start_dates[0]).tz("America/Caracas").locale('es').format('D MMMM')}
                     </p>
                     <p className="text-xs   ">
                       De{' '}
-                      {moment(start_dates[0]).format('hh:mm A')}{' '}
+                      {moment(start_dates[0]).tz("America/Caracas").format('hh:mm A')}{' '}
                       a{' '}
-                      {moment(end_dates[0]).format('hh:mm A')}
+                      {moment(end_dates[0]).tz("America/Caracas").format('hh:mm A')}
                     </p>
                   </div>
                   {asociated_skill && (
@@ -282,11 +282,11 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
                                 </span>{' '}
                                 pautada para el dia{' '}
                                 <span className="font-medium ">
-                                  {moment(selectedActivity!.start_dates[0]).locale('es').format('LL')}
+                                  {moment(selectedActivity!.start_dates[0]).tz("America/Caracas").locale('es').format('LL')}
                                 </span>{' '}
                                 a las{' '}
                                 <span className="font-medium ">
-                                  {moment(selectedActivity!.start_dates[0]).format('hh:mm A')}
+                                  {moment(selectedActivity!.start_dates[0]).tz("America/Caracas").format('hh:mm A')}
                                 </span>{' '}
                                 sera editada
                               </p>

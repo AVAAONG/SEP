@@ -11,6 +11,7 @@ import { signOut } from 'next-auth/react';
 import { MenuIcon } from 'public/svgs/svgs';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import useSWR from 'swr';
 import BasicModal from '../BasicModal';
 import ThemeToggleButton from './NavigationBar/ThemeToggleButton';
 interface NavigationBarProps {
@@ -18,13 +19,13 @@ interface NavigationBarProps {
   name: string | null | undefined;
   email: string | null | undefined;
 }
-
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const NavigationBar = ({ image, name, email }: NavigationBarProps) => {
   const [isSidebarOpen, setSidebarOpen] = useAtom(scholarSidebarAtom);
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [selected, setSelected] = useState<React.Key>('centro');
-
+  useSWR(`/api/setAuthCookie?cookieValue=SCHOLAR`, fetcher);
   return (
     <nav className="bg-gray-50  px-4 py-2 dark:bg-black  left-0 right-0 top-0 z-30">
       <div
