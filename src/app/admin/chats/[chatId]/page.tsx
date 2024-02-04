@@ -1,4 +1,5 @@
 import defailProfilePic from '@/../public/defaultProfilePic.png';
+import DisplayTime from '@/components/DisplayTime';
 import ActivityStatusIndicator from '@/components/table/ActivityStatus';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
@@ -124,12 +125,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
                     <div className="space-y-sm">
                       <h3 className="text-sm leading-6 text-secondary">Hora de inicio:</h3>
                       <p className="text-base font-semibold">
-                        {new Date(date)
-                          .toLocaleTimeString('es-ES', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          })
-                          .toUpperCase()}
+                        <DisplayTime time={date.toISOString()} />
                       </p>
                     </div>
                   </div>

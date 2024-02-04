@@ -1,4 +1,5 @@
 'use client';
+import DisplayTime from '@/components/DisplayTime';
 import SpeakersColumnWidget from '@/components/SpeakerColumnWidget';
 import { Level, Prisma } from '@prisma/client';
 import Link from 'next/link';
@@ -65,6 +66,11 @@ const ChatColumns: Column<ChatDataForTable>[] = [
   {
     Header: 'Inicio',
     accessor: 'startHour',
+    Cell: ({ value }) => {
+      return (
+        <DisplayTime time={value} />
+      )
+    },
   },
   {
     accessor: 'status',

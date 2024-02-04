@@ -1,5 +1,6 @@
 'use client';
 import { IScholarWorkshopColumns } from '@/app/becario/actividadesFormativas/page';
+import DisplayTime from '@/components/DisplayTime';
 import SpeakersColumnWidget from '@/components/SpeakerColumnWidget';
 import {
   parseModalityFromDatabase,
@@ -46,18 +47,10 @@ const scholarWorkshopAttendanceColumns: Column<IScholarWorkshopColumns>[] = [
   {
     Header: 'Fecha',
     accessor: 'start_dates',
-    Cell: ({ cell }) => {
-      const date = new Date(cell.value[0]);
+    Cell: ({ value }) => {
       return (
-        <span>
-          {' '}
-          {date.toLocaleDateString('es-ES', {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-          })}
-        </span>
-      );
+        <DisplayTime time={value[0].toISOString()} />
+      )
     },
   },
   {

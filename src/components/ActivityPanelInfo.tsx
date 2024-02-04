@@ -3,6 +3,7 @@ import { ChatWithSpeaker, WorkshopWithSpeaker } from "@/lib/db/types";
 import { parsePlatformFromDatabase } from "@/lib/utils2";
 import moment from "moment";
 import Image from "next/image";
+import DisplayTime from './DisplayTime';
 import ActivityStatusIndicator from "./table/ActivityStatus";
 
 interface ActivityPanelInfoProps {
@@ -48,7 +49,7 @@ const ActivityPanelInfo: React.FC<ActivityPanelInfoProps> = ({ activity, childre
 									<div className="space-y-sm">
 										<h3 className="text-sm leading-6 text-secondary">Hora de cierre {index + 1}:</h3>
 										<p className="text-base font-semibold">
-											{moment(end_dates[index]).format('HH:mm').toUpperCase()}
+											<DisplayTime time={end_dates[index].toISOString()} />
 										</p>
 									</div>
 								</div>

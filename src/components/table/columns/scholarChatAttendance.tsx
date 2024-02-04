@@ -1,5 +1,6 @@
 'use client';
 import { ScholarChatColumnT } from '@/app/admin/becarios/[scholarId]/page';
+import DisplayTime from '@/components/DisplayTime';
 import { parseModalityFromDatabase, parseWorkshopStatusFromDatabase } from '@/lib/utils2';
 import Link from 'next/link';
 import { CellProps, Column } from 'react-table';
@@ -24,18 +25,10 @@ const scholarChatAttendaceColumns: Column<ScholarChatColumnT>[] = [
   {
     Header: 'Fecha',
     accessor: 'start_dates',
-    Cell: ({ cell }) => {
-      const date = new Date(cell.value[0]);
+    Cell: ({ value }) => {
       return (
-        <span>
-          {' '}
-          {date.toLocaleDateString('es-ES', {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-          })}
-        </span>
-      );
+        <DisplayTime time={value[0].toISOString()} />
+      )
     },
   },
   {

@@ -1,5 +1,6 @@
 'use client';
 import defailProfilePic from '@/../public/defaultProfilePic.png';
+import DisplayTime from '@/components/DisplayTime';
 import { Modality, Prisma, Skill, WorkshopYear } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -88,13 +89,10 @@ const WorkshopColumns: Column<WorkshopDetails>[] = [
     Header: 'Inicio',
     accessor: 'startHour',
     Cell: ({ value }) => {
-      console.log(value)
-      return <>{new Date(value).toLocaleTimeString('es-ES', {
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true,
-      })}</>
-    }
+      return (
+        <DisplayTime time={value} />
+      )
+    },
   },
   {
     accessor: 'status',
