@@ -30,8 +30,6 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
     scholar_attendance ? scholar_attendance.map((a) => a.scholar.scholar) : [],
     scholar_attendance ? scholar_attendance : []
   );
-  console.log(scholarAttendanceDataForTable);
-
   const scholarDataToExport = scholarAttendanceDataForTable.map((scholar) => {
     return {
       names: scholar.first_names.split(' ')[0] + ' ' + scholar.last_names.split(' ')[0],
@@ -205,10 +203,10 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
                 hour={
                   start_dates
                     ? new Date(start_dates[0]).toLocaleTimeString('es-VE', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: true,
-                      })
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true,
+                    })
                     : ''
                 }
                 modality={parseModalityFromDatabase(modality as Modality)}

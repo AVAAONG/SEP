@@ -328,10 +328,16 @@ export const getWorkshopWithSpecificScholarAttendance = async (
 ) => {
   const workshop = await prisma.workshopAttendance.findFirst({
     where: {
-      workshop_id: activityId,
-      scholar: {
-        scholarId: scholarId,
-      },
+      AND: [
+        {
+          workshop_id: activityId,
+        },
+        {
+          scholar: {
+            scholarId: scholarId,
+          },
+        }
+      ]
     },
     include: {
       workshop: {
@@ -344,16 +350,23 @@ export const getWorkshopWithSpecificScholarAttendance = async (
 
   return workshop;
 };
+
 export const getChatWithSpecificScholarAttendance = async (
   activityId: shortUUID.SUUID,
   scholarId: string
 ) => {
   const workshop = await prisma.chatAttendance.findFirst({
     where: {
-      chat_id: activityId,
-      scholar: {
-        scholarId: scholarId,
-      },
+      AND: [
+        {
+          chat_id: activityId,
+        },
+        {
+          scholar: {
+            scholarId: scholarId,
+          },
+        }
+      ]
     },
     include: {
       chat: {
@@ -363,8 +376,10 @@ export const getChatWithSpecificScholarAttendance = async (
       },
     },
   });
+
   return workshop;
 };
+
 
 export const getScheduledWorkshops = async () => {
   const workshops = await prisma.workshop.findMany({
@@ -494,7 +509,6 @@ export const enroleScholarInWorkshop = async (
         },
       },
     });
-
     // If the scholar is not already enrolled, add the attendance
     if (!existingAttendance) {
       await prisma.workshopAttendance.create({

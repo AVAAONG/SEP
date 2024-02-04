@@ -1,8 +1,15 @@
 import { Chip } from '@nextui-org/chip';
 import { ActivityStatus as IActivityStatus } from '@prisma/client';
 
-const ActivityStatus = ({ value }: { value: IActivityStatus }) => {
-  if (value === 'SUSPENDED') {
+
+interface ActivityStatusProps {
+  status: IActivityStatus;
+  startDate?: string[],
+  endDate?: string[]
+}
+
+const ActivityStatusIndicator: React.FC<ActivityStatusProps> = ({ status, startDate, endDate }) => {
+  if (status === 'SUSPENDED') {
     return (
       <Chip
         startContent={<div className="rounded-full bg-red-800 p-1"></div>}
@@ -11,7 +18,7 @@ const ActivityStatus = ({ value }: { value: IActivityStatus }) => {
         Suspendido
       </Chip>
     );
-  } else if (value === 'DONE') {
+  } else if (status === 'DONE') {
     return (
       <Chip
         startContent={<div className="rounded-full bg-yellow-800 p-1"></div>}
@@ -20,16 +27,16 @@ const ActivityStatus = ({ value }: { value: IActivityStatus }) => {
         Realizado (Encuesta de satisfacción no enviada)
       </Chip>
     );
-  } else if (value === 'ATTENDANCE_CHECKED') {
+  } else if (status === 'ATTENDANCE_CHECKED') {
     return (
       <Chip
         startContent={<div className="rounded-full bg-green-800 p-1"></div>}
         className="inline-flex items-center bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full dark:bg-green-900 dark:text-green-300"
       >
-        Encuesta de satisfacción enviada
+        (Realizado) Encuesta de satisfacción enviada
       </Chip>
     );
-  } else if (value === 'SENT') {
+  } else if (status === 'SENT') {
     return (
       <Chip
         startContent={<div className="rounded-full bg-blue-800 p-1"></div>}
@@ -38,7 +45,7 @@ const ActivityStatus = ({ value }: { value: IActivityStatus }) => {
         Programado
       </Chip>
     );
-  } else if (value === 'IN_PROGRESS')
+  } else if (status === 'IN_PROGRESS')
     return (
       <Chip
         startContent={<div className="rounded-full bg-gray-800 p-1"></div>}
@@ -59,4 +66,4 @@ const ActivityStatus = ({ value }: { value: IActivityStatus }) => {
   }
 };
 
-export default ActivityStatus;
+export default ActivityStatusIndicator;

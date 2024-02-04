@@ -1,5 +1,5 @@
 import defailProfilePic from '@/../public/defaultProfilePic.png';
-import ActivityStatus from '@/components/table/ActivityStatus';
+import ActivityStatusIndicator from '@/components/table/ActivityStatus';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
 import { getChat } from '@/lib/db/utils/chats';
@@ -101,7 +101,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
             <div className="flex gap-2 items-center">
               <div className="w-fit font-medium px-2">Chat club</div>
               <div>
-                <ActivityStatus value={chat?.activity_status!} />
+                <ActivityStatusIndicator status={chat?.activity_status!} />
               </div>
             </div>
             <h1 className="italic text-xl font-bold leading-none tracking-tight text-primary-light md:text-3xl">
@@ -222,10 +222,10 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
                 hour={
                   start_dates
                     ? new Date(start_dates[0]).toLocaleTimeString('es-VE', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: true,
-                      })
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true,
+                    })
                     : ''
                 }
                 modality={parseModalityFromDatabase(modality as Modality)}

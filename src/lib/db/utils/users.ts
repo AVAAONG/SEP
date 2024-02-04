@@ -5,6 +5,7 @@
  */
 
 import { Prisma, Probation, ScholarCondition, User, WorkshopAttendance } from '@prisma/client';
+import { revalidatePath } from 'next/cache';
 import shortUUID from 'short-uuid';
 import { prisma } from './prisma';
 /**
@@ -374,6 +375,9 @@ export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) =>
               some: {
                 attendance: 'ENROLLED',
               },
+              none: {
+                attendance: 'CANCELLED'
+              },
             },
           },
           {
@@ -401,7 +405,11 @@ export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) =>
                   some: {
                     attendance: 'ENROLLED',
                   },
+                  none: {
+                    attendance: 'CANCELLED'
+                  }
                 },
+
               },
               {
                 activity_status: 'SENT',
@@ -500,3 +508,138 @@ export const getScholarsInProbationByYear = async (year: string) => {
 export type ScholarsInProbationByYearReturnType = Prisma.PromiseReturnType<
   typeof getScholarsInProbationByYear
 >;
+
+
+
+//ponemos el status de cancelado
+// le damos el cupo a la otra persona con el estatus de enrrolled
+// enviamos un correo de confirmacion.
+
+
+export const ceaseSpotInWorkshop = async (attendanceId: string, scholarId: string, activityId: string, scholarIdToCease: string) => {
+  await prisma.$transaction(async (prisma) => {
+    const existingAttendance = await prisma.workshopAttendance.findFirst({
+      where: {
+        workshop: {
+          id: activityId,
+        },
+        scholar: {
+          scholarId: scholarIdToCease
+        },
+      },
+    });
+    // If the scholar is not already enrolled, add the attendance
+    if (!existingAttendance) {
+      await prisma.workshopAttendance.update({
+        where: {
+          id: attendanceId
+        },
+        data: {
+          attendance: 'CANCELLED',
+        },
+      })
+      await prisma.workshopAttendance.create({
+        data: {
+          workshop: {
+            connect: {
+              id: activityId,
+            },
+          },
+          scholar: {
+            connect: {
+              scholarId: scholarIdToCease
+            },
+          },
+          attendance: 'ENROLLED',
+        },
+      });
+      return 'Cesion de cupo exitosa'
+    }
+    else {
+      return 'El becario ya estaba inscrito en la actividad'
+    }
+  });
+  revalidatePath('/becario/actividadesFormativas/[workshopId]', 'page')
+  revalidatePath('/admin/actividadesFormativas/[workshopId]', 'page')
+}
+
+export const ceaseSpotInChat = async (attendanceId: string, scholarId: string, activityId: string, scholarIdToCease: string) => {
+
+  await prisma.$transaction(async (prisma) => {
+    const existingAttendance = await prisma.chatAttendance.findFirst({
+      where: {
+        chat: {
+          id: activityId,
+        },
+        scholar: {
+          scholarId: scholarIdToCease
+        },
+      },
+    });
+    // If the scholar is not already enrolled, add the attendance
+    if (!existingAttendance) {
+      await prisma.chatAttendance.update({
+        where: {
+          id: attendanceId
+        },
+        data: {
+          attendance: 'CANCELLED',
+        },
+      })
+      await prisma.chatAttendance.create({
+        data: {
+          chat: {
+            connect: {
+              id: activityId,
+            },
+          },
+          scholar: {
+            connect: {
+              scholarId: scholarIdToCease
+            },
+          },
+          attendance: 'ENROLLED',
+        },
+      });
+      return 'Cesion de cupo exitosa'
+    }
+    else {
+      return 'El becario ya estaba inscrito en la actividad'
+    }
+  });
+  revalidatePath('/becario/chats/[chatsId]', 'page')
+  revalidatePath('/admin/chats/[chatsId]', 'page')
+}
+
+
+export const getNotEnrolledScholarsInWorkshop = async (workshopId: string) => {
+  const scholars = await prisma.scholar.findMany({
+    where: {
+      program_information: {
+        scholar_condition: 'ACTIVE',
+        attended_workshops: {
+          none: {
+            workshop_id: workshopId,
+          },
+        },
+      },
+    },
+  });
+  return scholars;
+}
+
+export const getNotEnrolledScholarsInChat = async (workshopId: string) => {
+  const scholars = await prisma.scholar.findMany({
+    where: {
+      program_information: {
+        scholar_condition: 'ACTIVE',
+        attended_chats: {
+          none: {
+            workshop_id: workshopId,
+          },
+        },
+      },
+    },
+  });
+  return scholars;
+}
