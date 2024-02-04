@@ -3,6 +3,10 @@
 import moment from "moment";
 
 /**
+ * @see https://github.com/orgs/vercel/discussions/3404
+ */
+
+/**
  * it formats the date passed as argument to the format needed by the calendar api
  *
  * @remarks the format needed by the calendar api is `aaaa-mm-ddThh:mm:ss-hh:mm`
