@@ -1,5 +1,5 @@
 
-const createChatInvitationMessage = (url: string) => {
+const createChatInvitationMessage = () => {
     return `
 <div class="gmail_quote">
 <div class="gmail_attr" dir="ltr">

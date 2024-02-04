@@ -26,6 +26,7 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import BasicModal from './BasicModal';
+import createChatInvitationMessage from './emailTemplateMessage/ChatInvitationMessage';
 import createWorkshopInvitationMessage from './emailTemplateMessage/WorkshopInvitationMessage';
 type ScheduleChatCardProps = {
   activities: ChatWithSpeaker[] | WorkshopWithSpeaker[];
@@ -73,12 +74,15 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
     else if ('year' in activities[0])
       await revalidateSpecificPath('/admin/actividadesFormativas/crear');
     if ('level' in activities[0]) {
+      const chatInvitationMessage = createChatInvitationMessage()
+      await sendActivitiesEmail(chatInvitationMessage, '¡Se han agregado chat clubs de ingles!')
     }
     if ('year' in activities[0]) {
       const workshopInvitationMessage = createWorkshopInvitationMessage()
       await sendActivitiesEmail(workshopInvitationMessage, '¡Se han agregado actividades formativas!')
-      setbuttonIsDisabled(false);
     }
+    setbuttonIsDisabled(false);
+
   };
   return (
     <div className="flex flex-col w-full items-center">

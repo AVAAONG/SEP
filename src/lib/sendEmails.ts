@@ -90,8 +90,8 @@ export const sendActivitiesEmail = async (htmlMessage: string, subject: string) 
       html: htmlMessage,
     });
     const failed = result.rejected.concat(result.pending).filter(Boolean);
-    if (failed.length) {
-      throw new Error(`Email (${failed.join(', ')}) could not be sent`);
-    }
+    // if (failed.length) {
+    //   throw new Error(`Email (${failed.join(', ')}) could not be sent`);
+    // }
   }
 }
