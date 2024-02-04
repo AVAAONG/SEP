@@ -86,13 +86,6 @@ const ScholarActivityAttendance: Column<IScholarForAttendanceTable>[] = [
           </Chip>
         )
       }
-      else if (attendace === 'ENROLLED') {
-        return (
-          <Chip >
-            Inscrito
-          </Chip>
-        )
-      }
       else {
         return (
           <select
@@ -100,7 +93,9 @@ const ScholarActivityAttendance: Column<IScholarForAttendanceTable>[] = [
               ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
               : attendace === 'NOT_ATTENDED'
                 ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
-                : ''
+                : attendace === 'ENROLLED'
+                  ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
+                  : ''
               }`}
             value={attendace}
             onChange={async (event) => {
@@ -111,6 +106,7 @@ const ScholarActivityAttendance: Column<IScholarForAttendanceTable>[] = [
           >
             <option value="ATTENDED">Asistió</option>
             <option value="NOT_ATTENDED">No asistió</option>
+            <option value="ENROLLED">Inscrito</option>
           </select>
         );
       }
