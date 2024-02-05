@@ -6,7 +6,6 @@
 //     },
 //   });
 
-import GeneralInformation from '@/components/scholar/config/GeneralInformation';
 import ProfilePic from '@/components/scholar/config/ProfilePic';
 import VolunteeringInformation from '@/components/scholar/config/VolunteeringInformation';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
@@ -95,11 +94,11 @@ const page = async () => {
       </div>
       <div className="col-span-2 ">
         <div className="bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-40 p-4 mb-4  shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2  sm:p-6 dark:bg-slate-950">
-          <GeneralInformation
+          {/* <GeneralInformation
             scholarGeneralInfo={scholarGeneralInfo}
             id={scholarId}
             title="Informacion General"
-          />
+          /> */}
         </div>
         <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2 dark:border-gray-900 sm:p-6 dark:bg-slate-950">
           {/* <AddressInformation
