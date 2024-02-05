@@ -16,7 +16,7 @@ const ActivityPanelInfo: React.FC<ActivityPanelInfoProps> = ({ activity, childre
 
 	const { title, start_dates, end_dates, description, speaker, modality, activity_status, platform } = activity;
 	return (
-		<section className="flex rounded-lg bg-white dark:bg-gray-900 p-8 ">
+		<section className="flex md:flex-col rounded-lg bg-white dark:bg-gray-900 p-8 ">
 			<div className="space-y-3 w-1/2 ">
 				<div className="flex flex-col space-y-2 ">
 					<div className="flex gap-2 items-center">
