@@ -1,11 +1,10 @@
 import { Chip } from '@nextui-org/chip';
 import { ActivityStatus as IActivityStatus } from '@prisma/client';
 
-
 interface ActivityStatusProps {
   status: IActivityStatus;
-  startDate?: string[],
-  endDate?: string[]
+  startDate?: string[];
+  endDate?: string[];
 }
 
 const ActivityStatusIndicator: React.FC<ActivityStatusProps> = ({ status, startDate, endDate }) => {
@@ -16,15 +15,6 @@ const ActivityStatusIndicator: React.FC<ActivityStatusProps> = ({ status, startD
         className="inline-flex items-center bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300"
       >
         Suspendido
-      </Chip>
-    );
-  } else if (status === 'DONE') {
-    return (
-      <Chip
-        startContent={<div className="rounded-full bg-yellow-800 p-1"></div>}
-        className="inline-flex items-center bg-yellow-100 text-yellow-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300"
-      >
-        Realizado (Encuesta de satisfacción no enviada)
       </Chip>
     );
   } else if (status === 'ATTENDANCE_CHECKED') {
@@ -45,16 +35,7 @@ const ActivityStatusIndicator: React.FC<ActivityStatusProps> = ({ status, startD
         Programado
       </Chip>
     );
-  } else if (status === 'IN_PROGRESS')
-    return (
-      <Chip
-        startContent={<div className="rounded-full bg-gray-800 p-1"></div>}
-        className="inline-flex items-center bg-gray-100 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full dark:bg-gray-900 dark:text-gray-300"
-      >
-        En progreso
-      </Chip>
-    );
-  else {
+  } else {
     return (
       <Chip
         startContent={<div className="rounded-full bg-gray-800 p-1"></div>}
