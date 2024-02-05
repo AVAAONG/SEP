@@ -694,3 +694,14 @@ export const getScholar = async (id: string) => {
   });
   return scholar;
 }
+
+
+export const updateScholar = async (id: string, data: Prisma.ScholarUpdateInput) => {
+  const scholar = await prisma.scholar.update({
+    where: {
+      id,
+    },
+    data,
+  });
+  return scholar;
+}

@@ -1,104 +1,130 @@
 'use client';
-import LoadingModal from '@/components/scholar/forms/LoadingModal';
 import GENERAL_INFORMATION_INPUT_DATA from '@/components/scholar/forms/data/generalInformationFormData';
-import { BaseSyntheticEvent, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { updateScholar } from '@/lib/db/utils/users';
+import scholarInfoSchema from '@/lib/schemas/scholar/GeneralInformation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button, Input, Select, SelectItem } from '@nextui-org/react';
+import { Scholar } from '@prisma/client';
+import moment from 'moment';
+import { BaseSyntheticEvent } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import { z } from 'zod';
 
 interface GeneralInformationProps {
-  scholarGeneralInfo: {
-    firstNames: string;
-    lastNames: string;
-    dni: string;
-    gender: string;
-    birthDate: string;
-    cellPhoneNumber: string;
-    avaaAdmissionYear: string;
-    localPhoneNumber: string;
-    email: string;
-  };
-  id: string;
+  scholar: Scholar;
   title: string;
 }
 
-const GeneralInformation = ({ scholar, id, title }: GeneralInformationProps) => {
-  const [updatinState, changeUpdatingState] = useState<'updating' | 'updated' | 'error' | 'none'>(
-    'none'
-  );
-
-  useEffect(() => {
-    if (updatinState === 'updated') {
-      setTimeout(() => {
-        changeUpdatingState('none');
-      }, 3000);
-    }
-  }, [updatinState]);
-
-  const { register, handleSubmit, setValue } = useForm({
+const GeneralInformation: React.FC<GeneralInformationProps> = ({ scholar, title }) => {
+  const {
+    handleSubmit,
+    control,
+    formState: { isSubmitting, isValid },
+  } = useForm<z.infer<typeof scholarInfoSchema>>({
+    resolver: zodResolver(scholarInfoSchema),
     defaultValues: {
-      ...scholarGeneralInfo,
+      ...scholar,
+      birthdate: moment(scholar.birthdate).format('YYYY-MM-DD'),
     },
   });
 
-  const saveData = async (data: any, event: BaseSyntheticEvent) => {
-    event.preventDefault();
-    changeUpdatingState('updating');
-    data.birthDate = new Date(data.birthDate);
-    data.avaaAdmissionYear = new Date(data.avaaAdmissionYear);
-    const response = await fetch(`/becario/api/scholar`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ data, id }),
-    });
-    if (response.status === 200) {
-      changeUpdatingState('updated');
-    } else {
-      changeUpdatingState('error');
-    }
+  const saveData = async (
+    data: z.infer<typeof scholarInfoSchema>,
+    event: BaseSyntheticEvent<object, any, any> | undefined
+  ) => {
+    event?.preventDefault();
+    data.birthdate = new Date(data.birthdate).toISOString();
+    await updateScholar(scholar.id, data);
   };
-
-  if (updatinState !== 'none') {
-    return <LoadingModal state={updatinState} changeState={changeUpdatingState} />;
-  } else {
-    return (
-      <>
-        <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">{title}</h3>
-        <form action="#">
-          <div className="grid grid-cols-6 gap-6">
-            {GENERAL_INFORMATION_INPUT_DATA.map((input, index) => {
-              const { label, id, placeholder, required, type } = input;
+  const onInvalid = (errors) => console.error(errors);
+  return (
+    <>
+      <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">{title}</h3>
+      <form
+        onSubmit={handleSubmit(
+          async (data, event) =>
+            toast.promise(saveData(data, event), {
+              pending: 'Guardando cambios...',
+              success: 'Cambios guardados',
+              error: 'Error al guardar cambios',
+            }),
+          onInvalid
+        )}
+      >
+        <div className="grid grid-cols-6 gap-6">
+          {GENERAL_INFORMATION_INPUT_DATA.map((input) => {
+            const { label, id, type } = input;
+            return (
+              <Controller
+                name={id}
+                key={id}
+                control={control}
+                rules={{ required: true }}
+                render={({ field, formState }) => {
+                  return (
+                    <Input
+                      value={field.value}
+                      onChange={field.onChange}
+                      isInvalid={!!formState.errors?.[id]?.message}
+                      errorMessage={formState.errors?.[id]?.message?.toString()}
+                      isRequired
+                      type={type}
+                      label={label}
+                      radius="sm"
+                      classNames={{ base: 'col-span-2 h-fit' }}
+                      labelPlacement="outside"
+                    />
+                  );
+                }}
+              />
+            );
+          })}
+          <Controller
+            name="gender"
+            control={control}
+            rules={{ required: true }}
+            shouldUnregister={true}
+            render={({ field, formState }) => {
               return (
-                <div className="col-span-6 sm:col-span-3" key={index}>
-                  <label
-                    htmlFor={id}
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    {label}
-                  </label>
-                  <input
-                    type={type}
-                    placeholder={placeholder}
-                    required={required}
-                    {...register(id)}
-                  />
-                </div>
+                <Select
+                  value={field.value}
+                  onChange={field.onChange}
+                  isInvalid={!!formState.errors?.['gender']?.message}
+                  errorMessage={formState.errors?.['gender']?.message?.toString()}
+                  classNames={{ base: 'col-span-2 h-fit' }}
+                  radius="sm"
+                  label="Género"
+                  labelPlacement="outside"
+                  defaultSelectedKeys={[field.value]}
+                >
+                  {[
+                    { value: 'M', label: 'Masculino' },
+                    { value: 'F', label: 'Femenino' },
+                    {
+                      value: 'O',
+                      label: 'Empresa u Organización',
+                    },
+                  ].map((modality) => (
+                    <SelectItem key={modality.value} value={modality.value}>
+                      {modality.label}
+                    </SelectItem>
+                  ))}
+                </Select>
               );
-            })}
-            <div className="col-span-6 sm:col-full">
-              <button
-                onClick={handleSubmit((data, event) => saveData(data, event!))}
-                className="text-white bg-green-600 hover:bg-green-500 hover:text-green-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                type="submit"
-              >
-                Guardar cambios
-              </button>
-            </div>
-          </div>
-        </form>
-      </>
-    );
-  }
+            }}
+          />
+          <Button
+            type="submit"
+            className="text-white bg-green-600 hover:bg-green-500 hover:text-green-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            isDisabled={isSubmitting}
+          >
+            Guardar cambios
+          </Button>
+        </div>
+      </form>
+    </>
+  );
 };
 
 export default GeneralInformation;

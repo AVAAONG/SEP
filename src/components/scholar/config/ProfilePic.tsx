@@ -1,3 +1,4 @@
+import { Button } from '@nextui-org/react';
 import Image from 'next/image';
 
 interface ProfilePicProps {
@@ -23,13 +24,11 @@ const ProfilePic = (props: ProfilePicProps) => {
       />
       <div>
         <h3 className="mb-1 text-xl font-bold text-gray-900 dark:text-white">Foto de perfil</h3>
-        <div className="mb-4 text-sm text-gray-500 dark:text-gray-400">
-          JPG, GIF or PNG. MAX 800px
-        </div>
+        <div className="mb-4 text-sm text-gray-500 dark:text-gray-400">JPG o PNG.</div>
         <div className="flex items-center space-x-4">
-          <button
+          <Button
             type="button"
-            className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-green-700 border border-green-700 hover:text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 hover:bg-green-600 dark:hover:text-slate-950 dark:focus:ring-primary-800"
+            className="text-white bg-green-600 hover:bg-green-500 hover:text-green-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
             <svg
               className="w-4 h-4 mr-2 -ml-1"
@@ -41,13 +40,13 @@ const ProfilePic = (props: ProfilePicProps) => {
               <path d="M9 13h2v5a1 1 0 11-2 0v-5z"></path>
             </svg>
             Subir Foto
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
             className="py-2 px-3 text-sm font-medium text-red-900 focus:outline-none bg-transparent rounded-lg border border-red-700 hover:bg-red-700 hover:text-white  dark:text-red-400 dark:border-red-600 dark:hover:text-white dark:hover:bg-red-700"
           >
             Borrar foto actual
-          </button>
+          </Button>
         </div>
       </div>
     </div>
