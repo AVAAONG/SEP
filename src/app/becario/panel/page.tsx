@@ -17,7 +17,7 @@ const page = async () => {
   const id = session?.scholarId;
   const [doneWorkshopsCount, doneChatsCount] = await getScholarDoneActivitiesCount(id);
   const [enrrolledWorkshops, enrrolledCHats] = await getActivitiesWhenScholarItsEnrolled(id);
-  const events = formatActivityEventsForBigCalendar([...enrrolledWorkshops, ...enrrolledCHats]);
+  const events = formatActivityEventsForBigCalendar([...enrrolledWorkshops, ...enrrolledCHats], "scholar");
   const cardContent: PanelCardProps[] = [
     {
       title: 'Actividades formativas realizadas',

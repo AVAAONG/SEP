@@ -1,5 +1,6 @@
 import { Button } from '@nextui-org/button';
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/modal';
+import Link from 'next/link';
 
 interface BasicModalProps {
   isOpen: boolean;
@@ -10,6 +11,7 @@ interface BasicModalProps {
   confirmText: string;
   isButtonDisabled: boolean;
   scroll?: boolean;
+  link?: string;
   size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full' | 'xs' | '3xl' | '4xl' | '5xl' | undefined;
 }
 
@@ -22,6 +24,7 @@ const BasicModal: React.FC<BasicModalProps> = ({
   confirmText,
   isButtonDisabled,
   scroll,
+  link,
   size,
 }) => {
   return (
@@ -37,7 +40,14 @@ const BasicModal: React.FC<BasicModalProps> = ({
       <ModalContent>
         {(onClose) => (
           <>
-            <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
+            <ModalHeader className="flex flex-col gap-1">
+              {link ? (<>
+                <Link href={link}>
+                  {title}
+                </Link>
+              </>) : (<> {title} </>)}
+
+            </ModalHeader>
             <ModalBody>
               <Content />
             </ModalBody>

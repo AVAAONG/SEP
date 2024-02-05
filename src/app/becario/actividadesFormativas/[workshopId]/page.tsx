@@ -31,7 +31,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
 
   return (
     <div className="min-h-screen flex flex-col gap-4">
-      <ActivityPanelInfo activity={workshop as WorkshopWithSpeaker}  >
+      <ActivityPanelInfo activity={chatForSpeaker as WorkshopWithSpeaker}  >
         <div className='w-full flex  items-center justify-end'>
           Estatus de asistencia = {attendance?.attendance!}
           <ActivityScholarActions activityId={workshopId} attendanceId={attendance?.id!} kindOfActivity='workshop' scholars={scholars} isButtonDisabled={isDisabled()} />

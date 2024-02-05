@@ -93,6 +93,7 @@ const CalendarForEnrrolling = ({ events, scholarName }: { events: any[]; scholar
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         size="lg"
+        link={`/becario/${selectedEvent?.level ? 'chats' : 'actividadesFormativas'}/${selectedEvent?.id}`}
         title={`Inscribirse en: ${selectedEvent?.originalTitle}`}
         Content={() => (
           <div className="flex flex-col gap-2 px-4">
@@ -166,7 +167,7 @@ const CalendarForEnrrolling = ({ events, scholarName }: { events: any[]; scholar
             )}
             <div className="flex gap-1">
               <p className="font-bold">Cupos disponibles:</p>
-              <p>{selectedEvent.spots}</p>
+              <p>{selectedEvent.spots - selectedEvent.attendees}</p>
             </div>
             <div className="flex gap-1">
               <p className="font-bold">Cupos ocupados:</p>

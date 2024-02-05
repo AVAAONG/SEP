@@ -11,17 +11,17 @@ const page = async () => {
   const actualYear = new Date().getFullYear();
   const activeScholarsCount = await getScholarsCountByCondition('ACTIVE', 'Rokk6_XCAJAg45heOEzYb');
   const [workshops, chats] = await getActivitiesByYear(actualYear);
-  const events = formatActivityEventsForBigCalendar([...workshops, ...chats]);
+  const events = formatActivityEventsForBigCalendar([...workshops, ...chats], "admin");
   const sentActivities: (Workshop | Chat)[] = [...workshops, ...chats]
     .filter((activity) => activity.activity_status === 'SENT')
     .sort((a, b) => new Date(a.start_dates[0]).getTime() - new Date(b.start_dates[0]).getTime());
 
   const workshopDoneCount = workshops.filter(
     (workshop) =>
-      workshop.activity_status === 'DONE' || workshop.activity_status === 'ATTENDANCE_CHECKED'
+      workshop.activity_status === 'ATTENDANCE_CHECKED'
   ).length;
   const chatsDoneCount = chats.filter(
-    (chat) => chat.activity_status === 'DONE' || chat.activity_status === 'ATTENDANCE_CHECKED'
+    (chat) => chat.activity_status === 'ATTENDANCE_CHECKED'
   ).length;
 
   const cardContent: PanelCardProps[] = [

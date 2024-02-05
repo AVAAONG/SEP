@@ -31,25 +31,27 @@ const getBgColor = (colors: any, activity_status: string) => {
   return bgColor;
 };
 
-const getActivityUrl = (id: string, route: 'actividadesFormativas' | 'chats') => {
+const getActivityUrl = (id: string, route: 'actividadesFormativas' | 'chats', kindOfUser: 'scholar' | 'admin',) => {
+
   const host = headers().get('host');
-  const pageUrl = `https://${host}/becario/${route}/${id}`;
+  const pageUrl = `https://${host}/${kindOfUser === 'admin' ? 'admin' : 'becario'}/${route}/${id}`;
   return pageUrl;
 };
 
 export const formatActivityEventsForBigCalendar = (
-  activities: (Workshop | Chat)[]
+  activities: (Workshop | Chat)[],
+  kindOfUser: 'scholar' | 'admin',
 ): BigCalendarEventType[] => {
-  return activities.flatMap((activity) => {
+  return activities?.flatMap((activity) => {
     const { id, title, start_dates, end_dates, description, modality, activity_status } = activity;
     let colors;
     let eventUrl: string;
     if ('year' in activity) {
       colors = ACTIVITIES_CALENDAR_COLORS.find((activity) => activity.activity === 'workshop');
-      eventUrl = getActivityUrl(id, 'actividadesFormativas');
+      eventUrl = getActivityUrl(id, 'actividadesFormativas', kindOfUser);
     } else if ('level' in activity) {
       colors = ACTIVITIES_CALENDAR_COLORS.find((activity) => activity.activity === 'chat');
-      eventUrl = getActivityUrl(id, 'chats');
+      eventUrl = getActivityUrl(id, 'chats', kindOfUser);
     }
 
     const bgColor = getBgColor(colors, activity_status);
