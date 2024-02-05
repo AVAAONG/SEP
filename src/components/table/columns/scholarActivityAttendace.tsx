@@ -116,6 +116,7 @@ const ScholarActivityAttendance: Column<IScholarForAttendanceTable>[] = [
             <option value="ATTENDED">Asistió</option>
             <option value="NOT_ATTENDED">No asistió</option>
             <option value="ENROLLED">Inscrito</option>
+            <option value="JUSTIFY">Justificó</option>
           </select>
         );
       }

@@ -1,12 +1,14 @@
 'use client';
 import { IScholarWorkshopColumns } from '@/app/becario/actividadesFormativas/page';
 import DisplayTime from '@/components/DisplayTime';
+import ScholarAttendanceWidget from '@/components/ScholarAttendanceWidget';
 import SpeakersColumnWidget from '@/components/SpeakerColumnWidget';
 import {
   parseModalityFromDatabase,
   parseSkillFromDatabase,
   parseWorkshopStatusFromDatabase,
 } from '@/lib/utils2';
+import { ScholarAttendance } from '@prisma/client';
 import Link from 'next/link';
 
 import { CellProps, Column } from 'react-table';
@@ -64,12 +66,6 @@ const scholarWorkshopAttendanceColumns: Column<IScholarWorkshopColumns>[] = [
             {workshopStatus}
           </span>
         );
-      } else if (value === 'DONE') {
-        return (
-          <span className="inline-flex items-center bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
-            {workshopStatus}
-          </span>
-        );
       } else if (value === 'ATTENDANCE_CHECKED') {
         return (
           <span className="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-green-900 dark:text-green-300">
@@ -95,32 +91,7 @@ const scholarWorkshopAttendanceColumns: Column<IScholarWorkshopColumns>[] = [
     Header: 'Asistencia',
     accessor: 'attendance',
     Cell: ({ value }) => {
-      if (value === 'NOT_ATTENDED') {
-        return (
-          <span className="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-            No asistió
-          </span>
-        );
-      } else if (value === 'ATTENDED') {
-        return (
-          <span className="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-green-900 dark:text-green-300">
-            Asistió
-          </span>
-        );
-
-      } else if (value === 'ENROLLED') {
-        return (
-          <span className="inline-flex items-center bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-blue-900 dark:text-blue-300">
-            Inscrito
-          </span>
-        );
-      } else {
-        return (
-          <span className="inline-flex items-center bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-gray-900 dark:text-gray-300">
-            Error
-          </span>
-        );
-      }
+      return (<ScholarAttendanceWidget value={value as ScholarAttendance} />)
     },
     disableSortBy: true,
   },

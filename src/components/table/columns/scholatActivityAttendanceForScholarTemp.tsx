@@ -1,8 +1,9 @@
 'use client';
 import defailProfilePic from '@/../public/defaultProfilePic.png';
 import { IScholarForAttendanceTable } from '@/app/admin/chats/[chatId]/page';
+import ScholarAttendanceWidget from '@/components/ScholarAttendanceWidget';
 import formatDni from '@/lib/db/utils/formatDni';
-import { Chip } from '@nextui-org/react';
+import { ScholarAttendance } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Cell, CellValue, Column } from 'react-table';
@@ -75,33 +76,7 @@ const ScholarActivityAttendanceForScholarTemp: Column<IScholarForAttendanceTable
 		Header: 'Asistencia',
 		accessor: 'attendance',
 		Cell: ({ value }) => {
-			if (value === 'CANCELLED') {
-				return (
-					<Chip color='danger'>
-						Canceló
-					</Chip>
-				)
-			}
-			else if (value === 'ENROLLED') {
-				return (
-					<Chip >
-						Inscrito
-					</Chip>
-				)
-			} else if (value === 'ATTENDED') {
-				return (
-					<Chip color='success'>
-						Asistió
-					</Chip>
-				)
-			}
-			else if (value === 'NOT_ATTENDED') {
-				return (
-					<Chip color='danger'>
-						No asistió
-					</Chip>
-				)
-			}
+			return (<ScholarAttendanceWidget value={value as ScholarAttendance} />)
 		},
 	},
 	{
