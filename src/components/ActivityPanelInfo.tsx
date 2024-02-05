@@ -16,8 +16,8 @@ const ActivityPanelInfo: React.FC<ActivityPanelInfoProps> = ({ activity, childre
 
 	const { title, start_dates, end_dates, description, speaker, modality, activity_status, platform } = activity;
 	return (
-		<section className="flex md:flex-col rounded-lg bg-white dark:bg-gray-900 p-8 ">
-			<div className="space-y-3 w-1/2 ">
+		<section className="flex flex-col md:flex-row gap-4 md:gap-0 rounded-lg bg-white dark:bg-gray-900 p-8 ">
+			<div className="space-y-3 w-full md:w-1/2 ">
 				<div className="flex flex-col space-y-2 ">
 					<div className="flex gap-2 items-center">
 						<div className="w-fit font-medium px-2">{'level' in activity ? 'Chat club' : 'Actividad formativa'}</div>
@@ -101,7 +101,7 @@ const ActivityPanelInfo: React.FC<ActivityPanelInfoProps> = ({ activity, childre
 					</div>
 				</div>
 			</div>
-			<div className="w-1/2 ">
+			<div className="w-full md:w-1/2 ">
 				{children}
 			</div>
 		</section>

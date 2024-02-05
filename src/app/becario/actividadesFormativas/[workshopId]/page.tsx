@@ -1,5 +1,6 @@
 import ActivityPanelInfo from '@/components/ActivityPanelInfo';
 import ActivityScholarActions from '@/components/ActivityScholarActions';
+import ScholarAttendanceWidget from '@/components/ScholarAttendanceWidget';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendanceForScholarTemp from '@/components/table/columns/scholatActivityAttendanceForScholarTemp';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
@@ -32,8 +33,15 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
   return (
     <div className="min-h-screen flex flex-col gap-4">
       <ActivityPanelInfo activity={chatForSpeaker as WorkshopWithSpeaker}  >
-        <div className='w-full flex  items-center justify-end'>
-          Estatus de asistencia = {attendance?.attendance!}
+        <div className='w-full flex gap-4  items-center justify-end'>
+          <div className='flex gap-2 items-center justify-center'>
+            <h3 className=" leading-none tracking-tight text-primary-light font-semibold">
+              Estatus de asistencia
+            </h3>
+            <div className="text-lg leading-none tracking-tight text-primary-light font-normal">
+              <ScholarAttendanceWidget value={attendance?.attendance!} />
+            </div>
+          </div>
           <ActivityScholarActions activityId={workshopId} attendanceId={attendance?.id!} kindOfActivity='workshop' scholars={scholars} isButtonDisabled={isDisabled()} />
         </div>
       </ActivityPanelInfo>
