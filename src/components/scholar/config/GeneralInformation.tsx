@@ -1,8 +1,8 @@
 'use client';
+import LoadingModal from '@/components/scholar/forms/LoadingModal';
+import GENERAL_INFORMATION_INPUT_DATA from '@/components/scholar/forms/data/generalInformationFormData';
 import { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import GENERAL_INFORMATION_INPUT_DATA from '@/components/scholar/forms/data/generalInformationFormData';
-import LoadingModal from '@/components/scholar/forms/LoadingModal';
 
 interface GeneralInformationProps {
   scholarGeneralInfo: {
@@ -20,7 +20,7 @@ interface GeneralInformationProps {
   title: string;
 }
 
-const GeneralInformation = ({ scholarGeneralInfo, id, title }: GeneralInformationProps) => {
+const GeneralInformation = ({ scholar, id, title }: GeneralInformationProps) => {
   const [updatinState, changeUpdatingState] = useState<'updating' | 'updated' | 'error' | 'none'>(
     'none'
   );

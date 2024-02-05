@@ -685,3 +685,12 @@ export const getOnlyCaracasScholar = async () => {
   });
   return scholars;
 };
+
+export const getScholar = async (id: string) => {
+  const scholar = await prisma.scholar.findUnique({
+    where: {
+      id,
+    },
+  });
+  return scholar;
+}

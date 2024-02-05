@@ -6,21 +6,13 @@ import speakerWorkshopsColumn from '@/components/table/columns/singleWorkshopSpe
 import ChartComponent from '@/components/charts/AreaChart';
 import { getWorkshopSpeakerWithWorkshops } from '@/lib/db/utils/speaker';
 import Image from 'next/image';
-import Link from 'next/link';
 import {
   FacebookIcon,
   InstagramIcon,
   LinkedinIcon,
   TwitterIcon,
 } from '../../../../../../public/svgs/SocialNetworks';
-import {
-  CurriculumIcon,
-  EmailIcon,
-  PhoneIcon,
-  Star,
-  chatIcon,
-  workshopIcon,
-} from '../../../../../../public/svgs/svgs';
+import { Star, chatIcon, workshopIcon } from '../../../../../../public/svgs/svgs';
 
 const speakerSearchOptions = [
   {
@@ -158,11 +150,6 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
                 <span>
                   {first_names} {last_names}{' '}
                 </span>
-                {curriculum && (
-                  <Link href={curriculum} target="_blank" className="w-6 block">
-                    <CurriculumIcon />
-                  </Link>
-                )}
               </h1>{' '}
               <span className="text-gray-400 dark:text-gray-300 font-semibold uppercase text-center w-full ">
                 {job_company}
@@ -175,39 +162,6 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
                 </span>
               </div>
             )}
-            <div className="flex flex-row gap-4">
-              {workshopSpeakerSocialNetwork.map(
-                ({ url, icon, username }, index) =>
-                  username && (
-                    <Link
-                      target="_blank"
-                      href={url}
-                      className="w-9 text-green-700 dark:text-green-400 rounded-full  bg-gray-100 dark:bg-slate-600 p-2"
-                      key={index}
-                    >
-                      {icon}
-                    </Link>
-                  )
-              )}
-            </div>
-            <div className="flex flex-col w-full text-sm gap-2 items-center justify-center">
-              {phone_number && (
-                <div className="w-full flex gap-2 items-center justify-center ">
-                  <div className="bg-gray-100 dark:bg-slate-600 p-2 w-9 rounded-full">
-                    <PhoneIcon />
-                  </div>
-                  <span>{phone_number}</span>
-                </div>
-              )}
-              {email && (
-                <div className="w-full flex gap-2 items-center justify-center">
-                  <div className="bg-gray-100 dark:bg-slate-600 p-2 w-9 rounded-full">
-                    <EmailIcon />
-                  </div>
-                  <span>{email}</span>
-                </div>
-              )}
-            </div>
           </div>
         </div>
         <div className="flex flex-col  w-full lg:w-3/4 pl-4">
