@@ -2,7 +2,7 @@ import ScheduleChatCard from '@/components/ScheduleChatCard';
 import ChatCreationForm from '@/components/admin/ChatCreationForm';
 import { getChatSpeakerWithParams, getScheduleChats } from '@/lib/db/utils/chats';
 import { Speaker } from '@prisma/client';
-
+export const dynamic = 'force-dynamic';
 const Page = async ({ searchParams }: { searchParams: { activityToEdit: string | null } }) => {
   const scheduledChats = await getScheduleChats();
   const speakers = await getChatSpeakerWithParams({

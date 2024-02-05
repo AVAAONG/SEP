@@ -1,5 +1,6 @@
 'use client';
 import { createCalendarEvent, updateCalendarEvent } from '@/lib/calendar/calendar';
+import { formatDatesClient } from '@/lib/calendar/clientUtils';
 import { IChatCalendar } from '@/lib/calendar/d';
 import { formatDates } from '@/lib/calendar/utils';
 import { CHAT_LEVELS, MODALITY } from '@/lib/constants';
@@ -89,7 +90,8 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({ speakers, chatForEd
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
     const buttonType = ((event?.nativeEvent as SubmitEvent)?.submitter as HTMLButtonElement)?.name;
-    const dates = await formatDates(data.dates);
+    const dates = formatDatesClient(data.dates); //client formating
+    const calendarDates = await formatDates(data.dates); //server formating
     const chatSpeakersId = data.speakersId.split(',');
     const speakersData = chatSpeakersId
       .map((speakerId: string) => {
@@ -97,7 +99,7 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({ speakers, chatForEd
         if (!speaker) return null;
         return {
           id: speaker?.id,
-          speakerName: `${speaker?.first_names} ${speaker?.last_names}`,
+          speakerName: `${speaker?.first_names.split(' ')[0]} ${speaker?.last_names.split(' ')[0]}`,
           speakerEmail: speaker?.email,
         };
       })
@@ -107,7 +109,7 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({ speakers, chatForEd
     const calendarChat: IChatCalendar = {
       platform: platformInPerson ? platformInPerson : platformOnline!,
       speakersData,
-      ...dates,
+      ...calendarDates,
       ...restData,
       description: data.description ? data.description : null,
     };
@@ -166,15 +168,15 @@ const ChatCreationForm: React.FC<ChatCreationFormProps> = ({ speakers, chatForEd
 
       if (data.modality === 'ONLINE') {
         chat.data.meeting_id = meetingDetails.map(
-          (meetingDetail) => meetingDetail.meetingId || null
+          (meetingDetail) => meetingDetail.meetingId || ''
         ) as string[];
         chat.data.meeting_link = meetingDetails.map(
-          (meetingDetail) => meetingDetail.meetingLink || null
+          (meetingDetail) => meetingDetail.meetingLink || ''
         ) as string[];
         chat.data.meeting_password = ['null'];
         if (platformOnline === 'ZOOM') {
           chat.data.meeting_password = meetingDetails.map(
-            (meetingDetail) => meetingDetail.meetingPassword || null
+            (meetingDetail) => meetingDetail.meetingPassword || ''
           ) as string[];
         }
       }

@@ -29,7 +29,6 @@ const PlatformInput = ({ modality, control }: PlatformInputProps) => {
                 labelPlacement="outside"
                 selectedKeys={[field.value]}
                 defaultSelectedKeys={[field.value]}
-
               >
                 {ONLINE_PLATFORMS.map(({ label, value }) => (
                   <SelectItem key={value} value={value}>
@@ -88,7 +87,6 @@ const PlatformInput = ({ modality, control }: PlatformInputProps) => {
                 label="Plataforma (Virtual)"
                 selectedKeys={[field.value]}
                 defaultSelectedKeys={[field.value]}
-
                 labelPlacement="outside"
               >
                 {ONLINE_PLATFORMS.map(({ label, value }) => (

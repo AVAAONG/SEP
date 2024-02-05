@@ -15,8 +15,8 @@ export const getWorkshopSpeakersWithParams = async (data: Prisma.SpeakerSelect) 
     const speakers = await prisma.speaker.findMany({
       select: data,
       where: {
-        speaker_kind: 'WORKSHOPS'
-      }
+        speaker_kind: 'WORKSHOPS',
+      },
     });
     return speakers;
   } catch (e) {
@@ -30,8 +30,8 @@ export const getChatSpeakersWithParams = async (data: Prisma.SpeakerSelect) => {
     const speakers = await prisma.speaker.findMany({
       select: data,
       where: {
-        speaker_kind: 'CHATS'
-      }
+        speaker_kind: 'CHATS',
+      },
     });
     return speakers;
   } catch (e) {
@@ -39,8 +39,6 @@ export const getChatSpeakersWithParams = async (data: Prisma.SpeakerSelect) => {
     await prisma.$disconnect();
   }
 };
-
-
 
 export const getWorkshopSpeaker = async (speakerId: string) => {
   const speaker = await prisma.speaker.findUnique({
@@ -95,9 +93,7 @@ export const getChatSpeakersCountByGender = async () => {
   return [workshopSpeakersWomanCount, workshopSpeakerMenCount];
 };
 
-export const getWorkshopSpeakerWithWorkshops = async (
-  speakerId: string
-) => {
+export const getWorkshopSpeakerWithWorkshops = async (speakerId: string) => {
   const [speaker, workshops] = await prisma.$transaction([
     prisma.speaker.findUnique({
       where: { id: speakerId },
@@ -115,7 +111,6 @@ export const getWorkshopSpeakerWithWorkshops = async (
   ]);
   return [speaker, workshops];
 };
-
 
 export const getChatSpeakersWithChats = async (
   speakerId: string
@@ -143,36 +138,34 @@ export const createSpeaker = async (data: Prisma.SpeakerCreateInput) => {
       data,
     });
     return speaker;
-
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
-}
+};
 
 export const updateSpeaker = async (speaker: Prisma.SpeakerCreateInput) => {
   try {
     await prisma.speaker.update({
       where: { id: speaker.id },
       data: {
-        ...speaker
-      }
+        ...speaker,
+      },
     });
-    return
+    return;
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
-}
-
+};
 
 export const setScholarAsChatSpeaker = async (scholarId: string) => {
   try {
     prisma.scholarProgramInformation.update({
       where: { scholarId: scholarId },
       data: {
-        is_chat_speaker: true
-      }
-    })
+        is_chat_speaker: true,
+      },
+    });
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
-}
+};

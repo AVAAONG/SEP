@@ -6,8 +6,6 @@ import { headers } from 'next/headers';
 import { ACTIVITIES_CALENDAR_COLORS } from './constants';
 import { parseModalityFromDatabase } from './utils2';
 
-
-
 export const createArrayFromObject = (object: Record<string, number>) => {
   const array = Object.entries(object)
     .map(([label, value]) => ({
@@ -18,35 +16,42 @@ export const createArrayFromObject = (object: Record<string, number>) => {
   return array;
 };
 
-
 const getBgColor = (colors: any, activity_status: string) => {
   let bgColor;
-  if (activity_status === 'SCHEDULED' || activity_status === "SENT") {
+  if (activity_status === 'SCHEDULED' || activity_status === 'SENT') {
     bgColor = colors?.comingActivities;
-  } else if (activity_status === 'ATTENDANCE_CHECKED' || activity_status === "DONE" || activity_status === "IN_PROGRESS" || activity_status === "SUSPENDED") {
+  } else if (
+    activity_status === 'ATTENDANCE_CHECKED' ||
+    activity_status === 'DONE' ||
+    activity_status === 'IN_PROGRESS' ||
+    activity_status === 'SUSPENDED'
+  ) {
     bgColor = colors?.pastActivities;
   }
   return bgColor;
-}
+};
 
-const getActivityUrl = (id: string, route: 'actividadesFormativas' | 'chats') => {
+const getActivityUrl = (id: string, route: 'actividadesFormativas' | 'chats', kindOfUser: 'scholar' | 'admin',) => {
+
   const host = headers().get('host');
-  const pageUrl = `https://${host}/becario/${route}/${id}`;
+  const pageUrl = `https://${host}/${kindOfUser === 'admin' ? 'admin' : 'becario'}/${route}/${id}`;
   return pageUrl;
-}
+};
 
-
-export const formatActivityEventsForBigCalendar = (activities: (Workshop | Chat)[]): BigCalendarEventType[] => {
-  return activities.flatMap((activity) => {
+export const formatActivityEventsForBigCalendar = (
+  activities: (Workshop | Chat)[],
+  kindOfUser: 'scholar' | 'admin',
+): BigCalendarEventType[] => {
+  return activities?.flatMap((activity) => {
     const { id, title, start_dates, end_dates, description, modality, activity_status } = activity;
     let colors;
     let eventUrl: string;
     if ('year' in activity) {
-      colors = ACTIVITIES_CALENDAR_COLORS.find(activity => activity.activity === 'workshop');
-      eventUrl = getActivityUrl(id, 'actividadesFormativas');
+      colors = ACTIVITIES_CALENDAR_COLORS.find((activity) => activity.activity === 'workshop');
+      eventUrl = getActivityUrl(id, 'actividadesFormativas', kindOfUser);
     } else if ('level' in activity) {
-      colors = ACTIVITIES_CALENDAR_COLORS.find(activity => activity.activity === 'chat');
-      eventUrl = getActivityUrl(id, 'chats');
+      colors = ACTIVITIES_CALENDAR_COLORS.find((activity) => activity.activity === 'chat');
+      eventUrl = getActivityUrl(id, 'chats', kindOfUser);
     }
 
     const bgColor = getBgColor(colors, activity_status);
@@ -56,7 +61,10 @@ export const formatActivityEventsForBigCalendar = (activities: (Workshop | Chat)
     return start_dates.map((startDate, index) => ({
       id: id,
 
-      title: index > 0 ? `(${eventModalityTitle}) ${title} (${index + 1})` : `(${eventModalityTitle}) ${title}`,
+      title:
+        index > 0
+          ? `(${eventModalityTitle}) ${title} (${index + 1})`
+          : `(${eventModalityTitle}) ${title}`,
       allDay: false,
       start: new Date(startDate),
       end: new Date(end_dates[index] || end_dates[0]),
@@ -68,8 +76,6 @@ export const formatActivityEventsForBigCalendar = (activities: (Workshop | Chat)
   });
 };
 
-
-
 interface CardProps {
   icon: () => JSX.Element;
   text: string;
@@ -78,8 +84,6 @@ interface CardProps {
   cardButtonBg: string;
   activity: 'talleres' | 'chats' | 'voluntariado';
 }
-
-
 
 export const reduceByProperty = <T extends Record<string, any>, D extends Record<string, any>>(
   valuesToReduce: T[],
@@ -97,20 +101,20 @@ export const reduceByProperty = <T extends Record<string, any>, D extends Record
   return reducedValues;
 };
 
-
-
-export const formatActivityEventsForBigCalendarEnrlled = (activities: (WorkshopWithAllData | ChatsWithAllData)[]): any[] => {
+export const formatActivityEventsForBigCalendarEnrlled = (
+  activities: (WorkshopWithAllData | ChatsWithAllData)[]
+): any[] => {
   return activities.flatMap((activity) => {
     const { id, title, start_dates, end_dates, description, modality, activity_status } = activity;
     let colors;
     let eventUrl: string;
     let kindOfActivity: string;
     if ('year' in activity) {
-      colors = ACTIVITIES_CALENDAR_COLORS.find(activity => activity.activity === 'workshop');
+      colors = ACTIVITIES_CALENDAR_COLORS.find((activity) => activity.activity === 'workshop');
       eventUrl = getActivityUrl(id, 'actividadesFormativas');
       kindOfActivity = 'workshop';
     } else if ('level' in activity) {
-      colors = ACTIVITIES_CALENDAR_COLORS.find(activity => activity.activity === 'chat');
+      colors = ACTIVITIES_CALENDAR_COLORS.find((activity) => activity.activity === 'chat');
       eventUrl = getActivityUrl(id, 'chats');
       kindOfActivity = 'chat';
     }
@@ -131,7 +135,10 @@ export const formatActivityEventsForBigCalendarEnrlled = (activities: (WorkshopW
       platform: activity.platform,
       level: activity.level,
       enrolledCount: activity.scholar_attendance.length,
-      title: index > 0 ? `(${eventModalityTitle}) ${title} (${index + 1})` : `(${eventModalityTitle}) ${title}`,
+      title:
+        index > 0
+          ? `(${eventModalityTitle}) ${title} (${index + 1})`
+          : `(${eventModalityTitle}) ${title}`,
       allDay: false,
       start: new Date(startDate),
       end: new Date(end_dates[index] || end_dates[0]),
@@ -148,4 +155,3 @@ export const formatActivityEventsForBigCalendarEnrlled = (activities: (WorkshopW
     }));
   });
 };
-

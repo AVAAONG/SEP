@@ -20,8 +20,6 @@
 // const MENTOR_SHEET = 'Base de datos';
 // const MENTORS_SHEET_RANGE = `'${MENTOR_SHEET}'!A2:Z48`;
 
-
-
 // const getMentors = async () => {
 //     const values = (await getSpreadsheetValues(
 //         MENTORS_SPREADSHEET,
@@ -81,7 +79,6 @@
 
 //         return mentor
 //     });
-
 
 //     return mentors
 // }

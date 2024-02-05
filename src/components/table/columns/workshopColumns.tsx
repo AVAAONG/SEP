@@ -1,5 +1,6 @@
 'use client';
 import defailProfilePic from '@/../public/defaultProfilePic.png';
+import DisplayTime from '@/components/DisplayTime';
 import { Modality, Prisma, Skill, WorkshopYear } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -25,12 +26,12 @@ interface WorkshopDetails {
   startHour: Date;
   endHour: Date;
   status:
-    | 'Asistencia no pasada'
-    | 'Realizado'
-    | 'Programado'
-    | 'Enviado'
-    | 'En progreso'
-    | 'Suspendido';
+  | 'Asistencia no pasada'
+  | 'Realizado'
+  | 'Programado'
+  | 'Enviado'
+  | 'En progreso'
+  | 'Suspendido';
   skill: Skill;
   modality: Modality;
   platform: string;
@@ -87,6 +88,11 @@ const WorkshopColumns: Column<WorkshopDetails>[] = [
   {
     Header: 'Inicio',
     accessor: 'startHour',
+    Cell: ({ value }) => {
+      return (
+        <DisplayTime time={value} />
+      )
+    },
   },
   {
     accessor: 'status',

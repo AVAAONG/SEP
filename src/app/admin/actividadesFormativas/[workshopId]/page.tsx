@@ -1,4 +1,5 @@
 import defailProfilePic from '@/../public/defaultProfilePic.png';
+import DisplayTime from '@/components/DisplayTime';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
 import { getWorkshop } from '@/lib/db/utils/Workshops';
@@ -30,8 +31,6 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
     scholar_attendance ? scholar_attendance.map((a) => a.scholar.scholar) : [],
     scholar_attendance ? scholar_attendance : []
   );
-  console.log(scholarAttendanceDataForTable);
-
   const scholarDataToExport = scholarAttendanceDataForTable.map((scholar) => {
     return {
       names: scholar.first_names.split(' ')[0] + ' ' + scholar.last_names.split(' ')[0],
@@ -45,6 +44,10 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
   const unAttendedScholarsCount = scholar_attendance?.filter(
     (scholar_att) => scholar_att.attendance === 'NOT_ATTENDED'
   ).length;
+  const cancelledScholarsCount = scholar_attendance?.filter(
+    (scholar_att) => scholar_att.attendance === 'CANCELLED'
+  ).length;
+
 
   const g = [
     {
@@ -61,7 +64,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
     },
     {
       title: 'Total de cancelaciones',
-      value: 0,
+      value: cancelledScholarsCount,
     },
   ];
 
@@ -101,18 +104,13 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
                     <div className="space-y-sm">
                       <h3 className="text-sm leading-6 text-secondary">Fecha {index + 1}:</h3>
                       <p className="text-base font-semibold">
-                        {new Date(date).toLocaleDateString('es-VE')}
+                        {new Date(date).toLocaleDateString('es-ES')}
                       </p>
                     </div>
                     <div className="space-y-sm">
                       <h3 className="text-sm leading-6 text-secondary">Hora de inicio:</h3>
                       <p className="text-base font-semibold">
-                        {new Date(date)
-                          .toLocaleTimeString('es-VE', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          })
-                          .toUpperCase()}
+                        <DisplayTime time={date.toISOString()} />
                       </p>
                     </div>
                   </div>
@@ -204,11 +202,11 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
                 date={start_dates ? new Date(start_dates[0]).toLocaleDateString('ez-VE') : ''}
                 hour={
                   start_dates
-                    ? new Date(start_dates[0]).toLocaleTimeString('es-VE', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: true,
-                      })
+                    ? new Date(start_dates[0]).toLocaleTimeString('es-ES', {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true,
+                    })
                     : ''
                 }
                 modality={parseModalityFromDatabase(modality as Modality)}

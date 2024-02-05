@@ -158,7 +158,7 @@ export const getSpreadsheetValuesByUrl = async (spreadsheetUrl: string, range: s
   const spreadsheetId = spreadsheetUrl.split('/')[5];
   const sheetName = range.includes('!')
     ? range.split('!')[0].replace(/'/g, '')
-    : (await getFirstSheetName(spreadsheetId));
+    : await getFirstSheetName(spreadsheetId);
   const sheetRange = range.includes('!') ? range.split('!')[1] : range;
   try {
     const response = await Sheets.spreadsheets.values.get({
@@ -233,7 +233,7 @@ export const createSpreadsheetAndReturnUrl = async (title: string) => {
         },
       },
     });
-    console.log('creado')
+    console.log('creado');
     return response.data.spreadsheetUrl;
   } catch (err) {
     console.log('Error al crear el spreadsheet');
@@ -242,7 +242,6 @@ export const createSpreadsheetAndReturnUrl = async (title: string) => {
 };
 //append a new row with a specified  values to a spreadsheet
 export const appendSpreadsheetValuesByRange = async (spreadsheetUrl: string, values: any[]) => {
-
   const spreadsheetId = spreadsheetUrl.split('/')[5];
   try {
     const response = await Sheets.spreadsheets.values.append({

@@ -7,7 +7,7 @@ interface AreaBarChartProps {
   barSeries;
 }
 
-const MixedChart = ({ areaSeries, barSeries, }: AreaBarChartProps) => {
+const MixedChart = ({ areaSeries, barSeries }: AreaBarChartProps) => {
   const [options] = useState<ApexCharts.ApexOptions>({
     chart: {
       type: 'line',
@@ -33,10 +33,7 @@ const MixedChart = ({ areaSeries, barSeries, }: AreaBarChartProps) => {
     colors: ['#23a217'],
   });
 
-  const [series] = useState<ApexAxisChartSeries>([
-    areaSeries,
-    barSeries,
-  ]);
+  const [series] = useState<ApexAxisChartSeries>([areaSeries, barSeries]);
 
   return <Chart options={options} series={series} type="line" height={250} />;
 };

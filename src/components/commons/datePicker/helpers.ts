@@ -1,4 +1,4 @@
-import { classNames } from "@/lib/scholar/utils";
+import { classNames } from '@/lib/scholar/utils';
 
 /**
  * Generates an array of year objects starting from 2020 to the current year.
@@ -11,21 +11,23 @@ import { classNames } from "@/lib/scholar/utils";
  * @returns An array of year objects.
  */
 export const getYearObjects = (): { name: string; href: string; current: boolean }[] => {
-    const currentYear = new Date().getFullYear();
-    const years = [];
+  const currentYear = new Date().getFullYear();
+  const years = [];
 
-    for (let year = 2020; year <= currentYear; year++) {
-        years.push({
-            name: year.toString(),
-            href: year.toString(),
-            current: false,
-        });
-    }
-    return years;
+  for (let year = 2020; year <= currentYear; year++) {
+    years.push({
+      name: year.toString(),
+      href: year.toString(),
+      current: false,
+    });
+  }
+  return years;
 };
 
 export const linkClass = (current: boolean) =>
-    classNames(
-        current ? 'text-white dark:text-primary-light font-semibold bg-primary-light  dark:bg-secondary-dark' : 'text-gray-500 hover:text-gray-700',
-        'rounded-xl px-3 py-1 text-sm font-medium'
-    );
+  classNames(
+    current
+      ? 'text-white dark:text-primary-light font-semibold bg-primary-light  dark:bg-secondary-dark'
+      : 'text-gray-500 hover:text-gray-700',
+    'rounded-xl px-3 py-1 text-sm font-medium'
+  );

@@ -129,7 +129,6 @@
 //         //   });
 //         // }
 
-
 //         // await prisma.scholarCVAInformation.update({
 //         //   where: {
 //         //     scholarId: scholar.id
@@ -168,7 +167,6 @@
 //         //     },
 //         //   }
 //         // })
-
 
 //         // if (is_working === 'Sí') {
 //         //   await prisma.scholar.update({

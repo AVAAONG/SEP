@@ -1,108 +1,61 @@
-import defailProfilePic from '@/../public/defaultProfilePic.png';
+import ActivityPanelInfo from '@/components/ActivityPanelInfo';
+import ActivityScholarActions from '@/components/ActivityScholarActions';
+import ScholarAttendanceWidget from '@/components/ScholarAttendanceWidget';
+import Table from '@/components/table/Table';
+import ScholarActivityAttendanceForScholarTemp from '@/components/table/columns/scholatActivityAttendanceForScholarTemp';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
-import { getWorkshopWithSpecificScholarAttendance } from '@/lib/db/utils/Workshops';
+import { WorkshopWithSpeaker } from '@/lib/db/types';
+import { getWorkshop, getWorkshopWithSpecificScholarAttendance } from '@/lib/db/utils/Workshops';
+import { getNotEnrolledScholarsInWorkshop } from '@/lib/db/utils/users';
+import { formatScholarDataForAttendanceTable } from '@/lib/tableUtils';
 import { getServerSession } from 'next-auth';
-import Image from 'next/image';
 import shortUUID from 'short-uuid';
 
 const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => {
   const se = await getServerSession(authOptions);
-
   const workshopId = params.workshopId || ('null' as shortUUID.SUUID);
-  const attendance = await getWorkshopWithSpecificScholarAttendance(workshopId, se?.user?.id);
+  const attendance = await getWorkshopWithSpecificScholarAttendance(workshopId, se?.scholarId);
+  const scholars = await getNotEnrolledScholarsInWorkshop(workshopId)
   const { workshop } = attendance || {};
-  const {
-    title,
-    start_dates,
-    end_dates,
-    description,
-    speaker,
-    modality,
-    asociated_skill,
-    platform,
-  } = workshop || {};
+  const chatForSpeaker = await getWorkshop(workshopId);
+  const isDisabled = () => {
+    if (attendance?.attendance! !== 'ENROLLED') return true
+    else if (new Date(workshop?.start_dates![0]!) <= new Date()) return true
+    else if (workshop?.activity_status !== 'SENT') return true
+    else return false
+  }
+  const scholarAttendanceDataForTable = formatScholarDataForAttendanceTable(
+    chatForSpeaker?.scholar_attendance ? chatForSpeaker.scholar_attendance.map((a) => a.scholar.scholar) : [],
+    chatForSpeaker?.scholar_attendance ? chatForSpeaker.scholar_attendance : []
+  );
+
 
   return (
-    <div className="space-y-6  min-h-screen">
-      <section className="flex bg-white rounded-lg p-8">
-        <div className="space-y-3 w-1/2">
-          <div className="flex flex-col space-y-2 ">
-            <span className="w-fit font-medium px-2">Actividad formativa</span>
-            {attendance?.attendance}
-            <h1 className="italic text-xl font-bold leading-none tracking-tight text-primary-light md:text-3xl">
-              {title}
-            </h1>
-          </div>
-
-          <h2 className="text-xl  font-semibold text-primary-light">Fechas:</h2>
-          <div className="space-y-4">
-            <div className="flex space-x-4">
-              {start_dates?.map((date, index) => {
-                return (
-                  <div className="flex flex-col space-y-2 border-l-2 border-primartext-primary-light pl-1.5 sm:pl-3">
-                    <div className="space-y-sm">
-                      <h3 className="text-sm leading-6 text-secondary">Fecha {index + 1}:</h3>
-                      <p className="text-base font-semibold">
-                        {new Date(date).toLocaleDateString('es-VE')}
-                      </p>
-                    </div>
-                    <div className="space-y-sm">
-                      <h3 className="text-sm leading-6 text-secondary">Hora de inicio:</h3>
-                      <p className="text-base font-semibold">
-                        {new Date(date)
-                          .toLocaleTimeString('es-VE', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          })
-                          .toUpperCase()}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="space-y-1">
-              <h3 className="text-xl font-semibold text-primary-light">
-                {modality === 'ONLINE' ? 'Plataforma' : 'Lugar'}
-              </h3>
-              <p className="text-base font-semibold capitalize">{platform}</p>
-            </div>
-            <div className="space-y-1">
-              {description && (
-                <h2 className="text-xl  font-semibold text-primary-light">Descripción:</h2>
-              )}{' '}
-              <p className="text-sm list-disc space-y-sm w-full">{description}</p>
+    <div className="min-h-screen flex flex-col gap-4">
+      <ActivityPanelInfo activity={chatForSpeaker as WorkshopWithSpeaker}  >
+        <div className='w-full flex gap-4  items-center justify-end'>
+          <div className='flex gap-2 items-center justify-center'>
+            <h3 className=" leading-none tracking-tight text-primary-light font-semibold">
+              Estatus de asistencia
+            </h3>
+            <div className="text-lg leading-none tracking-tight text-primary-light font-normal">
+              <ScholarAttendanceWidget value={attendance?.attendance!} />
             </div>
           </div>
-          <div className="w-full space-y-3">
-            <h2 className="text-xl font-semibold text-primary-light">
-              {speaker && speaker.length && speaker.length >= 2 ? 'Facilitadores' : 'Facilitador'}
-            </h2>
-            <div className="flex flex-col space-y-4">
-              {speaker?.map((s) => (
-                <div key={s.email} className="flex items-center space-x-2">
-                  <div className="h-9 w-9 shrink-0">
-                    <Image
-                      alt={s.first_names}
-                      loading="lazy"
-                      src={s.image ?? defailProfilePic}
-                      className="max-h-[72px] overflow-hidden rounded-full"
-                      width="72"
-                      height="72"
-                    />
-                  </div>
-                  <div className="space-y-sm">
-                    <div>
-                      <h3 className="text-sm font-semibold">
-                        {s.first_names} {s.last_names}
-                      </h3>
-                      <h4 className="text-xs uppercase">{s.job_company}</h4>
-                      <p className="text-sm">{s.description}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+          <ActivityScholarActions activityId={workshopId} attendanceId={attendance?.id!} kindOfActivity='workshop' scholars={scholars} isButtonDisabled={isDisabled()} />
+        </div>
+      </ActivityPanelInfo>
+      <section className="w-full space-y-3">
+        <h2 className="px-8 text-2xl leading-none tracking-tight text-primary-light font-semibold">
+          Becarios inscritos
+        </h2>
+        <div className="flex flex-row items-center space-x-2">
+          <div className="overflow-x-scroll md:overflow-x-clip rounded-lg w-full">
+            <Table
+              tableColumns={ScholarActivityAttendanceForScholarTemp}
+              tableData={scholarAttendanceDataForTable}
+              tableHeadersForSearch={[]}
+            />
           </div>
         </div>
       </section>

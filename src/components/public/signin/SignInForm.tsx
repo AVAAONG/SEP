@@ -41,11 +41,15 @@ const SigninForm = ({ callbackUrl, cookieValue }: SigninFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(async (data, event) => toast.promise(onSubmit(data, event!), {
-      pending: 'Realizando analisis de seguridad.',
-      success: 'Analisis de seguridad completado. Enviando enlace de acceso.',
-      error: 'Ocurrio un error',
-    }))}>
+    <form
+      onSubmit={handleSubmit(async (data, event) =>
+        toast.promise(onSubmit(data, event!), {
+          pending: 'Realizando analisis de seguridad.',
+          success: 'Analisis de seguridad completado. Enviando enlace de acceso.',
+          error: 'Ocurrio un error',
+        })
+      )}
+    >
       <div className="mb-3 flex flex-col gap-2">
         <Controller
           name="email"
@@ -57,10 +61,10 @@ const SigninForm = ({ callbackUrl, cookieValue }: SigninFormProps) => {
               label="Correo electrónico"
               autoFocus={true}
               required={true}
-              radius='sm'
+              radius="sm"
               autoComplete="email"
               type="email"
-              labelPlacement='outside'
+              labelPlacement="outside"
               value={field.value}
               onChange={field.onChange}
               isInvalid={!!formState.errors?.email?.message}
@@ -74,7 +78,7 @@ const SigninForm = ({ callbackUrl, cookieValue }: SigninFormProps) => {
         name="button"
         type="submit"
         isDisabled={!isValid || isSubmitting}
-        radius='sm'
+        radius="sm"
         className="bg-transparent border border-primary-light  hover:bg-primary-light hover:text-white font-medium w-full  "
       >
         Entrar con email

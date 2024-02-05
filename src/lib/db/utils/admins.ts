@@ -2,7 +2,7 @@
 
 import { AdminProfile, PrismaClient } from '@prisma/client';
 // import { prisma } from './prisma';
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 export const getAdminsProfiles = async () => {
   const users = await prisma.adminProfile.findMany();
@@ -27,23 +27,21 @@ export const createAdminProfileUser = async (data: AdminProfile) => {
         gender: data.gender,
         allowedActions: {
           connect: {
-            id: data.allowedActions_id
-          }
+            id: data.allowedActions_id,
+          },
         },
         responsibility: data.responsibility,
         chapter: {
           connect: {
-            id: data.chapter_id!
-          }
+            id: data.chapter_id!,
+          },
         },
       },
     });
     return adminProfile;
+  } catch (error) {
+    console.log(error);
   }
-  catch (error) {
-    console.log(error)
-  }
-
 };
 
 export const updateAdminProfileUser = async (data: AdminProfile) => {

@@ -76,11 +76,7 @@ const page = async ({
         day: 'numeric',
         year: 'numeric',
       }),
-      startHour: new Date(chat.start_dates[0]).toLocaleTimeString('es-VE', {
-        hour: 'numeric',
-        minute: 'numeric',
-        hourCycle: 'h12',
-      }),
+      startHour: new Date(chat.start_dates[0]).toISOString(),
       status: parseWorkshopStatusFromDatabase(chat.activity_status),
       modality: parseModalityFromDatabase(chat.modality),
       platform: chat.platform,

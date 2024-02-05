@@ -49,7 +49,7 @@ export const deleteChatFromDatabase = async (id: string) => {
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
 /**
  * Gets the total number of chats in the database.
@@ -193,8 +193,6 @@ export const getChatsCount = async (): Promise<number> => {
 //   return speaker;
 // };
 
-
-
 // export const deleteAllChats = async () => {
 //   const chats = await prisma.chat.deleteMany({});
 //   return chats;
@@ -205,7 +203,6 @@ export const getChatsCount = async (): Promise<number> => {
 //   return speakers;
 // };
 
-
 export const getChats = async () => {
   const chats = await prisma.chat.findMany({
     include: {
@@ -214,7 +211,7 @@ export const getChats = async () => {
     },
     orderBy: {
       start_dates: 'asc',
-    }
+    },
   });
   return chats;
 };
@@ -231,13 +228,13 @@ export const getChatSpeakerWithParams = async (data: Prisma.SpeakerSelect) => {
       where: {
         OR: [
           {
-            speaker_kind: 'CHATS'
+            speaker_kind: 'CHATS',
           },
           {
-            speaker_kind: 'CHATS_AND_WORKSHOPS'
-          }
-        ]
-      }
+            speaker_kind: 'CHATS_AND_WORKSHOPS',
+          },
+        ],
+      },
     });
     return speakers;
   } catch (e) {
@@ -258,9 +255,9 @@ export const getChat = async (id: shortUUID.SUUID) => {
               scholar: {
                 include: {
                   collage_information: true,
-                }
+                },
               },
-            }
+            },
           },
         },
       },
@@ -268,7 +265,6 @@ export const getChat = async (id: shortUUID.SUUID) => {
   });
   return workshop;
 };
-
 
 export const getChatsByScholar = async (programInformationId: string, scholarId: string) => {
   const chats = await prisma.chat.findMany({
@@ -298,8 +294,7 @@ export const getChatsByScholar = async (programInformationId: string, scholarId:
     },
   });
   return chats;
-}
-
+};
 
 export const getScheduleChats = async () => {
   const chats = await prisma.chat.findMany({
@@ -319,12 +314,12 @@ export const getScheduleChats = async () => {
 export const createChat = async (chat: Prisma.ChatCreateArgs) => {
   const createdChat = await prisma.chat.create(chat);
   return createdChat;
-}
+};
 
 export const editChat = async (chat: Prisma.ChatUpdateArgs) => {
   const editedChat = await prisma.chat.update(chat);
   return editedChat;
-}
+};
 
 export const changeChatStatus = async (id: string, status: ActivityStatus) => {
   const chat = await prisma.chat.update({
@@ -336,4 +331,4 @@ export const changeChatStatus = async (id: string, status: ActivityStatus) => {
     },
   });
   return chat;
-}
+};

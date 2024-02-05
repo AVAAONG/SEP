@@ -1,5 +1,6 @@
 import { calendar_v3 } from '@googleapis/calendar';
 import { Modality } from '@prisma/client';
+import { parsePlatformFromDatabase } from '../utils2';
 
 /**
  * Creates the default event object with all the details about the activitie
@@ -21,16 +22,20 @@ const createDefaultEvent = (
   end: string,
   attendees?: calendar_v3.Schema$EventAttendee[]
 ) => {
+
+  const startDateWithNoOffset = start.split('Z')[0];
+  const endDateWithNoOffset = end.split('Z')[0];
+
   const defaultEvent: calendar_v3.Schema$Event = {
     summary: title,
     description: calendarDescription,
-    location: platform,
+    location: parsePlatformFromDatabase(platform),
     start: {
-      dateTime: start,
+      dateTime: startDateWithNoOffset,
       timeZone: 'America/Caracas',
     },
     end: {
-      dateTime: end,
+      dateTime: endDateWithNoOffset,
       timeZone: 'America/Caracas',
     },
     visibility: 'public',
@@ -110,7 +115,6 @@ const createEventObject = (
   );
 
   if (modality === 'IN_PERSON') event = defaultEvent;
-
   else if (modality === 'ONLINE') {
     if (platform === 'PADLET') {
       event = {
@@ -129,7 +133,7 @@ const createEventObject = (
     }
   } else {
     throw new Error('No se especificó un tipo de modalidad válido');
-  };
+  }
   return event;
 };
 

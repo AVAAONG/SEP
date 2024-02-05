@@ -1,6 +1,9 @@
 'use client';
 import { ScholarChatColumnT } from '@/app/admin/becarios/[scholarId]/page';
+import DisplayTime from '@/components/DisplayTime';
+import ScholarAttendanceWidget from '@/components/ScholarAttendanceWidget';
 import { parseModalityFromDatabase, parseWorkshopStatusFromDatabase } from '@/lib/utils2';
+import { ScholarAttendance } from '@prisma/client';
 import Link from 'next/link';
 import { CellProps, Column } from 'react-table';
 
@@ -24,18 +27,10 @@ const scholarChatAttendaceColumns: Column<ScholarChatColumnT>[] = [
   {
     Header: 'Fecha',
     accessor: 'start_dates',
-    Cell: ({ cell }) => {
-      const date = new Date(cell.value[0]);
+    Cell: ({ value }) => {
       return (
-        <span>
-          {' '}
-          {date.toLocaleDateString('es-ES', {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-          })}
-        </span>
-      );
+        <DisplayTime time={value[0].toISOString()} />
+      )
     },
   },
   {
@@ -43,7 +38,7 @@ const scholarChatAttendaceColumns: Column<ScholarChatColumnT>[] = [
     Header: 'Inicio',
     accessor: 'start_dates',
     Cell: ({ value }) => {
-      const date = new Date(value[0]).toLocaleTimeString('es-VE', {
+      const date = new Date(value[0]).toLocaleTimeString('es-ES', {
         hour: 'numeric',
         minute: 'numeric',
         hourCycle: 'h12',
@@ -99,31 +94,7 @@ const scholarChatAttendaceColumns: Column<ScholarChatColumnT>[] = [
     Header: 'Asistencia',
     accessor: 'attendance',
     Cell: ({ value }) => {
-      if (value === 'NOT_ATTENDED') {
-        return (
-          <span className="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-            No asistió
-          </span>
-        );
-      } else if (value === 'ATTENDED') {
-        return (
-          <span className="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-green-900 dark:text-green-300">
-            Asistió
-          </span>
-        );
-      } else if (value === 'SPEAKER') {
-        return (
-          <span className="inline-flex items-center bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-blue-900 dark:text-blue-300">
-            Facilitador
-          </span>
-        );
-      } else {
-        return (
-          <span className="inline-flex items-center bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-gray-900 dark:text-gray-300">
-            Error
-          </span>
-        );
-      }
+      return (<ScholarAttendanceWidget value={value as ScholarAttendance} />)
     },
     disableSortBy: true,
   },

@@ -1,5 +1,6 @@
 import defailProfilePic from '@/../public/defaultProfilePic.png';
-import ActivityStatus from '@/components/table/ActivityStatus';
+import DisplayTime from '@/components/DisplayTime';
+import ActivityStatusIndicator from '@/components/table/ActivityStatus';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
 import { getChat } from '@/lib/db/utils/chats';
@@ -17,10 +18,12 @@ export interface IScholarForAttendanceTable {
   first_names: string;
   last_names: string;
   email: string | null;
+  kindOfActivity: 'workshop' | 'chat'
   phone_number: string | null;
   whatsAppNumber: string | null;
   dni: string;
   gender: Gender;
+  attendanceId: string;
   attendance?: ScholarAttendance;
 }
 
@@ -57,6 +60,9 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
   const unAttendedScholarsCount = scholar_attendance?.filter(
     (scholar_att) => scholar_att.attendance === 'NOT_ATTENDED'
   ).length;
+  const cancelledScholarsCount = scholar_attendance?.filter(
+    (scholar_att) => scholar_att.attendance === 'CANCELLED'
+  ).length;
 
   const g = [
     {
@@ -73,7 +79,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
     },
     {
       title: 'Total de cancelaciones',
-      value: 0,
+      value: cancelledScholarsCount,
     },
   ];
 
@@ -101,7 +107,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
             <div className="flex gap-2 items-center">
               <div className="w-fit font-medium px-2">Chat club</div>
               <div>
-                <ActivityStatus value={chat?.activity_status!} />
+                <ActivityStatusIndicator status={chat?.activity_status!} />
               </div>
             </div>
             <h1 className="italic text-xl font-bold leading-none tracking-tight text-primary-light md:text-3xl">
@@ -118,18 +124,13 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
                     <div className="space-y-sm">
                       <h3 className="text-sm leading-6 text-secondary">Fecha {index + 1}:</h3>
                       <p className="text-base font-semibold">
-                        {new Date(date).toLocaleDateString('es-VE')}
+                        {new Date(date).toLocaleDateString('es-ES')}
                       </p>
                     </div>
                     <div className="space-y-sm">
                       <h3 className="text-sm leading-6 text-secondary">Hora de inicio:</h3>
                       <p className="text-base font-semibold">
-                        {new Date(date)
-                          .toLocaleTimeString('es-VE', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          })
-                          .toUpperCase()}
+                        <DisplayTime time={date.toISOString()} />
                       </p>
                     </div>
                   </div>
@@ -221,11 +222,11 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
                 date={start_dates ? new Date(start_dates[0]).toLocaleDateString('ez-VE') : ''}
                 hour={
                   start_dates
-                    ? new Date(start_dates[0]).toLocaleTimeString('es-VE', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: true,
-                      })
+                    ? new Date(start_dates[0]).toLocaleTimeString('es-ES', {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true,
+                    })
                     : ''
                 }
                 modality={parseModalityFromDatabase(modality as Modality)}

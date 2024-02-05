@@ -3,7 +3,7 @@ import WorkshopCreationForm from '@/components/admin/WorkshopCreationForm';
 import { getScheduledWorkshops } from '@/lib/db/utils/Workshops';
 import { getWorkshopSpeakersWithParams } from '@/lib/db/utils/speaker';
 import { Speaker } from '@prisma/client';
-
+export const dynamic = 'force-dynamic';
 const Page = async ({ searchParams }: { searchParams: { activityToEdit: string | null } }) => {
   const scheduledWorkshops = await getScheduledWorkshops();
   const speakers = await getWorkshopSpeakersWithParams({

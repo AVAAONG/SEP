@@ -10,20 +10,17 @@ import * as QRCode from 'qrcode';
  * @param width Optional image width in pixels.
  * @param scale Optional scale factor.
  */
-async function generateQRCode(
-    inputText: string,
-) {
-    try {
-        const qrDataURL = await QRCode.toDataURL(inputText, {
-            margin: 1,
-            width: 300,
-            errorCorrectionLevel: 'H',
-        });
-        return qrDataURL;
-
-    } catch (error) {
-        console.error('Error generating QR code:', error);
-    }
+async function generateQRCode(inputText: string) {
+  try {
+    const qrDataURL = await QRCode.toDataURL(inputText, {
+      margin: 1,
+      width: 300,
+      errorCorrectionLevel: 'H',
+    });
+    return qrDataURL;
+  } catch (error) {
+    console.error('Error generating QR code:', error);
+  }
 }
 
 export default generateQRCode;

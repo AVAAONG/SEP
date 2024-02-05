@@ -4,10 +4,12 @@ import { CHAT_CALENDAR_ID, WORKSHOP_CALENDAR_ID } from '@/lib/constants';
 import { ChatWithSpeaker, WorkshopWithSpeaker } from '@/lib/db/types';
 import { changeWorkshopStatus, deleteWorkshopFromDatabase } from '@/lib/db/utils/Workshops';
 import { changeChatStatus, deleteChatFromDatabase } from '@/lib/db/utils/chats';
+import { sendActivitiesEmail } from '@/lib/sendEmails';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import {
   parseChatLevelFromDatabase,
   parseModalityFromDatabase,
+  parsePlatformFromDatabase,
   parseSkillFromDatabase,
 } from '@/lib/utils2';
 import { deleteZoomMeeting } from '@/lib/zoom';
@@ -18,16 +20,20 @@ import { useDisclosure } from '@nextui-org/modal';
 import { cn } from '@nextui-org/react';
 import { ScrollShadow } from '@nextui-org/scroll-shadow';
 import { Tooltip } from '@nextui-org/tooltip';
+import moment from 'moment-timezone';
+import 'moment/locale/es';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import BasicModal from './BasicModal';
-
+import createChatInvitationMessage from './emailTemplateMessage/ChatInvitationMessage';
+import createWorkshopInvitationMessage from './emailTemplateMessage/WorkshopInvitationMessage';
 type ScheduleChatCardProps = {
   activities: ChatWithSpeaker[] | WorkshopWithSpeaker[];
 };
 
 const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
+  const router = useRouter();
   const [groupSelected, setGroupSelected] = useState<string[]>([]);
   const [buttonIsDisabled, setbuttonIsDisabled] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<
@@ -37,16 +43,9 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
   const editModal = useDisclosure();
   const deleteModal = useDisclosure();
   const sendModal = useDisclosure();
-  let router;
 
-  const mounted = useRef(false);
 
-  useEffect(() => {
-    mounted.current = true;
-  }, []);
-  if (mounted.current) {
-    router = useRouter();
-  }
+
   const editWorkshop = async (chatId: string) => {
     router.push(`?activityToEdit=${chatId}`);
   };
@@ -66,7 +65,6 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
   };
   const sendActivities = async () => {
     setbuttonIsDisabled(true);
-    sendModal.onClose();
     groupSelected.map(async (id) => {
       if ('level' in activities[0]) await changeChatStatus(id, 'SENT');
       else if ('year' in activities[0]) await changeWorkshopStatus(id, 'SENT');
@@ -75,6 +73,16 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
     if ('level' in activities[0]) await revalidateSpecificPath('/admin/chats/crear');
     else if ('year' in activities[0])
       await revalidateSpecificPath('/admin/actividadesFormativas/crear');
+    if ('level' in activities[0]) {
+      const chatInvitationMessage = createChatInvitationMessage()
+      await sendActivitiesEmail(chatInvitationMessage, '¡Se han agregado chat clubs de ingles!')
+    }
+    if ('year' in activities[0]) {
+      const workshopInvitationMessage = createWorkshopInvitationMessage()
+      await sendActivitiesEmail(workshopInvitationMessage, '¡Se han agregado actividades formativas!')
+    }
+    setbuttonIsDisabled(false);
+
   };
   return (
     <div className="flex flex-col w-full items-center">
@@ -160,24 +168,13 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
                   </div>
                   <div className="flex-1 min-w-0 text-center">
                     <p className="text-sm font-medium ">
-                      {new Date(start_dates[0]).toLocaleDateString('es-ES', {
-                        month: 'long',
-                        day: 'numeric',
-                      })}
+                      {moment(start_dates[0]).tz("America/Caracas").locale('es').format('D MMMM')}
                     </p>
                     <p className="text-xs   ">
                       De{' '}
-                      {new Date(start_dates[0]).toLocaleString('es-ES', {
-                        hour: '2-digit',
-                        hour12: true,
-                        minute: '2-digit',
-                      })}{' '}
+                      {moment(start_dates[0]).tz("America/Caracas").format('hh:mm A')}{' '}
                       a{' '}
-                      {new Date(end_dates[0]).toLocaleString('es-ES', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: true,
-                      })}
+                      {moment(end_dates[0]).tz("America/Caracas").format('hh:mm A')}
                     </p>
                   </div>
                   {asociated_skill && (
@@ -195,7 +192,7 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
                   )}
                   <div className="flex-1 min-w-0 text-center">
                     <p className="text-sm font-medium ">{parseModalityFromDatabase(modality)} </p>
-                    <p className="text-xs">{platform}</p>
+                    <p className="text-xs">{parsePlatformFromDatabase(platform)}</p>
                   </div>
                   <div className=" flex flex-col w-6">
                     <Button
@@ -297,21 +294,11 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
                                 </span>{' '}
                                 pautada para el dia{' '}
                                 <span className="font-medium ">
-                                  {new Date(selectedActivity!.start_dates[0]).toLocaleDateString(
-                                    'es-ES',
-                                    { day: 'numeric', month: 'long', year: 'numeric' }
-                                  )}
+                                  {moment(selectedActivity!.start_dates[0]).tz("America/Caracas").locale('es').format('LL')}
                                 </span>{' '}
                                 a las{' '}
                                 <span className="font-medium ">
-                                  {new Date(selectedActivity!.start_dates[0]).toLocaleTimeString(
-                                    'es-ES',
-                                    {
-                                      hour: '2-digit',
-                                      minute: '2-digit',
-                                      hour12: true,
-                                    }
-                                  )}
+                                  {moment(selectedActivity!.start_dates[0]).tz("America/Caracas").format('hh:mm A')}
                                 </span>{' '}
                                 sera editada
                               </p>
@@ -366,6 +353,7 @@ const ScheduleChatCard: React.FC<ScheduleChatCardProps> = ({ activities }) => {
             success: 'Actividades enviadas de forma correcta 👌',
             error: 'ERROR: No se pudieron enviar las actividades 🤯',
           });
+          sendModal.onClose()
         }}
         confirmText="Enviar"
       />

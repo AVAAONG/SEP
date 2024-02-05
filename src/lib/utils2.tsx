@@ -55,4 +55,34 @@ export const parseChatLevelFromDatabase = (level: Level) => {
     default:
       return 'BASIC';
   }
+};
+
+
+export const parsePlatformFromDatabase = (platform: string) => {
+  switch (platform) {
+    case 'ZOOM':
+      return 'Zoom';
+    case 'TEAMS':
+      return 'Teams';
+    case 'GOOGLE_MEET':
+      return 'Google Meet';
+    case 'DISCORD':
+      return 'Discord';
+    case 'WHATSAPP':
+      return 'Whatsapp';
+    case 'FACEBOOK':
+      return 'Facebook';
+    case 'INSTAGRAM':
+      return 'Instagram';
+    case 'TWITTER':
+      return 'Twitter';
+    case 'YOUTUBE':
+      return 'Youtube';
+    case 'TWITCH':
+      return 'Twitch';
+    case 'OTHER':
+      return 'Otra';
+    default:
+      return platform;
+  }
 }

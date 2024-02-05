@@ -1,4 +1,4 @@
-'use server'
+'use server';
 /**
  * @file This file contains utils functions related to calendar, such as creating the event object, the event description, the event link, etc.
  * @author Kevin Bravo (kevinbravo.me)
@@ -6,7 +6,7 @@
 
 import { Skill } from '@prisma/client';
 import axios, { AxiosRequestConfig } from 'axios';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { Calendar } from '../googleAPI/auth';
 
 /**
@@ -139,15 +139,30 @@ export const substractMonths = (montsTosubstract: number) => {
  *
  * @remarks the format needed by the calendar api is `aaaa-mm-ddThh:mm:ss-hh:mm`
  * @remarks If the end hour is not passed as argument, it will add 2 hours to the start hour and set it as the end hour
- * 
+ *
  * @param date the date of the event (the format should be passed as `aaaa-mm-dd`)
  * @param startingHour the hour of the event (the format should be passed as `hh:mm`)
  * @returns the date object of the start and end hour in ISO string format
  */
-export const getISOStringDate = (date: string, hour: string) => {
-  const start = new Date(date + ',' + hour);
-  return start.toISOString()
-};
+function combineDateAndTime(dateString: string, timeString: string): string {
+  // Parse the input date and time
+  const parsedDate = moment(dateString, 'YYYY-MM-DD');
+  const parsedTime = moment(timeString, 'HH:mm');
+
+  // Combine the date and time
+  const combinedDateTime = parsedDate.set({
+    hour: parsedTime.hour(),
+    minute: parsedTime.minute(),
+    second: 0, // Optional: Set seconds to 0
+    millisecond: 0, // Optional: Set milliseconds to 0
+  });
+  // Convert to UTC based on the specified time zone
+  const utcDateTime = combinedDateTime.utc();
+  // Return the ISO string
+  return utcDateTime.toISOString();
+}
+
+
 
 /**
  * gets the google meet meeting link of an specific event
@@ -156,11 +171,11 @@ export const getISOStringDate = (date: string, hour: string) => {
  * @returns the meet link and its id
  */
 export const getMeetEventLink = async (calendarId: string, eventId: string) => {
-  console.log('froom google meet')
+  console.log('froom google meet');
   const event = await Calendar.events.get({ calendarId, eventId });
   const meetingLink = event.data.hangoutLink;
   const meetingId = event.data.hangoutLink?.split('/')[3];
-  console.log(meetingLink, meetingId)
+  console.log(meetingLink, meetingId);
   return { meetingLink, meetingId };
 };
 
@@ -196,7 +211,6 @@ export const mapWorkshopSkill = (skill: Skill): string => {
   }
 };
 
-
 export const formatDates = (
   dates: {
     date: string;
@@ -207,11 +221,12 @@ export const formatDates = (
   start_dates: string[];
   end_dates: string[];
 } => {
-  const start_dates = dates.map(({ date, startHour }) => getISOStringDate(date.trim(), startHour.trim()));
-  const end_dates = dates.map(({ date, endHour }) => getISOStringDate(date.trim(), endHour.trim()));
+  const start_dates = dates.map(({ date, startHour }) =>
+    combineDateAndTime(date.trim(), startHour.trim())
+  );
+  const end_dates = dates.map(({ date, endHour }) => combineDateAndTime(date.trim(), endHour.trim()));
   return { start_dates, end_dates };
 };
-
 
 export const sumHours = (startHours: string[], endHours: string[]) => {
   let hours: number = 0;

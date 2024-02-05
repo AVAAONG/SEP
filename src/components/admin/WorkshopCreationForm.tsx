@@ -1,5 +1,6 @@
 'use client';
 import { createCalendarEvent, updateCalendarEvent } from '@/lib/calendar/calendar';
+import { formatDatesClient } from '@/lib/calendar/clientUtils';
 import { IWorkshopCalendar } from '@/lib/calendar/d';
 import { formatDates } from '@/lib/calendar/utils';
 import { MODALITY, PROGRAM_COMPONENTS, WORKSHOP_TYPES, WORKSHOP_YEAR } from '@/lib/constants';
@@ -79,6 +80,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
       });
     }
   }, [workshopForEdit, setValue]);
+  const router = useRouter();
 
   const modality = useWatch({
     control,
@@ -88,14 +90,14 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
     control,
     name: 'dates',
   });
-  const router = useRouter();
 
   const handleFormSubmit = async (
     data: z.infer<typeof workshopCreationFormSchema>,
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
     const buttonType = ((event?.nativeEvent as SubmitEvent)?.submitter as HTMLButtonElement)?.name;
-    const dates = await formatDates(data.dates);
+    const dates = formatDatesClient(data.dates); //client formating
+    const calendarDates = await formatDates(data.dates); //server formating
     const workshopSpeakersId = data.speakersId.split(',');
     const speakersData = workshopSpeakersId
       .map((speakerId: string) => {
@@ -103,7 +105,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
         if (!speaker) return null;
         return {
           id: speaker?.id,
-          speakerName: `${speaker?.first_names} ${speaker?.last_names}`,
+          speakerName: `${speaker?.first_names.split(' ')[0]} ${speaker?.last_names.split(' ')[0]}`,
           speakerEmail: speaker?.email,
         };
       })
@@ -112,7 +114,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
     const calendarWorkshop: IWorkshopCalendar = {
       platform: platformInPerson ? platformInPerson : platformOnline!,
       speakersData,
-      ...dates,
+      ...calendarDates,
       ...restData,
       description: data.description ? data.description : null,
     };
@@ -141,13 +143,13 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
           kindOfWorkshop: data.kindOfWorkshop,
           year: data.year as unknown as WorkshopYear[],
           meeting_id: meetingDetails.map(
-            (meetingDetail) => meetingDetail.meetingId || null
+            (meetingDetail) => meetingDetail.meetingId || ''
           ) as string[],
           meeting_link: meetingDetails.map(
-            (meetingDetail) => meetingDetail.meetingLink || null
+            (meetingDetail) => meetingDetail.meetingLink || ''
           ) as string[],
           meeting_password: meetingDetails.map(
-            (meetingDetail) => meetingDetail.meetingPassword || null
+            (meetingDetail) => meetingDetail.meetingPassword || ''
           ) as string[],
           speaker: {
             connect: calendarWorkshop.speakersData.map((speaker) => ({ id: speaker.id })),

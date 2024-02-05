@@ -34,7 +34,6 @@ export const authenticateWithZoom = async (): Promise<ZoomAuthResponse> => {
     {
       grant_type: 'account_credentials',
       account_id: ZOOM_USER_ID,
-
     },
     {
       headers: {
@@ -109,8 +108,7 @@ export const deleteZoomMeeting = async (meetingId: string) => {
     },
   });
   return response;
-}
-
+};
 
 export const updateZoomMeeting = async (meetingId: string, name: string, startTime: string) => {
   const start_time: string = moment(startTime).format('YYYY-MM-DDTHH:mm:ss');
@@ -131,7 +129,7 @@ export const updateZoomMeeting = async (meetingId: string, name: string, startTi
         enable: true,
       },
     },
-  }
+  };
   const { access_token } = await authenticateWithZoom();
   const response = await axios.patch(
     `https://api.zoom.us/v2/meetings/${meetingId}`,
@@ -145,7 +143,6 @@ export const updateZoomMeeting = async (meetingId: string, name: string, startTi
   );
   const { join_url, id, password } = response.data;
   return { meetingLink: join_url, meetingId: id, meetingPassword: password };
-}
-
+};
 
 export default createZoomMeeting;
