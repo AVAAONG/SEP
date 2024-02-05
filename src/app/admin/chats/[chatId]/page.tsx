@@ -18,7 +18,7 @@ export interface IScholarForAttendanceTable {
   first_names: string;
   last_names: string;
   email: string | null;
-  kindOfActivity: 'workshop' | 'chat'
+  kindOfActivity: 'workshop' | 'chat';
   phone_number: string | null;
   whatsAppNumber: string | null;
   dni: string;
@@ -54,20 +54,33 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
     };
   });
 
-  const attendedScholarsCount = scholar_attendance?.filter(
-    (scholar_att) => scholar_att.attendance === 'ATTENDED'
-  ).length;
-  const unAttendedScholarsCount = scholar_attendance?.filter(
-    (scholar_att) => scholar_att.attendance === 'NOT_ATTENDED'
-  ).length;
-  const cancelledScholarsCount = scholar_attendance?.filter(
-    (scholar_att) => scholar_att.attendance === 'CANCELLED'
-  ).length;
+  let attendedScholarsCount = 0;
+  let unAttendedScholarsCount = 0;
+  let cancelledScholarsCount = 0;
+  let enroledScholars = 0;
 
+  scholar_attendance?.forEach((scholar_att) => {
+    switch (scholar_att.attendance) {
+      case 'ATTENDED':
+        attendedScholarsCount++;
+        break;
+      case 'NOT_ATTENDED':
+        unAttendedScholarsCount++;
+        break;
+      case 'CANCELLED':
+        cancelledScholarsCount++;
+        break;
+      case 'ENROLLED':
+        enroledScholars++;
+        break;
+      default:
+        break;
+    }
+  });
   const g = [
     {
       title: 'Total de inscritos',
-      value: scholar_attendance?.length,
+      value: enroledScholars,
     },
     {
       title: 'Total de asistentes',
@@ -223,10 +236,10 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
                 hour={
                   start_dates
                     ? new Date(start_dates[0]).toLocaleTimeString('es-ES', {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      hour12: true,
-                    })
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true,
+                      })
                     : ''
                 }
                 modality={parseModalityFromDatabase(modality as Modality)}
