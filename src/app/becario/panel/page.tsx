@@ -13,9 +13,10 @@ import { getServerSession } from 'next-auth';
 import { chatIcon, workshopIcon } from '../../../../public/svgs/svgs';
 
 const page = async () => {
+  const actualYear = new Date().getFullYear();
   const session = await getServerSession(authOptions);
   const id = session?.scholarId;
-  const [doneWorkshopsCount, doneChatsCount] = await getScholarDoneActivitiesCount(id);
+  const [doneWorkshopsCount, doneChatsCount] = await getScholarDoneActivitiesCount(id, actualYear);
   const [enrrolledWorkshops, enrrolledCHats] = await getActivitiesWhenScholarItsEnrolled(id);
   const events = formatActivityEventsForBigCalendar([...enrrolledWorkshops, ...enrrolledCHats], "scholar");
   const cardContent: PanelCardProps[] = [
