@@ -120,7 +120,7 @@ export const formatActivityEventsForBigCalendarEnrlled = (
     }
     const bgColor = getBgColor(colors, activity_status);
     const eventModalityTitle = parseModalityFromDatabase(modality);
-    const isFull = activity.scholar_attendance.length >= activity.avalible_spots;
+    const isFull = activity.scholar_attendance.map(a => a.attendance === 'ENROLLED').length >= activity.avalible_spots;
     return start_dates.map((startDate, index) => ({
       id: id,
       originalTitle: title,
