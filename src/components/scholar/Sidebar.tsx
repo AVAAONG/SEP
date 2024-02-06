@@ -10,6 +10,7 @@ import {
   CalendarIcon,
   chatIcon,
   dashboardComponent,
+  volunterIcon,
   workshopIcon,
 } from '../../../public/svgs/svgs';
 import ScholarDropdownButton from './ScholarDropdownButton';
@@ -26,39 +27,33 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
   {
     Icon: workshopIcon(),
     buttonName: 'Actividades formativas',
-    itemList: [
-      {
-        name: 'Registro',
-        link: `/${SCHOLAR_PREFIX}/actividadesFormativas`,
-      },
-    ],
-    link: '',
+    itemList: [],
+    link: `/${SCHOLAR_PREFIX}/actividadesFormativas`,
   },
   {
     Icon: chatIcon(),
     buttonName: 'Chats',
-    itemList: [{ name: 'Registro', link: `/${SCHOLAR_PREFIX}/chats` }],
+    itemList: [
+      { name: 'Registro', link: `/${SCHOLAR_PREFIX}/chats` },
+      { name: 'Proponer chat', link: `/${SCHOLAR_PREFIX}/chats/prouestas` },
+    ],
     link: '',
   },
-  // {
-  //   Icon: volunterIcon(),
-  //   buttonName: 'Voluntariado',
-  //   itemList: [
-  //     {
-  //       name: 'Lista de voluntariado',
-  //       link: `/${SCHOLAR_PREFIX}/voluntariado`,
-  //     },
-  //     {
-  //       name: 'Reporte de horas',
-  //       link: `/${SCHOLAR_PREFIX}/voluntariado/reporte`,
-  //     },
-  //     {
-  //       name: 'Subir voluntariado externo',
-  //       link: `/${SCHOLAR_PREFIX}/voluntariado/externo`,
-  //     },
-  //   ],
-  //   link: '',
-  // },
+  {
+    Icon: volunterIcon(),
+    buttonName: 'Voluntariado',
+    itemList: [
+      {
+        name: 'Registro',
+        link: `/${SCHOLAR_PREFIX}/voluntariado`,
+      },
+      {
+        name: 'Subir voluntariado externo',
+        link: `/${SCHOLAR_PREFIX}/voluntariado/externo`,
+      },
+    ],
+    link: '',
+  },
   {
     Icon: CalendarIcon(),
     buttonName: 'Calendario',
