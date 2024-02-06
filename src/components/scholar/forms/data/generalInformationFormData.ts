@@ -1,4 +1,4 @@
-import scholarInfoSchema from "@/lib/schemas/scholar/GeneralInformation";
+import scholarInfoSchema from "@/lib/schemas/scholar/scholarGeneralInformationSchema";
 
 type GeneralInformationInputData = {
   label: string;
@@ -64,7 +64,7 @@ const GENERAL_INFORMATION_INPUT_DATA: GeneralInformationInputData[] = [
   },
   {
     label: 'Número de telefono whatsapp',
-    id: 'whatsapp_phone_number',
+    id: 'whatsapp_number',
     placeholder: '0412-1234567',
     required: true,
     type: 'text',

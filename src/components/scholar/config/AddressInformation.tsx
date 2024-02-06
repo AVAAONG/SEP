@@ -1,98 +1,105 @@
 'use client';
-import LoadingModal from '@/components/scholar/forms/LoadingModal';
-import { BaseSyntheticEvent, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-
+import { updateScholar } from '@/lib/db/utils/users';
+import scholarAddressInformationSchema from '@/lib/schemas/scholar/scholarAddressInformationSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button, Input } from '@nextui-org/react';
+import { Scholar } from '@prisma/client';
+import { BaseSyntheticEvent } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import { z } from 'zod';
 interface AddressInformationProps {
-  scholarAddressInfo: {
-    stateOfOrigin: string;
-    currentZone: string;
-  };
-  id: string;
+  scholar: Scholar;
   title: string;
 }
 
-const AddressInformation = ({ scholarAddressInfo, title, id }: AddressInformationProps) => {
-  const [updatinState, changeUpdatingState] = useState<'updating' | 'updated' | 'error' | 'none'>(
-    'none'
-  );
-
-  useEffect(() => {
-    if (updatinState === 'updated') {
-      setTimeout(() => {
-        changeUpdatingState('none');
-      }, 3000);
-    }
-  }, [updatinState]);
-
-  const { register, handleSubmit } = useForm({
+const AddressInformation: React.FC<AddressInformationProps> = ({ scholar }) => {
+  const {
+    handleSubmit,
+    control,
+    formState: { isSubmitting, isValid },
+  } = useForm<z.infer<typeof scholarAddressInformationSchema>>({
+    resolver: zodResolver(scholarAddressInformationSchema),
     defaultValues: {
-      ...scholarAddressInfo,
+      ...scholar,
     },
   });
 
-  const saveData = async (data: any, event: BaseSyntheticEvent) => {
-    event.preventDefault();
-    changeUpdatingState('updating');
-    const response = await fetch(`/becario/api/scholar`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ data, id }),
-    });
-    if (response.status === 200) {
-      changeUpdatingState('updated');
-    } else {
-      changeUpdatingState('error');
-    }
+  const saveData = async (
+    data: z.infer<typeof scholarAddressInformationSchema>,
+    event: BaseSyntheticEvent<object, any, any> | undefined
+  ) => {
+    event?.preventDefault();
+    await updateScholar(scholar.id, data);
   };
 
-  if (updatinState !== 'none') {
-    return <LoadingModal state={updatinState} changeState={changeUpdatingState} />;
-  } else {
-    return (
-      <>
-        <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">{title}</h3>
-        <form action="#">
-          <div className="grid grid-cols-6 gap-6">
-            <div className="col-span-6 sm:col-span-3">
-              <label
-                htmlFor="address"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Estado de Origen
-              </label>
-              <input type="text" {...register('stateOfOrigin')} placeholder="La guaira" required />
-            </div>
-            <div className="col-span-6 sm:col-span-3">
-              <label
-                htmlFor="state"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Direccion de Residencia Actual
-              </label>
-              <input
-                type="text"
-                {...register('currentZone')}
-                placeholder="AV San Martin - El Guarataro"
-                required
-              />
-            </div>
-            <div className="col-span-6 sm:col-full">
-              <button
-                onClick={handleSubmit((data, event) => saveData(data, event!))}
-                className="text-white bg-green-600 hover:bg-green-500 hover:text-green-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                type="submit"
-              >
-                Guardar cambios
-              </button>
-            </div>
-          </div>
-        </form>
-      </>
-    );
-  }
+  return (
+    <>
+      <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">Dirección</h3>
+      <form
+        onSubmit={handleSubmit(async (data, event) =>
+          toast.promise(saveData(data, event), {
+            pending: 'Guardando cambios...',
+            success: 'Cambios guardados',
+            error: 'Error al guardar cambios',
+          })
+        )}
+      >
+        <div className="grid grid-cols-6 gap-6">
+          <Controller
+            name="state"
+            control={control}
+            rules={{ required: true }}
+            render={({ field, formState }) => {
+              return (
+                <Input
+                  value={field.value}
+                  onChange={field.onChange}
+                  isInvalid={!!formState.errors?.['state']?.message}
+                  errorMessage={formState.errors?.['state']?.message?.toString()}
+                  isRequired
+                  type="text"
+                  label="Estado de origen"
+                  radius="sm"
+                  classNames={{ base: 'col-span-3 h-fit' }}
+                  labelPlacement="outside"
+                />
+              );
+            }}
+          />
+          <Controller
+            name="address"
+            control={control}
+            rules={{ required: true }}
+            render={({ field, formState }) => {
+              return (
+                <Input
+                  value={field.value}
+                  onChange={field.onChange}
+                  isInvalid={!!formState.errors?.['address']?.message}
+                  errorMessage={formState.errors?.['address']?.message?.toString()}
+                  isRequired
+                  type="text"
+                  label="Direccion de residencia actual"
+                  radius="sm"
+                  classNames={{ base: 'col-span-3 h-fit' }}
+                  labelPlacement="outside"
+                />
+              );
+            }}
+          />
+
+          <Button
+            type="submit"
+            className="text-white bg-green-600 hover:bg-green-500 hover:text-green-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            isDisabled={isSubmitting}
+          >
+            Guardar cambios
+          </Button>
+        </div>
+      </form>
+    </>
+  );
 };
 
 export default AddressInformation;

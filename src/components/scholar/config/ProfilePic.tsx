@@ -23,13 +23,12 @@ const ProfilePic = (props: ProfilePicProps) => {
         alt="profile picture"
       />
       <div>
-        <h3 className="mb-1 text-xl font-bold text-gray-900 dark:text-white">Foto de perfil</h3>
+        <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">
+          Foto de perfil
+        </h3>
         <div className="mb-4 text-sm text-gray-500 dark:text-gray-400">JPG o PNG.</div>
         <div className="flex items-center space-x-4">
-          <Button
-            type="button"
-            className="text-white bg-green-600 hover:bg-green-500 hover:text-green-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
+          <Button className="text-white bg-green-600 hover:bg-green-500 hover:text-green-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
             <svg
               className="w-4 h-4 mr-2 -ml-1"
               fill="currentColor"

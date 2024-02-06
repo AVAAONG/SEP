@@ -1,7 +1,7 @@
 'use client';
 import GENERAL_INFORMATION_INPUT_DATA from '@/components/scholar/forms/data/generalInformationFormData';
 import { updateScholar } from '@/lib/db/utils/users';
-import scholarInfoSchema from '@/lib/schemas/scholar/GeneralInformation';
+import scholarInfoSchema from '@/lib/schemas/scholar/scholarGeneralInformationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input, Select, SelectItem } from '@nextui-org/react';
 import { Scholar } from '@prisma/client';
