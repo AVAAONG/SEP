@@ -4,6 +4,7 @@ import { getSentActivitiesWhereScholarIsNotEnrroled } from '@/lib/db/utils/Works
 import { prisma } from '@/lib/db/utils/prisma';
 import { formatActivityEventsForBigCalendarEnrlled } from '@/lib/utils';
 import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
 
 /**
  * Renders a page component with the calendar of activities
