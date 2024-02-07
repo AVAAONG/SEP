@@ -9,9 +9,12 @@ export const SpeakerCreationFormSchema = z.object({
   first_names: z.string().min(1, { message: 'El facilitador debe de tener minimo un nombre' }),
   last_names: z.string().min(1, { message: 'El facilitador debe de tener minimo un apellido' }),
   email: z.string().email().min(1, { message: 'Debes especificar el correo del facilitador' }),
-  birthdate: z.coerce.date().refine((date) => new Date(date) <= new Date(), {
-    message: 'La fecha no puede ser mayor a la actual',
-  }),
+  birthdate: z.coerce
+    .date()
+    .refine((date) => new Date(date) <= new Date(), {
+      message: 'La fecha no puede ser mayor a la actual',
+    })
+    .optional(),
   years_of_exp: z.coerce.number().optional(),
   job_title: z.string().optional(),
   job_company: z.string().optional(),

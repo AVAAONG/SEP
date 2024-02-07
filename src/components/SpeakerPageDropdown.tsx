@@ -1,10 +1,6 @@
 'use client';
 import { updateSpeaker } from '@/lib/db/utils/speaker';
-import {
-  ArrowTopRightOnSquareIcon,
-  EllipsisHorizontalCircleIcon,
-  PencilSquareIcon,
-} from '@heroicons/react/24/outline';
+import { EllipsisHorizontalCircleIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@nextui-org/button';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/dropdown';
@@ -91,14 +87,14 @@ const SpeakerPageDropdown: React.FC<SpeakerPageDropdownProps> = ({ speaker }) =>
           >
             Editar datos del facilitador
           </DropdownItem>
-          <DropdownItem
+          {/* <DropdownItem
             target="_blank"
             href="https://www.google.com"
             startContent={<ArrowTopRightOnSquareIcon className={iconClasses} />}
             key="visit"
           >
             Visitar pagina publica
-          </DropdownItem>
+          </DropdownItem> */}
         </DropdownMenu>
       </Dropdown>
       <Modal
