@@ -33,6 +33,17 @@ export const createUser = async (data: User): Promise<User> => {
   return user;
 };
 
+
+export const updateUsesr = async (image: string) => {
+  console.log('image', image);
+  await prisma.user.update({
+    where: { id: 'mm,,,,' },
+    data: {
+      image: image
+    },
+  });
+}
+
 /**
  * Delete all scholars from the database
  * @param dat
