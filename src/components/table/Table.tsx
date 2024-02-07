@@ -121,7 +121,7 @@ function Table<T extends object>({
                       <td
                         key={key}
                         {...restCellProps}
-                        className="px-4 py-1 whitespace-nowrap lowecase capitalize"
+                        className="px-4 py-1 whitespace-nowrap lowecase"
                       >
                         {cell.render('Cell')}
                       </td>

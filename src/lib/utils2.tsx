@@ -3,7 +3,7 @@ import { ActivityStatus, Level, Modality, Skill } from '@prisma/client';
 export const parseSkillFromDatabase = (skill: Skill) => {
   switch (skill) {
     case 'CITIZEN_EXERCISE':
-      return 'Ejercicio Ciudadano';
+      return 'Ejercicio ciudadano';
     case 'ENTREPRENEURSHIP':
       return 'Emprendimiento';
     case 'SELF_MANAGEMENT':
@@ -57,7 +57,6 @@ export const parseChatLevelFromDatabase = (level: Level) => {
   }
 };
 
-
 export const parsePlatformFromDatabase = (platform: string) => {
   switch (platform) {
     case 'ZOOM':
@@ -85,4 +84,4 @@ export const parsePlatformFromDatabase = (platform: string) => {
     default:
       return platform;
   }
-}
+};
