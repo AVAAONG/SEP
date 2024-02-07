@@ -30,7 +30,7 @@ const ActivityPanelInfo: React.FC<ActivityPanelInfoProps> = ({ activity, childre
   } = activity;
   return (
     <section className="flex flex-col md:flex-row gap-4 md:gap-0 rounded-lg bg-white dark:bg-gray-900 p-8 ">
-      <div className="space-y-3 w-full md:w-1/2 ">
+      <div className="space-y-3 w-full lg:w-1/2 ">
         <div className="flex flex-col space-y-2 ">
           <div className="flex gap-2 items-center">
             <div className="w-fit font-medium px-2">
