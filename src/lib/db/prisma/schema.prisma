@@ -180,36 +180,45 @@ enum KindOfVolunteer {
   INTERNO
 }
 
+enum VolunteerStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum VolunteerProject {
+  UMAA
+  OAL
+  ALV
+  UVPL
+  GA
+}
+
 model Volunteer {
   id                   String                @id @default(nanoid())
   title                String
-  spots                Int
-  description          String
   start_dates          DateTime[]
   end_dates            DateTime[]
-  raiting              Float?
+  modality             Modality
+  kind_of_volunteer    KindOfVolunteer
+  STATUS               VolunteerStatus
+  description          String
   place                String
-  photoAlbum           String?
-  kind_of_volunteer    String
-  constancia           String?
-  status               String
   volunteer_attendance VolunteerAttendance[]
+  VolunteerProject     VolunteerProject?
+  beneficiary          String
+  supervisor           String
+  supervisor_email     String
+  proof                String //in case of external volunteer
 }
-
-// model Project {
-//     id           String      @id @default(nanoid())
-//     organizacion beneficiada
-
-//     beneficiary String
-// }
 
 model VolunteerAttendance {
   id            String                    @id @default(nanoid(22))
   scholar       ScholarProgramInformation @relation(fields: [scholarId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   scholarId     String
   volunteerId   String
-  hours         Float
-  volnuteer     Volunteer                 @relation(fields: [volunteerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  asigned_hours Float
+  volunteer     Volunteer                 @relation(fields: [volunteerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   attendance    ScholarAttendance
   justification String?
 
