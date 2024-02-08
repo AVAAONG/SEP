@@ -716,3 +716,21 @@ export const updateScholar = async (id: string, data: Prisma.ScholarUpdateInput)
   });
   return scholar;
 }
+
+
+export const updateProfilePicture = async (id: string, image: string | null) => {
+  const scholar = await prisma.scholar.update({
+    where: {
+      id,
+    },
+    data: {
+      photo: image,
+      user: {
+        update: {
+          image: image
+        }
+      }
+    }
+  });
+  return scholar;
+}

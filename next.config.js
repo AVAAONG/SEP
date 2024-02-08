@@ -8,6 +8,7 @@ const nextConfig = {
       'lh3.googleusercontent.com',
       'd2u8k2ocievbld.cloudfront.net',
       'drive.google.com',
+      'blobstoragex9083.blob.core.windows.net'
     ],
   },
   eslint: {
