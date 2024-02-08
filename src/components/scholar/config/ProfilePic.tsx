@@ -46,7 +46,7 @@ const deleteProfilePic = async (image: string, scholarId: string) => {
 const ProfilePic = (props: ProfilePicProps) => {
   const { update } = useSession();
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between gap-4">
       <div className="w-32 h-32">
         <Avatar
           className="rounded-lg w-full h-full"
@@ -55,13 +55,9 @@ const ProfilePic = (props: ProfilePicProps) => {
         />
       </div>
 
-      <div>
-        <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">
-          Foto de perfil
-        </h3>
-        <div className="mb-4 text-sm text-gray-500 dark:text-gray-400">
-          Solo archivos JPG o PNG.
-        </div>
+      <div className="flex flex-col gap-4">
+        <h3 className="text-green-900 text-xl font-semibold dark:text-white">Foto de perfil</h3>
+        <div className=" text-sm text-gray-500 dark:text-gray-400">Solo archivos JPG o PNG.</div>
         <div className="flex items-center space-x-4">
           <Button
             isDisabled={props.image ? true : false}
