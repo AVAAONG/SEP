@@ -702,6 +702,9 @@ export const getScholar = async (id: string) => {
     where: {
       id,
     },
+    include: {
+      collage_information: true,
+    }
   });
   return scholar;
 }
@@ -713,6 +716,20 @@ export const updateScholar = async (id: string, data: Prisma.ScholarUpdateInput)
       id,
     },
     data,
+  });
+  return scholar;
+}
+
+export const updateScholarCollageInformation = async (id: string, data: Prisma.ScholarCollageInformationUpdateWithWhereUniqueWithoutScholarInput) => {
+  const scholar = await prisma.scholar.update({
+    where: {
+      id,
+    },
+    data: {
+      collage_information: {
+        update: data,
+      },
+    },
   });
   return scholar;
 }

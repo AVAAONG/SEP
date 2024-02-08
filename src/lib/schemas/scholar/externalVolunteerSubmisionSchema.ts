@@ -1,6 +1,6 @@
 import { Modality } from '@prisma/client';
 import { z } from 'zod';
-const MAX_FILE_SIZE = 5000000; // 5MB
+export const MAX_FILE_SIZE = 5000000; // 5MB
 
 const externalVolunteerSubmisionSchema = z
     .object({
