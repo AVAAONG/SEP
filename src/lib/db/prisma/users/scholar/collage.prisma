@@ -62,22 +62,22 @@ enum KindOfCollage {
 
 model ScholarCollageInformation {
     id                            String                 @id @default(nanoid())
-    // academic_load_completed       Boolean?
-    // have_schooolarship            Boolean                @default(false)
-    // scholarship_percentage        Int?
-    // collage_start_date            DateTime?
-    // collage_end_date              DateTime?
+    academic_load_completed       Boolean?
+    have_schooolarship            Boolean                @default(false)
+    scholarship_percentage        Int?
+    collage_start_date            DateTime?
+    collage_end_date              DateTime?
     grade_special_mention         String?
     collage_opinion_study_quality String?
     inscription_comprobant        String?
     career_schedule               String?
-    // kind_of_collage               KindOfCollage
-    // collage                       Collages?
-    // career                        String
-    // mention                       String?
-    // study_area                    StudyArea?
-    // evaluation_scale              EvaluationScale?
-    // study_regime                  StudyRegime
+    kind_of_collage               KindOfCollage
+    collage                       Collages?
+    career                        String
+    mention                       String?
+    study_area                    StudyArea?
+    evaluation_scale              EvaluationScale?
+    study_regime                  StudyRegime
     collage_period                ScholarCollagePeriod[]
     collage_acceptance_scan       String?
     collage_study_proof           String?
