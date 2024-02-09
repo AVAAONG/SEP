@@ -18,6 +18,7 @@ export default async function RootLayout({
           image={session?.user?.image}
           name={session?.user?.name}
           email={session?.user?.email}
+          scholarId={session?.scholarId}
         />
         <Sidebar />
         <MainLayout>{children}</MainLayout>

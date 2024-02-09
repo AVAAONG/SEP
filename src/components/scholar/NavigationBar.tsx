@@ -18,9 +18,10 @@ interface NavigationBarProps {
   image: string | null | undefined;
   name: string | null | undefined;
   email: string | null | undefined;
+  scholarId: string | null | undefined;
 }
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
-const NavigationBar = ({ image, name, email }: NavigationBarProps) => {
+const NavigationBar = ({ image, name, email, scholarId }: NavigationBarProps) => {
   const [isSidebarOpen, setSidebarOpen] = useAtom(scholarSidebarAtom);
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -77,6 +78,9 @@ const NavigationBar = ({ image, name, email }: NavigationBarProps) => {
               <DropdownItem key="profile" className="h-14 gap-2">
                 <p className="font-semibold">Registrad@ con</p>
                 <p className="font-semibold">{email}</p>
+              </DropdownItem>
+              <DropdownItem key="publicProfile" href={`/perfilBecario/${scholarId}`}>
+                Ver perfil público
               </DropdownItem>
               {/* <DropdownItem key="configurations" href="/becario/configuracion">
                 Configuracion
