@@ -1,10 +1,15 @@
 'use client';
+import { deleteBlob, getBlobFile, uploadBlob } from '@/lib/azure/azure';
+import { updateScholarCollageInformation } from '@/lib/db/utils/users';
 import scholarCollageInformationSchema from '@/lib/schemas/scholar/collageInformationSchema';
+import { CalendarDaysIcon, DocumentChartBarIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input, Select, SelectItem } from '@nextui-org/react';
 import { ScholarCollageInformation } from '@prisma/client';
-import { BaseSyntheticEvent } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import moment from 'moment';
+import Link from 'next/link';
+import { BaseSyntheticEvent, useState } from 'react';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 
@@ -54,7 +59,29 @@ const evaluationScales = [
   { value: 'CERO_TO_FIVE', label: '0 al 5' },
   { value: 'CERO_TO_TWENTY', label: '0 al 20' },
 ];
+
+const readFileAsBase64 = (file: File | null): Promise<string> => {
+  if (file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  } else {
+    throw new Error('No file provided');
+  }
+};
 const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage }) => {
+  const [schedule, setSchedule] = useState<string | null>(scholarCollage.career_schedule);
+  const [proof, setProof] = useState<string | null>(scholarCollage.collage_study_proof);
+  const [files, setFiles] = useState<{
+    collage_study_proof: File | null;
+    career_schedule: File | null;
+  }>({
+    collage_study_proof: null,
+    career_schedule: null,
+  });
   const {
     handleSubmit,
     control,
@@ -62,32 +89,69 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
   } = useForm<z.infer<typeof scholarCollageInformationSchema>>({
     resolver: zodResolver(scholarCollageInformationSchema),
     defaultValues: {
-      ...scholarCollage,
+      collage_start_date: moment(scholarCollage.collage_start_date).format('YYYY-MM-DD'),
+      collage_end_date: moment(scholarCollage.collage_end_date).format('YYYY-MM-DD'),
+      academic_load_completed: scholarCollage.academic_load_completed === true ? 'SI' : 'NO',
+      have_schooolarship: scholarCollage.have_schooolarship === true ? 'SI' : 'NO',
+      career: scholarCollage.career ?? undefined,
+      mention: scholarCollage.mention ?? undefined,
+      scholarship_percentage: scholarCollage.scholarship_percentage ?? undefined,
+      collage: scholarCollage.collage ?? undefined,
+      kind_of_collage: scholarCollage.kind_of_collage ?? undefined,
+      evaluation_scale: scholarCollage.evaluation_scale ?? undefined,
+      study_area: scholarCollage.study_area ?? undefined,
+      study_regime: scholarCollage.study_regime ?? undefined,
     },
   });
-  console.log(scholarCollage);
+  const haveScholarship = useWatch({
+    control,
+    name: 'have_schooolarship',
+  });
+  const academicLoadComplete = useWatch({
+    control,
+    name: 'academic_load_completed',
+  });
+  const kindOfCollage = useWatch({
+    control,
+    name: 'kind_of_collage',
+  });
 
   const saveData = async (
     data: z.infer<typeof scholarCollageInformationSchema>,
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
     event?.preventDefault();
-    console.log(data);
-    // await updateScholarCollageInformation(scholar.id, data);
+    if (files.collage_study_proof !== null && files.career_schedule !== null) {
+      const scheduleBase64 = await readFileAsBase64(files.career_schedule);
+      const proofBase64 = await readFileAsBase64(files.collage_study_proof);
+      const schedule = await uploadBlob(scheduleBase64, 'application/pdf', 'files');
+      const proof = await uploadBlob(proofBase64, 'application/pdf', 'files');
+      data.career_schedule = schedule!;
+      data.collage_study_proof = proof!;
+    }
+    data.collage_start_date = new Date(data.collage_start_date).toISOString();
+    data.collage_end_date = data.collage_end_date
+      ? new Date(data.collage_end_date).toISOString()
+      : null;
+    data.have_schooolarship = data.have_schooolarship === 'SI' ? true : false;
+    data.academic_load_completed = data.academic_load_completed === 'SI' ? true : false;
+    await updateScholarCollageInformation(scholarCollage?.scholar_id!, data);
   };
-
+  const onInvalid = (errors) => console.error(errors);
   return (
     <>
       <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">
         Información universitaria
       </h3>
       <form
-        onSubmit={handleSubmit(async (data, event) =>
-          toast.promise(saveData(data, event), {
-            pending: 'Guardando cambios...',
-            success: 'Cambios guardados',
-            error: 'Error al guardar cambios',
-          })
+        onSubmit={handleSubmit(
+          async (data, event) =>
+            toast.promise(saveData(data, event), {
+              pending: 'Guardando cambios...',
+              success: 'Cambios guardados',
+              error: 'Error al guardar cambios',
+            }),
+          onInvalid
         )}
       >
         <div className="grid grid-cols-6 gap-6">
@@ -126,6 +190,7 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
                   errorMessage={formState.errors?.['kind_of_collage']?.message?.toString()}
                   classNames={{ base: 'col-span-6 lg:col-span-2 h-fit' }}
                   radius="sm"
+                  isRequired
                   label="Tipo de universidad"
                   labelPlacement="outside"
                   defaultSelectedKeys={[field.value]}
@@ -156,6 +221,7 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
                   errorMessage={formState.errors?.['collage']?.message?.toString()}
                   classNames={{ base: 'col-span-6 lg:col-span-2 h-fit' }}
                   radius="sm"
+                  isRequired
                   label="Universidad"
                   labelPlacement="outside"
                   defaultSelectedKeys={[field.value]}
@@ -197,7 +263,7 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
             render={({ field, formState }) => {
               return (
                 <Input
-                  value={field.value}
+                  value={field.value?.toString()}
                   onChange={field.onChange}
                   isInvalid={!!formState.errors?.['mention']?.message}
                   errorMessage={formState.errors?.['mention']?.message?.toString()}
@@ -253,6 +319,7 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
                   classNames={{ base: 'col-span-6 lg:col-span-2 h-fit' }}
                   radius="sm"
                   label="Escala de evaluacion"
+                  isRequired
                   labelPlacement="outside"
                   defaultSelectedKeys={[field.value]}
                 >
@@ -279,6 +346,7 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
                   errorMessage={formState.errors?.['study_regime']?.message?.toString()}
                   classNames={{ base: 'col-span-6 lg:col-span-2 h-fit' }}
                   radius="sm"
+                  isRequired
                   label="Regimen de estudio"
                   labelPlacement="outside"
                   defaultSelectedKeys={[field.value]}
@@ -309,62 +377,68 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
               );
             }}
           />
-          <Controller
-            name="have_schooolarship"
-            control={control}
-            rules={{ required: true }}
-            shouldUnregister={true}
-            render={({ field, formState }) => {
-              return (
-                <Select
-                  value={field.value}
-                  onChange={field.onChange}
-                  isInvalid={!!formState.errors?.['have_schooolarship']?.message}
-                  errorMessage={formState.errors?.['have_schooolarship']?.message?.toString()}
-                  classNames={{ base: 'col-span-6 lg:col-span-2 h-fit' }}
-                  radius="sm"
-                  label="¿Posee beca?"
-                  labelPlacement="outside"
-                  defaultSelectedKeys={[field.value]}
-                >
-                  {[
-                    {
-                      label: 'Si',
-                      value: true,
-                    },
-                    {
-                      label: 'No',
-                      value: false,
-                    },
-                  ].map((modality) => (
-                    <SelectItem key={modality.value} value={modality.value}>
-                      {modality.label}
-                    </SelectItem>
-                  ))}
-                </Select>
-              );
-            }}
-          />
-          <Controller
-            name="scholarship_percentage"
-            control={control}
-            rules={{ required: true }}
-            render={({ field, formState }) => {
-              return (
-                <Input
-                  value={field.value}
-                  onChange={field.onChange}
-                  isInvalid={!!formState.errors?.['scholarship_percentage']?.message}
-                  errorMessage={formState.errors?.['scholarship_percentage']?.message?.toString()}
-                  type="number"
-                  label="Porcentaje de beca"
-                  radius="sm"
-                  classNames={{ base: 'col-span-6 lg:col-span-2 h-fit' }}
-                  labelPlacement="outside"
-                />
-              );
-            }}
-          />
+          {kindOfCollage === 'PRIVATE' && (
+            <Controller
+              name="have_schooolarship"
+              control={control}
+              rules={{ required: true }}
+              shouldUnregister={true}
+              render={({ field, formState }) => {
+                return (
+                  <Select
+                    value={field.value?.toString()}
+                    onChange={field.onChange}
+                    isInvalid={!!formState.errors?.['have_schooolarship']?.message}
+                    errorMessage={formState.errors?.['have_schooolarship']?.message?.toString()}
+                    classNames={{ base: 'col-span-6 lg:col-span-2 h-fit' }}
+                    radius="sm"
+                    label="¿Posee beca?"
+                    labelPlacement="outside"
+                    defaultSelectedKeys={[field.value]}
+                  >
+                    {[
+                      {
+                        label: 'Si',
+                        value: 'SI',
+                      },
+                      {
+                        label: 'No',
+                        value: 'NO',
+                      },
+                    ].map((modality) => (
+                      <SelectItem key={modality.value.toString()} value={modality.value.toString()}>
+                        {modality.label}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                );
+              }}
+            />
+          )}
+
+          {haveScholarship?.toString() === 'SI' && (
+            <Controller
+              name="scholarship_percentage"
+              control={control}
+              rules={{ required: true }}
+              render={({ field, formState }) => {
+                return (
+                  <Input
+                    value={field.value?.toString()}
+                    onChange={field.onChange}
+                    isInvalid={!!formState.errors?.['scholarship_percentage']?.message}
+                    errorMessage={formState.errors?.['scholarship_percentage']?.message?.toString()}
+                    type="number"
+                    label="Porcentaje de beca"
+                    radius="sm"
+                    classNames={{ base: 'col-span-6 lg:col-span-2 h-fit' }}
+                    labelPlacement="outside"
+                  />
+                );
+              }}
+            />
+          )}
+
           <Controller
             name="academic_load_completed"
             control={control}
@@ -379,6 +453,7 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
                   errorMessage={formState.errors?.['academic_load_completed']?.message?.toString()}
                   classNames={{ base: 'col-span-6 lg:col-span-2 h-fit' }}
                   radius="sm"
+                  isRequired
                   label="¿Culminaste carga academica?"
                   labelPlacement="outside"
                   defaultSelectedKeys={[field.value]}
@@ -386,56 +461,86 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
                   {[
                     {
                       label: 'Si',
-                      value: true,
+                      value: 'SI',
                     },
                     {
                       label: 'No',
-                      value: false,
+                      value: 'NO',
                     },
-                  ].map((modality) => (
-                    <SelectItem key={modality.value} value={modality.value}>
-                      {modality.label}
+                  ].map(({ label, value }) => (
+                    <SelectItem key={value} value={value}>
+                      {label}
                     </SelectItem>
                   ))}
                 </Select>
               );
             }}
           />
-          <Controller
-            name="collage_end_date"
-            control={control}
-            rules={{ required: true }}
-            render={({ field, formState }) => {
-              return (
-                <Input
-                  value={field.value}
-                  onChange={field.onChange}
-                  isInvalid={!!formState.errors?.['collage_end_date']?.message}
-                  errorMessage={formState.errors?.['collage_end_date']?.message?.toString()}
-                  isRequired
-                  type="date"
-                  label="Fecha de culminación de estudios universitarios"
-                  radius="sm"
-                  classNames={{ base: 'col-span-6 lg:col-span-2 h-fit' }}
-                  labelPlacement="outside"
-                />
-              );
-            }}
-          />
+          {academicLoadComplete?.toString() === 'SI' && (
+            <Controller
+              name="collage_end_date"
+              control={control}
+              rules={{ required: true }}
+              render={({ field, formState }) => {
+                console.log(academicLoadComplete);
+                return (
+                  <Input
+                    value={field.value?.toString()}
+                    onChange={field.onChange}
+                    isRequired
+                    isInvalid={!!formState.errors?.['collage_end_date']?.message}
+                    errorMessage={formState.errors?.['collage_end_date']?.message?.toString()}
+                    type="date"
+                    label="Fecha de culminación de estudios universitarios"
+                    radius="sm"
+                    classNames={{ base: 'col-span-6 lg:col-span-2 h-fit' }}
+                    labelPlacement="outside"
+                  />
+                );
+              }}
+            />
+          )}
+
           <Controller
             name="collage_study_proof"
             control={control}
-            rules={{ required: true }}
             render={({ field, formState }) => {
+              getBlobFile(scholarCollage.collage_study_proof)
+                .then((url) => {
+                  setProof(url);
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
               return (
                 <Input
-                  value={field.value}
-                  onChange={field.onChange}
+                  value={field.value?.toString()}
+                  startContent={
+                    proof && (
+                      <div className="w-5 h-5 text-primary-light animate-pulse">
+                        <Link href={proof}>
+                          <DocumentChartBarIcon />
+                        </Link>
+                      </div>
+                    )
+                  }
+                  onChange={async (e) => {
+                    if (scholarCollage?.collage_study_proof) {
+                      await deleteBlob(scholarCollage?.collage_study_proof!);
+                    }
+                    setFiles((prev) => {
+                      prev.collage_study_proof = e?.target.files?.[0] || null;
+                      return prev;
+                    });
+                    field.onChange(e);
+                  }}
                   isInvalid={!!formState.errors?.['collage_study_proof']?.message}
                   errorMessage={formState.errors?.['collage_study_proof']?.message?.toString()}
-                  isRequired
                   type="file"
+                  accept="application/pdf"
                   label="Constancia de inscripcion en universidad"
+                  placeholder="Constancia"
+                  description="Solo archivos en formato PDF"
                   radius="sm"
                   classNames={{ base: 'col-span-6 lg:col-span-2 h-fit' }}
                   labelPlacement="outside"
@@ -446,16 +551,44 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
           <Controller
             name="career_schedule"
             control={control}
-            rules={{ required: true }}
             render={({ field, formState }) => {
+              let fileUrl;
+              getBlobFile(scholarCollage.career_schedule)
+                .then((url) => {
+                  setSchedule(url);
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
               return (
                 <Input
+                  startContent={
+                    schedule && (
+                      <div className="w-5 h-5 text-primary-light animate-pulse">
+                        <Link href={schedule}>
+                          <CalendarDaysIcon />
+                        </Link>
+                      </div>
+                    )
+                  }
                   value={field.value}
-                  onChange={field.onChange}
+                  onChange={async (e) => {
+                    if (scholarCollage?.career_schedule) {
+                      await deleteBlob(scholarCollage?.career_schedule!);
+                    }
+                    setFiles((prev) => {
+                      prev.career_schedule = e?.target.files?.[0] || null;
+                      return prev;
+                    });
+                    field.onChange(e);
+                  }}
+                  className="flex items-center"
                   isInvalid={!!formState.errors?.['career_schedule']?.message}
                   errorMessage={formState.errors?.['career_schedule']?.message?.toString()}
-                  isRequired
                   type="file"
+                  accept="application/pdf"
+                  placeholder="horario"
+                  description="Solo archivos en formato PDF"
                   label="Horario de clases"
                   radius="sm"
                   classNames={{ base: 'col-span-6 lg:col-span-2 h-fit' }}
@@ -464,15 +597,14 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
               );
             }}
           />
-          <div className="col-span-2"></div>
-          <Button
-            type="submit"
-            className="col-span-2 lg:col-span-1 text-white bg-green-600 hover:bg-green-500 hover:text-green-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-            isDisabled={isSubmitting}
-          >
-            Guardar cambios
-          </Button>
         </div>
+        <Button
+          type="submit"
+          className="col-span-2 lg:col-span-1 text-white bg-green-600 hover:bg-green-500 hover:text-green-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          isDisabled={isSubmitting}
+        >
+          Guardar cambios
+        </Button>
       </form>
     </>
   );

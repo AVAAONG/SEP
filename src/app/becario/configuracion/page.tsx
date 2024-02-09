@@ -41,7 +41,7 @@ const page = async () => {
           <AddressInformation scholar={scholar} />
         </div>
         <div className="bg-light rounded-md bg-clip-padding backdrop-filter backdrop-blur-md p-4 mb-4  shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2  sm:p-6 dark:bg-slate-950">
-          <CollageInformation scholar={scholar?.collage_information[0]} />
+          <CollageInformation scholarCollage={scholar?.collage_information[0]} />
         </div>
       </div>
     </div>

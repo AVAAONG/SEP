@@ -720,16 +720,12 @@ export const updateScholar = async (id: string, data: Prisma.ScholarUpdateInput)
   return scholar;
 }
 
-export const updateScholarCollageInformation = async (id: string, data: Prisma.ScholarCollageInformationUpdateWithWhereUniqueWithoutScholarInput) => {
-  const scholar = await prisma.scholar.update({
+export const updateScholarCollageInformation = async (id: string, data: Prisma.ScholarCollageInformationUpdateInput) => {
+  const scholar = await prisma.scholarCollageInformation.update({
     where: {
-      id,
+      scholar_id: id,
     },
-    data: {
-      collage_information: {
-        update: data,
-      },
-    },
+    data: data
   });
   return scholar;
 }

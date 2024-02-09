@@ -18,6 +18,7 @@ const blobServiceClient = BlobServiceClient.fromConnectionString(
     AZURE_STORAGE_CONNECTION_STRING!
 );
 const containerName = 'profilepictures'
+const fileContainerName = 'userfiles'
 
 
 // Get a reference to a container
@@ -27,9 +28,13 @@ const containerName = 'profilepictures'
 //     await containerClient.create()
 // }
 const containerClient = blobServiceClient.getContainerClient(containerName);
+const fileContainerClient = blobServiceClient.getContainerClient(fileContainerName);
 
-export const uploadBlob = async (blob: string, type: string) => {
-    const blockBlobClient = containerClient.getBlockBlobClient(shortUUID.generate());
+export const uploadBlob = async (blob: string, type: string, containerType: 'files' | 'picture' = 'picture') => {
+    let blockBlobClient;
+    if (containerType === 'picture') blockBlobClient = containerClient.getBlockBlobClient(shortUUID.generate());
+    else if (containerType === 'files') blockBlobClient = fileContainerClient.getBlockBlobClient(shortUUID.generate())
+
     const s = deserializeBlob(blob, type);
     try {
         const response = await blockBlobClient.uploadData(s, {
@@ -56,4 +61,9 @@ export const deleteBlob = async (blobUrl: string) => {
 export const getBlobImage = async (url: string | null | undefined) => {
     const image = url ? `${url}?${SAAS_TOKEN}` : null;
     return image;
+}
+
+export const getBlobFile = async (url: string | null | undefined) => {
+    const file = url ? `${url}?${process.env.AZURE_STORAGE_CONTAINER_BLOB_SAS_TOKEN_FILES}` : null;
+    return file;
 }
