@@ -39,7 +39,7 @@ const GeneralInformation: React.FC<GeneralInformationProps> = ({ scholar }) => {
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
     event?.preventDefault();
-    data.birthdate = new Date(data.birthdate).toISOString();
+    data.birthdate = moment(data.birthdate).toISOString(true);
     if (!scholar?.id) return;
     await updateScholar(scholar.id, data);
   };
