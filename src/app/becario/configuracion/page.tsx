@@ -25,23 +25,19 @@ const page = async () => {
         <div className="bg-light rounded-md bg-clip-padding backdrop-filter backdrop-blur-md p-4 mb-4  shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2  sm:p-6 dark:bg-slate-950">
           <ProfilePic image={image} scholarId={scholarId} />
         </div>
-
         <div className="p-4 mb-4 bg-light border border-gray-200 rounded-lg shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2 dark:border-gray-900 sm:p-6 dark:bg-slate-950">
           <SocialMedia scholar={scholar} />
         </div>
-        {/* <div className="p-4 mb-4 bg-light border border-gray-200 rounded-lg shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2 dark:border-gray-900 sm:p-6 dark:bg-slate-950">
-          <VolunteeringInformation />
-        </div> */}
       </div>
       <div className="col-span-3 ">
         <div className="bg-light rounded-md bg-clip-padding backdrop-filter backdrop-blur-md p-4 mb-4  shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2  sm:p-6 dark:bg-slate-950">
-          <GeneralInformation scholar={scholar} title="Información personal" />
+          <GeneralInformation scholar={scholar} />
         </div>
         <div className="bg-light rounded-md bg-clip-padding backdrop-filter backdrop-blur-md p-4 mb-4  shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2  sm:p-6 dark:bg-slate-950">
           <AddressInformation scholar={scholar} />
         </div>
         <div className="bg-light rounded-md bg-clip-padding backdrop-filter backdrop-blur-md p-4 mb-4  shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2  sm:p-6 dark:bg-slate-950">
-          <CollageInformation scholarCollage={scholar?.collage_information[0]} />
+          <CollageInformation scholarCollage={scholar?.collage_information?.[0]} />
         </div>
       </div>
     </div>

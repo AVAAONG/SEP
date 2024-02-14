@@ -1,9 +1,8 @@
 'use client';
-import { updateScholar } from '@/lib/db/utils/users';
+import { ScholarWithCollage, updateScholar } from '@/lib/db/utils/users';
 import scholarScialMediaInformation from '@/lib/schemas/scholar/scholarSocialMediaInformation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input } from '@nextui-org/react';
-import { Scholar } from '@prisma/client';
 import {
   FacebookIcon,
   InstagramIcon,
@@ -18,7 +17,7 @@ import { toast } from 'react-toastify';
 import { z } from 'zod';
 
 interface SocialInformationProps {
-  scholar: Scholar;
+  scholar: ScholarWithCollage;
 }
 const SocialMedia: React.FC<SocialInformationProps> = ({ scholar }) => {
   const {
@@ -37,6 +36,7 @@ const SocialMedia: React.FC<SocialInformationProps> = ({ scholar }) => {
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
     event?.preventDefault();
+    if (!scholar?.id) return;
     await updateScholar(scholar.id, data);
   };
   return (

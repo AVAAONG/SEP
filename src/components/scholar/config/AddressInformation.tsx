@@ -1,16 +1,14 @@
 'use client';
-import { updateScholar } from '@/lib/db/utils/users';
+import { ScholarWithCollage, updateScholar } from '@/lib/db/utils/users';
 import scholarAddressInformationSchema from '@/lib/schemas/scholar/scholarAddressInformationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input } from '@nextui-org/react';
-import { Scholar } from '@prisma/client';
 import { BaseSyntheticEvent } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 interface AddressInformationProps {
-  scholar: Scholar;
-  title: string;
+  scholar: ScholarWithCollage;
 }
 
 const AddressInformation: React.FC<AddressInformationProps> = ({ scholar }) => {
@@ -21,7 +19,8 @@ const AddressInformation: React.FC<AddressInformationProps> = ({ scholar }) => {
   } = useForm<z.infer<typeof scholarAddressInformationSchema>>({
     resolver: zodResolver(scholarAddressInformationSchema),
     defaultValues: {
-      ...scholar,
+      state: scholar?.state || undefined,
+      address: scholar?.address || undefined,
     },
   });
 
@@ -30,6 +29,7 @@ const AddressInformation: React.FC<AddressInformationProps> = ({ scholar }) => {
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
     event?.preventDefault();
+    if (!scholar?.id) return;
     await updateScholar(scholar.id, data);
   };
 

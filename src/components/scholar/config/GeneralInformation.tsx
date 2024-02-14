@@ -1,10 +1,9 @@
 'use client';
 import GENERAL_INFORMATION_INPUT_DATA from '@/components/scholar/forms/data/generalInformationFormData';
-import { updateScholar } from '@/lib/db/utils/users';
+import { ScholarWithCollage, updateScholar } from '@/lib/db/utils/users';
 import scholarInfoSchema from '@/lib/schemas/scholar/scholarGeneralInformationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input, Select, SelectItem } from '@nextui-org/react';
-import { Scholar } from '@prisma/client';
 import moment from 'moment';
 import { BaseSyntheticEvent } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -12,11 +11,10 @@ import { toast } from 'react-toastify';
 import { z } from 'zod';
 
 interface GeneralInformationProps {
-  scholar: Scholar;
-  title: string;
+  scholar: ScholarWithCollage;
 }
 
-const GeneralInformation: React.FC<GeneralInformationProps> = ({ scholar, title }) => {
+const GeneralInformation: React.FC<GeneralInformationProps> = ({ scholar }) => {
   const {
     handleSubmit,
     control,
@@ -24,8 +22,15 @@ const GeneralInformation: React.FC<GeneralInformationProps> = ({ scholar, title 
   } = useForm<z.infer<typeof scholarInfoSchema>>({
     resolver: zodResolver(scholarInfoSchema),
     defaultValues: {
-      ...scholar,
-      birthdate: moment(scholar.birthdate).format('YYYY-MM-DD'),
+      birthdate: moment(scholar?.birthdate).format('YYYY-MM-DD'),
+      cell_phone_Number: scholar?.cell_phone_Number || undefined,
+      email: scholar?.email || undefined,
+      dni: scholar?.dni || undefined,
+      first_names: scholar?.first_names || undefined,
+      last_names: scholar?.last_names || undefined,
+      gender: scholar?.gender || undefined,
+      whatsapp_number: scholar?.whatsapp_number || undefined,
+      local_phone_number: scholar?.local_phone_number || undefined,
     },
   });
 
@@ -35,21 +40,21 @@ const GeneralInformation: React.FC<GeneralInformationProps> = ({ scholar, title 
   ) => {
     event?.preventDefault();
     data.birthdate = new Date(data.birthdate).toISOString();
+    if (!scholar?.id) return;
     await updateScholar(scholar.id, data);
   };
-  const onInvalid = (errors) => console.error(errors);
   return (
     <>
-      <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">{title}</h3>
+      <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">
+        Información personal
+      </h3>
       <form
-        onSubmit={handleSubmit(
-          async (data, event) =>
-            toast.promise(saveData(data, event), {
-              pending: 'Guardando cambios...',
-              success: 'Cambios guardados',
-              error: 'Error al guardar cambios',
-            }),
-          onInvalid
+        onSubmit={handleSubmit(async (data, event) =>
+          toast.promise(saveData(data, event), {
+            pending: 'Guardando cambios...',
+            success: 'Cambios guardados',
+            error: 'Error al guardar cambios',
+          })
         )}
       >
         <div className="grid grid-cols-6 gap-6">

@@ -709,6 +709,11 @@ export const getScholar = async (id: string) => {
   return scholar;
 }
 
+export type ScholarWithCollage = Prisma.PromiseReturnType<
+  typeof getScholar
+>;
+
+
 
 export const updateScholar = async (id: string, data: Prisma.ScholarUpdateInput) => {
   const scholar = await prisma.scholar.update({
