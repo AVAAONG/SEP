@@ -1,6 +1,7 @@
 import { Tooltip } from '@nextui-org/tooltip';
 import { Chat, Volunteer, Workshop } from '@prisma/client';
 import Link from 'next/link';
+import DisplayDate from './DisplayDate';
 import DisplayTime from './DisplayTime';
 import ActivityListIcon from './scholar/dashboard/ActivityListIcon';
 
@@ -54,11 +55,7 @@ const NextEventsList = ({ activities }: { activities: (Workshop | Chat | Volunte
                             />
                           </svg>
                           <span className="ml-1 text-gray-500 dark:text-gray-400">
-                            {activity.start_dates[0]?.toLocaleDateString('es-ES', {
-                              day: 'numeric',
-                              month: 'short',
-                              year: 'numeric',
-                            })}
+                            <DisplayDate date={activity.start_dates[0]?.toISOString()} />
                           </span>
                           <span className="ml-1 text-gray-500 dark:text-gray-400">
                             <DisplayTime time={activity.start_dates[0].toISOString()} />

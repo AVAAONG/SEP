@@ -3,9 +3,9 @@ import defailProfilePic from '@/../public/defaultProfilePic.png';
 import { ChatWithSpeaker, WorkshopWithSpeaker } from '@/lib/db/types';
 import { parsePlatformFromDatabase } from '@/lib/utils2';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
-import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
+import DisplayDate from './DisplayDate';
 import DisplayTime from './DisplayTime';
 import ActivityStatusIndicator from './table/ActivityStatus';
 
@@ -55,7 +55,9 @@ const ActivityPanelInfo: React.FC<ActivityPanelInfoProps> = ({ activity, childre
                 >
                   <div className="space-y-sm">
                     <h3 className="text-sm leading-6 text-secondary">Fecha {index + 1}:</h3>
-                    <p className="text-base font-semibold">{moment(date).format('L')}</p>
+                    <p className="text-base font-semibold">
+                      <DisplayDate date={date.toISOString()} />
+                    </p>
                   </div>
                   <div className="space-y-sm">
                     <h3 className="text-sm leading-6 text-secondary">
