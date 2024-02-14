@@ -548,7 +548,7 @@ export type ScholarsInProbationByYearReturnType = Prisma.PromiseReturnType<
 // enviamos un correo de confirmacion.
 
 
-export const ceaseSpotInWorkshop = async (attendanceId: string, scholarId: string, activityId: string, scholarIdToCease: string) => {
+export const ceaseSpotInWorkshop = async (attendanceId: string, activityId: string, scholarIdToCease: string) => {
   await prisma.$transaction(async (prisma) => {
     const existingAttendance = await prisma.workshopAttendance.findFirst({
       where: {
@@ -595,7 +595,7 @@ export const ceaseSpotInWorkshop = async (attendanceId: string, scholarId: strin
   revalidatePath('/admin/actividadesFormativas/[workshopId]', 'page')
 }
 
-export const ceaseSpotInChat = async (attendanceId: string, scholarId: string, activityId: string, scholarIdToCease: string) => {
+export const ceaseSpotInChat = async (attendanceId: string, activityId: string, scholarIdToCease: string) => {
 
   await prisma.$transaction(async (prisma) => {
     const existingAttendance = await prisma.chatAttendance.findFirst({
