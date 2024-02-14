@@ -1,6 +1,7 @@
 import ActivityPanelInfo from '@/components/ActivityPanelInfo';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
+import { ChatWithSpeaker } from '@/lib/db/types';
 import { getChat } from '@/lib/db/utils/chats';
 import { prisma } from '@/lib/db/utils/prisma';
 import { formatScholarDataForAttendanceTable } from '@/lib/tableUtils';
@@ -111,7 +112,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
 
   return (
     <div className="space-y-6  min-h-screen">
-      <ActivityPanelInfo activity={chat as WorkshopWithSpeaker}>
+      <ActivityPanelInfo activity={chat as ChatWithSpeaker}>
         <div className="w-full grid grid-cols-2 gap-4">
           {g.map(({ title, value }) => (
             <div className="rounded-lg border text-card-foreground shadow-sm w-full">
