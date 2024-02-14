@@ -1,5 +1,5 @@
 'use client';
-import { ScholarWithCollage, updateScholar } from '@/lib/db/utils/users';
+import { ScholarWithCollageAndJob, updateScholar } from '@/lib/db/utils/users';
 import scholarAddressInformationSchema from '@/lib/schemas/scholar/scholarAddressInformationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input } from '@nextui-org/react';
@@ -8,7 +8,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 interface AddressInformationProps {
-  scholar: ScholarWithCollage;
+  scholar: ScholarWithCollageAndJob;
 }
 
 const AddressInformation: React.FC<AddressInformationProps> = ({ scholar }) => {

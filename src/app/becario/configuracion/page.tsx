@@ -1,6 +1,7 @@
 import AddressInformation from '@/components/scholar/config/AddressInformation';
 import CollageInformation from '@/components/scholar/config/CollageInformation';
 import GeneralInformation from '@/components/scholar/config/GeneralInformation';
+import JobInformationForm from '@/components/scholar/config/JobInformation';
 import ProfilePic from '@/components/scholar/config/ProfilePic';
 import SocialMedia from '@/components/scholar/config/SocialMedia';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
@@ -38,6 +39,12 @@ const page = async () => {
         </div>
         <div className="bg-light rounded-md bg-clip-padding backdrop-filter backdrop-blur-md p-4 mb-4  shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2  sm:p-6 dark:bg-slate-950">
           <CollageInformation scholarCollage={scholar?.collage_information?.[0]} />
+        </div>
+        <div className="bg-light rounded-md bg-clip-padding backdrop-filter backdrop-blur-md p-4 mb-4  shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2  sm:p-6 dark:bg-slate-950">
+          <JobInformationForm
+            scholarJobInformation={scholar?.job_information?.[0]}
+            scholarId={scholarId}
+          />
         </div>
       </div>
     </div>

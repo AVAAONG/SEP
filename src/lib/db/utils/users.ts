@@ -704,12 +704,13 @@ export const getScholar = async (id: string) => {
     },
     include: {
       collage_information: true,
+      job_information: true,
     }
   });
   return scholar;
 }
 
-export type ScholarWithCollage = Prisma.PromiseReturnType<
+export type ScholarWithCollageAndJobAndJob = Prisma.PromiseReturnType<
   typeof getScholar
 >;
 
@@ -735,6 +736,25 @@ export const updateScholarCollageInformation = async (id: string, data: Prisma.S
   return scholar;
 }
 
+export const updateScholarJobInformation = async (scholarId: string, data: Prisma.JobInformationUpdateInput, jobInformationId: string) => {
+  if (jobInformationId) {
+    await prisma.jobInformation.update({
+      where: {
+        scholar_id: scholarId,
+      },
+      data: data
+    });
+  }
+  else {
+    await prisma.jobInformation.create({
+      data: {
+        ...data,
+        scholar_id: scholarId
+      },
+
+    });
+  }
+}
 
 export const updateProfilePicture = async (id: string, image: string | null) => {
   const scholar = await prisma.scholar.update({
