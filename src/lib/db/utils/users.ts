@@ -751,7 +751,6 @@ export const updateScholarJobInformation = async (scholarId: string, data: Prism
         ...data,
         scholar_id: scholarId
       },
-
     });
   }
 }
