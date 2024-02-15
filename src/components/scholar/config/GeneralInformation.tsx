@@ -106,10 +106,6 @@ const GeneralInformation: React.FC<GeneralInformationProps> = ({ scholar }) => {
                   {[
                     { value: 'M', label: 'Masculino' },
                     { value: 'F', label: 'Femenino' },
-                    {
-                      value: 'O',
-                      label: 'Empresa u Organización',
-                    },
                   ].map((modality) => (
                     <SelectItem key={modality.value} value={modality.value}>
                       {modality.label}
