@@ -40,7 +40,7 @@ const uploadProfilePic = async (event: ChangeEvent<HTMLInputElement>, scholarId:
 
 const deleteProfilePic = async (image: string | null, scholarId: string) => {
   if (!image) return;
-  await deleteBlob(image);
+  await deleteBlob(image.split('?')[0]);
   await updateProfilePicture(scholarId, null);
   revalidateSpecificPath('/becario/configuracion');
 };
