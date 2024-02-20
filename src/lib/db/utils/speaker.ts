@@ -15,7 +15,10 @@ export const getWorkshopSpeakersWithParams = async (data: Prisma.SpeakerSelect) 
     const speakers = await prisma.speaker.findMany({
       select: data,
       where: {
-        speaker_kind: 'WORKSHOPS',
+        OR: [
+          { speaker_kind: 'CHATS_AND_WORKSHOPS' },
+          { speaker_kind: 'WORKSHOPS' }
+        ]
       },
     });
     return speakers;
@@ -30,7 +33,10 @@ export const getChatSpeakersWithParams = async (data: Prisma.SpeakerSelect) => {
     const speakers = await prisma.speaker.findMany({
       select: data,
       where: {
-        speaker_kind: 'CHATS',
+        OR: [
+          { speaker_kind: 'CHATS_AND_WORKSHOPS' },
+          { speaker_kind: 'CHATS' }
+        ]
       },
     });
     return speakers;
