@@ -3,6 +3,7 @@ import NormalCard from '@/components/scholar/card/NormalCard';
 import Table from '@/components/table/Table';
 import speakerWorkshopsColumn from '@/components/table/columns/singleWorkshopSpeakerColumns';
 
+import SpeakerPageDropdown from '@/components/SpeakerPageDropdown';
 import ChartComponent from '@/components/charts/AreaChart';
 import { getWorkshopSpeakerWithWorkshops } from '@/lib/db/utils/speaker';
 import Image from 'next/image';
@@ -14,7 +15,6 @@ import {
   TwitterIcon,
 } from '../../../../../../public/svgs/SocialNetworks';
 import {
-  CurriculumIcon,
   EmailIcon,
   PhoneIcon,
   Star,
@@ -154,16 +154,12 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
               />
             </div>
             <div className="flex flex-col justify-center items-center gap-1 sm:gap-1 w-full px-4">
-              <h1 className="text-2xl text-green-700 font-bold text-center flex items-center justify-center gap-2">
-                <span>
+              <div className="flex items-center justify-center gap-1 w-full">
+                <h1 className="text-2xl text-green-700 font-bold text-center flex items-center justify-center gap-2">
                   {first_names} {last_names}{' '}
-                </span>
-                {curriculum && (
-                  <Link href={curriculum} target="_blank" className="w-6 block">
-                    <CurriculumIcon />
-                  </Link>
-                )}
-              </h1>{' '}
+                </h1>{' '}
+                <SpeakerPageDropdown speaker={workshopSpeaker} />
+              </div>
               <span className="text-gray-400 dark:text-gray-300 font-semibold uppercase text-center w-full ">
                 {job_company}
               </span>
