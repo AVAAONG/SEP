@@ -1,11 +1,12 @@
 'use client';
 import { deleteBlobFile, getBlobFile, uploadBlob } from '@/lib/azure/azure';
+import { COLLAGE_LONG_AND_SHORT, EVALUATION_SCALES, STUDY_AREAS } from '@/lib/constants';
 import { updateScholarCollageInformation } from '@/lib/db/utils/users';
 import scholarCollageInformationSchema from '@/lib/schemas/scholar/collageInformationSchema';
 import { CalendarDaysIcon, DocumentChartBarIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input, Select, SelectItem } from '@nextui-org/react';
-import { ScholarCollageInformation } from '@prisma/client';
+import { Prisma, ScholarCollageInformation } from '@prisma/client';
 import moment from 'moment';
 import Link from 'next/link';
 import { BaseSyntheticEvent, useState } from 'react';
@@ -16,49 +17,6 @@ import { z } from 'zod';
 interface CollageInformationProps {
   scholarCollage: ScholarCollageInformation;
 }
-const universities = [
-  { value: 'UCAB', label: 'Universidad Católica Andrés Bello (UCAB)' },
-  { value: 'USB', label: 'Universidad Simón Bolívar (USB)' },
-  { value: 'UCV', label: 'Universidad Central de Venezuela (UCV)' },
-  { value: 'UNIMET', label: 'Universidad Metropolitana (UNIMET)' },
-  { value: 'UNEXCA', label: 'Universidad Experimental de Caracas (UNEXCA)' },
-  { value: 'ENAHP', label: 'Escuela Nacional de Administración y Hacienda Pública (ENAHP)' },
-  { value: 'UNEARTE', label: 'Universidad Nacional Experimental de las Artes (UNEARTE)' },
-  { value: 'UNESR', label: 'Universidad Nacional Experimental Simón Rodríguez (UNESR)' },
-  { value: 'UCSAR', label: 'Universidad Católica Santa Rosa (UCSAR)' },
-  { value: 'IUPSM', label: 'Instituto Universitario Politécnico Santiago Mariño (IUPSM)' },
-  {
-    value: 'UNEXPO',
-    label: 'Universidad Nacional Experimental Politécnica Antonio José de Sucre (UNEXPO)',
-  },
-  { value: 'UMA', label: 'Universidad Monteávila (UMA)' },
-  { value: 'UJMV', label: 'Universidad José María Vargas (UJMV)' },
-  { value: 'UMC', label: 'Universidad Metropolitana de Caracas (UMC)' },
-  { value: 'UPEL', label: 'Universidad Pedagógica Experimental Libertador (UPEL)' },
-  { value: 'CUR', label: 'Colegio Universitario de Rehabilitación May Hamilton (CUR)' },
-  { value: 'USM', label: 'Universidad Santa María (USM)' },
-  {
-    value: 'UNEFA',
-    label: 'Universidad Nacional Experimental de la Fuerza Armada Nacional Bolivariana (UNEFA)',
-  },
-  { value: 'UAH', label: 'Universidad Alejandro de Humboldt (UAH)' },
-  { value: 'UBV', label: 'Universidad Bolivariana de Venezuela (UBV)' },
-];
-
-const studyAreas = [
-  { value: 'ARCHITECTURE_URBANISM', label: 'Arquitectura y Urbanismo' },
-  { value: 'HEALTH_SCIENCES', label: 'Ciencias de la Salud' },
-  { value: 'JURIDICAL_POLITICAL_SCIENCES', label: 'Jurídico-Políticas' },
-  { value: 'SOCIAL_SCIENCES', label: 'Ciencias Sociales' },
-  { value: 'HUMANITIES_EDUCATION', label: 'Humanidades y Educación' },
-  { value: 'STEM', label: 'STEM (Ciencias, Tecnología, Ingenierías, Matemáticas)' },
-  { value: 'OTHER', label: 'Other' },
-];
-const evaluationScales = [
-  { value: 'CERO_TO_TEN', label: '0 al 10' },
-  { value: 'CERO_TO_FIVE', label: '0 al 5' },
-  { value: 'CERO_TO_TWENTY', label: '0 al 20' },
-];
 
 const readFileAsBase64 = (file: File | null): Promise<string> => {
   if (file) {
@@ -72,6 +30,7 @@ const readFileAsBase64 = (file: File | null): Promise<string> => {
     throw new Error('No file provided');
   }
 };
+
 const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage }) => {
   const [schedule, setSchedule] = useState<string | null>(scholarCollage.career_schedule);
   const [proof, setProof] = useState<string | null>(scholarCollage.collage_study_proof);
@@ -121,22 +80,34 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
     event?.preventDefault();
+    let scholarCollageInfo: Prisma.ScholarCollageInformationUpdateInput = {
+      kind_of_collage: data.kind_of_collage,
+      collage: data.collage,
+      career: data.career,
+      mention: data.mention,
+      study_area: data.study_area,
+      evaluation_scale: data.evaluation_scale,
+      study_regime: data.study_regime,
+      scholarship_percentage: data.scholarship_percentage,
+    };
     if (files.collage_study_proof !== null && files.career_schedule !== null) {
       const scheduleBase64 = await readFileAsBase64(files.career_schedule);
       const proofBase64 = await readFileAsBase64(files.collage_study_proof);
       const schedule = await uploadBlob(scheduleBase64, 'application/pdf', 'files');
       const proof = await uploadBlob(proofBase64, 'application/pdf', 'files');
-      data.career_schedule = schedule!;
-      data.collage_study_proof = proof!;
+      scholarCollageInfo.career_schedule = schedule!;
+      scholarCollageInfo.collage_study_proof = proof!;
     }
-    data.collage_start_date = new Date(data.collage_start_date).toISOString();
-    data.collage_end_date = data.collage_end_date
+
+    scholarCollageInfo.collage_start_date = new Date(data.collage_start_date).toISOString();
+    scholarCollageInfo.collage_end_date = data.collage_end_date
       ? new Date(data.collage_end_date).toISOString()
       : null;
 
-    data.have_schooolarship = data.have_schooolarship === 'SI' ? true : false;
-    data.academic_load_completed = data.academic_load_completed === 'SI' ? true : false;
-    await updateScholarCollageInformation(scholarCollage?.scholar_id!, data);
+    scholarCollageInfo.have_schooolarship = data.have_schooolarship === 'SI' ? true : false;
+    scholarCollageInfo.academic_load_completed =
+      data.academic_load_completed === 'SI' ? true : false;
+    await updateScholarCollageInformation(scholarCollage?.scholar_id!, scholarCollageInfo);
   };
   return (
     <>
@@ -224,9 +195,9 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
                   labelPlacement="outside"
                   defaultSelectedKeys={[field.value]}
                 >
-                  {universities.map((modality) => (
-                    <SelectItem key={modality.value} value={modality.value}>
-                      {modality.label}
+                  {COLLAGE_LONG_AND_SHORT.map((collage) => (
+                    <SelectItem key={collage.value} value={collage.value}>
+                      {collage.label}
                     </SelectItem>
                   ))}
                 </Select>
@@ -293,9 +264,9 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
                   labelPlacement="outside"
                   defaultSelectedKeys={[field.value]}
                 >
-                  {studyAreas.map((modality) => (
-                    <SelectItem key={modality.value} value={modality.value}>
-                      {modality.label}
+                  {STUDY_AREAS.map((studyArea) => (
+                    <SelectItem key={studyArea.value} value={studyArea.value}>
+                      {studyArea.label}
                     </SelectItem>
                   ))}
                 </Select>
@@ -321,9 +292,9 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
                   labelPlacement="outside"
                   defaultSelectedKeys={[field.value]}
                 >
-                  {evaluationScales.map((modality) => (
-                    <SelectItem key={modality.value} value={modality.value}>
-                      {modality.label}
+                  {EVALUATION_SCALES.map((evaluationScale) => (
+                    <SelectItem key={evaluationScale.value} value={evaluationScale.value}>
+                      {evaluationScale.label}
                     </SelectItem>
                   ))}
                 </Select>
