@@ -82,9 +82,9 @@ const NavigationBar = ({ image, name, email, scholarId }: NavigationBarProps) =>
               <DropdownItem key="publicProfile" href={`/perfilBecario/${scholarId}`}>
                 Ver perfil público
               </DropdownItem>
-              {/* <DropdownItem key="configurations" href="/becario/configuracion">
+              <DropdownItem key="configurations" href="/becario/configuracion">
                 Configuracion
-              </DropdownItem> */}
+              </DropdownItem>
               <DropdownItem key="logout" color="danger" onClick={async () => signOut()}>
                 Cerrar sesión
               </DropdownItem>
