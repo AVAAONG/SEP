@@ -1,5 +1,5 @@
 'use client';
-import { deleteBlob, getBlobFile, uploadBlob } from '@/lib/azure/azure';
+import { deleteBlobFile, getBlobFile, uploadBlob } from '@/lib/azure/azure';
 import { updateScholarCollageInformation } from '@/lib/db/utils/users';
 import scholarCollageInformationSchema from '@/lib/schemas/scholar/collageInformationSchema';
 import { CalendarDaysIcon, DocumentChartBarIcon } from '@heroicons/react/24/outline';
@@ -133,25 +133,23 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
     data.collage_end_date = data.collage_end_date
       ? new Date(data.collage_end_date).toISOString()
       : null;
+
     data.have_schooolarship = data.have_schooolarship === 'SI' ? true : false;
     data.academic_load_completed = data.academic_load_completed === 'SI' ? true : false;
     await updateScholarCollageInformation(scholarCollage?.scholar_id!, data);
   };
-  const onInvalid = (errors) => console.error(errors);
   return (
     <>
       <h3 className="text-green-900 mb-4 text-xl font-semibold dark:text-white">
         Información universitaria
       </h3>
       <form
-        onSubmit={handleSubmit(
-          async (data, event) =>
-            toast.promise(saveData(data, event), {
-              pending: 'Guardando cambios...',
-              success: 'Cambios guardados',
-              error: 'Error al guardar cambios',
-            }),
-          onInvalid
+        onSubmit={handleSubmit(async (data, event) =>
+          toast.promise(saveData(data, event), {
+            pending: 'Guardando cambios...',
+            success: 'Cambios guardados',
+            error: 'Error al guardar cambios',
+          })
         )}
       >
         <div className="grid grid-cols-6 gap-6">
@@ -394,7 +392,7 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
                     radius="sm"
                     label="¿Posee beca?"
                     labelPlacement="outside"
-                    defaultSelectedKeys={[field.value]}
+                    defaultSelectedKeys={field.value ? [field.value] : []}
                   >
                     {[
                       {
@@ -447,7 +445,7 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
             render={({ field, formState }) => {
               return (
                 <Select
-                  value={field.value}
+                  value={field.value || ''}
                   onChange={field.onChange}
                   isInvalid={!!formState.errors?.['academic_load_completed']?.message}
                   errorMessage={formState.errors?.['academic_load_completed']?.message?.toString()}
@@ -456,7 +454,7 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
                   isRequired
                   label="¿Culminaste carga academica?"
                   labelPlacement="outside"
-                  defaultSelectedKeys={[field.value]}
+                  defaultSelectedKeys={field.value ? [field.value] : []}
                 >
                   {[
                     {
@@ -526,7 +524,7 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
                   }
                   onChange={async (e) => {
                     if (scholarCollage?.collage_study_proof) {
-                      await deleteBlob(scholarCollage?.collage_study_proof!);
+                      await deleteBlobFile(scholarCollage?.collage_study_proof!);
                     }
                     setFiles((prev) => {
                       prev.collage_study_proof = e?.target.files?.[0] || null;
@@ -552,7 +550,6 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
             name="career_schedule"
             control={control}
             render={({ field, formState }) => {
-              let fileUrl;
               getBlobFile(scholarCollage.career_schedule)
                 .then((url) => {
                   setSchedule(url);
@@ -571,10 +568,10 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
                       </div>
                     )
                   }
-                  value={field.value}
+                  value={field.value || ''}
                   onChange={async (e) => {
                     if (scholarCollage?.career_schedule) {
-                      await deleteBlob(scholarCollage?.career_schedule!);
+                      await deleteBlobFile(scholarCollage?.career_schedule!);
                     }
                     setFiles((prev) => {
                       prev.career_schedule = e?.target.files?.[0] || null;

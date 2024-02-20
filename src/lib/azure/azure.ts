@@ -67,3 +67,14 @@ export const getBlobFile = async (url: string | null | undefined) => {
     const file = url ? `${url}?${process.env.AZURE_STORAGE_CONTAINER_BLOB_SAS_TOKEN_FILES}` : null;
     return file;
 }
+
+export const deleteBlobFile = async (blobUrl: string) => {
+    const blobName = blobUrl.split('/').pop();
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName!);
+    try {
+        await blockBlobClient.delete();
+        console.log('File deleted from Azure Blob Storage');
+    } catch (error) {
+        console.error('Error deleting file: ', error);
+    }
+}
