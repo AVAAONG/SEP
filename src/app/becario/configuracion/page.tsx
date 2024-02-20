@@ -19,7 +19,7 @@ const page = async () => {
     <div className="grid grid-cols-1 px-2 pt-6 xl:grid-cols-4 xl:gap-4 ">
       <div className="mb-4 col-span-full xl:mb-2">
         <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
-          Configuracion de usuario
+          Configuración de usuario
         </h1>
       </div>
       <div className="col-span-full xl:col-auto">
