@@ -23,7 +23,7 @@ const ActivityStatusIndicator: React.FC<ActivityStatusProps> = ({ status, startD
         startContent={<div className="rounded-full bg-green-800 p-1"></div>}
         className="inline-flex items-center bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full dark:bg-green-900 dark:text-green-300"
       >
-        (Realizado) Encuesta de satisfacción enviada
+        Realizado
       </Chip>
     );
   } else if (status === 'SENT') {

@@ -22,11 +22,12 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
   const chatForSpeaker = await getChat(chatId);
   const isDisabled = () => {
     if (attendance?.attendance! !== 'ENROLLED') return true;
-    else if (new Date(chat?.start_dates![0]!) <= new Date()) return true;
-    else if (chat?.activity_status !== 'SENT') return true;
-    else if (chat.speaker[0].id === se?.scholarId) return true;
+    else if (new Date(workshop?.start_dates![0]!) <= new Date()) return true;
+    else if (workshop?.activity_status === 'SENT') return true;
+    else if (workshop?.activity_status === 'SUSPENDED') return true;
     else return false;
   };
+
   const scholarAttendanceDataForTable = formatScholarDataForAttendanceTable(
     chatForSpeaker?.scholar_attendance
       ? chatForSpeaker.scholar_attendance.map((a) => a.scholar.scholar)
@@ -55,6 +56,13 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
               kindOfActivity="chat"
               scholars={scholars}
               isButtonDisabled={isDisabled()}
+              scholarWhoCeaseName={se?.user?.name!}
+              activityName={chatForSpeaker?.title || ''}
+              date={chatForSpeaker?.start_dates[0] || ''}
+              startDate={chatForSpeaker?.start_dates[0] || ''}
+              endDate={chatForSpeaker?.end_dates[0] || ''}
+              modality={chatForSpeaker?.modality || ''}
+              platform={chatForSpeaker?.platform || ''}
             />
           </div>
         )}

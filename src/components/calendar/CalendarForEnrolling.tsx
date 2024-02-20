@@ -190,7 +190,8 @@ const CalendarForEnrrolling = ({ events, scholarName }: { events: any[]; scholar
         Content={() => (
           <>
             <div>
-              Al inscribirte, te comprometes a asistir y participar activamente en la actividad.
+              Al inscribirte te comprometes a asistir, participar activamente y cumplir con las
+              responsabilidades y obligaciones que se te asignen en la actividad.
             </div>
             <div>Recuerda, tu participación es vital para el éxito de la actividad. ✨ </div>
           </>
