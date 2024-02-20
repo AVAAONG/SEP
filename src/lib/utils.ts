@@ -111,30 +111,28 @@ export const formatActivityEventsForBigCalendarEnrlled = (
     let kindOfActivity: string;
     if ('year' in activity) {
       colors = ACTIVITIES_CALENDAR_COLORS.find((activity) => activity.activity === 'workshop');
-      eventUrl = getActivityUrl(id, 'actividadesFormativas');
+      eventUrl = getActivityUrl(id, 'actividadesFormativas', 'scholar');
       kindOfActivity = 'workshop';
     } else if ('level' in activity) {
       colors = ACTIVITIES_CALENDAR_COLORS.find((activity) => activity.activity === 'chat');
-      eventUrl = getActivityUrl(id, 'chats');
+      eventUrl = getActivityUrl(id, 'chats', 'scholar');
       kindOfActivity = 'chat';
     }
     const bgColor = getBgColor(colors, activity_status);
     const eventModalityTitle = parseModalityFromDatabase(modality);
-    const isFull = activity.scholar_attendance.map(a => a.attendance === 'ENROLLED').length >= activity.avalible_spots;
+    const enrolledCount = (activity.scholar_attendance as { attendance: string }[]).filter((a) => a.attendance === 'ENROLLED').length;
+    const isFull = enrolledCount >= activity.avalible_spots;
     return start_dates.map((startDate, index) => ({
       id: id,
       originalTitle: title,
       modality,
       kindOfActivity,
       eventId: activity.calendar_ids[0],
-      skill: activity.asociated_skill,
       isFull,
       attendees: activity.scholar_attendance.length,
       spots: activity.avalible_spots,
-      year: activity.year,
       platform: activity.platform,
-      level: activity.level,
-      enrolledCount: activity.scholar_attendance.length,
+      enrolledCount,
       title:
         index > 0
           ? `(${eventModalityTitle}) ${title} (${index + 1})`
@@ -152,6 +150,9 @@ export const formatActivityEventsForBigCalendarEnrlled = (
       speakerImages: activity.speaker.map((speaker) => speaker.image),
       speakerIds: activity.speaker.map((speaker) => speaker.id),
       speakersCompany: activity.speaker.map((speaker) => speaker.job_company),
+      level: activity.level,
+      year: activity.year,
+      skill: activity.asociated_skill,
     }));
   });
 };

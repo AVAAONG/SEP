@@ -53,6 +53,7 @@ const CalendarForEnrrolling = ({ events, scholarName }: { events: any[]; scholar
   const d = useSession();
 
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const confirmationModal = useDisclosure();
   type T = keyof typeof Views;
   const localizer = momentLocalizer(moment);
   const { defaultDate, views } = useMemo(
@@ -93,8 +94,10 @@ const CalendarForEnrrolling = ({ events, scholarName }: { events: any[]; scholar
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         size="lg"
-        link={`/becario/${selectedEvent?.level ? 'chats' : 'actividadesFormativas'}/${selectedEvent?.id}`}
-        title={`Inscribirse en: ${selectedEvent?.originalTitle}`}
+        link={`/becario/${
+          selectedEvent?.level ? 'chats' : 'actividadesFormativas'
+        }/${selectedEvent?.id}`}
+        title={`${selectedEvent?.originalTitle}`}
         Content={() => (
           <div className="flex flex-col gap-2 px-4">
             <div className="flex gap-2">
@@ -167,14 +170,30 @@ const CalendarForEnrrolling = ({ events, scholarName }: { events: any[]; scholar
             )}
             <div className="flex gap-1">
               <p className="font-bold">Cupos disponibles:</p>
-              <p>{selectedEvent.spots - selectedEvent.attendees}</p>
+              <p>{selectedEvent.spots - selectedEvent.enrolledCount}</p>
             </div>
             <div className="flex gap-1">
               <p className="font-bold">Cupos ocupados:</p>
-              <p>{selectedEvent.attendees}</p>
+              <p>{selectedEvent.enrolledCount}</p>
             </div>
             <p>{selectedEvent?.description}</p>
           </div>
+        )}
+        isButtonDisabled={selectedEvent?.isFull}
+        onConfirm={async () => confirmationModal.onOpen()}
+        confirmText={selectedEvent?.isFull ? 'Cupos agotados' : 'Inscribirse'}
+      />
+      <BasicModal
+        isOpen={confirmationModal.isOpen}
+        onOpenChange={confirmationModal.onOpenChange}
+        title="¿Estas seguro de que deseas inscribirte en esta actividad?"
+        Content={() => (
+          <>
+            <div>
+              Al inscribirte, te comprometes a asistir y participar activamente en la actividad.
+            </div>
+            <div>Recuerda, tu participación es vital para el éxito de la actividad. ✨ </div>
+          </>
         )}
         isButtonDisabled={selectedEvent?.isFull}
         onConfirm={async () => {
@@ -201,10 +220,9 @@ const CalendarForEnrrolling = ({ events, scholarName }: { events: any[]; scholar
             d.data.user?.email,
             'Confirmacion de inscripción'
           );
-          onClose();
-
+          confirmationModal.onClose();
         }}
-        confirmText={selectedEvent?.isFull ? 'Cupos agotados' : 'Inscribirse'}
+        confirmText="Confirmar Inscripción"
       />
     </>
   );
