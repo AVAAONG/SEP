@@ -99,6 +99,7 @@ const GeneralInformation: React.FC<GeneralInformationProps> = ({ scholar }) => {
                   errorMessage={formState.errors?.['gender']?.message?.toString()}
                   classNames={{ base: 'col-span-6 lg:col-span-2 h-fit' }}
                   radius="sm"
+                  isRequired
                   label="Género"
                   labelPlacement="outside"
                   defaultSelectedKeys={[field.value]}
