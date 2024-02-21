@@ -8,7 +8,7 @@ export const createExternalVolunteer = async (volunteer: Prisma.VolunteerCreateI
 ) => {
 	await prisma.volunteer.create({
 		data: {
-			kind_of_volunteer: 'INTERNAL',
+			kind_of_volunteer: 'EXTERNAL',
 			status: 'PENDING',
 			title: volunteer.title,
 			start_dates: volunteer.start_dates,
@@ -32,5 +32,18 @@ export const createExternalVolunteer = async (volunteer: Prisma.VolunteerCreateI
 				}
 			}
 		},
+	})
+}
+
+export const getVolunteersByScholar = async (scholarId: string) => {
+	return prisma.volunteerAttendance.findMany({
+		where: {
+			scholar: {
+				scholarId
+			},
+		},
+		include: {
+			volunteer: true
+		}
 	})
 }
