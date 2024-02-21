@@ -16,9 +16,13 @@ const page = async () => {
   const actualYear = new Date().getFullYear();
   const session = await getServerSession(authOptions);
   const id = session?.scholarId;
+  const name = session?.user?.name?.split(' ')[0];
   const [doneWorkshopsCount, doneChatsCount] = await getScholarDoneActivitiesCount(id, actualYear);
   const [enrrolledWorkshops, enrrolledCHats] = await getActivitiesWhenScholarItsEnrolled(id);
-  const events = formatActivityEventsForBigCalendar([...enrrolledWorkshops, ...enrrolledCHats], "scholar");
+  const events = formatActivityEventsForBigCalendar(
+    [...enrrolledWorkshops, ...enrrolledCHats],
+    'scholar'
+  );
   const cardContent: PanelCardProps[] = [
     {
       title: 'Actividades formativas realizadas',
@@ -36,14 +40,14 @@ const page = async () => {
       icon: chatIcon(),
       kind: 'chat',
     },
-    // {
-    //   title: 'Horas de voluntariado realizadas',
-    //   subtitle: 'Ver todas las actividades',
-    //   data: 0,
-    //   link: 'actividadesFormativas',
-    //   icon: workshopIcon(),
-    //   kind: 'volunteer',
-    // },
+    {
+      title: 'Horas de voluntariado realizadas',
+      subtitle: 'Ver todas las actividades',
+      data: 0,
+      link: 'voluntariado',
+      icon: workshopIcon(),
+      kind: 'volunteer',
+    },
   ];
 
   return (
@@ -67,7 +71,7 @@ const page = async () => {
             <InformationCircleIcon className="cursor-pointer w-6 h-6 text-emerald-600 dark:text-emerald-400" />
           </Tooltip>
           <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
-            ¡Hola! 💚
+            {name ? `¡Hola, ${name}! 💚` : `¡Hola! 💚`}
           </h1>
         </div>
 
