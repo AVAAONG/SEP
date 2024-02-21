@@ -60,6 +60,18 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
     itemList: [],
     link: `/${SCHOLAR_PREFIX}/calendario`,
   },
+  {
+    Icon: CalendarIcon(),
+    buttonName: 'Notas universitarias',
+    itemList: [],
+    link: `/${SCHOLAR_PREFIX}/universidad`,
+  },
+  {
+    Icon: CalendarIcon(),
+    buttonName: 'Registro CVA',
+    itemList: [],
+    link: `/${SCHOLAR_PREFIX}/cva`,
+  },
 ];
 
 const Sidebar = () => {
