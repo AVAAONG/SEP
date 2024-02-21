@@ -307,7 +307,7 @@ export const getScholarByEmail = async (email: string) => {
 };
 
 export const getScholarDoneActivitiesCount = async (scholar_id: string, year: number) => {
-  const [allWorkshops, allChats] = await prisma.$transaction([
+  const [allWorkshops, allChats, allVolunteers] = await prisma.$transaction([
     prisma.workshopAttendance.findMany({
       where: {
         AND: [
@@ -370,6 +370,23 @@ export const getScholarDoneActivitiesCount = async (scholar_id: string, year: nu
         ],
       },
     }),
+    prisma.volunteerAttendance.findMany({
+      where: {
+        AND: [
+          {
+            scholar: {
+              scholarId: scholar_id,
+            },
+          },
+          {
+            attendance: 'ATTENDED',
+          },
+        ],
+      },
+      include: {
+        volunteer: true
+      }
+    }),
   ]);
 
   const yearStart = new Date(year, 0, 1);
@@ -381,11 +398,14 @@ export const getScholarDoneActivitiesCount = async (scholar_id: string, year: nu
   const chats = allChats.filter((chat) =>
     chat.start_dates.some((date) => date >= yearStart && date <= yearEnd)
   ).length;
-  // const volunteers = allVolunteers.filter((volunteer) =>
-  //   volunteer.start_dates.some((date) => date >= yearStart && date <= yearEnd)
-  // );
+  const volunteers = allVolunteers.filter((volunteer) =>
+    volunteer.volunteer.start_dates.some((date) => date >= yearStart && date <= yearEnd)
+  );
+  const totalVolunteerAsignedHours = volunteers.reduce((acc, volunteer) => {
+    return acc + volunteer.asigned_hours;
+  }, 0);
 
-  return [workshops, chats];
+  return [workshops, chats, totalVolunteerAsignedHours];
 };
 
 export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) => {

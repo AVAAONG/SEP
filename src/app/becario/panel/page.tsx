@@ -17,7 +17,10 @@ const page = async () => {
   const session = await getServerSession(authOptions);
   const id = session?.scholarId;
   const name = session?.user?.name?.split(' ')[0];
-  const [doneWorkshopsCount, doneChatsCount] = await getScholarDoneActivitiesCount(id, actualYear);
+  const [doneWorkshopsCount, doneChatsCount, volunteers] = await getScholarDoneActivitiesCount(
+    id,
+    actualYear
+  );
   const [enrrolledWorkshops, enrrolledCHats] = await getActivitiesWhenScholarItsEnrolled(id);
   const events = formatActivityEventsForBigCalendar(
     [...enrrolledWorkshops, ...enrrolledCHats],
@@ -43,7 +46,7 @@ const page = async () => {
     {
       title: 'Horas de voluntariado realizadas',
       subtitle: 'Ver todas las actividades',
-      data: 0,
+      data: volunteers,
       link: 'voluntariado',
       icon: workshopIcon(),
       kind: 'volunteer',

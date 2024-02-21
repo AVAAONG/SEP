@@ -176,8 +176,8 @@ enum Gender {
 // /// @author Kevin Bravo (kevinbravo.me)
 
 enum KindOfVolunteer {
-  EXTERNO
-  INTERNO
+  INTERNAL
+  EXTERNAL
 }
 
 enum VolunteerStatus {
@@ -201,15 +201,15 @@ model Volunteer {
   end_dates            DateTime[]
   modality             Modality
   kind_of_volunteer    KindOfVolunteer
-  STATUS               VolunteerStatus
-  description          String
-  place                String
+  status               VolunteerStatus
+  description          String?
+  platform             String
   volunteer_attendance VolunteerAttendance[]
   VolunteerProject     VolunteerProject?
   beneficiary          String
-  supervisor           String
-  supervisor_email     String
-  proof                String //in case of external volunteer
+  proof                String?
+  supervisor           String?
+  supervisor_email     String?
 }
 
 model VolunteerAttendance {
@@ -920,9 +920,8 @@ model EntrepenourshipInformation {
   motivations_to_be_entrepeneur String?
   proexcelencia_motivates_it    String?
   entrepreneurship_start_date   DateTime?
-
-  scholar   Scholar @relation(fields: [scholarId], references: [id])
-  scholarId String  @unique
+  scholar                       Scholar   @relation(fields: [scholarId], references: [id])
+  scholarId                     String    @unique
 }
 
 //
