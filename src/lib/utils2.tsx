@@ -23,24 +23,33 @@ export const parseModalityFromDatabase = (modality: Modality) => {
       return 'Presencial';
     case 'ONLINE':
       return 'Virtual';
+    case 'HYBRID':
+      return 'Hibrida';
     default:
       return 'IN_PERSON';
+  }
+};
+
+export const parseKindOfVolunteerFromDatabase = (kindOfVolunteer: string) => {
+  switch (kindOfVolunteer) {
+    case 'INTERNAL':
+      return 'Interno';
+    case 'EXTERNAL':
+      return 'Externo';
+    default:
+      return 'INTERNAL';
   }
 };
 export const parseWorkshopStatusFromDatabase = (status: ActivityStatus) => {
   switch (status) {
     case 'ATTENDANCE_CHECKED':
       return 'Realizado';
-    case 'DONE':
-      return 'Asistencia no pasada';
     case 'SCHEDULED':
       return 'Programado';
     case 'SENT':
       return 'Enviado';
     case 'SUSPENDED':
       return 'Suspendido';
-    case 'IN_PROGRESS':
-      return 'En progreso';
   }
 };
 
