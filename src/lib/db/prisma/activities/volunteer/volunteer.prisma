@@ -6,8 +6,8 @@ import { ScholarProgramInformation } from "..\..\users\scholar\scholar"
 import { Modality, ScholarAttendance } from "..\type-activities"
 
 enum KindOfVolunteer {
-    EXTERNO
-    INTERNO
+    INTERNAL
+    EXTERNAL
 }
 
 enum VolunteerStatus {
@@ -31,15 +31,15 @@ model Volunteer {
     end_dates            DateTime[]
     modality             Modality
     kind_of_volunteer    KindOfVolunteer
-    STATUS               VolunteerStatus
-    description          String
-    place                String
+    status               VolunteerStatus
+    description          String?
+    platform             String
     volunteer_attendance VolunteerAttendance[]
     VolunteerProject     VolunteerProject?
     beneficiary          String
-    supervisor           String
-    supervisor_email     String
-    proof                String //in case of external volunteer
+    proof                String?
+    supervisor           String?
+    supervisor_email     String?
 }
 
 model VolunteerAttendance {
