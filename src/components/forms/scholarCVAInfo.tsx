@@ -45,7 +45,6 @@ const ScholarCVAInformation = ({
     defaultValues: {
       already_finished_cva: scholarCvaInformation.already_finished_cva === true ? 'YES' : 'NO',
       is_in_cva: scholarCvaInformation.is_in_cva === true ? 'YES' : 'NO',
-      certificate: '',
       cva_ended_date: moment(scholarCvaInformation?.cva_ended_date).format('YYYY-MM-DD'),
       cva_location: scholarCvaInformation.cva_location as CvaLocation,
       cva_started_date: moment(scholarCvaInformation.cva_started_date).format('YYYY-MM-DD'),
@@ -197,28 +196,32 @@ const ScholarCVAInformation = ({
                     rules={{ required: true }}
                     render={({ field, formState }) => {
                       return (
-                        <Input
-                          value={field.value?.toString()}
-                          onChange={async (e) => {
-                            if (scholarCvaInformation.certificate) {
-                              await deleteBlobFile(scholarCvaInformation.certificate!);
-                            }
-                            setCertificate((prev) => {
-                              prev = e?.target.files?.[0] || null;
-                              return prev;
-                            });
-                            field.onChange(e);
-                          }}
-                          isInvalid={!!formState.errors?.['certificate']?.message}
-                          errorMessage={formState.errors?.['certificate']?.message?.toString()}
-                          type="file"
-                          accept="application/pdf"
-                          placeholder="Constancia"
-                          label="Sube tu certificado del CVA"
-                          description="Solo en formato PDF"
-                          radius="sm"
-                          classNames={{ base: 'h-fit' }}
-                        />
+                        <div className="flex gap-2 text-sm flex-col">
+                          <label htmlFor="certificateInput">
+                            Certificado del CVA (Solo documentos PDF)
+                          </label>
+                          <input
+                            id="certificateInput"
+                            value={field.value?.toString()}
+                            onChange={async (e) => {
+                              if (scholarCvaInformation.certificate) {
+                                await deleteBlobFile(scholarCvaInformation.certificate!);
+                                await updateCvaInformation(scholarCvaInformation.scholarId, {
+                                  certificate: null,
+                                });
+                              }
+                              setCertificate((prev) => {
+                                prev = e?.target.files?.[0] || null;
+                                return prev;
+                              });
+                              field.onChange(e);
+                            }}
+                            type="file"
+                            className="flex items-center"
+                            accept="application/pdf"
+                            placeholder="Constancia"
+                          />
+                        </div>
                       );
                     }}
                   />

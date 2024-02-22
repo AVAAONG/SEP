@@ -506,6 +506,7 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
                   isInvalid={!!formState.errors?.['collage_study_proof']?.message}
                   errorMessage={formState.errors?.['collage_study_proof']?.message?.toString()}
                   type="file"
+                  className="flex items-center"
                   accept="application/pdf"
                   label="Constancia de inscripcion en universidad"
                   placeholder="Constancia"
