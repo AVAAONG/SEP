@@ -716,21 +716,12 @@ enum CvaLocation {
   CENTRO
 }
 
-enum CVASchedule {
-  DIARY
-  INTERDIARY
-  SABATINO
-}
-
 model ScholarCVAInformation {
   id                     String             @id @default(nanoid())
-  cva_started_date       DateTime?
   is_in_cva              Boolean            @default(false)
-  already_finished_cva   Boolean            @default(false)
-  cva_ended_date         DateTime?
-  certificate            String?
   not_started_cva_reason String?            @db.Text
   cva_location           CvaLocation?
+  certificate            String?
   modules                ScholarCvaModule[]
   scholar                Scholar            @relation(fields: [scholarId], references: [id])
   scholarId              String             @unique
@@ -742,7 +733,6 @@ model ScholarCvaModule {
   modality                   Modality?
   qualification              Float
   record                     String?
-  schedule                   CVASchedule?
   scholar_cva_information    ScholarCVAInformation? @relation(fields: [scholar_cva_information_id], references: [id])
   scholar_cva_information_id String?
 

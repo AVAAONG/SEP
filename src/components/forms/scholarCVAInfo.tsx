@@ -1,19 +1,39 @@
 'use client';
+import { deleteBlobFile, uploadBlob } from '@/lib/azure/azure';
 import { updateCvaInformation } from '@/lib/db/utils/cva';
 import scholarCVAInformationSchema from '@/lib/schemas/scholar/scholarCVAInformationSchema';
+import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
-import { CvaLocation, ScholarCVAInformation } from '@prisma/client';
+import { CvaLocation, Prisma, ScholarCVAInformation } from '@prisma/client';
 import moment from 'moment';
-import { BaseSyntheticEvent } from 'react';
+import Link from 'next/link';
+import { BaseSyntheticEvent, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
+
+const readFileAsBase64 = (file: File | null): Promise<string> => {
+  if (file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  } else {
+    throw new Error('No file provided');
+  }
+};
+
 const ScholarCVAInformation = ({
   scholarCvaInformation,
+  certificateUrl,
 }: {
   scholarCvaInformation: ScholarCVAInformation;
+  certificateUrl: string | null;
 }) => {
+  const [certificate, setCertificate] = useState<File | null>(null);
   const {
     control,
     handleSubmit,
@@ -25,7 +45,7 @@ const ScholarCVAInformation = ({
     defaultValues: {
       already_finished_cva: scholarCvaInformation.already_finished_cva === true ? 'YES' : 'NO',
       is_in_cva: scholarCvaInformation.is_in_cva === true ? 'YES' : 'NO',
-      certificate: scholarCvaInformation.certificate,
+      certificate: '',
       cva_ended_date: moment(scholarCvaInformation?.cva_ended_date).format('YYYY-MM-DD'),
       cva_location: scholarCvaInformation.cva_location as CvaLocation,
       cva_started_date: moment(scholarCvaInformation.cva_started_date).format('YYYY-MM-DD'),
@@ -45,9 +65,9 @@ const ScholarCVAInformation = ({
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
     event?.preventDefault();
-    await updateCvaInformation(scholarCvaInformation.scholarId, {
+
+    let scholarCvaInfo: Prisma.ScholarCVAInformationUpdateInput = {
       already_finished_cva: data.already_finished_cva === 'YES',
-      certificate: data.certificate,
       cva_ended_date: data.cva_ended_date ? new Date(data.cva_ended_date).toISOString() : null,
       cva_location: data.cva_location,
       cva_started_date: data.cva_started_date
@@ -55,12 +75,19 @@ const ScholarCVAInformation = ({
         : null,
       is_in_cva: data.is_in_cva === 'YES',
       not_started_cva_reason: data.not_started_cva_reason,
-    });
+    };
+    if (certificate) {
+      const certificateBase64 = await readFileAsBase64(certificate);
+      const certificateForDb = await uploadBlob(certificateBase64, 'application/pdf', 'files');
+      scholarCvaInfo.certificate = certificateForDb!;
+    }
+    await updateCvaInformation(scholarCvaInformation.scholarId, scholarCvaInfo);
   };
   const options = [
     { value: 'YES', label: 'Sí' },
     { value: 'NO', label: 'No' },
   ];
+
   return (
     <>
       <form
@@ -171,12 +198,22 @@ const ScholarCVAInformation = ({
                     render={({ field, formState }) => {
                       return (
                         <Input
-                          value={field.value || undefined}
-                          onChange={field.onChange}
+                          value={field.value?.toString()}
+                          onChange={async (e) => {
+                            if (scholarCvaInformation.certificate) {
+                              await deleteBlobFile(scholarCvaInformation.certificate!);
+                            }
+                            setCertificate((prev) => {
+                              prev = e?.target.files?.[0] || null;
+                              return prev;
+                            });
+                            field.onChange(e);
+                          }}
                           isInvalid={!!formState.errors?.['certificate']?.message}
                           errorMessage={formState.errors?.['certificate']?.message?.toString()}
                           type="file"
                           accept="application/pdf"
+                          placeholder="Constancia"
                           label="Sube tu certificado del CVA"
                           description="Solo en formato PDF"
                           radius="sm"
@@ -185,6 +222,13 @@ const ScholarCVAInformation = ({
                       );
                     }}
                   />
+                  {scholarCvaInformation.certificate && (
+                    <div>
+                      <Link href={certificateUrl ?? ''}>
+                        <DocumentTextIcon className="w-12 h-12" />
+                      </Link>
+                    </div>
+                  )}
                 </>
               ) : (
                 <>
