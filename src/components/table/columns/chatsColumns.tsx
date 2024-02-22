@@ -67,9 +67,7 @@ const ChatColumns: Column<ChatDataForTable>[] = [
     Header: 'Inicio',
     accessor: 'startHour',
     Cell: ({ value }) => {
-      return (
-        <DisplayTime time={value} />
-      )
+      return <DisplayTime time={value} />;
     },
   },
   {

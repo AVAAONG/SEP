@@ -24,3 +24,18 @@ export const updateCvaInformation = async (scholarId: string, data: Prisma.Schol
     })
     return cvaInformation;
 }
+
+export const createCvaModule = async (data: Prisma.ScholarCvaModuleCreateInput, cvaInformationId: string) => {
+    const cvaModule = await prisma.scholarCVAInformation.update({
+        where: {
+            id: cvaInformationId,
+        },
+        data: {
+            modules: {
+                create: data
+            }
+        }
+
+    })
+    return cvaModule;
+}

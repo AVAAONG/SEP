@@ -1,4 +1,4 @@
-import { ActivityStatus, Level, Modality, Skill } from '@prisma/client';
+import { ActivityStatus, CVASchedule, Level, Modality, Skill } from '@prisma/client';
 
 export const parseSkillFromDatabase = (skill: Skill) => {
   switch (skill) {
@@ -17,7 +17,7 @@ export const parseSkillFromDatabase = (skill: Skill) => {
   }
 };
 
-export const parseModalityFromDatabase = (modality: Modality) => {
+export const parseModalityFromDatabase = (modality: Modality | null) => {
   switch (modality) {
     case 'IN_PERSON':
       return 'Presencial';
@@ -27,6 +27,19 @@ export const parseModalityFromDatabase = (modality: Modality) => {
       return 'Hibrida';
     default:
       return 'IN_PERSON';
+  }
+};
+
+export const parseCvaScheduleFromDatabase = (schedule: CVASchedule | null) => {
+  switch (schedule) {
+    case 'DIARY':
+      return 'Diario';
+    case 'INTERDIARY':
+      return 'Interdiario';
+    case 'SABATINO':
+      return 'Sabatino';
+    default:
+      return 'error';
   }
 };
 

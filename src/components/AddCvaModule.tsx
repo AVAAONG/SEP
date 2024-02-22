@@ -1,5 +1,7 @@
 'use client';
+import { uploadBlob } from '@/lib/azure/azure';
 import { MODALITY } from '@/lib/constants';
+import { createCvaModule } from '@/lib/db/utils/cva';
 import scholarCVAModuleSchema from '@/lib/schemas/scholar/scholarCVAModuleSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@nextui-org/button';
@@ -14,9 +16,27 @@ import {
   SelectItem,
   useDisclosure,
 } from '@nextui-org/react';
+import { Prisma } from '@prisma/client';
+import { BaseSyntheticEvent, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
-const AddCvaModule = () => {
+
+const readFileAsBase64 = (file: File | null): Promise<string> => {
+  if (file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  } else {
+    throw new Error('No file provided');
+  }
+};
+
+const AddCvaModule = ({ cvaInformationId }: { cvaInformationId: string | null }) => {
+  const [record, setRecord] = useState<File | null>(null);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const {
     control,
@@ -27,9 +47,30 @@ const AddCvaModule = () => {
   } = useForm<z.infer<typeof scholarCVAModuleSchema>>({
     resolver: zodResolver(scholarCVAModuleSchema),
   });
+  const saveData = async (
+    data: z.infer<typeof scholarCVAModuleSchema>,
+    event: BaseSyntheticEvent<object, any, any> | undefined
+  ) => {
+    if (!cvaInformationId) return;
+    event?.preventDefault();
+    let scholarCvaModuleInfo: Prisma.ScholarCvaModuleCreateInput = {
+      module: data.module,
+      modality: data.modality,
+      qualification: data.qualification,
+      schedule: data.schedule,
+    };
+    if (record) {
+      const recordBase64 = await readFileAsBase64(record);
+      const recordForDb = await uploadBlob(recordBase64, 'application/pdf', 'files');
+      scholarCvaModuleInfo.record = recordForDb!;
+    }
+    createCvaModule(scholarCvaModuleInfo, cvaInformationId);
+    onClose();
+  };
   return (
     <>
       <Button
+        isDisabled={cvaInformationId === null}
         onPress={onOpen}
         className="col-span-2 lg:col-span-1 text-white bg-green-600 hover:bg-green-500 hover:text-green-900 font-medium rounded-lg text-sm px-3 py-1.5 text-center"
       >
@@ -45,7 +86,16 @@ const AddCvaModule = () => {
           base: 'bg-light dark:bg-dark',
         }}
       >
-        <form className="flex flex-col gap-4">
+        <form
+          className="flex flex-col gap-4"
+          onSubmit={handleSubmit(async (data, event) =>
+            toast.promise(saveData(data, event), {
+              pending: 'Guardando cambios...',
+              success: 'Cambios guardados',
+              error: 'Error al guardar cambios',
+            })
+          )}
+        >
           <ModalContent>
             {(onClose) => (
               <>
@@ -89,7 +139,6 @@ const AddCvaModule = () => {
                           classNames={{ base: 'col-span-2 md:col-span-1' }}
                           radius="sm"
                           label="Modalidad"
-                          labelPlacement="outside"
                           defaultSelectedKeys={[field.value]}
                         >
                           {MODALITY.map((modality) => (
@@ -113,7 +162,6 @@ const AddCvaModule = () => {
                           onChange={field.onChange}
                           isInvalid={!!formState.errors?.['qualification']?.message}
                           errorMessage={formState.errors?.['qualification']?.message?.toString()}
-                          autoFocus
                           step="0.01"
                           type="number"
                           label="Calificacion obtenida en el modulo"
@@ -129,20 +177,26 @@ const AddCvaModule = () => {
                     shouldUnregister={true}
                     render={({ field, formState }) => {
                       return (
-                        <Input
-                          value={field.value || undefined}
-                          onChange={field.onChange}
-                          isInvalid={!!formState.errors?.['record']?.message}
-                          errorMessage={formState.errors?.['record']?.message?.toString()}
-                          autoFocus
-                          type="file"
-                          accept="application/pdf"
-                          label="Comprobante del modulo"
-                          description="Solo en formato PDF"
-                          radius="sm"
-                          classNames={{ base: 'h-fit' }}
-                          labelPlacement="outside"
-                        />
+                        <div className="flex gap-2 text-sm flex-col">
+                          <label htmlFor="recorInput">
+                            Comprobante del modulo (Solo documentos PDF)
+                          </label>
+                          <input
+                            id="recorInput"
+                            value={field.value?.toString()}
+                            onChange={async (e) => {
+                              setRecord((prev) => {
+                                prev = e?.target.files?.[0] || null;
+                                return prev;
+                              });
+                              field.onChange(e);
+                            }}
+                            type="file"
+                            className="flex items-center"
+                            accept="application/pdf"
+                            placeholder="Constancia"
+                          />
+                        </div>
                       );
                     }}
                   />
