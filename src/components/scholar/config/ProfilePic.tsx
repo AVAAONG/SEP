@@ -21,7 +21,7 @@ const uploadProfilePic = async (event: ChangeEvent<HTMLInputElement>, scholarId:
     reader.onloadend = async function () {
       const base64String = reader.result;
       try {
-        const response = await uploadBlob(base64String as string, file.type);
+        const response = await uploadBlob(base64String as string, 'picture');
         url = response!;
         console.log('File uploaded to Azure Blob Storage');
       } catch (error) {

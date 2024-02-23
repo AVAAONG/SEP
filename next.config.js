@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  ///@see https://github.com/vercel/next.js/issues/59432#issuecomment-1876846798
+  ///@see https://github.com/Azure/azure-sdk-for-js/issues/28059
+  experimental: {
+    serverComponentsExternalPackages: ['@azure/storage-blob'],
+  },
   images: {
     domains: [
       'avaa.org',

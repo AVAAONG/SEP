@@ -1,4 +1,11 @@
 'use server'
+
+/**
+ * AZURE presents some problems in production, those problems are documented in the following github issues
+ * @see https://github.com/vercel/next.js/issues/59432#issuecomment-1876846798
+ * @see https://github.com/Azure/azure-sdk-for-js/issues/28059
+ */
+
 import { BlobServiceClient } from "@azure/storage-blob";
 import shortUUID from "short-uuid";
 function deserializeBlob(base64String: string, type: string): Buffer {
@@ -34,6 +41,7 @@ export const uploadBlob = async (blob: string, type: string, containerType: 'fil
     let blockBlobClient;
     if (containerType === 'picture') blockBlobClient = containerClient.getBlockBlobClient(shortUUID.generate());
     else if (containerType === 'files') blockBlobClient = fileContainerClient.getBlockBlobClient(shortUUID.generate())
+    else throw Error('Invalid container type');
 
     const s = deserializeBlob(blob, type);
     try {
