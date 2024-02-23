@@ -1,6 +1,7 @@
 'use client';
 import logo from '@/../public/proexcelencia-color.png';
 import { scholarSidebarAtom } from '@/lib/state/mainState';
+import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -33,12 +34,18 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
   {
     Icon: chatIcon(),
     buttonName: 'Chats',
-    itemList: [
-      { name: 'Registro', link: `/${SCHOLAR_PREFIX}/chats` },
-      { name: 'Proponer chat', link: `/${SCHOLAR_PREFIX}/chats/prouestas` },
-    ],
-    link: '',
+    itemList: [],
+    link: `/${SCHOLAR_PREFIX}/chats`,
   },
+  // {
+  //   Icon: chatIcon(),
+  //   buttonName: 'Chats',
+  //   itemList: [
+  //     { name: 'Registro', link: `/${SCHOLAR_PREFIX}/chats` },
+  //     { name: 'Proponer chat', link: `/${SCHOLAR_PREFIX}/chats/prouestas` },
+  //   ],
+  //   link: '',
+  // },
   {
     Icon: volunterIcon(),
     buttonName: 'Voluntariado',
@@ -60,14 +67,14 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
     itemList: [],
     link: `/${SCHOLAR_PREFIX}/calendario`,
   },
+  // {
+  //   Icon: CalendarIcon(),
+  //   buttonName: 'Notas universitarias',
+  //   itemList: [],
+  //   link: `/${SCHOLAR_PREFIX}/universidad`,
+  // },
   {
-    Icon: CalendarIcon(),
-    buttonName: 'Notas universitarias',
-    itemList: [],
-    link: `/${SCHOLAR_PREFIX}/universidad`,
-  },
-  {
-    Icon: CalendarIcon(),
+    Icon: <DocumentTextIcon />,
     buttonName: 'Registro CVA',
     itemList: [],
     link: `/${SCHOLAR_PREFIX}/cva`,
