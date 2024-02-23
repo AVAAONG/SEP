@@ -5,7 +5,7 @@ import { Autocomplete, AutocompleteItem } from '@nextui-org/autocomplete';
 import { Avatar } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
 import { useDisclosure } from '@nextui-org/react';
-import { Scholar } from '@prisma/client';
+import { Modality, Scholar } from '@prisma/client';
 import { useState } from 'react';
 import BasicModal from './BasicModal';
 
@@ -47,7 +47,7 @@ const createCeaseConfirmationMessage = (
     hour12: true,
   })}</td></tr>
 
-  <tr><td>Modalidad: ${parseModalityFromDatabase(modality)}</td></tr>
+  <tr><td>Modalidad: ${parseModalityFromDatabase(modality as Modality)}</td></tr>
 
   <tr><td>Plataforma: ${platform}</td></tr>
   
@@ -109,7 +109,7 @@ const ActivityScholarActions: React.FC<ActivityPanelInfoProps> = ({
   const handleCeaseSpot = async () => {
     const scholar = scholars.find((scholar) => scholar.id === selectedScholar);
     if (!scholar) return;
-    const link = `http://localhost:3000/becario/api/ceaseConfirmation?activityId=${activityId}&scholarWhoCeaseAttendanceId=${attendanceId}&scholarId=${
+    const link = `http://programaexcelencia.org/becario/api/ceaseConfirmation?activityId=${activityId}&scholarWhoCeaseAttendanceId=${attendanceId}&scholarId=${
       scholar.id
     }&kindOfActivity=${kindOfActivity}&timeout=${new Date()}`;
     const message = createCeaseConfirmationMessage(

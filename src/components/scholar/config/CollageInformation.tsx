@@ -9,7 +9,7 @@ import { Button, Input, Select, SelectItem } from '@nextui-org/react';
 import { Prisma, ScholarCollageInformation } from '@prisma/client';
 import moment from 'moment';
 import Link from 'next/link';
-import { BaseSyntheticEvent, useState } from 'react';
+import { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
@@ -34,6 +34,29 @@ const readFileAsBase64 = (file: File | null): Promise<string> => {
 const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage }) => {
   const [schedule, setSchedule] = useState<string | null>(scholarCollage.career_schedule);
   const [proof, setProof] = useState<string | null>(scholarCollage.collage_study_proof);
+
+  useEffect(() => {
+    if (scholarCollage?.collage_study_proof) {
+      getBlobFile(scholarCollage?.collage_study_proof)
+        .then((proof) => {
+          setProof(proof);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+
+    if (scholarCollage?.career_schedule) {
+      getBlobFile(scholarCollage?.career_schedule)
+        .then((url) => {
+          setSchedule(url);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [scholarCollage?.career_schedule, scholarCollage?.collage_study_proof]);
+
   const [files, setFiles] = useState<{
     collage_study_proof: File | null;
     career_schedule: File | null;
@@ -451,7 +474,6 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
               control={control}
               rules={{ required: true }}
               render={({ field, formState }) => {
-                console.log(academicLoadComplete);
                 return (
                   <Input
                     value={field.value?.toString()}
@@ -474,13 +496,13 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
             name="collage_study_proof"
             control={control}
             render={({ field, formState }) => {
-              getBlobFile(scholarCollage.collage_study_proof)
-                .then((url) => {
-                  setProof(url);
-                })
-                .catch((error) => {
-                  console.error(error);
-                });
+              // getBlobFile(scholarCollage.collage_study_proof)
+              //   .then((url) => {
+              //     setProof(url);
+              //   })
+              //   .catch((error) => {
+              //     console.error(error);
+              //   });
               return (
                 <Input
                   value={field.value?.toString()}
@@ -522,13 +544,13 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
             name="career_schedule"
             control={control}
             render={({ field, formState }) => {
-              getBlobFile(scholarCollage.career_schedule)
-                .then((url) => {
-                  setSchedule(url);
-                })
-                .catch((error) => {
-                  console.error(error);
-                });
+              // getBlobFile(scholarCollage.career_schedule)
+              //   .then((url) => {
+              //     setSchedule(url);
+              //   })
+              //   .catch((error) => {
+              //     console.error(error);
+              //   });
               return (
                 <Input
                   startContent={
