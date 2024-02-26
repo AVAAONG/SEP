@@ -16,10 +16,6 @@ import { ActivityStatus, Modality, Skill, WorkshopYear } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import dynamic from 'next/dynamic';
 
-/**
- * Renders the page component with a list of workshops for a specific scholar.
- * @returns The HTML document with the rendered page component.
- */
 const PieChartComponent = dynamic(() => import('@/components/charts/Pie'), { ssr: false });
 
 export interface IScholarWorkshopColumns {
@@ -148,19 +144,19 @@ const page = async ({
           <div className="w-full grid md:grid-cols-3 justify-center items-center rounded-lg">
             <div className="w-full">
               <h3 className="truncate font-semibold text-center text-sm">
-                Distribucion de actividades según su competencia
+                Distribución de actividades según su competencia
               </h3>
               <PieChartComponent data={workshopsBySkill} />
             </div>
             <div className="w-full">
               <h3 className="truncate font-semibold text-center text-sm">
-                Distribucion de actividades según su tipo
+                Distribución de actividades según su tipo
               </h3>
               <PieChartComponent data={workshopsByKind} />
             </div>
             <div className="w-full">
               <h3 className="truncate font-semibold text-center text-sm">
-                Distribucion de actividades según su año
+                Distribución de actividades según su año
               </h3>
               <PieChartComponent data={workshopsByYear} />
             </div>
