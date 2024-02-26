@@ -1,5 +1,3 @@
-// Install the library first: npm install --save qrcode
-
 import * as QRCode from 'qrcode';
 
 /**
