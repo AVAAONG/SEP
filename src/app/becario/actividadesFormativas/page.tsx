@@ -1,22 +1,19 @@
+import { PieChartComponent } from '@/components/charts';
 import DateSelector from '@/components/commons/datePicker';
 import Stats from '@/components/scholar/ScholarStats';
 import Table from '@/components/table/Table';
 import scholarWorkshopAttendanceColumns from '@/components/table/columns/scholarWorkshopAttendance';
-import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
-import {
-  filterActivityByMonth,
-  filterActivityByQuarter,
-  filterActivityByYear,
-} from '@/lib/datePickerFilters';
 import { getWorkhsopsByScholar } from '@/lib/db/utils/Workshops';
-import { createArrayFromObject } from '@/lib/utils';
-import { parseSkillFromDatabase } from '@/lib/utils2';
+import {
+  countActivityByModality,
+  countWorkshopProperties,
+  getAttendedActivities,
+} from '@/lib/utils/activityFilters';
+import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
+import { createScholarWorkshopAttendanceObject } from '@/lib/utils/parseDataForTable';
 import { ActivityStatus, Modality, Skill, WorkshopYear } from '@prisma/client';
 import { getServerSession } from 'next-auth';
-import dynamic from 'next/dynamic';
-
-const PieChartComponent = dynamic(() => import('@/components/charts/Pie'), { ssr: false });
 
 export interface IScholarWorkshopColumns {
   id: string;
@@ -35,99 +32,19 @@ export interface IScholarWorkshopColumns {
   speakerCompany: (string | null)[];
 }
 
-const createWorkshopObject = (workshops: WorkshopWithAllData[]): IScholarWorkshopColumns[] => {
-  return workshops.map((workshop): IScholarWorkshopColumns => {
-    return {
-      id: workshop.id,
-      title: workshop.title,
-      platform: workshop.platform,
-      start_dates: workshop.start_dates,
-      end_dates: workshop.end_dates,
-      modality: workshop.modality,
-      skill: workshop.asociated_skill,
-      activity_status: workshop.activity_status,
-      attendance: workshop.scholar_attendance[0].attendance,
-      year: workshop.year,
-      speakerNames: workshop.speaker.map(
-        (speaker) => `${speaker.first_names.split(' ')[0]} ${speaker.last_names.split(' ')[0]}`
-      ),
-      speakerImages: workshop.speaker.map((speaker) => speaker.image),
-      speakerIds: workshop.speaker.map((speaker) => speaker.id),
-      speakerCompany: workshop.speaker.map((speaker) => speaker.job_company),
-    };
-  });
-};
-
 const page = async ({
   searchParams,
 }: {
   searchParams?: { year: string; month: string; quarter: string };
 }) => {
   const session = await getServerSession(authOptions);
+  if (!session) return null;
   const workshopsDbList = await getWorkhsopsByScholar(session?.scholarId);
-  let workshops = [];
-
-  if (searchParams?.year) {
-    const workshopsFilteredByYear = filterActivityByYear(
-      workshopsDbList,
-      Number(searchParams?.year)
-    );
-    workshops = workshopsFilteredByYear;
-    if (searchParams?.quarter) {
-      workshops = filterActivityByQuarter(workshopsFilteredByYear, Number(searchParams?.quarter));
-    }
-    if (searchParams?.month) {
-      workshops = filterActivityByMonth(workshopsFilteredByYear, Number(searchParams?.month));
-    }
-  } else {
-    workshops = workshopsDbList;
-  }
-  const workshopsAttended = workshops.filter((workshop) => {
-    return workshop.scholar_attendance[0]?.attendance === 'ATTENDED';
-  });
-  console.log(workshopsAttended);
-  const in_personWorkshops = workshopsAttended.filter(
-    (workshop) => workshop.modality === 'IN_PERSON'
-  ).length;
-  const onlineWorkhops = workshopsAttended.filter(
-    (workshop) => workshop.modality === 'ONLINE'
-  ).length;
-
-  const w = createWorkshopObject(workshops);
-  const workshopsBySkillObj =
-    workshopsAttended?.reduce(
-      (acc, workshop) => {
-        const skill = parseSkillFromDatabase(workshop.asociated_skill);
-        acc[skill] = (acc[skill] || 0) + 1;
-        return acc;
-      },
-      {} as Record<string, number>
-    ) || {};
-
-  const workshopsBySkill = createArrayFromObject(workshopsBySkillObj);
-
-  const workshopsByKindObj =
-    workshopsAttended?.reduce(
-      (acc, workshop) => {
-        const skill = workshop.kindOfWorkshop;
-        acc[skill] = (acc[skill] || 0) + 1;
-        return acc;
-      },
-      {} as Record<string, number>
-    ) || {};
-
-  const workshopsByKind = createArrayFromObject(workshopsByKindObj);
-  const workshopsByYearObj =
-    workshopsAttended?.reduce(
-      (acc, workshop) => {
-        const skill = workshop.year.toString();
-        acc[skill] = (acc[skill] || 0) + 1;
-        return acc;
-      },
-      {} as Record<string, number>
-    ) || {};
-
-  const workshopsByYear = createArrayFromObject(workshopsByYearObj);
+  const workshops = filterActivitiesBySearchParams(workshopsDbList, searchParams);
+  const workshopsAttended = getAttendedActivities(workshops);
+  const { inPersonActivities, onlineActivities } = countActivityByModality(workshopsAttended);
+  const { skills, years, kinds } = countWorkshopProperties(workshopsAttended);
+  const workshopObjectForTable = createScholarWorkshopAttendanceObject(workshops);
 
   return (
     <div className="flex flex-col md:p-4 gap-1">
@@ -137,34 +54,30 @@ const page = async ({
         <Stats
           kindOfActivity="workshop"
           activitiesDone={workshopsAttended?.length}
-          first={in_personWorkshops}
-          second={onlineWorkhops}
+          first={inPersonActivities}
+          second={onlineActivities}
         />
         {workshops && workshops.length >= 1 && (
-          <div className="w-full grid md:grid-cols-3 justify-center items-center rounded-lg">
-            <div className="w-full">
+          <div className="w-full grid md:grid-cols-5  justify-center items-center">
+            <div className="md:col-start-2">
               <h3 className="truncate font-semibold text-center text-sm">
-                Distribución de actividades según su competencia
+                Distribución por competencia
               </h3>
-              <PieChartComponent data={workshopsBySkill} />
+              <PieChartComponent data={skills} />
             </div>
-            <div className="w-full">
-              <h3 className="truncate font-semibold text-center text-sm">
-                Distribución de actividades según su tipo
-              </h3>
-              <PieChartComponent data={workshopsByKind} />
+            <div>
+              <h3 className="truncate font-semibold text-center text-sm">Distribución por tipo</h3>
+              <PieChartComponent data={kinds} />
             </div>
-            <div className="w-full">
-              <h3 className="truncate font-semibold text-center text-sm">
-                Distribución de actividades según su año
-              </h3>
-              <PieChartComponent data={workshopsByYear} />
+            <div>
+              <h3 className="truncate font-semibold text-center text-sm">Distribución por año</h3>
+              <PieChartComponent data={years} />
             </div>
           </div>
         )}
         <Table
           tableColumns={scholarWorkshopAttendanceColumns}
-          tableData={w || []}
+          tableData={workshopObjectForTable || []}
           tableHeadersForSearch={[]}
         />
       </div>

@@ -107,3 +107,22 @@ export const parsePlatformFromDatabase = (platform: string) => {
       return platform;
   }
 };
+
+export const parseWorkshopKindFromDatabase = (kind: string) => {
+  switch (kind) {
+    case 'WORKSHOP':
+      return 'Taller';
+    case 'CINEMA_FORUM':
+      return 'Cine foro';
+    case 'FORUM':
+      return 'Foro';
+    case 'WEBINAR':
+      return 'Webinar';
+    case 'TALK':
+      return 'Charla';
+    case 'CONVERSATORIO':
+      return 'Conversatorio';
+    default:
+      return kind;
+  }
+};

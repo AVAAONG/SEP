@@ -86,24 +86,25 @@ const ActivityPanelInfo: React.FC<ActivityPanelInfoProps> = ({ activity, childre
             <p className="text-base font-semibold capitalize">
               {parsePlatformFromDatabase(platform)}
             </p>
-            {meeting_id.map((id, index) => (
-              <div>
-                <div className="flex gap-3">
-                  <p className="font-bold">Link de la reunion</p>
-                  <Link href={meeting_link[index]}>
-                    <ArrowTopRightOnSquareIcon className="h-5 w-5 text-primary-light cursor-pointer" />
-                  </Link>
+            {meeting_id?.[0]?.length > 0 &&
+              meeting_id?.map((id, index) => (
+                <div>
+                  <div className="flex gap-3">
+                    <p className="font-bold">Link de la reunion</p>
+                    <Link href={meeting_link[index]}>
+                      <ArrowTopRightOnSquareIcon className="h-5 w-5 text-primary-light cursor-pointer" />
+                    </Link>
+                  </div>
+                  <div className="flex gap-3">
+                    <p className="font-bold">Id de la reunion</p>
+                    <p>{id}</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <p className="font-bold">Contraseña de la reunion</p>
+                    <p>{meeting_password[index]}</p>
+                  </div>
                 </div>
-                <div className="flex gap-3">
-                  <p className="font-bold">Id de la reunion</p>
-                  <p>{id}</p>
-                </div>
-                <div className="flex gap-3">
-                  <p className="font-bold">Contraseña de la reunion</p>
-                  <p>{meeting_password[index]}</p>
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
           <div className="space-y-1">
             {description && (

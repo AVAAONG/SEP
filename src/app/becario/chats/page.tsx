@@ -8,7 +8,7 @@ import {
   filterActivityByMonth,
   filterActivityByQuarter,
   filterActivityByYear,
-} from '@/lib/datePickerFilters';
+} from '@/lib/utils/datePickerFilters';
 import { getChatsByScholar } from '@/lib/db/utils/Workshops';
 import { createArrayFromObject } from '@/lib/utils';
 import { parseChatLevelFromDatabase, parseModalityFromDatabase } from '@/lib/utils2';

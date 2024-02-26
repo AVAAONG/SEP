@@ -8,11 +8,11 @@ interface StatsProps {
 
 const defineActivity = (kindOfActivity: string) => {
   if (kindOfActivity === 'workshop') {
-    return ['actividades de formación', 10];
+    return ['Actividades de formación', 10];
   } else if (kindOfActivity === 'chat') {
-    return ['chats', 10];
+    return ['Chats', 10];
   } else if (kindOfActivity === 'volunteer') {
-    return ['voluntarido', 100];
+    return ['Voluntarido', 100];
   } else {
     return ['', 0];
   }
@@ -27,13 +27,13 @@ const Stats = ({ activitiesDone, kindOfActivity, first, second }: StatsProps) =>
 
   return (
     <div>
-      <dl className="grid grid-cols-1 rounded-lg bg-gradient-to-t from-green-500 to-emerald-600 dark:from-green-700 dark:to-emerald-700  overflow-hidden shadow divide-y-2 divide-emerald-700 dark:divide-emerald-950 md:grid-cols-3 md:divide-y-0 md:divide-x-2 border border-emerald-700  dark:border-emerald-800">
+      <dl className="grid grid-cols-1 rounded-lg bg-gradient-to-t bg-primary-light  overflow-hidden shadow divide-y-2 divide-emerald-700 dark:divide-emerald-950 md:grid-cols-3 md:divide-y-0 md:divide-x-2 border border-emerald-700  dark:border-emerald-800">
         <div className="p-4 flex flex-col justify-between">
-          <dt className="text-sm sm:text-xs lg:text-base font-semibold text-white truncate">
+          <dt className="text-sm sm:text-xs lg:text-base font-semibold text-white dark:text-black truncate">
             Total de {activityName} realizadas
           </dt>
           <dd className="flex justify-between items-baseline lg:flex">
-            <div className="flex items-baseline text-5xl font-bold  text-emerald-900 dark:text-emerald-950 ">
+            <div className="flex items-baseline text-5xl font-bold  text-white dark:text-black ">
               {activitiesDone}
             </div>
             <StatsTooltip
@@ -44,28 +44,28 @@ const Stats = ({ activitiesDone, kindOfActivity, first, second }: StatsProps) =>
           </dd>
         </div>
         <div className="p-4 overflow-hidden flex justify-between h-28">
-          <div className="flex items-start text-5xl font-bold  text-emerald-900 dark:text-emerald-950  h-min">
+          <div className="flex items-start text-5xl font-bold  text-white dark:text-black  h-min">
             <span className="-mt-1">{first}</span>
-            <span className="text-xs ml-2 text-white">
+            <span className="text-xs ml-2 text-white dark:text-black">
               {activityName} {kindOfActivity === 'voluteer' ? 'internas' : 'presenciales'}
             </span>
           </div>
           <div className="w-0">
             <hr className="border-2 w-20 translate-y-10  -translate-x-12 -skew-y-[65deg] border-emerald-700 dark:border-emerald-950 " />
           </div>
-          <div className="flex items-end text-5xl font-bold  text-emerald-900 dark:text-emerald-950">
+          <div className="flex items-end text-5xl font-bold  text-white dark:text-black">
             <span className="">{second}</span>
-            <span className="text-xs  ml-2 text-white">
+            <span className="text-xs  ml-2 text-white dark:text-black">
               {activityName} {kindOfActivity === 'voluteer' ? 'externas' : 'virtuales'}
             </span>
           </div>
         </div>
         <div className="p-4 flex flex-col justify-between">
-          <dt className="text-base sm:text-xs lg:text-base font-semibold text-white truncate">
+          <dt className="text-base sm:text-xs lg:text-base font-semibold text-white dark:text-black truncate">
             Total de {activityName} faltantes
           </dt>
           <dd className="flex justify-between items-baseline lg:flex">
-            <div className="flex items-baseline text-5xl font-bold  text-emerald-900 dark:text-emerald-950 ">
+            <div className="flex items-baseline text-5xl font-bold  text-white dark:text-black ">
               {pendingWorkshops}
             </div>
             <StatsTooltip
