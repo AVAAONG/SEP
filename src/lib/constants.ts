@@ -58,6 +58,7 @@ export const WORKSHOP_TYPES = [
   { label: 'Foro', value: 'FORUM' },
   { label: 'Webinar', value: 'WEBINAR' },
   { label: 'Charla', value: 'TALK' },
+  { label: 'Conversatorio', value: 'CONVERSATORIO' },
 ];
 
 export const MODALITY = [
