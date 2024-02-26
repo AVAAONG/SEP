@@ -55,7 +55,10 @@ const NextEventsList = ({ activities }: { activities: (Workshop | Chat | Volunte
                             />
                           </svg>
                           <span className="ml-1 text-gray-500 dark:text-gray-400">
-                            <DisplayDate date={activity.start_dates[0]?.toISOString()} />
+                            <DisplayDate
+                              date={activity.start_dates[0]?.toISOString()}
+                              kind="short"
+                            />
                           </span>
                           <span className="ml-1 text-gray-500 dark:text-gray-400">
                             <DisplayTime time={activity.start_dates[0].toISOString()} />
