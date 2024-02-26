@@ -9,9 +9,13 @@ export const SpeakerCreationFormSchema = z.object({
   first_names: z.string().min(1, { message: 'El facilitador debe de tener minimo un nombre' }),
   last_names: z.string().min(1, { message: 'El facilitador debe de tener minimo un apellido' }),
   email: z.string().email().min(1, { message: 'Debes especificar el correo del facilitador' }),
-  birthdate: z.coerce.date().refine((date) => new Date(date) <= new Date(), {
-    message: 'La fecha no puede ser mayor a la actual',
-  }),
+  birthdate: z.coerce
+    .date()
+    .refine((date) => new Date(date) <= new Date(), {
+      message: 'La fecha no puede ser mayor a la actual',
+    })
+    .optional()
+    .nullable(),
   years_of_exp: z.coerce.number().optional(),
   job_title: z.string().optional(),
   job_company: z.string().optional(),
@@ -35,71 +39,85 @@ const d = [
     label: 'Nombre(s)',
     name: 'first_names',
     kindOfInput: 'text',
+    required: true,
   },
   {
     label: 'Apellido(s)',
     name: 'last_names',
     kindOfInput: 'text',
+    required: true,
   },
   {
     label: 'Correo Electrónico',
     name: 'email',
     kindOfInput: 'email',
+    required: true,
   },
   {
     label: 'Número de Teléfono',
     name: 'phone_number',
     kindOfInput: 'tel',
+    required: false,
   },
   {
     label: 'Fecha de Nacimiento',
     name: 'birthdate',
     kindOfInput: 'date',
+    required: false,
   },
   {
     label: 'Años de Experiencia',
     name: 'years_of_exp',
     kindOfInput: 'number',
+    required: false,
   },
   {
     label: 'Título de Trabajo',
     name: 'job_title',
     kindOfInput: 'text',
+    required: false,
   },
   {
     label: 'Compañía de Trabajo',
     name: 'job_company',
     kindOfInput: 'text',
+    required: false,
   },
   {
     label: 'Ciudad Actual',
     name: 'actual_city',
     kindOfInput: 'text',
+    required: false,
   },
   {
     label: 'País Actual',
     name: 'actual_country',
     kindOfInput: 'text',
+    required: false,
   },
   {
     label: 'Usuario de Instagram',
     name: 'instagram_user',
     kindOfInput: 'text',
+    required: false,
   },
   {
     label: 'Usuario de Twitter',
     name: 'twitter_user',
     kindOfInput: 'text',
+    required: false,
   },
   {
     label: 'Usuario de LinkedIn',
     name: 'linkedin_user',
     kindOfInput: 'text',
+    required: false,
   },
   {
     label: 'Usuario de Facebook',
     name: 'facebook_user',
     kindOfInput: 'text',
+    required: false,
   },
 ];
 
@@ -108,9 +126,16 @@ interface InputComponentProps {
   label: string;
   name: string;
   kindOfInput: string;
+  required?: boolean;
 }
 
-const InputComponent: React.FC<InputComponentProps> = ({ control, label, name, kindOfInput }) => (
+const InputComponent: React.FC<InputComponentProps> = ({
+  control,
+  label,
+  name,
+  kindOfInput,
+  required,
+}) => (
   <Controller
     name={name}
     control={control}
@@ -118,6 +143,7 @@ const InputComponent: React.FC<InputComponentProps> = ({ control, label, name, k
     render={({ field, formState }) => {
       return (
         <Input
+          isRequired={required}
           value={field.value}
           onChange={field.onChange}
           isInvalid={!!formState.errors?.[name]?.message}
@@ -140,13 +166,14 @@ interface BaseSpeakerFormCreationProps {
 const BaseSpeakerFormCreation: React.FC<BaseSpeakerFormCreationProps> = ({ control }) => {
   return (
     <>
-      {d.map(({ label, name, kindOfInput }) => (
+      {d.map(({ label, name, kindOfInput, required }) => (
         <InputComponent
           key={name}
           control={control}
           label={label}
           name={name}
           kindOfInput={kindOfInput}
+          required={required}
         />
       ))}
       <Controller
@@ -165,6 +192,7 @@ const BaseSpeakerFormCreation: React.FC<BaseSpeakerFormCreationProps> = ({ contr
               radius="sm"
               label="Género"
               labelPlacement="outside"
+              isRequired
             >
               {[
                 { value: 'M', label: 'Masculino' },

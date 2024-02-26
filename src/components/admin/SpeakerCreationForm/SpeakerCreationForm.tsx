@@ -13,6 +13,7 @@ import {
 import { Prisma } from '@prisma/client';
 import { BaseSyntheticEvent } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
 import BaseSpeakerFormCreation, { SpeakerCreationFormSchema } from './BaseForm';
 
@@ -52,7 +53,15 @@ const SpeakerCreationForm = () => {
           base: 'bg-light dark:bg-dark',
         }}
       >
-        <form onSubmit={handleSubmit((data, event) => handleFormSubmit(data, event))}>
+        <form
+          onSubmit={handleSubmit((data, event) =>
+            toast.promise(handleFormSubmit(data, event), {
+              pending: 'Creando facilitador...',
+              success: 'Facilitador creado',
+              error: 'Error al crear facilitador',
+            })
+          )}
+        >
           <ModalContent>
             {(onClose) => (
               <>
