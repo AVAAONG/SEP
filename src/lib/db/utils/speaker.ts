@@ -20,6 +20,9 @@ export const getWorkshopSpeakersWithParams = async (data: Prisma.SpeakerSelect) 
           { speaker_kind: 'WORKSHOPS' }
         ]
       },
+      orderBy: {
+        first_names: 'asc'
+      }
     });
     return speakers;
   } catch (e) {

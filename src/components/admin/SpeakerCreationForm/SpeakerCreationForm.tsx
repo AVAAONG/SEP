@@ -1,5 +1,6 @@
 'use client';
 import { createSpeaker } from '@/lib/db/utils/speaker';
+import { revalidateSpecificPath } from '@/lib/serverAction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Button,
@@ -35,6 +36,7 @@ const SpeakerCreationForm = () => {
     event?.preventDefault();
     const speaker: Prisma.SpeakerCreateInput = { speaker_kind: 'WORKSHOPS', ...inputData };
     await createSpeaker(speaker);
+    revalidateSpecificPath('/admin/actividadesFormativas/facilitadores');
     reset();
     onClose();
   };
