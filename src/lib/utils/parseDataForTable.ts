@@ -1,18 +1,21 @@
 import { IScholarWorkshopColumns } from "@/app/becario/actividadesFormativas/page";
 import { WorkshopWithAllData } from "@/components/table/columns/workshopColumns";
+import { KindOfSpeaker } from "@prisma/client";
 
 const createScholarWorkshopAttendanceObject = (workshops: WorkshopWithAllData[]): IScholarWorkshopColumns[] => {
     return workshops.map((workshop): IScholarWorkshopColumns => {
         const speakerNames: string[] = [];
-        const speakerImages: (string | null)[] = [];
+        const speakerImages: (string | undefined)[] = [];
         const speakerIds: string[] = [];
         const speakerCompany: (string | null)[] = [];
+        const speakerKind: (KindOfSpeaker | null)[] = [];
 
         workshop.speaker.forEach((speaker) => {
             speakerNames.push(`${speaker.first_names.split(' ')[0]} ${speaker.last_names.split(' ')[0]}`);
-            speakerImages.push(speaker.image);
+            speakerImages.push(speaker.image || undefined);
             speakerIds.push(speaker.id);
             speakerCompany.push(speaker.job_company);
+            speakerKind.push(speaker.speaker_kind);
         });
 
         return {
@@ -29,6 +32,7 @@ const createScholarWorkshopAttendanceObject = (workshops: WorkshopWithAllData[])
             speakerNames,
             speakerImages,
             speakerIds,
+            speakerKind,
             speakerCompany,
         };
     });

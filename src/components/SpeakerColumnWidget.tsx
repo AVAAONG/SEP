@@ -1,23 +1,28 @@
 import { Avatar, AvatarGroup, Tooltip } from '@nextui-org/react';
+import { KindOfSpeaker } from '@prisma/client';
 import Link from 'next/link';
 import { SpeakerColumnWidgetCard } from './SpeakerWidgetImage';
 
 type SpeakersColumnWidgetProps = {
   speakerNames: string[];
-  speakerIds: string[];
+  speakerIds: (string | null)[];
   speakersCompany: (string | null)[];
-  speakerImages: (string | null)[];
+  speakerImages: (string | undefined)[];
+  speakerKind: (KindOfSpeaker | null)[];
 };
 const SpeakersColumnWidget: React.FC<SpeakersColumnWidgetProps> = ({
   speakerNames,
   speakerIds,
   speakersCompany,
   speakerImages,
+  speakerKind,
 }) => {
+  const baseLink =
+    speakerKind && speakerKind[0] === 'WORKSHOPS' ? 'actividadesFormativas' : 'chats';
   if (speakerNames.length < 2)
     return (
       <Link
-        href={speakerIds[0] ? `actividadesFormativas/facilitadores/${speakerIds[0]}` : ''}
+        href={speakerIds[0] ? `${baseLink}/facilitadores/${speakerIds[0]}` : ''}
         className="flex items-center"
       >
         <div className="flex-shrink-0 w-8 h-8">
@@ -54,7 +59,9 @@ const SpeakersColumnWidget: React.FC<SpeakersColumnWidgetProps> = ({
               }
             >
               <AvatarGroup max={2}>
-                <Link href={speakerIds[index] ? `facilitadores/${speakerIds[index]}` : ''}>
+                <Link
+                  href={speakerIds[index] ? `${baseLink}/facilitadores/${speakerIds[index]}` : ''}
+                >
                   <Avatar
                     classNames={{ base: 'text-white dark:text-secondary-dark' }}
                     className="w-8 h-8"

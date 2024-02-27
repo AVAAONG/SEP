@@ -12,13 +12,14 @@ import {
 } from '@/lib/utils/activityFilters';
 import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
 import { createScholarWorkshopAttendanceObject } from '@/lib/utils/parseDataForTable';
-import { ActivityStatus, Modality, Skill, WorkshopYear } from '@prisma/client';
+import { ActivityStatus, KindOfSpeaker, Modality, Skill, WorkshopYear } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 
 export interface IScholarWorkshopColumns {
   id: string;
   title: string;
   platform: string;
+  speakerKind: (KindOfSpeaker | null)[];
   start_dates: Date[];
   end_dates: Date[];
   modality: Modality;
@@ -27,7 +28,7 @@ export interface IScholarWorkshopColumns {
   attendance: string;
   year: WorkshopYear[];
   speakerNames: string[];
-  speakerImages: (string | null)[];
+  speakerImages: (string | undefined)[];
   speakerIds: (string | null)[];
   speakerCompany: (string | null)[];
 }

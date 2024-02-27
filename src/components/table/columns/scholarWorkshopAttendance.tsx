@@ -41,6 +41,7 @@ const scholarWorkshopAttendanceColumns: Column<IScholarWorkshopColumns>[] = [
           speakerIds={cell.row.original.speakerIds}
           speakersCompany={cell.row.original.speakerCompany}
           speakerImages={cell.row.original.speakerImages}
+          speakerKind={cell.row.original.speakerKind}
         />
       );
     },
