@@ -107,7 +107,7 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
     {
       icon: Star,
       text: 'Calificación promedio',
-      number: 4.5,
+      number: 0,
       bg: 'from-yellow-500  to-yellow-700',
       cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
       activity: 'chats',
