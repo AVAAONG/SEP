@@ -2,7 +2,6 @@ import defailProfilePic from '@/../public/defaultProfilePic.png';
 import NormalCard from '@/components/scholar/card/NormalCard';
 import Table from '@/components/table/Table';
 
-import SpeakerPageDropdown from '@/components/SpeakerPageDropdown';
 import ChartComponent from '@/components/charts/AreaChart';
 import singleChatSpeakerColumns from '@/components/table/columns/SinglechatSpeakerColumns';
 import { getChatSpeakersWithChats } from '@/lib/db/utils/speaker';
@@ -157,8 +156,7 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
               <div className="flex items-center justify-center gap-1 w-full">
                 <h1 className="text-2xl text-green-700 font-bold text-center flex items-center justify-center gap-2">
                   {first_names} {last_names}{' '}
-                </h1>{' '}
-                <SpeakerPageDropdown speaker={workshopSpeaker} />
+                </h1>
               </div>
               <span className="text-gray-400 dark:text-gray-300 font-semibold uppercase text-center w-full ">
                 {job_company}
