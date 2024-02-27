@@ -1,8 +1,9 @@
 'use server';
 
+import { ChatsWithAllData } from "@/components/table/columns/chatsColumns";
 import { WorkshopWithAllData } from "@/components/table/columns/workshopColumns";
 import { Chat, Volunteer, Workshop } from "@prisma/client";
-import { parseModalityFromDatabase, parseSkillFromDatabase, parseWorkshopKindFromDatabase } from "../utils2";
+import { parseChatLevelFromDatabase, parseModalityFromDatabase, parseSkillFromDatabase, parseWorkshopKindFromDatabase } from "../utils2";
 
 const countActivityByModality = (attendedActivities: (Workshop | Chat | Volunteer)[]) => {
     return attendedActivities.reduce(
@@ -18,11 +19,17 @@ const countActivityByModality = (attendedActivities: (Workshop | Chat | Voluntee
     );
 };
 
-const getAttendedActivities = (activities: (Workshop | Chat | Volunteer)[]) => {
+const getAttendedActivities = (activities: WorkshopWithAllData[]) => {
     return activities.filter((activity) => {
         return activity.scholar_attendance[0]?.attendance === 'ATTENDED';
     });
 };
+
+const getAttendedChats = (chats: ChatsWithAllData[], scholarId: string) => {
+    return chats.filter((chat) => {
+        return chat.scholar_attendance[0]?.attendance === 'ATTENDED' || chat.speaker.some((speaker) => speaker.id === scholarId);
+    });
+}
 
 type Count = {
     label: string;
@@ -72,10 +79,43 @@ const countWorkshopProperties = (workshops: WorkshopWithAllData[]): {
     return result;
 };
 
+const countChatProperties = (chats: ChatsWithAllData[]): {
+    level: Count[];
+    modality: Count[];
+
+} => {
+    const counts: Record<string, Record<string, number>> = {
+        level: {},
+        modality: {},
+    };
+
+    chats.forEach(chat => {
+        const chatLevel = parseChatLevelFromDatabase(chat.level);
+        const chatModality = parseModalityFromDatabase(chat.modality)
+        counts.level[chatLevel] = (counts.level[chatLevel] || 0) + 1;
+        counts.modality[chatModality] = (counts.modality[chatModality] || 0) + 1;
+    });
+
+    const result: { level: Count[]; modality: Count[] } = {
+        level: [],
+        modality: [],
+    };
+
+    for (const key in counts) {
+        result[key as 'level' | 'modality'] = Object.entries(counts[key]).map(([label, value]) => ({
+            label,
+            value: Number(value),
+        }));
+    }
+
+    return result;
+};
+
 export {
     countActivityByModality,
     getAttendedActivities,
-    countWorkshopProperties
-
+    getAttendedChats,
+    countWorkshopProperties,
+    countChatProperties
 };
 

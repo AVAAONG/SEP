@@ -8,7 +8,6 @@ import { Column } from 'react-table';
 const ChatsWithAllData = Prisma.validator<Prisma.ChatDefaultArgs>()({
   include: {
     speaker: true,
-    temp_data: true,
     scholar_attendance: true,
   },
 });
