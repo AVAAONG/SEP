@@ -13,8 +13,15 @@ import {
   InstagramIcon,
   LinkedinIcon,
   TwitterIcon,
-} from '../../../../../../public/svgs/SocialNetworks';
-import { Star, chatIcon, workshopIcon } from '../../../../../../public/svgs/svgs';
+} from '../../../../../public/svgs/SocialNetworks';
+import {
+  CurriculumIcon,
+  EmailIcon,
+  PhoneIcon,
+  Star,
+  chatIcon,
+  workshopIcon,
+} from '../../../../../public/svgs/svgs';
 
 const speakerSearchOptions = [
   {
@@ -167,7 +174,7 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
             {description && (
               <div className="flex flex-col justify-center items-center gap-2 sm:gap-1 sm:justify-start sm:items-start ">
                 <span className="text-base text-gray-400 dark:text-gray-300 font-semibold ">
-                  {description}
+                  adsfknlkjdsa{' '}
                 </span>
               </div>
             )}
@@ -184,6 +191,34 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
                       {icon}
                     </Link>
                   )
+              )}
+            </div>
+            <div className="flex flex-col w-full text-sm gap-2 items-center justify-center">
+              {phone_number && (
+                <div className="w-full flex gap-2 items-center justify-center ">
+                  <div className="bg-gray-100 dark:bg-slate-600 p-2 w-9 rounded-full">
+                    <PhoneIcon />
+                  </div>
+                  <span>{phone_number}</span>
+                </div>
+              )}
+              {curriculum && (
+                <div className="w-full flex gap-2 items-center justify-center ">
+                  <div className="bg-gray-100 dark:bg-slate-600 p-2 w-9 rounded-full">
+                    <Link href={curriculum} target="_blank" className="w-6 block">
+                      <CurriculumIcon />
+                    </Link>
+                  </div>
+                  <span>Curriculum</span>
+                </div>
+              )}
+              {email && (
+                <div className="w-full flex gap-2 items-center justify-center">
+                  <div className="bg-gray-100 dark:bg-slate-600 p-2 w-9 rounded-full">
+                    <EmailIcon />
+                  </div>
+                  <span>{email}</span>
+                </div>
               )}
             </div>
           </div>
