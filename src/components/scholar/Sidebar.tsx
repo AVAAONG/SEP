@@ -63,9 +63,9 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
   },
   {
     Icon: CalendarIcon(),
-    buttonName: 'Calendario',
+    buttonName: 'Oferta de actividades',
     itemList: [],
-    link: `/${SCHOLAR_PREFIX}/calendario`,
+    link: `/${SCHOLAR_PREFIX}/oferta`,
   },
   // {
   //   Icon: CalendarIcon(),
