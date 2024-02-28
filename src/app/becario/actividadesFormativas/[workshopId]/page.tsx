@@ -9,16 +9,21 @@ import { getWorkshop } from '@/lib/db/utils/Workshops';
 import { getNotEnrolledScholarsInWorkshop } from '@/lib/db/utils/users';
 import { formatScholarDataForAttendanceTable } from '@/lib/tableUtils';
 import { getServerSession } from 'next-auth';
+import { notFound } from 'next/navigation';
 import shortUUID from 'short-uuid';
 
 const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => {
   const se = await getServerSession(authOptions);
   const workshopId = params.workshopId || null;
-  const notEnrolledScholars = await getNotEnrolledScholarsInWorkshop(workshopId);
+
+  if (!workshopId) return null;
   const workshop = await getWorkshop(workshopId);
+  if (!workshop) return notFound();
+
+  const notEnrolledScholars = await getNotEnrolledScholarsInWorkshop(workshopId);
 
   const attendance = workshop?.scholar_attendance.find(
-    (a) => a.scholar.scholar.id === se?.user?.id
+    (a) => a.scholar.scholar.id === se?.scholarId
   );
 
   const scholarAttendanceDataForTable = formatScholarDataForAttendanceTable(
@@ -53,9 +58,9 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
             isButtonDisabled={isDisabled()}
             scholarWhoCeaseName={se?.user?.name!}
             activityName={workshop?.title || ''}
-            date={workshop?.start_dates[0] || ''}
-            startDate={workshop?.start_dates[0] || ''}
-            endDate={workshop?.end_dates[0] || ''}
+            date={workshop?.start_dates[0].toISOString() || ''}
+            startDate={workshop?.start_dates[0].toISOString() || ''}
+            endDate={workshop?.end_dates[0].toISOString() || ''}
             modality={workshop?.modality || ''}
             platform={workshop?.platform || ''}
           />
