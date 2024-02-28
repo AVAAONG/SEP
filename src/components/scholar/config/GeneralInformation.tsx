@@ -1,6 +1,6 @@
 'use client';
 import GENERAL_INFORMATION_INPUT_DATA from '@/components/scholar/forms/data/generalInformationFormData';
-import { ScholarWithCollageAndJobAndJob, updateScholar } from '@/lib/db/utils/users';
+import { ScholarWithCollageAndJob, updateScholar } from '@/lib/db/utils/users';
 import scholarInfoSchema from '@/lib/schemas/scholar/scholarGeneralInformationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input, Select, SelectItem } from '@nextui-org/react';
@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import { z } from 'zod';
 
 interface GeneralInformationProps {
-  scholar: ScholarWithCollageAndJobAndJob;
+  scholar: ScholarWithCollageAndJob;
 }
 
 const GeneralInformation: React.FC<GeneralInformationProps> = ({ scholar }) => {

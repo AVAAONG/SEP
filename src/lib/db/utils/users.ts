@@ -724,7 +724,7 @@ export const getScholar = async (id: string) => {
   return scholar;
 }
 
-export type ScholarWithCollageAndJobAndJob = Prisma.PromiseReturnType<
+export type ScholarWithCollageAndJob = Prisma.PromiseReturnType<
   typeof getScholar
 >;
 
