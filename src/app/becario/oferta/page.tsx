@@ -55,12 +55,12 @@ const page = async ({
       </h2>
       <h3 className="text-xs font-semibold text-emerald-700 sm:text-sm dark:text-emerald-500">
         {' '}
-        Ten en cuenta que las fechas y horarios de estas actividades pueden cambiar
+        Ten en cuenta que las fechas y horarios de estas actividades estan sujetos a cambios
       </h3>
       <div className="my-4">
         <TogleTab />
       </div>
-      {selectedKey === 'list' || selectedKey === null ? (
+      {selectedKey === 'calendar' || selectedKey === null ? (
         <div className="w-full">
           <div className="h-full min-h-[600px] text-gray-800 capitalize dark:text-gray-300 shadow-sm overflow-x-clip w-full bg-white border border-gray-200  shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 p-2">
             <CalendarForEnrrolling
