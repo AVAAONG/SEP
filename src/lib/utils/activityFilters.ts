@@ -52,7 +52,7 @@ const countWorkshopProperties = (workshops: WorkshopWithAllData[]): {
 
     workshops.forEach(workshop => {
         const workshopSkill = parseSkillFromDatabase(workshop.asociated_skill);
-        const workshopYear = workshop.year.toString();
+        const workshopYear = workshop.year.length > 4 ? 'Todos' : workshop.year.toString()
         const workshopKind = parseWorkshopKindFromDatabase(workshop.kindOfWorkshop)
         const workshopModality = parseModalityFromDatabase(workshop.modality)
 
