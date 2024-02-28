@@ -16,7 +16,7 @@ import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Tooltip, useDisclosure } from '@nextui-org/react';
 import Link from 'next/link';
 import { chatIcon, workshopIcon } from 'public/svgs/svgs';
-import React from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import BasicModal from './BasicModal';
 import DisplayDate from './DisplayDate';
@@ -50,7 +50,7 @@ const EnrrollActivitiCard: React.FC<EnrrollActivitiCardProps> = ({ activity, sch
   } = activity;
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const activityIsInThePast = start < new Date();
-
+  const [isCharging, setIsCharging] = useState(false);
   return (
     <>
       <Card className="min-w-[350px] max-w-[350px]" radius="sm">
@@ -184,8 +184,9 @@ const EnrrollActivitiCard: React.FC<EnrrollActivitiCardProps> = ({ activity, sch
             <div>Recuerda, tu participación es vital para el éxito de la actividad. ✨ </div>
           </>
         )}
-        isButtonDisabled={isFull}
+        isButtonDisabled={isFull || isCharging}
         onConfirm={async () => {
+          setIsCharging(true);
           toast.promise(handleEnrollment(id, scholar.id, eventId, kindOfActivity, scholar.email), {
             pending: 'Confirmando',
             success: 'Inscripción exitosa',
@@ -201,6 +202,7 @@ const EnrrollActivitiCard: React.FC<EnrrollActivitiCardProps> = ({ activity, sch
             'Confirmación de inscripción'
           );
           onClose();
+          setIsCharging(false);
         }}
         confirmText="Confirmar Inscripción"
       />

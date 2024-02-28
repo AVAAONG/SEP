@@ -58,6 +58,7 @@ const CalendarForEnrrolling = ({
   };
 }) => {
   const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
+  const [isCharging, setIsCharging] = useState(false);
   const d = useSession();
 
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -191,8 +192,9 @@ const CalendarForEnrrolling = ({
             <div>Recuerda, tu participación es vital para el éxito de la actividad. ✨ </div>
           </>
         )}
-        isButtonDisabled={selectedEvent?.isFull}
+        isButtonDisabled={selectedEvent?.isFull || isCharging}
         onConfirm={async () => {
+          setIsCharging(true)
           toast.promise(
             handleEnrollment(
               selectedEvent.id,
@@ -216,7 +218,10 @@ const CalendarForEnrrolling = ({
             scholar.email,
             'Confirmacion de inscripción'
           );
+          
           confirmationModal.onClose();
+          onClose();
+          setIsCharging(false)
         }}
         confirmText="Confirmar Inscripción"
       />
