@@ -21,7 +21,7 @@ const scholarChatAttendaceColumns: Column<IScholarChatColumns>[] = [
     accessor: 'title',
     Cell: ({ value, cell }) => (
       <Link href={cell.row.original.id ? `chats/${cell.row.original.id}` : ''}>
-        <div className="block text-center overflow-x-scroll">{value}</div>
+        <div className="block w-80 text-center overflow-x-scroll">{value}</div>
       </Link>
     ),
   },
@@ -32,7 +32,7 @@ const scholarChatAttendaceColumns: Column<IScholarChatColumns>[] = [
     Cell: ({ cell, value }) => {
       return (
         <SpeakersColumnWidget
-          speakerNames={cell.row.original.speakerNames}
+          speakerNames={value}
           speakerIds={cell.row.original.speakerIds}
           speakersCompany={cell.row.original.speakerCompany}
           speakerImages={cell.row.original.speakerImages}
@@ -83,6 +83,9 @@ const scholarChatAttendaceColumns: Column<IScholarChatColumns>[] = [
   {
     Header: 'Plataforma',
     accessor: 'platform',
+    Cell: ({ value }) => {
+      return <div className='block overflow-x-scroll w-28'>{value}</div>;
+    },
     disableSortBy: true,
   },
   // {

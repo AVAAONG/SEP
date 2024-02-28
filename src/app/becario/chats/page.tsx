@@ -47,7 +47,7 @@ const page = async ({
   const chatObjectForTable = createScholarChatAttendanceObject(chats);
 
   return (
-    <div className="flex flex-col md:p-4 gap-1">
+    <div className="flex flex-col gap-1">
       <DateSelector />
       <h1 className="text-xl font-medium sm:text-2xl mb-3 ">Registro de chat clubs de inglés</h1>
       <div className="h-full w-full flex flex-col gap-4">

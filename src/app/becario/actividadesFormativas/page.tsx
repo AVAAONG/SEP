@@ -48,9 +48,9 @@ const page = async ({
   const workshopObjectForTable = createScholarWorkshopAttendanceObject(workshops);
 
   return (
-    <div className="flex flex-col md:p-4 gap-1">
+    <div className="flex flex-col gap-1">
       <DateSelector />
-      <h1 className="text-xl font-medium sm:text-2xl mb-3 ">Registro de actividades formativas</h1>
+      <h1 className="text-xl ml-4 font-medium sm:text-2xl mb-3 ">Registro de actividades formativas</h1>
       <div className="h-full w-full flex flex-col gap-4">
         <Stats
           kindOfActivity="workshop"

@@ -26,7 +26,7 @@ const scholarWorkshopAttendanceColumns: Column<IScholarWorkshopColumns>[] = [
     accessor: 'title',
     Cell: ({ value, cell }) => (
       <Link href={cell.row.original.id ? `actividadesFormativas/${cell.row.original.id}` : ''}>
-        <div className="block text-center overflow-x-scroll">{value}</div>
+        <div className="block w-80 overflow-x-scroll">{value}</div>
       </Link>
     ),
   },
@@ -110,6 +110,9 @@ const scholarWorkshopAttendanceColumns: Column<IScholarWorkshopColumns>[] = [
   {
     Header: 'Plataforma',
     accessor: 'platform',
+    Cell: ({ value }) => {
+      return <div className='block overflow-x-scroll w-28'>{value}</div>;
+    },
     disableSortBy: true,
   },
 
