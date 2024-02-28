@@ -4,7 +4,6 @@ import { updateProfilePicture } from '@/lib/db/utils/users';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
 import { Avatar, Button } from '@nextui-org/react';
-import { useSession } from 'next-auth/react';
 import { ChangeEvent } from 'react';
 import { toast } from 'react-toastify';
 
@@ -29,7 +28,7 @@ const uploadProfilePic = async (event: ChangeEvent<HTMLInputElement>, scholarId:
       }
       try {
         await updateProfilePicture(scholarId, url);
-        revalidateSpecificPath('/becario/configuracion');
+        revalidateSpecificPath('/becario/');
       } catch (error) {
         console.error('Error saving the image ', error);
       }
@@ -42,11 +41,10 @@ const deleteProfilePic = async (image: string | null, scholarId: string) => {
   if (!image) return;
   await deleteBlob(image.split('?')[0]);
   await updateProfilePicture(scholarId, null);
-  revalidateSpecificPath('/becario/configuracion');
+  revalidateSpecificPath('/becario/');
 };
 
 const ProfilePic = (props: ProfilePicProps) => {
-  const { update } = useSession();
   return (
     <div className="flex items-center justify-between gap-4">
       <div className="w-32 h-32">
@@ -81,7 +79,6 @@ const ProfilePic = (props: ProfilePicProps) => {
                     success: 'Imagen subida',
                     error: 'Error subiendo imagen',
                   });
-                  update();
                 }}
               />
               Subir Foto
@@ -95,7 +92,6 @@ const ProfilePic = (props: ProfilePicProps) => {
                 success: 'Imagen eliminada',
                 error: 'Error eliminando imagen',
               });
-              update();
             }}
             id="delete-profile-pic"
             isIconOnly
