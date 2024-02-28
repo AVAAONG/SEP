@@ -37,7 +37,7 @@ const SpeakersColumnWidget: React.FC<SpeakersColumnWidgetProps> = ({
             {speakerNames[0]}
           </span>
           <div className="w-32 overflow-x-scroll text-xs font-medium text-gray-400 dark:text-slate-400 uppercase">
-            {speakersCompany[0]}
+            {speakersCompany?.[0]}
           </div>
         </div>
       </Link>

@@ -6,11 +6,7 @@ import './calendar.css';
 import { createEnrollementConfirmationMessage } from '@/lib/htmlConfirmationTemplate';
 import { sendGenericEmail } from '@/lib/sendEmails';
 import { handleEnrollment } from '@/lib/serverAction';
-import {
-  parseChatLevelFromDatabase,
-  parseModalityFromDatabase,
-  parseSkillFromDatabase,
-} from '@/lib/utils2';
+import { ActivitiesForEnrollement } from '@/lib/utils';
 import { BigCalendarEventType } from '@/types/Calendar';
 import { useDisclosure } from '@nextui-org/react';
 import moment from 'moment';
@@ -20,6 +16,8 @@ import { useMemo, useState } from 'react';
 import { Calendar as BigCalendar, Views, momentLocalizer } from 'react-big-calendar';
 import { toast } from 'react-toastify';
 import BasicModal from '../BasicModal';
+import DisplayDate from '../DisplayDate';
+import DisplayTime from '../DisplayTime';
 import SpeakersColumnWidget from '../SpeakerColumnWidget';
 
 /**
@@ -48,7 +46,17 @@ const styleEvent = (event: BigCalendarEventType) => {
  * @see {@link https://github.com/jquense/react-big-calendar} for more information about the react-big-calendar component.
  * @returns The Calendar component.
  */
-const CalendarForEnrrolling = ({ events, scholarName }: { events: any[]; scholarName: string }) => {
+const CalendarForEnrrolling = ({
+  events,
+  scholar,
+}: {
+  events: ActivitiesForEnrollement[];
+  scholar: {
+    id: string;
+    name: string;
+    email: string;
+  };
+}) => {
   const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
   const d = useSession();
 
@@ -97,34 +105,20 @@ const CalendarForEnrrolling = ({ events, scholarName }: { events: any[]; scholar
         link={`/becario/${
           selectedEvent?.level ? 'chats' : 'actividadesFormativas'
         }/${selectedEvent?.id}`}
-        title={`${selectedEvent?.originalTitle}`}
+        title={`${selectedEvent?.title}`}
         Content={() => (
           <div className="flex flex-col gap-2 px-4">
             <div className="flex gap-2">
               <p className="font-bold">Fecha:</p>
               <p>
-                {selectedEvent?.start?.toLocaleDateString('es-ES', {
-                  month: 'long',
-                  day: 'numeric',
-                  year: 'numeric',
-                })}
+                <DisplayDate date={selectedEvent?.start} />
               </p>
             </div>
             <div className="flex gap-1">
               <p className="font-bold">Horario:</p>
               <p>
-                de{' '}
-                {selectedEvent?.start?.toLocaleTimeString('es-ES', {
-                  hour: 'numeric',
-                  minute: '2-digit',
-                  hour12: true,
-                })}{' '}
-                hasta las{' '}
-                {selectedEvent?.end?.toLocaleTimeString('es-ES', {
-                  hour: 'numeric',
-                  minute: '2-digit',
-                  hour12: true,
-                })}
+                de <DisplayTime time={selectedEvent.start} /> hasta las{' '}
+                <DisplayTime time={selectedEvent.end} />
               </p>
             </div>
 
@@ -137,11 +131,12 @@ const CalendarForEnrrolling = ({ events, scholarName }: { events: any[]; scholar
                 speakerImages={selectedEvent.speakerImages}
                 speakerNames={selectedEvent.speakerNames}
                 speakersCompany={selectedEvent.speakersCompany}
+                speakerKind={selectedEvent.speakerKind}
               />
             </div>
             <div className="flex gap-1">
               <p className="font-bold">Modalidad:</p>
-              <p>{parseModalityFromDatabase(selectedEvent.modality)}</p>
+              <p>{selectedEvent.modality}</p>
             </div>
             <div className="flex gap-1">
               <p className="font-bold">
@@ -153,28 +148,28 @@ const CalendarForEnrrolling = ({ events, scholarName }: { events: any[]; scholar
             {selectedEvent.level && (
               <div className="flex gap-1">
                 <p className="font-bold">Nivel</p>
-                <span className="inline">{parseChatLevelFromDatabase(selectedEvent.level)}</span>
+                <span className="inline">{selectedEvent.level}</span>
               </div>
             )}
             {selectedEvent.skill && (
               <>
                 <div className="flex gap-1">
                   <p className="font-bold">Competencia:</p>
-                  <p>{parseSkillFromDatabase(selectedEvent.skill)}</p>
+                  <p>{selectedEvent.skill}</p>
                 </div>
                 <div className="flex gap-1">
                   <p className="font-bold">Año:</p>
-                  <p>{selectedEvent.year.join(', ')}</p>
+                  <p>{selectedEvent.year}</p>
                 </div>
               </>
             )}
             <div className="flex gap-1">
               <p className="font-bold">Cupos disponibles:</p>
-              <p>{selectedEvent.spots - selectedEvent.enrolledCount}</p>
+              <p>{selectedEvent.avalibleSpots}</p>
             </div>
             <div className="flex gap-1">
               <p className="font-bold">Cupos ocupados:</p>
-              <p>{selectedEvent.enrolledCount}</p>
+              <p>{selectedEvent.enrolledScholars}</p>
             </div>
             <p>{selectedEvent?.description}</p>
           </div>
@@ -201,10 +196,10 @@ const CalendarForEnrrolling = ({ events, scholarName }: { events: any[]; scholar
           toast.promise(
             handleEnrollment(
               selectedEvent.id,
-              d.data.scholarId,
+              scholar.id,
               selectedEvent.eventId,
               selectedEvent.kindOfActivity,
-              d.data.user?.email
+              scholar.email
             ),
             {
               pending: 'Confirmando',
@@ -214,11 +209,11 @@ const CalendarForEnrrolling = ({ events, scholarName }: { events: any[]; scholar
           );
           await sendGenericEmail(
             createEnrollementConfirmationMessage(
-              scholarName,
+              scholar.name,
               `www.programaexcelencia.org/becario/actividadesFormativas/${selectedEvent.id}`,
               selectedEvent.originalTitle
             ),
-            d.data.user?.email,
+            scholar.email,
             'Confirmacion de inscripción'
           );
           confirmationModal.onClose();

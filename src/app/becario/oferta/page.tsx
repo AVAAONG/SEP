@@ -4,7 +4,7 @@ import CalendarForEnrrolling from '@/components/calendar/CalendarForEnrolling';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { getSentActivitiesWhereScholarIsNotEnrroled } from '@/lib/db/utils/Workshops';
 import { prisma } from '@/lib/db/utils/prisma';
-import { formatActivityEventsForBigCalendarEnrlled } from '@/lib/utils';
+import { formatActivitiesForEnrollement } from '@/lib/utils';
 
 import { getServerSession } from 'next-auth';
 /**
@@ -15,11 +15,10 @@ const page = async ({
   searchParams,
 }: {
   searchParams?: {
-    [key: string]: string | string[] | undefined
+    [key: string]: string | string[] | undefined;
   };
 }) => {
   const selectedKey = searchParams?.selectedKey || null;
-
   const sesion = await getServerSession(authOptions);
   const scholar = await prisma.scholar.findUnique({
     where: {
@@ -40,8 +39,9 @@ const page = async ({
   // else {
   const [workshops, chats] = await getSentActivitiesWhereScholarIsNotEnrroled(sesion?.scholarId);
 
-  const scholarNames = `${scholar?.first_names.split(' ')[0]} ${scholar?.last_names.split(' ')[0]}`;
-  const events = formatActivityEventsForBigCalendarEnrlled([...workshops, ...chats]);
+  const scholarNames = `${scholar?.first_names.split(' ')[0]}`;
+  const events = formatActivitiesForEnrollement([...workshops, ...chats]);
+
   return (
     <div className="flex flex-col justify-center items-center w-full text-center gap-2 sm:gap-0">
       <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white mb-2">
@@ -57,26 +57,39 @@ const page = async ({
         {' '}
         Ten en cuenta que las fechas y horarios de estas actividades pueden cambiar
       </h3>
-      <div className='my-4'>
+      <div className="my-4">
         <TogleTab />
       </div>
-      {selectedKey === 'CALENDAR' || selectedKey === null ? (
+      {selectedKey === 'list' || selectedKey === null ? (
         <div className="w-full">
           <div className="h-full min-h-[600px] text-gray-800 capitalize dark:text-gray-300 shadow-sm overflow-x-clip w-full bg-white border border-gray-200  shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 p-2">
-            <CalendarForEnrrolling events={events} scholarName={scholarNames} />
+            <CalendarForEnrrolling
+              events={events}
+              scholar={{
+                id: sesion?.scholarId!,
+                name: scholarNames,
+                email: sesion?.user?.email!,
+              }}
+            />
           </div>
         </div>
       ) : (
-        <div className='flex gap-4 w-full flex-wrap items-center justify-center'>
-          {[...workshops, ...chats].map((event) => {
+        <div className="flex gap-4 w-full flex-wrap items-center justify-center">
+          {events.map((event) => {
             return (
-              <EnrrollActivitiCard activity={event} scholarId={sesion?.scholarId!} />
-            )
+              <EnrrollActivitiCard
+                activity={event}
+                scholar={{
+                  id: sesion?.scholarId!,
+                  name: scholarNames,
+                  email: sesion?.user?.email!,
+                }}
+              />
+            );
           })}
         </div>
-
       )}
-    </div >
+    </div>
   );
   // }
 };

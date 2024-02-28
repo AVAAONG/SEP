@@ -1,11 +1,14 @@
 'use client';
-import { enrrrollScholarToWorkshop } from '@/lib/db/utils/Workshops';
-import { parseChatLevelFromDatabase, parseModalityFromDatabase, parsePlatformFromDatabase, parseSkillFromDatabase } from '@/lib/utils2';
+import { createEnrollementConfirmationMessage } from '@/lib/htmlConfirmationTemplate';
+import { sendGenericEmail } from '@/lib/sendEmails';
+import { handleEnrollment } from '@/lib/serverAction';
+import { ActivitiesForEnrollement } from '@/lib/utils';
 import {
   CalendarDaysIcon,
   ClockIcon,
   InformationCircleIcon,
   MapPinIcon,
+  UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import { Avatar } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
@@ -13,28 +16,40 @@ import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Tooltip, useDisclosure } from '@nextui-org/react';
 import { chatIcon, workshopIcon } from 'public/svgs/svgs';
 import React from 'react';
+import { toast } from 'react-toastify';
+import BasicModal from './BasicModal';
 import DisplayDate from './DisplayDate';
 import DisplayTime from './DisplayTime';
-import { ChatsWithAllData } from './table/columns/chatsColumns';
-import { WorkshopWithAllData } from './table/columns/workshopColumns';
 
 interface EnrrollActivitiCardProps {
-  activity: WorkshopWithAllData | ChatsWithAllData;
-  scholarId: string;
+  activity: ActivitiesForEnrollement;
+  scholar: {
+    id: string;
+    name: string;
+    email: string;
+  };
 }
 
-const EnrrollActivitiCard: React.FC<EnrrollActivitiCardProps> = ({ activity, scholarId }) => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const confirmationModal = useDisclosure();
-  const speakers = activity.speaker.map((speaker) => {
-    const firstNames = speaker.first_names.split(' ');
-    const lastNames = speaker.last_names.split(' ');
-    return `${firstNames[0]} ${lastNames[0]}`;
-  });
-  const startDates = activity.start_dates.map((date) => new Date(date));
-  const endDates = activity.end_dates.map((date) => new Date(date));
+const EnrrollActivitiCard: React.FC<EnrrollActivitiCardProps> = ({ activity, scholar }) => {
+  const {
+    kindOfActivity,
+    start,
+    end,
+    modality,
+    platform,
+    speakerNames,
+    year,
+    title,
+    skill,
+    avalibleSpots,
+    level,
+    isFull,
+    id,
+    eventId,
+  } = activity;
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const activityIsInThePast = start < new Date();
 
-  const kindOfActivity = 'asociated_skill' in activity ? 'workshop' : 'chat';
   return (
     <>
       <Card className="min-w-[350px] max-w-[350px]" radius="sm">
@@ -46,19 +61,23 @@ const EnrrollActivitiCard: React.FC<EnrrollActivitiCardProps> = ({ activity, sch
                 radius="sm"
                 size="md"
                 classNames={{
-                  icon: `${kindOfActivity === 'workshop' ? ' border-blue-500 bg-blue-500' : 'border-red-500 bg-red-500'} text-white p-1`,
-                  base: `${kindOfActivity === 'workshop' ? ' border-blue-500 ' : 'border-red-500 '}`,
+                  icon: `${
+                    kindOfActivity === 'workshop'
+                      ? ' border-blue-500 bg-blue-500'
+                      : 'border-red-500 bg-red-500'
+                  } text-white p-1`,
+                  base: `${
+                    kindOfActivity === 'workshop' ? ' border-blue-500 ' : 'border-red-500 '
+                  }`,
                   img: `${kindOfActivity === 'workshop' ? ' border-blue-500 ' : 'border-red-500 '}`,
                 }}
               />
             </div>
             <div className="flex flex-col gap-1 items-start justify-center">
-              <h3 className="text-small font-semibold leading-none  text-ellipsis">
-                {activity.title}
-              </h3>
-              <h4 className="text-small tracking-tight text-default-400">
-                Por: {speakers.join(', ')}
-              </h4>
+              <Tooltip content={title}>
+                <h3 className="text-small font-semibold leading-none  text-ellipsis">{title}</h3>
+              </Tooltip>
+              <h4 className="text-small tracking-tight text-default-400">Por: {speakerNames}</h4>
             </div>
           </div>
         </CardHeader>
@@ -66,45 +85,57 @@ const EnrrollActivitiCard: React.FC<EnrrollActivitiCardProps> = ({ activity, sch
           <div className="flex gap-1">
             <CalendarDaysIcon className="w-4 h-4 " />
             <h5 className=" tracking-tight text-default-400">
-              <DisplayDate date={startDates[0].toISOString()} />
+              <DisplayDate date={start.toISOString()} />
             </h5>
           </div>
           <div className="flex gap-1">
             <ClockIcon className="w-4 h-4" />
             <h5 className=" tracking-tight text-default-400">
-              <DisplayTime time={startDates[0].toISOString()} />
-              {' '}a{' '}
-              <DisplayTime time={endDates[0].toISOString()} />
+              <DisplayTime time={start.toISOString()} /> a <DisplayTime time={end.toISOString()} />
+            </h5>
+          </div>
+          <div className="flex gap-1">
+            <UserCircleIcon className="w-4 h-4" />
+            <h5 className="tracking-tight text-default-400">
+              {avalibleSpots === 0
+                ? 'No hay cupos disponibles :('
+                : `${avalibleSpots} cupos disponibles`}{' '}
             </h5>
           </div>
           <div className="flex gap-1">
             <div className="flex gap-1">
               <MapPinIcon className="w-4 h-4 " />
-              <h5 className="tracking-tight text-default-400">{parseModalityFromDatabase(activity.modality)}</h5>
+              <h5 className="tracking-tight text-default-400">{modality}</h5>
             </div>
             <div className="flex gap-1">
               <MapPinIcon className="w-4 h-4" />
-              <h5 className="tracking-tight text-default-400">{parsePlatformFromDatabase(activity.platform)}</h5>
+              <h5 className="tracking-tight text-default-400">{platform}</h5>
             </div>
           </div>
         </CardBody>
-        {'asociated_skill' in activity ? (
+        {kindOfActivity === 'workshop' ? (
           <CardFooter className="justify-between">
             <div className="flex flex-col space-y-1 text-tiny">
               <div className="flex gap-1.5">
                 <Tooltip content="Año de la actividad formativa">
                   <InformationCircleIcon className="w-4 h-4 " />
                 </Tooltip>
-                <h5 className=" tracking-tight text-default-400">{activity.year.length > 4 ? 'Todos' : activity.year.join(', ')}</h5>
+                <h5 className=" tracking-tight text-default-400">{year}</h5>
               </div>
               <div className="flex gap-1.5">
                 <Tooltip content="Competencia asociada">
                   <InformationCircleIcon className="w-4 h-4 " />
                 </Tooltip>
-                <h5 className=" tracking-tight text-default-400">{parseSkillFromDatabase(activity.asociated_skill)}</h5>
+                <h5 className=" tracking-tight text-default-400">{skill}</h5>
               </div>
             </div>
-            <Button onPress={onOpen} className="bg-blue-500 text-white" radius="full" size="sm">
+            <Button
+              isDisabled={isFull || activityIsInThePast}
+              onPress={onOpen}
+              className="bg-blue-500 text-white"
+              radius="full"
+              size="sm"
+            >
               ¡Inscribirse!
             </Button>
           </CardFooter>
@@ -115,18 +146,24 @@ const EnrrollActivitiCard: React.FC<EnrrollActivitiCardProps> = ({ activity, sch
                 <Tooltip content="Nivel del chat">
                   <InformationCircleIcon className="w-4 h-4 " />
                 </Tooltip>
-                <h5 className="tracking-tight text-default-400">{parseChatLevelFromDatabase(activity.level)}</h5>
+                <h5 className="tracking-tight text-default-400">{level}</h5>
               </div>
             </div>
-            <Button onPress={onOpen} className="bg-red-500 text-white" radius="full" size="sm">
+            <Button
+              isDisabled={isFull || activityIsInThePast}
+              onPress={onOpen}
+              className="bg-red-500 text-white"
+              radius="full"
+              size="sm"
+            >
               ¡Inscribirse!
             </Button>
           </CardFooter>
         )}
       </Card>
-      {/* <BasicModal
-        isOpen={confirmationModal.isOpen}
-        onOpenChange={confirmationModal.onOpenChange}
+      <BasicModal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
         title="¿Estas seguro de que deseas inscribirte en esta actividad?"
         Content={() => (
           <>
@@ -137,35 +174,26 @@ const EnrrollActivitiCard: React.FC<EnrrollActivitiCardProps> = ({ activity, sch
             <div>Recuerda, tu participación es vital para el éxito de la actividad. ✨ </div>
           </>
         )}
-        isButtonDisabled={selectedEvent?.isFull}
+        isButtonDisabled={isFull}
         onConfirm={async () => {
-          toast.promise(
-            handleEnrollment(
-              selectedEvent.id,
-              scholarId,
-              selectedEvent.eventId,
-              selectedEvent.kindOfActivity,
-              d.data.user?.email
-            ),
-            {
-              pending: 'Confirmando',
-              success: 'Inscripción exitosa',
-              error: 'Error al inscribirte en la actividad. Inténtalo de nuevo más tarde.',
-            }
-          );
+          toast.promise(handleEnrollment(id, scholar.id, eventId, kindOfActivity, scholar.email), {
+            pending: 'Confirmando',
+            success: 'Inscripción exitosa',
+            error: 'Error al inscribirte en la actividad. Inténtalo de nuevo más tarde.',
+          });
           await sendGenericEmail(
             createEnrollementConfirmationMessage(
-              scholarName,
-              `www.programaexcelencia.org/becario/actividadesFormativas/${selectedEvent.id}`,
-              selectedEvent.originalTitle
+              scholar.name,
+              `www.programaexcelencia.org/becario/actividadesFormativas/${id}`,
+              title
             ),
-            d.data.user?.email,
-            'Confirmacion de inscripción'
+            scholar.email,
+            'Confirmación de inscripción'
           );
-          confirmationModal.onClose();
+          onClose();
         }}
         confirmText="Confirmar Inscripción"
-      />  */}
+      />
     </>
   );
 };
