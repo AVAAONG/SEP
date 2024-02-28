@@ -18,10 +18,11 @@ const DisplayTime: React.FC<DisplayTimeProps> = ({ time }) => {
         return (
             <>
                 {new Date(time)
-                    .toLocaleTimeString('es-ES', {
+                    .toLocaleTimeString('es-VE', {
                         hour: '2-digit',
                         minute: '2-digit',
                         hour12: true,
+                        hourCycle: 'h12'
 
                     })}
             </>
