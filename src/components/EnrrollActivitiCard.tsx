@@ -14,6 +14,7 @@ import { Avatar } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Tooltip, useDisclosure } from '@nextui-org/react';
+import Link from 'next/link';
 import { chatIcon, workshopIcon } from 'public/svgs/svgs';
 import React from 'react';
 import { toast } from 'react-toastify';
@@ -54,32 +55,41 @@ const EnrrollActivitiCard: React.FC<EnrrollActivitiCardProps> = ({ activity, sch
     <>
       <Card className="min-w-[350px] max-w-[350px]" radius="sm">
         <CardHeader className="justify-between">
-          <div className="flex items-center gap-3 max-w-fit truncate">
-            <div>
-              <Avatar
-                icon={'asociated_skill' in activity ? workshopIcon() : chatIcon()}
-                radius="sm"
-                size="md"
-                classNames={{
-                  icon: `${
-                    kindOfActivity === 'workshop'
-                      ? ' border-blue-500 bg-blue-500'
-                      : 'border-red-500 bg-red-500'
-                  } text-white p-1`,
-                  base: `${
-                    kindOfActivity === 'workshop' ? ' border-blue-500 ' : 'border-red-500 '
-                  }`,
-                  img: `${kindOfActivity === 'workshop' ? ' border-blue-500 ' : 'border-red-500 '}`,
-                }}
-              />
+          <Link
+            className="max-w-fit truncate"
+            href={`/becario/${
+              kindOfActivity === 'workshop' ? 'actividadesFormativas' : 'chats'
+            }/${id}`}
+          >
+            <div className="flex items-center gap-3 max-w-fit truncate">
+              <div>
+                <Avatar
+                  icon={'asociated_skill' in activity ? workshopIcon() : chatIcon()}
+                  radius="sm"
+                  size="md"
+                  classNames={{
+                    icon: `${
+                      kindOfActivity === 'workshop'
+                        ? ' border-blue-500 bg-blue-500'
+                        : 'border-red-500 bg-red-500'
+                    } text-white p-1`,
+                    base: `${
+                      kindOfActivity === 'workshop' ? ' border-blue-500 ' : 'border-red-500 '
+                    }`,
+                    img: `${
+                      kindOfActivity === 'workshop' ? ' border-blue-500 ' : 'border-red-500 '
+                    }`,
+                  }}
+                />
+              </div>
+              <div className="flex flex-col gap-1 items-start justify-center">
+                <Tooltip content={title}>
+                  <h3 className="text-small font-semibold leading-none  text-ellipsis">{title}</h3>
+                </Tooltip>
+                <h4 className="text-small tracking-tight text-default-400">Por: {speakerNames}</h4>
+              </div>
             </div>
-            <div className="flex flex-col gap-1 items-start justify-center">
-              <Tooltip content={title}>
-                <h3 className="text-small font-semibold leading-none  text-ellipsis">{title}</h3>
-              </Tooltip>
-              <h4 className="text-small tracking-tight text-default-400">Por: {speakerNames}</h4>
-            </div>
-          </div>
+          </Link>
         </CardHeader>
         <CardBody className="flex flex-col gap-2 px-3 py-2  text-tiny">
           <div className="flex gap-1">
