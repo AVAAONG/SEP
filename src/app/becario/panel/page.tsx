@@ -15,6 +15,7 @@ import { chatIcon, workshopIcon } from '../../../../public/svgs/svgs';
 const page = async () => {
   const actualYear = new Date().getFullYear();
   const session = await getServerSession(authOptions);
+  if (!session) return redirect('accessDenied');
   const id = session?.scholarId;
   const name = session?.user?.name?.split(' ')[0];
   const [doneWorkshopsCount, doneChatsCount, volunteers] = await getScholarDoneActivitiesCount(
