@@ -10,6 +10,8 @@ import { formatActivityEventsForBigCalendar } from '@/lib/utils';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { Tooltip } from '@nextui-org/react';
 import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
+import React from 'react';
 import { chatIcon, workshopIcon } from '../../../../public/svgs/svgs';
 
 const page = async () => {
@@ -80,7 +82,9 @@ const page = async () => {
         </div>
 
         <div className="w-full flex flex-col md:flex-row gap-3 items-center">
-          {cardContent.map((card) => PanelCard(card))}
+          {cardContent.map((card, index) => (
+            <React.Fragment key={index}>{PanelCard(card)}</React.Fragment>
+          ))}
         </div>
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="items-end flex flex-col gap-1 h-full max-h-[680px] text-gray-800 capitalize dark:text-gray-300 shadow-sm overflow-x-clip w-full bg-white border border-gray-200  shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 p-2">
