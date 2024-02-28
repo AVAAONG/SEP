@@ -668,7 +668,7 @@ export const getNotEnrolledScholarsInWorkshop = async (workshopId: string) => {
   const scholars = await prisma.scholar.findMany({
     where: {
       program_information: {
-        // scholar_condition: 'ACTIVE',
+        scholar_condition: 'ACTIVE',
         attended_workshops: {
           none: {
             workshop_id: workshopId,

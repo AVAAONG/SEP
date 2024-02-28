@@ -338,7 +338,6 @@ export const getWorkshop = async (id: shortUUID.SUUID) => {
 };
 export const getWorkshopWithSpecificScholarAttendance = async (
   activityId: shortUUID.SUUID,
-  scholarId: string
 ) => {
   const workshop = await prisma.workshopAttendance.findFirst({
     where: {
@@ -348,11 +347,6 @@ export const getWorkshopWithSpecificScholarAttendance = async (
             {
               workshop_id: activityId,
             },
-            {
-              scholar: {
-                scholarId: scholarId,
-              },
-            }
           ]
         },
         {
@@ -360,15 +354,6 @@ export const getWorkshopWithSpecificScholarAttendance = async (
             {
               workshop_id: activityId,
             },
-            {
-              workshop: {
-                speaker: {
-                  some: {
-                    id: scholarId,
-                  }
-                },
-              },
-            }
           ]
         }
       ]
