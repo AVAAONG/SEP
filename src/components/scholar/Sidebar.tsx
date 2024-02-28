@@ -1,14 +1,13 @@
 'use client';
 import logo from '@/../public/proexcelencia-color.png';
 import { scholarSidebarAtom } from '@/lib/state/mainState';
-import { DocumentTextIcon } from '@heroicons/react/24/outline';
+import { DocumentTextIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import {
-  CalendarIcon,
   chatIcon,
   dashboardComponent,
   volunterIcon,
@@ -62,7 +61,7 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
     link: '',
   },
   {
-    Icon: CalendarIcon(),
+    Icon: <SparklesIcon />,
     buttonName: 'Oferta de actividades',
     itemList: [],
     link: `/${SCHOLAR_PREFIX}/oferta`,
