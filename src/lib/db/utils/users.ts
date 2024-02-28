@@ -427,9 +427,6 @@ export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) =>
               some: {
                 attendance: 'ENROLLED',
               },
-              none: {
-                attendance: 'CANCELLED'
-              },
             },
           },
           {
@@ -457,9 +454,6 @@ export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) =>
                   some: {
                     attendance: 'ENROLLED',
                   },
-                  none: {
-                    attendance: 'CANCELLED'
-                  }
                 },
 
               },

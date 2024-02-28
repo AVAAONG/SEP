@@ -62,6 +62,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
             startDate={workshop?.start_dates[0].toISOString() || ''}
             endDate={workshop?.end_dates[0].toISOString() || ''}
             modality={workshop?.modality || ''}
+            eventId={workshop.calendar_ids[0] || ''}
             platform={workshop?.platform || ''}
           />
         </div>

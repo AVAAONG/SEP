@@ -7,6 +7,7 @@ import { Button } from '@nextui-org/button';
 import { useDisclosure } from '@nextui-org/react';
 import { Modality, Scholar } from '@prisma/client';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import BasicModal from './BasicModal';
 
 const createCeaseConfirmationMessage = (
@@ -86,6 +87,7 @@ interface ActivityPanelInfoProps {
   startDate: string;
   endDate: string;
   modality: string;
+  eventId: string;
   platform: string;
 }
 
@@ -101,6 +103,7 @@ const ActivityScholarActions: React.FC<ActivityPanelInfoProps> = ({
   endDate,
   modality,
   platform,
+  eventId: eventId,
   isButtonDisabled,
 }) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -111,7 +114,11 @@ const ActivityScholarActions: React.FC<ActivityPanelInfoProps> = ({
     if (!scholar) return;
     const link = `http://programaexcelencia.org/becario/api/ceaseConfirmation?activityId=${activityId}&scholarWhoCeaseAttendanceId=${attendanceId}&scholarId=${
       scholar.id
-    }&kindOfActivity=${kindOfActivity}&timeout=${new Date()}`;
+    }&kindOfActivity=${kindOfActivity}&scholarWhoReceiveEmail=${
+      scholar.email
+    }&scholarWhoReceiveName=${
+      scholar.first_names.split(' ')[0] || ''
+    }&eventId=${eventId}&activityName=${activityName}`;
     const message = createCeaseConfirmationMessage(
       scholar.first_names.split(' ')[0] || '',
       scholarWhoCeaseName,
@@ -131,8 +138,9 @@ const ActivityScholarActions: React.FC<ActivityPanelInfoProps> = ({
   };
 
   return (
+    ///TODO set isDisable option
     <div className="w-1/2 flex items-center justify-end">
-      <Button onPress={onOpen} color="warning" className="text-white" isDisabled={isButtonDisabled}>
+      <Button onPress={onOpen} color="warning" className="text-white" isDisabled={false}>
         Cancelar inscripcion
       </Button>
       <BasicModal
@@ -186,13 +194,12 @@ const ActivityScholarActions: React.FC<ActivityPanelInfoProps> = ({
         )}
         isButtonDisabled={selectedScholar === undefined}
         onConfirm={async () => {
-          handleCeaseSpot();
-          // toast.promise(handleCeaseSpot(), {
-          //   pending: 'Cediendo cupo...',
-          //   success: 'Cupo cedido exitosamente',
-          //   error: 'Error al ceder cupo',
-          // });
-          // onClose();
+          toast.promise(handleCeaseSpot(), {
+            pending: 'Creando correo de confirmación...',
+            success: 'Correo de confirmación creado exitosamente',
+            error: 'Error al ceder cupo',
+          });
+          onClose();
         }}
         confirmText="Cancelar y ceder cupo"
       />

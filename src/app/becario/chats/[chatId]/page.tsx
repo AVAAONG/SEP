@@ -62,6 +62,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
               startDate={chat?.start_dates[0].toISOString() || ''}
               endDate={chat?.end_dates[0].toISOString() || ''}
               modality={chat?.modality || ''}
+              eventId={chat.calendar_ids[0] || ''}
               platform={chat?.platform || ''}
             />
           </div>
