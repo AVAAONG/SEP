@@ -70,7 +70,7 @@ export const handleEnrollment = async (
 ) => {
   if (kindOfActivity === 'workshop') await enroleScholarInWorkshop(activityId, scholarId);
   else if (kindOfActivity === 'chat') await enroleScholarInChat(activityId, scholarId);
-  revalidatePath('/becario/calendario');
+  revalidatePath('/becario/oferta');
   const result = await fetch(
     'https://script.google.com/macros/s/AKfycbzSiMKnlwygmcPdvdGvmeLlvXc_bcdm4tcWcpZ2H7QBbz-g3dBqxgFfzd_G44YaEeKkZA/exec',
     {
