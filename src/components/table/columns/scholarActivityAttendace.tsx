@@ -81,36 +81,34 @@ const ScholarActivityAttendance: Column<IScholarForAttendanceTable>[] = [
     Cell: ({ value, cell }) => {
       const [attendace, setAttendance] = useState(value);
       const handleAttendance = async (attendance: ScholarAttendance) => {
-        if (cell.row.original.kindOfActivity === 'workshop') await changeScholarAttendance(cell.row.original.attendanceId, attendance);
-        else if (cell.row.original.kindOfActivity === 'chat') await changeScholarAttendanceChat(cell.row.original.attendanceId, attendance);
+        if (cell.row.original.kindOfActivity === 'workshop')
+          await changeScholarAttendance(cell.row.original.attendanceId, attendance);
+        else if (cell.row.original.kindOfActivity === 'chat')
+          await changeScholarAttendanceChat(cell.row.original.attendanceId, attendance);
         return setAttendance(attendance);
-      }
+      };
       if (attendace === 'CANCELLED') {
-        return (
-          <Chip color='danger'>
-            Canceló
-          </Chip>
-        )
-      }
-      else {
+        return <Chip color="danger">Canceló</Chip>;
+      } else {
         return (
           <select
-            className={`border-0 cursor-pointer rounded-full font-medium w-24 text-xs  p-0 outline-transparent ${attendace === 'ATTENDED'
-              ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
-              : attendace === 'NOT_ATTENDED'
-                ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
-                : attendace === 'ENROLLED'
-                  ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
-                  : ''
-              }`}
+            className={`border-0 cursor-pointer rounded-full font-medium w-24 text-xs  p-0 outline-transparent ${
+              attendace === 'ATTENDED'
+                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
+                : attendace === 'NOT_ATTENDED'
+                  ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+                  : attendace === 'ENROLLED'
+                    ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
+                    : ''
+            }`}
             value={attendace}
             onChange={async (event) => {
               const attendance = event.target.value as ScholarAttendance;
               toast.promise(handleAttendance(attendance), {
                 pending: 'Colocando asistencia...',
                 success: 'Asistencia colocada exitosamente',
-                error: 'Error al colocar asistencia'
-              })
+                error: 'Error al colocar asistencia',
+              });
             }}
           >
             <option value="ATTENDED">Asistió</option>
@@ -120,7 +118,6 @@ const ScholarActivityAttendance: Column<IScholarForAttendanceTable>[] = [
           </select>
         );
       }
-
     },
   },
   {
