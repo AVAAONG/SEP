@@ -381,6 +381,11 @@ export const getScholarDoneActivitiesCount = async (scholar_id: string, year: nu
           {
             attendance: 'ATTENDED',
           },
+          {
+            volunteer: {
+              status: 'APPROVED'
+            }
+          }
         ],
       },
       include: {
