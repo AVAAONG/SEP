@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 import { z } from 'zod';
 
 interface CollageInformationProps {
-  scholarCollage: ScholarCollageInformation;
+  scholarCollage: ScholarCollageInformation | undefined;
 }
 
 const readFileAsBase64 = (file: File | null): Promise<string> => {
@@ -32,8 +32,12 @@ const readFileAsBase64 = (file: File | null): Promise<string> => {
 };
 
 const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage }) => {
-  const [schedule, setSchedule] = useState<string | null>(scholarCollage.career_schedule);
-  const [proof, setProof] = useState<string | null>(scholarCollage.collage_study_proof);
+  const [schedule, setSchedule] = useState<string | null | undefined>(
+    scholarCollage?.career_schedule
+  );
+  const [proof, setProof] = useState<string | null | undefined>(
+    scholarCollage?.collage_study_proof
+  );
 
   useEffect(() => {
     if (scholarCollage?.collage_study_proof) {
@@ -71,18 +75,18 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
   } = useForm<z.infer<typeof scholarCollageInformationSchema>>({
     resolver: zodResolver(scholarCollageInformationSchema),
     defaultValues: {
-      collage_start_date: moment(scholarCollage.collage_start_date).format('YYYY-MM-DD'),
-      collage_end_date: moment(scholarCollage.collage_end_date).format('YYYY-MM-DD'),
-      academic_load_completed: scholarCollage.academic_load_completed === true ? 'SI' : 'NO',
-      have_schooolarship: scholarCollage.have_schooolarship === true ? 'SI' : 'NO',
-      career: scholarCollage.career ?? undefined,
-      mention: scholarCollage.mention ?? undefined,
-      scholarship_percentage: scholarCollage.scholarship_percentage ?? undefined,
-      collage: scholarCollage.collage ?? undefined,
-      kind_of_collage: scholarCollage.kind_of_collage ?? undefined,
-      evaluation_scale: scholarCollage.evaluation_scale ?? undefined,
-      study_area: scholarCollage.study_area ?? undefined,
-      study_regime: scholarCollage.study_regime ?? undefined,
+      collage_start_date: moment(scholarCollage?.collage_start_date).format('YYYY-MM-DD'),
+      collage_end_date: moment(scholarCollage?.collage_end_date).format('YYYY-MM-DD'),
+      academic_load_completed: scholarCollage?.academic_load_completed === true ? 'SI' : 'NO',
+      have_schooolarship: scholarCollage?.have_schooolarship === true ? 'SI' : 'NO',
+      career: scholarCollage?.career ?? undefined,
+      mention: scholarCollage?.mention ?? undefined,
+      scholarship_percentage: scholarCollage?.scholarship_percentage ?? undefined,
+      collage: scholarCollage?.collage ?? undefined,
+      kind_of_collage: scholarCollage?.kind_of_collage ?? undefined,
+      evaluation_scale: scholarCollage?.evaluation_scale ?? undefined,
+      study_area: scholarCollage?.study_area ?? undefined,
+      study_regime: scholarCollage?.study_regime ?? undefined,
     },
   });
   const haveScholarship = useWatch({
