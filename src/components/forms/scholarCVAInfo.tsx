@@ -1,10 +1,11 @@
 'use client';
 import { deleteBlobFile, uploadBlob } from '@/lib/azure/azure';
-import { updateCvaInformation } from '@/lib/db/utils/cva';
+import { createCvaInformation, updateCvaInformation } from '@/lib/db/utils/cva';
 import scholarCVAInformationSchema from '@/lib/schemas/scholar/scholarCVAInformationSchema';
+import { revalidateSpecificPath } from '@/lib/serverAction';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
+import { Button, Input, Select, SelectItem, Textarea, Tooltip } from '@nextui-org/react';
 import { CvaLocation, Prisma, ScholarCVAInformation } from '@prisma/client';
 import moment from 'moment';
 import Link from 'next/link';
@@ -30,25 +31,23 @@ const ScholarCVAInformation = ({
   scholarCvaInformation,
   certificateUrl,
 }: {
-  scholarCvaInformation: ScholarCVAInformation;
+  scholarCvaInformation: ScholarCVAInformation | null;
   certificateUrl: string | null;
 }) => {
   const [certificate, setCertificate] = useState<File | null>(null);
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting, isValid },
-    reset,
-    setValue,
+    formState: { isSubmitting },
   } = useForm<z.infer<typeof scholarCVAInformationSchema>>({
     resolver: zodResolver(scholarCVAInformationSchema),
     defaultValues: {
-      already_finished_cva: scholarCvaInformation.already_finished_cva === true ? 'YES' : 'NO',
-      is_in_cva: scholarCvaInformation.is_in_cva === true ? 'YES' : 'NO',
+      already_finished_cva: scholarCvaInformation?.already_finished_cva === true ? 'YES' : 'NO',
+      is_in_cva: scholarCvaInformation?.is_in_cva === true ? 'YES' : 'NO',
       cva_ended_date: moment(scholarCvaInformation?.cva_ended_date).format('YYYY-MM-DD'),
-      cva_location: scholarCvaInformation.cva_location as CvaLocation,
-      cva_started_date: moment(scholarCvaInformation.cva_started_date).format('YYYY-MM-DD'),
-      not_started_cva_reason: scholarCvaInformation.not_started_cva_reason,
+      cva_location: scholarCvaInformation?.cva_location as CvaLocation,
+      cva_started_date: moment(scholarCvaInformation?.cva_started_date).format('YYYY-MM-DD'),
+      not_started_cva_reason: scholarCvaInformation?.not_started_cva_reason,
     },
   });
   const isInCva = useWatch({
@@ -65,7 +64,9 @@ const ScholarCVAInformation = ({
   ) => {
     event?.preventDefault();
 
-    let scholarCvaInfo: Prisma.ScholarCVAInformationUpdateInput = {
+    let scholarCvaInfo:
+      | Prisma.ScholarCVAInformationUpdateInput
+      | Prisma.ScholarCVAInformationCreateInput = {
       already_finished_cva: data.already_finished_cva === 'YES',
       cva_ended_date: data.cva_ended_date ? new Date(data.cva_ended_date).toISOString() : null,
       cva_location: data.cva_location,
@@ -80,7 +81,12 @@ const ScholarCVAInformation = ({
       const certificateForDb = await uploadBlob(certificateBase64, 'application/pdf', 'files');
       scholarCvaInfo.certificate = certificateForDb!;
     }
-    await updateCvaInformation(scholarCvaInformation.scholarId, scholarCvaInfo);
+    if (scholarCvaInformation?.scholarId) {
+      await updateCvaInformation(scholarCvaInformation?.scholarId, scholarCvaInfo);
+    } else {
+      await createCvaInformation(scholarCvaInfo as Prisma.ScholarCVAInformationCreateInput);
+    }
+    await revalidateSpecificPath('becario/cva');
   };
   const options = [
     { value: 'YES', label: 'Sí' },
@@ -204,9 +210,9 @@ const ScholarCVAInformation = ({
                             id="certificateInput"
                             value={field.value?.toString()}
                             onChange={async (e) => {
-                              if (scholarCvaInformation.certificate) {
-                                await deleteBlobFile(scholarCvaInformation.certificate!);
-                                await updateCvaInformation(scholarCvaInformation.scholarId, {
+                              if (scholarCvaInformation?.certificate) {
+                                await deleteBlobFile(scholarCvaInformation?.certificate!);
+                                await updateCvaInformation(scholarCvaInformation?.scholarId, {
                                   certificate: null,
                                 });
                               }
@@ -225,12 +231,14 @@ const ScholarCVAInformation = ({
                       );
                     }}
                   />
-                  {scholarCvaInformation.certificate && (
-                    <div>
-                      <Link href={certificateUrl ?? ''}>
-                        <DocumentTextIcon className="w-12 h-12" />
-                      </Link>
-                    </div>
+                  {scholarCvaInformation?.certificate && (
+                    <Tooltip content="Certificado del CVA">
+                      <div className="m-auto">
+                        <Link href={certificateUrl ?? ''}>
+                          <DocumentTextIcon className="w-10 h-10 text-primary-light" />
+                        </Link>
+                      </div>
+                    </Tooltip>
                   )}
                 </>
               ) : (

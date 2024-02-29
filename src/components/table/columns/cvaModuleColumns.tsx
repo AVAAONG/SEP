@@ -1,11 +1,18 @@
 'use client';
 
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
-import { ScholarCvaModule } from '@prisma/client';
 import Link from 'next/link';
 import { Column } from 'react-table';
 
-const CvaModulesColumns: Column<ScholarCvaModule>[] = [
+const CvaModulesColumns: Column<{
+  modality: string;
+  schedule: string;
+  record: string | null;
+  id: string;
+  module: number;
+  qualification: number;
+  scholar_cva_information_id: string | null;
+}>[] = [
   {
     Header: 'n°',
     accessor: 'id',
