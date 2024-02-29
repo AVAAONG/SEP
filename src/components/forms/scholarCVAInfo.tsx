@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { BaseSyntheticEvent, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import shortUUID from 'short-uuid';
 import { z } from 'zod';
 
 const readFileAsBase64 = (file: File | null): Promise<string> => {
@@ -30,9 +31,11 @@ const readFileAsBase64 = (file: File | null): Promise<string> => {
 const ScholarCVAInformation = ({
   scholarCvaInformation,
   certificateUrl,
+  scholarId,
 }: {
   scholarCvaInformation: ScholarCVAInformation | null;
   certificateUrl: string | null;
+  scholarId: string;
 }) => {
   const [certificate, setCertificate] = useState<File | null>(null);
   const {
@@ -63,7 +66,6 @@ const ScholarCVAInformation = ({
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
     event?.preventDefault();
-
     let scholarCvaInfo:
       | Prisma.ScholarCVAInformationUpdateInput
       | Prisma.ScholarCVAInformationCreateInput = {
@@ -82,12 +84,20 @@ const ScholarCVAInformation = ({
       scholarCvaInfo.certificate = certificateForDb!;
     }
     if (scholarCvaInformation?.scholarId) {
-      await updateCvaInformation(scholarCvaInformation?.scholarId, scholarCvaInfo);
+      await updateCvaInformation(
+        scholarCvaInformation?.scholarId,
+        scholarCvaInfo as Prisma.ScholarCVAInformationUpdateInput
+      );
     } else {
-      await createCvaInformation(scholarCvaInfo as Prisma.ScholarCVAInformationCreateInput);
+      await createCvaInformation({
+        ...(scholarCvaInfo as Prisma.ScholarCVAInformationCreateInput),
+        id: shortUUID.generate(),
+        scholar: { connect: { id: scholarId } },
+      });
     }
     await revalidateSpecificPath('becario/cva');
   };
+
   const options = [
     { value: 'YES', label: 'Sí' },
     { value: 'NO', label: 'No' },
@@ -105,7 +115,7 @@ const ScholarCVAInformation = ({
           })
         )}
       >
-        <div className="gap-4 grid grid-cols-3 w-full">
+        <div className="gap-4 grid lg:grid-cols-3 w-full">
           <Controller
             name="cva_started_date"
             control={control}

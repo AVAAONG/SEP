@@ -24,15 +24,16 @@ const page = async () => {
   );
 
   return (
-    <div className="flex flex-col px-2 pt-6 gap-4 h-screen">
+    <div className="flex flex-col pt-6 gap-4 min-h-screen">
       <h1 className="text-xl font-semibold  sm:text-2xl ">Información sobre el CVA</h1>
       <div className="p-8 w-full bg-gray-100 dark:bg-black rounded-lg">
         <ScholarCVAInformation
           scholarCvaInformation={cvaInformation}
           certificateUrl={cvaCertificate}
+          scholarId={session?.scholarId!}
         />
       </div>
-      <div className="w-full ">
+      <div className="w-full">
         <Table
           tableData={cvaModules || []}
           tableColumns={CvaModulesColumns}

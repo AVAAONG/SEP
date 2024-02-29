@@ -8,7 +8,11 @@ export const getCvaInformationByScholar = async (scholarId: string) => {
             scholarId
         },
         include: {
-            modules: true
+            modules: {
+                where: {
+
+                }
+            }
         }
     })
     return cvaInformation;
@@ -28,6 +32,7 @@ export const updateCvaInformation = async (scholarId: string, data: Prisma.Schol
 
 export const createCvaInformation = async (data: Prisma.ScholarCVAInformationCreateInput) => {
     const cvaInformation = await prisma.scholarCVAInformation.create({
+
         data
     })
     return cvaInformation;
