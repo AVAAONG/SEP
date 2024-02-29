@@ -12,7 +12,7 @@ import { Tooltip } from '@nextui-org/react';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import React from 'react';
-import { chatIcon, workshopIcon } from '../../../../public/svgs/svgs';
+import { chatIcon, volunterIcon, workshopIcon } from '../../../../public/svgs/svgs';
 
 const page = async () => {
   const actualYear = new Date().getFullYear();
@@ -51,7 +51,7 @@ const page = async () => {
       subtitle: 'Ver todas las actividades',
       data: volunteers,
       link: 'voluntariado',
-      icon: workshopIcon(),
+      icon: volunterIcon(),
       kind: 'volunteer',
     },
   ];

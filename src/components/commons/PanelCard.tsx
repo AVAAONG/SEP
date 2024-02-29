@@ -8,13 +8,13 @@ const colorVariants = {
     linkBackground: 'bg-blue-50  dark:bg-blue-950  hover:bg-blue-100 dark:hover:bg-blue-900',
   },
   chat: {
-    iconColor: 'bg-gradient-to-r from-red-500 to-red-900',
+    iconColor: 'bg-gradient-to-r from-red-500 to-red-800',
     titleColor: 'text-red-500',
     subtitleColor: 'text-red-600 hover:text-red-500',
     linkBackground: 'bg-red-50  dark:bg-red-950 hover:bg-red-100 dark:hover:bg-red-900',
   },
   volunteer: {
-    iconColor: 'bg-gradient-to-r from-green-500 to-green-900',
+    iconColor: 'bg-gradient-to-r from-green-500 to-green-700',
     titleColor: 'text-green-500',
     subtitleColor: 'text-green-600 hover:text-green-500',
     linkBackground: 'bg-green-50 dark:bg-green-950 hover:bg-green-100 dark:hover:bg-green-900',
