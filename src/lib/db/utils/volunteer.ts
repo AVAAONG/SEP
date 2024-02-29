@@ -1,5 +1,5 @@
 'use server';
-import { Prisma } from "@prisma/client";
+import { Prisma, VolunteerStatus } from "@prisma/client";
 import { prisma } from "./prisma";
 
 export const createExternalVolunteer = async (volunteer: Prisma.VolunteerCreateInput,
@@ -44,6 +44,42 @@ export const getVolunteersByScholar = async (scholarId: string) => {
 		},
 		include: {
 			volunteer: true
+		}
+	})
+}
+
+export const getExternalVolunteer = async () => {
+	return prisma.volunteer.findMany({
+		include: {
+			volunteer_attendance: {
+				include: {
+					scholar: {
+						include: {
+							scholar: {
+								select: {
+									first_names: true,
+									last_names: true
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		orderBy: {
+			status: 'asc'
+		}
+	})
+}
+
+
+export const changeScholarVolunteerStatus = async (volunteerId: string, volunteerStatus: VolunteerStatus) => {
+	await prisma.volunteer.update({
+		where: {
+			id: volunteerId
+		},
+		data: {
+			status: volunteerStatus
 		}
 	})
 }
