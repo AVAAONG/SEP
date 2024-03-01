@@ -72,6 +72,13 @@ const CalendarForEnrrolling = ({
     }),
     []
   );
+
+  const isDisabled = () => {
+    if (new Date(selectedEvent?.start!) <= new Date()) return true;
+    else if (selectedEvent?.isFull) return true;
+    else return false;
+  };
+
   return (
     <>
       <BigCalendar
@@ -175,7 +182,7 @@ const CalendarForEnrrolling = ({
             <p>{selectedEvent?.description}</p>
           </div>
         )}
-        isButtonDisabled={selectedEvent?.isFull}
+        isButtonDisabled={isDisabled()}
         onConfirm={async () => confirmationModal.onOpen()}
         confirmText={selectedEvent?.isFull ? 'Cupos agotados' : 'Inscribirse'}
       />
@@ -192,9 +199,9 @@ const CalendarForEnrrolling = ({
             <div>Recuerda, tu participación es vital para el éxito de la actividad. ✨ </div>
           </>
         )}
-        isButtonDisabled={selectedEvent?.isFull || isCharging}
+        isButtonDisabled={isDisabled() || isCharging}
         onConfirm={async () => {
-          setIsCharging(true)
+          setIsCharging(true);
           toast.promise(
             handleEnrollment(
               selectedEvent.id,
@@ -218,10 +225,10 @@ const CalendarForEnrrolling = ({
             scholar.email,
             'Confirmacion de inscripción'
           );
-          
+
           confirmationModal.onClose();
           onClose();
-          setIsCharging(false)
+          setIsCharging(false);
         }}
         confirmText="Confirmar Inscripción"
       />

@@ -49,8 +49,14 @@ const EnrrollActivitiCard: React.FC<EnrrollActivitiCardProps> = ({ activity, sch
     eventId,
   } = activity;
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  const activityIsInThePast = start < new Date();
+
   const [isCharging, setIsCharging] = useState(false);
+  const isDisabled = () => {
+    if (new Date(start!) <= new Date()) return true;
+    else if (isFull) return true;
+    else return false;
+  };
+
   return (
     <>
       <Card className="min-w-[350px] max-w-[350px]" radius="sm">
@@ -140,7 +146,7 @@ const EnrrollActivitiCard: React.FC<EnrrollActivitiCardProps> = ({ activity, sch
               </div>
             </div>
             <Button
-              isDisabled={isFull || activityIsInThePast}
+              isDisabled={isDisabled()}
               onPress={onOpen}
               className="bg-blue-500 text-white"
               radius="full"
@@ -160,7 +166,7 @@ const EnrrollActivitiCard: React.FC<EnrrollActivitiCardProps> = ({ activity, sch
               </div>
             </div>
             <Button
-              isDisabled={isFull || activityIsInThePast}
+              isDisabled={isDisabled()}
               onPress={onOpen}
               className="bg-red-500 text-white"
               radius="full"
