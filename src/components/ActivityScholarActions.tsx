@@ -1,12 +1,9 @@
 'use client';
 import { sendGenericEmail } from '@/lib/sendEmails';
 import { parseModalityFromDatabase } from '@/lib/utils2';
-import { Autocomplete, AutocompleteItem } from '@nextui-org/autocomplete';
-import { Avatar } from '@nextui-org/avatar';
-import { Button } from '@nextui-org/button';
-import { useDisclosure } from '@nextui-org/react';
+import { Autocomplete, AutocompleteItem, Avatar, Button, useDisclosure } from '@nextui-org/react';
 import { Modality, Scholar } from '@prisma/client';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import BasicModal from './BasicModal';
 
@@ -107,20 +104,19 @@ const ActivityScholarActions: React.FC<ActivityPanelInfoProps> = ({
   isButtonDisabled,
 }) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  const [selectedScholar, setSelectedScholar] = useState<React.Key | undefined>();
-
+  const [selectedScholar, setSelectedScholar] = useState<Scholar | undefined>();
+  const memoizedScholars = useMemo(() => scholars, [scholars]);
   const handleCeaseSpot = async () => {
-    const scholar = scholars.find((scholar) => scholar.id === selectedScholar);
-    if (!scholar) return;
+    if (!selectedScholar) return;
     const link = `http://programaexcelencia.org/becario/api/ceaseConfirmation?activityId=${activityId}&scholarWhoCeaseAttendanceId=${attendanceId}&scholarId=${
-      scholar.id
+      selectedScholar.id
     }&kindOfActivity=${kindOfActivity}&scholarWhoReceiveEmail=${
-      scholar.email
+      selectedScholar.email
     }&scholarWhoReceiveName=${
-      scholar.first_names.split(' ')[0] || ''
+      selectedScholar.first_names.split(' ')[0] || ''
     }&eventId=${eventId}&activityName=${activityName}`;
     const message = createCeaseConfirmationMessage(
-      scholar.first_names.split(' ')[0] || '',
+      selectedScholar.first_names.split(' ')[0] || '',
       scholarWhoCeaseName,
       activityName,
       date,
@@ -132,7 +128,7 @@ const ActivityScholarActions: React.FC<ActivityPanelInfoProps> = ({
     );
     await sendGenericEmail(
       message,
-      scholar.email ?? 'avaatecnologia@gmail.com',
+      selectedScholar.email ?? 'avaatecnologia@gmail.com',
       `Te han cedido el cupo a la actividad: ${activityName}`
     );
   };
@@ -140,7 +136,7 @@ const ActivityScholarActions: React.FC<ActivityPanelInfoProps> = ({
   return (
     ///TODO set isDisable option
     <div className="w-1/2 flex items-center justify-end">
-      <Button onPress={onOpen} color="warning" className="text-white" isDisabled={isButtonDisabled}>
+      <Button onPress={onOpen} color="warning" className="text-white" isDisabled={false}>
         Cancelar inscripcion
       </Button>
       <BasicModal
@@ -160,17 +156,20 @@ const ActivityScholarActions: React.FC<ActivityPanelInfoProps> = ({
               actividad.
             </p>
             <Autocomplete
-              defaultItems={scholars}
+              defaultItems={memoizedScholars}
               radius="sm"
               label="Selecciona un becario al cual cederle tu cupo"
               labelPlacement="outside"
-              onSelectionChange={setSelectedScholar}
+              selectedKey={selectedScholar?.id || ''}
+              onSelectionChange={(key) => {
+                setSelectedScholar(memoizedScholars.find((scholar) => scholar.id === key));
+              }}
             >
               {(scholar) => (
                 <AutocompleteItem
                   key={scholar.id}
-                  textValue={`${scholar.first_names.split(' ')[0]} ${
-                    scholar.last_names.split(' ')[0]
+                  textValue={`${scholar.first_names.trim().split(' ')[0]} ${
+                    scholar.last_names.trim().split(' ')[0]
                   }`}
                 >
                   <div className="flex gap-2 items-center">
@@ -181,8 +180,8 @@ const ActivityScholarActions: React.FC<ActivityPanelInfoProps> = ({
                       src={scholar.photo || ''}
                     />
                     <div className="flex flex-col">
-                      <span className="text-small">{`${scholar.first_names.split(' ')[0]} ${
-                        scholar.last_names.split(' ')[0]
+                      <span className="text-small">{`${scholar.first_names.trim().split(' ')[0]} ${
+                        scholar.last_names.trim().split(' ')[0]
                       }`}</span>
                       <span className="text-tiny text-default-400">{scholar.email}</span>
                     </div>

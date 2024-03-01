@@ -136,6 +136,7 @@ const ChatSpeakerFormCreation: React.FC<ChatSpeakerFormCreationProps> = ({ schol
                             classNames={{
                               base: 'col-start-2 col-span-2',
                             }}
+                            selectedKey={scholar?.id || ''}
                             radius="sm"
                             label="Selecciona un becario"
                             labelPlacement="outside"
@@ -147,8 +148,8 @@ const ChatSpeakerFormCreation: React.FC<ChatSpeakerFormCreationProps> = ({ schol
                               <AutocompleteItem
                                 classNames={{ base: 'col-span-2 md:col-span-1' }}
                                 key={scholar.id}
-                                textValue={`${scholar.first_names.split(' ')[0]} ${
-                                  scholar.last_names.split(' ')[0]
+                                textValue={`${scholar.first_names.trim().split(' ')[0]} ${
+                                  scholar.last_names.trim().split(' ')[0]
                                 }`}
                               >
                                 <div className="flex gap-2 items-center">
