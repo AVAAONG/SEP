@@ -3,6 +3,7 @@
 import { ChatsWithAllData } from "@/components/table/columns/chatsColumns";
 import { WorkshopWithAllData } from "@/components/table/columns/workshopColumns";
 import { Chat, Volunteer, Workshop } from "@prisma/client";
+import { VolunteerWithAllData } from "../db/types";
 import { parseChatLevelFromDatabase, parseModalityFromDatabase, parseSkillFromDatabase, parseWorkshopKindFromDatabase } from "../utils2";
 
 const countActivityByModality = (attendedActivities: (Workshop | Chat | Volunteer)[]) => {
@@ -30,6 +31,22 @@ const getAttendedChats = (chats: ChatsWithAllData[], scholarId: string) => {
         return chat.scholar_attendance[0]?.attendance === 'ATTENDED' || chat.speaker.some((speaker) => speaker.id === scholarId);
     });
 }
+
+const getApprovedAndAttendedVolunteers = (volunteers: VolunteerWithAllData[]) => {
+    let externalVolunteerHours: number = 0,
+        internalVolunteerHours: number = 0,
+        totalVolunteerHours: number = 0;
+    volunteers.forEach(volunteer => {
+        const volunteerAttendance = volunteer.volunteer_attendance;
+        if (volunteer.status === 'APPROVED' && volunteerAttendance[0].attendance === 'ATTENDED') {
+            if (volunteer.kind_of_volunteer === 'INTERNAL') internalVolunteerHours += volunteerAttendance[0].asigned_hours;
+            else externalVolunteerHours += volunteerAttendance[0].asigned_hours;
+            totalVolunteerHours += volunteerAttendance[0].asigned_hours;
+        }
+    })
+    return { externalVolunteerHours, internalVolunteerHours, totalVolunteerHours };
+}
+
 
 type Count = {
     label: string;
@@ -111,9 +128,12 @@ const countChatProperties = (chats: ChatsWithAllData[]): {
     return result;
 };
 
+
+
 export {
     countActivityByModality,
     getAttendedActivities,
+    getApprovedAndAttendedVolunteers,
     getAttendedChats,
     countWorkshopProperties,
     countChatProperties

@@ -1,6 +1,6 @@
 import StatsTooltip from '../admin/StatsTooltip';
 interface StatsProps {
-  kindOfActivity: 'workshop' | 'chat' | 'voluteer';
+  kindOfActivity: 'workshop' | 'chat' | 'volunteer';
   activitiesDone: number;
   first: number;
   second: number;
@@ -12,7 +12,7 @@ const defineActivity = (kindOfActivity: string) => {
   } else if (kindOfActivity === 'chat') {
     return ['Chats', 10];
   } else if (kindOfActivity === 'volunteer') {
-    return ['Voluntarido', 100];
+    return ['Horas de voluntarido', 100];
   } else {
     return ['', 0];
   }
@@ -20,9 +20,9 @@ const defineActivity = (kindOfActivity: string) => {
 
 const Stats = ({ activitiesDone, kindOfActivity, first, second }: StatsProps) => {
   const [activityName, number] = defineActivity(kindOfActivity);
-
+  const toRealize = kindOfActivity === 'volunteer' ? 100 : 10;
   const pendingWorkshops = Math.max(0, Number(number) - activitiesDone);
-  const donePercentage = (activitiesDone / 10) * 100;
+  const donePercentage = (activitiesDone / toRealize) * 100;
   const pendingPercentage = Math.max(0, 100 - donePercentage);
 
   return (
@@ -47,7 +47,7 @@ const Stats = ({ activitiesDone, kindOfActivity, first, second }: StatsProps) =>
           <div className="flex items-start text-5xl font-bold  text-white dark:text-black  h-min">
             <span className="-mt-1">{first}</span>
             <span className="text-xs ml-2 text-white dark:text-black">
-              {activityName} {kindOfActivity === 'voluteer' ? 'internas' : 'presenciales'}
+              {activityName} {kindOfActivity === 'volunteer' ? 'internas' : 'presenciales'}
             </span>
           </div>
           <div className="w-0">
@@ -56,7 +56,7 @@ const Stats = ({ activitiesDone, kindOfActivity, first, second }: StatsProps) =>
           <div className="flex items-end text-5xl font-bold  text-white dark:text-black">
             <span className="">{second}</span>
             <span className="text-xs  ml-2 text-white dark:text-black">
-              {activityName} {kindOfActivity === 'voluteer' ? 'externas' : 'virtuales'}
+              {activityName} {kindOfActivity === 'volunteer' ? 'externas' : 'virtuales'}
             </span>
           </div>
         </div>

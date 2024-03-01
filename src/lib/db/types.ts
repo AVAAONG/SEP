@@ -13,3 +13,19 @@ const workshopWithSpeaker = Prisma.validator<Prisma.WorkshopDefaultArgs>()({
   },
 });
 export type WorkshopWithSpeaker = Prisma.WorkshopGetPayload<typeof workshopWithSpeaker>;
+
+const volunteerWithAllData = Prisma.validator<Prisma.VolunteerDefaultArgs>()({
+  include: {
+    volunteer_attendance: true,
+  },
+});
+
+export type VolunteerWithAllData = Prisma.VolunteerGetPayload<typeof volunteerWithAllData>;
+
+const volunteerAttendanceWithVolunteer = Prisma.validator<Prisma.VolunteerAttendanceDefaultArgs>()({
+  include: {
+    volunteer: true,
+  },
+});
+
+export type VolunteerAttendanceWithVolunteer = Prisma.VolunteerAttendanceGetPayload<typeof volunteerAttendanceWithVolunteer>;
