@@ -139,7 +139,7 @@ export const formatActivitiesForEnrollement = (
     const colors = ACTIVITIES_CALENDAR_COLORS.find((activity) => activity.activity === kindOfActivity);
     const eventUrl = getActivityUrl(id, kindOfActivity === 'workshop' ? 'actividadesFormativas' : 'chats', 'scholar');
     const bgColor = getBgColor(colors, activity_status);
-    const enrolledCount = (activity.scholar_attendance as { attendance: string }[]).filter((a) => a.attendance === 'ENROLLED').length;
+    const enrolledCount = (activity.scholar_attendance as { attendance: string }[]).filter((a) => a.attendance === 'ENROLLED' || a.attendance === 'ATTENDED' || a.attendance === 'NOT_ATTENDED').length;
     const isFull = enrolledCount >= activity.avalible_spots;
     const speakerNames: string[] = [];
     const speakerImages: (string | undefined)[] = [];
