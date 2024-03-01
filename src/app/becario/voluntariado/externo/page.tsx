@@ -60,7 +60,7 @@ const page = () => {
     await createExternalVolunteer(volunteerData, sesion.data?.scholarId, data.asigned_hours);
   };
   return (
-    <section className="flex flex-col px-12 justify-start items-center w-full gap-4">
+    <section className="flex flex-col md:px-12 justify-start items-center w-full gap-4">
       <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white mb-4">
         ¡Sube tu voluntariado externo!
       </h1>
@@ -112,6 +112,8 @@ const page = () => {
                     classNames={{
                       base: 'col-span-2 md:col-span-1',
                       innerWrapper: 'bg-gray-100',
+                      helperWrapper: 'bg-gray-100',
+                      trigger: 'bg-gray-100',
                     }}
                     radius="sm"
                     isRequired
