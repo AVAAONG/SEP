@@ -1,4 +1,6 @@
 'use client';
+import { createSpeaker, setScholarAsChatSpeaker } from '@/lib/db/utils/speaker';
+import { revalidateSpecificPath } from '@/lib/serverAction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Autocomplete,
@@ -14,13 +16,12 @@ import {
   Tabs,
   useDisclosure,
 } from '@nextui-org/react';
-import { Prisma, Scholar } from '@prisma/client';
+import { Scholar } from '@prisma/client';
 import moment from 'moment';
-import React, { BaseSyntheticEvent, useState } from 'react';
+import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import BaseSpeakerFormCreation, { SpeakerCreationFormSchema } from './BaseForm';
-import { createSpeaker, setScholarAsChatSpeaker } from '@/lib/db/utils/speaker';
 
 interface ChatSpeakerFormCreationProps {
   scholars: Scholar[];
@@ -36,38 +37,52 @@ const ChatSpeakerFormCreation: React.FC<ChatSpeakerFormCreationProps> = ({ schol
     control,
     handleSubmit,
     reset,
+    setValue,
     formState: { isSubmitting, isValid },
   } = useForm<z.infer<typeof SpeakerCreationFormSchema>>({
     resolver: zodResolver(SpeakerCreationFormSchema),
-
-    defaultValues: {
-      last_names: scholar?.last_names,
-      email: scholar?.email!,
-      ///@ts-ignore
-      birthdate: scholar?.birthdate ? moment(scholar?.birthdate).format('YYYY-MM-DD') : undefined,
-      actual_city: scholar?.city || undefined,
-      first_names: scholar?.first_names,
-      phone_number: scholar?.cell_phone_Number || undefined,
-      image: scholar?.photo || undefined,
-      instagram_user: scholar?.instagram_user || undefined,
-      twitter_user: scholar?.twitter_user || undefined,
-      linkedin_user: scholar?.linkedin_user || undefined,
-      facebook_user: scholar?.facebook_user || undefined,
-      gender: scholar?.gender,
-    },
   });
+  useEffect(() => {
+    reset();
+    if (scholar) {
+      const formatedChat: z.infer<typeof SpeakerCreationFormSchema> = {
+        last_names: scholar?.last_names,
+        email: scholar?.email!,
+        ///@ts-ignore
+        birthdate: scholar?.birthdate ? moment(scholar?.birthdate).format('YYYY-MM-DD') : undefined,
+        actual_city: scholar?.city || undefined,
+        first_names: scholar?.first_names,
+        phone_number: scholar?.cell_phone_Number || undefined,
+        image: scholar?.photo || undefined,
+        instagram_user: scholar?.instagram_user || undefined,
+        twitter_user: scholar?.twitter_user || undefined,
+        linkedin_user: scholar?.linkedin_user || undefined,
+        facebook_user: scholar?.facebook_user || undefined,
+        gender: scholar?.gender,
+      };
+      Object.keys(formatedChat).forEach((key) => {
+        if (key in formatedChat) {
+          const valueKey = key as keyof typeof formatedChat;
+          if (formatedChat[valueKey] !== undefined) {
+            setValue(valueKey, formatedChat[valueKey]);
+          }
+        }
+      });
+    }
+  }, [scholar, setValue]);
+
   const handleFormSubmit = async (
     data: z.infer<typeof SpeakerCreationFormSchema>,
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
     event?.preventDefault();
-    let speaker: Prisma.SpeakerCreateInput =
-      selected === 'SCHOLAR'
-        ? { speaker_kind: 'CHATS', id: scholar?.id, ...data }
-        : { speaker_kind: 'CHATS', ...data };
-    console.log(selected);
-    await createSpeaker(speaker);
-    await setScholarAsChatSpeaker(scholar?.id!);
+    if (selected === 'SCHOLAR') {
+      await createSpeaker({ ...data, speaker_kind: 'CHATS', id: scholar?.id! });
+      await setScholarAsChatSpeaker(scholar?.id!);
+    } else {
+      await createSpeaker({ ...data, speaker_kind: 'CHATS' });
+    }
+    await revalidateSpecificPath('admin/chats/facilitadores');
     reset();
     onClose();
   };

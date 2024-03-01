@@ -6,9 +6,19 @@ import { Control, Controller } from 'react-hook-form';
 import { z } from 'zod';
 
 export const SpeakerCreationFormSchema = z.object({
-  first_names: z.string().min(1, { message: 'El facilitador debe de tener minimo un nombre' }),
-  last_names: z.string().min(1, { message: 'El facilitador debe de tener minimo un apellido' }),
-  email: z.string().email().min(1, { message: 'Debes especificar el correo del facilitador' }),
+  first_names: z
+    .string()
+    .min(1, { message: 'El facilitador debe de tener minimo un nombre' })
+    .trim(),
+  last_names: z
+    .string()
+    .min(1, { message: 'El facilitador debe de tener minimo un apellido' })
+    .trim(),
+  email: z
+    .string()
+    .email()
+    .min(1, { message: 'Debes especificar el correo del facilitador' })
+    .trim(),
   birthdate: z.coerce
     .date()
     .refine((date) => new Date(date) <= new Date(), {
@@ -16,18 +26,18 @@ export const SpeakerCreationFormSchema = z.object({
     })
     .optional(),
   years_of_exp: z.coerce.number().optional(),
-  job_title: z.string().optional(),
-  job_company: z.string().optional(),
-  actual_city: z.string().optional(),
-  actual_country: z.string().optional(),
-  phone_number: z.string().optional(),
-  image: z.string().optional(),
-  description: z.string().optional(),
-  instagram_user: z.string().optional(),
-  twitter_user: z.string().optional(),
-  linkedin_user: z.string().optional(),
-  facebook_user: z.string().optional(),
-  curriculum: z.string().optional(),
+  job_title: z.string().trim().optional(),
+  job_company: z.string().trim().optional().nullable(),
+  actual_city: z.string().trim().optional().nullable(),
+  actual_country: z.string().trim().optional().nullable(),
+  phone_number: z.string().trim().optional().nullable(),
+  image: z.string().trim().optional().nullable(),
+  description: z.string().trim().optional().nullable(),
+  instagram_user: z.string().trim().optional().nullable(),
+  twitter_user: z.string().trim().optional().nullable(),
+  linkedin_user: z.string().trim().optional().nullable(),
+  facebook_user: z.string().trim().optional().nullable(),
+  curriculum: z.string().trim().optional().nullable(),
   gender: z.enum(['M', 'F', 'O'], {
     required_error: 'Debes seleccionar el género del facilitador',
   }),
@@ -117,7 +127,6 @@ const InputComponent: React.FC<InputComponentProps> = ({ control, label, name, k
   <Controller
     name={name}
     control={control}
-    shouldUnregister={true}
     render={({ field, formState }) => {
       return (
         <Input
@@ -156,7 +165,6 @@ const BaseSpeakerFormCreation: React.FC<BaseSpeakerFormCreationProps> = ({ contr
         name="gender"
         control={control}
         rules={{ required: true }}
-        shouldUnregister={true}
         render={({ field, formState }) => {
           return (
             <Select
@@ -190,7 +198,6 @@ const BaseSpeakerFormCreation: React.FC<BaseSpeakerFormCreationProps> = ({ contr
         name="description"
         control={control}
         rules={{ required: true }}
-        shouldUnregister={true}
         render={({ field, formState }) => {
           return (
             <Textarea
