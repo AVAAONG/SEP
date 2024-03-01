@@ -4,6 +4,9 @@ const nextConfig = {
   ///@see https://github.com/Azure/azure-sdk-for-js/issues/28059
   experimental: {
     serverComponentsExternalPackages: ['@azure/storage-blob'],
+    serverActions: {
+      bodySizeLimit: '2mb',
+    },
   },
   images: {
     domains: [
