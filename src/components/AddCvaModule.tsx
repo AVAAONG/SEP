@@ -117,7 +117,7 @@ const AddCvaModule = ({ cvaInformationId }: { cvaInformationId: string | null })
                           errorMessage={formState.errors?.['module']?.message?.toString()}
                           autoFocus
                           type="number"
-                          label="Numero del modulo en el que te encuentras"
+                          label="Numero del ultimo modulo cursado"
                           radius="sm"
                         />
                       );
@@ -164,7 +164,7 @@ const AddCvaModule = ({ cvaInformationId }: { cvaInformationId: string | null })
                           errorMessage={formState.errors?.['qualification']?.message?.toString()}
                           step="0.01"
                           type="number"
-                          label="Calificacion obtenida en el modulo"
+                          label="Calificacion obtenida en el ultimo modulo cursado"
                           radius="sm"
                         />
                       );
