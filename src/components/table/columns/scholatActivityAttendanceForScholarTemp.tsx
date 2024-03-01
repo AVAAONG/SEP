@@ -37,19 +37,19 @@ const ScholarActivityAttendanceForScholarTemp: Column<IScholarForAttendanceTable
     },
   },
   {
+    Header: 'Asistencia',
+    accessor: 'attendance',
+    Cell: ({ value }) => {
+      return <ScholarAttendanceWidget value={value as ScholarAttendance} />;
+    },
+  },
+  {
     Header: 'Numero de WhatsApp',
     accessor: 'whatsAppNumber',
   },
   {
     Header: 'Correo',
     accessor: 'email',
-  },
-  {
-    Header: 'Asistencia',
-    accessor: 'attendance',
-    Cell: ({ value }) => {
-      return <ScholarAttendanceWidget value={value as ScholarAttendance} />;
-    },
   },
 ];
 
