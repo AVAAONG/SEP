@@ -33,7 +33,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
 
   const isDisabled = () => {
     if (attendance?.attendance! !== 'ENROLLED') return true;
-    else if (new Date(workshop?.start_dates![0]!) >= new Date()) return true;
+    else if (new Date(workshop?.start_dates![0]!) <= new Date()) return true;
     else if (workshop?.activity_status !== 'SENT') return true;
     else return false;
   };
