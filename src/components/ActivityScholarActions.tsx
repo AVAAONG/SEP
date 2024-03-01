@@ -140,7 +140,7 @@ const ActivityScholarActions: React.FC<ActivityPanelInfoProps> = ({
   return (
     ///TODO set isDisable option
     <div className="w-1/2 flex items-center justify-end">
-      <Button onPress={onOpen} color="warning" className="text-white" isDisabled={false}>
+      <Button onPress={onOpen} color="warning" className="text-white" isDisabled={isButtonDisabled}>
         Cancelar inscripcion
       </Button>
       <BasicModal

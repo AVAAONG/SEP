@@ -25,7 +25,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
 
   const isDisabled = () => {
     if (attendance?.attendance! !== 'ENROLLED') return true;
-    else if (new Date(chat?.start_dates![0]!) <= new Date()) return true;
+    else if (new Date(chat?.start_dates![0]!) >= new Date()) return true;
     else if (chat?.activity_status !== 'SENT') return true;
     else return false;
   };

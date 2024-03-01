@@ -22,9 +22,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
 
   const notEnrolledScholars = await getNotEnrolledScholarsInWorkshop(workshopId);
 
-  const attendance = workshop?.scholar_attendance.find(
-    (a) => a.scholar.scholar.id === se?.scholarId
-  );
+  let attendance = workshop?.scholar_attendance.find((a) => a.scholar.scholar.id === se?.scholarId);
 
   const scholarAttendanceDataForTable = formatScholarDataForAttendanceTable(
     workshop?.scholar_attendance ? workshop.scholar_attendance.map((a) => a.scholar.scholar) : [],
@@ -33,7 +31,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
 
   const isDisabled = () => {
     if (attendance?.attendance! !== 'ENROLLED') return true;
-    else if (new Date(workshop?.start_dates![0]!) <= new Date()) return true;
+    else if (new Date(workshop?.start_dates![0]!) >= new Date()) return true;
     else if (workshop?.activity_status !== 'SENT') return true;
     else return false;
   };
