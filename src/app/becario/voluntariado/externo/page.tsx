@@ -360,7 +360,6 @@ const page = () => {
                           });
                           field.onChange(e);
                         }}
-                        errorMessage={formState.errors?.['proof']?.message?.toString()}
                         id="dropzone-file"
                         type="file"
                         className="hidden"
