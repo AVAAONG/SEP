@@ -38,21 +38,28 @@ const ScholarCVAInformation = ({
   scholarId: string;
 }) => {
   const [certificate, setCertificate] = useState<File | null>(null);
-  let defaultValues = {
-    already_finished_cva: scholarCvaInformation?.already_finished_cva === true ? 'YES' : 'NO',
-    is_in_cva: scholarCvaInformation?.is_in_cva === true ? 'YES' : 'NO',
-    cva_ended_date: moment(scholarCvaInformation?.cva_ended_date).format('YYYY-MM-DD'),
-    cva_location: scholarCvaInformation?.cva_location as CvaLocation,
-    cva_started_date: moment(scholarCvaInformation?.cva_started_date).format('YYYY-MM-DD'),
-    not_started_cva_reason: scholarCvaInformation?.not_started_cva_reason,
-  };
+
+  let defaultValues = scholarCvaInformation
+    ? {
+        already_finished_cva: scholarCvaInformation?.already_finished_cva === true ? 'YES' : 'NO',
+        is_in_cva: scholarCvaInformation?.is_in_cva === true ? 'YES' : 'NO',
+        cva_ended_date: scholarCvaInformation.cva_ended_date
+          ? moment(scholarCvaInformation?.cva_ended_date).format('YYYY-MM-DD')
+          : null,
+        cva_location: scholarCvaInformation?.cva_location as CvaLocation,
+        cva_started_date: scholarCvaInformation.cva_started_date
+          ? moment(scholarCvaInformation?.cva_started_date).format('YYYY-MM-DD')
+          : null,
+        not_started_cva_reason: scholarCvaInformation?.not_started_cva_reason,
+      }
+    : undefined;
   const {
     control,
     handleSubmit,
     formState: { isSubmitting },
   } = useForm<z.infer<typeof scholarCVAInformationSchema>>({
     resolver: zodResolver(scholarCVAInformationSchema),
-    defaultValues: scholarCvaInformation ? defaultValues : undefined,
+    defaultValues: defaultValues,
   });
   const isInCva = useWatch({
     control,

@@ -26,7 +26,7 @@ const page = async () => {
   return (
     <div className="flex flex-col pt-6 gap-4 min-h-screen">
       <h1 className="text-xl font-semibold  sm:text-2xl ">Información sobre el CVA</h1>
-      <div className="p-8 w-full bg-gray-100 dark:bg-black rounded-lg">
+      <div className="p-2 lg:p-6 w-full bg-gray-100 dark:bg-black rounded-lg">
         <ScholarCVAInformation
           scholarCvaInformation={cvaInformation}
           certificateUrl={cvaCertificate}
