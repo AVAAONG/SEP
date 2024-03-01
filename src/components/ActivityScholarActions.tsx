@@ -108,13 +108,18 @@ const ActivityScholarActions: React.FC<ActivityPanelInfoProps> = ({
   const memoizedScholars = useMemo(() => scholars, [scholars]);
   const handleCeaseSpot = async () => {
     if (!selectedScholar) return;
-    const link = `http://programaexcelencia.org/becario/api/ceaseConfirmation?activityId=${activityId}&scholarWhoCeaseAttendanceId=${attendanceId}&scholarId=${
-      selectedScholar.id
-    }&kindOfActivity=${kindOfActivity}&scholarWhoReceiveEmail=${
-      selectedScholar.email
-    }&scholarWhoReceiveName=${
+    const link = `https://programaexcelencia.org/becario/api/ceaseConfirmation?activityId=${encodeURIComponent(
+      activityId
+    )}&scholarWhoCeaseAttendanceId=${encodeURIComponent(
+      attendanceId
+    )}&scholarId=${encodeURIComponent(selectedScholar.id)}&kindOfActivity=${encodeURIComponent(
+      kindOfActivity
+    )}&scholarWhoReceiveEmail=${encodeURIComponent(
+      selectedScholar.email || ''
+    )}&scholarWhoReceiveName=${encodeURIComponent(
       selectedScholar.first_names.split(' ')[0] || ''
-    }&eventId=${eventId}&activityName=${activityName}`;
+    )}&eventId=${encodeURIComponent(eventId)}&activityName=${encodeURIComponent(activityName)}`;
+
     const message = createCeaseConfirmationMessage(
       selectedScholar.first_names.split(' ')[0] || '',
       scholarWhoCeaseName,
