@@ -116,6 +116,7 @@ const AddCvaModule = ({ cvaInformationId }: { cvaInformationId: string | null })
                           isInvalid={!!formState.errors?.['module']?.message}
                           errorMessage={formState.errors?.['module']?.message?.toString()}
                           autoFocus
+                          className='col-span-2 md:col-span-1'
                           type="number"
                           label="Numero del ultimo modulo cursado"
                           radius="sm"
@@ -139,6 +140,8 @@ const AddCvaModule = ({ cvaInformationId }: { cvaInformationId: string | null })
                           classNames={{ base: 'col-span-2 md:col-span-1' }}
                           radius="sm"
                           label="Modalidad"
+                          className='col-span-2 md:col-span-1'
+
                           defaultSelectedKeys={[field.value]}
                         >
                           {MODALITY.map((modality) => (
@@ -160,6 +163,8 @@ const AddCvaModule = ({ cvaInformationId }: { cvaInformationId: string | null })
                         <Input
                           value={field.value?.toString() || undefined}
                           onChange={field.onChange}
+                          className='col-span-2 md:col-span-1'
+
                           isInvalid={!!formState.errors?.['qualification']?.message}
                           errorMessage={formState.errors?.['qualification']?.message?.toString()}
                           step="0.01"
@@ -177,7 +182,7 @@ const AddCvaModule = ({ cvaInformationId }: { cvaInformationId: string | null })
                     shouldUnregister={true}
                     render={({ field, formState }) => {
                       return (
-                        <div className="flex gap-2 text-sm flex-col">
+                        <div className="flex gap-2 text-sm flex-col col-span-2 md:col-span-1">
                           <label htmlFor="recorInput">
                             Comprobante del modulo (Solo documentos PDF)
                           </label>
@@ -213,6 +218,8 @@ const AddCvaModule = ({ cvaInformationId }: { cvaInformationId: string | null })
                         isInvalid={!!formState.errors?.['schedule']?.message}
                         errorMessage={formState.errors?.['schedule']?.message?.toString()}
                         radius="sm"
+                        className='col-span-2 md:col-span-1'
+
                         label="Horario"
                         defaultSelectedKeys={[field.value]}
                         selectedKeys={[field.value]}
