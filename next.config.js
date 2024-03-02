@@ -5,7 +5,7 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['@azure/storage-blob'],
     serverActions: {
-      bodySizeLimit: '2mb',
+      bodySizeLimit: '5mb',
     },
   },
   images: {
