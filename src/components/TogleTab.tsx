@@ -21,7 +21,7 @@ const TogleTab = () => {
         onSelectionChange={handleSelectionChange}
         aria-label="Tabs colors"
         classNames={{
-          tabList: 'bg-gray-100',
+          tabList: 'bg-gray-100 dark:bg-gray-800',
         }}
         radius="full"
       >
