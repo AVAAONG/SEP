@@ -55,11 +55,10 @@ function Table<T extends object>({
 
   return (
     <div
-      className={`${
-        isExpanded
-          ? 'absolute h-full top-0 bottom-0 left-0 right-0 z-50 min-h-full'
-          : 'relative overflow-hidden '
-      }  bg-white shadow-md shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full min-h-max`}
+      className={`${isExpanded
+        ? 'absolute top-0  left-0 right-0 z-50 '
+        : 'relative overflow-hidden min-h-max shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full'
+        }  bg-white shadow-md `}
     >
       <TableHeader
         optionsForFilter={tableHeadersForSearch}
