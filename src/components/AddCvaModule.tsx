@@ -197,8 +197,8 @@ const AddCvaModule = ({ cvaInformationId }: { cvaInformationId: string | null })
                               field.onChange(e);
                             }}
                             type="file"
+                            accept='.pdf, .jpg, .jpeg, .png'
                             className="flex items-center"
-                            accept="application/pdf"
                             placeholder="Constancia"
                           />
                         </div>
