@@ -58,7 +58,7 @@ const Calendar = ({ events }: { events: BigCalendarEventType[] }) => {
         eventPropGetter={styleEvent}
         popup
         onSelectEvent={(event) => {
-          window.open(event.url, '_blank');
+          window.open(event.url);
         }}
         messages={{
           month: 'Mes',

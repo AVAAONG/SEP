@@ -30,7 +30,7 @@ const NextEventsList = ({ activities }: { activities: (Workshop | Chat | Volunte
               }
               return (
                 <li className="py-2.5 overflow-hidden" key={index}>
-                  <Link href={link}>
+                  <Link href={link} target='_self'>
                     <div className="flex items-center w-full">
                       <ActivityListIcon kindOfActivity={kindOfActivity(activity)} />
                       <div className="flex flex-col ml-2">
