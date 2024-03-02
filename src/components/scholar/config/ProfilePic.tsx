@@ -55,10 +55,10 @@ const ProfilePic = (props: ProfilePicProps) => {
         />
       </div>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 ">
         <h3 className="text-green-900 text-xl font-semibold dark:text-white">Foto de perfil</h3>
         <div className=" text-sm text-gray-500 dark:text-gray-400">Solo archivos JPG o PNG.</div>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 w-full">
           <Button
             isDisabled={props.image ? true : false}
             className="text-white bg-green-600 hover:bg-green-500 hover:text-green-900 font-medium rounded-lg text-sm  text-center"

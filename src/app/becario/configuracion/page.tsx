@@ -15,10 +15,10 @@ const page = async () => {
   const scholar = await getScholar(scholarId);
   const image = await getBlobImage(scholar?.photo);
   const classNames =
-    ' bg-light rounded-md bg-clip-padding backdrop-filter backdrop-blur-md p-4 mb-4 shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2  sm:p-6 dark:bg-slate-950';
+    ' bg-light rounded-md bg-clip-padding backdrop-filter backdrop-blur-md p-2 sm:p-6  mb-4 shadow-md shadow-gray-300 dark:shadow-gray-900 2xl:col-span-2 dark:bg-slate-950';
 
   return (
-    <div className="grid grid-cols-1 px-2 pt-6 xl:grid-cols-4 xl:gap-4 ">
+    <div className="grid grid-cols-1 pt-6 xl:grid-cols-4 xl:gap-4 ">
       <div className="mb-4 col-span-full xl:mb-2">
         <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
           Configuración de usuario

@@ -57,7 +57,7 @@ const GeneralInformation: React.FC<GeneralInformationProps> = ({ scholar }) => {
           })
         )}
       >
-        <div className="grid grid-cols-6 gap-6">
+        <div className="grid grid-cols-6 gap-6 items-center justify-center">
           {GENERAL_INFORMATION_INPUT_DATA.map((input) => {
             const { label, id, type } = input;
             return (
@@ -118,7 +118,7 @@ const GeneralInformation: React.FC<GeneralInformationProps> = ({ scholar }) => {
           />
           <Button
             type="submit"
-            className="col-span-2 lg:col-span-1 text-white bg-green-600 hover:bg-green-500 hover:text-green-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="col-span-6 md:col-span-1 text-white bg-green-600 hover:bg-green-500 hover:text-green-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             isDisabled={isSubmitting}
           >
             Guardar cambios
