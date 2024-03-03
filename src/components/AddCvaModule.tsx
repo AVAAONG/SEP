@@ -3,6 +3,7 @@ import { uploadBlob } from '@/lib/azure/azure';
 import { MODALITY } from '@/lib/constants';
 import { createCvaModule } from '@/lib/db/utils/cva';
 import scholarCVAModuleSchema from '@/lib/schemas/scholar/scholarCVAModuleSchema';
+import { revalidateSpecificPath } from '@/lib/serverAction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@nextui-org/button';
 import {
@@ -65,6 +66,7 @@ const AddCvaModule = ({ cvaInformationId }: { cvaInformationId: string | null })
       scholarCvaModuleInfo.record = recordForDb!;
     }
     createCvaModule(scholarCvaModuleInfo, cvaInformationId);
+    await revalidateSpecificPath('becario/cva')
     onClose();
   };
   return (
