@@ -7,7 +7,6 @@ import { prisma } from '@/lib/db/utils/prisma';
 import { formatScholarDataForAttendanceTable } from '@/lib/tableUtils';
 import ExportButton from '@/lib/temp';
 import { parseModalityFromDatabase, parseSkillFromDatabase } from '@/lib/utils2';
-import { Button } from '@nextui-org/react';
 import { Modality } from '@prisma/client';
 import shortUUID from 'short-uuid';
 
@@ -112,7 +111,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
               </p>
             </div>
           ))}
-          {workshop?.activity_status === 'SENT' && (
+          {/* {workshop?.activity_status === 'SENT' && (
             <Button
               color="success"
               className="text-white"
@@ -120,7 +119,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
             >
               Habilitar encuesta de satisfacción
             </Button>
-          )}
+          )} */}
         </div>
       </ActivityPanelInfo>
 
@@ -142,10 +141,10 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
                 hour={
                   start_dates
                     ? new Date(start_dates[0]).toLocaleTimeString('es-ES', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: true,
-                      })
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true,
+                    })
                     : ''
                 }
                 modality={parseModalityFromDatabase(modality as Modality)}
