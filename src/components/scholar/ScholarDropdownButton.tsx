@@ -52,18 +52,17 @@ const ScholarDropdownButton = (props: DropdownButtonProps) => {
         </Button>
         <ul
           id="dropdown-pages"
-          className={`${
-            isDropdownOpen ? 'flex flex-col' : 'hidden'
-          } py-2 space-y-1 transition-transform  duration-75`}
+          className={`${isDropdownOpen ? 'flex flex-col' : 'hidden'
+            } py-2 space-y-1 transition-transform  duration-75`}
         >
           {itemList.map((item, index) => (
             <li className="flex gap-2 justify-center items-center" key={index}>
               <Link
                 href={item.link}
                 isBlock={true}
-                className="flex items-center gap-4 p-2 pl-11 w-full text-sm rounded-lg "
+                className="flex items-center gap-4 p-2 pl-11 w-full text-sm rounded-lg hover:text-primary-light "
               >
-                <div className="rounded-full bg-black w-1.5 h-1.5"></div>
+                <div className="rounded-full bg-black w-1.5 h-1.5 hover:text-primary-light"></div>
                 {item.name}
               </Link>
             </li>

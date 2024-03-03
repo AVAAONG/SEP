@@ -13,17 +13,13 @@ import {
   volunterIcon,
   workshopIcon,
 } from '../../../public/svgs/svgs';
+import SidebarSeparator from '../admin/navigation/sidebar/SidebarSeparator';
 import ScholarDropdownButton from './ScholarDropdownButton';
 
 const SCHOLAR_PREFIX = 'becario';
 
-export const SCHOLAR_SIDEBAR_ITEMS = [
-  {
-    Icon: dashboardComponent(),
-    buttonName: 'Panel general',
-    itemList: [],
-    link: `/${SCHOLAR_PREFIX}/panel`,
-  },
+const SCHOLAR_SIDEBAR_ITEMS = [
+
   {
     Icon: workshopIcon(),
     buttonName: 'Actividades formativas',
@@ -61,7 +57,7 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
     link: '',
   },
   {
-    Icon: <SparklesIcon />,
+    Icon: <SparklesIcon className='!text-primary-light' />,
     buttonName: 'Oferta de actividades',
     itemList: [],
     link: `/${SCHOLAR_PREFIX}/oferta`,
@@ -72,13 +68,11 @@ export const SCHOLAR_SIDEBAR_ITEMS = [
   //   itemList: [],
   //   link: `/${SCHOLAR_PREFIX}/universidad`,
   // },
-  {
-    Icon: <DocumentTextIcon />,
-    buttonName: 'Registro CVA',
-    itemList: [],
-    link: `/${SCHOLAR_PREFIX}/cva`,
-  },
+
 ];
+
+
+
 
 const Sidebar = () => {
   const [isSidebarOpen, setSidebarOpen] = useAtom(scholarSidebarAtom);
@@ -92,9 +86,8 @@ const Sidebar = () => {
   }, [pathname]);
   return (
     <aside
-      className={`${
-        isSidebarOpen ? 'fixed  w-full md:w-72' : 'hidden'
-      } top-0 left-0 z-40 h-screen pt-4 bg-gray-50 md:translate-x-0 dark:bg-black`}
+      className={`${isSidebarOpen ? 'fixed  w-full md:w-72' : 'hidden'
+        } top-0 left-0 z-40 h-screen pt-4 bg-gray-50 md:translate-x-0 dark:bg-black`}
     >
       <div className={`flex items-center mt-2 px-5 ${isSidebarOpen ? 'justify-between' : ''} `}>
         <Link href="/becario/panel" className="flex justify-center w-full">
@@ -135,13 +128,31 @@ const Sidebar = () => {
           </button>
         </div>
       </div>
-      <div className="overflow-y-auto py-6 px-3 h-full">
+      <div className="flex flex-col gap-2 overflow-y-auto py-6 px-3 h-full">
+        <ul className="space-y-2">
+          <ScholarDropdownButton
+            Icon={dashboardComponent()}
+            buttonName='Panel general'
+            itemList={[]}
+            link={`/${SCHOLAR_PREFIX}/panel`}
+          />
+        </ul>
+        <SidebarSeparator text='Actividades' />
         <ul className="space-y-2">
           {SCHOLAR_SIDEBAR_ITEMS.map((item, index) => (
             <ScholarDropdownButton {...item} key={index} />
           ))}
         </ul>
-        <div className="p-4 mt-6 rounded-lg bg-emerald-100 dark:bg-emerald-900 dark:border-emerald-950 border-green-600">
+        <SidebarSeparator text='Otros componentes' />
+        <ul className="space-y-2">
+          <ScholarDropdownButton
+            Icon={<DocumentTextIcon />}
+            buttonName='Registro CVA'
+            itemList={[]}
+            link={`/${SCHOLAR_PREFIX}/cva`}
+          />
+        </ul>
+        <div className="p-4 mt-4 rounded-lg bg-emerald-100 dark:bg-emerald-900 dark:border-emerald-950 border-green-600">
           <div className="flex items-center mb-3">
             <span className=" text-emerald-800 text-sm font-bold rounded  dark:text-emerald-200">
               ¡Danos tu feedback!
