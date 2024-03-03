@@ -24,7 +24,7 @@ export const SpeakerCreationFormSchema = z.object({
     .refine((date) => new Date(date) <= new Date(), {
       message: 'La fecha no puede ser mayor a la actual',
     })
-    .optional(),
+    .optional().nullable(),
   years_of_exp: z.coerce.number().optional(),
   job_title: z.string().trim().optional(),
   job_company: z.string().trim().optional().nullable(),
