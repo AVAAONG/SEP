@@ -2,9 +2,9 @@ import { Avatar, Card, CardHeader } from '@nextui-org/react';
 import React from 'react';
 
 interface ISpeakerColumnWidgetCardProps {
-  speakerName: string;
-  speakerCompany: string;
-  speakerImage: string;
+  speakerName: string | null;
+  speakerCompany: string | null;
+  speakerImage: string | undefined;
 }
 
 export const SpeakerColumnWidgetCard: React.FC<ISpeakerColumnWidgetCardProps> = ({

@@ -57,7 +57,7 @@ const page = async ({
           )}
           <h2 className="text-xl font-semibold md:text-2xl">¡Entra!</h2>
           <div className="my-4">
-            <SigninForm callbackUrl="/becario/panel" cookieValue="SCHOLAR" />
+            <SigninForm callbackUrl={scholarCallbackUrl} cookieValue="SCHOLAR" />
           </div>
           <div className="inline-flex items-center justify-around w-full ">
             <hr className="w-40 h-px my-8 border-0 bg-primary-light opacity-40" />
@@ -66,7 +66,7 @@ const page = async ({
           </div>
           <div className="flex">
             <GoogleSignInButton
-              callbackUrl="/becario/panel"
+              callbackUrl={scholarCallbackUrl}
               providerId="userGoogle"
               cookieValue="SCHOLAR"
             />

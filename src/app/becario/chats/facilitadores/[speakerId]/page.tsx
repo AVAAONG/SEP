@@ -2,7 +2,6 @@ import defailProfilePic from '@/../public/defaultProfilePic.png';
 import NormalCard from '@/components/scholar/card/NormalCard';
 import Table from '@/components/table/Table';
 
-import SpeakerPageDropdown from '@/components/SpeakerPageDropdown';
 import ChartComponent from '@/components/charts/AreaChart';
 import singleChatSpeakerColumns from '@/components/table/columns/SinglechatSpeakerColumns';
 import { getChatSpeakersWithChats } from '@/lib/db/utils/speaker';
@@ -14,14 +13,7 @@ import {
   LinkedinIcon,
   TwitterIcon,
 } from '../../../../../../public/svgs/SocialNetworks';
-import {
-  CurriculumIcon,
-  EmailIcon,
-  PhoneIcon,
-  Star,
-  chatIcon,
-  workshopIcon,
-} from '../../../../../../public/svgs/svgs';
+import { Star, chatIcon, workshopIcon } from '../../../../../../public/svgs/svgs';
 
 const speakerSearchOptions = [
   {
@@ -114,7 +106,7 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
     {
       icon: Star,
       text: 'Calificación promedio',
-      number: 4.5,
+      number: 0,
       bg: 'from-yellow-500  to-yellow-700',
       cardButtonBg: 'bg-indigo-950 active:bg-blue-700 hover:bg-blue-700',
       activity: 'chats',
@@ -164,8 +156,7 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
               <div className="flex items-center justify-center gap-1 w-full">
                 <h1 className="text-2xl text-green-700 font-bold text-center flex items-center justify-center gap-2">
                   {first_names} {last_names}{' '}
-                </h1>{' '}
-                <SpeakerPageDropdown speaker={workshopSpeaker} />
+                </h1>
               </div>
               <span className="text-gray-400 dark:text-gray-300 font-semibold uppercase text-center w-full ">
                 {job_company}
@@ -174,7 +165,7 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
             {description && (
               <div className="flex flex-col justify-center items-center gap-2 sm:gap-1 sm:justify-start sm:items-start ">
                 <span className="text-base text-gray-400 dark:text-gray-300 font-semibold ">
-                  adsfknlkjdsa{' '}
+                  {description}
                 </span>
               </div>
             )}
@@ -191,34 +182,6 @@ const page = async ({ params }: { params: { speakerId: string } }) => {
                       {icon}
                     </Link>
                   )
-              )}
-            </div>
-            <div className="flex flex-col w-full text-sm gap-2 items-center justify-center">
-              {phone_number && (
-                <div className="w-full flex gap-2 items-center justify-center ">
-                  <div className="bg-gray-100 dark:bg-slate-600 p-2 w-9 rounded-full">
-                    <PhoneIcon />
-                  </div>
-                  <span>{phone_number}</span>
-                </div>
-              )}
-              {curriculum && (
-                <div className="w-full flex gap-2 items-center justify-center ">
-                  <div className="bg-gray-100 dark:bg-slate-600 p-2 w-9 rounded-full">
-                    <Link href={curriculum} target="_blank" className="w-6 block">
-                      <CurriculumIcon />
-                    </Link>
-                  </div>
-                  <span>Curriculum</span>
-                </div>
-              )}
-              {email && (
-                <div className="w-full flex gap-2 items-center justify-center">
-                  <div className="bg-gray-100 dark:bg-slate-600 p-2 w-9 rounded-full">
-                    <EmailIcon />
-                  </div>
-                  <span>{email}</span>
-                </div>
               )}
             </div>
           </div>

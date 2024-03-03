@@ -1,9 +1,9 @@
-import { ActivityStatus, Level, Modality, Skill } from '@prisma/client';
+import { ActivityStatus, CVASchedule, Level, Modality, Skill } from '@prisma/client';
 
 export const parseSkillFromDatabase = (skill: Skill) => {
   switch (skill) {
     case 'CITIZEN_EXERCISE':
-      return 'Ejercicio Ciudadano';
+      return 'Ejercicio ciudadano';
     case 'ENTREPRENEURSHIP':
       return 'Emprendimiento';
     case 'SELF_MANAGEMENT':
@@ -17,30 +17,52 @@ export const parseSkillFromDatabase = (skill: Skill) => {
   }
 };
 
-export const parseModalityFromDatabase = (modality: Modality) => {
+export const parseModalityFromDatabase = (modality: Modality | null) => {
   switch (modality) {
     case 'IN_PERSON':
       return 'Presencial';
     case 'ONLINE':
       return 'Virtual';
+    case 'HYBRID':
+      return 'Hibrida';
     default:
       return 'IN_PERSON';
+  }
+};
+
+export const parseCvaScheduleFromDatabase = (schedule: CVASchedule | null) => {
+  switch (schedule) {
+    case 'DIARY':
+      return 'Diario';
+    case 'INTERDIARY':
+      return 'Interdiario';
+    case 'SABATINO':
+      return 'Sabatino';
+    default:
+      return 'error';
+  }
+};
+
+export const parseKindOfVolunteerFromDatabase = (kindOfVolunteer: string) => {
+  switch (kindOfVolunteer) {
+    case 'INTERNAL':
+      return 'Interno';
+    case 'EXTERNAL':
+      return 'Externo';
+    default:
+      return 'INTERNAL';
   }
 };
 export const parseWorkshopStatusFromDatabase = (status: ActivityStatus) => {
   switch (status) {
     case 'ATTENDANCE_CHECKED':
       return 'Realizado';
-    case 'DONE':
-      return 'Asistencia no pasada';
     case 'SCHEDULED':
       return 'Programado';
     case 'SENT':
       return 'Enviado';
     case 'SUSPENDED':
       return 'Suspendido';
-    case 'IN_PROGRESS':
-      return 'En progreso';
   }
 };
 
@@ -56,7 +78,6 @@ export const parseChatLevelFromDatabase = (level: Level) => {
       return 'BASIC';
   }
 };
-
 
 export const parsePlatformFromDatabase = (platform: string) => {
   switch (platform) {
@@ -85,4 +106,23 @@ export const parsePlatformFromDatabase = (platform: string) => {
     default:
       return platform;
   }
-}
+};
+
+export const parseWorkshopKindFromDatabase = (kind: string) => {
+  switch (kind) {
+    case 'WORKSHOP':
+      return 'Taller';
+    case 'CINEMA_FORUM':
+      return 'Cine foro';
+    case 'FORUM':
+      return 'Foro';
+    case 'WEBINAR':
+      return 'Webinar';
+    case 'TALK':
+      return 'Charla';
+    case 'CONVERSATORIO':
+      return 'Conversatorio';
+    default:
+      return kind;
+  }
+};

@@ -70,6 +70,7 @@ export const handleEnrollment = async (
 ) => {
   if (kindOfActivity === 'workshop') await enroleScholarInWorkshop(activityId, scholarId);
   else if (kindOfActivity === 'chat') await enroleScholarInChat(activityId, scholarId);
+  revalidatePath('/becario/oferta');
   const result = await fetch(
     'https://script.google.com/macros/s/AKfycbzSiMKnlwygmcPdvdGvmeLlvXc_bcdm4tcWcpZ2H7QBbz-g3dBqxgFfzd_G44YaEeKkZA/exec',
     {
@@ -84,6 +85,5 @@ export const handleEnrollment = async (
       }),
     }
   );
-  revalidatePath('/becario/calendario')
   if (result.status !== 200) throw new Error('Error al inscribirte en la actividad');
 };

@@ -1,6 +1,6 @@
 'use client';
 import { IScholarWorkshopColumns } from '@/app/becario/actividadesFormativas/page';
-import DisplayTime from '@/components/DisplayTime';
+import DisplayDate from '@/components/DisplayDate';
 import ScholarAttendanceWidget from '@/components/ScholarAttendanceWidget';
 import SpeakersColumnWidget from '@/components/SpeakerColumnWidget';
 import {
@@ -26,7 +26,7 @@ const scholarWorkshopAttendanceColumns: Column<IScholarWorkshopColumns>[] = [
     accessor: 'title',
     Cell: ({ value, cell }) => (
       <Link href={cell.row.original.id ? `actividadesFormativas/${cell.row.original.id}` : ''}>
-        <div className="block text-center overflow-x-scroll">{value}</div>
+        <div className="block w-80 overflow-x-scroll">{value}</div>
       </Link>
     ),
   },
@@ -41,6 +41,7 @@ const scholarWorkshopAttendanceColumns: Column<IScholarWorkshopColumns>[] = [
           speakerIds={cell.row.original.speakerIds}
           speakersCompany={cell.row.original.speakerCompany}
           speakerImages={cell.row.original.speakerImages}
+          speakerKind={cell.row.original.speakerKind}
         />
       );
     },
@@ -50,9 +51,7 @@ const scholarWorkshopAttendanceColumns: Column<IScholarWorkshopColumns>[] = [
     Header: 'Fecha',
     accessor: 'start_dates',
     Cell: ({ value }) => {
-      return (
-        <DisplayTime time={value[0].toISOString()} />
-      )
+      return <DisplayDate date={value[0].toISOString()} kind="short" />;
     },
   },
   {
@@ -91,9 +90,8 @@ const scholarWorkshopAttendanceColumns: Column<IScholarWorkshopColumns>[] = [
     Header: 'Asistencia',
     accessor: 'attendance',
     Cell: ({ value }) => {
-      return (<ScholarAttendanceWidget value={value as ScholarAttendance} />)
+      return <ScholarAttendanceWidget value={value as ScholarAttendance} />;
     },
-    disableSortBy: true,
   },
   {
     Header: 'Modalidad',
@@ -103,16 +101,21 @@ const scholarWorkshopAttendanceColumns: Column<IScholarWorkshopColumns>[] = [
     },
   },
   {
-    Header: 'Plataforma',
-    accessor: 'platform',
-  },
-  {
     Header: 'Competencia',
     accessor: 'skill',
     Cell: ({ value }) => {
       return <span>{parseSkillFromDatabase(value)}</span>;
     },
   },
+  {
+    Header: 'Plataforma',
+    accessor: 'platform',
+    Cell: ({ value }) => {
+      return <div className='block overflow-x-scroll w-28'>{value}</div>;
+    },
+    disableSortBy: true,
+  },
+
   //   {
   //     Header: 'Satisfacción',
   //     accessor: 'rating',

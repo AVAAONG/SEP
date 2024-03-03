@@ -55,11 +55,10 @@ function Table<T extends object>({
 
   return (
     <div
-      className={`${
-        isExpanded
-          ? 'absolute h-full top-0 bottom-0 left-0 right-0 z-50 min-h-full'
-          : 'relative overflow-hidden '
-      }  bg-white shadow-md shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full min-h-max`}
+      className={`${isExpanded
+        ? 'absolute top-0  left-0 right-0 z-50 '
+        : 'relative overflow-hidden min-h-max shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full'
+        }  bg-white shadow-md `}
     >
       <TableHeader
         optionsForFilter={tableHeadersForSearch}
@@ -121,7 +120,7 @@ function Table<T extends object>({
                       <td
                         key={key}
                         {...restCellProps}
-                        className="px-4 py-1 whitespace-nowrap lowecase capitalize"
+                        className="px-4 py-1 whitespace-nowrap lowecase"
                       >
                         {cell.render('Cell')}
                       </td>

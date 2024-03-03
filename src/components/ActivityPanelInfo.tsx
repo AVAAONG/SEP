@@ -3,9 +3,9 @@ import defailProfilePic from '@/../public/defaultProfilePic.png';
 import { ChatWithSpeaker, WorkshopWithSpeaker } from '@/lib/db/types';
 import { parsePlatformFromDatabase } from '@/lib/utils2';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
-import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
+import DisplayDate from './DisplayDate';
 import DisplayTime from './DisplayTime';
 import ActivityStatusIndicator from './table/ActivityStatus';
 
@@ -30,7 +30,7 @@ const ActivityPanelInfo: React.FC<ActivityPanelInfoProps> = ({ activity, childre
   } = activity;
   return (
     <section className="flex flex-col md:flex-row gap-4 md:gap-0 rounded-lg bg-white dark:bg-gray-900 p-8 ">
-      <div className="space-y-3 w-full md:w-1/2 ">
+      <div className="space-y-3 w-full lg:w-1/2 ">
         <div className="flex flex-col space-y-2 ">
           <div className="flex gap-2 items-center">
             <div className="w-fit font-medium px-2">
@@ -55,7 +55,9 @@ const ActivityPanelInfo: React.FC<ActivityPanelInfoProps> = ({ activity, childre
                 >
                   <div className="space-y-sm">
                     <h3 className="text-sm leading-6 text-secondary">Fecha {index + 1}:</h3>
-                    <p className="text-base font-semibold">{moment(date).format('L')}</p>
+                    <p className="text-base font-semibold">
+                      <DisplayDate date={date.toISOString()} />
+                    </p>
                   </div>
                   <div className="space-y-sm">
                     <h3 className="text-sm leading-6 text-secondary">
@@ -84,24 +86,25 @@ const ActivityPanelInfo: React.FC<ActivityPanelInfoProps> = ({ activity, childre
             <p className="text-base font-semibold capitalize">
               {parsePlatformFromDatabase(platform)}
             </p>
-            {meeting_id.map((id, index) => (
-              <div>
-                <div className="flex gap-3">
-                  <p className="font-bold">Link de la reunion</p>
-                  <Link href={meeting_link[index]}>
-                    <ArrowTopRightOnSquareIcon className="h-5 w-5 text-primary-light cursor-pointer" />
-                  </Link>
+            {meeting_id?.[0]?.length > 0 &&
+              meeting_id?.map((id, index) => (
+                <div>
+                  <div className="flex gap-3">
+                    <p className="font-bold">Link de la reunion</p>
+                    <Link href={meeting_link[index]}>
+                      <ArrowTopRightOnSquareIcon className="h-5 w-5 text-primary-light cursor-pointer" />
+                    </Link>
+                  </div>
+                  <div className="flex gap-3">
+                    <p className="font-bold">Id de la reunion</p>
+                    <p>{id}</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <p className="font-bold">Contraseña de la reunion</p>
+                    <p>{meeting_password[index]}</p>
+                  </div>
                 </div>
-                <div className="flex gap-3">
-                  <p className="font-bold">Id de la reunion</p>
-                  <p>{id}</p>
-                </div>
-                <div className="flex gap-3">
-                  <p className="font-bold">Contraseña de la reunion</p>
-                  <p>{meeting_password[index]}</p>
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
           <div className="space-y-1">
             {description && (

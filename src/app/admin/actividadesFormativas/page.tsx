@@ -312,7 +312,7 @@ const page = async ({
       <div className="w-full  rounded-lg bg-white">
         <MixedAreaChartComponent areaSeries={areaSeries} barSeries={barSeries} />
       </div>
-      <div className="w-full flex h-80 gap-6 justify-center items-center rounded-lg bg-white">
+      <div className="w-full grid md:grid-cols-3 p-4 gap-6 justify-center items-center rounded-lg bg-white">
         <div>
           <h3 className="truncate font-semibold text-center text-sm">
             Distribucion de actividades segun su nivel

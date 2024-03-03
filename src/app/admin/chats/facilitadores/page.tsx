@@ -58,6 +58,11 @@ const toSelect: Prisma.SpeakerSelect = {
 const page = async () => {
   const chatSpeakers = await getChatSpeakersWithParams(toSelect);
   const scholars = await prisma.scholar.findMany({
+    where: {
+      program_information: {
+        is_chat_speaker: false,
+      },
+    },
     orderBy: {
       first_names: 'asc',
     },

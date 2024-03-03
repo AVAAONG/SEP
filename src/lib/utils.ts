@@ -1,10 +1,10 @@
 import { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
 import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
 import { BigCalendarEventType } from '@/types/Calendar';
-import { Chat, Workshop } from '@prisma/client';
+import { ActivityStatus, Chat, KindOfSpeaker, Workshop } from '@prisma/client';
 import { headers } from 'next/headers';
 import { ACTIVITIES_CALENDAR_COLORS } from './constants';
-import { parseModalityFromDatabase } from './utils2';
+import { parseChatLevelFromDatabase, parseModalityFromDatabase, parsePlatformFromDatabase, parseSkillFromDatabase } from './utils2';
 
 export const createArrayFromObject = (object: Record<string, number>) => {
   const array = Object.entries(object)
@@ -101,57 +101,85 @@ export const reduceByProperty = <T extends Record<string, any>, D extends Record
   return reducedValues;
 };
 
-export const formatActivityEventsForBigCalendarEnrlled = (
+
+export interface ActivitiesForEnrollement {
+  id: string;
+  title: string;
+  modality: string
+  platform: string;
+  description: string | null;
+  kindOfActivity: 'workshop' | 'chat';
+  eventId: string;
+  isFull: boolean;
+  avalibleSpots: number;
+  enrolledScholars: number;
+  allDay: boolean;
+  start: Date;
+  end: Date;
+  bgColor: string;
+  activityStatus: ActivityStatus;
+  speakerNames: string[]
+  speakerImages: (string | undefined)[];
+  speakerIds: string[]
+  speakerCompany: (string | null)[];
+  speakerKind: (KindOfSpeaker | null)[];
+  activityLink: string;
+  level: string | null;
+  year: string | null;
+  skill: string | null;
+}
+
+
+export const formatActivitiesForEnrollement = (
   activities: (WorkshopWithAllData | ChatsWithAllData)[]
-): any[] => {
+): ActivitiesForEnrollement[] => {
   return activities.flatMap((activity) => {
-    const { id, title, start_dates, end_dates, description, modality, activity_status } = activity;
-    let colors;
-    let eventUrl: string;
-    let kindOfActivity: string;
-    if ('year' in activity) {
-      colors = ACTIVITIES_CALENDAR_COLORS.find((activity) => activity.activity === 'workshop');
-      eventUrl = getActivityUrl(id, 'actividadesFormativas');
-      kindOfActivity = 'workshop';
-    } else if ('level' in activity) {
-      colors = ACTIVITIES_CALENDAR_COLORS.find((activity) => activity.activity === 'chat');
-      eventUrl = getActivityUrl(id, 'chats');
-      kindOfActivity = 'chat';
-    }
+    const { id, title, start_dates, end_dates, description, modality, activity_status, platform, avalible_spots, calendar_ids } = activity;
+    const kindOfActivity: 'chat' | 'workshop' = 'level' in activity ? 'chat' : 'workshop';
+    const colors = ACTIVITIES_CALENDAR_COLORS.find((activity) => activity.activity === kindOfActivity);
+    const eventUrl = getActivityUrl(id, kindOfActivity === 'workshop' ? 'actividadesFormativas' : 'chats', 'scholar');
     const bgColor = getBgColor(colors, activity_status);
-    const eventModalityTitle = parseModalityFromDatabase(modality);
-    const isFull = activity.scholar_attendance.length >= activity.avalible_spots;
-    return start_dates.map((startDate, index) => ({
-      id: id,
-      originalTitle: title,
-      modality,
+    const enrolledCount = (activity.scholar_attendance as { attendance: string }[]).filter((a) => a.attendance === 'ENROLLED' || a.attendance === 'ATTENDED' || a.attendance === 'NOT_ATTENDED').length;
+    const isFull = enrolledCount >= activity.avalible_spots;
+    const speakerNames: string[] = [];
+    const speakerImages: (string | undefined)[] = [];
+    const speakerIds: string[] = [];
+    const speakerCompany: (string | null)[] = [];
+    const speakerKind: (KindOfSpeaker | null)[] = [];
+
+    activity.speaker.forEach((speaker) => {
+      speakerNames.push(`${speaker.first_names.split(' ')[0]} ${speaker.last_names.split(' ')[0]}`);
+      speakerImages.push(speaker.image || undefined);
+      speakerIds.push(speaker.id);
+      speakerCompany.push(speaker.job_company);
+      speakerKind.push(speaker.speaker_kind);
+    });
+
+    return {
+      id,
+      title,
+      modality: parseModalityFromDatabase(modality),
+      platform: parsePlatformFromDatabase(platform),
+      description,
       kindOfActivity,
-      eventId: activity.calendar_ids[0],
-      skill: activity.asociated_skill,
+      eventId: calendar_ids[0],
       isFull,
-      attendees: activity.scholar_attendance.length,
-      spots: activity.avalible_spots,
-      year: activity.year,
-      platform: activity.platform,
-      level: activity.level,
-      enrolledCount: activity.scholar_attendance.length,
-      title:
-        index > 0
-          ? `(${eventModalityTitle}) ${title} (${index + 1})`
-          : `(${eventModalityTitle}) ${title}`,
+      avalibleSpots: avalible_spots - enrolledCount,
+      enrolledScholars: enrolledCount,
       allDay: false,
-      start: new Date(startDate),
-      end: new Date(end_dates[index] || end_dates[0]),
-      description: description as string,
+      start: new Date(start_dates[0]),
+      end: new Date(end_dates[0]),
       bgColor,
-      isSuspended: activity_status === 'SUSPENDED',
-      url: eventUrl,
-      speakerNames: activity.speaker.map(
-        (speaker) => `${speaker.first_names.split(' ')[0]} ${speaker.last_names.split(' ')[0]}`
-      ),
-      speakerImages: activity.speaker.map((speaker) => speaker.image),
-      speakerIds: activity.speaker.map((speaker) => speaker.id),
-      speakersCompany: activity.speaker.map((speaker) => speaker.job_company),
-    }));
+      activityStatus: activity_status,
+      speakerNames,
+      speakerImages,
+      speakerIds,
+      speakerCompany,
+      speakerKind,
+      activityLink: eventUrl,
+      level: 'level' in activity ? parseChatLevelFromDatabase(activity.level) : null,
+      year: 'year' in activity ? activity.year.length > 4 ? 'Todos' : activity.year.join(', ') : null,
+      skill: 'year' in activity ? parseSkillFromDatabase(activity.asociated_skill) : null,
+    }
   });
 };

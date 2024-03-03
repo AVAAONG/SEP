@@ -31,6 +31,8 @@
     "prisma:import": "rm ./src/lib/db/prisma/schema.prisma && pnpm prisma-import --schemas=./src/lib/db/prisma/**/*.prisma --output=./src/lib/db/prisma/schema.prisma && pnpm prisma:format"
   },
   "dependencies": {
+    "@azure/identity": "^4.0.1",
+    "@azure/storage-blob": "^12.17.0",
     "@googleapis/calendar": "^4.1.0",
     "@googleapis/drive": "^5.1.0",
     "@googleapis/forms": "^2.0.5",

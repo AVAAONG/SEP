@@ -1,121 +1,157 @@
 'use client';
-import BasicModal from '@/components/BasicModal';
-import { enrrrollScholarToWorkshop } from '@/lib/db/utils/Workshops';
+import { createEnrollementConfirmationMessage } from '@/lib/htmlConfirmationTemplate';
+import { sendGenericEmail } from '@/lib/sendEmails';
+import { handleEnrollment } from '@/lib/serverAction';
+import { ActivitiesForEnrollement } from '@/lib/utils';
 import {
   CalendarDaysIcon,
   ClockIcon,
   InformationCircleIcon,
   MapPinIcon,
+  UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import { Avatar } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Tooltip, useDisclosure } from '@nextui-org/react';
-import { workshopIcon } from 'public/svgs/svgs';
-import React from 'react';
-import { ChatsWithAllData } from './table/columns/chatsColumns';
-import { WorkshopWithAllData } from './table/columns/workshopColumns';
+import Link from 'next/link';
+import { chatIcon, workshopIcon } from 'public/svgs/svgs';
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+import BasicModal from './BasicModal';
+import DisplayDate from './DisplayDate';
+import DisplayTime from './DisplayTime';
 
 interface EnrrollActivitiCardProps {
-  activity: WorkshopWithAllData | ChatsWithAllData;
-  scholarId: string;
+  activity: ActivitiesForEnrollement;
+  scholar: {
+    id: string;
+    name: string;
+    email: string;
+  };
 }
 
-const EnrrollActivitiCard: React.FC<EnrrollActivitiCardProps> = ({ activity, scholarId }) => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const speakers = activity.speaker.map((speaker) => {
-    const firstNames = speaker.first_names.split(' ');
-    const lastNames = speaker.last_names.split(' ');
-    return `${firstNames[0]} ${lastNames[0]}`;
-  });
-  const startDates = activity.start_dates.map((date) => new Date(date));
-  const endDates = activity.end_dates.map((date) => new Date(date));
-  const enrrollScholar = async () => {
-    await enrrrollScholarToWorkshop(activity.id, scholarId);
+const EnrrollActivitiCard: React.FC<EnrrollActivitiCardProps> = ({ activity, scholar }) => {
+  const {
+    kindOfActivity,
+    start,
+    end,
+    modality,
+    platform,
+    speakerNames,
+    year,
+    title,
+    skill,
+    avalibleSpots,
+    level,
+    isFull,
+    id,
+    eventId,
+  } = activity;
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+
+  const [isCharging, setIsCharging] = useState(false);
+  const isDisabled = () => {
+    if (new Date(start!) <= new Date()) return true;
+    else if (isFull) return true;
+    else return false;
   };
+
   return (
     <>
-      <Card className="min-w-[300px]" radius="sm">
-        <CardHeader className="justify-between w-full">
-          <div className="flex items-center gap-3 ">
-            <div>
-              <Avatar
-                icon={workshopIcon()}
-                radius="md"
-                size="md"
-                classNames={{
-                  icon: 'bg-blue-500 text-white border-blue-500 p-1',
-                  base: 'border-blue-500',
-                  img: 'border-blue-500',
-                }}
-              />
+      <Card className="min-w-[350px] max-w-[350px]" radius="sm">
+        <CardHeader className="justify-between">
+          <Link
+            className="max-w-fit truncate"
+            href={`/becario/${
+              kindOfActivity === 'workshop' ? 'actividadesFormativas' : 'chats'
+            }/${id}`}
+          >
+            <div className="flex items-center gap-3 max-w-fit truncate">
+              <div>
+                <Avatar
+                  icon={'asociated_skill' in activity ? workshopIcon() : chatIcon()}
+                  radius="sm"
+                  size="md"
+                  classNames={{
+                    icon: `${
+                      kindOfActivity === 'workshop'
+                        ? ' border-blue-500 bg-blue-500'
+                        : 'border-red-500 bg-red-500'
+                    } text-white p-1`,
+                    base: `${
+                      kindOfActivity === 'workshop' ? ' border-blue-500 ' : 'border-red-500 '
+                    }`,
+                    img: `${
+                      kindOfActivity === 'workshop' ? ' border-blue-500 ' : 'border-red-500 '
+                    }`,
+                  }}
+                />
+              </div>
+              <div className="flex flex-col gap-1 items-start justify-center">
+                <Tooltip content={title}>
+                  <h3 className="text-small font-semibold leading-none  text-ellipsis">{title}</h3>
+                </Tooltip>
+                <h4 className="text-small tracking-tight text-default-400">Por: {speakerNames}</h4>
+              </div>
             </div>
-            <div className="flex flex-col gap-1 items-start justify-center">
-              <h3 className="text-small font-semibold leading-none text-default-600">
-                {activity.title}
-              </h3>
-              <h4 className="text-small tracking-tight text-default-400">
-                Por: {speakers.join(', ')}
-              </h4>
-            </div>
-          </div>
+          </Link>
         </CardHeader>
         <CardBody className="flex flex-col gap-2 px-3 py-2  text-tiny">
           <div className="flex gap-1">
             <CalendarDaysIcon className="w-4 h-4 " />
             <h5 className=" tracking-tight text-default-400">
-              {startDates[0].toLocaleDateString('es-ES', {
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric',
-              })}
+              <DisplayDate date={start.toISOString()} />
             </h5>
           </div>
           <div className="flex gap-1">
             <ClockIcon className="w-4 h-4" />
             <h5 className=" tracking-tight text-default-400">
-              {' '}
-              {startDates[0].toLocaleTimeString('es-ES', {
-                hour: 'numeric',
-                minute: 'numeric',
-                hour12: true,
-              })}{' '}
-              a{' '}
-              {endDates[0].toLocaleTimeString('es-ES', {
-                hour: 'numeric',
-                minute: 'numeric',
-                hour12: true,
-              })}
+              <DisplayTime time={start.toISOString()} /> a <DisplayTime time={end.toISOString()} />
+            </h5>
+          </div>
+          <div className="flex gap-1">
+            <UserCircleIcon className="w-4 h-4" />
+            <h5 className="tracking-tight text-default-400">
+              {avalibleSpots === 0
+                ? 'No hay cupos disponibles :('
+                : `${avalibleSpots} cupos disponibles`}{' '}
             </h5>
           </div>
           <div className="flex gap-1">
             <div className="flex gap-1">
               <MapPinIcon className="w-4 h-4 " />
-              <h5 className="tracking-tight text-default-400">{activity.modality}</h5>
+              <h5 className="tracking-tight text-default-400">{modality}</h5>
             </div>
             <div className="flex gap-1">
               <MapPinIcon className="w-4 h-4" />
-              <h5 className="tracking-tight text-default-400">{activity.platform}</h5>
+              <h5 className="tracking-tight text-default-400">{platform}</h5>
             </div>
           </div>
         </CardBody>
-        {'asociated_skill' in activity ? (
+        {kindOfActivity === 'workshop' ? (
           <CardFooter className="justify-between">
             <div className="flex flex-col space-y-1 text-tiny">
               <div className="flex gap-1.5">
                 <Tooltip content="Año de la actividad formativa">
                   <InformationCircleIcon className="w-4 h-4 " />
                 </Tooltip>
-                <h5 className=" tracking-tight text-default-400">{activity.year.join(', ')}</h5>
+                <h5 className=" tracking-tight text-default-400">{year}</h5>
               </div>
               <div className="flex gap-1.5">
                 <Tooltip content="Competencia asociada">
                   <InformationCircleIcon className="w-4 h-4 " />
                 </Tooltip>
-                <h5 className=" tracking-tight text-default-400">{activity.asociated_skill}</h5>
+                <h5 className=" tracking-tight text-default-400">{skill}</h5>
               </div>
             </div>
-            <Button onPress={onOpen} className="bg-blue-500 text-white" radius="full" size="sm">
+            <Button
+              isDisabled={isDisabled()}
+              onPress={onOpen}
+              className="bg-blue-500 text-white"
+              radius="full"
+              size="sm"
+            >
               ¡Inscribirse!
             </Button>
           </CardFooter>
@@ -126,10 +162,16 @@ const EnrrollActivitiCard: React.FC<EnrrollActivitiCardProps> = ({ activity, sch
                 <Tooltip content="Nivel del chat">
                   <InformationCircleIcon className="w-4 h-4 " />
                 </Tooltip>
-                <h5 className=" tracking-tight text-default-400">{activity.level}</h5>
+                <h5 className="tracking-tight text-default-400">{level}</h5>
               </div>
             </div>
-            <Button onPress={onOpen} className="bg-red-500 text-white" radius="full" size="sm">
+            <Button
+              isDisabled={isDisabled()}
+              onPress={onOpen}
+              className="bg-red-500 text-white"
+              radius="full"
+              size="sm"
+            >
               ¡Inscribirse!
             </Button>
           </CardFooter>
@@ -138,28 +180,37 @@ const EnrrollActivitiCard: React.FC<EnrrollActivitiCardProps> = ({ activity, sch
       <BasicModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        title="Confirmación de inscripción"
-        Content={() => {
-          return (
-            <div className="w-full flex flex-col gap-4 text-sm">
-              <h1 className="text-center font-bold">
-                ¿Estas seguro que quires inscribirte en la actividad de {activity.title}?
-              </h1>
-              <p>
-                👀 Recuerda, inscribirse es un compromiso que adquieres con AVAA y contigo mismo.
-              </p>
-              <p>
-                Al inscribirte, te comprometes a asistir a la actividad y cumplir con las
-                responsabilidades y obligaciones que se te asignen.
-              </p>
+        title="¿Estas seguro de que deseas inscribirte en esta actividad?"
+        Content={() => (
+          <>
+            <div>
+              Al inscribirte te comprometes a asistir, participar activamente y cumplir con las
+              responsabilidades y obligaciones que se te asignen en la actividad.
             </div>
-          );
-        }}
-        isButtonDisabled={false}
+            <div>Recuerda, tu participación es vital para el éxito de la actividad. ✨ </div>
+          </>
+        )}
+        isButtonDisabled={isFull || isCharging}
         onConfirm={async () => {
-          await enrrollScholar();
+          setIsCharging(true);
+          toast.promise(handleEnrollment(id, scholar.id, eventId, kindOfActivity, scholar.email), {
+            pending: 'Confirmando',
+            success: 'Inscripción exitosa',
+            error: 'Error al inscribirte en la actividad. Inténtalo de nuevo más tarde.',
+          });
+          await sendGenericEmail(
+            createEnrollementConfirmationMessage(
+              scholar.name,
+              `www.programaexcelencia.org/becario/actividadesFormativas/${id}`,
+              title
+            ),
+            scholar.email,
+            'Confirmación de inscripción'
+          );
+          onClose();
+          setIsCharging(false);
         }}
-        confirmText="Confirmar inscripción"
+        confirmText="Confirmar Inscripción"
       />
     </>
   );

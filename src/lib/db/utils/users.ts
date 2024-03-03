@@ -33,6 +33,17 @@ export const createUser = async (data: User): Promise<User> => {
   return user;
 };
 
+
+export const updateUsesr = async (image: string) => {
+  console.log('image', image);
+  await prisma.user.update({
+    where: { id: 'mm,,,,' },
+    data: {
+      image: image
+    },
+  });
+}
+
 /**
  * Delete all scholars from the database
  * @param dat
@@ -296,7 +307,7 @@ export const getScholarByEmail = async (email: string) => {
 };
 
 export const getScholarDoneActivitiesCount = async (scholar_id: string, year: number) => {
-  const [allWorkshops, allChats] = await prisma.$transaction([
+  const [allWorkshops, allChats, allVolunteers] = await prisma.$transaction([
     prisma.workshopAttendance.findMany({
       where: {
         AND: [
@@ -359,6 +370,28 @@ export const getScholarDoneActivitiesCount = async (scholar_id: string, year: nu
         ],
       },
     }),
+    prisma.volunteerAttendance.findMany({
+      where: {
+        AND: [
+          {
+            scholar: {
+              scholarId: scholar_id,
+            },
+          },
+          {
+            attendance: 'ATTENDED',
+          },
+          {
+            volunteer: {
+              status: 'APPROVED'
+            }
+          }
+        ],
+      },
+      include: {
+        volunteer: true
+      }
+    }),
   ]);
 
   const yearStart = new Date(year, 0, 1);
@@ -370,11 +403,14 @@ export const getScholarDoneActivitiesCount = async (scholar_id: string, year: nu
   const chats = allChats.filter((chat) =>
     chat.start_dates.some((date) => date >= yearStart && date <= yearEnd)
   ).length;
-  // const volunteers = allVolunteers.filter((volunteer) =>
-  //   volunteer.start_dates.some((date) => date >= yearStart && date <= yearEnd)
-  // );
+  const volunteers = allVolunteers.filter((volunteer) =>
+    volunteer.volunteer.start_dates.some((date) => date >= yearStart && date <= yearEnd)
+  );
+  const totalVolunteerAsignedHours = volunteers.reduce((acc, volunteer) => {
+    return acc + volunteer.asigned_hours;
+  }, 0);
 
-  return [workshops, chats];
+  return [workshops, chats, totalVolunteerAsignedHours];
 };
 
 export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) => {
@@ -423,7 +459,6 @@ export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) =>
                   some: {
                     attendance: 'ENROLLED',
                   },
-
                 },
 
               },
@@ -532,7 +567,7 @@ export type ScholarsInProbationByYearReturnType = Prisma.PromiseReturnType<
 // enviamos un correo de confirmacion.
 
 
-export const ceaseSpotInWorkshop = async (attendanceId: string, scholarId: string, activityId: string, scholarIdToCease: string) => {
+export const ceaseSpotInWorkshop = async (attendanceId: string, activityId: string, scholarIdToCease: string) => {
   await prisma.$transaction(async (prisma) => {
     const existingAttendance = await prisma.workshopAttendance.findFirst({
       where: {
@@ -579,7 +614,7 @@ export const ceaseSpotInWorkshop = async (attendanceId: string, scholarId: strin
   revalidatePath('/admin/actividadesFormativas/[workshopId]', 'page')
 }
 
-export const ceaseSpotInChat = async (attendanceId: string, scholarId: string, activityId: string, scholarIdToCease: string) => {
+export const ceaseSpotInChat = async (attendanceId: string, activityId: string, scholarIdToCease: string) => {
 
   await prisma.$transaction(async (prisma) => {
     const existingAttendance = await prisma.chatAttendance.findFirst({
@@ -686,6 +721,72 @@ export const getScholar = async (id: string) => {
     where: {
       id,
     },
+    include: {
+      collage_information: true,
+      job_information: true,
+    }
+  });
+  return scholar;
+}
+
+export type ScholarWithCollageAndJob = Prisma.PromiseReturnType<
+  typeof getScholar
+>;
+
+
+
+export const updateScholar = async (id: string, data: Prisma.ScholarUpdateInput) => {
+  const scholar = await prisma.scholar.update({
+    where: {
+      id,
+    },
+    data,
+  });
+  return scholar;
+}
+
+export const updateScholarCollageInformation = async (id: string, data: Prisma.ScholarCollageInformationUpdateInput) => {
+  const scholar = await prisma.scholarCollageInformation.update({
+    where: {
+      scholar_id: id,
+    },
+    data: data
+  });
+  return scholar;
+}
+
+export const updateScholarJobInformation = async (scholarId: string, data: Prisma.JobInformationUpdateInput, jobInformationId: string) => {
+  if (jobInformationId) {
+    await prisma.jobInformation.update({
+      where: {
+        scholar_id: scholarId,
+      },
+      data: data
+    });
+  }
+  else {
+    await prisma.jobInformation.create({
+      data: {
+        ...data,
+        scholar_id: scholarId
+      },
+    });
+  }
+}
+
+export const updateProfilePicture = async (id: string, image: string | null) => {
+  const scholar = await prisma.scholar.update({
+    where: {
+      id,
+    },
+    data: {
+      photo: image,
+      user: {
+        update: {
+          image: image
+        }
+      }
+    }
   });
   return scholar;
 }

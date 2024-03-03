@@ -1,6 +1,7 @@
 import { Tooltip } from '@nextui-org/tooltip';
 import { Chat, Volunteer, Workshop } from '@prisma/client';
 import Link from 'next/link';
+import DisplayDate from './DisplayDate';
 import DisplayTime from './DisplayTime';
 import ActivityListIcon from './scholar/dashboard/ActivityListIcon';
 
@@ -29,7 +30,7 @@ const NextEventsList = ({ activities }: { activities: (Workshop | Chat | Volunte
               }
               return (
                 <li className="py-2.5 overflow-hidden" key={index}>
-                  <Link href={link}>
+                  <Link href={link} target='_self'>
                     <div className="flex items-center w-full">
                       <ActivityListIcon kindOfActivity={kindOfActivity(activity)} />
                       <div className="flex flex-col ml-2">
@@ -54,11 +55,10 @@ const NextEventsList = ({ activities }: { activities: (Workshop | Chat | Volunte
                             />
                           </svg>
                           <span className="ml-1 text-gray-500 dark:text-gray-400">
-                            {activity.start_dates[0]?.toLocaleDateString('es-ES', {
-                              day: 'numeric',
-                              month: 'short',
-                              year: 'numeric',
-                            })}
+                            <DisplayDate
+                              date={activity.start_dates[0]?.toISOString()}
+                              kind="short"
+                            />
                           </span>
                           <span className="ml-1 text-gray-500 dark:text-gray-400">
                             <DisplayTime time={activity.start_dates[0].toISOString()} />

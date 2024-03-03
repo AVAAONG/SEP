@@ -1,7 +1,6 @@
 'use client';
-import defailProfilePic from '@/../public/defaultProfilePic.png';
+import { Avatar } from '@nextui-org/react';
 import { signOut } from 'next-auth/react';
-import Image from 'next/image';
 import { useState } from 'react';
 interface ProfileDropdownProps {
   name: string | null | undefined;
@@ -15,14 +14,14 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
   const toggleDropdownProfile = () => setDropdownProfile(!isDrowpdownProfileOpen);
 
   const { name, email, image, type } = props;
-
+  const imaged = image;
   return (
     <>
       <button onClick={toggleDropdownProfile} type="button" className="flex text-sm rounded-full">
         <span className="sr-only">Abrir menu de usuario</span>
-        <Image
+        <Avatar
           className="w-10 h-10 rounded-full border border-green-800"
-          src={image === '/' ? image : defailProfilePic}
+          src={imaged}
           alt="user photo"
           width={50}
           height={50}

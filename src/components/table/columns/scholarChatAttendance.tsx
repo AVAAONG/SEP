@@ -1,16 +1,17 @@
 'use client';
-import { ScholarChatColumnT } from '@/app/admin/becarios/[scholarId]/page';
-import DisplayTime from '@/components/DisplayTime';
+import { IScholarChatColumns } from '@/app/becario/chats/page';
+import DisplayDate from '@/components/DisplayDate';
 import ScholarAttendanceWidget from '@/components/ScholarAttendanceWidget';
-import { parseModalityFromDatabase, parseWorkshopStatusFromDatabase } from '@/lib/utils2';
+import SpeakersColumnWidget from '@/components/SpeakerColumnWidget';
 import { ScholarAttendance } from '@prisma/client';
 import Link from 'next/link';
 import { CellProps, Column } from 'react-table';
+import ActivityStatusIndicator from '../ActivityStatus';
 
-const scholarChatAttendaceColumns: Column<ScholarChatColumnT>[] = [
+const scholarChatAttendaceColumns: Column<IScholarChatColumns>[] = [
   {
     Header: '#',
-    Cell: ({ cell }: CellProps<ScholarChatColumnT>) => {
+    Cell: ({ cell }: CellProps<IScholarChatColumns>) => {
       return <span>{cell.row.index + 1}</span>;
     },
     disableSortBy: true,
@@ -20,17 +21,32 @@ const scholarChatAttendaceColumns: Column<ScholarChatColumnT>[] = [
     accessor: 'title',
     Cell: ({ value, cell }) => (
       <Link href={cell.row.original.id ? `chats/${cell.row.original.id}` : ''}>
-        <div className="block text-center overflow-x-scroll">{value}</div>
+        <div className="block w-80 text-center overflow-x-scroll">{value}</div>
       </Link>
     ),
+  },
+
+  {
+    Header: 'Facilitador',
+    accessor: 'speakerNames',
+    Cell: ({ cell, value }) => {
+      return (
+        <SpeakersColumnWidget
+          speakerNames={value}
+          speakerIds={cell.row.original.speakerIds}
+          speakersCompany={cell.row.original.speakerCompany}
+          speakerImages={cell.row.original.speakerImages}
+          speakerKind={cell.row.original.speakerKind}
+        />
+      );
+    },
+    disableSortBy: true,
   },
   {
     Header: 'Fecha',
     accessor: 'start_dates',
     Cell: ({ value }) => {
-      return (
-        <DisplayTime time={value[0].toISOString()} />
-      )
+      return <DisplayDate date={value[0].toISOString()} kind="short" />;
     },
   },
   {
@@ -50,65 +66,26 @@ const scholarChatAttendaceColumns: Column<ScholarChatColumnT>[] = [
   {
     Header: 'Estatus',
     accessor: 'activity_status',
-    Cell: ({ cell }: CellProps<ScholarChatColumnT>) => {
-      const workshopStatus = parseWorkshopStatusFromDatabase(cell.value);
-      if (cell.value === 'SUSPENDED') {
-        return (
-          <span className="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-            {workshopStatus}
-          </span>
-        );
-      } else if (cell.value === 'DONE') {
-        return (
-          <span className="inline-flex items-center bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
-            {workshopStatus}
-          </span>
-        );
-      } else if (cell.value === 'ATTENDANCE_CHECKED') {
-        return (
-          <span className="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-green-900 dark:text-green-300">
-            {workshopStatus}
-          </span>
-        );
-      } else if (
-        cell.value === 'SCHEDULED' ||
-        cell.value === 'SENT' ||
-        cell.value === 'IN_PROGRESS'
-      ) {
-        return (
-          <span className="inline-flex items-center bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-blue-900 dark:text-blue-300">
-            Programado
-          </span>
-        );
-      } else {
-        return (
-          <span className="inline-flex items-center bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-gray-900 dark:text-gray-300">
-            Error
-          </span>
-        );
-      }
-    },
+    Cell: ({ value }) => <ActivityStatusIndicator status={value} />,
     disableSortBy: true,
   },
   {
     Header: 'Asistencia',
     accessor: 'attendance',
-    Cell: ({ value }) => {
-      return (<ScholarAttendanceWidget value={value as ScholarAttendance} />)
-    },
+    Cell: ({ value }) => <ScholarAttendanceWidget value={value as ScholarAttendance} />,
     disableSortBy: true,
   },
   {
     Header: 'Modalidad',
     accessor: 'modality',
-    Cell: ({ cell }: CellProps<ScholarChatColumnT>) => {
-      return <span>{parseModalityFromDatabase(cell.value)}</span>;
-    },
     disableSortBy: true,
   },
   {
     Header: 'Plataforma',
     accessor: 'platform',
+    Cell: ({ value }) => {
+      return <div className='block overflow-x-scroll w-28'>{value}</div>;
+    },
     disableSortBy: true,
   },
   // {

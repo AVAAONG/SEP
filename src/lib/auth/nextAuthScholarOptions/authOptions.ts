@@ -72,10 +72,10 @@ const authOptions: NextAuthOptions = {
     },
     session: async ({ session, token }) => {
       return {
-        scholarId: token.scholarId,
         userId: token.userId,
-        kind_of_user: 'SCHOLAR',
         ...session,
+        scholarId: token.scholarId,
+        kind_of_user: 'SCHOLAR',
       };
     },
     jwt: ({ token, user, account, profile }) => {

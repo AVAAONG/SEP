@@ -1,15 +1,8 @@
+import scholarInfoSchema from "@/lib/schemas/scholar/scholarGeneralInformationSchema";
+
 type GeneralInformationInputData = {
   label: string;
-  id:
-    | 'firstNames'
-    | 'lastNames'
-    | 'dni'
-    | 'gender'
-    | 'birthDate'
-    | 'cellPhoneNumber'
-    | 'avaaAdmissionYear'
-    | 'localPhoneNumber'
-    | 'email';
+  id: keyof typeof scholarInfoSchema.shape
   placeholder: string;
   required?: boolean;
   type: string;
@@ -21,7 +14,7 @@ type GeneralInformationInputData = {
 const GENERAL_INFORMATION_INPUT_DATA: GeneralInformationInputData[] = [
   {
     label: 'Nombres',
-    id: 'firstNames',
+    id: 'first_names',
     placeholder: 'Kevin José',
     required: true,
     type: 'text',
@@ -31,7 +24,7 @@ const GENERAL_INFORMATION_INPUT_DATA: GeneralInformationInputData[] = [
   },
   {
     label: 'Apellidos',
-    id: 'lastNames',
+    id: 'last_names',
     placeholder: 'Bravo Mota',
     required: true,
     type: 'text',
@@ -46,24 +39,16 @@ const GENERAL_INFORMATION_INPUT_DATA: GeneralInformationInputData[] = [
     autoComplete: 'cedula',
   },
   {
-    label: 'Género',
-    id: 'gender',
-    placeholder: 'Masculino',
-    required: true,
-    type: 'select',
-    autoComplete: 'genre',
-  },
-  {
     label: 'Fecha de nacimiento',
-    id: 'birthDate',
-    placeholder: 'Femenino',
+    id: 'birthdate',
+    placeholder: '2222-444-44',
     required: true,
     type: 'date',
     autoComplete: 'birthDate',
   },
   {
     label: 'Número de telefono local',
-    id: 'localPhoneNumber',
+    id: 'local_phone_number',
     placeholder: '0212-1234567',
     required: true,
     type: 'text',
@@ -71,7 +56,15 @@ const GENERAL_INFORMATION_INPUT_DATA: GeneralInformationInputData[] = [
   },
   {
     label: 'Número de telefono celular',
-    id: 'cellPhoneNumber',
+    id: 'cell_phone_Number',
+    placeholder: '0412-1234567',
+    required: true,
+    type: 'text',
+    autoComplete: 'cellPhone',
+  },
+  {
+    label: 'Número de telefono whatsapp',
+    id: 'whatsapp_number',
     placeholder: '0412-1234567',
     required: true,
     type: 'text',
@@ -84,14 +77,6 @@ const GENERAL_INFORMATION_INPUT_DATA: GeneralInformationInputData[] = [
     required: true,
     type: 'email',
     autoComplete: 'email',
-  },
-  {
-    label: 'Año de ingreso en AVAA',
-    id: 'avaaAdmissionYear',
-    placeholder: '',
-    required: true,
-    type: 'date',
-    autoComplete: 'avaaAdmissionYear',
   },
 ];
 

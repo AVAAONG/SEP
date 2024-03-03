@@ -10,15 +10,23 @@ import { formatActivityEventsForBigCalendar } from '@/lib/utils';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { Tooltip } from '@nextui-org/react';
 import { getServerSession } from 'next-auth';
-import { chatIcon, workshopIcon } from '../../../../public/svgs/svgs';
+import { redirect } from 'next/navigation';
+import React from 'react';
+import { chatIcon, volunterIcon, workshopIcon } from '../../../../public/svgs/svgs';
 
 const page = async () => {
   const actualYear = new Date().getFullYear();
   const session = await getServerSession(authOptions);
+  if (!session) return redirect('accessDenied');
   const id = session?.scholarId;
-  const [doneWorkshopsCount, doneChatsCount] = await getScholarDoneActivitiesCount(id, actualYear);
+  const name = session?.user?.name?.split(' ')[0];
+  const [doneWorkshopsCount, doneChatsCount, doneVolunteerCount] =
+    await getScholarDoneActivitiesCount(id, actualYear);
   const [enrrolledWorkshops, enrrolledCHats] = await getActivitiesWhenScholarItsEnrolled(id);
-  const events = formatActivityEventsForBigCalendar([...enrrolledWorkshops, ...enrrolledCHats], "scholar");
+  const events = formatActivityEventsForBigCalendar(
+    [...enrrolledWorkshops, ...enrrolledCHats],
+    'scholar'
+  );
   const cardContent: PanelCardProps[] = [
     {
       title: 'Actividades formativas realizadas',
@@ -36,14 +44,14 @@ const page = async () => {
       icon: chatIcon(),
       kind: 'chat',
     },
-    // {
-    //   title: 'Horas de voluntariado realizadas',
-    //   subtitle: 'Ver todas las actividades',
-    //   data: 0,
-    //   link: 'actividadesFormativas',
-    //   icon: workshopIcon(),
-    //   kind: 'volunteer',
-    // },
+    {
+      title: 'Horas de voluntariado realizadas',
+      subtitle: 'Ver todas las actividades',
+      data: doneVolunteerCount,
+      link: 'voluntariado',
+      icon: volunterIcon(),
+      kind: 'volunteer',
+    },
   ];
 
   return (
@@ -67,12 +75,14 @@ const page = async () => {
             <InformationCircleIcon className="cursor-pointer w-6 h-6 text-emerald-600 dark:text-emerald-400" />
           </Tooltip>
           <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
-            ¡Hola! 💚
+            {name ? `¡Hola, ${name}! 💚` : `¡Hola! 💚`}
           </h1>
         </div>
 
         <div className="w-full flex flex-col md:flex-row gap-3 items-center">
-          {cardContent.map((card) => PanelCard(card))}
+          {cardContent.map((card, index) => (
+            <React.Fragment key={index}>{PanelCard(card)}</React.Fragment>
+          ))}
         </div>
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="items-end flex flex-col gap-1 h-full max-h-[680px] text-gray-800 capitalize dark:text-gray-300 shadow-sm overflow-x-clip w-full bg-white border border-gray-200  shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 p-2">

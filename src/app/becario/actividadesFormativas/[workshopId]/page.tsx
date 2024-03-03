@@ -5,36 +5,42 @@ import Table from '@/components/table/Table';
 import ScholarActivityAttendanceForScholarTemp from '@/components/table/columns/scholatActivityAttendanceForScholarTemp';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { WorkshopWithSpeaker } from '@/lib/db/types';
-import { getWorkshop, getWorkshopWithSpecificScholarAttendance } from '@/lib/db/utils/Workshops';
+import { getWorkshop } from '@/lib/db/utils/Workshops';
 import { getNotEnrolledScholarsInWorkshop } from '@/lib/db/utils/users';
 import { formatScholarDataForAttendanceTable } from '@/lib/tableUtils';
 import { getServerSession } from 'next-auth';
+import { notFound } from 'next/navigation';
 import shortUUID from 'short-uuid';
 
 const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => {
   const se = await getServerSession(authOptions);
-  const workshopId = params.workshopId || ('null' as shortUUID.SUUID);
-  const attendance = await getWorkshopWithSpecificScholarAttendance(workshopId, se?.scholarId);
-  const scholars = await getNotEnrolledScholarsInWorkshop(workshopId)
-  const { workshop } = attendance || {};
-  const chatForSpeaker = await getWorkshop(workshopId);
-  const isDisabled = () => {
-    if (attendance?.attendance! !== 'ENROLLED') return true
-    else if (new Date(workshop?.start_dates![0]!) <= new Date()) return true
-    else if (workshop?.activity_status !== 'SENT') return true
-    else return false
-  }
+  const workshopId = params.workshopId || null;
+
+  if (!workshopId) return null;
+  const workshop = await getWorkshop(workshopId);
+  if (!workshop) return notFound();
+
+  const notEnrolledScholars = await getNotEnrolledScholarsInWorkshop(workshopId);
+
+  let attendance = workshop?.scholar_attendance.find((a) => a.scholar.scholar.id === se?.scholarId);
+
   const scholarAttendanceDataForTable = formatScholarDataForAttendanceTable(
-    chatForSpeaker?.scholar_attendance ? chatForSpeaker.scholar_attendance.map((a) => a.scholar.scholar) : [],
-    chatForSpeaker?.scholar_attendance ? chatForSpeaker.scholar_attendance : []
+    workshop?.scholar_attendance ? workshop.scholar_attendance.map((a) => a.scholar.scholar) : [],
+    workshop?.scholar_attendance ? workshop.scholar_attendance : []
   );
 
+  const isDisabled = () => {
+    if (attendance?.attendance! !== 'ENROLLED') return true;
+    else if (new Date(workshop?.start_dates![0]!) <= new Date()) return true;
+    else if (workshop?.activity_status !== 'SENT') return true;
+    else return false;
+  };
 
   return (
     <div className="min-h-screen flex flex-col gap-4">
-      <ActivityPanelInfo activity={chatForSpeaker as WorkshopWithSpeaker}  >
-        <div className='w-full flex gap-4  items-center justify-end'>
-          <div className='flex gap-2 items-center justify-center'>
+      <ActivityPanelInfo activity={workshop as WorkshopWithSpeaker}>
+        <div className="w-full flex gap-4  items-center justify-end">
+          <div className="flex gap-2 items-center justify-center">
             <h3 className=" leading-none tracking-tight text-primary-light font-semibold">
               Estatus de asistencia
             </h3>
@@ -42,7 +48,21 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
               <ScholarAttendanceWidget value={attendance?.attendance!} />
             </div>
           </div>
-          <ActivityScholarActions activityId={workshopId} attendanceId={attendance?.id!} kindOfActivity='workshop' scholars={scholars} isButtonDisabled={isDisabled()} />
+          <ActivityScholarActions
+            activityId={workshopId}
+            attendanceId={attendance?.id!}
+            kindOfActivity="workshop"
+            scholars={notEnrolledScholars}
+            isButtonDisabled={isDisabled()}
+            scholarWhoCeaseName={se?.user?.name!}
+            activityName={workshop?.title || ''}
+            date={workshop?.start_dates[0].toISOString() || ''}
+            startDate={workshop?.start_dates[0].toISOString() || ''}
+            endDate={workshop?.end_dates[0].toISOString() || ''}
+            modality={workshop?.modality || ''}
+            eventId={workshop.calendar_ids[0] || ''}
+            platform={workshop?.platform || ''}
+          />
         </div>
       </ActivityPanelInfo>
       <section className="w-full space-y-3">

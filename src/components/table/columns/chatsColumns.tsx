@@ -8,7 +8,6 @@ import { Column } from 'react-table';
 const ChatsWithAllData = Prisma.validator<Prisma.ChatDefaultArgs>()({
   include: {
     speaker: true,
-    temp_data: true,
     scholar_attendance: true,
   },
 });
@@ -67,9 +66,7 @@ const ChatColumns: Column<ChatDataForTable>[] = [
     Header: 'Inicio',
     accessor: 'startHour',
     Cell: ({ value }) => {
-      return (
-        <DisplayTime time={value} />
-      )
+      return <DisplayTime time={value} />;
     },
   },
   {
