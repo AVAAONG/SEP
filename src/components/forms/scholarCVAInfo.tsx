@@ -41,17 +41,17 @@ const ScholarCVAInformation = ({
 
   let defaultValues = scholarCvaInformation
     ? {
-        already_finished_cva: scholarCvaInformation?.already_finished_cva === true ? 'YES' : 'NO',
-        is_in_cva: scholarCvaInformation?.is_in_cva === true ? 'YES' : 'NO',
-        cva_ended_date: scholarCvaInformation.cva_ended_date
-          ? moment(scholarCvaInformation?.cva_ended_date).format('YYYY-MM-DD')
-          : null,
-        cva_location: scholarCvaInformation?.cva_location as CvaLocation,
-        cva_started_date: scholarCvaInformation.cva_started_date
-          ? moment(scholarCvaInformation?.cva_started_date).format('YYYY-MM-DD')
-          : null,
-        not_started_cva_reason: scholarCvaInformation?.not_started_cva_reason,
-      }
+      already_finished_cva: scholarCvaInformation?.already_finished_cva === true ? 'YES' : 'NO',
+      is_in_cva: scholarCvaInformation?.is_in_cva === true ? 'YES' : 'NO',
+      cva_ended_date: scholarCvaInformation.cva_ended_date
+        ? moment(scholarCvaInformation?.cva_ended_date).format('YYYY-MM-DD')
+        : null,
+      cva_location: scholarCvaInformation?.cva_location as CvaLocation,
+      cva_started_date: scholarCvaInformation.cva_started_date
+        ? moment(scholarCvaInformation?.cva_started_date).format('YYYY-MM-DD')
+        : null,
+      not_started_cva_reason: scholarCvaInformation?.not_started_cva_reason,
+    }
     : undefined;
   const {
     control,
@@ -88,7 +88,8 @@ const ScholarCVAInformation = ({
     };
     if (certificate) {
       const certificateBase64 = await readFileAsBase64(certificate);
-      const certificateForDb = await uploadBlob(certificateBase64, 'application/pdf', 'files');
+      const fileType = certificate.type; // Get the type of the file dynamically
+      const certificateForDb = await uploadBlob(certificateBase64, fileType, 'files');
       scholarCvaInfo.certificate = certificateForDb!;
     }
     if (scholarCvaInformation?.scholarId) {
