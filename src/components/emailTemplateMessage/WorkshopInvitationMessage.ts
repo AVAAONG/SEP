@@ -1,6 +1,6 @@
 const createWorkshopInvitationMessage = () => {
-    return (
-        `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  return (
+    `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
    <head>
    <!--[if gte mso 9]>
@@ -214,8 +214,8 @@ const createWorkshopInvitationMessage = () => {
            
      <!--[if mso]><style>.v-button {background: transparent !important;}</style><![endif]-->
    <div class="v-text-align" align="center">
-     <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://programaexcelencia.org/becario/calendario" style="height:37px; v-text-anchor:middle; width:146px;" arcsize="11%"  stroke="f" fillcolor="#26ac0c"><w:anchorlock/><center style="color:#ffffff;"><![endif]-->
-       <a href="https://programaexcelencia.org/becario/calendario" target="_blank" class="v-button v-font-size" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #ffffff; background-color: #26ac0c; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
+     <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://programaexcelencia.org/becario/oferta" style="height:37px; v-text-anchor:middle; width:146px;" arcsize="11%"  stroke="f" fillcolor="#26ac0c"><w:anchorlock/><center style="color:#ffffff;"><![endif]-->
+       <a href="https://programaexcelencia.org/becario/oferta" target="_blank" class="v-button v-font-size" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #ffffff; background-color: #26ac0c; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
          <span style="display:block;padding:10px 20px;line-height:120%;"><strong>¡Ver calendario!</strong></span>
        </a>
        <!--[if mso]></center></v:roundrect><![endif]-->
@@ -404,7 +404,7 @@ const createWorkshopInvitationMessage = () => {
    
    </html>
    `
-    )
+  )
 }
 
 export default createWorkshopInvitationMessage
