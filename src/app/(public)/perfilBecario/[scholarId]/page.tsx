@@ -102,9 +102,8 @@ const page = async ({
   const scholar = await getScholarWithAllData(scholarId);
   const lastNames = scholar?.last_names?.split(' ')!;
 
-  const name = `${scholar?.first_names.split(' ')[0]} ${
-    lastNames[0].length < 3 ? `${lastNames[0]} ${lastNames[1]}` : lastNames[0]
-  } `;
+  const name = `${scholar?.first_names.split(' ')[0]} ${lastNames[0].length < 3 ? `${lastNames[0]} ${lastNames[1]}` : lastNames[0]
+    } `;
   const { twitter_user, facebook_user, instagram_user, linkedin_user, program_information } =
     scholar || {};
 
@@ -218,7 +217,7 @@ const page = async ({
           </div>
           <div className="w-64 flex items-center justify-center rounded-full border-2 border-primary-1 p-1">
             <Image
-              src={defailProfilePic}
+              src={scholar.photo ?? defailProfilePic}
               alt="Foto del becario"
               width={250}
               height={250}
@@ -261,9 +260,8 @@ const page = async ({
             <SharePubilcProfile qrCode={qrcode!} profileLink={pageUrl} />
           </div>
           <div
-            className={`${
-              searchParams?.actividad === undefined ? 'md:py-28' : ''
-            } flex flex-col md:px-8 gap-8`}
+            className={`${searchParams?.actividad === undefined ? 'md:py-28' : ''
+              } flex flex-col md:px-8 gap-8`}
           >
             {searchParams?.actividad !== undefined && (
               <Link
