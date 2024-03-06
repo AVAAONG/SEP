@@ -4,6 +4,7 @@ import { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
 import WorkshopColumns, { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
 import { getWorkshops } from '@/lib/db/utils/Workshops';
 import { createArrayFromObject } from '@/lib/utils';
+import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
 import {
   parseModalityFromDatabase,
   parseSkillFromDatabase,
@@ -17,47 +18,6 @@ const PieChartComponent = dynamic(() => import('@/components/charts/Pie'), { ssr
 const MixedAreaChartComponent = dynamic(() => import('@/components/charts/MixedAreaChart'), {
   ssr: false,
 });
-
-export function filterActivitiesByMonth(
-  activities: WorkshopWithAllData[] | ChatsWithAllData[],
-  month: number
-): WorkshopWithAllData[] | ChatsWithAllData[] {
-  if (!Array.isArray(activities)) throw new Error('activities must be an array');
-
-  const filteredActivities = activities.filter(
-    (activity: WorkshopWithAllData | ChatsWithAllData) => {
-      const startMonth = new Date(activity.start_dates[0]).getMonth();
-      return startMonth === month;
-    }
-  );
-
-  return filteredActivities;
-}
-
-export function filterActivitiesByQuarter(
-  workshops: WorkshopWithAllData[] | ChatsWithAllData[],
-  quarter: number
-): WorkshopWithAllData[] | ChatsWithAllData[] {
-  const filteredWorkshops = workshops.filter((workshop: WorkshopWithAllData | ChatsWithAllData) => {
-    const startMonth = new Date(workshop.start_dates[0]).getMonth();
-    const workshopQuarter = Math.floor(startMonth / 3) + 1;
-    return workshopQuarter === quarter;
-  });
-
-  return filteredWorkshops;
-}
-
-export function filterActivitiesByYear(
-  workshops: WorkshopWithAllData[] | ChatsWithAllData[],
-  year: number
-): WorkshopWithAllData[] | ChatsWithAllData[] {
-  const filteredWorkshops = workshops.filter((workshop) => {
-    const startYear = new Date(workshop.start_dates[0]).getFullYear();
-    return startYear === year;
-  });
-
-  return filteredWorkshops;
-}
 
 const parseWorkshopYearFromDatabase = (years: WorkshopYear[]) => {
   if (years.length === 5) {
@@ -92,20 +52,10 @@ const page = async ({
   searchParams?: { year: string; month: string; quarter: string };
 }) => {
   const resultWorkshops = await getWorkshops();
-  let workshops: WorkshopWithAllData[] = [];
-
-  if (searchParams?.year) {
-    workshops = filterActivitiesByYear(resultWorkshops, Number(searchParams?.year));
-  }
-  if (searchParams?.quarter) {
-    workshops = filterActivitiesByQuarter(resultWorkshops, Number(searchParams?.quarter));
-  }
-  if (searchParams?.month) {
-    workshops = filterActivitiesByMonth(resultWorkshops, Number(searchParams?.month));
-  }
-  if (!searchParams?.year && !searchParams?.quarter && !searchParams?.month) {
-    workshops = resultWorkshops;
-  }
+  let workshops: WorkshopWithAllData[] = filterActivitiesBySearchParams(
+    resultWorkshops,
+    searchParams
+  );
 
   const suspendedWorkshops = workshops.filter(
     (workshop) => workshop.activity_status === 'SUSPENDED'

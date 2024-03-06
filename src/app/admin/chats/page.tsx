@@ -3,6 +3,7 @@ import Table from '@/components/table/Table';
 import ChatColumns, { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
 import { getChats } from '@/lib/db/utils/chats';
 import { createArrayFromObject } from '@/lib/utils';
+import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
 import {
   parseChatLevelFromDatabase,
   parseModalityFromDatabase,
@@ -10,12 +11,7 @@ import {
 } from '@/lib/utils2';
 import { Tooltip } from '@nextui-org/react';
 import dynamic from 'next/dynamic';
-import {
-  filterActivitiesByMonth,
-  filterActivitiesByQuarter,
-  filterActivitiesBySchedule,
-  filterActivitiesByYear,
-} from '../actividadesFormativas/page';
+import { filterActivitiesBySchedule } from '../actividadesFormativas/page';
 
 const PieChartComponent = dynamic(() => import('@/components/charts/Pie'), { ssr: false });
 const MixedAreaChartComponent = dynamic(() => import('@/components/charts/MixedAreaChart'), {
@@ -29,19 +25,7 @@ const page = async ({
   searchParams?: { year: string; month: string; quarter: string };
 }) => {
   const resultWorkshops = await getChats();
-  let workshops: ChatsWithAllData[] = [];
-  if (searchParams?.year) {
-    workshops = filterActivitiesByYear(resultWorkshops, Number(searchParams?.year));
-  }
-  if (searchParams?.quarter) {
-    workshops = filterActivitiesByQuarter(resultWorkshops, Number(searchParams?.quarter));
-  }
-  if (searchParams?.month) {
-    workshops = filterActivitiesByMonth(resultWorkshops, Number(searchParams?.month));
-  }
-  if (!searchParams?.year && !searchParams?.quarter && !searchParams?.month) {
-    workshops = resultWorkshops;
-  }
+  let workshops: ChatsWithAllData[] = filterActivitiesBySearchParams(resultWorkshops, searchParams);
 
   const suspendedWorkshops = workshops.filter(
     (workshop) => workshop.activity_status === 'SUSPENDED'
