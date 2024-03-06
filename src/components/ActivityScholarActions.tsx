@@ -61,9 +61,9 @@ const ActivityScholarActions: React.FC<ActivityPanelInfoProps> = ({
       selectedScholar.first_names.split(' ')[0] || '',
       scholarWhoCeaseName,
       activityName,
-      date,
-      startDate,
-      endDate,
+      new Date(date).toISOString(),
+      new Date(startDate).toISOString(),
+      new Date(endDate).toISOString(),
       modality,
       platform,
       link
