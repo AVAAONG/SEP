@@ -114,9 +114,9 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
       <ActivityPanelInfo activity={chat as ChatWithSpeaker}>
         <div className="w-full grid grid-cols-2 gap-4">
           {g.map(({ title, value }) => (
-            <div className="rounded-lg border text-card-foreground shadow-sm w-full">
+            <div className="rounded-lg border text-card-foreground shadow-sm w-full overflow-hidden">
               <div className="flex flex-col space-y-1.5 p-6 ">
-                <h3 className="text-lg font-semibold whitespace-nowrap leading-none tracking-tight">
+                <h3 className="text-lg font-semibold whitespace-nowrap leading-none tracking-tight truncate">
                   {title}
                 </h3>
               </div>
@@ -154,10 +154,10 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
                 hour={
                   start_dates
                     ? new Date(start_dates[0]).toLocaleTimeString('es-ES', {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      hour12: true,
-                    })
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true,
+                      })
                     : ''
                 }
                 modality={parseModalityFromDatabase(modality as Modality)}
