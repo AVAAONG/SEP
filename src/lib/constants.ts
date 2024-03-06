@@ -71,6 +71,7 @@ export const ONLINE_PLATFORMS = [
   { label: 'Zoom', value: 'ZOOM' },
   { label: 'Google Meet', value: 'GOOGLE_MEET' },
   { label: 'Padlet', value: 'PADLET' },
+  { label: 'Microsoft Teams', value: 'MS_TEAMS' },
   { label: 'Otra', value: 'OTHER' },
 ];
 export const WORKSHOP_YEAR = ['I', 'II', 'III', 'IV', 'V'];
