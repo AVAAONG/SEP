@@ -6,7 +6,6 @@ import { Scholar } from '@prisma/client';
 import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import BasicModal from './BasicModal';
-import ScholarActivitySatisfactionSurvey from './ScholarActivitySatisfactionSurvey';
 
 interface ActivityPanelInfoProps {
   scholars: Scholar[];
@@ -151,7 +150,7 @@ const ActivityScholarActions: React.FC<ActivityPanelInfoProps> = ({
           confirmText="Cancelar y ceder cupo"
         />
       </>
-      <>
+      {/* <>
         <Button
           onPress={surveyModal.onOpen}
           color="success"
@@ -178,7 +177,7 @@ const ActivityScholarActions: React.FC<ActivityPanelInfoProps> = ({
           }}
           confirmText="Subir respuestas"
         />
-      </>
+      </> */}
     </div>
   );
 };

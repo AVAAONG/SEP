@@ -1,5 +1,6 @@
 import ActivityPanelInfo from '@/components/ActivityPanelInfo';
 import ActivityScholarActions from '@/components/ActivityScholarActions';
+import ScholarActivitySatisfactionSurvey from '@/components/ScholarActivitySatisfactionSurvey';
 import ScholarAttendanceWidget from '@/components/ScholarAttendanceWidget';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendanceForScholarTemp from '@/components/table/columns/scholatActivityAttendanceForScholarTemp';
@@ -63,6 +64,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
             eventId={workshop.calendar_ids[0] || ''}
             platform={workshop?.platform || ''}
           />
+          <ScholarActivitySatisfactionSurvey />
         </div>
       </ActivityPanelInfo>
       <section className="w-full space-y-3">
