@@ -24,7 +24,6 @@ const ScholarActivityAttendance: Column<IScholarForAttendanceTable>[] = [
     Cell: ({ value, cell }: { value: CellValue; cell: Cell<IScholarForAttendanceTable> }) => {
       const id = cell.row.original.id;
       const career = '';
-      console.log(cell.row.original.profilePhoto, 'id');
       return (
         <Link href={cell.row.original.id ? `/admin/becarios/${id}` : ''} className="w-67">
           <div className="flex items-center  w-full">
