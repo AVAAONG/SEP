@@ -696,6 +696,7 @@ export const updateWorkshopAttendanceSatisfactionForm = async (
       satisfaction_form: {
         create: satisfactionForm
       },
+      satisfaction_form_filled: true,
     },
   });
   return workshop;

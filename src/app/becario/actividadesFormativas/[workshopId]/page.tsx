@@ -36,11 +36,12 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
     else if (workshop?.activity_status !== 'SENT') return true;
     else return false;
   };
+  attendance?.satisfaction_form_filled;
 
   return (
     <div className="min-h-screen flex flex-col gap-4">
       <ActivityPanelInfo activity={workshop as WorkshopWithSpeaker}>
-        <div className="w-full flex gap-4  items-center justify-end">
+        <div className="w-full flex-col lg:flex-row flex gap-4  items-center justify-end">
           <div className="flex gap-2 items-center justify-center">
             <h3 className=" leading-none tracking-tight text-primary-light font-semibold">
               Estatus de asistencia
@@ -49,25 +50,28 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
               <ScholarAttendanceWidget value={attendance?.attendance!} />
             </div>
           </div>
-          <ActivityScholarActions
-            activityId={workshopId}
-            attendanceId={attendance?.id!}
-            kindOfActivity="workshop"
-            scholars={notEnrolledScholars}
-            isButtonDisabled={isDisabled()}
-            scholarWhoCeaseName={se?.user?.name!}
-            activityName={workshop?.title || ''}
-            date={workshop?.start_dates[0].toISOString() || ''}
-            startDate={workshop?.start_dates[0].toISOString() || ''}
-            endDate={workshop?.end_dates[0].toISOString() || ''}
-            modality={workshop?.modality || ''}
-            eventId={workshop.calendar_ids[0] || ''}
-            platform={workshop?.platform || ''}
-          />
-          <ScholarActivitySatisfactionSurvey
-            attendanceId={attendance?.id}
-            workshopStatus={workshop.activity_status}
-          />
+          <div className="flex gap-4">
+            <ActivityScholarActions
+              activityId={workshopId}
+              attendanceId={attendance?.id!}
+              kindOfActivity="workshop"
+              scholars={notEnrolledScholars}
+              isButtonDisabled={isDisabled()}
+              scholarWhoCeaseName={se?.user?.name!}
+              activityName={workshop?.title || ''}
+              date={workshop?.start_dates[0].toISOString() || ''}
+              startDate={workshop?.start_dates[0].toISOString() || ''}
+              endDate={workshop?.end_dates[0].toISOString() || ''}
+              modality={workshop?.modality || ''}
+              eventId={workshop.calendar_ids[0] || ''}
+              platform={workshop?.platform || ''}
+            />
+            <ScholarActivitySatisfactionSurvey
+              attendanceId={attendance?.id}
+              satisfactionFormFilled={attendance?.satisfaction_form_filled}
+              workshopStatus={workshop.activity_status}
+            />
+          </div>
         </div>
       </ActivityPanelInfo>
       <section className="w-full space-y-3">

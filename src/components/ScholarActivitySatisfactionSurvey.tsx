@@ -29,9 +29,11 @@ const VALORATION = [
 const ScholarActivitySatisfactionSurvey = ({
   attendanceId,
   workshopStatus,
+  satisfactionFormFilled,
 }: {
   attendanceId: string | undefined;
   workshopStatus: ActivityStatus;
+  satisfactionFormFilled: boolean | undefined | null;
 }) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const {
@@ -60,9 +62,9 @@ const ScholarActivitySatisfactionSurvey = ({
         onPress={onOpen}
         color="success"
         className="text-white"
-        isDisabled={workshopStatus !== 'ATTENDANCE_CHECKED'}
+        isDisabled={workshopStatus !== 'ATTENDANCE_CHECKED' || satisfactionFormFilled}
       >
-        Encuesta de satisfacción
+        {satisfactionFormFilled ? '✅ Encuesta de satisfacción llena' : 'Encuesta de satisfacción'}
       </Button>
       <Modal
         size="5xl"

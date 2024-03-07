@@ -76,7 +76,7 @@ const ActivityScholarActions: React.FC<ActivityPanelInfoProps> = ({
 
   return (
     ///TODO set isDisable option
-    <div className="w-1/2 flex items-center justify-end gap-4">
+    <div className="flex items-center justify-end gap-4">
       <>
         <Button
           onPress={onOpen}
@@ -150,34 +150,6 @@ const ActivityScholarActions: React.FC<ActivityPanelInfoProps> = ({
           confirmText="Cancelar y ceder cupo"
         />
       </>
-      {/* <>
-        <Button
-          onPress={surveyModal.onOpen}
-          color="success"
-          className="text-white"
-          isDisabled={false}
-        >
-          Encuesta de satisfacción
-        </Button>
-        <BasicModal
-          isOpen={surveyModal.isOpen}
-          scroll={true}
-          size="5xl"
-          onOpenChange={surveyModal.onOpenChange}
-          title="Encuesta de satisfacción de la actividad"
-          Content={() => <ScholarActivitySatisfactionSurvey />}
-          isButtonDisabled={false}
-          onConfirm={async () => {
-            toast.promise(handleCeaseSpot(), {
-              pending: 'Confirmando llenado de encuesta...',
-              success: 'Encuesta subida de forma correcta',
-              error: 'Error al subir encuesta',
-            });
-            surveyModal.onClose();
-          }}
-          confirmText="Subir respuestas"
-        />
-      </> */}
     </div>
   );
 };
