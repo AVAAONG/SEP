@@ -1,12 +1,10 @@
 'use client';
-import defailProfilePic from '@/../public/defaultProfilePic.png';
 import { IScholarForAttendanceTable } from '@/app/admin/chats/[chatId]/page';
 import { changeScholarAttendance, changeScholarAttendanceChat } from '@/lib/db/utils/Workshops';
 import formatDni from '@/lib/db/utils/formatDni';
 import { revalidateSpecificPath } from '@/lib/serverAction';
-import { Chip } from '@nextui-org/react';
+import { Avatar, Chip } from '@nextui-org/react';
 import { ScholarAttendance } from '@prisma/client';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Cell, CellValue, Column } from 'react-table';
@@ -26,13 +24,14 @@ const ScholarActivityAttendance: Column<IScholarForAttendanceTable>[] = [
     Cell: ({ value, cell }: { value: CellValue; cell: Cell<IScholarForAttendanceTable> }) => {
       const id = cell.row.original.id;
       const career = '';
+      console.log(cell.row.original.profilePhoto, 'id');
       return (
         <Link href={cell.row.original.id ? `/admin/becarios/${id}` : ''} className="w-67">
           <div className="flex items-center  w-full">
             <div className="flex-shrink-0 w-8 h-8">
-              <Image
+              <Avatar
                 className="w-full h-full rounded-full"
-                src={defailProfilePic}
+                src={cell.row.original.profilePhoto || undefined}
                 alt="Foto de perfil"
               />
             </div>
