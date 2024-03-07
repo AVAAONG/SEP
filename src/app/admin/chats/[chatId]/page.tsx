@@ -22,6 +22,7 @@ export interface IScholarForAttendanceTable {
   gender: Gender;
   attendanceId: string;
   attendance?: ScholarAttendance;
+  profilePhoto: string | null;
 }
 
 const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
