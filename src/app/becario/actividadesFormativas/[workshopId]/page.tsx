@@ -64,7 +64,10 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
             eventId={workshop.calendar_ids[0] || ''}
             platform={workshop?.platform || ''}
           />
-          <ScholarActivitySatisfactionSurvey />
+          <ScholarActivitySatisfactionSurvey
+            attendanceId={attendance?.id}
+            workshopStatus={workshop.activity_status}
+          />
         </div>
       </ActivityPanelInfo>
       <section className="w-full space-y-3">

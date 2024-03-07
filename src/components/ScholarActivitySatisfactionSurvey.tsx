@@ -1,4 +1,5 @@
 'use client';
+import { updateWorkshopAttendanceSatisfactionForm } from '@/lib/db/utils/Workshops';
 import activitySatisfactionFormSchema from '@/lib/schemas/acivitySatisFactionFormSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@nextui-org/button';
@@ -11,6 +12,7 @@ import {
   useDisclosure,
 } from '@nextui-org/modal';
 import { Select, SelectItem } from '@nextui-org/react';
+import { ActivityStatus } from '@prisma/client';
 import { BaseSyntheticEvent } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -24,7 +26,13 @@ const VALORATION = [
   { label: 'Malo', value: '1' },
 ];
 
-const ScholarActivitySatisfactionSurvey = () => {
+const ScholarActivitySatisfactionSurvey = ({
+  attendanceId,
+  workshopStatus,
+}: {
+  attendanceId: string | undefined;
+  workshopStatus: ActivityStatus;
+}) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const {
     control,
@@ -41,13 +49,19 @@ const ScholarActivitySatisfactionSurvey = () => {
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
     event?.preventDefault();
-    console.log(data);
+    if (!attendanceId) return;
+    await updateWorkshopAttendanceSatisfactionForm(attendanceId, data);
     onClose();
   };
 
   return (
     <>
-      <Button onPress={onOpen} color="success" className="text-white" isDisabled={false}>
+      <Button
+        onPress={onOpen}
+        color="success"
+        className="text-white"
+        isDisabled={workshopStatus !== 'ATTENDANCE_CHECKED'}
+      >
         Encuesta de satisfacción
       </Button>
       <Modal

@@ -11,7 +11,7 @@ import {
   Prisma,
   ScholarAttendance,
   Volunteer,
-  Workshop,
+  Workshop
 } from '@prisma/client';
 import shortUUID from 'short-uuid';
 import { prisma } from './prisma';
@@ -682,3 +682,21 @@ export const changeWorkshopStatus = async (id: string, status: ActivityStatus) =
   });
   return workshop;
 };
+
+
+export const updateWorkshopAttendanceSatisfactionForm = async (
+  id: string,
+  satisfactionForm: Prisma.WorkshopSafisfactionFormUncheckedCreateWithoutWorkshop_attendanceInput
+) => {
+  const workshop = await prisma.workshopAttendance.update({
+    where: {
+      id: id,
+    },
+    data: {
+      satisfaction_form: {
+        create: satisfactionForm
+      },
+    },
+  });
+  return workshop;
+}
