@@ -92,9 +92,9 @@ model ScholarCollageInformation {
 model ScholarCollagePeriod {
     id                            String                     @id @default(nanoid())
     current_academic_period       Int
-    inscription_proof             String?
-    collage_schedule              String?
     grade                         Float
+    start_date                    DateTime                   @default(now())
+    end_date                      DateTime                   @default(now())
     class_modality                Modality
     record                        String?
     scholar_collage_information   ScholarCollageInformation? @relation(fields: [scholar_collage_nformation_id], references: [id])

@@ -19,7 +19,6 @@ import ScholarDropdownButton from './ScholarDropdownButton';
 const SCHOLAR_PREFIX = 'becario';
 
 const SCHOLAR_SIDEBAR_ITEMS = [
-
   {
     Icon: workshopIcon(),
     buttonName: 'Actividades formativas',
@@ -57,7 +56,7 @@ const SCHOLAR_SIDEBAR_ITEMS = [
     link: '',
   },
   {
-    Icon: <SparklesIcon className='!text-primary-light' />,
+    Icon: <SparklesIcon className="!text-primary-light" />,
     buttonName: 'Oferta de actividades',
     itemList: [],
     link: `/${SCHOLAR_PREFIX}/oferta`,
@@ -68,11 +67,7 @@ const SCHOLAR_SIDEBAR_ITEMS = [
   //   itemList: [],
   //   link: `/${SCHOLAR_PREFIX}/universidad`,
   // },
-
 ];
-
-
-
 
 const Sidebar = () => {
   const [isSidebarOpen, setSidebarOpen] = useAtom(scholarSidebarAtom);
@@ -86,8 +81,9 @@ const Sidebar = () => {
   }, [pathname]);
   return (
     <aside
-      className={`${isSidebarOpen ? 'fixed  w-full md:w-72' : 'hidden'
-        } top-0 left-0 z-40 h-screen pt-4 bg-gray-50 md:translate-x-0 dark:bg-black`}
+      className={`${
+        isSidebarOpen ? 'fixed  w-full md:w-72' : 'hidden'
+      } top-0 left-0 z-40 h-screen pt-4 bg-gray-50 md:translate-x-0 dark:bg-black`}
     >
       <div className={`flex items-center mt-2 px-5 ${isSidebarOpen ? 'justify-between' : ''} `}>
         <Link href="/becario/panel" className="flex justify-center w-full">
@@ -132,24 +128,30 @@ const Sidebar = () => {
         <ul className="space-y-2">
           <ScholarDropdownButton
             Icon={dashboardComponent()}
-            buttonName='Panel general'
+            buttonName="Panel general"
             itemList={[]}
             link={`/${SCHOLAR_PREFIX}/panel`}
           />
         </ul>
-        <SidebarSeparator text='Actividades' />
+        <SidebarSeparator text="Actividades" />
         <ul className="space-y-2">
           {SCHOLAR_SIDEBAR_ITEMS.map((item, index) => (
             <ScholarDropdownButton {...item} key={index} />
           ))}
         </ul>
-        <SidebarSeparator text='Otros componentes' />
+        <SidebarSeparator text="Otros componentes" />
         <ul className="space-y-2">
           <ScholarDropdownButton
             Icon={<DocumentTextIcon />}
-            buttonName='Registro CVA'
+            buttonName="Registro CVA"
             itemList={[]}
             link={`/${SCHOLAR_PREFIX}/cva`}
+          />
+          <ScholarDropdownButton
+            Icon={<DocumentTextIcon />}
+            buttonName="Notas universitarias"
+            itemList={[]}
+            link={`/${SCHOLAR_PREFIX}/universidad`}
           />
         </ul>
         <div className="p-4 mt-4 rounded-lg bg-emerald-100 dark:bg-emerald-900 dark:border-emerald-950 border-green-600">
