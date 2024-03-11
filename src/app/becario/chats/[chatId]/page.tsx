@@ -76,7 +76,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
           <div className="overflow-x-scroll md:overflow-x-clip rounded-lg w-full">
             <Table
               tableColumns={
-                chat?.speaker[0].id === se?.scholarId || chat.speaker[1].id === se?.scholarId
+                chat?.speaker[0].id === se?.scholarId || chat.speaker?.[1]?.id === se?.scholarId
                   ? ScholarActivityAttendance
                   : ScholarActivityAttendanceForScholarTemp
               }
