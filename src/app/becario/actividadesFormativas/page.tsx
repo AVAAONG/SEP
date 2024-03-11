@@ -6,8 +6,8 @@ import scholarWorkshopAttendanceColumns from '@/components/table/columns/scholar
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { getWorkhsopsByScholar } from '@/lib/db/utils/Workshops';
 import {
-  countActivityByModality,
   countWorkshopProperties,
+  formatCountsForCharts,
   getAttendedActivities,
 } from '@/lib/utils/activityFilters';
 import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
@@ -43,20 +43,22 @@ const page = async ({
   const workshopsDbList = await getWorkhsopsByScholar(session?.scholarId);
   const workshops = filterActivitiesBySearchParams(workshopsDbList, searchParams);
   const workshopsAttended = getAttendedActivities(workshops);
-  const { inPersonActivities, onlineActivities } = countActivityByModality(workshopsAttended);
-  const { skills, years, kinds } = countWorkshopProperties(workshopsAttended);
+  const { skills, years, kinds, modality } = countWorkshopProperties(workshopsAttended);
+  const objectsFormatedForCharts = formatCountsForCharts({ skills, years, kinds });
   const workshopObjectForTable = createScholarWorkshopAttendanceObject(workshops);
 
   return (
     <div className="flex flex-col gap-1">
       <DateSelector />
-      <h1 className="text-xl ml-4 font-medium sm:text-2xl mb-3 ">Registro de actividades formativas</h1>
+      <h1 className="text-xl ml-4 font-medium sm:text-2xl mb-3 ">
+        Registro de actividades formativas
+      </h1>
       <div className="h-full w-full flex flex-col gap-4">
         <Stats
           kindOfActivity="workshop"
           activitiesDone={workshopsAttended?.length}
-          first={inPersonActivities}
-          second={onlineActivities}
+          first={modality.Presencial}
+          second={modality.Virtual}
         />
         {workshops && workshops.length >= 1 && (
           <div className="w-full grid md:grid-cols-5  justify-center items-center">
@@ -64,15 +66,15 @@ const page = async ({
               <h3 className="truncate font-semibold text-center text-sm">
                 Distribución por competencia
               </h3>
-              <PieChartComponent data={skills} />
+              <PieChartComponent data={objectsFormatedForCharts.skills} />
             </div>
             <div>
               <h3 className="truncate font-semibold text-center text-sm">Distribución por tipo</h3>
-              <PieChartComponent data={kinds} />
+              <PieChartComponent data={objectsFormatedForCharts.kinds} />
             </div>
             <div>
               <h3 className="truncate font-semibold text-center text-sm">Distribución por año</h3>
-              <PieChartComponent data={years} />
+              <PieChartComponent data={objectsFormatedForCharts.years} />
             </div>
           </div>
         )}

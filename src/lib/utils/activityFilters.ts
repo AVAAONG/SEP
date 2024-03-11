@@ -4,7 +4,7 @@ import { ChatsWithAllData } from "@/components/table/columns/chatsColumns";
 import { WorkshopWithAllData } from "@/components/table/columns/workshopColumns";
 import { Chat, Volunteer, Workshop } from "@prisma/client";
 import { VolunteerWithAllData } from "../db/types";
-import { parseChatLevelFromDatabase, parseModalityFromDatabase, parseSkillFromDatabase, parseWorkshopKindFromDatabase } from "../utils2";
+import { parseChatLevelFromDatabase, parseModalityFromDatabase, parseSkillFromDatabase, parseWorkshopKindFromDatabase, parseWorkshopYearFromDatabase } from "../utils2";
 
 const countActivityByModality = (attendedActivities: (Workshop | Chat | Volunteer)[]) => {
     return attendedActivities.reduce(
@@ -53,12 +53,11 @@ type Count = {
     value: number;
 };
 
-const countWorkshopProperties = (workshops: WorkshopWithAllData[]): {
+const countWorkshopProperties2 = (workshops: WorkshopWithAllData[]): {
     skills: Count[];
     years: Count[];
     kinds: Count[];
     modality: Count[];
-
 } => {
     const counts: Record<string, Record<string, number>> = {
         skills: {},
@@ -80,6 +79,46 @@ const countWorkshopProperties = (workshops: WorkshopWithAllData[]): {
     });
 
     const result: { skills: Count[]; years: Count[]; kinds: Count[], modality: Count[] } = {
+        skills: [],
+        years: [],
+        kinds: [],
+        modality: [],
+    };
+
+    for (const key in counts) {
+        result[key as 'skills' | 'years' | 'kinds' | 'modality'] = Object.entries(counts[key]).map(([label, value]) => ({
+            label,
+            value: Number(value),
+        }));
+    }
+
+    return result;
+};
+
+const countWorkshopProperties = (workshops: WorkshopWithAllData[]) => {
+    const counts = {
+        skills: {} as Record<string, number>,
+        years: {} as Record<string, number>,
+        kinds: {} as Record<string, number>,
+        modality: {} as Record<"Presencial" | "Virtual" | "Hibrida", number>,
+    };
+
+    workshops.forEach(workshop => {
+        const workshopSkill = parseSkillFromDatabase(workshop.asociated_skill);
+        const workshopYear = parseWorkshopYearFromDatabase(workshop.year);
+        const workshopKind = parseWorkshopKindFromDatabase(workshop.kindOfWorkshop)
+        const workshopModality = parseModalityFromDatabase(workshop.modality)
+
+        counts.skills[workshopSkill] = (counts.skills[workshopSkill] || 0) + 1;
+        counts.years[workshopYear] = (counts.years[workshopYear] || 0) + 1;
+        counts.kinds[workshopKind] = (counts.kinds[workshopKind] || 0) + 1;
+        counts.modality[workshopModality] = (counts.modality[workshopModality] || 0) + 1;
+    });
+    return counts;
+}
+
+const formatCountsForCharts = (counts: Record<string, Record<string, number>>): { skills: Count[]; years: Count[]; kinds: Count[]; modality: Count[] } => {
+    const result: { skills: Count[]; years: Count[]; kinds: Count[]; modality: Count[] } = {
         skills: [],
         years: [],
         kinds: [],
@@ -128,13 +167,30 @@ const countChatProperties = (chats: ChatsWithAllData[]): {
     return result;
 };
 
+const categorizeActivityByStatus = (activities: WorkshopWithAllData[] | ChatsWithAllData[]) => {
+    const categorizedActivities: Record<string, WorkshopWithAllData[] | ChatsWithAllData[]> = {
+        suspended: [],
+        done: [],
+        schedule: [],
+        sent: [],
+    };
 
+    activities.forEach(activity => {
+        if (activity.activity_status in categorizedActivities) {
+            categorizedActivities[activity.activity_status].push(activity);
+        }
+    });
+
+    return categorizedActivities;
+};
 
 export {
     countActivityByModality,
     getAttendedActivities,
     getApprovedAndAttendedVolunteers,
     getAttendedChats,
+    categorizeActivityByStatus,
+    formatCountsForCharts,
     countWorkshopProperties,
     countChatProperties
 };

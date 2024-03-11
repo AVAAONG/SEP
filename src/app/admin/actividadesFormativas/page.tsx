@@ -3,29 +3,21 @@ import Table from '@/components/table/Table';
 import { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
 import WorkshopColumns, { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
 import { getWorkshops } from '@/lib/db/utils/Workshops';
-import { createArrayFromObject } from '@/lib/utils';
+import { categorizeActivityByStatus } from '@/lib/utils/activityFilters';
 import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
 import {
   parseModalityFromDatabase,
   parseSkillFromDatabase,
   parseWorkshopStatusFromDatabase,
+  parseWorkshopYearFromDatabase,
 } from '@/lib/utils2';
 import { Tooltip } from '@nextui-org/react';
-import { Workshop, WorkshopYear } from '@prisma/client';
 import dynamic from 'next/dynamic';
 
 const PieChartComponent = dynamic(() => import('@/components/charts/Pie'), { ssr: false });
 const MixedAreaChartComponent = dynamic(() => import('@/components/charts/MixedAreaChart'), {
   ssr: false,
 });
-
-const parseWorkshopYearFromDatabase = (years: WorkshopYear[]) => {
-  if (years.length === 5) {
-    return 'Todos';
-  } else {
-    return years.join(', ');
-  }
-};
 
 export function filterActivitiesBySchedule(workshops: WorkshopWithAllData[] | ChatsWithAllData[]): {
   morning: WorkshopWithAllData[] | ChatsWithAllData[];
@@ -57,12 +49,13 @@ const page = async ({
     searchParams
   );
 
+  const activitiesByStatus = categorizeActivityByStatus(workshops);
+
   const suspendedWorkshops = workshops.filter(
     (workshop) => workshop.activity_status === 'SUSPENDED'
   );
   const doneWorkshops = workshops.filter(
-    (workshop) =>
-      workshop.activity_status === 'ATTENDANCE_CHECKED' || workshop.activity_status === 'DONE'
+    (workshop) => workshop.activity_status === 'ATTENDANCE_CHECKED'
   );
   const scheduledWorkshops = workshops.filter(
     (workshop) => workshop.activity_status === 'SCHEDULED' || workshop.activity_status === 'SENT'
@@ -138,44 +131,6 @@ const page = async ({
       tooltipText: `${suspendedWorkshopsPercentage}% de las actividades fueron canceladas`,
     },
   ];
-
-  const workshopsByModalityObj =
-    doneWorkshops?.reduce(
-      (acc, workshop) => {
-        const skill = parseModalityFromDatabase(workshop.modality);
-        acc[skill] = (acc[skill] || 0) + 1;
-        return acc;
-      },
-      {} as Record<string, number>
-    ) || {};
-
-  const workshopsBySkillObj =
-    doneWorkshops?.reduce(
-      (acc, workshop) => {
-        const skill = parseSkillFromDatabase(workshop.asociated_skill);
-        acc[skill] = (acc[skill] || 0) + 1;
-        return acc;
-      },
-      {} as Record<string, number>
-    ) || {};
-
-  const workshopsBySkill = createArrayFromObject(workshopsBySkillObj);
-  const workshopsByModality = createArrayFromObject(workshopsByModalityObj);
-  const { morning, afternoon } = filterActivitiesBySchedule(doneWorkshops);
-
-  const workshopsByMonth: Record<number, number> =
-    doneWorkshops?.reduce(
-      (acc, workshop) => {
-        const month = new Date(workshop.start_dates[0]).getMonth();
-        acc[month] = (acc[month] || 0) + 1;
-        return acc;
-      },
-      {} as Record<number, number>
-    ) || {};
-
-  interface WorkshopWithAttendance extends Workshop {
-    scholar_attendance?: { attendance: string }[];
-  }
 
   const workshopsWithHighAttendancePerMonth: Record<string, number> =
     doneWorkshops?.reduce(

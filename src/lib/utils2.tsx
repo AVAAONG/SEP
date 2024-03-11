@@ -1,4 +1,4 @@
-import { ActivityStatus, CVASchedule, Level, Modality, Skill } from '@prisma/client';
+import { ActivityStatus, CVASchedule, Level, Modality, Skill, WorkshopYear } from '@prisma/client';
 
 export const parseSkillFromDatabase = (skill: Skill) => {
   switch (skill) {
@@ -26,7 +26,7 @@ export const parseModalityFromDatabase = (modality: Modality | null) => {
     case 'HYBRID':
       return 'Hibrida';
     default:
-      return 'IN_PERSON';
+      return 'Presencial';
   }
 };
 
@@ -112,5 +112,12 @@ export const parseWorkshopKindFromDatabase = (kind: string) => {
       return 'Conversatorio';
     default:
       return kind;
+  }
+};
+export const parseWorkshopYearFromDatabase = (years: WorkshopYear[]) => {
+  if (years.length === 5) {
+    return 'Todos';
+  } else {
+    return years.join(', ');
   }
 };
