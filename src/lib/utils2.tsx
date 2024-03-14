@@ -13,7 +13,7 @@ export const parseSkillFromDatabase = (skill: Skill) => {
     case 'ICT':
       return 'TIC';
     default:
-      return 'CITIZEN_EXERCISE';
+      return 'Ejercicio ciudadano';
   }
 };
 
@@ -111,7 +111,7 @@ export const parseWorkshopKindFromDatabase = (kind: string) => {
     case 'CONVERSATORIO':
       return 'Conversatorio';
     default:
-      return kind;
+      return 'sin definir';
   }
 };
 export const parseWorkshopYearFromDatabase = (years: WorkshopYear[]) => {

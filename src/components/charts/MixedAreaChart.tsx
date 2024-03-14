@@ -1,29 +1,21 @@
 'use client';
-import { useState } from 'react';
 import Chart from 'react-apexcharts';
 
 interface AreaBarChartProps {
-  areaSeries;
-  barSeries;
+  areaSeries: ApexNonAxisChartSeries;
+  barSeries: ApexNonAxisChartSeries;
 }
 
 const MixedChart = ({ areaSeries, barSeries }: AreaBarChartProps) => {
-  const [options] = useState<ApexCharts.ApexOptions>({
+  const options: ApexCharts.ApexOptions = {
     chart: {
       type: 'line',
       toolbar: {
-        show: false,
+        show: true,
       },
     },
     stroke: {
       curve: 'smooth',
-    },
-    xaxis: {
-      type: 'datetime',
-      labels: {
-        format: 'MMM',
-      },
-      tickAmount: 12, // Display all twelve months on the x-axis
     },
     yaxis: {
       labels: {
@@ -31,10 +23,8 @@ const MixedChart = ({ areaSeries, barSeries }: AreaBarChartProps) => {
       },
     },
     colors: ['#23a217'],
-  });
-
-  const [series] = useState<ApexAxisChartSeries>([areaSeries, barSeries]);
-
+  };
+  const series = [areaSeries, barSeries];
   return <Chart options={options} series={series} type="line" height={250} />;
 };
 

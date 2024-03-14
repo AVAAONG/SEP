@@ -4,5 +4,8 @@ import dynamic from 'next/dynamic';
  * @returns The HTML document with the rendered page component.
  */
 const PieChartComponent = dynamic(() => import('./Pie'), { ssr: false });
+const MixedAreaChartComponent = dynamic(() => import('./MixedAreaChart'), {
+  ssr: false,
+});
 
-export { PieChartComponent };
+export { PieChartComponent, MixedAreaChartComponent };
