@@ -8,7 +8,6 @@
 //     getSpreadsheetValuesByUrl,
 //     insertSpreadsheetValue,
 // } from '@/lib/googleAPI/sheets';
-// import { Platform } from '@/types/General';
 // import { ActivityStatus, Modality, ScholarAttendance, WorkshopYear } from '@prisma/client';
 // import { nanoid } from 'nanoid';
 // import { NextApiRequest } from 'next';
@@ -80,7 +79,7 @@
 //                     },
 //                     avalible_spots,
 //                     modality,
-//                     platform: platform as Platform,
+//                     platform: platform,
 //                     description,
 //                     year,
 //                     activity_status,
