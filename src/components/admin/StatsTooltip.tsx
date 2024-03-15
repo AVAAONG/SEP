@@ -1,6 +1,7 @@
 'use client';
-import { classNames } from '@/lib/scholar/utils';
+
 import { useState } from 'react';
+const classNames = (...classes: string[]) => classes.filter(Boolean).join(' ');
 
 const StatsTooltip = ({
   percentage,
