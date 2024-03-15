@@ -8,8 +8,8 @@ import scholarPublicWorkshopAttendanceColumns from '@/components/table/columns/s
 import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
 import { getChatsByScholar } from '@/lib/db/utils/chats';
 import { getScholarWithAllData } from '@/lib/db/utils/users';
-import { getCollageName } from '@/lib/parseFromDatabase';
 import generateQRCode from '@/lib/utils/createQrCode';
+import { getCollageName } from '@/lib/utils/parseFromDatabase';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 import moment from 'moment';
 import { headers } from 'next/headers';
@@ -102,8 +102,9 @@ const page = async ({
   const scholar = await getScholarWithAllData(scholarId);
   const lastNames = scholar?.last_names?.split(' ')!;
 
-  const name = `${scholar?.first_names.split(' ')[0]} ${lastNames[0].length < 3 ? `${lastNames[0]} ${lastNames[1]}` : lastNames[0]
-    } `;
+  const name = `${scholar?.first_names.split(' ')[0]} ${
+    lastNames[0].length < 3 ? `${lastNames[0]} ${lastNames[1]}` : lastNames[0]
+  } `;
   const { twitter_user, facebook_user, instagram_user, linkedin_user, program_information } =
     scholar || {};
 
@@ -260,8 +261,9 @@ const page = async ({
             <SharePubilcProfile qrCode={qrcode!} profileLink={pageUrl} />
           </div>
           <div
-            className={`${searchParams?.actividad === undefined ? 'md:py-28' : ''
-              } flex flex-col md:px-8 gap-8`}
+            className={`${
+              searchParams?.actividad === undefined ? 'md:py-28' : ''
+            } flex flex-col md:px-8 gap-8`}
           >
             {searchParams?.actividad !== undefined && (
               <Link

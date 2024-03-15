@@ -9,11 +9,16 @@ import { formatScholarDataForAttendanceTable } from '@/lib/tableUtils';
 import ExportButton from '@/lib/temp';
 import { parseModalityFromDatabase, parseSkillFromDatabase } from '@/lib/utils2';
 import { Modality } from '@prisma/client';
+import { notFound } from 'next/navigation';
 import shortUUID from 'short-uuid';
 
 const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => {
-  const workshopId = params.workshopId || ('null' as shortUUID.SUUID);
+  const workshopId = params.workshopId;
+
+  if (!workshopId) return null;
   const workshop = await getWorkshop(workshopId);
+  if (!workshop) return notFound();
+
   const { title, start_dates, speaker, modality, asociated_skill, platform, scholar_attendance } =
     workshop || {};
 

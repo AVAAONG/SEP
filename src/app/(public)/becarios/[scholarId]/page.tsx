@@ -8,8 +8,8 @@ import scholarPublicWorkshopAttendanceColumns from '@/components/table/columns/s
 import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
 import { getChatsByScholar } from '@/lib/db/utils/chats';
 import { getScholarWithAllData } from '@/lib/db/utils/users';
-import { getCollageName } from '@/lib/parseFromDatabase';
 import generateQRCode from '@/lib/utils/createQrCode';
+import { getCollageName } from '@/lib/utils/parseFromDatabase';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 import moment from 'moment';
 import { headers } from 'next/headers';
