@@ -2,7 +2,7 @@
 import DisplayDate from '@/components/DisplayDate';
 import DisplayTime from '@/components/DisplayTime';
 import SpeakersColumnWidget from '@/components/SpeakerColumnWidget';
-import { ActivityStatus, Modality, Prisma, Skill, WorkshopYear } from '@prisma/client';
+import { ActivityStatus, KindOfSpeaker, Prisma } from '@prisma/client';
 import Link from 'next/link';
 import { Column } from 'react-table';
 import ActivityStatusIndicator from '../ActivityStatus';
@@ -18,26 +18,26 @@ export type WorkshopWithAllData = Prisma.WorkshopGetPayload<typeof workshopWithA
 interface WorkshopDetails {
   id: string;
   title: string;
-  speakerIds: string;
-  speakerNames: string;
-  speakerCompany: string;
-  speakerKind: string;
-  speakerImages: string;
-  date: Date;
-  startHour: Date;
-  endHour: Date;
+  speakerNames: string[];
+  speakerImages: (string | undefined)[];
+  speakerIds: string[];
+  speakerKind: (KindOfSpeaker | null)[];
+  speakerCompany: (string | null)[];
+  date: string;
+  parsedStatus: string;
+  startHour: string;
   status: ActivityStatus;
-  skill: Skill;
-  modality: Modality;
+  skill: string; // Assuming parseSkillFromDatabase returns a string
+  modality: string; // Assuming parseModalityFromDatabase returns a string
   platform: string;
-  year: WorkshopYear;
-  enrrolledScholars: number;
+  year: string;
   attendedScholars: number;
+  enrrolledScholars: number;
 }
 
 const WorkshopColumns: Column<WorkshopDetails>[] = [
   {
-    Header: 'Taller',
+    Header: 'Actividad',
     accessor: 'title',
     Cell: ({ value, cell }) => {
       return (
@@ -78,9 +78,9 @@ const WorkshopColumns: Column<WorkshopDetails>[] = [
     },
   },
   {
-    accessor: 'status',
+    accessor: 'parsedStatus',
     Header: 'Estatus',
-    Cell: ({ value }) => <ActivityStatusIndicator status={value} />,
+    Cell: ({ cell }) => <ActivityStatusIndicator status={cell.row.original.status} />,
     disableSortBy: true,
   },
   {

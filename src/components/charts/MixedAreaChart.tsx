@@ -2,8 +2,24 @@
 import Chart from 'react-apexcharts';
 
 interface AreaBarChartProps {
-  areaSeries: ApexNonAxisChartSeries;
-  barSeries: ApexNonAxisChartSeries;
+  areaSeries: {
+    data: {
+      x: string;
+      y: number;
+    }[];
+    name: string;
+    color: string;
+    type: string;
+  };
+  barSeries: {
+    data: {
+      x: string;
+      y: number;
+    }[];
+    name: string;
+    color: string;
+    type: string;
+  };
 }
 
 const MixedChart = ({ areaSeries, barSeries }: AreaBarChartProps) => {

@@ -196,13 +196,13 @@ const countActivityAttendancePerMonth = (workshops: WorkshopWithAllData[]) => {
     };
 
     workshops.forEach((workshop) => {
+        if (workshop.activity_status === 'SUSPENDED' || workshop.activity_status === 'SCHEDULED' || workshop.activity_status === 'SENT') return;
         const date = new Date(workshop.start_dates[0]);
         const month = date.getMonth();
-
         // Calculate activitiesByMonth
         stats.activitiesByMonth[month] = (stats.activitiesByMonth[month] || 0) + 1;
         // Calculate workshopsWithHighAttendancePerMonth
-        const totalScholars = workshop.scholar_attendance?.filter((a) => a.attendance !== 'ATTENDED').length || 0;
+        const totalScholars = workshop.scholar_attendance?.filter((a) => (a.attendance === 'ENROLLED' || 'ATTENDED' || 'NOT_ATTENDED' || 'JUSTIFY') || 0).length;
         const attendedScholars =
             workshop.scholar_attendance?.filter((a) => a.attendance === 'ATTENDED').length || 0;
         const attendancePercentage = (attendedScholars / totalScholars) * 100;

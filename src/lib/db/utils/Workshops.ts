@@ -134,7 +134,7 @@ export const getWorkshops = async () => {
   const workshops = await prisma.workshop.findMany({
     include: {
       speaker: true,
-      scholar_attendance: true,
+      scholar_attendance: true
     },
   });
   return workshops;

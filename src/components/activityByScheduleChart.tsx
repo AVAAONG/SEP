@@ -3,34 +3,40 @@ import { PieChartComponent } from './charts';
 import { ChatsWithAllData } from './table/columns/chatsColumns';
 import { WorkshopWithAllData } from './table/columns/workshopColumns';
 
-function countActivitiesBySchedule(workshops: WorkshopWithAllData[] | ChatsWithAllData[]): {
-  morning: WorkshopWithAllData[] | ChatsWithAllData[];
-  afternoon: WorkshopWithAllData[] | ChatsWithAllData[];
-} {
-  return workshops.reduce(
-    (acc, workshop) => {
-      const startHour = new Date(workshop.start_dates[0]).getHours();
+const countActivitiesBySchedule = (
+  activities: WorkshopWithAllData[] | ChatsWithAllData[]
+): {
+  morning: number;
+  afternoon: number;
+} => {
+  return activities.reduce(
+    (acc, activity) => {
+      const startHour = new Date(activity.start_dates[0]).getHours();
       const key = startHour < 12 ? 'morning' : 'afternoon';
-      acc[key].push(workshop);
+      acc[key]++;
       return acc;
     },
     {
-      morning: [] as WorkshopWithAllData[] | ChatsWithAllData[],
-      afternoon: [] as WorkshopWithAllData[] | ChatsWithAllData[],
+      morning: 0,
+      afternoon: 0,
     }
   );
+};
+
+interface ActivityByScheduleChartProps {
+  activities: WorkshopWithAllData[] | ChatsWithAllData[];
 }
 
-const ActivityByScheduleChart = ({ activities }) => {
+const ActivityByScheduleChart: React.FC<ActivityByScheduleChartProps> = ({ activities }) => {
   const { morning, afternoon } = countActivitiesBySchedule(activities);
   return (
     <PieChartComponent
       data={[
         {
           label: 'Manañas',
-          value: morning.length,
+          value: morning,
         },
-        { label: 'Tardes', value: afternoon.length },
+        { label: 'Tardes', value: afternoon },
       ]}
     />
   );

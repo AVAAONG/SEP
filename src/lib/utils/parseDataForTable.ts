@@ -3,7 +3,7 @@ import { IScholarChatColumns } from "@/app/becario/chats/page";
 import { ChatsWithAllData } from "@/components/table/columns/chatsColumns";
 import { WorkshopWithAllData } from "@/components/table/columns/workshopColumns";
 import { KindOfSpeaker } from "@prisma/client";
-import { parseModalityFromDatabase, parseSkillFromDatabase, parseWorkshopYearFromDatabase } from "../utils2";
+import { parseModalityFromDatabase, parseSkillFromDatabase, parseWorkshopStatusFromDatabase, parseWorkshopYearFromDatabase } from "../utils2";
 
 const createScholarWorkshopAttendanceObject = (workshops: WorkshopWithAllData[]): IScholarWorkshopColumns[] => {
     return workshops.map((workshop): IScholarWorkshopColumns => {
@@ -94,12 +94,11 @@ const createAdminWorkshopsObjectForTable = (workshops: WorkshopWithAllData[]) =>
         const attendedScholars = workshop.scholar_attendance.filter((a) => a.attendance === 'ATTENDED')
             .length;
         const enrrolledScholars = workshop.scholar_attendance.filter(
-            (a) => a.attendance === 'ENROLLED' || 'ATTENDED'
+            (a) => a.attendance === 'ENROLLED' || 'ATTENDED' || 'NOT_ATTENDED' || 'JUSTIFY'
         ).length;
         return {
             id: workshop.id,
             title: workshop.title,
-            speakerId: workshop.speaker[0].id,
             speakerNames,
             speakerImages,
             speakerIds,
@@ -108,6 +107,7 @@ const createAdminWorkshopsObjectForTable = (workshops: WorkshopWithAllData[]) =>
             date: new Date(workshop.start_dates[0]).toISOString(),
             startHour: new Date(workshop.start_dates[0]).toISOString(),
             status: workshop.activity_status,
+            parsedStatus: parseWorkshopStatusFromDatabase(workshop.activity_status),
             skill: parseSkillFromDatabase(workshop.asociated_skill),
             modality: parseModalityFromDatabase(workshop.modality),
             platform: workshop.platform,

@@ -3,7 +3,7 @@ import AdminStats from '@/components/admin/AdminStats';
 import { MixedAreaChartComponent, PieChartComponent } from '@/components/charts';
 import DateSelector from '@/components/commons/datePicker';
 import Table from '@/components/table/Table';
-import WorkshopColumns, { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
+import WorkshopColumns from '@/components/table/columns/workshopColumns';
 import { getWorkshops } from '@/lib/db/utils/Workshops';
 import {
   categorizeActivityByStatus,
@@ -21,15 +21,14 @@ const page = async ({
   searchParams?: { year: string; month: string; quarter: string };
 }) => {
   const resultWorkshops = await getWorkshops();
-  let workshops: WorkshopWithAllData[] = filterActivitiesBySearchParams(
-    resultWorkshops,
-    searchParams
-  );
+  const workshops = filterActivitiesBySearchParams(resultWorkshops, searchParams);
+  const workshopObjectForTable = createAdminWorkshopsObjectForTable(workshops);
   const activitiesByStatus = categorizeActivityByStatus(workshops);
-  const workshopPropertiesCounts = countWorkshopProperties(workshops);
+
+  const workshopPropertiesCounts = countWorkshopProperties(activitiesByStatus.ATTENDANCE_CHECKED);
   const workshopPropertiesFormatedForCharts = formatCountsForCharts(workshopPropertiesCounts);
   const stats = createAdminStatsForWorkshops(activitiesByStatus, workshops.length);
-  const workshopObjectForTable = createAdminWorkshopsObjectForTable(workshops);
+
   const { barSeries, lineSeries } = getActivityAttendancePerMonth(
     activitiesByStatus.ATTENDANCE_CHECKED
   );
@@ -63,7 +62,7 @@ const page = async ({
         <Table
           tableData={workshopObjectForTable}
           tableColumns={WorkshopColumns}
-          tableHeadersForSearch={[]}
+          tableHeadersForSearch={[{ option: 'parsedStatus', label: 'Estatus' }]}
         />
       </div>
     </div>

@@ -1,4 +1,5 @@
 'use server';
+import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
 import { Chat, Volunteer, Workshop } from '@prisma/client';
 
 const filterActivityByMonth = (
@@ -38,7 +39,7 @@ const filterActivityByYear = (
 }
 
 const filterActivitiesBySearchParams = (
-  activityDbList: (Workshop | Chat | Volunteer)[],
+  activityDbList: (WorkshopWithAllData | Chat | Volunteer)[],
   searchParams: { year?: string; quarter?: string; month?: string } | undefined
 ): (Workshop | Chat | Volunteer)[] => {
   let activities: (Workshop | Chat | Volunteer)[];
