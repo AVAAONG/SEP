@@ -45,16 +45,16 @@ const page = async ({
       <div className="w-full grid md:grid-cols-5 justify-center items-center rounded-lg bg-white p-4">
         <div className="md:col-start-2">
           <h3 className="truncate font-semibold text-center text-sm">
-            Distribucion por competencia
+            Distribución por competencia
           </h3>
           <PieChartComponent data={workshopPropertiesFormatedForCharts.skills} />
         </div>
         <div>
-          <h3 className="truncate font-semibold text-center text-sm">Distribucion por modalidad</h3>
+          <h3 className="truncate font-semibold text-center text-sm">Distribución por modalidad</h3>
           <PieChartComponent data={workshopPropertiesFormatedForCharts.modality} />
         </div>
         <div>
-          <h3 className="truncate font-semibold text-center text-sm">Distribucion por horario</h3>
+          <h3 className="truncate font-semibold text-center text-sm">Distribución por horario</h3>
           <ActivityByScheduleChart activities={activitiesByStatus.ATTENDANCE_CHECKED} />
         </div>
       </div>
