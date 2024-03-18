@@ -3,7 +3,7 @@ import { IScholarChatColumns } from "@/app/becario/chats/page";
 import { ChatsWithAllData } from "@/components/table/columns/chatsColumns";
 import { WorkshopWithAllData } from "@/components/table/columns/workshopColumns";
 import { KindOfSpeaker } from "@prisma/client";
-import { parseModalityFromDatabase, parseSkillFromDatabase, parseWorkshopStatusFromDatabase, parseWorkshopYearFromDatabase } from "../utils2";
+import { parseChatLevelFromDatabase, parseModalityFromDatabase, parseSkillFromDatabase, parseWorkshopStatusFromDatabase, parseWorkshopYearFromDatabase } from "../utils2";
 
 const createScholarWorkshopAttendanceObject = (workshops: WorkshopWithAllData[]): IScholarWorkshopColumns[] => {
     return workshops.map((workshop): IScholarWorkshopColumns => {
@@ -118,9 +118,47 @@ const createAdminWorkshopsObjectForTable = (workshops: WorkshopWithAllData[]) =>
     });
 }
 
+const createAdminChatsObjectForTable = (chats: ChatsWithAllData[]) => {
+    const speakerNames: string[] = [];
+    const speakerImages: (string | undefined)[] = [];
+    const speakerIds: string[] = [];
+    const speakerCompany: (string | null)[] = [];
+    const speakerKind: (KindOfSpeaker | null)[] = [];
+    chats.map((chat) => {
+        chat.speaker.forEach((speaker) => {
+            speakerNames.push(`${speaker.first_names.split(' ')[0]} ${speaker.last_names.split(' ')[0]}`);
+            speakerImages.push(speaker.image || undefined);
+            speakerIds.push(speaker.id);
+            speakerCompany.push(speaker.job_company);
+            speakerKind.push(speaker.speaker_kind);
+        });
+
+        const attendedScholars = chat.scholar_attendance.filter((a) => a.attendance === 'ATTENDED')
+            .length;
+        const enrrolledScholars = chat.scholar_attendance.filter(
+            (a) => a.attendance === 'ENROLLED' || 'ATTENDED' || 'NOT_ATTENDED' || 'JUSTIFY'
+        ).length;
+        return {
+            id: chat.id,
+            title: chat.title,
+            date: new Date(chat.start_dates[0]).toISOString(),
+            startHour: new Date(chat.start_dates[0]).toISOString(),
+            status: parseWorkshopStatusFromDatabase(chat.activity_status),
+            modality: parseModalityFromDatabase(chat.modality),
+            platform: chat.platform,
+            level: parseChatLevelFromDatabase(chat.level),
+            scholarsEnrroled: chat.scholar_attendance.filter(
+                (a) => a.attendance === 'ENROLLED' || 'ATTENDED'
+            ).length,
+            attendedScholars,
+            enrrolledScholars,
+        };
+    });
+}
 export {
     createScholarWorkshopAttendanceObject,
     createScholarChatAttendanceObject,
-    createAdminWorkshopsObjectForTable
+    createAdminWorkshopsObjectForTable,
+    createAdminChatsObjectForTable
 };
 

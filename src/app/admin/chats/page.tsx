@@ -1,9 +1,10 @@
 import DateSelector from '@/components/commons/datePicker';
 import Table from '@/components/table/Table';
-import ChatColumns, { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
+import ChatColumns from '@/components/table/columns/chatsColumns';
 import { getChats } from '@/lib/db/utils/chats';
 import { createArrayFromObject } from '@/lib/utils';
 import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
+import { createAdminChatsObjectForTable } from '@/lib/utils/parseDataForTable';
 import {
   parseChatLevelFromDatabase,
   parseModalityFromDatabase,
@@ -12,6 +13,7 @@ import {
 import { Tooltip } from '@nextui-org/react';
 import dynamic from 'next/dynamic';
 import { filterActivitiesBySchedule } from '../actividadesFormativas/page';
+import { categorizeActivityByStatus } from '@/lib/utils/activityFilters';
 
 const PieChartComponent = dynamic(() => import('@/components/charts/Pie'), { ssr: false });
 const MixedAreaChartComponent = dynamic(() => import('@/components/charts/MixedAreaChart'), {
@@ -21,22 +23,12 @@ const MixedAreaChartComponent = dynamic(() => import('@/components/charts/MixedA
 const page = async ({
   searchParams,
 }: {
-  params: { scholarId: string };
   searchParams?: { year: string; month: string; quarter: string };
 }) => {
-  const resultWorkshops = await getChats();
-  let workshops: ChatsWithAllData[] = filterActivitiesBySearchParams(resultWorkshops, searchParams);
-
-  const suspendedWorkshops = workshops.filter(
-    (workshop) => workshop.activity_status === 'SUSPENDED'
-  );
-  const doneWorkshops = workshops.filter(
-    (workshop) =>
-      workshop.activity_status === 'ATTENDANCE_CHECKED' || workshop.activity_status === 'DONE'
-  );
-  const scheduledWorkshops = workshops.filter(
-    (workshop) => workshop.activity_status === 'SCHEDULED'
-  );
+  const rawChats = await getChats();
+  let chats = filterActivitiesBySearchParams(rawChats, searchParams);
+  const chatObjectForTable = createAdminChatsObjectForTable(chats);
+  const activitiesByStatus = categorizeActivityByStatus(chats);
 
   const doneWorkshopsPercentage = Number(
     ((doneWorkshops.length / workshops.length) * 100).toFixed(0)
@@ -45,32 +37,6 @@ const page = async ({
     ((suspendedWorkshops.length / workshops.length) * 100).toFixed(0)
   );
 
-  const chatSDataForTable = workshops.map((chat) => {
-    return {
-      id: chat.id,
-      title: chat.title,
-      speakerNames: chat.speaker.map(
-        (speaker) => `${speaker.first_names.split(' ')[0]} ${speaker.last_names.split(' ')[0]}`
-      ),
-      speakerImages: chat.speaker.map((speaker) => speaker.image),
-      speakerIds: chat.speaker.map((speaker) => speaker.id),
-      speakerCompany: chat.speaker.map((speaker) => speaker.job_company),
-      date: new Date(chat.start_dates[0]).toLocaleString('es-ES', {
-        month: 'numeric',
-        day: 'numeric',
-        year: 'numeric',
-      }),
-      startHour: new Date(chat.start_dates[0]).toISOString(),
-      status: parseWorkshopStatusFromDatabase(chat.activity_status),
-      modality: parseModalityFromDatabase(chat.modality),
-      platform: chat.platform,
-      level: parseChatLevelFromDatabase(chat.level),
-      scholarsEnrroled: chat.scholar_attendance.filter(
-        (a) => a.attendance === 'ENROLLED' || 'ATTENDED'
-      ).length,
-      attendedScholars: chat.scholar_attendance.filter((a) => a.attendance === 'ATTENDED').length,
-    };
-  });
   const stats = [
     {
       name: 'Chat clubs ofertados',
@@ -254,7 +220,7 @@ const page = async ({
       </div>
       <div className="w-full ">
         <Table
-          tableData={chatSDataForTable}
+          tableData={chatObjectForTable}
           tableColumns={ChatColumns}
           tableHeadersForSearch={[]}
         />
