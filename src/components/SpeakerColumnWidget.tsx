@@ -52,8 +52,8 @@ const SpeakersColumnWidget: React.FC<SpeakersColumnWidgetProps> = ({
               showArrow
               content={
                 <SpeakerColumnWidgetCard
-                  speakerCompany={speakersCompany[index]}
-                  speakerImage={speakerImages[index]}
+                  speakerCompany={speakersCompany?.[index]}
+                  speakerImage={speakerImages?.[index]}
                   speakerName={speakerName}
                 />
               }
