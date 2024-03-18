@@ -559,8 +559,7 @@ export const enroleScholarInWorkshop = async (
           scholar_attendance: true,
         }
       });
-      const totalAttendance = workshop?.scholar_attendance.filter(attendance => attendance.attendance === 'ENROLLED').length;
-      if (!totalAttendance) return;
+      const totalAttendance = workshop?.scholar_attendance.filter(attendance => attendance.attendance === 'ENROLLED').length || 0;
       if (totalAttendance >= workshop?.avalible_spots!) { }
       else {
         await prisma.workshopAttendance.create({
@@ -612,7 +611,7 @@ export const enroleScholarInChat = async (
           scholar_attendance: true,
         }
       });
-      const totalAttendance = chat?.scholar_attendance.filter(attendance => attendance.attendance === 'ENROLLED').length;
+      const totalAttendance = chat?.scholar_attendance.filter(attendance => attendance.attendance === 'ENROLLED').length || 0;
       if (!totalAttendance) return;
       if (totalAttendance >= chat?.avalible_spots!) { }
       else {
