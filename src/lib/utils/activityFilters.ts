@@ -2,9 +2,9 @@
 
 import { ChatsWithAllData } from "@/components/table/columns/chatsColumns";
 import { WorkshopWithAllData } from "@/components/table/columns/workshopColumns";
-import { ActivityStatus, Chat, Volunteer, Workshop } from "@prisma/client";
+import { ActivityStatus, Chat, Volunteer, Workshop, WorkshopSafisfactionForm } from "@prisma/client";
 import { VolunteerWithAllData } from "../db/types";
-import { parseChatLevelFromDatabase, parseModalityFromDatabase, parseSkillFromDatabase, parseWorkshopKindFromDatabase, parseWorkshopYearFromDatabase } from "../utils2";
+import { parseChatLevelFromDatabase, parseModalityFromDatabase, parseSatisfactionFormResponsesFromDatabase, parseSkillFromDatabase, parseWorkshopKindFromDatabase, parseWorkshopYearFromDatabase } from "../utils2";
 
 const countActivityByModality = (attendedActivities: (Workshop | Chat | Volunteer)[]) => {
     return attendedActivities.reduce(
@@ -259,6 +259,34 @@ const getActivityAttendancePerMonth = (workshops: WorkshopWithAllData[]) => {
 
 
 
+const countActivitySatisfactionForm = (form: WorkshopSafisfactionForm[]) => {
+    const counts = {
+        activity_organization: {},
+        activity_number_of_participants: {},
+        activity_lenght: {},
+        activity_relevance_for_scholar: {},
+        speaker_theory_practice_mix: {},
+        speaker_knowledge_of_activity: {},
+        speaker_foment_scholar_to_participate: {},
+        speaker_knowledge_transmition: {},
+        content_match_necesities: {},
+        content_knowledge_adquisition: {},
+        content_knowledge_expansion: {},
+        content_personal_development: {},
+        general_satisfaction: {}
+    };
+
+    form.forEach(workshop => {
+        Object.keys(counts).forEach(key => {
+            const value = parseSatisfactionFormResponsesFromDatabase(workshop[key]);
+            counts[key][value] = (counts[key][value] || 0) + 1;
+        });
+    });
+
+    return counts;
+}
+
+
 
 export {
     countActivityByModality,
@@ -268,6 +296,7 @@ export {
     categorizeActivityByStatus,
     formatCountsForCharts,
     countWorkshopProperties,
+    countActivitySatisfactionForm,
     createAdminStatsForActivities,
     formatChatCountsForCharts,
     countChatProperties,

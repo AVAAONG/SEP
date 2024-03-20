@@ -320,7 +320,9 @@ export const getWorkshop = async (id: shortUUID.SUUID) => {
     include: {
       speaker: true,
       scholar_attendance: {
+
         include: {
+          satisfaction_form: true,
           scholar: {
             include: {
               scholar: {

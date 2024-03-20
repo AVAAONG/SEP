@@ -121,3 +121,79 @@ export const parseWorkshopYearFromDatabase = (years: WorkshopYear[]) => {
     return years.join(', ');
   }
 };
+
+export const parseSatisfactionFormResponsesFromDatabase = (response: number) => {
+  switch (response) {
+    case 1:
+      return 'Malo';
+    case 2:
+      return 'Deficiente';
+    case 3:
+      return 'Regular';
+    case 4:
+      return 'Bueno';
+    case 5:
+      return 'Excelente';
+    default:
+      return 'No definido';
+  }
+};
+
+export const parseSatisfactionFormTitlesFromDatabase = (key: string) => {
+  switch (key) {
+    case 'activity_organization':
+      return {
+        title: 'Organización de la actividad',
+        question:
+          'La actividad estuvo bien organizada (información, cumplimiento de fechas, horarios y atención)',
+      };
+    case 'activity_number_of_participants':
+      return {
+        title: 'Número de participantes',
+        question: 'El número de participantes ha sido adecuado para el desarrollo de la actividad',
+      };
+    case 'activity_lenght':
+      return {
+        title: 'Duración de la actividad',
+        question:
+          'La duración de la actividad fue suficiente, según los objetivos y contenidos de la misma',
+      };
+    case 'activity_relevance_for_scholar':
+      return {
+        title: 'Relevancia para el becario',
+        question: 'Grado de relevancia de la actividad, para mi formación integral',
+      };
+    case 'speaker_theory_practice_mix':
+      return {
+        title: 'Mezcla de teoría y práctica del facilitador',
+        question: ' Combinación adecuada de teoría y aplicación práctica',
+      };
+    case 'speaker_knowledge_of_activity':
+      return {
+        title: 'Conocimiento del tema por parte del facilitador',
+        question: 'Conocimiento de los temas impartidos en profundidad',
+      };
+    case 'speaker_foment_scholar_to_participate':
+      return {
+        title: 'El facilitador fomento la participación de los asistentes',
+        question: 'El facilitador fomento la participación de los asistentes',
+      };
+    case 'speaker_knowledge_transmition':
+      return {
+        title: 'Transmisión de conocimientos del facilitador',
+        question: 'La forma de impartir la actividad ha facilitado el aprendizaje',
+      };
+    case 'content_match_necesities':
+      return 'El contenido coincide con las necesidades';
+    case 'content_knowledge_adquisition':
+      return 'Adquisición de conocimientos de contenido';
+    case 'content_knowledge_expansion':
+      return 'Expansión de conocimientos de contenido';
+    case 'content_personal_development':
+      return 'Desarrollo personal de contenido';
+    case 'general_satisfaction':
+      return 'Satisfacción general';
+    default:
+      return 'Clave no reconocida';
+  }
+};

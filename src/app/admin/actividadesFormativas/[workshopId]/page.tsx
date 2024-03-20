@@ -39,6 +39,8 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
     ? scholar_attendance.map((attendance) => attendance.scholar.scholar.email)
     : [];
 
+  const formResponses = scholar_attendance.map((attendance) => attendance.satisfaction_form);
+
   return (
     <div className="space-y-6  min-h-screen">
       <ActivityPanelInfo activity={workshop as WorkshopWithSpeaker}>
@@ -46,6 +48,53 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
           <ActivityScholarStatusesCount scholarAttendance={scholar_attendance} />
           <AdminActivityActions
             activityId={workshopId}
+            formResponses={[
+              {
+                activity_organization: 5,
+                activity_number_of_participants: 5,
+                activity_lenght: 5,
+                activity_relevance_for_scholar: 5,
+                speaker_theory_practice_mix: 5,
+                speaker_knowledge_of_activity: 5,
+                speaker_foment_scholar_to_participate: 5,
+                speaker_knowledge_transmition: 5,
+                content_match_necesities: 4,
+                content_knowledge_adquisition: 5,
+                content_knowledge_expansion: 5,
+                content_personal_development: 5,
+                general_satisfaction: 5,
+              },
+              {
+                activity_organization: 3,
+                activity_number_of_participants: 1,
+                activity_lenght: 2,
+                activity_relevance_for_scholar: 2,
+                speaker_theory_practice_mix: 2,
+                speaker_knowledge_of_activity: 3,
+                speaker_foment_scholar_to_participate: 8,
+                speaker_knowledge_transmition: 1,
+                content_match_necesities: 2,
+                content_knowledge_adquisition: 1,
+                content_knowledge_expansion: 2,
+                content_personal_development: 5,
+                general_satisfaction: 3,
+              },
+              {
+                activity_organization: 4,
+                activity_number_of_participants: 1,
+                activity_lenght: 2,
+                activity_relevance_for_scholar: 4,
+                speaker_theory_practice_mix: 1,
+                speaker_knowledge_of_activity: 2,
+                speaker_foment_scholar_to_participate: 8,
+                speaker_knowledge_transmition: 1,
+                content_match_necesities: 2,
+                content_knowledge_adquisition: 1,
+                content_knowledge_expansion: 2,
+                content_personal_development: 2,
+                general_satisfaction: 1,
+              },
+            ]}
             kindOfActivity="workshop"
             scholarsEmails={scholarEmails}
           />

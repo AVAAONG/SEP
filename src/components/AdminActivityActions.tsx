@@ -1,11 +1,13 @@
 'use client';
 import { Button } from '@nextui-org/react';
 import StatusUpdateButton from './activityActions/changeStatus';
+import SatisfactionFormResults from './activityActions/satisfactionFormResults';
 
 const AdminActivityActions = ({
   kindOfActivity,
   activityId,
   scholarsEmails,
+  formResponses,
 }: {
   kindOfActivity: 'workshop' | 'chat';
   scholarsEmails: (string | null)[];
@@ -20,7 +22,7 @@ const AdminActivityActions = ({
           activityForChangeId={activityId}
           scholarsEmails={scholarsEmails}
         />
-        <Button className="w-full">Resultados de la encuesta</Button>
+        <SatisfactionFormResults formResponses={formResponses} />
       </div>
     </>
   );
