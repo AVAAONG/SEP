@@ -8,7 +8,7 @@ import { getWorkshops } from '@/lib/db/utils/Workshops';
 import {
   categorizeActivityByStatus,
   countWorkshopProperties,
-  createAdminStatsForWorkshops,
+  createAdminStatsForActivities,
   formatCountsForCharts,
   getActivityAttendancePerMonth,
 } from '@/lib/utils/activityFilters';
@@ -27,7 +27,7 @@ const page = async ({
 
   const workshopPropertiesCounts = countWorkshopProperties(activitiesByStatus.ATTENDANCE_CHECKED);
   const workshopPropertiesFormatedForCharts = formatCountsForCharts(workshopPropertiesCounts);
-  const stats = createAdminStatsForWorkshops(activitiesByStatus, workshops.length);
+  const stats = createAdminStatsForActivities(activitiesByStatus, workshops.length, 'workshop');
 
   const { barSeries, lineSeries } = getActivityAttendancePerMonth(
     activitiesByStatus.ATTENDANCE_CHECKED

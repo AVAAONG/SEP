@@ -119,12 +119,13 @@ const createAdminWorkshopsObjectForTable = (workshops: WorkshopWithAllData[]) =>
 }
 
 const createAdminChatsObjectForTable = (chats: ChatsWithAllData[]) => {
-    const speakerNames: string[] = [];
-    const speakerImages: (string | undefined)[] = [];
-    const speakerIds: string[] = [];
-    const speakerCompany: (string | null)[] = [];
-    const speakerKind: (KindOfSpeaker | null)[] = [];
-    chats.map((chat) => {
+
+    return chats.map((chat) => {
+        const speakerNames: string[] = [];
+        const speakerImages: (string | undefined)[] = [];
+        const speakerIds: string[] = [];
+        const speakerCompany: (string | null)[] = [];
+        const speakerKind: (KindOfSpeaker | null)[] = [];
         chat.speaker.forEach((speaker) => {
             speakerNames.push(`${speaker.first_names.split(' ')[0]} ${speaker.last_names.split(' ')[0]}`);
             speakerImages.push(speaker.image || undefined);
@@ -152,6 +153,11 @@ const createAdminChatsObjectForTable = (chats: ChatsWithAllData[]) => {
             ).length,
             attendedScholars,
             enrrolledScholars,
+            speakerNames,
+            speakerImages,
+            speakerIds,
+            speakerKind,
+            speakerCompany,
         };
     });
 }

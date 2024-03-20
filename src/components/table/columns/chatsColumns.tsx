@@ -1,4 +1,5 @@
 'use client';
+import DisplayDate from '@/components/DisplayDate';
 import DisplayTime from '@/components/DisplayTime';
 import SpeakersColumnWidget from '@/components/SpeakerColumnWidget';
 import { Level, Prisma } from '@prisma/client';
@@ -61,6 +62,9 @@ const ChatColumns: Column<ChatDataForTable>[] = [
   {
     Header: 'Fecha',
     accessor: 'date',
+    Cell: ({ value }) => {
+      return <DisplayDate date={value} kind="short" />;
+    },
   },
   {
     Header: 'Inicio',

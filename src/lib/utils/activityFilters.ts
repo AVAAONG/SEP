@@ -94,23 +94,7 @@ const formatCountsForCharts = (counts: Record<string, Record<string, number>>): 
     return result;
 };
 
-const countChatProperties = (chats: ChatsWithAllData[]): {
-    level: Count[];
-    modality: Count[];
-
-} => {
-    const counts: Record<string, Record<string, number>> = {
-        level: {},
-        modality: {},
-    };
-
-    chats.forEach(chat => {
-        const chatLevel = parseChatLevelFromDatabase(chat.level);
-        const chatModality = parseModalityFromDatabase(chat.modality)
-        counts.level[chatLevel] = (counts.level[chatLevel] || 0) + 1;
-        counts.modality[chatModality] = (counts.modality[chatModality] || 0) + 1;
-    });
-
+const formatChatCountsForCharts = (counts: Record<string, Record<string, number>>): { level: Count[]; modality: Count[] } => {
     const result: { level: Count[]; modality: Count[] } = {
         level: [],
         modality: [],
@@ -124,6 +108,22 @@ const countChatProperties = (chats: ChatsWithAllData[]): {
     }
 
     return result;
+};
+
+const countChatProperties = (chats: ChatsWithAllData[]) => {
+    const counts: Record<string, Record<string, number>> = {
+        level: {},
+        modality: {},
+    };
+
+    chats.forEach(chat => {
+        const chatLevel = parseChatLevelFromDatabase(chat.level);
+        const chatModality = parseModalityFromDatabase(chat.modality)
+        counts.level[chatLevel] = (counts.level[chatLevel] || 0) + 1;
+        counts.modality[chatModality] = (counts.modality[chatModality] || 0) + 1;
+    });
+
+    return counts;
 };
 
 const categorizeActivityByStatus = (activities: WorkshopWithAllData[] | ChatsWithAllData[]) => {
@@ -143,7 +143,10 @@ const categorizeActivityByStatus = (activities: WorkshopWithAllData[] | ChatsWit
     return categorizedActivities;
 };
 
-const createAdminStatsForWorkshops = (activitiesByStatus: Record<ActivityStatus, WorkshopWithAllData[]>, totalAmountOfActivities: number) => {
+const createAdminStatsForActivities = (activitiesByStatus: Record<ActivityStatus, WorkshopWithAllData[] | ChatsWithAllData[]>, totalAmountOfActivities: number, kindOfActivity: 'workshop' | 'chat') => {
+
+    const mainText = kindOfActivity === 'workshop' ? 'Actividades formativas' : 'Chats clubs';
+    const gender = kindOfActivity === 'workshop' ? 'a' : 'o';
     const doneWorkshopsPercentage = Number(
         ((activitiesByStatus.ATTENDANCE_CHECKED.length / totalAmountOfActivities) * 100).toFixed(0)
     );
@@ -153,31 +156,30 @@ const createAdminStatsForWorkshops = (activitiesByStatus: Record<ActivityStatus,
 
     const stats = [
         {
-            name: 'Actividades formativas ofertadas',
+            name: `${mainText} ofertad${gender}s`,
             stat: totalAmountOfActivities || 0,
-            previousStat: 250,
             changeType: 'decrease',
             comparationText: null,
             tooltipText: null,
         },
         {
-            name: 'Actividades formativas realizadas',
+            name: `${mainText} realizad${gender}s`,
             stat: activitiesByStatus.ATTENDANCE_CHECKED.length || 0,
             changeType: 'increase',
-            comparationText: `De ${totalAmountOfActivities || 0} actividades ofertadas`,
+            comparationText: `De ${totalAmountOfActivities || 0} actividades ofertad${gender}s`,
             comparation: doneWorkshopsPercentage,
-            tooltipText: `${doneWorkshopsPercentage}% de las actividades fueron realizadas`,
+            tooltipText: `${doneWorkshopsPercentage}% de las actividades fueron realizad${gender}s`,
         },
         {
-            name: 'Actividades formativas canceladas',
+            name: `${mainText} suspendid${gender}s`,
             stat: activitiesByStatus.SUSPENDED.length || 0,
             changeType: 'increase',
-            comparationText: `De ${totalAmountOfActivities || 0} actividades ofertadas`,
+            comparationText: `De ${totalAmountOfActivities || 0} actividades ofertad${gender}s`,
             comparation: suspendedWorkshopsPercentage,
-            tooltipText: `${suspendedWorkshopsPercentage}% de las actividades fueron canceladas`,
+            tooltipText: `${suspendedWorkshopsPercentage}% de las actividades fueron cancelad${gender}s`,
         },
         {
-            name: 'Actividades formativas agendadas',
+            name: `${mainText} agendadas`,
             stat: activitiesByStatus.SCHEDULED.length + activitiesByStatus.SENT.length || 0,
             changeType: 'increase',
             comparationText: null,
@@ -233,7 +235,7 @@ const formatActivityAttendancePerMonthForChart = (stats: {
             x: new Date(0, Number(month)).toLocaleString('es-ES', { month: 'long' }),
             y: count,
         })),
-        name: 'Actividades formativas con alta asistencia',
+        name: 'Actividades  con alta asistencia',
         color: '#eab308',
         type: 'line',
     };
@@ -242,7 +244,7 @@ const formatActivityAttendancePerMonthForChart = (stats: {
             x: new Date(0, Number(month)).toLocaleString('es-ES', { month: 'long' }),
             y: count,
         })),
-        name: 'Actividades formativas realizadas',
+        name: 'Actividades realizadas',
         color: '#23a217',
         type: 'bar',
     }
@@ -266,7 +268,8 @@ export {
     categorizeActivityByStatus,
     formatCountsForCharts,
     countWorkshopProperties,
-    createAdminStatsForWorkshops,
+    createAdminStatsForActivities,
+    formatChatCountsForCharts,
     countChatProperties,
     getActivityAttendancePerMonth
 };
