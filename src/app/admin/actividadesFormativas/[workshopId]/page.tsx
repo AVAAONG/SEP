@@ -27,12 +27,6 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
     scholar_attendance ? scholar_attendance : []
   );
 
-  const attendanceHadBeenPassed = scholar_attendance?.some(
-    (attendance) =>
-      attendance.attendance === 'ATTENDED' ||
-      attendance.attendance === 'NOT_ATTENDED' ||
-      attendance.attendance === 'JUSTIFY'
-  );
   const scholarDataToExport = scholarAttendanceDataForTable
     .filter((scholar) => scholar.attendance === 'ENROLLED')
     .map((scholar) => {
@@ -41,6 +35,9 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
         dni: scholar.dni,
       };
     });
+  const scholarEmails = scholar_attendance
+    ? scholar_attendance.map((attendance) => attendance.scholar.scholar.email)
+    : [];
 
   return (
     <div className="space-y-6  min-h-screen">
@@ -50,7 +47,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
           <AdminActivityActions
             activityId={workshopId}
             kindOfActivity="workshop"
-            attendanceHadBeenPassed={attendanceHadBeenPassed}
+            scholarsEmails={scholarEmails}
           />
         </div>
       </ActivityPanelInfo>

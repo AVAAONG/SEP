@@ -12,7 +12,6 @@ import { Gender, Modality, ScholarAttendance } from '@prisma/client';
 import { notFound } from 'next/navigation';
 import shortUUID from 'short-uuid';
 
-
 export interface IScholarForAttendanceTable {
   id: string;
   first_names: string;
@@ -34,35 +33,24 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
   const chat = await getChat(chatId);
   if (!chatId) return notFound();
 
-  const {
-    title,
-    level,
-    start_dates,
-    modality,
-    speaker,
-    platform,
-    scholar_attendance,
-  } = chat || {};
+  const { title, level, start_dates, modality, speaker, platform, scholar_attendance } = chat || {};
 
   const scholarAttendanceDataForTable = await formatScholarDataForAttendanceTable(
     scholar_attendance ? scholar_attendance.map((a) => a.scholar.scholar) : [],
     scholar_attendance ? scholar_attendance : []
   );
+  const scholarDataToExport = scholarAttendanceDataForTable
+    .filter((scholar) => scholar.attendance === 'ENROLLED')
+    .map((scholar) => {
+      return {
+        names: scholar.first_names.split(' ')[0] + ' ' + scholar.last_names.split(' ')[0],
+        dni: scholar.dni,
+      };
+    });
 
-  const scholarDataToExport = scholarAttendanceDataForTable.filter((scholar) => scholar.attendance === 'ENROLLED').map((scholar) => {
-    return {
-      names: scholar.first_names.split(' ')[0] + ' ' + scholar.last_names.split(' ')[0],
-      dni: scholar.dni,
-    };
-  });
-
-  const attendanceHadBeenPassed = scholar_attendance?.some(
-    (attendance) =>
-      attendance.attendance === 'ATTENDED' ||
-      attendance.attendance === 'NOT_ATTENDED' ||
-      attendance.attendance === 'JUSTIFY'
-  );
-
+  const scholarEmails = scholar_attendance
+    ? scholar_attendance.map((attendance) => attendance.scholar.scholar.email)
+    : [];
   return (
     <div className="space-y-6  min-h-screen">
       <ActivityPanelInfo activity={chat as ChatWithSpeaker}>
@@ -70,8 +58,8 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
           <ActivityScholarStatusesCount scholarAttendance={scholar_attendance} />
           <AdminActivityActions
             activityId={chatId}
-            kindOfActivity="workshop"
-            attendanceHadBeenPassed={attendanceHadBeenPassed}
+            kindOfActivity="chat"
+            scholarsEmails={scholarEmails}
           />
         </div>
       </ActivityPanelInfo>
@@ -93,10 +81,10 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
                 hour={
                   start_dates
                     ? new Date(start_dates[0]).toLocaleTimeString('es-ES', {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      hour12: true,
-                    })
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true,
+                      })
                     : ''
                 }
                 modality={parseModalityFromDatabase(modality as Modality)}

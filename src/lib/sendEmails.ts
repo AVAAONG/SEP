@@ -28,7 +28,7 @@ const sendEmailWithDevAccount = async (name: string, html: string, to: string, g
 };
 export default sendEmailWithDevAccount;
 
-export const sendGenericEmail = async (htmlMessage: string, to: string, subject: string) => {
+export const sendGenericEmail = async (htmlMessage: string, to: string | string[], subject: string) => {
   const transport = createTransport({
     service: 'gmail',
     auth: {

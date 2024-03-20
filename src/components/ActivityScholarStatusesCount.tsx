@@ -10,19 +10,19 @@ const ActivityScholarStatusesCount = ({ scholarAttendance }) => {
 
   const STATS = [
     {
-      title: 'Total de inscritos',
+      title: 'Inscritos',
       value: enroledScholars,
     },
     {
-      title: 'Total de asistentes',
+      title: 'Asistentes',
       value: attendedScholarsCount,
     },
     {
-      title: 'Total de inasistentes',
+      title: 'Inasistentes',
       value: unAttendedScholarsCount,
     },
     {
-      title: 'Total de cancelaciones',
+      title: 'Cancelaciones',
       value: cancelledScholarsCount,
     },
   ];
