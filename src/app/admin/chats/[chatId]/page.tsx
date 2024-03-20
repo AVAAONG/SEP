@@ -1,14 +1,17 @@
 import ActivityPanelInfo from '@/components/ActivityPanelInfo';
+import ActivityScholarStatusesCount from '@/components/ActivityScholarStatusesCount';
+import AdminActivityActions from '@/components/AdminActivityActions';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
 import { ChatWithSpeaker } from '@/lib/db/types';
 import { getChat } from '@/lib/db/utils/chats';
-import { prisma } from '@/lib/db/utils/prisma';
 import { formatScholarDataForAttendanceTable } from '@/lib/tableUtils';
 import ExportButton from '@/lib/temp';
 import { parseChatLevelFromDatabase, parseModalityFromDatabase } from '@/lib/utils2';
 import { Gender, Modality, ScholarAttendance } from '@prisma/client';
+import { notFound } from 'next/navigation';
 import shortUUID from 'short-uuid';
+
 
 export interface IScholarForAttendanceTable {
   id: string;
@@ -26,115 +29,50 @@ export interface IScholarForAttendanceTable {
 }
 
 const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
-  const chatId = params.chatId || ('null' as shortUUID.SUUID);
-
+  const chatId = params.chatId;
+  if (!chatId) return null;
   const chat = await getChat(chatId);
+  if (!chatId) return notFound();
+
   const {
     title,
     level,
     start_dates,
-    description,
-    speaker,
     modality,
+    speaker,
     platform,
     scholar_attendance,
   } = chat || {};
 
-  const scholarAttendanceDataForTable = formatScholarDataForAttendanceTable(
+  const scholarAttendanceDataForTable = await formatScholarDataForAttendanceTable(
     scholar_attendance ? scholar_attendance.map((a) => a.scholar.scholar) : [],
     scholar_attendance ? scholar_attendance : []
   );
 
-  const scholarDataToExport = scholarAttendanceDataForTable.map((scholar) => {
+  const scholarDataToExport = scholarAttendanceDataForTable.filter((scholar) => scholar.attendance === 'ENROLLED').map((scholar) => {
     return {
       names: scholar.first_names.split(' ')[0] + ' ' + scholar.last_names.split(' ')[0],
       dni: scholar.dni,
     };
   });
 
-  let attendedScholarsCount = 0;
-  let unAttendedScholarsCount = 0;
-  let cancelledScholarsCount = 0;
-  let enroledScholars = 0;
-
-  scholar_attendance?.forEach((scholar_att) => {
-    switch (scholar_att.attendance) {
-      case 'ATTENDED':
-        attendedScholarsCount++;
-        break;
-      case 'NOT_ATTENDED':
-        unAttendedScholarsCount++;
-        break;
-      case 'CANCELLED':
-        cancelledScholarsCount++;
-        break;
-      case 'ENROLLED':
-        enroledScholars++;
-        break;
-      default:
-        break;
-    }
-  });
-  const g = [
-    {
-      title: 'Total de inscritos',
-      value: enroledScholars,
-    },
-    {
-      title: 'Total de asistentes',
-      value: attendedScholarsCount,
-    },
-    {
-      title: 'Total de inasistentes',
-      value: unAttendedScholarsCount,
-    },
-    {
-      title: 'Total de cancelaciones',
-      value: cancelledScholarsCount,
-    },
-  ];
-
-  const allowSatisfactionSurvey = async () => {
-    if (chat?.activity_status === 'DONE') {
-      await prisma.chat.update({
-        where: {
-          id: chatId,
-        },
-        data: {
-          activity_status: 'ATTENDANCE_CHECKED',
-        },
-      });
-      return 'Encuesta de satisfacción enviada';
-    } else if (chat?.activity_status === 'ATTENDANCE_CHECKED') {
-      return 'La encuesta de satisfaccion ya ha sido enviada';
-    }
-  };
+  const attendanceHadBeenPassed = scholar_attendance?.some(
+    (attendance) =>
+      attendance.attendance === 'ATTENDED' ||
+      attendance.attendance === 'NOT_ATTENDED' ||
+      attendance.attendance === 'JUSTIFY'
+  );
 
   return (
     <div className="space-y-6  min-h-screen">
       <ActivityPanelInfo activity={chat as ChatWithSpeaker}>
-        <div className="w-full grid grid-cols-2 gap-4">
-          {g.map(({ title, value }) => (
-            <div className="rounded-lg border text-card-foreground shadow-sm w-full overflow-hidden">
-              <div className="flex flex-col space-y-1.5 p-6 ">
-                <h3 className="text-lg font-semibold whitespace-nowrap leading-none tracking-tight truncate">
-                  {title}
-                </h3>
-              </div>
-              <p className="text-4xl font-semibold whitespace-nowrap leading-none tracking-tight p-6">
-                {value}
-              </p>
-            </div>
-          ))}
-          {/* {chat?.activity_status === 'SENT' && (
-            <Button
-              color="success"
-              className="text-white"
-              onPress={async () => allowSatisfactionSurvey()}
-            >
-              Habilitar encuesta de satisfacción
-            </Button>
-          )} */}
+        <div className="flex flex-col gap-4">
+          <ActivityScholarStatusesCount scholarAttendance={scholar_attendance} />
+          <AdminActivityActions
+            activityId={chatId}
+            kindOfActivity="workshop"
+            attendanceHadBeenPassed={attendanceHadBeenPassed}
+          />
         </div>
       </ActivityPanelInfo>
       <section className="w-full space-y-3">
@@ -155,10 +93,10 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
                 hour={
                   start_dates
                     ? new Date(start_dates[0]).toLocaleTimeString('es-ES', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: true,
-                      })
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true,
+                    })
                     : ''
                 }
                 modality={parseModalityFromDatabase(modality as Modality)}
