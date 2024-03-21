@@ -1,5 +1,6 @@
 'use client';
 import { Button } from '@nextui-org/react';
+import { WorkshopSafisfactionForm } from '@prisma/client';
 import StatusUpdateButton from './activityActions/StatusUpdate/StatusUpdate';
 import SatisfactionFormResults from './activityActions/satisfactionForm/satisfactionFormResults';
 
@@ -12,6 +13,7 @@ const AdminActivityActions = ({
   kindOfActivity: 'workshop' | 'chat';
   scholarsEmails: (string | null)[];
   activityId: string;
+  formResponses: WorkshopSafisfactionForm[];
 }) => {
   return (
     <>
