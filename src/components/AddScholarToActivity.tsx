@@ -8,21 +8,10 @@ import BasicModal from './BasicModal';
 
 interface ActivityPanelInfoProps {
   scholars: Scholar[];
-  attendanceId: string;
-  activityId: string;
-  kindOfActivity: 'workshop' | 'chat';
-  isButtonDisabled: boolean;
-  scholarWhoCeaseName: string;
-  activityName: string;
-  date: string;
-  startDate: string;
-  endDate: string;
-  modality: string;
   eventId: string;
-  platform: string;
 }
 
-const AddScholarToActivity: React.FC<ActivityPanelInfoProps> = ({ scholars, eventId: eventId }) => {
+const AddScholarToActivity: React.FC<ActivityPanelInfoProps> = ({ scholars, eventId }) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [selectedScholar, setSelectedScholar] = useState<Scholar | undefined>();
   const memoizedScholars = useMemo(() => scholars, [scholars]);
@@ -43,13 +32,13 @@ const AddScholarToActivity: React.FC<ActivityPanelInfoProps> = ({ scholars, even
         <BasicModal
           isOpen={isOpen}
           onOpenChange={onOpenChange}
-          title="Busca al becario que agregaras a la actividad"
+          title="Agregar becario a la actividad"
           Content={() => (
             <div className="flex flex-col gap-4">
               <Autocomplete
                 defaultItems={memoizedScholars}
                 radius="sm"
-                label="Selecciona un becario al cual cederle tu cupo"
+                label="Elige al becario que agregarás a la actividad"
                 labelPlacement="outside"
                 selectedKey={selectedScholar?.id || ''}
                 onSelectionChange={(key) => {

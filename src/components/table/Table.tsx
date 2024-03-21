@@ -55,10 +55,11 @@ function Table<T extends object>({
 
   return (
     <div
-      className={`${isExpanded
-        ? 'absolute top-0  left-0 right-0 z-50 '
-        : 'relative overflow-hidden min-h-max shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full'
-        }  bg-white shadow-md `}
+      className={`${
+        isExpanded
+          ? 'absolute top-0  left-0 right-0 z-50 '
+          : 'relative overflow-hidden min-h-max shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full'
+      }  bg-white shadow-md `}
     >
       <TableHeader
         optionsForFilter={tableHeadersForSearch}
@@ -66,8 +67,8 @@ function Table<T extends object>({
         setGlobalFilter={setGlobalFilter}
         filterValue={globalFilter}
       >
-        <ExpandTableButton isExpanded={isExpanded} toggleExpanded={toggleExpanded} />
         {children && children}
+        <ExpandTableButton isExpanded={isExpanded} toggleExpanded={toggleExpanded} />
       </TableHeader>
       <div className="flow-root w-full overflow-x-scroll mt-2">
         <table {...getTableProps()} className="w-full  text-sm text-left text-gray-300 ">

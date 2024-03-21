@@ -23,7 +23,7 @@ const TableHeader = ({
         setGlobalFilter={setGlobalFilter}
         filterValue={filterValue}
       />
-      <div className="flex gap-4">{children}</div>
+      <div className="flex gap-3">{children}</div>
     </div>
   );
 };

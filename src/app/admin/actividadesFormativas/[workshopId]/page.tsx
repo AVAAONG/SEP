@@ -1,5 +1,6 @@
 import ActivityPanelInfo from '@/components/ActivityPanelInfo';
 import ActivityScholarStatusesCount from '@/components/ActivityScholarStatusesCount';
+import AddScholarToActivity from '@/components/AddScholarToActivity';
 import AdminActivityActions from '@/components/AdminActivityActions';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
@@ -100,6 +101,8 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
               tableData={scholarAttendanceDataForTable}
               tableHeadersForSearch={[]}
             >
+              <AddScholarToActivity scholars={[]} eventId="" />
+
               <ExportButton
                 activityTitle={title!}
                 competenceOrLevel={parseSkillFromDatabase(asociated_skill!)}
