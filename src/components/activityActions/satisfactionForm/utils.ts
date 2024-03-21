@@ -1,6 +1,23 @@
 
 import { WorkshopSafisfactionForm } from "@prisma/client";
 
+export const COLORS_BASED_ON_RESPONSE = {
+    'Malo': '#b91c1c', // red
+    'Deficiente': '#d97706',// orange
+    'Regular': '#eab308',// yellow
+    'Bueno': '#1d4ed8',// blue
+    'Excelente': '#23a217',// green
+
+};
+
+
+export type SatisfactionFormResponses =
+    Omit<
+        WorkshopSafisfactionForm,
+        | 'id'
+        | 'workshop_attendance_id'
+    >
+
 export const parseSatisfactionFormResponsesFromDatabase = (response: number | string) => {
     switch (response) {
         case 1:
@@ -18,21 +35,8 @@ export const parseSatisfactionFormResponsesFromDatabase = (response: number | st
     }
 };
 
-export const getColorBasedOnResponse = (response: string) => {
-    switch (response) {
-        case 'Malo':
-            return '#b91c1c'; // red
-        case 'Deficiente':
-            return '#d97706'; // orange
-        case 'Regular':
-            return '#eab308'; // yellow
-        case 'Bueno':
-            return '#1d4ed8'; // blue
-        case 'Excelente':
-            return '#23a217'; // green
-        default:
-            return '#808080'; // gray
-    }
+export const getColorBasedOnResponse = (response: keyof typeof COLORS_BASED_ON_RESPONSE): string => {
+    return COLORS_BASED_ON_RESPONSE[response] || '#808080' //gray;
 };
 
 export const getSatisfactionFormTitleAndQuestion = (key: string) => {
@@ -117,13 +121,13 @@ type Count = {
     [key in 'Malo' | 'Deficiente' | 'Regular' | 'Bueno' | 'Excelente' | 'No definido']?: number;
 };
 
-type Result = {
+export type SatisfactionFormChartData = {
     name: string;
-    value: { label: string; value: number }[];
+    value: { label: string; value: number, color?: string }[];
 };
 
-export const transformFormResponses = (formResponses: WorkshopSafisfactionForm[]): Result[] => {
-    const keys: (keyof WorkshopSafisfactionForm)[] = [
+export const transformFormResponses = (formResponses: SatisfactionFormResponses[]): SatisfactionFormChartData[] => {
+    const keys: (keyof SatisfactionFormResponses)[] = [
         'activity_organization',
         'activity_number_of_participants',
         'activity_lenght',
@@ -149,9 +153,10 @@ export const transformFormResponses = (formResponses: WorkshopSafisfactionForm[]
         const value = Object.entries(valueCounts).map(([label, count]) => ({
             label,
             value: count as number,
-            color: getColorBasedOnResponse(label),
+            color: getColorBasedOnResponse(label as keyof typeof COLORS_BASED_ON_RESPONSE),
         }));
 
         return { name: key, value };
     });
 };
+

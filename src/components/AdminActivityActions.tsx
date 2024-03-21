@@ -1,8 +1,10 @@
-'use client';
 import { Button } from '@nextui-org/react';
-import { WorkshopSafisfactionForm } from '@prisma/client';
 import StatusUpdateButton from './activityActions/StatusUpdate/StatusUpdate';
 import SatisfactionFormResults from './activityActions/satisfactionForm/satisfactionFormResults';
+import {
+  SatisfactionFormResponses,
+  transformFormResponses,
+} from './activityActions/satisfactionForm/utils';
 
 const AdminActivityActions = ({
   kindOfActivity,
@@ -13,8 +15,9 @@ const AdminActivityActions = ({
   kindOfActivity: 'workshop' | 'chat';
   scholarsEmails: (string | null)[];
   activityId: string;
-  formResponses: WorkshopSafisfactionForm[];
+  formResponses: SatisfactionFormResponses[];
 }) => {
+  const satisfactionFormChartData = transformFormResponses(formResponses);
   return (
     <>
       <div className="grid grid-cols-2 gap-4 w-full">
@@ -24,7 +27,7 @@ const AdminActivityActions = ({
           activityForChangeId={activityId}
           scholarsEmails={scholarsEmails}
         />
-        <SatisfactionFormResults formResponses={formResponses} />
+        <SatisfactionFormResults satisfactionFormChartData={satisfactionFormChartData} />
       </div>
     </>
   );

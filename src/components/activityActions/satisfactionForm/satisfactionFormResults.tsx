@@ -1,17 +1,21 @@
 'use client';
 import { Button, Tooltip, useDisclosure } from '@nextui-org/react';
-import { WorkshopSafisfactionForm } from '@prisma/client';
 import BasicModal from '../../BasicModal';
 import { PieChartComponent } from '../../charts';
-import { getSatisfactionFormTitleAndQuestion, transformFormResponses } from './utils';
+import {
+  COLORS_BASED_ON_RESPONSE,
+  SatisfactionFormChartData,
+  getSatisfactionFormTitleAndQuestion,
+} from './utils';
 
 interface SatisfactionFormResultsProps {
-  formResponses: WorkshopSafisfactionForm[];
+  satisfactionFormChartData: SatisfactionFormChartData[];
 }
 
-const SatisfactionFormResults: React.FC<SatisfactionFormResultsProps> = ({ formResponses }) => {
+const SatisfactionFormResults: React.FC<SatisfactionFormResultsProps> = ({
+  satisfactionFormChartData,
+}) => {
   const attendanceCheckedModal = useDisclosure();
-  const responsesForEachKey = transformFormResponses(formResponses);
   return (
     <>
       <Button className="w-full" onPress={attendanceCheckedModal.onOpen}>
@@ -29,29 +33,15 @@ const SatisfactionFormResults: React.FC<SatisfactionFormResultsProps> = ({ formR
             <div>
               <div className="flex flex-row gap-4 text-sm">
                 <h3>Leyenda</h3>
-                <div className="flex flex-row gap-2 items-center">
-                  <div className="w-4 h-4 bg-[#23a217] rounded-full"></div>
-                  <p>Excelente</p>
-                </div>
-                <div className="flex flex-row gap-2 items-center">
-                  <div className="w-4 h-4 bg-[#1d4ed8] rounded-full"></div>
-                  <p>Bueno</p>
-                </div>
-                <div className="flex flex-row gap-2 items-center">
-                  <div className="w-4 h-4 bg-[#eab308] rounded-full"></div>
-                  <p>Regular</p>
-                </div>
-                <div className="flex flex-row gap-2 items-center">
-                  <div className="w-4 h-4 bg-[#d97706] rounded-full"></div>
-                  <p>Deficiente</p>
-                </div>
-                <div className="flex flex-row gap-2 items-center">
-                  <div className="w-4 h-4 bg-[#b91c1c] rounded-full"></div>
-                  <p>Malo</p>
-                </div>
+                {Object.entries(COLORS_BASED_ON_RESPONSE).map(([label, color]) => (
+                  <div className="flex flex-row gap-2 items-center">
+                    <div className={`w-4 h-4 bg-[${color}] rounded-full`}></div>
+                    <p>{label}</p>
+                  </div>
+                ))}
               </div>
               <div className="grid grid-cols-4 gap-4 p-4 ">
-                {responsesForEachKey.map((response, index) => {
+                {satisfactionFormChartData.map((response, index) => {
                   const title = getSatisfactionFormTitleAndQuestion(response.name);
                   return (
                     <div key={index}>
