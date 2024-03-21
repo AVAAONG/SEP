@@ -1,12 +1,13 @@
-import { Button } from '@nextui-org/react';
+import { getWorkshopSpeakersWithParams } from '@/lib/db/utils/speaker';
 import StatusUpdateButton from './activityActions/StatusUpdate/StatusUpdate';
+import EditActivity from './activityActions/editActivity/EditActivity';
 import SatisfactionFormResults from './activityActions/satisfactionForm/satisfactionFormResults';
 import {
   SatisfactionFormResponses,
   transformFormResponses,
 } from './activityActions/satisfactionForm/utils';
 
-const AdminActivityActions = ({
+const AdminActivityActions = async ({
   kindOfActivity,
   activityId,
   scholarsEmails,
@@ -18,10 +19,17 @@ const AdminActivityActions = ({
   formResponses: SatisfactionFormResponses[];
 }) => {
   const satisfactionFormChartData = transformFormResponses(formResponses);
+  const speakers = await getWorkshopSpeakersWithParams({
+    id: true,
+    first_names: true,
+    last_names: true,
+    email: true,
+    image: true,
+  });
   return (
     <>
       <div className="grid grid-cols-2 gap-4 w-full">
-        <Button className="w-full">Editar Actividad</Button>
+        <EditActivity activityId={activityId} speakers={speakers} />
         <StatusUpdateButton
           kindOfActivity={kindOfActivity}
           activityForChangeId={activityId}
