@@ -1,8 +1,10 @@
 'use client';
 import Chart from 'react-apexcharts';
 interface PieChartProps {
-  data: { label: string; value: number }[];
+  data: { label: string; value: number; color?: string }[];
 }
+
+const COLORS = ['#23a217', '#eab308', '#1d4ed8', '#b91c1c', '#062e05', '#d97706', '#0e3fa9'];
 
 const PieChart = ({ data }: PieChartProps) => {
   const options: ApexCharts.ApexOptions = {
@@ -16,8 +18,7 @@ const PieChart = ({ data }: PieChartProps) => {
     legend: {
       show: false,
     },
-
-    colors: ['#23a217', '#eab308', '#1d4ed8', '#b91c1c', '#062e05', '#d97706', '#0e3fa9'],
+    colors: data.some((d) => d.color) ? data.map((d) => d.color) : COLORS,
   };
 
   const series = data.map((d) => d.value);

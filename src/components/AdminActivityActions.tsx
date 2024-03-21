@@ -1,7 +1,7 @@
 'use client';
 import { Button } from '@nextui-org/react';
-import StatusUpdateButton from './activityActions/changeStatus';
-import SatisfactionFormResults from './activityActions/satisfactionFormResults';
+import StatusUpdateButton from './activityActions/StatusUpdate/StatusUpdate';
+import SatisfactionFormResults from './activityActions/satisfactionForm/satisfactionFormResults';
 
 const AdminActivityActions = ({
   kindOfActivity,
