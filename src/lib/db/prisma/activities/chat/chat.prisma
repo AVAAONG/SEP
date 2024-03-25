@@ -46,16 +46,70 @@ model ChatAttendance {
 }
 
 model ChatSafisfactionForm {
-    id                              String         @id @default(nanoid())
-    suggestions                     String //Escribe algunas sugerencias que permitan mejorar el desarrollo de las actividades de formación.
-    speaker_satisfaction            Float //Consideras que el desempeño del facilitador, en general, fue:
-    speaker_strategies_satisfaction Float // Consideras que las estrategias aplicadas por el especialista facilitaron tu aprendizaje y el desarrollo de la competencia prevista.
-    meeting_software_satisfaction   Float //El uso de la plataforma para videoconferencias utilizada fue:
-    activity_satisfaction           Float //¿Cuál es tu nivel de satisfacción con el desarrollo de la actividad?
-    activity_pourpose_satisfaction  Float //La actividad evidenció un propósito formativo de utilidad para tu desempeño personal y profesional.
-    activity_duration               Float // 2. El tiempo programado para el desarrollo de la actividad de formación fue:
-    activity_schedule               Float //El horario propuesto para la actividad fue:
-    acivity_anticipation_time       Float // Recibiste la convocatoria para la actividad con suficiente anticipación:
-    chat_attendance                 ChatAttendance @relation(fields: [chat_attendance_id], references: [id])
-    chat_attendance_id              String         @unique
+/// Prisma schema model for `Chat` table in database.
+/// Here we model all the necesary data and information wee need for the English Chat clubs, and related tables (tempData, attendance, speaker)
+/// @author Kevin Bravo (kevinbravo.me)
+
+import { ActivityStatus, Modality } from "..\type-activities"
+import { Level } from "types-chat"
+import { ScholarAttendance } from "..\type-activities"
+import { Gender } from "..\type-activities"
+import { Scholar, ScholarProgramInformation, ScholarProgramInformation } from "..\..\users\scholar\scholar"
+import { Speaker } from "..\speaker"
+
+model Chat {
+    id                 String           @id @default(nanoid())
+    title              String
+    avalible_spots     Int
+    platform           String
+    description        String?
+    calendar_ids       String[]
+    start_dates        DateTime[]
+    end_dates          DateTime[]
+    modality           Modality
+    level              Level
+    activity_status    ActivityStatus
+    scholar_attendance ChatAttendance[]
+    speaker            Speaker[]
+    meeting_link       String[]
+    meeting_id         String[]
+    meeting_password   String[]
+    whatsapp_link      String[]
+    slides             String?
+
+    @@index([title, modality, activity_status, level])
+}
+
+model ChatAttendance {
+    id                             String                    @id @default(nanoid())
+    scholar                        ScholarProgramInformation @relation(fields: [program_information_scholar_id], references: [id])
+    program_information_scholar_id String
+    chat_id                        String
+    chat                           Chat                      @relation(fields: [chat_id], references: [id])
+    attendance                     ScholarAttendance
+    raiting                        Float?
+    justification                  String?
+    satisfaction_form_filled       Boolean?
+    ChatSafisfactionForm           ChatSafisfactionForm?
+}
+
+model ChatSafisfactionForm {
+    id                                    String         @id @default(nanoid())
+    activity_organization                 Int
+    activity_number_of_participants       Int
+    activity_lenght                       Int
+    activity_relevance_for_scholar        Int
+    speaker_theory_practice_mix           Int
+    speaker_knowledge_of_activity         Int
+    speaker_foment_scholar_to_participate Int
+    speaker_knowledge_transmition         Int
+    content_match_necesities              Int
+    content_knowledge_adquisition         Int
+    content_knowledge_expansion           Int
+    content_personal_development          Int
+    general_satisfaction                  Int
+    chat_attendance                       ChatAttendance @relation(fields: [chat_attendance_id], references: [id])
+    chat_attendance_id                    String         @unique
+}
+
 }
