@@ -1,4 +1,4 @@
-import { chatIcon, userIcon, workshopIcon } from '../../../../public/svgs/svgs';
+import { chatIcon, userIcon, volunterIcon, workshopIcon } from '../../../../public/svgs/svgs';
 
 export const PROGRAM_COMPONENTS = [
   {
@@ -19,15 +19,15 @@ export const PROGRAM_COMPONENTS = [
       { name: 'Registro', link: '/admin/chats' },
     ],
   },
-  // {
-  //   icon: volunterIcon,
-  //   buttonName: 'Voluntariado',
-  //   itemList: [
-  //     { name: 'Crear', link: 'voluntariado/crear' },
-  //     // { name: "Estadísticas de talleres", link: "voluntariado/estadisticas" },
-  //     // { name: "Lista de voluntariado", link: "/voluntariado/lista" },
-  //   ],
-  // },
+  {
+    icon: volunterIcon,
+    buttonName: 'Voluntariado',
+    itemList: [
+      { name: 'Crear', link: '/admin/voluntariado/crear' },
+      { name: "Registro", link: "/admin/voluntariado" },
+      { name: "Voluntariado Externo", link: "/admin/voluntariado/externo" },
+    ],
+  },
 ];
 
 export const SCHOLARS = [
