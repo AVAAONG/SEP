@@ -2,10 +2,12 @@ import ActivityPanelInfo from '@/components/ActivityPanelInfo';
 import ActivityScholarStatusesCount from '@/components/ActivityScholarStatusesCount';
 import AddScholarToActivity from '@/components/AddScholarToActivity';
 import AdminActivityActions from '@/components/AdminActivityActions';
+import QuitScholarFromActivity from '@/components/QuitScholarFromActivity';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
 import { WorkshopWithSpeaker } from '@/lib/db/types';
 import { getWorkshop } from '@/lib/db/utils/Workshops';
+import { getNotEnrolledScholarsInWorkshop } from '@/lib/db/utils/users';
 import { formatScholarDataForAttendanceTable } from '@/lib/tableUtils';
 import ExportButton from '@/lib/temp';
 import { parseModalityFromDatabase, parseSkillFromDatabase } from '@/lib/utils2';
@@ -18,6 +20,8 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
   if (!workshopId) return null;
   const workshop = await getWorkshop(workshopId);
   if (!workshop) return notFound();
+
+  const scholars = await getNotEnrolledScholarsInWorkshop(workshopId);
 
   const { title, start_dates, speaker, modality, asociated_skill, platform, scholar_attendance } =
     workshop || {};
@@ -101,7 +105,16 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
               tableData={scholarAttendanceDataForTable}
               tableHeadersForSearch={[]}
             >
-              <AddScholarToActivity scholars={[]} eventId="" />
+              <AddScholarToActivity
+                scholars={scholars}
+                activityId={workshopId}
+                kindOfActivity="workshop"
+              />
+              <QuitScholarFromActivity
+                scholars={scholars}
+                activityId={workshopId}
+                kindOfActivity="workshop"
+              />
 
               <ExportButton
                 activityTitle={title!}

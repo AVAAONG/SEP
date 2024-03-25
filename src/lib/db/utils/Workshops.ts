@@ -583,6 +583,152 @@ export const enroleScholarInWorkshop = async (
   });
 }
 
+export const addScholarToWorkshop = async (
+  workshopId: string,
+  scholarId: string,
+) => {
+  // Start a transaction
+  await prisma.$transaction(async (prisma) => {
+    // Check if the scholar is already enrolled in the workshop
+    const existingAttendance = await prisma.workshopAttendance.findFirst({
+      where: {
+        workshop: {
+          id: workshopId,
+        },
+        scholar: {
+          scholarId,
+        },
+      },
+    });
+    // If the scholar is not already enrolled, add the attendance
+    if (!existingAttendance) {
+      const workshop = await prisma.workshop.findUnique({
+        where: {
+          id: workshopId,
+        },
+        include: {
+          scholar_attendance: true,
+        }
+      });
+
+      await prisma.workshopAttendance.create({
+        data: {
+          workshop: {
+            connect: {
+              id: workshopId,
+            },
+          },
+          scholar: {
+            connect: {
+              scholarId,
+            },
+          },
+          attendance: 'ENROLLED',
+        },
+      });
+    }
+  });
+}
+export const addScholarToChat = async (
+  chatId: string,
+  scholarId: string,
+) => {
+  // Start a transaction
+  await prisma.$transaction(async (prisma) => {
+    // Check if the scholar is already enrolled in the workshop
+    const existingAttendance = await prisma.chatAttendance.findFirst({
+      where: {
+        chat: {
+          id: chatId,
+        },
+        scholar: {
+          scholarId,
+        },
+      },
+    });
+    // If the scholar is not already enrolled, add the attendance
+    if (!existingAttendance) {
+      const workshop = await prisma.chat.findUnique({
+        where: {
+          id: chatId,
+        },
+        include: {
+          scholar_attendance: true,
+        }
+      });
+
+      await prisma.chatAttendance.create({
+        data: {
+          chat: {
+            connect: {
+              id: chatId,
+            },
+          },
+          scholar: {
+            connect: {
+              scholarId,
+            },
+          },
+          attendance: 'ENROLLED',
+        },
+      });
+    }
+  });
+}
+
+export const deleteScholarFromChat = async (
+  chatId: string,
+  scholarId: string
+) => {
+  // Start a transaction
+  await prisma.$transaction(async (prisma) => {
+    // Check if the scholar is already enrolled in the workshop
+    const existingAttendance = await prisma.chatAttendance.findFirst({
+      where: {
+        chat: {
+          id: chatId,
+        },
+        scholar: {
+          scholarId,
+        },
+      },
+    });
+
+    // If the scholar is enrolled delete it.
+    if (existingAttendance) await prisma.chatAttendance.delete({
+      where: {
+        id: existingAttendance.id,
+      },
+    });
+  });
+}
+
+export const deleteScholarFromWorkshop = async (
+  workshopId: string,
+  scholarId: string
+) => {
+  // Start a transaction
+  await prisma.$transaction(async (prisma) => {
+    // Check if the scholar is already enrolled in the workshop
+    const existingAttendance = await prisma.workshopAttendance.findFirst({
+      where: {
+        workshop: {
+          id: workshopId,
+        },
+        scholar: {
+          scholarId,
+        },
+      },
+    });
+
+    // If the scholar is enrolled delete it.
+    if (existingAttendance) await prisma.workshopAttendance.delete({
+      where: {
+        id: existingAttendance.id,
+      },
+    });
+  });
+}
 
 export const enroleScholarInChat = async (
   chatId: string,

@@ -1,5 +1,6 @@
 'use client';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { deleteScholarFromChat, deleteScholarFromWorkshop } from '@/lib/db/utils/Workshops';
+import { PlusIcon } from '@heroicons/react/24/outline';
 import { Autocomplete, AutocompleteItem, Avatar, Button, useDisclosure } from '@nextui-org/react';
 import { Scholar } from '@prisma/client';
 import { useMemo, useState } from 'react';
@@ -8,28 +9,26 @@ import BasicModal from './BasicModal';
 
 interface ActivityPanelInfoProps {
   scholars: Scholar[];
-  attendanceId: string;
   activityId: string;
   kindOfActivity: 'workshop' | 'chat';
-  isButtonDisabled: boolean;
-  scholarWhoCeaseName: string;
-  activityName: string;
-  date: string;
-  startDate: string;
-  endDate: string;
-  modality: string;
-  eventId: string;
-  platform: string;
 }
 
-const QuitScolarFromActivity: React.FC<ActivityPanelInfoProps> = ({
+const QuitScholarFromActivity: React.FC<ActivityPanelInfoProps> = ({
   scholars,
-  eventId: eventId,
+  activityId,
+  kindOfActivity,
 }) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [selectedScholar, setSelectedScholar] = useState<Scholar | undefined>();
   const memoizedScholars = useMemo(() => scholars, [scholars]);
-  const handleCeaseSpot = async () => {};
+  const handleAddScholar = async () => {
+    if (selectedScholar) {
+      if (kindOfActivity === 'workshop')
+        await deleteScholarFromWorkshop(activityId, selectedScholar.id);
+      else if (kindOfActivity === 'chat')
+        await deleteScholarFromChat(activityId, selectedScholar.id);
+    }
+  };
 
   return (
     <div className="w-1/2 flex items-center justify-end gap-4">
@@ -37,22 +36,23 @@ const QuitScolarFromActivity: React.FC<ActivityPanelInfoProps> = ({
         <Button
           onPress={onOpen}
           color="danger"
+          radius="sm"
           className="text-white"
-          startContent={<XMarkIcon className="h-5 w-5" />}
+          startContent={<PlusIcon className="h-5 w-5" />}
           isDisabled={false}
         >
-          Quitar becario
+          Eliminar becario
         </Button>
         <BasicModal
           isOpen={isOpen}
           onOpenChange={onOpenChange}
-          title="Busca al becario que quitaras de la actividad"
+          title="Eliminar becario a la actividad"
           Content={() => (
             <div className="flex flex-col gap-4">
               <Autocomplete
                 defaultItems={memoizedScholars}
                 radius="sm"
-                label="Selecciona un becario al cual cederle tu cupo"
+                label="Elige al becario que eliminaras de la actividad"
                 labelPlacement="outside"
                 selectedKey={selectedScholar?.id || ''}
                 onSelectionChange={(key) => {
@@ -87,18 +87,18 @@ const QuitScolarFromActivity: React.FC<ActivityPanelInfoProps> = ({
           )}
           isButtonDisabled={selectedScholar === undefined}
           onConfirm={async () => {
-            toast.promise(handleCeaseSpot(), {
-              pending: 'Creando correo de confirmación...',
-              success: 'Correo de confirmación creado exitosamente',
-              error: 'Error al ceder cupo',
+            toast.promise(handleAddScholar(), {
+              pending: 'Quitando Becario',
+              success: 'Becario eliminado exitosamente',
+              error: 'Error al quitar becario',
             });
             onClose();
           }}
-          confirmText="Cancelar y ceder cupo"
+          confirmText="Quitar becario"
         />
       </>
     </div>
   );
 };
 
-export default QuitScolarFromActivity;
+export default QuitScholarFromActivity;

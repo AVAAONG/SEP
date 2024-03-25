@@ -1,4 +1,6 @@
 'use client';
+import { addScholarToChat, addScholarToWorkshop } from '@/lib/db/utils/Workshops';
+import { revalidateSpecificPath } from '@/lib/serverAction';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { Autocomplete, AutocompleteItem, Avatar, Button, useDisclosure } from '@nextui-org/react';
 import { Scholar } from '@prisma/client';
@@ -8,14 +10,25 @@ import BasicModal from './BasicModal';
 
 interface ActivityPanelInfoProps {
   scholars: Scholar[];
-  eventId: string;
+  activityId: string;
+  kindOfActivity: 'workshop' | 'chat';
 }
 
-const AddScholarToActivity: React.FC<ActivityPanelInfoProps> = ({ scholars, eventId }) => {
+const AddScholarToActivity: React.FC<ActivityPanelInfoProps> = ({
+  scholars,
+  activityId,
+  kindOfActivity,
+}) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [selectedScholar, setSelectedScholar] = useState<Scholar | undefined>();
   const memoizedScholars = useMemo(() => scholars, [scholars]);
-  const handleCeaseSpot = async () => {};
+  const handleAddScholar = async () => {
+    if (selectedScholar) {
+      if (kindOfActivity === 'workshop') await addScholarToWorkshop(activityId, selectedScholar.id);
+      else if (kindOfActivity === 'chat') await addScholarToChat(activityId, selectedScholar.id);
+      revalidateSpecificPath(`/admin/actividadesFormativas/${activityId}`);
+    }
+  };
 
   return (
     <div className="w-1/2 flex items-center justify-end gap-4">
@@ -23,6 +36,7 @@ const AddScholarToActivity: React.FC<ActivityPanelInfoProps> = ({ scholars, even
         <Button
           onPress={onOpen}
           color="success"
+          radius="sm"
           className="text-white"
           startContent={<PlusIcon className="h-5 w-5" />}
           isDisabled={false}
@@ -73,14 +87,14 @@ const AddScholarToActivity: React.FC<ActivityPanelInfoProps> = ({ scholars, even
           )}
           isButtonDisabled={selectedScholar === undefined}
           onConfirm={async () => {
-            toast.promise(handleCeaseSpot(), {
-              pending: 'Creando correo de confirmación...',
-              success: 'Correo de confirmación creado exitosamente',
-              error: 'Error al ceder cupo',
+            toast.promise(handleAddScholar(), {
+              pending: 'Agregando Becario',
+              success: 'Becario agregado exitosamente',
+              error: 'Error al agregar becario',
             });
             onClose();
           }}
-          confirmText="Cancelar y ceder cupo"
+          confirmText="Agregar becario"
         />
       </>
     </div>
