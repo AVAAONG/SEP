@@ -46,54 +46,6 @@ model ChatAttendance {
 }
 
 model ChatSafisfactionForm {
-/// Prisma schema model for `Chat` table in database.
-/// Here we model all the necesary data and information wee need for the English Chat clubs, and related tables (tempData, attendance, speaker)
-/// @author Kevin Bravo (kevinbravo.me)
-
-import { ActivityStatus, Modality } from "..\type-activities"
-import { Level } from "types-chat"
-import { ScholarAttendance } from "..\type-activities"
-import { Gender } from "..\type-activities"
-import { Scholar, ScholarProgramInformation, ScholarProgramInformation } from "..\..\users\scholar\scholar"
-import { Speaker } from "..\speaker"
-
-model Chat {
-    id                 String           @id @default(nanoid())
-    title              String
-    avalible_spots     Int
-    platform           String
-    description        String?
-    calendar_ids       String[]
-    start_dates        DateTime[]
-    end_dates          DateTime[]
-    modality           Modality
-    level              Level
-    activity_status    ActivityStatus
-    scholar_attendance ChatAttendance[]
-    speaker            Speaker[]
-    meeting_link       String[]
-    meeting_id         String[]
-    meeting_password   String[]
-    whatsapp_link      String[]
-    slides             String?
-
-    @@index([title, modality, activity_status, level])
-}
-
-model ChatAttendance {
-    id                             String                    @id @default(nanoid())
-    scholar                        ScholarProgramInformation @relation(fields: [program_information_scholar_id], references: [id])
-    program_information_scholar_id String
-    chat_id                        String
-    chat                           Chat                      @relation(fields: [chat_id], references: [id])
-    attendance                     ScholarAttendance
-    raiting                        Float?
-    justification                  String?
-    satisfaction_form_filled       Boolean?
-    ChatSafisfactionForm           ChatSafisfactionForm?
-}
-
-model ChatSafisfactionForm {
     id                                    String         @id @default(nanoid())
     activity_organization                 Int
     activity_number_of_participants       Int
@@ -110,6 +62,4 @@ model ChatSafisfactionForm {
     general_satisfaction                  Int
     chat_attendance                       ChatAttendance @relation(fields: [chat_attendance_id], references: [id])
     chat_attendance_id                    String         @unique
-}
-
 }
