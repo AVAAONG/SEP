@@ -60,7 +60,12 @@ const page = async ({
           Ten en cuenta que las fechas y horarios de estas actividades estan sujetos a cambios
         </h3>
         <div className="my-4">
-          <TogleTab />
+          <TogleTab
+            options={[
+              { key: 'calendar', title: 'Calendario' },
+              { key: 'activities', title: 'Actividades' },
+            ]}
+          />
         </div>
         {selectedKey === 'calendar' || selectedKey === null ? (
           <div className="w-full">
