@@ -1,4 +1,4 @@
-import { Collages, StudyArea } from '@prisma/client';
+import { Collages, ScholarStatus, StudyArea } from '@prisma/client';
 
 export const parseStudyAreaFromDatabase = (studyArea: StudyArea) => {
   switch (studyArea) {
@@ -14,6 +14,8 @@ export const parseStudyAreaFromDatabase = (studyArea: StudyArea) => {
       return 'Ciencias sociales';
     case 'STEM':
       return 'Ciencias, tecnología, ingeniería y matemáticas';
+    default:
+      return 'ERROR';
   }
 };
 
@@ -80,3 +82,16 @@ export const parseAvaaAdmisionYear = (year: number) => {
       return '+V';
   }
 };
+
+export const parseProbationFromDatabase = (status: ScholarStatus) => {
+  switch (status) {
+    case 'NORMAL':
+      return 'Normal';
+    case 'PROBATION_I':
+      return 'Probatorio 1';
+    case 'PROBATION_II':
+      return 'Probatorio 2';
+    default:
+      return 'ERROR';
+  }
+}  

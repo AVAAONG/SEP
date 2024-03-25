@@ -94,6 +94,19 @@ const formatCountsForCharts = (counts: Record<string, Record<string, number>>): 
     return result;
 };
 
+export const formatCountsForCharts2 = <T extends string>(counts: Record<T, Record<string, number>>): { [K in T]: Count[] } => {
+    const result: { [K in T]: Count[] } = {} as any; // Temporary fix for typing
+
+    for (const key in counts) {
+        result[key] = Object.entries(counts[key]).map(([label, value]) => ({
+            label,
+            value: Number(value),
+        }));
+    }
+
+    return result;
+};
+
 const formatChatCountsForCharts = (counts: Record<string, Record<string, number>>): { level: Count[]; modality: Count[] } => {
     const result: { level: Count[]; modality: Count[] } = {
         level: [],

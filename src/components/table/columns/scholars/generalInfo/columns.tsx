@@ -5,34 +5,35 @@ import { Gender } from '@prisma/client';
 import Link from 'next/link';
 import { Cell, CellValue, Column } from 'react-table';
 
-interface ScholarTableData {
+export interface ScholarGeneralInformationColumnProps {
   id: string;
   first_names: string;
   last_names: string;
+  profilePhoto: string;
   dni: string;
   birthdate: string;
   years: number;
   gender: Gender;
-  local_phone_number: string;
-  cell_phone_Number: string;
   whatsapp_number: string;
   email: string;
   collage: string;
   career: string;
   avaaStarteYear: Date;
   yearsInAvaa: number;
-  studyArea: string;
-  socialMedia: any[]; // Replace any with the actual type
-  atendedChats: number;
-  atendedWorkshops: number;
+  programStatus: string;
 }
-[];
 
-const scholarAllInformationCollumn: Column<ScholarTableData>[] = [
+const scholarGeneralInformationColumns: Column<ScholarGeneralInformationColumnProps>[] = [
   {
     Header: 'Nombre',
-    accessor: (row: ScholarTableData) => `${row.first_names} ${row.last_names}`,
-    Cell: ({ value, cell }: { value: CellValue; cell: Cell<ScholarTableData> }) => (
+    accessor: (row: ScholarGeneralInformationColumnProps) => `${row.first_names} ${row.last_names}`,
+    Cell: ({
+      value,
+      cell,
+    }: {
+      value: CellValue;
+      cell: Cell<ScholarGeneralInformationColumnProps>;
+    }) => (
       <Link href={cell.row.original.id ? `/admin/becarios/${''}` : ''} className="w-67">
         <div className="flex items-center  w-full">
           <div className="flex-shrink-0 w-8 h-8">
@@ -44,10 +45,6 @@ const scholarAllInformationCollumn: Column<ScholarTableData>[] = [
           </div>
           <div className="ml-4 text-start w-full">
             <span className="text-sm font-medium text-gray-900 dark:text-slate-100">{value}</span>
-            <span className="block text-xs font-medium text-gray-400 dark:text-slate-400">
-              {'d'}
-            </span>
-            <div className="ml-4 text-start"></div>
           </div>
         </div>
       </Link>
@@ -56,6 +53,7 @@ const scholarAllInformationCollumn: Column<ScholarTableData>[] = [
   {
     Header: 'Cédula',
     accessor: 'dni',
+    disableSortBy: true,
     Cell: ({ value }: { value: CellValue }) => {
       const dni = formatDni(value);
       return <span>V-{dni}</span>;
@@ -87,45 +85,53 @@ const scholarAllInformationCollumn: Column<ScholarTableData>[] = [
         );
       }
     },
+    disableSortBy: true,
   },
   {
-    Header: 'Telefono local',
-    accessor: 'local_phone_number',
-  },
-  {
-    Header: 'Telefono celular',
-    accessor: 'cell_phone_Number',
-  },
-  {
-    Header: 'Whatsapp',
+    Header: 'Celular whatsapp',
     accessor: 'whatsapp_number',
+    disableSortBy: true,
   },
   {
     Header: 'Fecha de ingreso a AVAA',
     accessor: 'avaaStarteYear',
   },
   {
-    Header: 'Año actual en AVAA',
+    Header: 'Año en AVAA',
     accessor: 'yearsInAvaa',
   },
-  // {
-  //   Header: 'Redes Sociales',
-  //   accessor: 'socialMedia',
-  //   Cell: ({ value }) => (
-  //     <div className="flex gap-2 justify-center">
-  //       {value.map((socialNetwork: any, index: number) => (
-  //         <Link
-  //           key={index}
-  //           target="_blank"
-  //           href={socialNetwork.url ? socialNetwork.url : ''}
-  //           className="w-8 text-primary-light dark:text-primary-light rounded-full bg-gray-100 dark:bg-slate-600 p-2"
-  //         >
-  //           {socialNetwork.icon}
-  //         </Link>
-  //       ))}
-  //     </div>
-  //   ),
-  // },
+  {
+    Header: 'Status',
+    accessor: 'programStatus',
+    Cell: ({ value }: { value: CellValue }) => {
+      if (value === 'Normal') {
+        return (
+          <span className="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+            Normal
+          </span>
+        );
+      } else if (value === 'Probatorio 1') {
+        return (
+          <span className="inline-flex items-center bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
+            Probatorio 1
+          </span>
+        );
+      } else if (value === 'Probatorio 2') {
+        return (
+          <span className="inline-flex items-center bg-rose-100 text-rose-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-rose-900 dark:text-rose-300">
+            Probatorio 2
+          </span>
+        );
+      } else {
+        return (
+          <span className="inline-flex items-center bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-gray-900 dark:text-gray-300">
+            ERROR
+          </span>
+        );
+      }
+    },
+    disableSortBy: true,
+  },
 ];
 
-export default scholarAllInformationCollumn;
+export default scholarGeneralInformationColumns;

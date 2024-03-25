@@ -1,7 +1,8 @@
 'use client';
+import defailProfilePic from '@/../public/defaultProfilePic.png';
 import formatDni from '@/lib/db/utils/formatDni';
-import { Avatar } from '@nextui-org/react';
 import { Gender } from '@prisma/client';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Cell, CellValue, Column } from 'react-table';
 
@@ -33,22 +34,19 @@ const scholarAllInformationCollumn: Column<ScholarTableData>[] = [
     Header: 'Nombre',
     accessor: (row: ScholarTableData) => `${row.first_names} ${row.last_names}`,
     Cell: ({ value, cell }: { value: CellValue; cell: Cell<ScholarTableData> }) => (
-      <Link href={cell.row.original.id ? `/admin/becarios/${''}` : ''} className="w-67">
-        <div className="flex items-center  w-full">
-          <div className="flex-shrink-0 w-8 h-8">
-            <Avatar
-              className="w-full h-full rounded-full"
-              src={cell.row.original.profilePhoto || undefined}
-              alt="Foto de perfil"
-            />
-          </div>
-          <div className="ml-4 text-start w-full">
-            <span className="text-sm font-medium text-gray-900 dark:text-slate-100">{value}</span>
-            <span className="block text-xs font-medium text-gray-400 dark:text-slate-400">
-              {'d'}
-            </span>
-            <div className="ml-4 text-start"></div>
-          </div>
+      <Link
+        href={cell.row.original.id ? `becarios/${cell.row.original.id}` : ''}
+        className="flex items-center"
+      >
+        <div className="flex-shrink-0 w-8 h-8">
+          <Image
+            className="w-full h-full rounded-full"
+            src={defailProfilePic}
+            alt="Foto de perfil"
+          />
+        </div>
+        <div className="ml-4 text-start">
+          <span className="text-sm font-medium text-gray-900 dark:text-slate-100">{value}</span>
         </div>
       </Link>
     ),
@@ -101,6 +99,26 @@ const scholarAllInformationCollumn: Column<ScholarTableData>[] = [
     accessor: 'whatsapp_number',
   },
   {
+    Header: 'Correo',
+    accessor: 'email',
+  },
+  {
+    Header: 'Universidad',
+    accessor: 'collage',
+    id: 'collage',
+    Cell: ({ value }: { value: CellValue }) => {
+      return <span>{value}</span>;
+    },
+  },
+  {
+    Header: 'Area de estudio',
+    accessor: 'studyArea',
+  },
+  {
+    Header: 'Carrera',
+    accessor: 'career',
+  },
+  {
     Header: 'Fecha de ingreso a AVAA',
     accessor: 'avaaStarteYear',
   },
@@ -108,24 +126,32 @@ const scholarAllInformationCollumn: Column<ScholarTableData>[] = [
     Header: 'Año actual en AVAA',
     accessor: 'yearsInAvaa',
   },
-  // {
-  //   Header: 'Redes Sociales',
-  //   accessor: 'socialMedia',
-  //   Cell: ({ value }) => (
-  //     <div className="flex gap-2 justify-center">
-  //       {value.map((socialNetwork: any, index: number) => (
-  //         <Link
-  //           key={index}
-  //           target="_blank"
-  //           href={socialNetwork.url ? socialNetwork.url : ''}
-  //           className="w-8 text-primary-light dark:text-primary-light rounded-full bg-gray-100 dark:bg-slate-600 p-2"
-  //         >
-  //           {socialNetwork.icon}
-  //         </Link>
-  //       ))}
-  //     </div>
-  //   ),
-  // },
+  {
+    Header: 'Redes Sociales',
+    accessor: 'socialMedia',
+    Cell: ({ value }) => (
+      <div className="flex gap-2 justify-center">
+        {value.map((socialNetwork: any, index: number) => (
+          <Link
+            key={index}
+            target="_blank"
+            href={socialNetwork.url ? socialNetwork.url : ''}
+            className="w-8 text-primary-light dark:text-primary-light rounded-full bg-gray-100 dark:bg-slate-600 p-2"
+          >
+            {socialNetwork.icon}
+          </Link>
+        ))}
+      </div>
+    ),
+  },
+  {
+    Header: 'Actividades formativas realizadas',
+    accessor: 'atendedWorkshops',
+  },
+  {
+    Header: 'Chat clubs  realizadas',
+    accessor: 'atendedChats',
+  },
 ];
 
 export default scholarAllInformationCollumn;
