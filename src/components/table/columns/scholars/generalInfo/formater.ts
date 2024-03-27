@@ -1,9 +1,10 @@
+import { ScholarWithAllData } from "@/components/EditScholarForm";
 import { getBlobImage } from "@/lib/azure/azure";
 import { parseAvaaAdmisionYear, parseProbationFromDatabase } from "@/lib/utils/parseFromDatabase";
 import moment from "moment";
 import { ScholarGeneralInformationColumnProps } from "./columns";
 
-export const formatScholarsToGeneralInfoTable = async (scholars): Promise<ScholarGeneralInformationColumnProps> => {
+export const formatScholarsToGeneralInfoTable = async (scholars: ScholarWithAllData[]): Promise<ScholarGeneralInformationColumnProps[]> => {
     const data = scholars.map(async (scholar) => {
         const {
             id,
@@ -16,7 +17,6 @@ export const formatScholarsToGeneralInfoTable = async (scholars): Promise<Schola
             email,
             gender,
             program_information,
-            collage_information
         } = scholar;
         return {
             id,
@@ -29,8 +29,6 @@ export const formatScholarsToGeneralInfoTable = async (scholars): Promise<Schola
             gender: gender!,
             whatsapp_number: whatsapp_number!,
             email,
-            collage: collage_information[0]?.collage!,
-            career: collage_information[0]?.career!,
             avaaStarteYear: moment(program_information?.program_admission_date).format('DD/MM/YYYY'),
             yearsInAvaa: parseAvaaAdmisionYear(
                 moment().diff(moment(program_information?.program_admission_date), 'years')
@@ -38,5 +36,5 @@ export const formatScholarsToGeneralInfoTable = async (scholars): Promise<Schola
             programStatus: parseProbationFromDatabase(program_information?.scholar_status!)
         };
     });
-    return await Promise.all(data);
+    return Promise.all(data)
 }

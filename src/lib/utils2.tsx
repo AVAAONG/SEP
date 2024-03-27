@@ -39,7 +39,7 @@ export const parseCvaScheduleFromDatabase = (schedule: CVASchedule | null) => {
     case 'SABATINO':
       return 'Sabatino';
     default:
-      return 'error';
+      return 'Sin datos';
   }
 };
 
@@ -121,4 +121,3 @@ export const parseWorkshopYearFromDatabase = (years: WorkshopYear[]) => {
     return years.join(', ');
   }
 };
-

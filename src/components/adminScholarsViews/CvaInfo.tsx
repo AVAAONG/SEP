@@ -4,12 +4,12 @@ import Link from 'next/link';
 import { ExternalStatsIcon } from 'public/svgs/svgs';
 import { DonutChartComponent, PieChartComponent } from '../charts';
 import Table from '../table/Table';
-import { formatScholarsToCollageinfoTable } from '../table/columns/scholars/collageInfo/formater';
+import scholarCvaInformationColumns from '../table/columns/scholars/cvaInfo/columns';
+import { formatScholarsToCvaInfoTable } from '../table/columns/scholars/cvaInfo/formater';
 import ScholarViewsProps from './types';
-import scholarCollageInformationColumns from '../table/columns/scholars/collageInfo/columns';
 
-const CollageInfo = async ({ scholars }: ScholarViewsProps) => {
-  const data = await formatScholarsToCollageinfoTable(scholars);
+const CvaInfo = async ({ scholars }: ScholarViewsProps) => {
+  const data = await formatScholarsToCvaInfoTable(scholars);
   const scholarsPropertiesCount = countScholarProperties(scholars);
   const dataForCharts = formatCountsForCharts2(scholarsPropertiesCount);
   return (
@@ -47,7 +47,7 @@ const CollageInfo = async ({ scholars }: ScholarViewsProps) => {
       <h2 className="font-bold  uppercase text-base tracking-wide px-4 mt-4">Base de datos</h2>
       <div className="w-full h-full">
         <Table
-          tableColumns={scholarCollageInformationColumns}
+          tableColumns={scholarCvaInformationColumns}
           tableData={data}
           tableHeadersForSearch={[]}
         />
@@ -56,4 +56,4 @@ const CollageInfo = async ({ scholars }: ScholarViewsProps) => {
   );
 };
 
-export default CollageInfo;
+export default CvaInfo;
