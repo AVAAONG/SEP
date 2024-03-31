@@ -1,5 +1,7 @@
 'use client';
 
+import { Button } from "@nextui-org/button";
+
 interface ExpandTableButtonProps {
   isExpanded: boolean;
   toggleExpanded: (isExpanded: boolean) => void;
@@ -7,7 +9,8 @@ interface ExpandTableButtonProps {
 
 const ExpandTableButton = ({ isExpanded, toggleExpanded }: ExpandTableButtonProps) => {
   return (
-    <button
+    <Button
+      isIconOnly
       onClick={() => toggleExpanded(isExpanded ? false : true)}
       className="w-auto flex gap-2 items-center justify-center p-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10  dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
       type="button"
@@ -53,7 +56,7 @@ const ExpandTableButton = ({ isExpanded, toggleExpanded }: ExpandTableButtonProp
           </g>
         </svg>
       )}
-    </button>
+    </Button>
   );
 };
 
