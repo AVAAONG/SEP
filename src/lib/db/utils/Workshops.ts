@@ -611,8 +611,8 @@ export const enroleScholarInChat = async (
           scholar_attendance: true,
         }
       });
-      const totalAttendance = workshop?.scholar_attendance.filter(attendance => attendance.attendance === 'ENROLLED').length || 0;
-      if (totalAttendance >= workshop?.avalible_spots!) { }
+      const totalAttendance = chat?.scholar_attendance.filter(attendance => attendance.attendance === 'ENROLLED').length || 0;
+      if (totalAttendance >= chat?.avalible_spots!) { }
       else {
         await prisma.chatAttendance.create({
           data: {
