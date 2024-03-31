@@ -1,11 +1,6 @@
 import TogleTab from '@/components/TogleTab';
 import AdminStats from '@/components/admin/AdminStats';
 import { DonutChartComponent, PieChartComponent } from '@/components/charts';
-import Table from '@/components/table/Table';
-import scholarCollageInformationColumns from '@/components/table/columns/scholars/collageInfo/columns';
-import { formatScholarsToCollageinfoTable } from '@/components/table/columns/scholars/collageInfo/formater';
-import scholarGeneralInformationColumns from '@/components/table/columns/scholars/generalInfo/columns';
-import { formatScholarsToGeneralInfoTable } from '@/components/table/columns/scholars/generalInfo/formater';
 import { getScholarsWithAllData } from '@/lib/db/utils/users';
 import { formatCountsForCharts2 } from '@/lib/utils/activityFilters';
 import { countScholarProperties } from '@/lib/utils/scholarCounter';
@@ -22,8 +17,6 @@ const page = async ({
   const scholars = await getScholarsWithAllData();
   const scholarsPropertiesCount = countScholarProperties(scholars);
   const dataForCharts = formatCountsForCharts2(scholarsPropertiesCount);
-  const dataForTable = await formatScholarsToGeneralInfoTable(scholars);
-  const collageDataForTable = await formatScholarsToCollageinfoTable(scholars);
 
   const percentage = Number(
     ((scholarsPropertiesCount.status.PROBATION_I / scholars.length) * 100).toFixed(0)
@@ -75,7 +68,7 @@ const page = async ({
             { key: 'cva', title: 'CVA' },
             { key: 'job', title: 'Trabajo' },
             { key: 'mentors', title: 'Mentoria' },
-            { key: 'activities', title: 'Actividades' },
+            { key: 'components', title: 'Actividades' },
             { key: 'contact', title: 'Datos de contacto' },
           ]}
         />
@@ -113,19 +106,6 @@ const page = async ({
 
       <h2 className="font-bold  uppercase text-base tracking-wide px-4 mt-4">Base de datos</h2>
       <div className="w-full h-full">
-        {searchParams === undefined ? (
-          <Table
-            tableColumns={scholarGeneralInformationColumns}
-            tableData={dataForTable}
-            tableHeadersForSearch={[]}
-          />
-        ) : (
-          <Table
-            tableColumns={scholarCollageInformationColumns}
-            tableData={collageDataForTable}
-            tableHeadersForSearch={[]}
-          />
-        )}
       </div>
     </div>
   );

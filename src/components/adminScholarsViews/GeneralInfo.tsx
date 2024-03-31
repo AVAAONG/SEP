@@ -1,13 +1,17 @@
 import { formatCountsForCharts2 } from '@/lib/utils/activityFilters';
 import { countScholarProperties } from '@/lib/utils/scholarCounter';
-import { Table } from '@nextui-org/react';
 import Link from 'next/link';
 import { ExternalStatsIcon } from 'public/svgs/svgs';
+import { ScholarWithAllData } from '../EditScholarForm';
 import { DonutChartComponent, PieChartComponent } from '../charts';
+import Table from '../table/Table';
 import scholarGeneralInformationColumns from '../table/columns/scholars/generalInfo/columns';
 import { formatScholarsToGeneralInfoTable } from '../table/columns/scholars/generalInfo/formater';
 
-const GeneralInfo = async ({ scholars }) => {
+interface GeneralInfoProps {
+  scholars: ScholarWithAllData[];
+}
+const GeneralInfo = async ({ scholars }: GeneralInfoProps) => {
   const data = await formatScholarsToGeneralInfoTable(scholars);
   const scholarsPropertiesCount = countScholarProperties(scholars);
   const dataForCharts = formatCountsForCharts2(scholarsPropertiesCount);
