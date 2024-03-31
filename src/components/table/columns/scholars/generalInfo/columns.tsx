@@ -9,17 +9,15 @@ export interface ScholarGeneralInformationColumnProps {
   id: string;
   first_names: string;
   last_names: string;
-  profilePhoto: string;
+  profilePhoto: string | null;
   dni: string;
   birthdate: string;
   years: number;
   gender: Gender;
   whatsapp_number: string;
-  email: string;
-  collage: string;
-  career: string;
-  avaaStarteYear: Date;
-  yearsInAvaa: number;
+  email: string | null;
+  avaaStarteYear: string;
+  yearsInAvaa: string;
   programStatus: string;
 }
 
@@ -90,6 +88,11 @@ const scholarGeneralInformationColumns: Column<ScholarGeneralInformationColumnPr
   {
     Header: 'Celular whatsapp',
     accessor: 'whatsapp_number',
+    disableSortBy: true,
+  },
+  {
+    Header: 'Correo electrónico',
+    accessor: 'email',
     disableSortBy: true,
   },
   {

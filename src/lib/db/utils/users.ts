@@ -158,7 +158,9 @@ export const getScholarsWithAllData = async () => {
       },
       cva_information: {
         include: {
-          modules: true,
+          modules: {
+            take: 1,
+          },
         },
       },
       program_information: {
@@ -181,6 +183,9 @@ export const getScholarsWithAllData = async () => {
 
   return scholar;
 };
+
+
+
 
 export const getScholars = async () => {
   const scholars = await prisma.scholar.findMany({

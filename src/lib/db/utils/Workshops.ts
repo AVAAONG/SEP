@@ -463,6 +463,36 @@ export const getWorkhsopsByScholar = async (scholarId: string) => {
   return chats;
 };
 
+
+export const getScholarsWithActivities = async () => {
+  const scholars = await prisma.scholar.findMany({
+    select: {
+      id: true,
+      first_names: true,
+      last_names: true,
+      dni: true,
+      photo: true,
+      program_information: {
+        select: {
+          attended_workshops: true,
+          attended_chats: true,
+          volunteerAttendance: {
+            include: {
+              volunteer:
+              {
+                include: {
+                  volunteer_attendance: true,
+                }
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  return scholars;
+}
+
 export const getChatsByScholar = async (scholarId: string) => {
   const chats = await prisma.chat.findMany({
     where: {

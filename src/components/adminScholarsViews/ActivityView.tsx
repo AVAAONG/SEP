@@ -1,20 +1,15 @@
-import { formatCountsForCharts2 } from '@/lib/utils/activityFilters';
-import { countScholarProperties } from '@/lib/utils/scholarCounter';
-import Link from 'next/link';
-import { ExternalStatsIcon } from 'public/svgs/svgs';
-import { DonutChartComponent, PieChartComponent } from '../charts';
+import { getScholarsWithActivities } from '@/lib/db/utils/Workshops';
 import Table from '../table/Table';
-import scholarCvaInformationColumns from '../table/columns/scholars/cvaInfo/columns';
-import { formatScholarsToCvaInfoTable } from '../table/columns/scholars/cvaInfo/formater';
-import ScholarViewsProps from './types';
+import scholarActivitiesInformationColumns from '../table/columns/scholars/activitiesInfo/columns';
+import { formatScholarsActivitiesForActivitiesTable } from '../table/columns/scholars/activitiesInfo/formater';
 
-const CvaInfo = async ({ scholars }: ScholarViewsProps) => {
-  const data = await formatScholarsToCvaInfoTable(scholars);
-  const scholarsPropertiesCount = countScholarProperties(scholars);
-  const dataForCharts = formatCountsForCharts2(scholarsPropertiesCount);
+const ActivitiesInfo = async () => {
+  const scholars = await getScholarsWithActivities();
+  const data = await formatScholarsActivitiesForActivitiesTable(scholars);
+  //   const scholarsPropertiesCount = countScholarProperties(scholars);
   return (
     <>
-      <div className="flex flex-col w-full h-full bg-white dark:bg-black rounded-lg py-4 justify-center shadow-md ">
+      {/* <div className="flex flex-col w-full h-full bg-white dark:bg-black rounded-lg py-4 justify-center shadow-md ">
         <div className="w-full flex justify-end h-5 text-primary-1">
           <Link href={'/admin/becarios/estadisticas'} className="w-5 h-5 text-primary-1 -mt-3 mr-1">
             <ExternalStatsIcon />
@@ -42,12 +37,12 @@ const CvaInfo = async ({ scholars }: ScholarViewsProps) => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <h2 className="font-bold  uppercase text-base tracking-wide px-4 mt-4">Base de datos</h2>
       <div className="w-full h-full">
         <Table
-          tableColumns={scholarCvaInformationColumns}
+          tableColumns={scholarActivitiesInformationColumns}
           tableData={data}
           tableHeadersForSearch={[]}
         />
@@ -56,4 +51,4 @@ const CvaInfo = async ({ scholars }: ScholarViewsProps) => {
   );
 };
 
-export default CvaInfo;
+export default ActivitiesInfo;

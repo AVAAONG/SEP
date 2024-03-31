@@ -5,9 +5,10 @@ import { ExternalStatsIcon } from 'public/svgs/svgs';
 import { DonutChartComponent, PieChartComponent } from '../charts';
 import Table from '../table/Table';
 import { formatScholarsToCollageinfoTable } from '../table/columns/scholars/collageInfo/formater';
-import scholarGeneralInformationColumns from '../table/columns/scholars/generalInfo/columns';
+import ScholarViewsProps from './types';
+import scholarCollageInformationColumns from '../table/columns/scholars/collageInfo/columns';
 
-const CollageInfo = async () => {
+const CollageInfo = async ({ scholars }: ScholarViewsProps) => {
   const data = await formatScholarsToCollageinfoTable(scholars);
   const scholarsPropertiesCount = countScholarProperties(scholars);
   const dataForCharts = formatCountsForCharts2(scholarsPropertiesCount);
@@ -46,7 +47,7 @@ const CollageInfo = async () => {
       <h2 className="font-bold  uppercase text-base tracking-wide px-4 mt-4">Base de datos</h2>
       <div className="w-full h-full">
         <Table
-          tableColumns={scholarGeneralInformationColumns}
+          tableColumns={scholarCollageInformationColumns}
           tableData={data}
           tableHeadersForSearch={[]}
         />

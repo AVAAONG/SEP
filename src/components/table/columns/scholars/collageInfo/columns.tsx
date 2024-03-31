@@ -1,7 +1,7 @@
 'use client';
 import formatDni from '@/lib/db/utils/formatDni';
 import { Avatar } from '@nextui-org/avatar';
-import { Tooltip } from '@nextui-org/tooltip';
+import { Tooltip } from '@nextui-org/react';
 import Link from 'next/link';
 import { Cell, CellValue, Column } from 'react-table';
 
@@ -9,18 +9,18 @@ export interface scholarCollageInformationColumnsProps {
   id: string;
   first_names: string;
   last_names: string;
-  profilePhoto: string;
+  profilePhoto: string | null;
   dni: string;
   kindOfCollage: string;
+  collageStartDate: string;
   studyRegime: string;
   collage: string;
-  completeCollage: string;
+  collageCompleteName: string;
   studyArea: string;
   carrer: string;
   mention: string;
-  currentAcademicPeriod: string;
-  collageStartDate: string;
-  grade: string;
+  currentAcademicPeriod: number;
+  grade: number;
 }
 
 const scholarCollageInformationColumns: Column<scholarCollageInformationColumnsProps>[] = [
@@ -75,6 +75,13 @@ const scholarCollageInformationColumns: Column<scholarCollageInformationColumnsP
   {
     Header: 'Universidad',
     accessor: 'collage',
+    Cell: ({ value, cell }) => {
+      return (
+        <Tooltip content={cell.row.original.collageCompleteName}>
+          <div>{value}</div>
+        </Tooltip>
+      );
+    },
   },
   {
     Header: 'Area de estudio',
@@ -83,13 +90,6 @@ const scholarCollageInformationColumns: Column<scholarCollageInformationColumnsP
   {
     Header: 'Carrera',
     accessor: 'carrer',
-    Cell: ({ value, cell }) => {
-      return (
-        <Tooltip content={cell.row.original.completeCollage}>
-          <button>{value}</button>
-        </Tooltip>
-      );
-    },
   },
   {
     Header: 'Mención',

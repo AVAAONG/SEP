@@ -1,8 +1,9 @@
+import { ScholarWithAllData } from "@/components/EditScholarForm";
 import { getBlobImage } from "@/lib/azure/azure";
-import { getCollageName, parseStudyAreaFromDatabase } from "@/lib/utils/parseFromDatabase";
+import { getCollageName, parseStudiRegimeFromDatabase, parseStudyAreaFromDatabase } from "@/lib/utils/parseFromDatabase";
 import { scholarCollageInformationColumnsProps } from "./columns";
 
-export const formatScholarsToCollageinfoTable = async (scholars): Promise<scholarCollageInformationColumnsProps> => {
+export const formatScholarsToCollageinfoTable = async (scholars: ScholarWithAllData[]): Promise<scholarCollageInformationColumnsProps[]> => {
     const data = scholars.map(async (scholar) => {
         const {
             id,
@@ -18,16 +19,16 @@ export const formatScholarsToCollageinfoTable = async (scholars): Promise<schola
             last_names,
             profilePhoto: photo ? await getBlobImage(photo) : null,
             dni,
-            kindOfCollage: collage_information[0]?.kind_of_collage!,
-            studyRegime: collage_information[0]?.study_regime!,
+            kindOfCollage: collage_information[0]?.kind_of_collage! === 'PRIVATE' ? 'Privada' : 'Pública',
+            collageStartDate: new Date(collage_information[0]?.collage_start_date!).toLocaleDateString(),
+            studyRegime: parseStudiRegimeFromDatabase(collage_information[0]?.study_regime!),
             collage: collage_information[0]?.collage!,
-            completeCollage: getCollageName(collage_information[0]?.complete_collage!),
+            collageCompleteName: getCollageName(collage_information[0]?.collage!),
             studyArea: parseStudyAreaFromDatabase(collage_information[0]?.study_area!),
             carrer: collage_information[0]?.career!,
             mention: collage_information[0]?.mention!,
-            currentAcademicPeriod: collage_information[0]?.collage_period.current_academic_period!,
-            collageStartDate: collage_information[0]?.collage_start_date!,
-            grade: collage_information[0]?.collage_period.grade!
+            currentAcademicPeriod: collage_information[0]?.collage_period?.[0]?.current_academic_period,
+            grade: collage_information[0]?.collage_period?.[0]?.grade,
         };
     });
     return await Promise.all(data);

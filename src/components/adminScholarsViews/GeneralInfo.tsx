@@ -2,16 +2,13 @@ import { formatCountsForCharts2 } from '@/lib/utils/activityFilters';
 import { countScholarProperties } from '@/lib/utils/scholarCounter';
 import Link from 'next/link';
 import { ExternalStatsIcon } from 'public/svgs/svgs';
-import { ScholarWithAllData } from '../EditScholarForm';
 import { DonutChartComponent, PieChartComponent } from '../charts';
 import Table from '../table/Table';
 import scholarGeneralInformationColumns from '../table/columns/scholars/generalInfo/columns';
 import { formatScholarsToGeneralInfoTable } from '../table/columns/scholars/generalInfo/formater';
+import ScholarViewsProps from './types';
 
-interface GeneralInfoProps {
-  scholars: ScholarWithAllData[];
-}
-const GeneralInfo = async ({ scholars }: GeneralInfoProps) => {
+const GeneralInfo = async ({ scholars }: ScholarViewsProps) => {
   const data = await formatScholarsToGeneralInfoTable(scholars);
   const scholarsPropertiesCount = countScholarProperties(scholars);
   const dataForCharts = formatCountsForCharts2(scholarsPropertiesCount);
@@ -46,7 +43,6 @@ const GeneralInfo = async ({ scholars }: GeneralInfoProps) => {
           </div>
         </div>
       </div>
-
       <h2 className="font-bold  uppercase text-base tracking-wide px-4 mt-4">Base de datos</h2>
       <div className="w-full h-full">
         <Table

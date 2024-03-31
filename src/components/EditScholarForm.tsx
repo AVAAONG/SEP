@@ -15,8 +15,16 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 const scholarWithAllData = Prisma.validator<Prisma.ScholarDefaultArgs>()({
   include: {
     program_information: true,
-    collage_information: true,
-    cva_information: true,
+    collage_information: {
+      include: {
+        collage_period: true,
+      },
+    },
+    cva_information: {
+      include: {
+        modules: true,
+      },
+    },
   },
 });
 export type ScholarWithAllData = Prisma.ScholarGetPayload<typeof scholarWithAllData>;

@@ -1,4 +1,4 @@
-import { Collages, ScholarStatus, StudyArea } from '@prisma/client';
+import { Collages, CvaLocation, ScholarStatus, StudyArea, StudyRegime } from '@prisma/client';
 
 export const parseStudyAreaFromDatabase = (studyArea: StudyArea) => {
   switch (studyArea) {
@@ -61,6 +61,8 @@ export const getCollageName = (university: Collages) => {
       return `Universidad Alejandro de Humboldt (${university})`;
     case 'UBV':
       return `Universidad Bolivariana de Venezuela (${university})`;
+    default:
+      return `Error`;
   }
 };
 
@@ -94,4 +96,31 @@ export const parseProbationFromDatabase = (status: ScholarStatus) => {
     default:
       return 'ERROR';
   }
-}  
+}
+
+export const parseStudiRegimeFromDatabase = (regime: StudyRegime) => {
+  switch (regime) {
+    case 'SEMESTER':
+      return 'Semestral';
+    case 'QUARTER':
+      return 'Trimestral';
+    case 'QUARTIER':
+      return 'Cuatrimestral';
+    case 'ANNUAL':
+      return 'Anual';
+    default:
+      return 'ERROR';
+  }
+}
+
+
+export const parseCvaLocationFromDatabase = (location: CvaLocation) => {
+  switch (location) {
+    case 'MERCEDES':
+      return 'Las mercedes';
+    case 'CENTRO':
+      return 'El centro';
+    default:
+      return 'Sin datos';
+  }
+}
