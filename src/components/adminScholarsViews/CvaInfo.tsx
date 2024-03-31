@@ -1,5 +1,5 @@
 import { formatCountsForCharts2 } from '@/lib/utils/activityFilters';
-import { countScholarProperties } from '@/lib/utils/scholarCounter';
+import { countScholarGeneralProperties } from '@/lib/utils/scholarCounter';
 import Table from '../table/Table';
 import scholarCvaInformationColumns from '../table/columns/scholars/cvaInfo/columns';
 import { formatScholarsToCvaInfoTable } from '../table/columns/scholars/cvaInfo/formater';
@@ -7,7 +7,7 @@ import ScholarViewsProps from './types';
 
 const CvaInfo = async ({ scholars }: ScholarViewsProps) => {
   const data = await formatScholarsToCvaInfoTable(scholars);
-  const scholarsPropertiesCount = countScholarProperties(scholars);
+  const scholarsPropertiesCount = countScholarGeneralProperties(scholars);
   const dataForCharts = formatCountsForCharts2(scholarsPropertiesCount);
   return (
     <>

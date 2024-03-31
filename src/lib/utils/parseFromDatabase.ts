@@ -1,4 +1,4 @@
-import { Collages, CvaLocation, ScholarStatus, StudyArea, StudyRegime } from '@prisma/client';
+import { Collages, CvaLocation, KindOfCollage, ScholarStatus, StudyArea, StudyRegime } from '@prisma/client';
 
 export const parseStudyAreaFromDatabase = (studyArea: StudyArea) => {
   switch (studyArea) {
@@ -111,6 +111,18 @@ export const parseStudiRegimeFromDatabase = (regime: StudyRegime) => {
     default:
       return 'ERROR';
   }
+}
+
+export const parseKindOfCollageFromDatabase = (kind: KindOfCollage) => {
+  switch (kind) {
+    case 'PUBLIC':
+      return 'Pública';
+    case 'PRIVATE':
+      return 'Privada';
+    default:
+      return 'ERROR';
+  }
+
 }
 
 

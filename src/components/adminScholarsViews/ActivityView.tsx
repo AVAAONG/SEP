@@ -6,7 +6,7 @@ import { formatScholarsActivitiesForActivitiesTable } from '../table/columns/sch
 const ActivitiesInfo = async () => {
   const scholars = await getScholarsWithActivities();
   const data = await formatScholarsActivitiesForActivitiesTable(scholars);
-  //   const scholarsPropertiesCount = countScholarProperties(scholars);
+  //   const scholarsPropertiesCount = countScholarGeneralProperties(scholars);
   return (
     <>
       <h2 className="font-bold  uppercase text-base tracking-wide px-4 mt-4">Base de datos</h2>

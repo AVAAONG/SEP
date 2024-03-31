@@ -1,6 +1,6 @@
 import { ScholarWithAllData } from "@/components/EditScholarForm";
 import { getBlobImage } from "@/lib/azure/azure";
-import { getCollageName, parseStudiRegimeFromDatabase, parseStudyAreaFromDatabase } from "@/lib/utils/parseFromDatabase";
+import { getCollageName, parseKindOfCollageFromDatabase, parseStudiRegimeFromDatabase, parseStudyAreaFromDatabase } from "@/lib/utils/parseFromDatabase";
 import { scholarCollageInformationColumnsProps } from "./columns";
 
 export const formatScholarsToCollageinfoTable = async (scholars: ScholarWithAllData[]): Promise<scholarCollageInformationColumnsProps[]> => {
@@ -19,7 +19,7 @@ export const formatScholarsToCollageinfoTable = async (scholars: ScholarWithAllD
             last_names,
             profilePhoto: photo ? await getBlobImage(photo) : null,
             dni,
-            kindOfCollage: collage_information[0]?.kind_of_collage! === 'PRIVATE' ? 'Privada' : 'Pública',
+            kindOfCollage: parseKindOfCollageFromDatabase(collage_information[0]?.kind_of_collage!),
             collageStartDate: new Date(collage_information[0]?.collage_start_date!).toLocaleDateString(),
             studyRegime: parseStudiRegimeFromDatabase(collage_information[0]?.study_regime!),
             collage: collage_information[0]?.collage!,
