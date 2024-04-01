@@ -1,9 +1,9 @@
 'use client';
 import DisplayDate from '@/components/DisplayDate';
 import formatDni from '@/lib/db/utils/formatDni';
-import { Avatar, Tooltip } from '@nextui-org/react';
-import Link from 'next/link';
+import { Tooltip } from '@nextui-org/react';
 import { Cell, CellValue, Column } from 'react-table';
+import ScholarColumnWidget from '../commons/ScholarWidget';
 
 export interface ScholarCvaInformationColumnsProps {
   id: string;
@@ -34,20 +34,11 @@ const scholarCvaInformationColumns: Column<ScholarCvaInformationColumnsProps>[] 
       value: CellValue;
       cell: Cell<ScholarCvaInformationColumnsProps>;
     }) => (
-      <Link href={cell.row.original.id ? `/admin/becarios/${''}` : ''} className="w-67">
-        <div className="flex items-center  w-full">
-          <div className="flex-shrink-0 w-8 h-8">
-            <Avatar
-              className="w-full h-full rounded-full"
-              src={cell.row.original.profilePhoto || undefined}
-              alt="Foto de perfil"
-            />
-          </div>
-          <div className="ml-4 text-start w-full">
-            <span className="text-sm font-medium text-gray-900 dark:text-slate-100">{value}</span>
-          </div>
-        </div>
-      </Link>
+      <ScholarColumnWidget
+        scholarId={cell.row.original.id}
+        scholarName={value}
+        scholarPhoto={cell.row.original.profilePhoto}
+      />
     ),
   },
   {
@@ -117,9 +108,12 @@ const scholarCvaInformationColumns: Column<ScholarCvaInformationColumnsProps>[] 
     accessor: 'notStartedReason',
     disableSortBy: true,
     Cell: ({ value }: { value: CellValue }) => (
-      <Tooltip content={value} classNames={{
-        base: 'w-96'
-      }}>
+      <Tooltip
+        content={value}
+        classNames={{
+          base: 'w-96',
+        }}
+      >
         <div className="max-w-sm overflow-hidden">{value || 'No aplica'}</div>
       </Tooltip>
     ),

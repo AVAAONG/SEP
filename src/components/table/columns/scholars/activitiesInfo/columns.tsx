@@ -1,7 +1,6 @@
 'use client';
-import { Avatar } from '@nextui-org/react';
-import Link from 'next/link';
 import { Cell, CellValue, Column } from 'react-table';
+import ScholarColumnWidget from '../commons/ScholarWidget';
 
 export interface ScholarActivitiesInformationColumnsProps {
   id: string;
@@ -26,23 +25,11 @@ const scholarActivitiesInformationColumns: Column<ScholarActivitiesInformationCo
       value: CellValue;
       cell: Cell<ScholarActivitiesInformationColumnsProps>;
     }) => (
-      <Link
-        href={cell.row.original.id ? `/admin/becarios/${cell.row.original.id}` : ''}
-        className="w-67"
-      >
-        <div className="flex items-center  w-full">
-          <div className="flex-shrink-0 w-8 h-8">
-            <Avatar
-              className="w-full h-full rounded-full"
-              src={cell.row.original.profilePhoto || undefined}
-              alt="Foto de perfil"
-            />
-          </div>
-          <div className="ml-4 text-start w-full">
-            <span className="text-sm font-medium text-gray-900 dark:text-slate-100">{value}</span>
-          </div>
-        </div>
-      </Link>
+      <ScholarColumnWidget
+        scholarId={cell.row.original.id}
+        scholarName={value}
+        scholarPhoto={cell.row.original.profilePhoto}
+      />
     ),
   },
   {
