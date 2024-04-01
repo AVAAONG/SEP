@@ -11,34 +11,34 @@ const TAB_OPTIONS = [
   // { key: 'job', title: 'Trabajo' },
   { key: 'activities', title: 'Actividades' },
   // { key: 'contact', title: 'Datos de contacto' },
-]
+];
 
 const page = async ({
   searchParams,
 }: {
   searchParams?: {
     selectedKey:
-    | 'general'
-    | 'collage'
-    | 'cva'
-    | 'job'
-    | 'mentorship'
-    | 'activities'
-    | 'contact'
-    | undefined;
+      | 'general'
+      | 'collage'
+      | 'cva'
+      | 'job'
+      | 'mentorship'
+      | 'activities'
+      | 'contact'
+      | undefined;
   };
 }) => {
   const view = searchParams?.selectedKey;
   const scholars = await getScholarsWithAllData();
   const scholarsPropertiesCount = countScholarGeneralProperties(scholars);
 
-  const probationI = scholars.length > 0
-    ? ((scholarsPropertiesCount.status.PROBATION_I / scholars.length) * 100).toFixed(0)
-    : '0';
+  const probationI =
+    scholars.length > 0
+      ? ((scholarsPropertiesCount.status.PROBATION_I / scholars.length) * 100).toFixed(0)
+      : '0';
   const probationII = Number(
     ((scholarsPropertiesCount.status.PROBATION_II / scholars.length) * 100).toFixed(0)
   );
-
 
   return (
     <div className="flex flex-col w-full gap-4">
@@ -78,9 +78,7 @@ const page = async ({
         ]}
       />
       <div className="mx-auto">
-        <TogleTab
-          options={TAB_OPTIONS}
-        />
+        <TogleTab options={TAB_OPTIONS} />
       </div>
       <h2 className="font-bold uppercase text-base tracking-wide px-4 mt-4">Resumen</h2>
       <AdminScholarsView scholars={scholars} view={view} />

@@ -1,4 +1,13 @@
-import { ActivityStatus, CVASchedule, Level, Modality, Skill, WorkshopYear } from '@prisma/client';
+import {
+  ActivityStatus,
+  CVASchedule,
+  Level,
+  Modality,
+  ScholarAttendance,
+  Skill,
+  VolunteerStatus,
+  WorkshopYear,
+} from '@prisma/client';
 
 export const parseSkillFromDatabase = (skill: Skill) => {
   switch (skill) {
@@ -27,6 +36,17 @@ export const parseModalityFromDatabase = (modality: Modality | null | undefined)
       return 'Hibrida';
     default:
       return 'Sin datos';
+  }
+};
+
+export const parseVolunteerStatusFromDatabase = (status: VolunteerStatus) => {
+  switch (status) {
+    case 'APPROVED':
+      return 'Aprobado';
+    case 'PENDING':
+      return 'Pendiente de aprobación';
+    case 'REJECTED':
+      return 'Rechazado';
   }
 };
 
@@ -63,6 +83,21 @@ export const parseWorkshopStatusFromDatabase = (status: ActivityStatus) => {
       return 'Enviado';
     case 'SUSPENDED':
       return 'Suspendido';
+  }
+};
+
+export const parseScholarAttendanceFromDatabase = (attendance: ScholarAttendance) => {
+  switch (attendance) {
+    case 'ATTENDED':
+      return 'Asistió';
+    case 'CANCELLED':
+      return 'Cancelo';
+    case 'ENROLLED':
+      return 'Inscrito';
+    case 'JUSTIFY':
+      return 'Justifico';
+    case 'NOT_ATTENDED':
+      return 'No asistió';
   }
 };
 

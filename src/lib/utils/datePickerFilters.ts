@@ -38,7 +38,7 @@ const filterActivityByYear = (
   return filteredActivities;
 }
 
-const filterActivitiesBySearchParams = (
+const filterActivitiesBySearchParams = async (
   activityDbList: (WorkshopWithAllData | Chat | Volunteer)[],
   searchParams: { year?: string; quarter?: string; month?: string } | undefined
 ): (Workshop | Chat | Volunteer)[] => {
@@ -55,5 +55,4 @@ const filterActivitiesBySearchParams = (
   return activities;
 };
 
-export { filterActivityByMonth, filterActivityByQuarter, filterActivityByYear };
 export default filterActivitiesBySearchParams;

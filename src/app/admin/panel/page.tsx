@@ -10,7 +10,7 @@ import { chatIcon, userIcon, workshopIcon } from 'public/svgs/svgs';
 const page = async () => {
   const actualYear = new Date().getFullYear();
   const activeScholarsCount = await getScholarsCountByCondition('ACTIVE', 'Rokk6_XCAJAg45heOEzYb');
-  const [workshops, chats] = await getActivitiesByYear(actualYear);
+  const [workshops, chats, volunteer] = await getActivitiesByYear(actualYear);
   const events = formatActivityEventsForBigCalendar([...workshops, ...chats], 'admin');
   const sentActivities: (Workshop | Chat)[] = [...workshops, ...chats]
     .filter((activity) => activity.activity_status === 'SENT')
@@ -22,6 +22,13 @@ const page = async () => {
   const chatsDoneCount = chats.filter(
     (chat) => chat.activity_status === 'ATTENDANCE_CHECKED'
   ).length;
+  const volunteerHours = volunteer.reduce((total, volunteer) => {
+    if (volunteer.attendance.status === 'APPROVED') {
+      return total + volunteer.asigned_hours;
+    } else {
+      return total;
+    }
+  }, 0);
 
   const cardContent: PanelCardProps[] = [
     {
@@ -43,7 +50,7 @@ const page = async () => {
     {
       title: 'Horas de voluntariado realizadas',
       subtitle: 'Ver todas las actividades',
-      data: 0,
+      data: volunteerHours,
       link: 'voluntariado',
       icon: workshopIcon(),
       kind: 'volunteer',

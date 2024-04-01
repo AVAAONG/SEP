@@ -11,6 +11,7 @@ import {
   Prisma,
   ScholarAttendance,
   Volunteer,
+  VolunteerAttendance,
   Workshop
 } from '@prisma/client';
 import shortUUID from 'short-uuid';
@@ -220,11 +221,15 @@ export const getSentActivitiesWhereScholarIsNotEnrroled = async (
 
 export const getActivitiesByYear = async (
   year: number
-): Promise<[Workshop[], Chat[], Volunteer[]]> => {
+): Promise<[Workshop[], Chat[], VolunteerAttendance[]]> => {
   const [allWorkshops, allChats, allVolunteers] = await prisma.$transaction([
     prisma.workshop.findMany(),
     prisma.chat.findMany(),
-    prisma.volunteer.findMany(),
+    prisma.volunteerAttendance.findMany({
+      include: {
+        volunteer: true
+      }
+    }),
   ]);
 
   const yearStart = new Date(year, 0, 1);
@@ -237,7 +242,7 @@ export const getActivitiesByYear = async (
     chat.start_dates.some((date) => date >= yearStart && date <= yearEnd)
   );
   const volunteers = allVolunteers.filter((volunteer) =>
-    volunteer.start_dates.some((date) => date >= yearStart && date <= yearEnd)
+    volunteer.volunteer.start_dates.some((date) => date >= yearStart && date <= yearEnd)
   );
 
   return [workshops, chats, volunteers];
@@ -462,6 +467,30 @@ export const getWorkhsopsByScholar = async (scholarId: string) => {
   });
   return chats;
 };
+
+export const getVolunteersByScholar = async (scholarId: string) => {
+  const volunteers = await prisma.volunteer.findMany({
+    where: {
+      volunteer_attendance: {
+        some: {
+          scholar: {
+            scholarId: scholarId,
+          },
+        },
+      },
+    },
+    include: {
+      volunteer_attendance: {
+        where: {
+          scholar: {
+            scholarId: scholarId,
+          },
+        },
+      },
+    },
+  });
+  return volunteers;
+}
 
 
 export const getScholarsWithActivities = async () => {

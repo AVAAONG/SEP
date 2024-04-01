@@ -7,7 +7,7 @@ import { ActivityStatus, Chat, Volunteer, Workshop, WorkshopSafisfactionForm } f
 import { VolunteerWithAllData } from "../db/types";
 import { parseChatLevelFromDatabase, parseModalityFromDatabase, parseSatisfactionFormResponsesFromDatabase, parseSkillFromDatabase, parseWorkshopKindFromDatabase, parseWorkshopYearFromDatabase } from "../utils2";
 
-const countActivityByModality = (attendedActivities: (Workshop | Chat | Volunteer)[]) => {
+const countActivityByModality = async (attendedActivities: (Workshop | Chat | Volunteer)[]) => {
     return attendedActivities.reduce(
         (acc: { inPersonActivities: number; onlineActivities: number, hibridActivities: number }, activity: Workshop | Chat | Volunteer) => {
             if (activity.modality === 'IN_PERSON') acc.inPersonActivities++;
@@ -21,19 +21,19 @@ const countActivityByModality = (attendedActivities: (Workshop | Chat | Voluntee
     );
 };
 
-const getAttendedActivities = (activities: WorkshopWithAllData[]) => {
+const getAttendedActivities = async (activities: WorkshopWithAllData[]) => {
     return activities.filter((activity) => {
         return activity.scholar_attendance[0]?.attendance === 'ATTENDED';
     });
 };
 
-const getAttendedChats = (chats: ChatsWithAllData[], scholarId: string) => {
+const getAttendedChats = async (chats: ChatsWithAllData[], scholarId: string) => {
     return chats.filter((chat) => {
         return chat.scholar_attendance[0]?.attendance === 'ATTENDED' || chat.speaker.some((speaker) => speaker.id === scholarId);
     });
 }
 
-const getApprovedAndAttendedVolunteers = (volunteers: VolunteerWithAllData[]) => {
+const getApprovedAndAttendedVolunteers = async (volunteers: VolunteerWithAllData[]) => {
     let externalVolunteerHours: number = 0,
         internalVolunteerHours: number = 0,
         totalVolunteerHours: number = 0;
@@ -54,7 +54,7 @@ type Count = {
     value: number;
 };
 
-const countWorkshopProperties = (workshops: WorkshopWithAllData[]) => {
+const countWorkshopProperties = async (workshops: WorkshopWithAllData[]) => {
     const counts = {
         skills: {} as Record<"Ejercicio ciudadano" | "Emprendimiento" | "Gerencia de sí mismo" | "Liderazgo" | "TIC", number>,
         years: {} as Record<string, number>,
@@ -77,7 +77,7 @@ const countWorkshopProperties = (workshops: WorkshopWithAllData[]) => {
     return counts;
 }
 
-const formatCountsForCharts = (counts: Record<string, Record<string, number>>): { skills: Count[]; years: Count[]; kinds: Count[]; modality: Count[] } => {
+const formatCountsForCharts = async (counts: Record<string, Record<string, number>>): { skills: Count[]; years: Count[]; kinds: Count[]; modality: Count[] } => {
     const result: { skills: Count[]; years: Count[]; kinds: Count[]; modality: Count[] } = {
         skills: [],
         years: [],
@@ -95,7 +95,7 @@ const formatCountsForCharts = (counts: Record<string, Record<string, number>>): 
     return result;
 };
 
-export const formatCountsForCharts2 = <T extends string>(counts: Record<T, Record<string, number>>): { [K in T]: Count[] } => {
+export const formatCountsForCharts2 = async  <T extends string>(counts: Record<T, Record<string, number>>): { [K in T]: Count[] } => {
     const result: { [K in T]: Count[] } = {} as any; // Temporary fix for typing
 
     for (const key in counts) {
@@ -108,7 +108,7 @@ export const formatCountsForCharts2 = <T extends string>(counts: Record<T, Recor
     return result;
 };
 
-export const formatCountsForChartsActivityExpe = <T extends string>(counts: Record<T, Record<string, number>>): { [K in T]: Count[] } => {
+export const formatCountsForChartsActivityExpe = async <T extends string>(counts: Record<T, Record<string, number>>): { [K in T]: Count[] } => {
     const result: { [K in T]: Count[] } = {} as any; // Temporary fix for typing
 
     for (const key in counts) {
@@ -122,7 +122,7 @@ export const formatCountsForChartsActivityExpe = <T extends string>(counts: Reco
     return result;
 };
 
-const formatChatCountsForCharts = (counts: Record<string, Record<string, number>>): { level: Count[]; modality: Count[] } => {
+const formatChatCountsForCharts = async (counts: Record<string, Record<string, number>>): { level: Count[]; modality: Count[] } => {
     const result: { level: Count[]; modality: Count[] } = {
         level: [],
         modality: [],
@@ -138,7 +138,7 @@ const formatChatCountsForCharts = (counts: Record<string, Record<string, number>
     return result;
 };
 
-const countChatProperties = (chats: ChatsWithAllData[]) => {
+const countChatProperties = async (chats: ChatsWithAllData[]) => {
     const counts: Record<string, Record<string, number>> = {
         level: {},
         modality: {},
@@ -154,7 +154,7 @@ const countChatProperties = (chats: ChatsWithAllData[]) => {
     return counts;
 };
 
-const categorizeActivityByStatus = (activities: WorkshopWithAllData[] | ChatsWithAllData[]) => {
+const categorizeActivityByStatus = async (activities: WorkshopWithAllData[] | ChatsWithAllData[]) => {
     const categorizedActivities: Record<ActivityStatus, WorkshopWithAllData[] | ChatsWithAllData[]> = {
         SUSPENDED: [],
         ATTENDANCE_CHECKED: [],
@@ -171,7 +171,7 @@ const categorizeActivityByStatus = (activities: WorkshopWithAllData[] | ChatsWit
     return categorizedActivities;
 };
 
-const createAdminStatsForActivities = (activitiesByStatus: Record<ActivityStatus, WorkshopWithAllData[] | ChatsWithAllData[]>, totalAmountOfActivities: number, kindOfActivity: 'workshop' | 'chat') => {
+const createAdminStatsForActivities = async (activitiesByStatus: Record<ActivityStatus, WorkshopWithAllData[] | ChatsWithAllData[]>, totalAmountOfActivities: number, kindOfActivity: 'workshop' | 'chat') => {
 
     const mainText = kindOfActivity === 'workshop' ? 'Actividades formativas' : 'Chats clubs';
     const gender = kindOfActivity === 'workshop' ? 'a' : 'o';
@@ -216,7 +216,7 @@ const createAdminStatsForActivities = (activitiesByStatus: Record<ActivityStatus
     return stats
 }
 
-const countActivityAttendancePerMonth = (workshops: WorkshopWithAllData[]) => {
+const countActivityAttendancePerMonth = async (workshops: WorkshopWithAllData[]) => {
     const stats: {
         activitiesByMonth: Record<number, number>;
         workshopsWithHighAttendancePerMonth: Record<string, number>;
@@ -247,7 +247,7 @@ const countActivityAttendancePerMonth = (workshops: WorkshopWithAllData[]) => {
     return stats;
 };
 
-const formatActivityAttendancePerMonthForChart = (stats: {
+const formatActivityAttendancePerMonthForChart = async (stats: {
     activitiesByMonth: Record<number, number>;
     workshopsWithHighAttendancePerMonth: Record<string, number>;
 }) => {
@@ -279,7 +279,7 @@ const formatActivityAttendancePerMonthForChart = (stats: {
     return { lineSeries, barSeries };
 }
 
-const getActivityAttendancePerMonth = (workshops: WorkshopWithAllData[]) => {
+const getActivityAttendancePerMonth = async (workshops: WorkshopWithAllData[]) => {
     const stats = countActivityAttendancePerMonth(workshops);
     const chartSeries = formatActivityAttendancePerMonthForChart(stats);
     return chartSeries;
@@ -287,7 +287,7 @@ const getActivityAttendancePerMonth = (workshops: WorkshopWithAllData[]) => {
 
 
 
-const countActivitySatisfactionForm = (form: WorkshopSafisfactionForm[]) => {
+const countActivitySatisfactionForm = async (form: WorkshopSafisfactionForm[]) => {
     const counts = {
         activity_organization: {},
         activity_number_of_participants: {},
@@ -317,17 +317,7 @@ const countActivitySatisfactionForm = (form: WorkshopSafisfactionForm[]) => {
 
 
 export {
-    countActivityByModality,
-    getAttendedActivities,
-    getApprovedAndAttendedVolunteers,
-    getAttendedChats,
-    categorizeActivityByStatus,
-    formatCountsForCharts,
-    countWorkshopProperties,
-    countActivitySatisfactionForm,
-    createAdminStatsForActivities,
-    formatChatCountsForCharts,
-    countChatProperties,
-    getActivityAttendancePerMonth
+    categorizeActivityByStatus, countActivityByModality, countActivitySatisfactionForm, countChatProperties, countWorkshopProperties, createAdminStatsForActivities,
+    formatChatCountsForCharts, formatCountsForCharts, getActivityAttendancePerMonth, getApprovedAndAttendedVolunteers, getAttendedActivities, getAttendedChats
 };
 
