@@ -7,7 +7,6 @@ import {
   deleteadminProfile,
   getAdminsProfiles,
 } from '@/lib/db/utils/admins';
-import { uploadImageToImgur } from '@/lib/imgurUpload';
 import createSEPOnboardingMessage from '@/lib/mailMessages/sepOnboardingMessage';
 import sendEmailWithDevAccount from '@/lib/sendEmails';
 import { AdminProfile } from '@prisma/client';
@@ -38,7 +37,7 @@ const page = () => {
     event.preventDefault();
     setIsCreating(true);
     let imageLink;
-    if (image) imageLink = await uploadImageToImgur(image!);
+    if (image) imageLink = '';
     else imageLink = null;
     data.profilePic = imageLink || '';
     data.profileName = data.profileName.trim();
