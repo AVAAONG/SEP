@@ -26,7 +26,7 @@ export const formatScholarsToCvaInfoTable = async (scholars: ScholarWithAllData[
             moduleModality: parseModalityFromDatabase(cva_information?.modules?.[0]?.modality),
             qualification: cva_information?.modules?.[0]?.qualification,
             schedule: parseCvaScheduleFromDatabase(cva_information?.modules?.[0]?.schedule),
-            cvaFinished: cva_information?.already_finished_cva,
+            cvaFinished: cva_information?.already_finished_cva ? 'Sí' : 'No',
             cvaStartDate: cva_information?.cva_started_date ? new Date(cva_information?.cva_started_date).toISOString() : null,
             cvaEndDate: cva_information?.cva_ended_date ? new Date(cva_information?.cva_ended_date).toISOString() : null,
             notStartedReason: cva_information?.not_started_cva_reason

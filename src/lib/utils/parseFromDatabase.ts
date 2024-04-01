@@ -126,7 +126,7 @@ export const parseKindOfCollageFromDatabase = (kind: KindOfCollage) => {
 }
 
 
-export const parseCvaLocationFromDatabase = (location: CvaLocation) => {
+export const parseCvaLocationFromDatabase = (location: CvaLocation | null | undefined) => {
   switch (location) {
     case 'MERCEDES':
       return 'Las mercedes';

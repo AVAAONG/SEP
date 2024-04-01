@@ -1,5 +1,6 @@
 import moment from "moment";
-import { parseAvaaAdmisionYear, parseKindOfCollageFromDatabase, parseStudiRegimeFromDatabase, parseStudyAreaFromDatabase } from "./parseFromDatabase";
+import { parseModalityFromDatabase } from "../utils2";
+import { parseAvaaAdmisionYear, parseCvaLocationFromDatabase, parseKindOfCollageFromDatabase, parseStudiRegimeFromDatabase, parseStudyAreaFromDatabase } from "./parseFromDatabase";
 
 export const countScholarGeneralProperties = (scholars: any[]) => {
     const counts = {
@@ -38,6 +39,32 @@ export const countScholarCollageProperties = (scholars: any[]) => {
         counts.studyArea[scholarStudyArea] = (counts.studyArea[scholarStudyArea] || 0) + 1;
         counts.kindOfCollage[scholarKindOfCollage] = (counts.kindOfCollage[scholarKindOfCollage] || 0) + 1;
         counts.studyRegimen[scholarStudyRegimen] = (counts.studyRegimen[scholarStudyRegimen] || 0) + 1;
+    });
+    return counts;
+}
+
+export const countScholarCvaProperties = (scholars: any[]) => {
+    const counts = {
+        cvaLocation: {} as Record<"Las mercedes" | "El centro" | "Sin datos", number>,
+        cvaModality: {} as Record<"Presencial" | "Virtual" | "Hibrida" | 'Sin datos', number>,
+        cvaLastModule: {} as Record<string, number>,
+        hasFinishedCva: {} as Record<string, number>,
+        isCurrentlyInCva: {} as Record<string, number>,
+    };
+
+    scholars.forEach(scholar => {
+        const cvaLocation = parseCvaLocationFromDatabase(scholar.cva_information?.cva_location);
+        const cvaModality = parseModalityFromDatabase(scholar.cva_information?.modules?.[0]?.modality);
+        const cvaLastModule = scholar.cva_information?.modules?.[0]?.module;
+        const hasFinishedCva = scholar.cva_information?.already_finished_cva ? 'Sí' : 'No';
+        const isCurrentlyInCva = scholar.cva_information?.is_in_cva ? 'Sí' : 'No';
+
+        counts.cvaLocation[cvaLocation] = (counts.cvaLocation[cvaLocation] || 0) + 1;
+        counts.cvaModality[cvaModality] = (counts.cvaModality[cvaModality] || 0) + 1;
+        if (cvaLastModule === undefined) { }
+        else counts.cvaLastModule[cvaLastModule] = (counts.cvaLastModule[cvaLastModule] || 0) + 1;
+        counts.hasFinishedCva[hasFinishedCva] = (counts.hasFinishedCva[hasFinishedCva] || 0) + 1;
+        counts.isCurrentlyInCva[isCurrentlyInCva] = (counts.isCurrentlyInCva[isCurrentlyInCva] || 0) + 1;
     });
     return counts;
 }

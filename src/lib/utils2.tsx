@@ -17,7 +17,7 @@ export const parseSkillFromDatabase = (skill: Skill) => {
   }
 };
 
-export const parseModalityFromDatabase = (modality: Modality | null) => {
+export const parseModalityFromDatabase = (modality: Modality | null | undefined) => {
   switch (modality) {
     case 'IN_PERSON':
       return 'Presencial';
@@ -26,11 +26,11 @@ export const parseModalityFromDatabase = (modality: Modality | null) => {
     case 'HYBRID':
       return 'Hibrida';
     default:
-      return 'Presencial';
+      return 'Sin datos';
   }
 };
 
-export const parseCvaScheduleFromDatabase = (schedule: CVASchedule | null) => {
+export const parseCvaScheduleFromDatabase = (schedule: CVASchedule | null | undefined) => {
   switch (schedule) {
     case 'DIARY':
       return 'Diario';

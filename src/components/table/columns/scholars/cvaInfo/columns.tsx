@@ -13,14 +13,14 @@ export interface ScholarCvaInformationColumnsProps {
   dni: string;
   isInCva: string;
   cvaLocation: string;
-  actualModule: string;
+  actualModule: number | undefined;
   moduleModality: string;
-  qualification: string;
+  qualification: number | undefined;
   schedule: string;
   cvaFinished: string;
-  cvaStartDate: string;
-  cvaEndDate: string;
-  notStartedReason: string;
+  cvaStartDate: string | null;
+  cvaEndDate: string | null;
+  notStartedReason: string | null | undefined;
 }
 
 const scholarCvaInformationColumns: Column<ScholarCvaInformationColumnsProps>[] = [
@@ -117,8 +117,10 @@ const scholarCvaInformationColumns: Column<ScholarCvaInformationColumnsProps>[] 
     accessor: 'notStartedReason',
     disableSortBy: true,
     Cell: ({ value }: { value: CellValue }) => (
-      <Tooltip content={value}>
-        <div className="w-96">{value || 'No aplica'}</div>
+      <Tooltip content={value} classNames={{
+        base: 'w-96'
+      }}>
+        <div className="max-w-sm overflow-hidden">{value || 'No aplica'}</div>
       </Tooltip>
     ),
   },
