@@ -42,6 +42,10 @@ const WORKSHOP_SEARCH_OPTIONS = [
     label: 'Estatus de la actividad',
     option: 'activityStatus',
   },
+  {
+    label: 'Facilitador',
+    option: 'speakerNames',
+  },
 ];
 const CHAT_SEARCH_OPTIONS = [
   {
@@ -55,6 +59,33 @@ const CHAT_SEARCH_OPTIONS = [
   {
     label: 'Asistencia',
     option: 'attendance',
+  },
+  {
+    label: 'Estatus de la actividad',
+    option: 'activityStatus',
+  },
+  {
+    label: 'Facilitador',
+    option: 'speakerNames',
+  },
+];
+
+const VOLUNTEER_SEARCH_OPTIONS = [
+  {
+    label: 'Tipo de voluntariado',
+    option: 'level',
+  },
+  {
+    label: 'Modalidad',
+    option: 'modality',
+  },
+  {
+    label: 'Asistencia',
+    option: 'attendance',
+  },
+  {
+    label: 'Estatus de la actividad',
+    option: 'activityStatus',
   },
   {
     label: 'Estatus de la actividad',
