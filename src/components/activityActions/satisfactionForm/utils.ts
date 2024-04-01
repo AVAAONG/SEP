@@ -7,7 +7,18 @@ export const COLORS_BASED_ON_RESPONSE = {
     'Regular': '#eab308',// yellow
     'Bueno': '#1d4ed8',// blue
     'Excelente': '#23a217',// green
+};
 
+export const COLOR_BASED_ON_PERCENTAGE = {
+    'Menos de 30%': '#b91c1c', // red
+    '30%': '#d97706',// orange
+    '70%': '#eab308',// yellow
+    '100%': '#1d4ed8',// blue
+    'Mas de 100%': '#23a217',// green
+}
+
+export const getColorBasedOnPercentage = (response: keyof typeof COLOR_BASED_ON_PERCENTAGE): string => {
+    return COLOR_BASED_ON_PERCENTAGE[response] || '#808080' //gray;
 };
 
 

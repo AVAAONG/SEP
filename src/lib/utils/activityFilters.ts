@@ -1,5 +1,6 @@
 'use server';
 
+import { COLOR_BASED_ON_PERCENTAGE, getColorBasedOnPercentage } from "@/components/activityActions/satisfactionForm/utils";
 import { ChatsWithAllData } from "@/components/table/columns/chatsColumns";
 import { WorkshopWithAllData } from "@/components/table/columns/workshopColumns";
 import { ActivityStatus, Chat, Volunteer, Workshop, WorkshopSafisfactionForm } from "@prisma/client";
@@ -101,6 +102,20 @@ export const formatCountsForCharts2 = <T extends string>(counts: Record<T, Recor
         result[key] = Object.entries(counts[key]).map(([label, value]) => ({
             label,
             value: Number(value),
+        }));
+    }
+
+    return result;
+};
+
+export const formatCountsForChartsActivityExpe = <T extends string>(counts: Record<T, Record<string, number>>): { [K in T]: Count[] } => {
+    const result: { [K in T]: Count[] } = {} as any; // Temporary fix for typing
+
+    for (const key in counts) {
+        result[key] = Object.entries(counts[key]).map(([label, value]) => ({
+            label,
+            value: Number(value),
+            color: getColorBasedOnPercentage(label as keyof typeof COLOR_BASED_ON_PERCENTAGE),
         }));
     }
 

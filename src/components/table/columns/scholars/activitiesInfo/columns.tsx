@@ -1,5 +1,4 @@
 'use client';
-import formatDni from '@/lib/db/utils/formatDni';
 import { Avatar } from '@nextui-org/react';
 import Link from 'next/link';
 import { Cell, CellValue, Column } from 'react-table';
@@ -9,10 +8,11 @@ export interface ScholarActivitiesInformationColumnsProps {
   first_names: string;
   last_names: string;
   profilePhoto: string | null;
-  dni: string;
-  doneWorkshops: number;
-  doneChats: number;
-  doneVolunteerHours: number;
+  whatsAppNumber: string | null;
+  email: string | null;
+  doneWorkshops: number | undefined;
+  doneChats: number | undefined;
+  doneVolunteerHours: number | undefined;
 }
 const scholarActivitiesInformationColumns: Column<ScholarActivitiesInformationColumnsProps>[] = [
   {
@@ -46,13 +46,12 @@ const scholarActivitiesInformationColumns: Column<ScholarActivitiesInformationCo
     ),
   },
   {
-    Header: 'Cédula',
-    accessor: 'dni',
-    disableSortBy: true,
-    Cell: ({ value }: { value: CellValue }) => {
-      const dni = formatDni(value);
-      return <span>V-{dni}</span>;
-    },
+    Header: 'Numero WhatsApp',
+    accessor: 'whatsAppNumber',
+  },
+  {
+    Header: 'Correo electronico',
+    accessor: 'email',
   },
   {
     Header: 'Actividades formativas',

@@ -1,14 +1,41 @@
 import { getScholarsWithActivities } from '@/lib/db/utils/Workshops';
+import { formatCountsForChartsActivityExpe } from '@/lib/utils/activityFilters';
+import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
+import { countScholarActivitiesProperties } from '@/lib/utils/scholarCounter';
+import { DonutChartComponent } from '../charts';
+import DateSelector from '../commons/datePicker';
 import Table from '../table/Table';
 import scholarActivitiesInformationColumns from '../table/columns/scholars/activitiesInfo/columns';
 import { formatScholarsActivitiesForActivitiesTable } from '../table/columns/scholars/activitiesInfo/formater';
 
-const ActivitiesInfo = async () => {
+const ActivitiesInfo = async ({
+  searchParams,
+}: {
+  searchParams?: { year: string; month: string; quarter: string };
+}) => {
+  const searchParamsExample = { year: '2024', month: '', quarter: '1' };
   const scholars = await getScholarsWithActivities();
-  const data = await formatScholarsActivitiesForActivitiesTable(scholars);
-  //   const scholarsPropertiesCount = countScholarGeneralProperties(scholars);
+  const df = scholars.map(scholar => {
+    const f = filterActivitiesBySearchParams(scholar.program_information.attended_chats.map(chat => chat.chat), searchParamsExample)
+    const g = filterActivitiesBySearchParams(scholar.program_information.attended_workshops?.map(workshop => workshop.workshop), searchParamsExample)
+    const tt = filterActivitiesBySearchParams(scholar.program_information.volunteerAttendance?.map(workshop => workshop.volunteer), searchParamsExample)
+    return { ...scholar, program_information: { ...scholar.program_information, attended_chats: f, attended_workshops: g, volunteerAttendance: tt } }
+  })
+  const data = await formatScholarsActivitiesForActivitiesTable(df);
+  const scholarsPropertiesCount = countScholarActivitiesProperties(df);
+  const dataForCharts = formatCountsForChartsActivityExpe(scholarsPropertiesCount);
+
   return (
     <>
+      <DateSelector />
+      <div className="flex flex-col w-full h-full bg-white dark:bg-black rounded-lg py-4 justify-center shadow-md ">
+        <div className="w-full grid md:grid-cols-5 justify-center items-center">
+          {/* Necesary div to center the charts */} <div></div>
+          <DonutChartComponent data={dataForCharts.workshopsPercentage} chartTitle='% de actividades formativas completadas' />
+          <DonutChartComponent data={dataForCharts.chatPercentage} chartTitle='% de chat clubs completados' />
+          <DonutChartComponent data={dataForCharts.volunteerPercentage} chartTitle='% de horas de voluntariado completado' />
+        </div>
+      </div>
       <h2 className="font-bold  uppercase text-base tracking-wide px-4 mt-4">Base de datos</h2>
       <div className="w-full h-full">
         <Table

@@ -1,6 +1,5 @@
 import { ScholarWithAllData } from "@/components/EditScholarForm";
 import { getBlobImage } from "@/lib/azure/azure";
-import { getApprovedAndAttendedVolunteers } from "@/lib/utils/activityFilters";
 import { ScholarActivitiesInformationColumnsProps } from "./columns";
 
 export const formatScholarsActivitiesForActivitiesTable = async (scholars: ScholarWithAllData[]): Promise<ScholarActivitiesInformationColumnsProps[]> => {
@@ -10,20 +9,20 @@ export const formatScholarsActivitiesForActivitiesTable = async (scholars: Schol
             first_names,
             last_names,
             photo,
-            dni,
+            email,
+            whatsapp_number,
             program_information,
         } = scholar;
-        const done = program_information.attended_workshops.filter((attendance) => attendance.attendance === 'ATTENDED').length
-        console.log(program_information.volunteerAttendance)
         return {
             id,
             first_names,
             last_names,
             profilePhoto: photo ? await getBlobImage(photo) : null,
-            dni,
-            doneWorkshops: done,
-            doneChats: done,
-            doneVolunteerHours: getApprovedAndAttendedVolunteers(program_information.volunteerAttendance.volunteer).totalVolunteerHours,
+            whatsAppNumber: whatsapp_number,
+            email,
+            doneWorkshops: program_information?.attended_workshops.length,
+            doneChats: program_information?.attended_chats.length,
+            doneVolunteerHours: program_information?.volunteerAttendance.reduce((total, volunteer) => total + volunteer.asigned_hours, 0)
         };
     });
     return Promise.all(data)

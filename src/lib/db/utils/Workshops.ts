@@ -466,31 +466,109 @@ export const getWorkhsopsByScholar = async (scholarId: string) => {
 
 export const getScholarsWithActivities = async () => {
   const scholars = await prisma.scholar.findMany({
+    where: {
+      AND: [
+        {
+          program_information: {
+            chapter: {
+              id: 'Rokk6_XCAJAg45heOEzYb'
+            },
+          },
+        },
+        {
+          program_information: {
+            scholar_condition: 'ACTIVE',
+          }
+        }
+      ]
+    },
     select: {
       id: true,
       first_names: true,
       last_names: true,
-      dni: true,
+      whatsapp_number: true,
+      email: true,
       photo: true,
       program_information: {
         select: {
-          attended_workshops: true,
-          attended_chats: true,
-          volunteerAttendance: {
-            include: {
-              volunteer:
-              {
-                include: {
-                  volunteer_attendance: true,
-                }
-              },
+          attended_workshops: {
+            where: {
+              attendance: 'ATTENDED',
+              workshop: {
+                activity_status: 'ATTENDANCE_CHECKED',
+              }
             },
+            include: {
+              workshop: true,
+            }
+          },
+          volunteerAttendance: {
+            where: {
+              attendance: 'ATTENDED',
+              volunteer: {
+                status: 'APPROVED',
+              }
+            },
+            include: {
+              volunteer: true,
+            }
           },
         },
       },
     },
   });
-  return scholars;
+
+  const total = await Promise.all(scholars.map(async (scholar) => {
+    let sample = await prisma.chatAttendance.findMany({
+      where: {
+        chat: {
+          activity_status: 'ATTENDANCE_CHECKED'
+        },
+        OR: [
+          {
+            AND: [
+              {
+                scholar: {
+                  scholarId: scholar.id,
+                },
+              },
+              {
+                attendance: 'ATTENDED'
+              },
+            ]
+          },
+          {
+            chat: {
+              speaker: {
+                some: {
+                  id: scholar.id,
+                },
+              },
+            }
+          },
+        ],
+      },
+      include: {
+        chat: true
+      }
+    });
+    // Remove duplicate chats
+    const chatIds = new Set();
+    sample = sample.filter(chatAttendance => {
+      const duplicate = chatIds.has(chatAttendance.chat.id);
+      chatIds.add(chatAttendance.chat.id);
+      return !duplicate;
+    });
+
+    return {
+      ...scholar,
+      program_information: {
+        ...scholar.program_information,
+        attended_chats: sample,
+      },
+    };
+  }));
+  return total;
 }
 
 export const getChatsByScholar = async (scholarId: string) => {
@@ -527,6 +605,7 @@ export const getChatsByScholar = async (scholarId: string) => {
     },
   });
   return chats;
+
 };
 
 export const getWorkshopsByScholar2 = async (scholarProgramInformationId: string) => {
