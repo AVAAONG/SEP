@@ -9,6 +9,6 @@ const MixedAreaChartComponent = dynamic(() => import('./MixedAreaChart'), {
   ssr: false,
 });
 const DonutChartComponent = dynamic(() => import('./DonutChart'), { ssr: false });
+const AreaChartComponent = dynamic(() => import('./AreaChart'), { ssr: false });
 
-export { PieChartComponent, MixedAreaChartComponent, DonutChartComponent };
-
+export { AreaChartComponent, DonutChartComponent, MixedAreaChartComponent, PieChartComponent };
