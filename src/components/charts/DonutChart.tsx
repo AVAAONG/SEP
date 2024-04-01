@@ -4,7 +4,7 @@ import Legend from './common/Legend';
 import { COLORS } from './common/chartConstants';
 
 interface ChartProps {
-  data: Array<{ label: string; value: number }>;
+  data: Array<{ label: string; value: number, color?: string }>;
   chartTitle: string
 }
 
@@ -12,12 +12,12 @@ const DonutChart: React.FC<ChartProps> = ({ data, chartTitle }) => {
   const options: ApexCharts.ApexOptions = {
     labels: data.map((d) => d.label),
     dataLabels: {
-      enabled: true,
+      enabled: false,
     },
     legend: {
       show: false,
     },
-    colors: COLORS,
+    colors: data.some((d) => d.color) ? data.map((d) => d.color) : COLORS,
     plotOptions: {
       pie: {
         donut: {
