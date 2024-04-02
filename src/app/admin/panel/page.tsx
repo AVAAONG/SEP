@@ -5,7 +5,7 @@ import { getActivitiesByYear } from '@/lib/db/utils/Workshops';
 import { getScholarsCountByCondition } from '@/lib/db/utils/users';
 import { formatActivityEventsForBigCalendar } from '@/lib/utils';
 import { Chat, Workshop } from '@prisma/client';
-import { chatIcon, userIcon, workshopIcon } from 'public/svgs/svgs';
+import { chatIcon, userIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs';
 
 const page = async () => {
   const actualYear = new Date().getFullYear();
@@ -52,7 +52,7 @@ const page = async () => {
       subtitle: 'Ver todas las actividades',
       data: volunteerHours,
       link: 'voluntariado',
-      icon: workshopIcon(),
+      icon: volunterIcon(),
       kind: 'volunteer',
     },
     {
