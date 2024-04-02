@@ -15,6 +15,14 @@ const TABLE_SEARCH_OPTIONS = [
     label: 'Estatus',
     option: 'programStatus',
   },
+  {
+    label: 'Género',
+    option: 'gender',
+  },
+  {
+    label: 'Edad',
+    option: 'years',
+  },
 ];
 
 const GeneralInfo = async ({ scholars }: ScholarViewsProps) => {
