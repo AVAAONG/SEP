@@ -77,27 +77,9 @@ const countWorkshopProperties = async (workshops: WorkshopWithAllData[]) => {
     return counts;
 }
 
-const formatCountsForCharts = async (counts: Record<string, Record<string, number>>): { skills: Count[]; years: Count[]; kinds: Count[]; modality: Count[] } => {
-    const result: { skills: Count[]; years: Count[]; kinds: Count[]; modality: Count[] } = {
-        skills: [],
-        years: [],
-        kinds: [],
-        modality: [],
-    };
 
-    for (const key in counts) {
-        result[key as 'skills' | 'years' | 'kinds' | 'modality'] = Object.entries(counts[key]).map(([label, value]) => ({
-            label,
-            value: Number(value),
-        }));
-    }
-
-    return result;
-};
-
-export const formatCountsForCharts2 = async  <T extends string>(counts: Record<T, Record<string, number>>): { [K in T]: Count[] } => {
+const formatCountsForCharts = async  <T extends string>(counts: Record<T, Record<string, number>>): Promise<{ [K in T]: Count[] }> => {
     const result: { [K in T]: Count[] } = {} as any; // Temporary fix for typing
-
     for (const key in counts) {
         result[key] = Object.entries(counts[key]).map(([label, value]) => ({
             label,
@@ -108,7 +90,7 @@ export const formatCountsForCharts2 = async  <T extends string>(counts: Record<T
     return result;
 };
 
-export const formatCountsForChartsActivityExpe = async <T extends string>(counts: Record<T, Record<string, number>>): { [K in T]: Count[] } => {
+export const formatCountsForChartsActivityExpe = async <T extends string>(counts: Record<T, Record<string, number>>): Promise<{ [K in T]: Count[] }> => {
     const result: { [K in T]: Count[] } = {} as any; // Temporary fix for typing
 
     for (const key in counts) {
@@ -122,21 +104,6 @@ export const formatCountsForChartsActivityExpe = async <T extends string>(counts
     return result;
 };
 
-const formatChatCountsForCharts = async (counts: Record<string, Record<string, number>>): { level: Count[]; modality: Count[] } => {
-    const result: { level: Count[]; modality: Count[] } = {
-        level: [],
-        modality: [],
-    };
-
-    for (const key in counts) {
-        result[key as 'level' | 'modality'] = Object.entries(counts[key]).map(([label, value]) => ({
-            label,
-            value: Number(value),
-        }));
-    }
-
-    return result;
-};
 
 const countChatProperties = async (chats: ChatsWithAllData[]) => {
     const counts: Record<string, Record<string, number>> = {
@@ -317,7 +284,6 @@ const countActivitySatisfactionForm = async (form: WorkshopSafisfactionForm[]) =
 
 
 export {
-    categorizeActivityByStatus, countActivityByModality, countActivitySatisfactionForm, countChatProperties, countWorkshopProperties, createAdminStatsForActivities,
-    formatChatCountsForCharts, formatCountsForCharts, getActivityAttendancePerMonth, getApprovedAndAttendedVolunteers, getAttendedActivities, getAttendedChats
+    categorizeActivityByStatus, countActivityByModality, countActivitySatisfactionForm, countChatProperties, countWorkshopProperties, createAdminStatsForActivities, formatCountsForCharts, getActivityAttendancePerMonth, getApprovedAndAttendedVolunteers, getAttendedActivities, getAttendedChats
 };
 

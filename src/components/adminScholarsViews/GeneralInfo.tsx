@@ -1,4 +1,4 @@
-import { formatCountsForCharts2 } from '@/lib/utils/activityFilters';
+import { formatCountsForCharts } from '@/lib/utils/activityFilters';
 import { countScholarGeneralProperties } from '@/lib/utils/scholarCounter';
 import { DonutChartComponent } from '../charts';
 import Table from '../table/Table';
@@ -28,7 +28,7 @@ const TABLE_SEARCH_OPTIONS = [
 const GeneralInfo = async ({ scholars }: ScholarViewsProps) => {
   const data = await formatScholarsToGeneralInfoTable(scholars);
   const scholarsPropertiesCount = countScholarGeneralProperties(scholars);
-  const dataForCharts = await formatCountsForCharts2(scholarsPropertiesCount);
+  const dataForCharts = await formatCountsForCharts(scholarsPropertiesCount);
   return (
     <>
       <div className="flex flex-col w-full h-full bg-white dark:bg-black rounded-lg py-4 justify-center shadow-md ">

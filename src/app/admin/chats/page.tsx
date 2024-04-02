@@ -5,7 +5,7 @@ import DateSelector from '@/components/commons/datePicker';
 import Table from '@/components/table/Table';
 import ChatColumns from '@/components/table/columns/chatsColumns';
 import { getChats } from '@/lib/db/utils/chats';
-import { categorizeActivityByStatus, countChatProperties, createAdminStatsForActivities, formatChatCountsForCharts, getActivityAttendancePerMonth } from '@/lib/utils/activityFilters';
+import { categorizeActivityByStatus, countChatProperties, createAdminStatsForActivities, formatCountsForCharts, getActivityAttendancePerMonth } from '@/lib/utils/activityFilters';
 import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
 import { createAdminChatsObjectForTable } from '@/lib/utils/parseDataForTable';
 
@@ -21,7 +21,7 @@ const page = async ({
   const activitiesByStatus = categorizeActivityByStatus(chats);
 
   const chatPropertiesCounts = countChatProperties(activitiesByStatus.ATTENDANCE_CHECKED);
-  const chatPropertiesFormatedForCharts = formatChatCountsForCharts(chatPropertiesCounts);
+  const chatPropertiesFormatedForCharts = formatCountsForCharts(chatPropertiesCounts);
   const stats = createAdminStatsForActivities(activitiesByStatus, chats.length, 'chat');
 
   const { barSeries, lineSeries } = getActivityAttendancePerMonth(
