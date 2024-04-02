@@ -35,6 +35,5 @@ model ScholarCvaModule {
     schedule                   CVASchedule?
     scholar_cva_information    ScholarCVAInformation? @relation(fields: [scholar_cva_information_id], references: [id])
     scholar_cva_information_id String?
-
-    @@unique([scholar_cva_information_id])
+    createdAtt                 DateTime               @default(now())
 }
