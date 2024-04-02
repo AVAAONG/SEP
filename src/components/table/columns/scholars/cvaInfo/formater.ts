@@ -1,10 +1,10 @@
-import { ScholarWithAllData } from "@/components/EditScholarForm";
 import { getBlobImage } from "@/lib/azure/azure";
+import { ScholarsCvaInformation } from "@/lib/db/utils/cva";
 import { parseCvaLocationFromDatabase } from "@/lib/utils/parseFromDatabase";
 import { parseCvaScheduleFromDatabase, parseModalityFromDatabase } from "@/lib/utils2";
 import { ScholarCvaInformationColumnsProps } from "./columns";
 
-export const formatScholarsToCvaInfoTable = async (scholars: ScholarWithAllData[]): Promise<ScholarCvaInformationColumnsProps[]> => {
+export const formatScholarsToCvaInfoTable = async (scholars: ScholarsCvaInformation[]): Promise<ScholarCvaInformationColumnsProps[]> => {
     const data = scholars.map(async (scholar) => {
         const {
             id,

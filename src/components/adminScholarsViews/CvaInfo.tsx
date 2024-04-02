@@ -1,10 +1,10 @@
+import { getScholarsCvaInformation } from '@/lib/db/utils/cva';
 import { formatCountsForCharts } from '@/lib/utils/activityFilters';
 import { countScholarCvaProperties } from '@/lib/utils/scholarCounter';
 import { DonutChartComponent } from '../charts';
 import Table from '../table/Table';
 import scholarCvaInformationColumns from '../table/columns/scholars/cvaInfo/columns';
 import { formatScholarsToCvaInfoTable } from '../table/columns/scholars/cvaInfo/formater';
-import ScholarViewsProps from './types';
 
 const TABLE_SEARCH_OPTIONS = [
   {
@@ -13,8 +13,8 @@ const TABLE_SEARCH_OPTIONS = [
   },
 ];
 
-
-const CvaInfo = async ({ scholars }: ScholarViewsProps) => {
+const CvaInfo = async () => {
+  const scholars = await getScholarsCvaInformation()
   const data = await formatScholarsToCvaInfoTable(scholars);
   const scholarsPropertiesCount = countScholarCvaProperties(scholars);
   const dataForCharts = await formatCountsForCharts(scholarsPropertiesCount);

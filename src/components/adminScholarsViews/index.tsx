@@ -16,7 +16,7 @@ const AdminScholarsView = async ({ scholars, view }: indexProps) => {
     case 'collage':
       return <CollageInfo scholars={scholars} />;
     case 'cva':
-      return <CvaInfo scholars={scholars} />;
+      return <CvaInfo />;
     case 'activities':
       return <ActivitiesInfo />;
     default:

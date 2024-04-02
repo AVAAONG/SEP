@@ -156,13 +156,6 @@ export const getScholarsWithAllData = async () => {
           collage_period: true,
         },
       },
-      cva_information: {
-        include: {
-          modules: {
-            take: 1,
-          },
-        },
-      },
       program_information: {
         include: {
           attended_chats: {
