@@ -5,6 +5,7 @@ import {
   Modality,
   ScholarAttendance,
   Skill,
+  VolunteerProject,
   VolunteerStatus,
   WorkshopYear,
 } from '@prisma/client';
@@ -154,5 +155,18 @@ export const parseWorkshopYearFromDatabase = (years: WorkshopYear[]) => {
     return 'Todos';
   } else {
     return years.join(', ');
+  }
+};
+
+export const parseVolunteerProject = (value: VolunteerProject | null | undefined) => {
+  switch (value) {
+    case 'OFFICE':
+      return 'Oficina';
+    case 'CHAT_CLUBS':
+      return 'Chat clubs';
+    case 'EXTERNAL':
+      return 'Externo';
+    default:
+      return value;
   }
 };

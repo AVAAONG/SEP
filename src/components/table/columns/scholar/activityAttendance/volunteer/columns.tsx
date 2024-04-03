@@ -18,6 +18,7 @@ export interface IscholarVolunteerAttendanceColumns {
   modality: string;
   asignedHours: number;
   platform: string;
+  volunteerProject: string;
 }
 
 const scholarVolunteerAttendanceColumns: Column<IscholarVolunteerAttendanceColumns>[] = [
@@ -42,6 +43,10 @@ const scholarVolunteerAttendanceColumns: Column<IscholarVolunteerAttendanceColum
   {
     Header: 'Tipo de voluntariado',
     accessor: 'kindOfVolunteer',
+  },
+  {
+    Header: 'Proyecto',
+    accessor: 'volunteerProject',
   },
   {
     Header: 'Fecha de inicio',

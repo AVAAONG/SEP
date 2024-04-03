@@ -1,5 +1,5 @@
 import { VolunteerWithAllData } from "@/lib/db/types";
-import { parseKindOfVolunteerFromDatabase, parseModalityFromDatabase, parseVolunteerStatusFromDatabase } from "@/lib/utils2";
+import { parseKindOfVolunteerFromDatabase, parseModalityFromDatabase, parseVolunteerProject, parseVolunteerStatusFromDatabase } from "@/lib/utils2";
 import { IscholarVolunteerAttendanceColumns } from "./columns";
 
 
@@ -18,6 +18,7 @@ const createScholarVolunteerAttendanceForTable = (volunteers: VolunteerWithAllDa
             attendance: volunteerAttendance.attendance,
             kindOfVolunteer: parseKindOfVolunteerFromDatabase(volunteer.kind_of_volunteer),
             asignedHours: volunteerAttendance.asigned_hours,
+            volunteerProject: parseVolunteerProject(volunteer.VolunteerProject),
         };
     });
 }
