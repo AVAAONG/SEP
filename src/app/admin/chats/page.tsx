@@ -5,10 +5,15 @@ import DateSelector from '@/components/commons/datePicker';
 import Table from '@/components/table/Table';
 import ChatColumns from '@/components/table/columns/chatsColumns';
 import { getChats } from '@/lib/db/utils/chats';
-import { categorizeActivityByStatus, countChatProperties, createAdminStatsForActivities, formatCountsForCharts, getActivityAttendancePerMonth } from '@/lib/utils/activityFilters';
+import {
+  categorizeActivityByStatus,
+  countChatProperties,
+  createAdminStatsForActivities,
+  formatCountsForCharts,
+  getActivityAttendancePerMonth,
+} from '@/lib/utils/activityFilters';
 import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
 import { createAdminChatsObjectForTable } from '@/lib/utils/parseDataForTable';
-
 
 const page = async ({
   searchParams,
@@ -16,13 +21,13 @@ const page = async ({
   searchParams?: { year: string; month: string; quarter: string };
 }) => {
   const rawChats = await getChats();
-  const chats = filterActivitiesBySearchParams(rawChats, searchParams);
+  const chats = await filterActivitiesBySearchParams(rawChats, searchParams);
   const chatObjectForTable = createAdminChatsObjectForTable(chats);
-  const activitiesByStatus = categorizeActivityByStatus(chats);
+  const activitiesByStatus = await categorizeActivityByStatus(chats);
 
-  const chatPropertiesCounts = countChatProperties(activitiesByStatus.ATTENDANCE_CHECKED);
-  const chatPropertiesFormatedForCharts = formatCountsForCharts(chatPropertiesCounts);
-  const stats = createAdminStatsForActivities(activitiesByStatus, chats.length, 'chat');
+  const chatPropertiesCounts = await countChatProperties(activitiesByStatus.ATTENDANCE_CHECKED);
+  const chatPropertiesFormatedForCharts = await formatCountsForCharts(chatPropertiesCounts);
+  const stats = await createAdminStatsForActivities(activitiesByStatus, chats.length, 'chat');
 
   const { barSeries, lineSeries } = getActivityAttendancePerMonth(
     activitiesByStatus.ATTENDANCE_CHECKED
@@ -39,21 +44,15 @@ const page = async ({
       </div>
       <div className="w-full flex h-80 gap-6 justify-center items-center rounded-lg bg-white">
         <div>
-          <h3 className="truncate font-semibold text-center text-sm">
-            Distribución por nivel
-          </h3>
+          <h3 className="truncate font-semibold text-center text-sm">Distribución por nivel</h3>
           <PieChartComponent data={chatPropertiesFormatedForCharts.level} />
         </div>
         <div>
-          <h3 className="truncate font-semibold text-center text-sm">
-            Distribución por modalidad
-          </h3>
+          <h3 className="truncate font-semibold text-center text-sm">Distribución por modalidad</h3>
           <PieChartComponent data={chatPropertiesFormatedForCharts.modality} />
         </div>
         <div>
-          <h3 className="truncate font-semibold text-center text-sm">
-            Distribución por horario
-          </h3>
+          <h3 className="truncate font-semibold text-center text-sm">Distribución por horario</h3>
           <ActivityByScheduleChart activities={activitiesByStatus.ATTENDANCE_CHECKED} />
         </div>
       </div>

@@ -8,11 +8,7 @@ export const getCvaInformationByScholar = async (scholarId: string) => {
             scholarId
         },
         include: {
-            modules: {
-                where: {
-
-                }
-            }
+            modules: true
         }
     })
     return cvaInformation;
