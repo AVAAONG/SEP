@@ -1,167 +1,105 @@
 'use client';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { MONTHS, QUARTERS, YEARS } from './constants';
 import { linkClass } from './helpers';
 
-/**
- * A React component that provides a user interface for selecting a date range.
- * The component updates the URL query parameters accordingly.
- * @abstract The component conditionally renders the quarter and month tabs based on whether a year and quarter have been selected.
- */
 const DateSelector = () => {
-  const [yearTabs, setYearTabs] = useState(YEARS);
-  const [quarterTabs, setQuarterTabs] = useState(QUARTERS);
-  const [monthTabs, setMonthTabs] = useState(MONTHS);
-  const [searchParams, setSearchParams] = useState(new URLSearchParams());
-  const querys = useSearchParams();
-  const year = querys.get('year');
-  const quarter = querys.get('quarter');
-  const month = querys.get('month');
+  const [selected, setSelected] = useState<
+    {
+      year: string | null;
+      quarter: string | null;
+      month: string | null;
+    }>({ year: null, quarter: null, month: null });
+  const { get, set, } = useSearchParams();
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const router = useRouter();
+
+  // Derive tabs from selected state
+  const yearTabs = YEARS.map((tab) => ({ ...tab, current: tab.href === selected.year }));
+  const quarterTabs = QUARTERS.map((tab) => ({ ...tab, current: tab.href === selected.quarter }));
+  const monthTabs = MONTHS.filter((tab) => tab.quarter === selected.quarter).map((tab) => ({
+    ...tab,
+    current: tab.href === selected.month,
+  }));
+
   useEffect(() => {
-    if (year) {
-      setYearTabs((prevTabs) =>
-        prevTabs.map((prevTab) => ({
-          ...prevTab,
-          current: prevTab.href === year,
-        }))
-      );
+    const newSelected = {
+      year: get('year') || null,
+      quarter: get('quarter') || null,
+      month: get('month') || null,
+    };
+    setSelected(newSelected);
+  }, [searchParams]);
+
+  const handleTabClick = (level: 'year' | 'quarter' | 'month', value: string) => {
+    const newSearchParams = new URLSearchParams(searchParams);  // Start with existing params
+
+    // Toggle selection on the same level
+    if (newSearchParams.get(level) === value) {
+      newSearchParams.delete(level);
+    } else {
+      newSearchParams.set(level, value);
+
+      // Preserve params lexicographically before 'year'
+      if (level === 'year') {
+        for (const [key, val] of newSearchParams.entries()) {
+          // Delete unless the key comes before 'year'
+          if (key > 'year') {
+            newSearchParams.delete(key);
+          }
+        }
+      } else if (level === 'quarter') {
+        newSearchParams.delete('month');
+      }
     }
-    if (quarter) {
-      setQuarterTabs((prevTabs) =>
-        prevTabs.map((prevTab) => ({
-          ...prevTab,
-          current: prevTab.href === quarter,
-        }))
-      );
-    }
-    if (month) {
-      setMonthTabs((prevTabs) =>
-        prevTabs.map((prevTab) => ({
-          ...prevTab,
-          current: prevTab.href === month,
-        }))
-      );
-    }
-    setSearchParams(new URLSearchParams(`year=${year}&quarter=${quarter}&month=${month}`));
-  }, [year, quarter, month]);
+
+    router.replace(`${pathname}?${newSearchParams.toString()}`);
+  };
 
   return (
     <div className="flex flex-col space-y-1 items-center">
-      <nav className="flex space-x-2  rounded-md" aria-label="Tabs">
+      <nav className="flex space-x-2 rounded-md" aria-label="Tabs">
         {yearTabs.map((tab) => (
-          <Link
-            replace={false}
+          <button
             key={tab.name}
-            href={tab.current ? '?' : `?year=${tab.href}`}
             className={linkClass(tab.current)}
             aria-current={tab.current ? 'page' : undefined}
-            onClick={() => {
-              if (tab.current) {
-                setYearTabs(YEARS);
-                setQuarterTabs(QUARTERS);
-                setMonthTabs(MONTHS);
-                setSearchParams(new URLSearchParams());
-              } else {
-                setYearTabs((prevTabs) =>
-                  prevTabs.map((prevTab) => ({
-                    ...prevTab,
-                    current: prevTab.href === tab.href,
-                  }))
-                );
-                setSearchParams(new URLSearchParams(`year=${tab.href}`));
-              }
-            }}
+            onClick={() => handleTabClick('year', tab.href)}
           >
             {tab.name}
-          </Link>
+          </button>
         ))}
       </nav>
-      {year && (
+
+      {selected.year && (
         <nav className="flex space-x-2 " aria-label="Tabs">
           {quarterTabs.map((tab) => (
-            <Link
-              replace={false}
+            <button
               key={tab.name}
-              href={
-                tab.current
-                  ? `?year=${searchParams.get('year')}`
-                  : `?year=${searchParams.get('year')}&quarter=${tab.href}`
-              }
               className={linkClass(tab.current)}
               aria-current={tab.current ? 'page' : undefined}
-              onClick={() => {
-                if (tab.current) {
-                  setQuarterTabs(QUARTERS);
-                  setMonthTabs(MONTHS);
-                  setSearchParams(new URLSearchParams(`year=${searchParams.get('year')}`));
-                } else {
-                  setQuarterTabs((prevTabs) =>
-                    prevTabs.map((prevTab) => ({
-                      ...prevTab,
-                      current: prevTab.href === tab.href,
-                    }))
-                  );
-                  setSearchParams(
-                    new URLSearchParams(`year=${searchParams.get('year')}&quarter=${tab.href}`)
-                  );
-                }
-              }}
+              onClick={() => handleTabClick('quarter', tab.href)}
             >
               {tab.name}
-            </Link>
+            </button>
           ))}
         </nav>
       )}
-      {year && quarter && (
+
+      {selected.year && selected.quarter && (
         <nav className="flex space-x-2 " aria-label="Tabs">
-          {monthTabs.map((tab) => {
-            if (tab.quarter === quarter) {
-              return (
-                <Link
-                  key={tab.name}
-                  replace={false}
-                  href={
-                    tab.current
-                      ? `?year=${searchParams.get('year')}&quarter=${searchParams.get('quarter')}`
-                      : `?year=${searchParams.get('year')}&quarter=${searchParams.get(
-                          'quarter'
-                        )}&month=${tab.href}`
-                  }
-                  className={linkClass(tab.current)}
-                  aria-current={tab.current ? 'page' : undefined}
-                  onClick={() => {
-                    if (tab.current) {
-                      setQuarterTabs(QUARTERS);
-                      setMonthTabs(MONTHS);
-                      setSearchParams(
-                        new URLSearchParams(
-                          `year=${searchParams.get('year')}&quarter=${searchParams.get('quarter')}`
-                        )
-                      );
-                    } else {
-                      setMonthTabs((prevTabs) =>
-                        prevTabs.map((prevTab) => ({
-                          ...prevTab,
-                          current: prevTab.href === tab.href,
-                        }))
-                      );
-                      setSearchParams(
-                        new URLSearchParams(
-                          `year=${searchParams.get('year')}&quarter=${searchParams.get(
-                            'quarter'
-                          )}&month=${tab.href}`
-                        )
-                      );
-                    }
-                  }}
-                >
-                  {tab.name}
-                </Link>
-              );
-            }
-          })}
+          {monthTabs.map((tab) => (
+            <button
+              key={tab.name}
+              className={linkClass(tab.current)}
+              aria-current={tab.current ? 'page' : undefined}
+              onClick={() => handleTabClick('month', tab.href)}
+            >
+              {tab.name}
+            </button>
+          ))}
         </nav>
       )}
     </div>

@@ -7,9 +7,10 @@ import GeneralInfo from './GeneralInfo';
 interface indexProps {
   scholars: ScholarWithAllData[];
   view: 'collage' | 'cva' | 'job' | 'mentorship' | 'activities' | 'contact' | 'general' | undefined;
+  searchs?: { year: string; month: string; quarter: string };
 }
 
-const AdminScholarsView = async ({ scholars, view }: indexProps) => {
+const AdminScholarsView = async ({ scholars, view, searchs }: indexProps) => {
   switch (view) {
     case 'general':
       return <GeneralInfo scholars={scholars} />;
@@ -18,7 +19,7 @@ const AdminScholarsView = async ({ scholars, view }: indexProps) => {
     case 'cva':
       return <CvaInfo />;
     case 'activities':
-      return <ActivitiesInfo />;
+      return <ActivitiesInfo searchParams={searchs} />;
     default:
       return <GeneralInfo scholars={scholars} />;
   }

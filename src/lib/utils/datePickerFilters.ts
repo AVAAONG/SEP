@@ -41,7 +41,7 @@ const filterActivityByYear = (
 const filterActivitiesBySearchParams = async (
   activityDbList: (WorkshopWithAllData | Chat | Volunteer)[],
   searchParams: { year?: string; quarter?: string; month?: string } | undefined
-): (Workshop | Chat | Volunteer)[] => {
+): Promise<(Workshop | Chat | Volunteer)[]> => {
   let activities: (Workshop | Chat | Volunteer)[];
   if (searchParams?.year) {
     activities = filterActivityByYear(activityDbList, Number(searchParams?.year));

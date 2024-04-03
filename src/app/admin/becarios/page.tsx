@@ -18,14 +18,14 @@ const page = async ({
 }: {
   searchParams?: {
     selectedKey:
-      | 'general'
-      | 'collage'
-      | 'cva'
-      | 'job'
-      | 'mentorship'
-      | 'activities'
-      | 'contact'
-      | undefined;
+    | 'general'
+    | 'collage'
+    | 'cva'
+    | 'job'
+    | 'mentorship'
+    | 'activities'
+    | 'contact'
+    | undefined;
   };
 }) => {
   const view = searchParams?.selectedKey;
@@ -81,7 +81,7 @@ const page = async ({
         <TogleTab options={TAB_OPTIONS} />
       </div>
       <h2 className="font-bold uppercase text-base tracking-wide px-4 mt-4">Resumen</h2>
-      <AdminScholarsView scholars={scholars} view={view} />
+      <AdminScholarsView scholars={scholars} view={view} searchs={searchParams} />
     </div>
   );
 };

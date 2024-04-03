@@ -13,20 +13,19 @@ const ActivitiesInfo = async ({
 }: {
   searchParams?: { year: string; month: string; quarter: string };
 }) => {
-  const searchParamsExample = { year: '2024', month: '', quarter: '1' };
   const scholars = await getScholarsWithActivities();
-  const df = scholars.map((scholar) => {
-    const f = filterActivitiesBySearchParams(
+  const df = await Promise.all(scholars.map(async (scholar) => {
+    const f = await filterActivitiesBySearchParams(
       scholar.program_information.attended_chats.map((chat) => chat.chat),
-      searchParamsExample
+      searchParams
     );
-    const g = filterActivitiesBySearchParams(
+    const g = await filterActivitiesBySearchParams(
       scholar.program_information.attended_workshops?.map((workshop) => workshop.workshop),
-      searchParamsExample
+      searchParams
     );
-    const tt = filterActivitiesBySearchParams(
+    const tt = await filterActivitiesBySearchParams(
       scholar.program_information.volunteerAttendance?.map((workshop) => workshop.volunteer),
-      searchParamsExample
+      searchParams
     );
     return {
       ...scholar,
@@ -37,10 +36,11 @@ const ActivitiesInfo = async ({
         volunteerAttendance: tt,
       },
     };
-  });
+  }));
+
   const data = await formatScholarsActivitiesForActivitiesTable(df);
   const scholarsPropertiesCount = countScholarActivitiesProperties(df);
-  const dataForCharts = formatCountsForChartsActivityExpe(scholarsPropertiesCount);
+  const dataForCharts = await formatCountsForChartsActivityExpe(scholarsPropertiesCount);
 
   return (
     <>

@@ -1,8 +1,7 @@
-import { ScholarWithAllData } from "@/components/EditScholarForm";
 import { getBlobImage } from "@/lib/azure/azure";
 import { ScholarActivitiesInformationColumnsProps } from "./columns";
 
-export const formatScholarsActivitiesForActivitiesTable = async (scholars: ScholarWithAllData[]): Promise<ScholarActivitiesInformationColumnsProps[]> => {
+export const formatScholarsActivitiesForActivitiesTable = async (scholars: any[]): Promise<ScholarActivitiesInformationColumnsProps[]> => {
     const data = scholars.map(async (scholar) => {
         const {
             id,
