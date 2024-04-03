@@ -105,7 +105,7 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "husky": "^8.0.3",
-    "nodemailer": "^6.9.7",
+    "nodemailer": "^6.9.9",
     "postcss": "8.4.31",
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.7",
