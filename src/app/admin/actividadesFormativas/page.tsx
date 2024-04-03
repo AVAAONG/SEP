@@ -21,15 +21,15 @@ const page = async ({
   searchParams?: { year: string; month: string; quarter: string };
 }) => {
   const resultWorkshops = await getWorkshops();
-  const workshops = filterActivitiesBySearchParams(resultWorkshops, searchParams);
+  const workshops = await filterActivitiesBySearchParams(resultWorkshops, searchParams);
   const workshopObjectForTable = createAdminWorkshopsObjectForTable(workshops);
-  const activitiesByStatus = categorizeActivityByStatus(workshops);
+  const activitiesByStatus = await categorizeActivityByStatus(workshops);
 
-  const workshopPropertiesCounts = countWorkshopProperties(activitiesByStatus.ATTENDANCE_CHECKED);
-  const workshopPropertiesFormatedForCharts = formatCountsForCharts(workshopPropertiesCounts);
-  const stats = createAdminStatsForActivities(activitiesByStatus, workshops.length, 'workshop');
+  const workshopPropertiesCounts = await countWorkshopProperties(activitiesByStatus.ATTENDANCE_CHECKED);
+  const workshopPropertiesFormatedForCharts = await formatCountsForCharts(workshopPropertiesCounts);
+  const stats = await createAdminStatsForActivities(activitiesByStatus, workshops.length, 'workshop');
 
-  const { barSeries, lineSeries } = getActivityAttendancePerMonth(
+  const { barSeries, lineSeries } = await getActivityAttendancePerMonth(
     activitiesByStatus.ATTENDANCE_CHECKED
   );
   return (

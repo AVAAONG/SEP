@@ -247,8 +247,8 @@ const formatActivityAttendancePerMonthForChart = async (stats: {
 }
 
 const getActivityAttendancePerMonth = async (workshops: WorkshopWithAllData[]) => {
-    const stats = countActivityAttendancePerMonth(workshops);
-    const chartSeries = formatActivityAttendancePerMonthForChart(stats);
+    const stats = await countActivityAttendancePerMonth(workshops);
+    const chartSeries = await formatActivityAttendancePerMonthForChart(stats);
     return chartSeries;
 }
 
