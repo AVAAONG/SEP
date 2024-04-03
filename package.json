@@ -24,7 +24,7 @@
     "prisma:generate": "pnpm run prisma:import && prisma generate --schema=./src/lib/db/prisma/schema.prisma",
     "prisma:migrate": "prisma migrate dev --schema=./src/lib/db/prisma/schema.prisma",
     "prisma:migrate-reset": "prisma migrate reset --schema=./src/lib/db/prisma/schema.prisma",
-    "prisma:migrate-deploy": "prisma migrate reset --schema=./src/lib/db/prisma/schema.prisma",
+    "prisma:migrate-deploy": "prisma migrate deploy --schema=./src/lib/db/prisma/schema.prisma",
     "prisma:studio": "prisma studio --schema=./src/lib/db/prisma/schema.prisma",
     "prisma:push": "prisma db push dev --schema=./src/lib/db/prisma/schema.prisma",
     "prisma:format": "prisma format --schema=./src/lib/db/prisma/schema.prisma",
