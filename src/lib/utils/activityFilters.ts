@@ -1,11 +1,11 @@
 'use server';
 
-import { COLOR_BASED_ON_PERCENTAGE, getColorBasedOnPercentage } from "@/components/activityActions/satisfactionForm/utils";
+import { COLOR_BASED_ON_PERCENTAGE, getColorBasedOnPercentage, parseSatisfactionFormResponsesFromDatabase } from "@/components/activityActions/satisfactionForm/utils";
 import { ChatsWithAllData } from "@/components/table/columns/chatsColumns";
 import { WorkshopWithAllData } from "@/components/table/columns/workshopColumns";
 import { ActivityStatus, Chat, Volunteer, Workshop, WorkshopSafisfactionForm } from "@prisma/client";
 import { VolunteerWithAllData } from "../db/types";
-import { parseChatLevelFromDatabase, parseModalityFromDatabase, parseSatisfactionFormResponsesFromDatabase, parseSkillFromDatabase, parseWorkshopKindFromDatabase, parseWorkshopYearFromDatabase } from "../utils2";
+import { parseChatLevelFromDatabase, parseModalityFromDatabase, parseSkillFromDatabase, parseWorkshopKindFromDatabase, parseWorkshopYearFromDatabase } from "../utils2";
 
 const countActivityByModality = async (attendedActivities: (Workshop | Chat | Volunteer)[]) => {
     return attendedActivities.reduce(
