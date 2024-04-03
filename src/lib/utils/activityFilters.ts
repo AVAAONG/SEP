@@ -5,7 +5,7 @@ import { ChatsWithAllData } from "@/components/table/columns/chatsColumns";
 import { WorkshopWithAllData } from "@/components/table/columns/workshopColumns";
 import { ActivityStatus, Chat, Volunteer, Workshop, WorkshopSafisfactionForm } from "@prisma/client";
 import { VolunteerWithAllData } from "../db/types";
-import { parseChatLevelFromDatabase, parseModalityFromDatabase, parseSkillFromDatabase, parseWorkshopKindFromDatabase, parseWorkshopYearFromDatabase } from "../utils2";
+import { parseChatLevelFromDatabase, parseKindOfVolunteerFromDatabase, parseModalityFromDatabase, parseSkillFromDatabase, parseVolunteerProject, parseWorkshopKindFromDatabase, parseWorkshopYearFromDatabase } from "../utils2";
 
 const countActivityByModality = async (attendedActivities: (Workshop | Chat | Volunteer)[]) => {
     return attendedActivities.reduce(
@@ -38,11 +38,16 @@ const getApprovedAndAttendedVolunteers = async (volunteers: VolunteerWithAllData
         internalVolunteerHours: number = 0,
         totalVolunteerHours: number = 0;
     volunteers.forEach(volunteer => {
-        const volunteerAttendance = volunteer.volunteer_attendance;
-        if (volunteer.status === 'APPROVED' && volunteerAttendance[0].attendance === 'ATTENDED') {
-            if (volunteer.kind_of_volunteer === 'INTERNAL') internalVolunteerHours += volunteerAttendance[0].asigned_hours;
-            else externalVolunteerHours += volunteerAttendance[0].asigned_hours;
-            totalVolunteerHours += volunteerAttendance[0].asigned_hours;
+        const volunteerAttendance = volunteer.volunteer_attendance[0];
+        if (volunteer.status === 'APPROVED' && volunteerAttendance.attendance === 'ATTENDED') {
+            if (volunteer.kind_of_volunteer === 'INTERNAL') internalVolunteerHours += volunteerAttendance.asigned_hours;
+            else {
+                if (externalVolunteerHours < 30) {
+                    const remainingHours = 30 - externalVolunteerHours;
+                    externalVolunteerHours += Math.min(volunteerAttendance.asigned_hours, remainingHours);
+                }
+            };
+            totalVolunteerHours += externalVolunteerHours + internalVolunteerHours;
         }
     })
     return { externalVolunteerHours, internalVolunteerHours, totalVolunteerHours };
@@ -282,8 +287,28 @@ const countActivitySatisfactionForm = async (form: WorkshopSafisfactionForm[]) =
 }
 
 
+const countVolunteerProperties = async (volunteers: VolunteerWithAllData[]) => {
+    const counts = {
+        kindOfVolunteer: {} as Record<string, number>,
+        modality: {} as Record<string, number>,
+        asociatedProject: {} as Record<string, number>,
+    };
+
+    volunteers.forEach(volunteer => {
+        const volunteerKind = parseKindOfVolunteerFromDatabase(volunteer.kind_of_volunteer);
+        const volunteerModality = parseModalityFromDatabase(volunteer.modality)
+        const volunteerAsociatedProject = parseVolunteerProject(volunteer.VolunteerProject)
+        counts.kindOfVolunteer[volunteerKind] = (counts.kindOfVolunteer[volunteerKind] || 0) + 1;
+        counts.modality[volunteerModality] = (counts.modality[volunteerModality] || 0) + 1;
+        counts.asociatedProject[volunteerAsociatedProject] = (counts.asociatedProject[volunteerAsociatedProject] || 0) + 1;
+    });
+
+    return counts;
+};
+
+
 
 export {
-    categorizeActivityByStatus, countActivityByModality, countActivitySatisfactionForm, countChatProperties, countWorkshopProperties, createAdminStatsForActivities, formatCountsForCharts, getActivityAttendancePerMonth, getApprovedAndAttendedVolunteers, getAttendedActivities, getAttendedChats
+    categorizeActivityByStatus, countActivityByModality, countActivitySatisfactionForm, countChatProperties, countVolunteerProperties, countWorkshopProperties, createAdminStatsForActivities, formatCountsForCharts, getActivityAttendancePerMonth, getApprovedAndAttendedVolunteers, getAttendedActivities, getAttendedChats
 };
 

@@ -22,8 +22,8 @@ const Stats = ({ activitiesDone, kindOfActivity, first, second }: StatsProps) =>
   const [activityName, number] = defineActivity(kindOfActivity);
   const toRealize = kindOfActivity === 'volunteer' ? 100 : 10;
   const pendingWorkshops = Math.max(0, Number(number) - activitiesDone);
-  const donePercentage = (activitiesDone / toRealize) * 100;
-  const pendingPercentage = Math.max(0, 100 - donePercentage);
+  const donePercentage = ((activitiesDone / toRealize) * 100).toFixed(0);
+  const pendingPercentage = Math.max(0, 100 - Number(donePercentage));
 
   return (
     <div>

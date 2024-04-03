@@ -343,6 +343,28 @@ export const getWorkshop = async (id: shortUUID.SUUID) => {
   });
   return workshop;
 };
+export const getVolunteer = async (id: shortUUID.SUUID) => {
+  const workshop = await prisma.volunteer.findUnique({
+    where: { id },
+    include: {
+      volunteer_attendance: {
+        include: {
+          scholar: {
+            include: {
+              scholar: {
+                include: {
+                  collage_information: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  return workshop;
+};
+
 export const getWorkshopWithSpecificScholarAttendance = async (
   activityId: shortUUID.SUUID,
 ) => {

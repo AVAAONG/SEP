@@ -18,7 +18,7 @@ export interface IscholarVolunteerAttendanceColumns {
   modality: string;
   asignedHours: number;
   platform: string;
-  volunteerProject: string;
+  volunteerProject: string | null | undefined;
 }
 
 const scholarVolunteerAttendanceColumns: Column<IscholarVolunteerAttendanceColumns>[] = [
