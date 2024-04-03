@@ -31,15 +31,6 @@ const SCHOLAR_SIDEBAR_ITEMS = [
     itemList: [],
     link: `/${SCHOLAR_PREFIX}/chats`,
   },
-  // {
-  //   Icon: chatIcon(),
-  //   buttonName: 'Chats',
-  //   itemList: [
-  //     { name: 'Registro', link: `/${SCHOLAR_PREFIX}/chats` },
-  //     { name: 'Proponer chat', link: `/${SCHOLAR_PREFIX}/chats/prouestas` },
-  //   ],
-  //   link: '',
-  // },
   {
     Icon: volunterIcon(),
     buttonName: 'Voluntariado',
@@ -61,12 +52,6 @@ const SCHOLAR_SIDEBAR_ITEMS = [
     itemList: [],
     link: `/${SCHOLAR_PREFIX}/oferta`,
   },
-  // {
-  //   Icon: CalendarIcon(),
-  //   buttonName: 'Notas universitarias',
-  //   itemList: [],
-  //   link: `/${SCHOLAR_PREFIX}/universidad`,
-  // },
 ];
 
 const Sidebar = () => {
