@@ -1,9 +1,8 @@
 'use client';
-import defailProfilePic from '@/../public/defaultProfilePic.png';
 import { ChatWithSpeaker, WorkshopWithSpeaker } from '@/lib/db/types';
 import { parsePlatformFromDatabase } from '@/lib/utils2';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
-import Image from 'next/image';
+import { Avatar } from '@nextui-org/react';
 import Link from 'next/link';
 import DisplayDate from './DisplayDate';
 import DisplayTime from './DisplayTime';
@@ -121,13 +120,10 @@ const ActivityPanelInfo: React.FC<ActivityPanelInfoProps> = ({ activity, childre
             {speaker?.map((s) => (
               <div key={s.id} className="flex items-center space-x-2">
                 <div className="h-9 w-9 shrink-0">
-                  <Image
+                  <Avatar
                     alt={s.first_names}
-                    loading="lazy"
-                    src={s.image || defailProfilePic}
-                    className="max-h-[72px] overflow-hidden rounded-full"
-                    width="72"
-                    height="72"
+                    src={s.image || undefined}
+                    className="max-h-[35px] w-[35px] h-[35px] overflow-hidden rounded-full"
                   />
                 </div>
                 <div className="space-y-sm">
