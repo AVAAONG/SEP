@@ -185,9 +185,11 @@ enum KindOfVolunteer {
 }
 
 enum VolunteerStatus {
-  PENDING
-  APPROVED
-  REJECTED
+  PENDING // status for external volunteers 
+  APPROVED // estatus for external volunteeers AKA=> DONE
+  REJECTED //estatus for external volunteers AKA => SUSPENDED
+  DONE // status for internal volunteers
+  SUSPENDED // estatus for internal volunteers
 }
 
 enum VolunteerProject {
@@ -979,6 +981,7 @@ enum ScholarCondition {
   ACTIVE
   RESIGNATION
   WITHDRAWAL
+  TO_BE_ALUMNI
   ALUMNI
 }
 

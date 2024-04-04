@@ -4,12 +4,11 @@
 
 import { WorkshopAttendance } from "..\..\activities\workshop\workshop"
 import { ChatAttendance } from "..\..\activities\chat\chat"
-import { Region, ScholarStatus } from "types-scholar"
 import { Chapter } from "..\..\organization\chapter"
 import { Gender } from "..\..\activities\type-activities"
 import { ScholarCollageInformation } from "collage"
 import { ScholarCVAInformation } from "cva"
-import { ScholarCondition, ScholarStatus, ScholarStatus } from "types-scholar"
+import { ScholarCondition,Region, ScholarStatus  } from "types-scholar"
 import { User } from "..\..\base-next-auth"
 import { Chat, Chat, Chat } from "..\..\activities\chat\chat"
 import { VolunteerAttendance } from "..\..\activities\volunteer\volunteer"
