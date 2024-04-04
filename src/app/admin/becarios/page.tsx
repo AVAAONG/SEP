@@ -32,10 +32,7 @@ const page = async ({
   const scholars = await getScholarsWithAllData();
   const scholarsPropertiesCount = countScholarGeneralProperties(scholars);
 
-  const probationI =
-    scholars.length > 0
-      ? ((scholarsPropertiesCount.status.PROBATION_I / scholars.length) * 100).toFixed(0)
-      : '0';
+  const probationI = Number(((scholarsPropertiesCount.status.PROBATION_I / scholars.length) * 100).toFixed(0))
   const probationII = Number(
     ((scholarsPropertiesCount.status.PROBATION_II / scholars.length) * 100).toFixed(0)
   );
@@ -56,23 +53,23 @@ const page = async ({
             stat: 0,
             changeType: 'increase',
             comparationText: `De ${scholars.length || 0} becarios activos`,
-            comparation: probationI,
-            tooltipText: `${probationI}% de los becarios se encuentran proximos a egresar`,
+            comparation: 0,
+            tooltipText: `0% de los becar ios se encuentran proximos a egresar`,
           },
           {
             name: `Becarios en probatorio I`,
             stat: scholarsPropertiesCount.status.PROBATION_I || 0,
             changeType: 'decrease',
             comparationText: `De ${scholars.length || 0} becarios activos`,
-            comparation: probationII,
-            tooltipText: `${probationII}% de los becarios se encuentran en Probatorio 2`,
+            comparation: probationI,
+            tooltipText: `${probationI}% de los becarios se encuentran en Probatorio 1`,
           },
           {
             name: `Becarios en probatorio II`,
             stat: scholarsPropertiesCount.status.PROBATION_II || 0,
             changeType: 'decrease',
             comparationText: `De ${scholars.length || 0} becarios activos`,
-            comparation: 55,
+            comparation: probationII,
             tooltipText: `${probationII}% de los becarios se encuentran en Probatorio 2`,
           },
         ]}

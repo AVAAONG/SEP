@@ -385,11 +385,15 @@ export const getScholarDoneActivitiesCount = async (scholar_id: string, year: nu
   const volunteers = allVolunteers.filter((volunteer) =>
     volunteer.volunteer.start_dates.some((date) => date >= yearStart && date <= yearEnd)
   );
-  const totalVolunteerAsignedHours = volunteers.reduce((acc, volunteer) => {
-    return acc + volunteer.asigned_hours;
+  const totalVolunteerAssignedHours = volunteers.reduce((acc, volunteer) => {
+    let hours = volunteer.asigned_hours;
+    if (volunteer.volunteer.kind_of_volunteer === 'EXTERNAL') {
+      hours = Math.min(hours, 30);
+    }
+    return acc + hours;
   }, 0);
 
-  return [workshops, chats, totalVolunteerAsignedHours];
+  return [workshops, chats, totalVolunteerAssignedHours];
 };
 
 export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) => {
