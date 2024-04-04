@@ -666,14 +666,18 @@ export const ceaseSpotInChat = async (attendanceId: string, activityId: string, 
 export const getNotEnrolledScholarsInWorkshop = async (workshopId: string) => {
   const scholars = await prisma.scholar.findMany({
     where: {
-      program_information: {
-        scholar_condition: 'ACTIVE',
-        attended_workshops: {
-          none: {
-            workshop_id: workshopId,
+      AND: [
+        {
+          program_information: {
+            scholar_condition: 'ACTIVE',
+            attended_workshops: {
+              none: {
+                workshop_id: workshopId,
+              },
+            },
           },
         },
-      },
+      ]
     },
   });
   return scholars;
