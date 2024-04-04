@@ -341,11 +341,18 @@ export const getScholarDoneActivitiesCount = async (scholar_id: string, year: nu
             ],
           },
           {
-            speaker: {
-              some: {
-                id: scholar_id,
+            AND: [
+              {
+                speaker: {
+                  some: {
+                    id: scholar_id,
+                  },
+                },
               },
-            },
+              {
+                activity_status: 'ATTENDANCE_CHECKED',
+              },
+            ]
           },
         ],
       },
