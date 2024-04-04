@@ -465,6 +465,25 @@ export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) =>
         ],
       },
     }),
+    prisma.volunteer.findMany({
+      where: {
+        AND: [
+          {
+            volunteer_attendance: {
+              some: {
+                scholar: {
+                  scholarId: scholar_id,
+                },
+              },
+            },
+
+          },
+          {
+            status: 'SENT',
+          },
+        ],
+      },
+    })
   ]);
   return [chats, workshops];
 };
