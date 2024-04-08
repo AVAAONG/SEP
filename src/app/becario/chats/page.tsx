@@ -8,6 +8,7 @@ import { getChatsByScholar } from '@/lib/db/utils/Workshops';
 import {
   countActivityByModality,
   countChatProperties,
+  formatCountsForCharts,
   getAttendedChats,
 } from '@/lib/utils/activityFilters';
 import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
@@ -40,10 +41,12 @@ const page = async ({
   const session = await getServerSession(authOptions);
   if (!session) return null;
   const chatDbList = await getChatsByScholar(session.scholarId);
-  const chats = filterActivitiesBySearchParams(chatDbList, searchParams);
-  const attendedChat = getAttendedChats(chats, session.scholarId);
-  const { inPersonActivities, onlineActivities } = countActivityByModality(attendedChat);
-  const { level, modality } = countChatProperties(attendedChat);
+  const chats = await filterActivitiesBySearchParams(chatDbList, searchParams);
+  const attendedChat = await getAttendedChats(chats, session.scholarId);
+  const { inPersonActivities, onlineActivities } = await countActivityByModality(attendedChat);
+  const { level, modality } = await countChatProperties(attendedChat);
+  const objectsFormatedForCharts = await formatCountsForCharts({ level, modality });
+
   const chatObjectForTable = createScholarChatAttendanceObject(chats);
 
   return (
@@ -61,13 +64,13 @@ const page = async ({
           <div className="w-full grid md:grid-cols-4  justify-center items-center">
             <div className="md:col-start-2">
               <h3 className="truncate font-semibold text-center text-sm">Distribución por nivel</h3>
-              <PieChartComponent data={level} />
+              <PieChartComponent data={objectsFormatedForCharts.level} />
             </div>
             <div>
               <h3 className="truncate font-semibold text-center text-sm">
                 Distribución por modalidad
               </h3>
-              <PieChartComponent data={modality} />
+              <PieChartComponent data={objectsFormatedForCharts.modality} />
             </div>
           </div>
         )}

@@ -41,10 +41,10 @@ const page = async ({
   const session = await getServerSession(authOptions);
   if (!session) return null;
   const workshopsDbList = await getWorkhsopsByScholar(session?.scholarId);
-  const workshops = filterActivitiesBySearchParams(workshopsDbList, searchParams);
-  const workshopsAttended = getAttendedActivities(workshops);
-  const { skills, years, kinds, modality } = countWorkshopProperties(workshopsAttended);
-  const objectsFormatedForCharts = formatCountsForCharts({ skills, years, kinds });
+  const workshops = await filterActivitiesBySearchParams(workshopsDbList, searchParams);
+  const workshopsAttended = await getAttendedActivities(workshops);
+  const { skills, years, kinds, modality } = await countWorkshopProperties(workshopsAttended);
+  const objectsFormatedForCharts = await formatCountsForCharts({ skills, years, kinds });
   const workshopObjectForTable = createScholarWorkshopAttendanceObject(workshops);
 
   return (
