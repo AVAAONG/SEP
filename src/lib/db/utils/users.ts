@@ -282,6 +282,10 @@ export const getUser = async (id: shortUUID.SUUID): Promise<User | null> => {
 export const getScholarByEmail = async (email: string) => {
   const scholar = await prisma.scholar.findUnique({
     where: { email },
+    include: {
+      program_information: true,
+      collage_information: true,
+    }
   });
   return scholar;
 };
