@@ -1,5 +1,5 @@
 'use client';
-import { parseSkillFromDatabase } from '@/lib/utils2';
+import { parseChatLevelFromDatabase, parseSkillFromDatabase } from '@/lib/utils2';
 import { Accordion, AccordionItem } from '@nextui-org/react';
 import { Skill } from '@prisma/client';
 import Link from 'next/link';
@@ -121,7 +121,9 @@ const ChatsAccordion: React.FC<ChatAccordionProps> = ({ chatInfo }) => {
           <div className="p-4 gap-4 flex flex-wrap justify-between">
             {chatTotalHoursByLevel.map((level) => (
               <div className="flex-grow">
-                <h4 className="font-semibold text-light">{level.category}</h4>
+                <h4 className="font-semibold text-light">
+                  {parseChatLevelFromDatabase(level.category)}
+                </h4>
                 <p className="text-4xl font-bold text-white ">{level.totalHours}</p>
                 <p className="text-base  text-black dark:text-red-200">Horas académicas</p>
               </div>
