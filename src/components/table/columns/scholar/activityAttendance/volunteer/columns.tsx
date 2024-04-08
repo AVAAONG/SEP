@@ -5,6 +5,7 @@ import VolunteerStatusWidgetSpanish, {
   VolunteerStatusSpanish,
 } from '@/components/charts/common/widgets/VolunteerStatusWidgetSpanish';
 import { ScholarAttendance } from '@prisma/client';
+import Link from 'next/link';
 import { CellProps, Column } from 'react-table';
 
 export interface IscholarVolunteerAttendanceColumns {
@@ -34,9 +35,9 @@ const scholarVolunteerAttendanceColumns: Column<IscholarVolunteerAttendanceColum
     accessor: 'title',
     Cell: ({ value, cell }) => {
       return (
-        // <Link href={cell.row.original.id ? `actividadesFormativas/${cell.row.original.id}` : ''}>
-        <div className="block w-72 overflow-x-scroll">{value}</div>
-        // </Link>
+        <Link href={cell.row.original.id ? `voluntariado/${cell.row.original.id}` : ''}>
+          <div className="block w-72 overflow-x-scroll">{value}</div>
+        </Link>
       );
     },
   },

@@ -30,7 +30,9 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
     scholar_attendance ? scholar_attendance.map((a) => a.scholar.scholar) : [],
     scholar_attendance ? scholar_attendance : []
   );
-
+  const scholarsForQuit = scholar_attendance
+    ? scholar_attendance.map((a) => a.scholar.scholar)
+    : [];
   const scholarDataToExport = scholarAttendanceDataForTable
     .filter((scholar) => scholar.attendance === 'ENROLLED')
     .map((scholar) => {
@@ -111,7 +113,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
                 kindOfActivity="workshop"
               />
               <QuitScholarFromActivity
-                scholars={scholars}
+                scholars={scholarsForQuit}
                 activityId={workshopId}
                 kindOfActivity="workshop"
               />

@@ -29,13 +29,6 @@ const page = async () => {
       <h1 className="text-xl font-semibold  sm:text-2xl ">
         Información sobre el periodo academico
       </h1>
-      {/* <div className="p-2 lg:p-6 w-full bg-gray-100 dark:bg-black rounded-lg">
-        <ScholarCVAInformation
-          scholarCvaInformation={cvaInformation}
-          certificateUrl={cvaCertificate}
-          scholarId={session?.scholarId!}
-        />
-      </div> */}
       <div className="w-full">
         <Table
           tableData={collagePeriods || []}

@@ -4,6 +4,7 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
+import { getApprovedAndAttendedVolunteers } from '@/lib/utils/activityFilters';
 import { Prisma, Probation, ScholarCondition, User, WorkshopAttendance } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import shortUUID from 'short-uuid';
@@ -340,35 +341,38 @@ export const getScholarDoneActivitiesCount = async (scholar_id: string, year: nu
             ],
           },
           {
-            speaker: {
+            AND: [
+              {
+                speaker: {
+                  some: {
+                    id: scholar_id,
+                  },
+                },
+              },
+              {
+                activity_status: 'ATTENDANCE_CHECKED',
+              },
+            ]
+          },
+        ],
+      },
+    }),
+    prisma.volunteer.findMany({
+      where: {
+        AND: [
+          {
+            volunteer_attendance: {
               some: {
-                id: scholar_id,
+                scholar: {
+                  scholarId: scholar_id,
+                },
               },
             },
           },
         ],
       },
-    }),
-    prisma.volunteerAttendance.findMany({
-      where: {
-        AND: [
-          {
-            scholar: {
-              scholarId: scholar_id,
-            },
-          },
-          {
-            attendance: 'ATTENDED',
-          },
-          {
-            volunteer: {
-              status: 'APPROVED'
-            }
-          }
-        ],
-      },
       include: {
-        volunteer: true
+        volunteer_attendance: true
       }
     }),
   ]);
@@ -383,17 +387,11 @@ export const getScholarDoneActivitiesCount = async (scholar_id: string, year: nu
     chat.start_dates.some((date) => date >= yearStart && date <= yearEnd)
   ).length;
   const volunteers = allVolunteers.filter((volunteer) =>
-    volunteer.volunteer.start_dates.some((date) => date >= yearStart && date <= yearEnd)
+    volunteer.start_dates.some((date) => date >= yearStart && date <= yearEnd)
   );
-  const totalVolunteerAssignedHours = volunteers.reduce((acc, volunteer) => {
-    let hours = volunteer.asigned_hours;
-    if (volunteer.volunteer.kind_of_volunteer === 'EXTERNAL') {
-      hours = Math.min(hours, 30);
-    }
-    return acc + hours;
-  }, 0);
+  const { totalVolunteerHours } = await getApprovedAndAttendedVolunteers(volunteers)
 
-  return [workshops, chats, totalVolunteerAssignedHours];
+  return [workshops, chats, totalVolunteerHours];
 };
 
 export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) => {
@@ -467,6 +465,25 @@ export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) =>
         ],
       },
     }),
+    prisma.volunteer.findMany({
+      where: {
+        AND: [
+          {
+            volunteer_attendance: {
+              some: {
+                scholar: {
+                  scholarId: scholar_id,
+                },
+              },
+            },
+
+          },
+          {
+            status: 'SENT',
+          },
+        ],
+      },
+    })
   ]);
   return [chats, workshops];
 };
@@ -649,11 +666,32 @@ export const ceaseSpotInChat = async (attendanceId: string, activityId: string, 
 export const getNotEnrolledScholarsInWorkshop = async (workshopId: string) => {
   const scholars = await prisma.scholar.findMany({
     where: {
+      AND: [
+        {
+          program_information: {
+            scholar_condition: 'ACTIVE',
+            attended_workshops: {
+              none: {
+                workshop_id: workshopId,
+              },
+            },
+          },
+        },
+      ]
+    },
+  });
+  return scholars;
+}
+
+
+export const getNotEnrolledScholarsInVolunteer = async (volunteerId: string) => {
+  const scholars = await prisma.scholar.findMany({
+    where: {
       program_information: {
         scholar_condition: 'ACTIVE',
-        attended_workshops: {
+        volunteerAttendance: {
           none: {
-            workshop_id: workshopId,
+            volunteerId: volunteerId,
           },
         },
       },
