@@ -5,6 +5,7 @@ import CardWithStat from '@/components/scholar/card/CardWithStats';
 import Table from '@/components/table/Table';
 import scholarChatAttendaceColumns from '@/components/table/columns/scholar/activityAttendance/chats/columns';
 import createScholarChatAttendanceForTable from '@/components/table/columns/scholar/activityAttendance/chats/formater';
+import scholarChatAttendanceSearchOptions from '@/components/table/columns/scholar/activityAttendance/chats/searchOptions';
 import scholarVolunteerAttendanceColumns from '@/components/table/columns/scholar/activityAttendance/volunteer/columns';
 import createScholarVolunteerAttendanceForTable from '@/components/table/columns/scholar/activityAttendance/volunteer/formater';
 import scholarWorkshopAttendanceColumns from '@/components/table/columns/scholar/activityAttendance/workshops/columns';
@@ -17,34 +18,11 @@ import {
   getWorkhsopsByScholar,
 } from '@/lib/db/utils/Workshops';
 import { getScholarWithAllData } from '@/lib/db/utils/users';
-import { getAttendedWorkshops } from '@/lib/utils/getAttendedActivities';
+import { getAttendedChats, getAttendedWorkshops } from '@/lib/utils/getAttendedActivities';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import { Avatar, Button, Tooltip } from '@nextui-org/react';
 import Link from 'next/link';
 import { chatIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs';
-
-const CHAT_SEARCH_OPTIONS = [
-  {
-    label: 'Nivel',
-    option: 'level',
-  },
-  {
-    label: 'Modalidad',
-    option: 'modality',
-  },
-  {
-    label: 'Asistencia',
-    option: 'attendance',
-  },
-  {
-    label: 'Estatus de la actividad',
-    option: 'activityStatus',
-  },
-  {
-    label: 'Facilitador',
-    option: 'speakerNames',
-  },
-];
 
 const VOLUNTEER_SEARCH_OPTIONS = [
   {
@@ -87,13 +65,8 @@ const page = async ({
   const chatObject = createScholarChatAttendanceForTable(chats, scholarId);
   const volunteerDataForTable = createScholarVolunteerAttendanceForTable(volunteers);
   const scholarPhoto = photo ? await getBlobImage(photo) : undefined;
-
   const atendedWorkshops = getAttendedWorkshops(workshops);
-  const atendedChats = chatObject?.filter(
-    (chat) =>
-      chat.attendance === 'ATTENDED' ||
-      (chat.attendance === 'SPEAKER' && chat.activity_status !== 'SUSPENDED')
-  );
+  const atendedChats = getAttendedChats(chatObject, scholarId);
   const cardContent = [
     {
       icon: workshopIcon,
@@ -240,7 +213,7 @@ const page = async ({
           <Table
             tableColumns={scholarChatAttendaceColumns}
             tableData={chatObject}
-            tableHeadersForSearch={CHAT_SEARCH_OPTIONS}
+            tableHeadersForSearch={scholarChatAttendanceSearchOptions}
           />
         </div>
       )}
