@@ -4,7 +4,9 @@ import Stats from '@/components/scholar/ScholarStats';
 import Table from '@/components/table/Table';
 import scholarVolunteerAttendanceColumns from '@/components/table/columns/scholar/activityAttendance/volunteer/columns';
 import createScholarVolunteerAttendanceForTable from '@/components/table/columns/scholar/activityAttendance/volunteer/formater';
+import scholarVolunteerAttendanceSearchOptions from '@/components/table/columns/scholar/activityAttendance/volunteer/searchOptions';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
+import { VolunteerWithAllData } from '@/lib/db/types';
 import { getVolunteersByScholar } from '@/lib/db/utils/Workshops';
 import { countVolunteerProperties, formatCountsForCharts } from '@/lib/utils/activityFilters';
 import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
@@ -20,7 +22,10 @@ const page = async ({
   const volunteerDbList = await getVolunteersByScholar(session?.scholarId!);
   const { externalVolunteerHours, internalVolunteerHours, totalVolunteerHours } =
     getApprovedAndAttendedVolunteers(volunteerDbList);
-  const volunteers = await filterActivitiesBySearchParams(volunteerDbList, searchParams);
+  const volunteers = (await filterActivitiesBySearchParams(
+    volunteerDbList,
+    searchParams
+  )) as VolunteerWithAllData[];
   const volunteerPropertiesCount = await countVolunteerProperties(volunteers);
   const volunteerDataForCharts = await formatCountsForCharts(volunteerPropertiesCount);
   const volunteerDataForTable = createScholarVolunteerAttendanceForTable(volunteers);
@@ -44,19 +49,16 @@ const page = async ({
         />
         {volunteerDbList && volunteerDbList.length >= 1 && (
           <div className="w-full grid md:grid-cols-5  justify-center items-center">
-            <div />
-            <div>
-              <DonutChartComponent
-                data={volunteerDataForCharts.asociatedProject}
-                chartTitle="Distribucion por proyecto"
-              />
-            </div>
-            <div>
-              <DonutChartComponent
-                data={volunteerDataForCharts.kindOfVolunteer}
-                chartTitle="Distribucion por tipo"
-              />
-            </div>
+            <div></div>
+            <DonutChartComponent
+              data={volunteerDataForCharts.asociatedProject}
+              chartTitle="Distribucion por proyecto"
+            />
+            <DonutChartComponent
+              data={volunteerDataForCharts.kindOfVolunteer}
+              chartTitle="Distribucion por tipo"
+            />
+
             <DonutChartComponent
               data={volunteerDataForCharts.modality}
               chartTitle="Distribucion por modalidad"
@@ -66,7 +68,7 @@ const page = async ({
         <Table
           tableData={volunteerDataForTable}
           tableColumns={scholarVolunteerAttendanceColumns}
-          tableHeadersForSearch={[]}
+          tableHeadersForSearch={scholarVolunteerAttendanceSearchOptions}
         />
       </div>
     </div>

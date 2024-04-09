@@ -1,4 +1,8 @@
-export type VolunteerStatusSpanish = 'Pendiente de aprobación' | 'Aprobado' | 'Rechazado';
+export type VolunteerStatusSpanish =
+  | 'Pendiente de aprobación'
+  | 'Aprobado'
+  | 'Rechazado'
+  | undefined;
 
 const VolunteerStatusWidgetSpanish = ({ value }: { value: VolunteerStatusSpanish }) => {
   if (value === 'Rechazado') {

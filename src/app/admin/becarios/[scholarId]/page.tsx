@@ -24,29 +24,6 @@ import { Avatar, Button, Tooltip } from '@nextui-org/react';
 import Link from 'next/link';
 import { chatIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs';
 
-const VOLUNTEER_SEARCH_OPTIONS = [
-  {
-    label: 'Tipo de voluntariado',
-    option: 'level',
-  },
-  {
-    label: 'Modalidad',
-    option: 'modality',
-  },
-  {
-    label: 'Asistencia',
-    option: 'attendance',
-  },
-  {
-    label: 'Estatus de la actividad',
-    option: 'activityStatus',
-  },
-  {
-    label: 'Estatus de la actividad',
-    option: 'activityStatus',
-  },
-];
-
 const page = async ({
   params,
   searchParams,
