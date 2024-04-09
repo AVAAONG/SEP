@@ -139,7 +139,8 @@ const Sidebar = () => {
             link={`/${SCHOLAR_PREFIX}/universidad`}
           />
         </ul>
-        <div className="p-4 mt-4 rounded-lg bg-emerald-100 dark:bg-emerald-900 dark:border-emerald-950 border-green-600">
+        {/* FEEDBACK FORM */}
+        {/* <div className="p-4 mt-4 rounded-lg bg-emerald-100 dark:bg-emerald-900 dark:border-emerald-950 border-green-600">
           <div className="flex items-center mb-3">
             <span className=" text-emerald-800 text-sm font-bold rounded  dark:text-emerald-200">
               ¡Danos tu feedback!
@@ -156,7 +157,7 @@ const Sidebar = () => {
           >
             Dejar feedback
           </a>
-        </div>
+        </div> */}
       </div>
     </aside>
   );
