@@ -68,8 +68,8 @@ const page = () => {
         onSubmit={handleSubmit((data, event) =>
           toast.promise(submitExternalVolunter(data, event), {
             pending: 'Subiendo voluntariado...',
-            success: 'voluntariado enviado con éxito',
-            error: 'Ocurrió un error alsubir el voluntariado',
+            success: 'Voluntariado externo subido con exito 🎉',
+            error: 'Ocurrió un error al subir el voluntariado',
           })
         )}
         className="flex flex-col gap-8 w-full justify-center items-center"
