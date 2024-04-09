@@ -9,9 +9,9 @@ import {
   countActivityByModality,
   countChatProperties,
   formatCountsForCharts,
-  getAttendedChats,
 } from '@/lib/utils/activityFilters';
 import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
+import { getAttendedChats } from '@/lib/utils/getAttendedActivities';
 import { createScholarChatAttendanceObject } from '@/lib/utils/parseDataForTable';
 import { ActivityStatus, KindOfSpeaker, Level } from '@prisma/client';
 import { getServerSession } from 'next-auth';
@@ -42,7 +42,7 @@ const page = async ({
   if (!session) return null;
   const chatDbList = await getChatsByScholar(session.scholarId);
   const chats = await filterActivitiesBySearchParams(chatDbList, searchParams);
-  const attendedChat = await getAttendedChats(chats, session.scholarId);
+  const attendedChat = getAttendedChats(chats, session.scholarId);
   const { inPersonActivities, onlineActivities } = await countActivityByModality(attendedChat);
   const { level, modality } = await countChatProperties(attendedChat);
   const objectsFormatedForCharts = await formatCountsForCharts({ level, modality });

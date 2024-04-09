@@ -21,37 +21,6 @@ const countActivityByModality = async (attendedActivities: (Workshop | Chat | Vo
     );
 };
 
-const getAttendedActivities = async (activities: WorkshopWithAllData[]) => {
-    return activities.filter((activity) => {
-        return activity.scholar_attendance[0]?.attendance === 'ATTENDED';
-    });
-};
-
-const getAttendedChats = async (chats: ChatsWithAllData[], scholarId: string) => {
-    return chats.filter((chat) => {
-        return chat.scholar_attendance[0]?.attendance === 'ATTENDED' || chat.speaker.some((speaker) => speaker.id === scholarId);
-    });
-}
-
-const getApprovedAndAttendedVolunteers = async (volunteers: VolunteerWithAllData[]) => {
-    let externalVolunteerHours: number = 0,
-        internalVolunteerHours: number = 0,
-        totalVolunteerHours: number = 0;
-    volunteers.forEach(volunteer => {
-        const volunteerAttendance = volunteer.volunteer_attendance[0];
-        if (volunteer.status === 'APPROVED' && volunteerAttendance.attendance === 'ATTENDED') {
-            if (volunteer.kind_of_volunteer === 'INTERNAL') internalVolunteerHours += volunteerAttendance.asigned_hours;
-            else {
-                if (externalVolunteerHours < 30) {
-                    const remainingHours = 30 - externalVolunteerHours;
-                    externalVolunteerHours += Math.min(volunteerAttendance.asigned_hours, remainingHours);
-                }
-            };
-            totalVolunteerHours += externalVolunteerHours + internalVolunteerHours;
-        }
-    })
-    return { externalVolunteerHours, internalVolunteerHours, totalVolunteerHours };
-}
 
 
 type Count = {
@@ -309,6 +278,6 @@ const countVolunteerProperties = async (volunteers: VolunteerWithAllData[]) => {
 
 
 export {
-    categorizeActivityByStatus, countActivityByModality, countActivitySatisfactionForm, countChatProperties, countVolunteerProperties, countWorkshopProperties, createAdminStatsForActivities, formatCountsForCharts, getActivityAttendancePerMonth, getApprovedAndAttendedVolunteers, getAttendedActivities, getAttendedChats
+    categorizeActivityByStatus, countActivityByModality, countActivitySatisfactionForm, countChatProperties, countVolunteerProperties, countWorkshopProperties, createAdminStatsForActivities, formatCountsForCharts, getActivityAttendancePerMonth
 };
 

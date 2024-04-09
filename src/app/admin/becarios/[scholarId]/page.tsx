@@ -9,6 +9,7 @@ import scholarVolunteerAttendanceColumns from '@/components/table/columns/schola
 import createScholarVolunteerAttendanceForTable from '@/components/table/columns/scholar/activityAttendance/volunteer/formater';
 import scholarWorkshopAttendanceColumns from '@/components/table/columns/scholar/activityAttendance/workshops/columns';
 import createScholarWorkshopAttendanceForTable from '@/components/table/columns/scholar/activityAttendance/workshops/formater';
+import scholarWorkshopAttendanceSearchOptions from '@/components/table/columns/scholar/activityAttendance/workshops/searchOptions';
 import { getBlobImage } from '@/lib/azure/azure';
 import {
   getChatsByScholar,
@@ -16,37 +17,12 @@ import {
   getWorkhsopsByScholar,
 } from '@/lib/db/utils/Workshops';
 import { getScholarWithAllData } from '@/lib/db/utils/users';
+import { getAttendedWorkshops } from '@/lib/utils/getAttendedActivities';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import { Avatar, Button, Tooltip } from '@nextui-org/react';
 import Link from 'next/link';
 import { chatIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs';
 
-const WORKSHOP_SEARCH_OPTIONS = [
-  {
-    label: 'Año de la actividad',
-    option: 'year',
-  },
-  {
-    label: 'Competencia',
-    option: 'skill',
-  },
-  {
-    label: 'Modalidad',
-    option: 'modality',
-  },
-  {
-    label: 'Asistencia',
-    option: 'attendance',
-  },
-  {
-    label: 'Estatus de la actividad',
-    option: 'activityStatus',
-  },
-  {
-    label: 'Facilitador',
-    option: 'speakerNames',
-  },
-];
 const CHAT_SEARCH_OPTIONS = [
   {
     label: 'Nivel',
@@ -112,9 +88,7 @@ const page = async ({
   const volunteerDataForTable = createScholarVolunteerAttendanceForTable(volunteers);
   const scholarPhoto = photo ? await getBlobImage(photo) : undefined;
 
-  const atendedWorkshops = attended_workshops?.filter(
-    (workshop) => workshop.attendance === 'ATTENDED'
-  );
+  const atendedWorkshops = getAttendedWorkshops(workshops);
   const atendedChats = chatObject?.filter(
     (chat) =>
       chat.attendance === 'ATTENDED' ||
@@ -257,7 +231,7 @@ const page = async ({
           <Table
             tableColumns={scholarWorkshopAttendanceColumns}
             tableData={workshopObj}
-            tableHeadersForSearch={WORKSHOP_SEARCH_OPTIONS}
+            tableHeadersForSearch={scholarWorkshopAttendanceSearchOptions}
           />
         </div>
       )}

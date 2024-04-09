@@ -6,12 +6,9 @@ import scholarVolunteerAttendanceColumns from '@/components/table/columns/schola
 import createScholarVolunteerAttendanceForTable from '@/components/table/columns/scholar/activityAttendance/volunteer/formater';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { getVolunteersByScholar } from '@/lib/db/utils/Workshops';
-import {
-  countVolunteerProperties,
-  formatCountsForCharts,
-  getApprovedAndAttendedVolunteers,
-} from '@/lib/utils/activityFilters';
+import { countVolunteerProperties, formatCountsForCharts } from '@/lib/utils/activityFilters';
 import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
+import { getApprovedAndAttendedVolunteers } from '@/lib/utils/getAttendedActivities';
 import { getServerSession } from 'next-auth';
 
 const page = async ({
@@ -22,7 +19,7 @@ const page = async ({
   const session = await getServerSession(authOptions);
   const volunteerDbList = await getVolunteersByScholar(session?.scholarId!);
   const { externalVolunteerHours, internalVolunteerHours, totalVolunteerHours } =
-    await getApprovedAndAttendedVolunteers(volunteerDbList);
+    getApprovedAndAttendedVolunteers(volunteerDbList);
   const volunteers = await filterActivitiesBySearchParams(volunteerDbList, searchParams);
   const volunteerPropertiesCount = await countVolunteerProperties(volunteers);
   const volunteerDataForCharts = await formatCountsForCharts(volunteerPropertiesCount);

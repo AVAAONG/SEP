@@ -4,7 +4,7 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { getApprovedAndAttendedVolunteers } from '@/lib/utils/activityFilters';
+import { getApprovedAndAttendedVolunteers } from '@/lib/utils/getAttendedActivities';
 import { Prisma, Probation, ScholarCondition, User, WorkshopAttendance } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import shortUUID from 'short-uuid';
@@ -393,7 +393,7 @@ export const getScholarDoneActivitiesCount = async (scholar_id: string, year: nu
   const volunteers = allVolunteers.filter((volunteer) =>
     volunteer.start_dates.some((date) => date >= yearStart && date <= yearEnd)
   );
-  const { totalVolunteerHours } = await getApprovedAndAttendedVolunteers(volunteers)
+  const { totalVolunteerHours } = getApprovedAndAttendedVolunteers(volunteers)
 
   return [workshops, chats, totalVolunteerHours];
 };
