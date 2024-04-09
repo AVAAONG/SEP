@@ -40,7 +40,7 @@ const scholarWorkshopAttendanceColumns: Column<IScholarWorkshopAttendanceColumns
     Header: 'Actividad formativa',
     accessor: 'title',
     Cell: ({ value, cell }) => (
-      <Link href={cell.row.original.id ? `chats/${cell.row.original.id}` : ''}>
+      <Link href={cell.row.original.id ? `actividadesFormativas/${cell.row.original.id}` : ''}>
         <div className="block w-80 text-center overflow-x-scroll">{value}</div>
       </Link>
     ),
