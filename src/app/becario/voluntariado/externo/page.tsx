@@ -31,6 +31,7 @@ const page = () => {
     handleSubmit,
     control,
     formState: { isSubmitting, isValid },
+    reset,
   } = useForm<z.infer<typeof externalVolunteerSubmisionSchema>>({
     resolver: zodResolver(externalVolunteerSubmisionSchema),
   });
@@ -58,6 +59,8 @@ const page = () => {
     };
     if (!sesion.data?.scholarId) throw new Error('No se encontro el id del becario');
     await createExternalVolunteer(volunteerData, sesion.data?.scholarId, data.asigned_hours);
+    reset(undefined);
+    setSelectedDocument(null);
   };
   return (
     <section className="flex flex-col md:px-12 justify-start items-center w-full gap-4">
