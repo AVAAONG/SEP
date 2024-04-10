@@ -32,6 +32,7 @@ const page = async ({
   const { barSeries, lineSeries } = getActivityAttendancePerMonth(
     activitiesByStatus.ATTENDANCE_CHECKED
   );
+  
 
   return (
     <div className="w-full flex flex-col gap-6  items-center ">

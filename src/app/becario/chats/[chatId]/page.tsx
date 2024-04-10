@@ -1,6 +1,7 @@
 import ActivityPanelInfo from '@/components/ActivityPanelInfo';
 import ScholarActivitySatisfactionSurvey from '@/components/ScholarActivitySatisfactionSurvey';
 import ScholarAttendanceWidget from '@/components/ScholarAttendanceWidget';
+import StatusUpdateButton from '@/components/activityActions/StatusUpdate/StatusUpdate';
 import CeaseSpotButtonProps from '@/components/ceaseSpot/ceaseSpotButton';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
@@ -51,6 +52,9 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
       ? attendance.attendance
       : undefined;
 
+  const scholarEmails = scholarsAttendance
+    ? scholarsAttendance.map((attendance) => attendance.scholar.scholar.email)
+    : [];
   return (
     <div className="min-h-screen flex flex-col gap-4">
       <ActivityPanelInfo activity={chat as ChatWithSpeaker}>
@@ -66,6 +70,15 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
                 <ScholarAttendanceWidget value={scholarAttendance} />
               </div>
             </div>
+            {scholarAttendance === 'SPEAKER' && (
+              <div className="w-fit">
+                <StatusUpdateButton
+                  kindOfActivity="chat"
+                  activityForChangeId={chatId}
+                  scholarsEmails={scholarEmails}
+                />
+              </div>
+            )}
             <div className="flex gap-4">
               {scholarAttendance === 'ENROLLED' && (
                 <CeaseSpotButtonProps
