@@ -4,6 +4,7 @@ import {
   updatechatAttendanceSatisfactionForm,
 } from '@/lib/db/utils/Workshops';
 import activitySatisfactionFormSchema from '@/lib/schemas/acivitySatisFactionFormSchema';
+import { revalidateSpecificPath } from '@/lib/serverAction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@nextui-org/button';
 import {
@@ -56,9 +57,13 @@ const ScholarActivitySatisfactionSurvey = ({
   ) => {
     event?.preventDefault();
     if (!attendanceId) return;
-    if (kindOfActivity === 'workshop')
+    if (kindOfActivity === 'workshop') {
       await updateWorkshopAttendanceSatisfactionForm(attendanceId, data);
-    else if (kindOfActivity === 'chat') updatechatAttendanceSatisfactionForm(attendanceId, data);
+      revalidateSpecificPath(`/becario/chats/[workshopId]`, 'page');
+    } else if (kindOfActivity === 'chat') {
+      updatechatAttendanceSatisfactionForm(attendanceId, data);
+      revalidateSpecificPath(`/becario/chats/[chatId]`, 'page');
+    }
     onClose();
   };
 

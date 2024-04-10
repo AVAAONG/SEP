@@ -30,8 +30,9 @@ const handler = async (cookieValue: string) => {
 
 export default handler;
 
-export const revalidateSpecificPath = async (path: string) => {
-  await revalidatePath(path);
+export const revalidateSpecificPath = async (path: string, type?: 'page' | 'layout') => {
+  if (!type) revalidatePath(path, type);
+  else revalidatePath(path);
 };
 export type KindOfCard = 'cva_incorporation_centro' | 'cva_incorporation_mercedes' | 'cva_desincorporation_centro' | 'cva_desincorporation_mercedes' | 'generic_program_proof' | 'program_proof_spanish' | 'program_proof_english';
 export const createCVACard = async (

@@ -61,7 +61,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
                 attendanceId={attendance?.id}
                 satisfactionFormFilled={attendance?.satisfaction_form_filled}
                 workshopStatus={workshop.activity_status}
-                kindOfActivity="chat"
+                kindOfActivity="workshop"
               />
             )}
           </div>
