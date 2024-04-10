@@ -38,8 +38,8 @@ export const getApprovedAndAttendedVolunteers = (volunteers: IVolunteer[]) => {
                     externalVolunteerHours += Math.min(volunteerAttendance.asigned_hours, remainingHours);
                 }
             };
-            totalVolunteerHours += externalVolunteerHours + internalVolunteerHours;
         }
     })
+    totalVolunteerHours += externalVolunteerHours + internalVolunteerHours;
     return { externalVolunteerHours, internalVolunteerHours, totalVolunteerHours };
 }
