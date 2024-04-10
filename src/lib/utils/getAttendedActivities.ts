@@ -16,7 +16,7 @@ type IChat = Prisma.ChatGetPayload<{
 }>;
 export const getAttendedChats = (chats: IChat[], scholarId: string) => {
     return chats.filter((chat) =>
-        chat.scholar_attendance[0]?.attendance === 'ATTENDED' || chat.speaker.some((speaker) => speaker.id === scholarId) && chat.activity_status === 'ATTENDANCE_CHECKED'
+        (chat.scholar_attendance[0]?.attendance === 'ATTENDED' && chat.activity_status === 'ATTENDANCE_CHECKED') || (chat.speaker.some((speaker) => speaker.id === scholarId) && chat.activity_status === 'ATTENDANCE_CHECKED')
     );
 }
 
