@@ -157,7 +157,7 @@ export const formatActivitiesForEnrollement = (
 
     return {
       id,
-      title,
+      title: `(${parseModalityFromDatabase(modality)}) ${title}`,
       modality: parseModalityFromDatabase(modality),
       platform: parsePlatformFromDatabase(platform),
       description,
