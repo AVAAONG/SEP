@@ -1004,3 +1004,22 @@ export const updateWorkshopAttendanceSatisfactionForm = async (
   });
   return workshop;
 }
+
+
+export const updatechatAttendanceSatisfactionForm = async (
+  id: string,
+  satisfactionForm: Prisma.ChatSafisfactionFormUncheckedCreateWithoutChat_attendanceInput
+) => {
+  const chat = await prisma.chatAttendance.update({
+    where: {
+      id: id,
+    },
+    data: {
+      ChatSafisfactionForm: {
+        create: satisfactionForm
+      },
+      satisfaction_form_filled: true,
+    },
+  });
+  return chat;
+}

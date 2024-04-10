@@ -1,15 +1,17 @@
 import ActivityPanelInfo from '@/components/ActivityPanelInfo';
-import ActivityScholarActions from '@/components/ActivityScholarActions';
 import ScholarActivitySatisfactionSurvey from '@/components/ScholarActivitySatisfactionSurvey';
 import ScholarAttendanceWidget from '@/components/ScholarAttendanceWidget';
+import CeaseSpotButtonProps from '@/components/ceaseSpot/ceaseSpotButton';
 import Table from '@/components/table/Table';
 import ScholarAttendanceInfoNoPriv from '@/components/table/columns/scholars/activityAttendanceWithNoPrivilege/columns';
-import { formatScholarDataForScholarAttendanceInfoNoPrivTable } from '@/components/table/columns/scholars/activityAttendanceWithNoPrivilege/formater';
+import {
+  IWorkshopAttendance,
+  formatScholarDataForScholarAttendanceInfoNoPrivTable,
+} from '@/components/table/columns/scholars/activityAttendanceWithNoPrivilege/formater';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { WorkshopWithSpeaker } from '@/lib/db/types';
 import { getWorkshop } from '@/lib/db/utils/Workshops';
 import { getNotEnrolledScholarsInWorkshop } from '@/lib/db/utils/users';
-import isDisabled from '@/lib/utils/isCancelationDisabled';
 import { getServerSession } from 'next-auth';
 import { notFound } from 'next/navigation';
 import shortUUID from 'short-uuid';
@@ -23,15 +25,16 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
   if (!workshop) return notFound();
 
   const notEnrolledScholars = await getNotEnrolledScholarsInWorkshop(workshopId);
-  const scholarAttendance = workshop?.scholar_attendance;
-  const scholars = scholarAttendance.map((a) => a.scholar.scholar);
-  const attendance = scholarAttendance.find((a) => a.scholar.scholar.id === se?.scholarId);
-
+  const scholarsAttendance = workshop?.scholar_attendance;
+  const scholars = scholarsAttendance.map((a) => a.scholar.scholar);
+  const attendance = scholarsAttendance.find(
+    (a) => a.scholar.scholar.id === se?.scholarId
+  ) as IWorkshopAttendance;
   const scholarAttendanceDataForTable = await formatScholarDataForScholarAttendanceInfoNoPrivTable(
     scholars,
-    scholarAttendance
+    scholarsAttendance
   );
-
+  const scholarAttendance = attendance ? attendance.attendance : undefined;
   return (
     <div className="min-h-screen flex flex-col gap-4">
       <ActivityPanelInfo activity={workshop as WorkshopWithSpeaker}>
@@ -41,34 +44,26 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
               Estatus de asistencia
             </h3>
             <div className="text-lg leading-none tracking-tight text-primary-light font-normal">
-              <ScholarAttendanceWidget value={attendance?.attendance!} />
+              <ScholarAttendanceWidget value={scholarAttendance} />
             </div>
           </div>
           <div className="flex gap-4">
-            <ActivityScholarActions
-              activityId={workshopId}
-              attendanceId={attendance?.id!}
-              kindOfActivity="workshop"
-              scholars={notEnrolledScholars}
-              isButtonDisabled={isDisabled(
-                attendance?.attendance!,
-                workshop?.start_dates![0]!.toISOString()!,
-                workshop?.activity_status!
-              )}
-              scholarWhoCeaseName={se?.user?.name!}
-              activityName={workshop?.title || ''}
-              date={workshop?.start_dates[0].toISOString() || ''}
-              startDate={workshop?.start_dates[0].toISOString() || ''}
-              endDate={workshop?.end_dates[0].toISOString() || ''}
-              modality={workshop?.modality || ''}
-              eventId={workshop.calendar_ids[0] || ''}
-              platform={workshop?.platform || ''}
-            />
-            <ScholarActivitySatisfactionSurvey
-              attendanceId={attendance?.id}
-              satisfactionFormFilled={attendance?.satisfaction_form_filled}
-              workshopStatus={workshop.activity_status}
-            />
+            {scholarAttendance === 'ENROLLED' && (
+              <CeaseSpotButtonProps
+                scholarWhoCeaseAttendance={attendance}
+                kindOfActivity="workshop"
+                activity={workshop}
+                scholarsToCeaseSpot={notEnrolledScholars}
+              />
+            )}
+            {scholarAttendance === 'ATTENDED' && (
+              <ScholarActivitySatisfactionSurvey
+                attendanceId={attendance?.id}
+                satisfactionFormFilled={attendance?.satisfaction_form_filled}
+                workshopStatus={workshop.activity_status}
+                kindOfActivity="chat"
+              />
+            )}
           </div>
         </div>
       </ActivityPanelInfo>

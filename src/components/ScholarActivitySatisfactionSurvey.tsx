@@ -1,5 +1,8 @@
 'use client';
-import { updateWorkshopAttendanceSatisfactionForm } from '@/lib/db/utils/Workshops';
+import {
+  updateWorkshopAttendanceSatisfactionForm,
+  updatechatAttendanceSatisfactionForm,
+} from '@/lib/db/utils/Workshops';
 import activitySatisfactionFormSchema from '@/lib/schemas/acivitySatisFactionFormSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@nextui-org/button';
@@ -30,10 +33,12 @@ const ScholarActivitySatisfactionSurvey = ({
   attendanceId,
   workshopStatus,
   satisfactionFormFilled,
+  kindOfActivity,
 }: {
   attendanceId: string | undefined;
   workshopStatus: ActivityStatus;
   satisfactionFormFilled: boolean | undefined | null;
+  kindOfActivity: 'workshop' | 'chat';
 }) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const {
@@ -41,7 +46,6 @@ const ScholarActivitySatisfactionSurvey = ({
     handleSubmit,
     formState: { isSubmitting, isValid },
     reset,
-    setValue,
   } = useForm<z.infer<typeof activitySatisfactionFormSchema>>({
     resolver: zodResolver(activitySatisfactionFormSchema),
   });
@@ -52,7 +56,9 @@ const ScholarActivitySatisfactionSurvey = ({
   ) => {
     event?.preventDefault();
     if (!attendanceId) return;
-    await updateWorkshopAttendanceSatisfactionForm(attendanceId, data);
+    if (kindOfActivity === 'workshop')
+      await updateWorkshopAttendanceSatisfactionForm(attendanceId, data);
+    else if (kindOfActivity === 'chat') updatechatAttendanceSatisfactionForm(attendanceId, data);
     onClose();
   };
 
@@ -62,9 +68,9 @@ const ScholarActivitySatisfactionSurvey = ({
         onPress={onOpen}
         color="success"
         className="text-white"
-        isDisabled={workshopStatus !== 'ATTENDANCE_CHECKED' || satisfactionFormFilled}
+        isDisabled={workshopStatus !== 'ATTENDANCE_CHECKED' || Boolean(satisfactionFormFilled)}
       >
-        {satisfactionFormFilled ? '✅ Encuesta de satisfacción llena' : 'Encuesta de satisfacción'}
+        {satisfactionFormFilled ? '✔ Encuesta de satisfacción llena' : 'Encuesta de satisfacción'}
       </Button>
       <Modal
         size="5xl"

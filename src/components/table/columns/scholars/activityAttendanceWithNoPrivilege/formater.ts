@@ -2,7 +2,7 @@ import { getBlobImage } from '@/lib/azure/azure';
 import { Prisma, Scholar, ScholarAttendance, } from '@prisma/client';
 import { IScholarAttendanceInfoNoPriv } from './columns';
 
-type ChatAttendance = Prisma.ChatAttendanceGetPayload<{
+export type IChatAttendance = Prisma.ChatAttendanceGetPayload<{
     include: {
         ChatSafisfactionForm: true;
         scholar: {
@@ -13,7 +13,7 @@ type ChatAttendance = Prisma.ChatAttendanceGetPayload<{
     }
 }>;
 
-type WorkshopAttendance = Prisma.WorkshopAttendanceGetPayload<{
+export type IWorkshopAttendance = Prisma.WorkshopAttendanceGetPayload<{
     include: {
         satisfaction_form: true;
         scholar: {
@@ -24,9 +24,9 @@ type WorkshopAttendance = Prisma.WorkshopAttendanceGetPayload<{
     }
 }>;
 
-const createAttendanceMap = (scholarAttendance: ChatAttendance[] | WorkshopAttendance[]) => {
+const createAttendanceMap = (scholarAttendance: IChatAttendance[] | IWorkshopAttendance[]) => {
     const attendanceMap = new Map<string, ScholarAttendance>();
-    scholarAttendance.forEach((a: ChatAttendance | WorkshopAttendance) => {
+    scholarAttendance.forEach((a: IChatAttendance | IWorkshopAttendance) => {
         attendanceMap.set(a.scholar.scholar.id, a.attendance);
     });
     return attendanceMap;
@@ -47,7 +47,7 @@ const formatScholarData = async (scholar: Scholar, attendanceMap: Map<string, Sc
 
 export const formatScholarDataForScholarAttendanceInfoNoPrivTable = async (
     scholars: Scholar[],
-    scholarAttendance: ChatAttendance[] | WorkshopAttendance[]
+    scholarAttendance: IChatAttendance[] | IWorkshopAttendance[]
 ): Promise<IScholarAttendanceInfoNoPriv[]> => {
     const attendanceMap = createAttendanceMap(scholarAttendance);
     const scholarDataPromises = scholars.map(scholar => formatScholarData(scholar, attendanceMap));
