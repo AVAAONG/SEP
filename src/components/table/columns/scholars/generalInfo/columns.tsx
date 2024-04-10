@@ -92,6 +92,7 @@ const scholarGeneralInformationColumns: Column<ScholarGeneralInformationColumnPr
   {
     Header: 'Año en AVAA',
     accessor: 'yearsInAvaa',
+    filter: 'equals', // filter the exact value
   },
   {
     Header: 'Status',
