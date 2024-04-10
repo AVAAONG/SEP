@@ -4,18 +4,20 @@ import { IScholarAttendanceInfoNoPriv } from './columns';
 
 type ChatAttendance = Prisma.ChatAttendanceGetPayload<{
     include: {
+        ChatSafisfactionForm: true;
         scholar: {
-            select: {
+            include: {
                 scholar: true
             }
         }
     }
 }>;
 
-type WorkshopAttendance = Prisma.ChatAttendanceGetPayload<{
+type WorkshopAttendance = Prisma.WorkshopAttendanceGetPayload<{
     include: {
+        satisfaction_form: true;
         scholar: {
-            select: {
+            include: {
                 scholar: true
             }
         }

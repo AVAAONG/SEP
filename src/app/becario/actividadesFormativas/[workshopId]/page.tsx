@@ -23,7 +23,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
   if (!workshop) return notFound();
 
   const notEnrolledScholars = await getNotEnrolledScholarsInWorkshop(workshopId);
-  const scholarAttendance = workshop?.scholar_attendance || [];
+  const scholarAttendance = workshop?.scholar_attendance;
   const scholars = scholarAttendance.map((a) => a.scholar.scholar);
   const attendance = scholarAttendance.find((a) => a.scholar.scholar.id === se?.scholarId);
 
