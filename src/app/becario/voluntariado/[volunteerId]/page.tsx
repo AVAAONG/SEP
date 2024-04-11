@@ -2,13 +2,13 @@ import DisplayDate from '@/components/DisplayDate';
 import DisplayTime from '@/components/DisplayTime';
 import VolunteerStatusWidget from '@/components/VolunteerStatus';
 import Table from '@/components/table/Table';
-import ScholarActivityAttendanceForScholarTemp from '@/components/table/columns/scholatActivityAttendanceForScholarTemp';
-import { getBlobFile, getBlobImage } from '@/lib/azure/azure';
+import ScholarAttendanceInfoNoPriv from '@/components/table/columns/scholars/activityAttendanceWithNoPrivilege/columns';
+import { formatScholarDataForScholarAttendanceInfoNoPrivTable } from '@/components/table/columns/scholars/activityAttendanceWithNoPrivilege/formater';
+import { getBlobFile } from '@/lib/azure/azure';
 import { getVolunteer } from '@/lib/db/utils/Workshops';
 import { parsePlatformFromDatabase } from '@/lib/utils2';
 import { DocumentIcon } from '@heroicons/react/24/outline';
 import { Avatar } from '@nextui-org/react';
-import { VolunteerAttendance } from '@prisma/client';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import shortUUID from 'short-uuid';
@@ -33,36 +33,11 @@ const page = async ({ params }: { params: { volunteerId: shortUUID.SUUID } }) =>
     volunteer_attendance,
   } = volunteer;
   const proofLink = proof ? await getBlobFile(proof) : '#';
-  const scholarDataPromises = volunteer_attendance
-    .map((a) => a.scholar.scholar)
-    .map(async (scholar) => {
-      const attendance = volunteer_attendance.find(
-        (a: VolunteerAttendance) => a.scholar.scholar.id === scholar.id
-      );
-      return {
-        id: scholar.id,
-        first_names: scholar.first_names,
-        last_names: scholar.last_names,
-        email: scholar.email,
-        phone_number: scholar.cell_phone_Number,
-        whatsAppNumber: scholar.whatsapp_number,
-        dni: scholar.dni,
-        gender: scholar.gender,
-        attendance: attendance.attendance,
-        attendanceId: attendance.id,
-        profilePhoto: scholar.photo ? await getBlobImage(scholar.photo) : null,
-      };
-    });
-
-  const scholarData = await Promise.all(scholarDataPromises);
-
-  // const isDisabled = () => {
-  //   if (attendance?.attendance! !== 'ENROLLED') return true;
-  //   else if (new Date(workshop?.start_dates![0]!) <= new Date()) return true;
-  //   else if (workshop?.activity_status !== 'SENT') return true;
-  //   else return false;
-  // };
-
+  const scholars = volunteer_attendance.map((a) => a.scholar.scholar);
+  const scholarAttendanceDataForTable = await formatScholarDataForScholarAttendanceInfoNoPrivTable(
+    scholars,
+    volunteer_attendance
+  );
   return (
     <div className="min-h-screen flex flex-col gap-4">
       <section className="flex flex-col md:flex-row gap-4 md:gap-0 rounded-lg bg-white dark:bg-gray-900 p-8 ">
@@ -157,7 +132,6 @@ const page = async ({ params }: { params: { volunteerId: shortUUID.SUUID } }) =>
             </div>
           </div>
         </div>
-        {/* <div className="w-full md:w-1/2 ">{children}</div> */}
       </section>
       <section className="w-full space-y-3">
         <h2 className="px-8 text-2xl leading-none tracking-tight text-primary-light font-semibold">
@@ -166,8 +140,8 @@ const page = async ({ params }: { params: { volunteerId: shortUUID.SUUID } }) =>
         <div className="flex flex-row items-center space-x-2">
           <div className="overflow-x-scroll md:overflow-x-clip rounded-lg w-full">
             <Table
-              tableColumns={ScholarActivityAttendanceForScholarTemp}
-              tableData={scholarData}
+              tableColumns={ScholarAttendanceInfoNoPriv}
+              tableData={scholarAttendanceDataForTable}
               tableHeadersForSearch={[]}
             />
           </div>

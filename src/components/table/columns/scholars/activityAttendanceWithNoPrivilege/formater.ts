@@ -23,10 +23,19 @@ export type IWorkshopAttendance = Prisma.WorkshopAttendanceGetPayload<{
         }
     }
 }>;
-
-const createAttendanceMap = (scholarAttendance: IChatAttendance[] | IWorkshopAttendance[]) => {
+export type IVolunteerAttendance = Prisma.VolunteerAttendanceGetPayload<{
+    include: {
+        satisfaction_form: true;
+        scholar: {
+            include: {
+                scholar: true
+            }
+        }
+    }
+}>;
+const createAttendanceMap = (scholarAttendance: IChatAttendance[] | IWorkshopAttendance[] | IVolunteerAttendance[]) => {
     const attendanceMap = new Map<string, ScholarAttendance>();
-    scholarAttendance.forEach((a: IChatAttendance | IWorkshopAttendance) => {
+    scholarAttendance.forEach((a: IChatAttendance | IWorkshopAttendance | IVolunteerAttendance) => {
         attendanceMap.set(a.scholar.scholar.id, a.attendance);
     });
     return attendanceMap;
@@ -47,7 +56,7 @@ const formatScholarData = async (scholar: Scholar, attendanceMap: Map<string, Sc
 
 export const formatScholarDataForScholarAttendanceInfoNoPrivTable = async (
     scholars: Scholar[],
-    scholarAttendance: IChatAttendance[] | IWorkshopAttendance[]
+    scholarAttendance: IChatAttendance[] | IWorkshopAttendance[] | IVolunteerAttendance[]
 ): Promise<IScholarAttendanceInfoNoPriv[]> => {
     const attendanceMap = createAttendanceMap(scholarAttendance);
     const scholarDataPromises = scholars.map(scholar => formatScholarData(scholar, attendanceMap));
