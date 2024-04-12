@@ -65,7 +65,7 @@ const AddCvaModule = ({ cvaInformationId }: { cvaInformationId: string | null })
       const recordForDb = await uploadBlob(recordBase64, 'application/pdf', 'files');
       scholarCvaModuleInfo.record = recordForDb!;
     }
-    createCvaModule(scholarCvaModuleInfo, cvaInformationId);
+    await createCvaModule(scholarCvaModuleInfo, cvaInformationId);
     await revalidateSpecificPath('becario/cva');
     onClose();
   };
