@@ -166,7 +166,7 @@ export const COLLAGE_LONG_AND_SHORT = [
   },
   { value: 'UMA', label: 'Universidad Monteávila (UMA)' },
   { value: 'UJMV', label: 'Universidad José María Vargas (UJMV)' },
-  { value: 'UMC', label: 'Universidad Metropolitana de Caracas (UMC)' },
+  { value: 'UMC', label: 'Universidad Nacional Experimental Marítima del Caribe (UMC)' },
   { value: 'UPEL', label: 'Universidad Pedagógica Experimental Libertador (UPEL)' },
   { value: 'CUR', label: 'Colegio Universitario de Rehabilitación May Hamilton (CUR)' },
   { value: 'USM', label: 'Universidad Santa María (USM)' },

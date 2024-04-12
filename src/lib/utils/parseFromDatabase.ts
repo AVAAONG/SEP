@@ -48,7 +48,7 @@ export const getCollageName = (university: Collages) => {
     case 'UJMV':
       return `Universidad José María Vargas (${university})`;
     case 'UMC':
-      return `Universidad Metropolitana de Caracas (${university})`;
+      return `Universidad Nacional Experimental Marítima del Caribe (${university})`;
     case 'UPEL':
       return `Universidad Pedagógica Experimental Libertador (${university})`;
     case 'CUR':
