@@ -30,35 +30,41 @@ const handler = async (cookieValue: string) => {
 
 export default handler;
 
-export const revalidateSpecificPath = async (path: string) => {
-  await revalidatePath(path);
+export const revalidateSpecificPath = async (path: string, type?: 'page' | 'layout') => {
+  if (!type) revalidatePath(path, type);
+  else revalidatePath(path);
 };
-
+export type KindOfCard = 'cva_incorporation_centro' | 'cva_incorporation_mercedes' | 'cva_desincorporation_centro' | 'cva_desincorporation_mercedes' | 'generic_program_proof' | 'program_proof_spanish' | 'program_proof_english';
 export const createCVACard = async (
   email: string | undefined | null,
-  sede: 'centro' | 'mercedes'
+  kindOfCard: KindOfCard | undefined | null,
+  programName?: string
 ) => {
-  if (!email) return;
+  if (!email || !kindOfCard) return;
   const scholar = await getScholarByEmail(email);
   const result = await fetch(
-    'https://script.google.com/macros/s/AKfycbw4HXPBRWkcMFCt5Dd8gQp6ZCJYKFCNGed0dFq_R7DRY9HgnhJuJOrr1emtZxZNYFrrNg/exec',
+    'https://script.google.com/macros/s/AKfycbygQcpeOSMqKy5B6mCWWTmgmcxtRYV1H-aW1gQB1SiZbFP6uyq8Itl9PdSzg6hp8L7kZQ/exec',
     {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        sede,
-        scholarName: scholar?.first_names,
-        scholarSurname: scholar?.last_names,
-        dni: scholar?.dni,
-        genre: scholar?.gender === 'M' ? 'masculino' : 'femenino',
-        email,
-        phoneNumber: scholar?.cell_phone_Number,
+        "kindOfCard": kindOfCard,
+        "scholarFirstNames": scholar?.first_names,
+        "scholarLastNames": scholar?.last_names,
+        "gender": scholar?.gender,
+        "scholarDni": scholar?.dni,
+        "avaaAdmisionYear": new Date(scholar?.program_information?.program_admission_date).getFullYear(),
+        "email": scholar?.email,
+        "phoneNumber": scholar?.cell_phone_Number,
+        "carrer": scholar?.collage_information[0].career,
+        "collage": scholar?.collage_information[0].collage,
+        "programToApply": programName
       }),
     }
   );
-  if (result.status !== 200) throw new Error('Error al crear la carta CVA');
+  if (result.status !== 200) throw new Error('Error');
 };
 
 export const handleEnrollment = async (

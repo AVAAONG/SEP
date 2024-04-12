@@ -11,9 +11,12 @@ enum KindOfVolunteer {
 }
 
 enum VolunteerStatus {
-    PENDING
-    APPROVED
-    REJECTED
+    PENDING // status for external volunteers 
+    APPROVED // estatus for external volunteeers AKA=> DONE
+    REJECTED //estatus for external volunteers AKA => SUSPENDED
+    DONE // status for internal volunteers
+    SUSPENDED // estatus for internal volunteers
+    SENT // status for internal volunteers // ALLOW SCHOLARS TO ENROLLE IN THE VOLUNTEER ACTIVITY
 }
 
 enum VolunteerProject {

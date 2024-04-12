@@ -1,5 +1,5 @@
 'use server';
-import { Prisma, VolunteerStatus } from "@prisma/client";
+import { Prisma, VolunteerAttendance, VolunteerStatus } from "@prisma/client";
 import { prisma } from "./prisma";
 
 export const createExternalVolunteer = async (volunteer: Prisma.VolunteerCreateInput,
@@ -34,22 +34,23 @@ export const createExternalVolunteer = async (volunteer: Prisma.VolunteerCreateI
 		},
 	})
 }
+export type VolunteerAttendanceWithVolunteer = VolunteerAttendance & {
+	volunteer: Prisma.VolunteerGetPayload<{}> | null;
+}
 
-export const getVolunteersByScholar = async (scholarId: string) => {
-	return prisma.volunteer.findMany({
+
+export const getVolunteersByScholar = async (scholarId: string): Promise<VolunteerAttendanceWithVolunteer[]> => {
+	const volunteer = await prisma.volunteerAttendance.findMany({
 		where: {
-			volunteer_attendance: {
-				some: {
-					scholarId
-				}
+			scholar: {
+				scholarId: scholarId
 			}
 		},
 		include: {
-			volunteer_attendance: {
-				take: 1
-			}
+			volunteer: true
 		}
 	})
+	return volunteer
 }
 
 export const getExternalVolunteer = async () => {

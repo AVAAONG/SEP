@@ -250,6 +250,7 @@ export const getChat = async (id: shortUUID.SUUID) => {
       speaker: true,
       scholar_attendance: {
         include: {
+          ChatSafisfactionForm: true,
           scholar: {
             include: {
               scholar: {

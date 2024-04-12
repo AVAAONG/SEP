@@ -1,4 +1,5 @@
 'use client';
+import DisplayDate from '@/components/DisplayDate';
 import DisplayTime from '@/components/DisplayTime';
 import SpeakersColumnWidget from '@/components/SpeakerColumnWidget';
 import { Level, Prisma } from '@prisma/client';
@@ -8,7 +9,11 @@ import { Column } from 'react-table';
 const ChatsWithAllData = Prisma.validator<Prisma.ChatDefaultArgs>()({
   include: {
     speaker: true,
-    scholar_attendance: true,
+    scholar_attendance: {
+      include: {
+        ChatSafisfactionForm: true,
+      },
+    },
   },
 });
 export type ChatsWithAllData = Prisma.ChatGetPayload<typeof ChatsWithAllData>;
@@ -61,6 +66,9 @@ const ChatColumns: Column<ChatDataForTable>[] = [
   {
     Header: 'Fecha',
     accessor: 'date',
+    Cell: ({ value }) => {
+      return <DisplayDate date={value} kind="short" />;
+    },
   },
   {
     Header: 'Inicio',

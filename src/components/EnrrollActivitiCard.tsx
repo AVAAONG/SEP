@@ -201,7 +201,9 @@ const EnrrollActivitiCard: React.FC<EnrrollActivitiCardProps> = ({ activity, sch
           await sendGenericEmail(
             createEnrollementConfirmationMessage(
               scholar.name,
-              `www.programaexcelencia.org/becario/actividadesFormativas/${id}`,
+              kindOfActivity === 'workshop'
+                ? `www.programaexcelencia.org/becario/actividadesFormativas/${id}`
+                : `www.programaexcelencia.org/becario/chats/${id}`,
               title
             ),
             scholar.email,

@@ -83,6 +83,7 @@ const DateInput: React.FC<DateInputProps> = ({ control, fieldArray }) => {
                       errorMessage={errorMessage?.toString()}
                       radius="sm"
                       type="date"
+                      isRequired
                       label={`Fecha ${index + 1}`}
                       placeholder="Fecha"
                       labelPlacement="outside"
@@ -106,6 +107,7 @@ const DateInput: React.FC<DateInputProps> = ({ control, fieldArray }) => {
                     errorMessage={errorMessage?.toString()}
                     radius="sm"
                     type="time"
+                    isRequired
                     label={`Hora de inicio ${index + 1}`}
                     placeholder="Hora de inicio"
                     labelPlacement="outside"
@@ -127,6 +129,7 @@ const DateInput: React.FC<DateInputProps> = ({ control, fieldArray }) => {
                     isInvalid={!!errorMessage}
                     errorMessage={errorMessage?.toString()}
                     radius="sm"
+                    isRequired
                     label={`Hora de cierre ${index + 1} `}
                     placeholder="Hora de cierre"
                     labelPlacement="outside"

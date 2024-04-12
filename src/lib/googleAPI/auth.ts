@@ -1,9 +1,5 @@
 import { calendar } from '@googleapis/calendar';
-import { drive } from '@googleapis/drive';
-import { forms } from '@googleapis/forms';
-import { gmail } from '@googleapis/gmail';
 import { auth } from '@googleapis/oauth2';
-import { people } from '@googleapis/people';
 import { sheets } from '@googleapis/sheets';
 
 import { getServerSession } from 'next-auth';
@@ -46,8 +42,5 @@ export const setTokens = async () => {
  * @see link
  */
 export const Calendar = calendar({ version: 'v3', auth: oauth2Client });
-export const Drive = drive({ version: 'v3', auth: oauth2Client });
-export const Gmail = gmail({ version: 'v1', auth: oauth2Client });
 export const Sheets = sheets({ version: 'v4', auth: oauth2Client });
-export const People = people({ version: 'v1', auth: oauth2Client });
-export const Form = forms({ version: 'v1', auth: oauth2Client });
+

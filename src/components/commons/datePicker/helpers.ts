@@ -1,4 +1,4 @@
-import { classNames } from '@/lib/scholar/utils';
+
 
 /**
  * Generates an array of year objects starting from 2020 to the current year.
@@ -10,6 +10,9 @@ import { classNames } from '@/lib/scholar/utils';
  *
  * @returns An array of year objects.
  */
+
+const classNames = (...classes: string[]) => classes.filter(Boolean).join(' ');
+
 export const getYearObjects = (): { name: string; href: string; current: boolean }[] => {
   const currentYear = new Date().getFullYear();
   const years = [];

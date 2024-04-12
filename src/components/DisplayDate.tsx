@@ -19,6 +19,7 @@ const DisplayDate: React.FC<DisplayDateProps> = ({ date, kind = 'long' }) => {
       return (
         <>
           {new Date(date).toLocaleDateString('es-ES', {
+            weekday: 'long',
             day: '2-digit',
             month: 'long',
             year: 'numeric',

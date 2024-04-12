@@ -1,4 +1,14 @@
-import { ActivityStatus, CVASchedule, Level, Modality, Skill } from '@prisma/client';
+import {
+  ActivityStatus,
+  CVASchedule,
+  Level,
+  Modality,
+  ScholarAttendance,
+  Skill,
+  VolunteerProject,
+  VolunteerStatus,
+  WorkshopYear,
+} from '@prisma/client';
 
 export const parseSkillFromDatabase = (skill: Skill) => {
   switch (skill) {
@@ -13,11 +23,11 @@ export const parseSkillFromDatabase = (skill: Skill) => {
     case 'ICT':
       return 'TIC';
     default:
-      return 'CITIZEN_EXERCISE';
+      return 'Ejercicio ciudadano';
   }
 };
 
-export const parseModalityFromDatabase = (modality: Modality | null) => {
+export const parseModalityFromDatabase = (modality: Modality | null | undefined) => {
   switch (modality) {
     case 'IN_PERSON':
       return 'Presencial';
@@ -26,11 +36,22 @@ export const parseModalityFromDatabase = (modality: Modality | null) => {
     case 'HYBRID':
       return 'Hibrida';
     default:
-      return 'IN_PERSON';
+      return 'Sin datos';
   }
 };
 
-export const parseCvaScheduleFromDatabase = (schedule: CVASchedule | null) => {
+export const parseVolunteerStatusFromDatabase = (status: VolunteerStatus) => {
+  switch (status) {
+    case 'APPROVED':
+      return 'Aprobado';
+    case 'PENDING':
+      return 'Pendiente de aprobación';
+    case 'REJECTED':
+      return 'Rechazado';
+  }
+};
+
+export const parseCvaScheduleFromDatabase = (schedule: CVASchedule | null | undefined) => {
   switch (schedule) {
     case 'DIARY':
       return 'Diario';
@@ -39,7 +60,7 @@ export const parseCvaScheduleFromDatabase = (schedule: CVASchedule | null) => {
     case 'SABATINO':
       return 'Sabatino';
     default:
-      return 'error';
+      return 'Sin datos';
   }
 };
 
@@ -63,6 +84,21 @@ export const parseWorkshopStatusFromDatabase = (status: ActivityStatus) => {
       return 'Enviado';
     case 'SUSPENDED':
       return 'Suspendido';
+  }
+};
+
+export const parseScholarAttendanceFromDatabase = (attendance: ScholarAttendance) => {
+  switch (attendance) {
+    case 'ATTENDED':
+      return 'Asistió';
+    case 'CANCELLED':
+      return 'Cancelo';
+    case 'ENROLLED':
+      return 'Inscrito';
+    case 'JUSTIFY':
+      return 'Justifico';
+    case 'NOT_ATTENDED':
+      return 'No asistió';
   }
 };
 
@@ -111,6 +147,26 @@ export const parseWorkshopKindFromDatabase = (kind: string) => {
     case 'CONVERSATORIO':
       return 'Conversatorio';
     default:
-      return kind;
+      return 'sin definir';
+  }
+};
+export const parseWorkshopYearFromDatabase = (years: WorkshopYear[]) => {
+  if (years.length === 5) {
+    return 'Todos';
+  } else {
+    return years.join(', ');
+  }
+};
+
+export const parseVolunteerProject = (value: VolunteerProject | null | undefined) => {
+  switch (value) {
+    case 'OFFICE':
+      return 'Oficina';
+    case 'CHAT_CLUBS':
+      return 'Chat clubs';
+    case 'EXTERNAL':
+      return 'Externo';
+    default:
+      return value;
   }
 };

@@ -99,6 +99,7 @@ model ScholarCollagePeriod {
     record                        String?
     scholar_collage_information   ScholarCollageInformation? @relation(fields: [scholar_collage_nformation_id], references: [id])
     scholar_collage_nformation_id String?
+    created_at                    DateTime                   @default(now())
 
     @@index([scholar_collage_nformation_id])
 }

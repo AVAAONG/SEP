@@ -93,7 +93,6 @@ const ScholarDropdown = ({ scholar }) => {
         probationKind="PROBATION_II"
         onConfirm={() => {}}
       />
-
       <EditScholarForm modalIsOpen={editModalIsOpen} set={setEditModalOpen} scholar={scholar} />
     </>
   );

@@ -1,4 +1,3 @@
-import defailProfilePic from '@/../public/defaultProfilePic.png';
 import PublicAccordion from '@/components/PublicAccordion';
 import SharePubilcProfile from '@/components/ShareModal';
 import Table from '@/components/table/Table';
@@ -6,14 +5,16 @@ import { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
 import scholarPublicChatAttendanceColumns from '@/components/table/columns/scholarChatPublicAttendance';
 import scholarPublicWorkshopAttendanceColumns from '@/components/table/columns/scholarWorkshopPublicAttendance';
 import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
+import { getBlobImage } from '@/lib/azure/azure';
 import { getChatsByScholar } from '@/lib/db/utils/chats';
 import { getScholarWithAllData } from '@/lib/db/utils/users';
-import { getCollageName } from '@/lib/parseFromDatabase';
 import generateQRCode from '@/lib/utils/createQrCode';
+import { getCollageName } from '@/lib/utils/parseFromDatabase';
+import { parseChatLevelFromDatabase } from '@/lib/utils2';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
+import { Avatar } from '@nextui-org/react';
 import moment from 'moment';
 import { headers } from 'next/headers';
-import Image from 'next/image';
 import Link from 'next/link';
 import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from 'public/svgs/SocialNetworks';
 
@@ -101,9 +102,11 @@ const page = async ({
   const pageUrl = `https://${host}/perfilBecario/${scholarId}`;
   const scholar = await getScholarWithAllData(scholarId);
   const lastNames = scholar?.last_names?.split(' ')!;
+  const scholarProfilePhoto = scholar?.photo ? await getBlobImage(scholar?.photo) : undefined;
 
-  const name = `${scholar?.first_names.split(' ')[0]} ${lastNames[0].length < 3 ? `${lastNames[0]} ${lastNames[1]}` : lastNames[0]
-    } `;
+  const name = `${scholar?.first_names.split(' ')[0]} ${
+    lastNames[0].length < 3 ? `${lastNames[0]} ${lastNames[1]}` : lastNames[0]
+  } `;
   const { twitter_user, facebook_user, instagram_user, linkedin_user, program_information } =
     scholar || {};
 
@@ -111,7 +114,7 @@ const page = async ({
   const chats = createChatObject(allchatsByScholar).filter((chat) => {
     return (
       (chat.attendance === 'ATTENDED' || chat.attendance === 'SPEAKER') &&
-      (chat.status === 'DONE' || chat.status === 'ATTENDANCE_CHECKED')
+      chat.status === 'ATTENDANCE_CHECKED'
     );
   });
 
@@ -119,8 +122,7 @@ const page = async ({
     .filter((attendance) => {
       return (
         attendance.attendance === 'ATTENDED' &&
-        (attendance.workshop.activity_status === 'DONE' ||
-          attendance.workshop.activity_status === 'ATTENDANCE_CHECKED')
+        attendance.workshop.activity_status === 'ATTENDANCE_CHECKED'
       );
     })
     .map((attendance) => {
@@ -175,7 +177,7 @@ const page = async ({
         title: chat.title,
         duration: getActivityDurationInAcademicHours(startDate, endDate),
         modality: chat.modality,
-        category: chat.category,
+        category: parseChatLevelFromDatabase(chat.category),
         condition: chat.attendance === 'SPEAKER' ? 'Facilitador' : 'Asistente',
       };
     });
@@ -215,14 +217,11 @@ const page = async ({
           <div className="block md:hidden self-end">
             <SharePubilcProfile qrCode={qrcode!} profileLink={pageUrl} />
           </div>
-          <div className="w-64 flex items-center justify-center rounded-full border-2 border-primary-1 p-1">
-            <Image
-              src={scholar.photo ?? defailProfilePic}
+          <div className="flex-shrink-0 flex items-center justify-center w-64 h-64 object-contain rounded-full shadow-lg border-3 border-green-500 p-1 overflow-hidden">
+            <Avatar
+              src={scholarProfilePhoto || undefined}
               alt="Foto del becario"
-              width={250}
-              height={250}
-              priority
-              className="rounded-full"
+              className="w-full h-full  rounded-full"
             />
           </div>
           <div className="flex flex-col items-center gap-4">
@@ -260,8 +259,9 @@ const page = async ({
             <SharePubilcProfile qrCode={qrcode!} profileLink={pageUrl} />
           </div>
           <div
-            className={`${searchParams?.actividad === undefined ? 'md:py-28' : ''
-              } flex flex-col md:px-8 gap-8`}
+            className={`${
+              searchParams?.actividad === undefined ? 'md:py-28' : ''
+            } flex flex-col md:px-8 gap-8`}
           >
             {searchParams?.actividad !== undefined && (
               <Link

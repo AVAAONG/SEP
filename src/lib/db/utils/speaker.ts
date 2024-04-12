@@ -178,3 +178,16 @@ export const setScholarAsChatSpeaker = async (scholarId: string) => {
     console.log(e);
   }
 };
+
+export const getChatSpeakerForStats = async () => {
+  return await prisma.chat.findMany({
+    include: {
+      speaker: true,
+      scholar_attendance: {
+        include: {
+          ChatSafisfactionForm: true,
+        }
+      }
+    },
+  });
+}

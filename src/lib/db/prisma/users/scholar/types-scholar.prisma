@@ -29,6 +29,7 @@ enum ScholarCondition {
   ACTIVE
   RESIGNATION
   WITHDRAWAL
+  TO_BE_ALUMNI
   ALUMNI
 }
 

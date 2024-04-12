@@ -1,9 +1,15 @@
 import ActivityPanelInfo from '@/components/ActivityPanelInfo';
-import ActivityScholarActions from '@/components/ActivityScholarActions';
+import ScholarActivitySatisfactionSurvey from '@/components/ScholarActivitySatisfactionSurvey';
 import ScholarAttendanceWidget from '@/components/ScholarAttendanceWidget';
+import StatusUpdateButton from '@/components/activityActions/StatusUpdate/StatusUpdate';
+import CeaseSpotButtonProps from '@/components/ceaseSpot/ceaseSpotButton';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
-import ScholarActivityAttendanceForScholarTemp from '@/components/table/columns/scholatActivityAttendanceForScholarTemp';
+import ScholarAttendanceInfoNoPriv from '@/components/table/columns/scholars/activityAttendanceWithNoPrivilege/columns';
+import {
+  IChatAttendance,
+  formatScholarDataForScholarAttendanceInfoNoPrivTable,
+} from '@/components/table/columns/scholars/activityAttendanceWithNoPrivilege/formater';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { ChatWithSpeaker } from '@/lib/db/types';
 import { getChat } from '@/lib/db/utils/chats';
@@ -20,21 +26,35 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
   const chat = await getChat(chatId);
   if (!chat) return notFound();
 
-  const attendance = chat?.scholar_attendance.find((a) => a.scholar.scholar.id === se?.scholarId);
-  const scholars = await getNotEnrolledScholarsInChat(chatId);
+  const notEnrolledScholars = await getNotEnrolledScholarsInChat(chatId);
 
-  const isDisabled = () => {
-    if (attendance?.attendance! !== 'ENROLLED') return true;
-    else if (new Date(chat?.start_dates![0]!) <= new Date()) return true;
-    else if (chat?.activity_status !== 'SENT') return true;
-    else return false;
-  };
+  const scholarsAttendance = chat?.scholar_attendance;
+  const scholars = scholarsAttendance.map((a) => a.scholar.scholar);
 
-  const scholarAttendanceDataForTable = formatScholarDataForAttendanceTable(
+  const attendance = scholarsAttendance.find(
+    (a) => a.scholar.scholar.id === se?.scholarId
+  ) as IChatAttendance;
+  const scholarAttendanceDataForTable = await formatScholarDataForScholarAttendanceInfoNoPrivTable(
+    scholars,
+    scholarsAttendance
+  );
+  const scholarAttendanceDataForTableAdmin = await formatScholarDataForAttendanceTable(
     chat?.scholar_attendance ? chat.scholar_attendance.map((a) => a.scholar.scholar) : [],
     chat?.scholar_attendance ? chat.scholar_attendance : []
   );
 
+  const isTheSpeaker =
+    chat?.speaker?.[0]?.id === se?.scholarId || chat.speaker?.[1]?.id === se?.scholarId;
+
+  const scholarAttendance = isTheSpeaker
+    ? 'SPEAKER'
+    : attendance
+      ? attendance.attendance
+      : undefined;
+
+  const scholarEmails = scholarsAttendance
+    ? scholarsAttendance.map((attendance) => attendance.scholar.scholar.email)
+    : [];
   return (
     <div className="min-h-screen flex flex-col gap-4">
       <ActivityPanelInfo activity={chat as ChatWithSpeaker}>
@@ -47,24 +67,36 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
                 Estatus de asistencia
               </h3>
               <div className="text-lg leading-none tracking-tight text-primary-light font-normal">
-                <ScholarAttendanceWidget value={attendance?.attendance!} />
+                <ScholarAttendanceWidget value={scholarAttendance} />
               </div>
             </div>
-            <ActivityScholarActions
-              activityId={chatId}
-              attendanceId={attendance?.id!}
-              kindOfActivity="chat"
-              scholars={scholars}
-              isButtonDisabled={isDisabled()}
-              scholarWhoCeaseName={se?.user?.name!}
-              activityName={chat?.title || ''}
-              date={chat?.start_dates[0].toISOString() || ''}
-              startDate={chat?.start_dates[0].toISOString() || ''}
-              endDate={chat?.end_dates[0].toISOString() || ''}
-              modality={chat?.modality || ''}
-              eventId={chat.calendar_ids[0] || ''}
-              platform={chat?.platform || ''}
-            />
+            {scholarAttendance === 'SPEAKER' && (
+              <div className="w-fit">
+                <StatusUpdateButton
+                  kindOfActivity="chat"
+                  activityForChangeId={chatId}
+                  scholarsEmails={scholarEmails}
+                />
+              </div>
+            )}
+            <div className="flex gap-4">
+              {scholarAttendance === 'ENROLLED' && (
+                <CeaseSpotButtonProps
+                  scholarWhoCeaseAttendance={attendance}
+                  kindOfActivity="chat"
+                  activity={chat}
+                  scholarsToCeaseSpot={notEnrolledScholars}
+                />
+              )}
+              {scholarAttendance === 'ATTENDED' && (
+                <ScholarActivitySatisfactionSurvey
+                  attendanceId={attendance?.id}
+                  satisfactionFormFilled={attendance?.satisfaction_form_filled}
+                  workshopStatus={chat.activity_status}
+                  kindOfActivity="chat"
+                />
+              )}
+            </div>
           </div>
         )}
       </ActivityPanelInfo>
@@ -74,15 +106,19 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
         </h2>
         <div className="flex flex-row items-center space-x-2">
           <div className="overflow-x-scroll md:overflow-x-clip rounded-lg w-full">
-            <Table
-              tableColumns={
-                chat?.speaker[0].id === se?.scholarId || chat.speaker?.[1]?.id === se?.scholarId
-                  ? ScholarActivityAttendance
-                  : ScholarActivityAttendanceForScholarTemp
-              }
-              tableData={scholarAttendanceDataForTable}
-              tableHeadersForSearch={[]}
-            />
+            {isTheSpeaker ? (
+              <Table
+                tableColumns={ScholarActivityAttendance}
+                tableData={scholarAttendanceDataForTableAdmin}
+                tableHeadersForSearch={[]}
+              />
+            ) : (
+              <Table
+                tableColumns={ScholarAttendanceInfoNoPriv}
+                tableData={scholarAttendanceDataForTable}
+                tableHeadersForSearch={[]}
+              />
+            )}
           </div>
         </div>
       </section>

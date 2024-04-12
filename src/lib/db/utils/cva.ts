@@ -1,5 +1,5 @@
 'use server'
-import { Prisma } from "@prisma/client";
+import { Prisma, Scholar } from "@prisma/client";
 import { prisma } from "./prisma";
 
 export const getCvaInformationByScholar = async (scholarId: string) => {
@@ -8,11 +8,7 @@ export const getCvaInformationByScholar = async (scholarId: string) => {
             scholarId
         },
         include: {
-            modules: {
-                where: {
-
-                }
-            }
+            modules: true
         }
     })
     return cvaInformation;
@@ -52,4 +48,36 @@ export const createCvaModule = async (data: Prisma.ScholarCvaModuleCreateInput, 
 
     })
     return cvaModule;
+}
+
+
+export type ScholarsCvaInformation =
+    (Pick<Scholar, 'id' | 'first_names' | 'last_names' | 'photo' | 'dni'> & {
+        cva_information?: Prisma.ScholarCVAInformationGetPayload<{
+            include: { modules: Prisma.ScholarCvaModuleFindManyArgs };
+        }> | null;
+    });
+
+export const getScholarsCvaInformation = async (): Promise<ScholarsCvaInformation[]> => {
+    const cvaInformation = await prisma.scholar.findMany({
+        select: {
+            id: true,
+            first_names: true,
+            last_names: true,
+            photo: true,
+            dni: true,
+            cva_information: {
+                include: {
+                    modules: {
+                        take: 1,
+                        orderBy: {
+                            createdAtt: 'desc',
+                        },
+                    },
+                },
+            },
+
+        },
+    })
+    return cvaInformation;
 }
