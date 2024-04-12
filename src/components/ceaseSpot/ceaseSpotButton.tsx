@@ -12,7 +12,7 @@ import {
   IWorkshopAttendance,
 } from '../table/columns/scholars/activityAttendanceWithNoPrivilege/formater';
 import { WorkshopWithAllData } from '../table/columns/workshopColumns';
-import isDisabled from './utils';
+import isDisabled, { generateWhatsAppMessage } from './utils';
 
 interface CeaseSpotButtonProps {
   kindOfActivity: 'workshop' | 'chat';
@@ -89,6 +89,12 @@ const CeaseSpotButtonProps: React.FC<CeaseSpotButtonProps> = ({
                 de la actividad pasara a contarse como "Cancelado".
               </p>
               <p className="font-medium">Si te arrepientes, no podrás volver a inscribirte.👀</p>
+              <p className="font-medium">
+                Puedes copiar el siguiente mensaje para buscar un becario
+              </p>
+              <div>
+                <pre>{generateWhatsAppMessage(activity)}</pre>
+              </div>
               <p className="text-sm list-disc space-y-sm w-full">
                 Si estas seguro de cancelar tu inscripción, primero busca a un becario que pueda
                 ocupar tu lugar en la actividad, luego, Asegurate de que este confirme su asistencia
