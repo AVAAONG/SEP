@@ -245,7 +245,7 @@ const ScholarActivitySatisfactionSurvey = ({
                                 'speaker_theory_practice_mix'
                               ]?.message?.toString()}
                               radius="sm"
-                              label="Combinación adecuada de teoría y aplicación práctica"
+                              label={`${kindOfActivity === 'chat' ? 'Materiales utilizados' : 'Combinación adecuada de teoría y aplicación práctica'}`}
                               defaultSelectedKeys={[field.value]}
                             >
                               {VALORATION.map(({ label, value }) => (
