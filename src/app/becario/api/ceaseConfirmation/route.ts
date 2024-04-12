@@ -51,7 +51,7 @@ export async function GET(req: Request) {
             scholarWhoReceiveName,
             kindOfActivity === 'workshop'
                 ? `www.programaexcelencia.org/becario/actividadesFormativas/${activityId}`
-                : `www.programaexcelencia.org/becario/chats/${activityId}`,,
+                : `www.programaexcelencia.org/becario/chats/${activityId}`,
             activityName
         ),
         scholarWhoReceiveEmail,
