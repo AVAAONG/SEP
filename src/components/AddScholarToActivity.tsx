@@ -24,9 +24,13 @@ const AddScholarToActivity: React.FC<ActivityPanelInfoProps> = ({
   const memoizedScholars = useMemo(() => scholars, [scholars]);
   const handleAddScholar = async () => {
     if (selectedScholar) {
-      if (kindOfActivity === 'workshop') await addScholarToWorkshop(activityId, selectedScholar.id);
-      else if (kindOfActivity === 'chat') await addScholarToChat(activityId, selectedScholar.id);
-      revalidateSpecificPath(`/admin/actividadesFormativas/${activityId}`);
+      if (kindOfActivity === 'workshop') {
+        await addScholarToWorkshop(activityId, selectedScholar.id);
+        revalidateSpecificPath(`/admin/actividadesFormativas/${activityId}`);
+      } else if (kindOfActivity === 'chat') {
+        await addScholarToChat(activityId, selectedScholar.id);
+        revalidateSpecificPath(`/admin/chats/${activityId}`);
+      }
     }
   };
 

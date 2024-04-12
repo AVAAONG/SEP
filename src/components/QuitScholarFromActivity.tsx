@@ -1,5 +1,6 @@
 'use client';
 import { deleteScholarFromChat, deleteScholarFromWorkshop } from '@/lib/db/utils/Workshops';
+import { revalidateSpecificPath } from '@/lib/serverAction';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { Autocomplete, AutocompleteItem, Avatar, Button, useDisclosure } from '@nextui-org/react';
 import { Scholar } from '@prisma/client';
@@ -23,10 +24,13 @@ const QuitScholarFromActivity: React.FC<ActivityPanelInfoProps> = ({
   const memoizedScholars = useMemo(() => scholars, [scholars]);
   const handleAddScholar = async () => {
     if (selectedScholar) {
-      if (kindOfActivity === 'workshop')
+      if (kindOfActivity === 'workshop') {
         await deleteScholarFromWorkshop(activityId, selectedScholar.id);
-      else if (kindOfActivity === 'chat')
+        revalidateSpecificPath(`/admin/actividadesFormativas/${activityId}`);
+      } else if (kindOfActivity === 'chat') {
         await deleteScholarFromChat(activityId, selectedScholar.id);
+        revalidateSpecificPath(`/admin/chats/${activityId}`);
+      }
     }
   };
 
