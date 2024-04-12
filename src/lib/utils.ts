@@ -161,6 +161,7 @@ export const formatActivitiesForEnrollement = (
       modality: parseModalityFromDatabase(modality),
       platform: parsePlatformFromDatabase(platform),
       description,
+      originalTitle: title,
       kindOfActivity,
       eventId: calendar_ids[0],
       isFull,
