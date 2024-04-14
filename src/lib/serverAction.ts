@@ -55,7 +55,7 @@ export const createCVACard = async (
         "scholarLastNames": scholar?.last_names,
         "gender": scholar?.gender,
         "scholarDni": scholar?.dni,
-        "avaaAdmisionYear": new Date(scholar?.program_information?.program_admission_date).getFullYear(),
+        "avaaAdmisionYear": new Date(scholar?.program_information?.program_admission_date).getFullYear().toString(),
         "email": scholar?.email,
         "phoneNumber": scholar?.cell_phone_Number,
         "carrer": scholar?.collage_information[0].career,
