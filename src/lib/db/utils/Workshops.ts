@@ -556,7 +556,11 @@ export const getScholarsWithActivities = async () => {
               }
             },
             include: {
-              volunteer: true,
+              volunteer: {
+                include: {
+                  volunteer_attendance: true,
+                }
+              },
             }
           },
         },

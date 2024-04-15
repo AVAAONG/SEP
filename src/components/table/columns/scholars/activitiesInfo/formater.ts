@@ -1,4 +1,5 @@
 import { getBlobImage } from "@/lib/azure/azure";
+import { getApprovedAndAttendedVolunteers } from "@/lib/utils/getAttendedActivities";
 import { ScholarActivitiesInformationColumnsProps } from "./columns";
 
 export const formatScholarsActivitiesForActivitiesTable = async (scholars: any[]): Promise<ScholarActivitiesInformationColumnsProps[]> => {
@@ -12,6 +13,7 @@ export const formatScholarsActivitiesForActivitiesTable = async (scholars: any[]
             whatsapp_number,
             program_information,
         } = scholar;
+        const { totalVolunteerHours } = getApprovedAndAttendedVolunteers(program_information?.volunteerAttendance)
         return {
             id,
             first_names,
@@ -21,7 +23,7 @@ export const formatScholarsActivitiesForActivitiesTable = async (scholars: any[]
             email,
             doneWorkshops: program_information?.attended_workshops.length,
             doneChats: program_information?.attended_chats.length,
-            doneVolunteerHours: program_information?.volunteerAttendance.reduce((total, volunteer) => total + volunteer.asigned_hours, 0)
+            doneVolunteerHours: totalVolunteerHours,
         };
     });
     return Promise.all(data)

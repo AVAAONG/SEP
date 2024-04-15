@@ -14,9 +14,8 @@ enum VolunteerStatus {
     PENDING // status for external volunteers 
     APPROVED // estatus for external volunteeers AKA=> DONE
     REJECTED //estatus for external volunteers AKA => SUSPENDED
-    DONE // status for internal volunteers
-    SUSPENDED // estatus for internal volunteers
     SENT // status for internal volunteers // ALLOW SCHOLARS TO ENROLLE IN THE VOLUNTEER ACTIVITY
+    SCHEDULED // status for internal volunteers // ALLOW ADMINS TO SCHEDULE THE VOLUNTEER ACTIVITY
 }
 
 enum VolunteerProject {
@@ -33,6 +32,8 @@ enum VolunteerProject {
 model Volunteer {
     id                   String                @id @default(nanoid())
     title                String
+    avalible_spots       Int                   @default(0)
+    calendar_ids         String[]
     start_dates          DateTime[]
     end_dates            DateTime[]
     modality             Modality

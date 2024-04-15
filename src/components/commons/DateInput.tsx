@@ -1,4 +1,5 @@
 import chatCreationFormSchema from '@/lib/schemas/chatCreationFormSchema';
+import volunteerSchema from '@/lib/schemas/volunteerSchema';
 import workshopCreationFormSchema from '@/lib/schemas/workshopCreationFormSchema';
 import { Input } from '@nextui-org/input';
 import { Button } from '@nextui-org/react';
@@ -15,10 +16,12 @@ import { z } from 'zod';
 interface DateInputProps {
   control:
     | Control<z.infer<typeof workshopCreationFormSchema>>
-    | Control<z.infer<typeof chatCreationFormSchema>>;
+    | Control<z.infer<typeof chatCreationFormSchema>>
+    | Control<z.infer<typeof volunteerSchema>>;
   fieldArray:
     | UseFieldArrayReturn<z.infer<typeof workshopCreationFormSchema>>
-    | UseFieldArrayReturn<z.infer<typeof chatCreationFormSchema>>;
+    | UseFieldArrayReturn<z.infer<typeof chatCreationFormSchema>>
+    | UseFieldArrayReturn<z.infer<typeof volunteerSchema>>;
 }
 
 /**
@@ -79,6 +82,7 @@ const DateInput: React.FC<DateInputProps> = ({ control, fieldArray }) => {
 
                   return (
                     <Input
+                      {...field}
                       isInvalid={!!errorMessage}
                       errorMessage={errorMessage?.toString()}
                       radius="sm"
@@ -88,8 +92,6 @@ const DateInput: React.FC<DateInputProps> = ({ control, fieldArray }) => {
                       placeholder="Fecha"
                       labelPlacement="outside"
                       classNames={{ base: 'col-span-2 md:col-span-1' }}
-                      value={field.value}
-                      onChange={field.onChange}
                     />
                   );
                 }}
@@ -99,10 +101,12 @@ const DateInput: React.FC<DateInputProps> = ({ control, fieldArray }) => {
               name={`dates.${index}.startHour`}
               control={control as Control<z.infer<typeof workshopCreationFormSchema>>}
               rules={{ required: true }}
-              render={({ field, fieldState, formState }) => {
-                const errorMessage = formState.errors?.dates?.[index]?.startHour?.message;
+              render={({ field, formState }) => {
+                const errorMessage = formState.errors.dates?.[index]?.startHour?.message;
+
                 return (
                   <Input
+                    {...field}
                     isInvalid={!!errorMessage}
                     errorMessage={errorMessage?.toString()}
                     radius="sm"
@@ -112,8 +116,6 @@ const DateInput: React.FC<DateInputProps> = ({ control, fieldArray }) => {
                     placeholder="Hora de inicio"
                     labelPlacement="outside"
                     classNames={{ base: 'col-span-2 md:col-span-1' }}
-                    value={field.value}
-                    onChange={field.onChange}
                   />
                 );
               }}
@@ -122,21 +124,21 @@ const DateInput: React.FC<DateInputProps> = ({ control, fieldArray }) => {
               name={`dates.${index}.endHour`}
               control={control as Control<z.infer<typeof workshopCreationFormSchema>>}
               rules={{ required: true }}
-              render={({ field, fieldState, formState }) => {
-                const errorMessage = formState.errors?.dates?.[index]?.endHour?.message;
+              render={({ field, formState }) => {
+                const errorMessage = formState.errors.dates?.[index]?.endHour?.message;
+
                 return (
                   <Input
+                    {...field}
                     isInvalid={!!errorMessage}
                     errorMessage={errorMessage?.toString()}
                     radius="sm"
+                    type="time"
                     isRequired
-                    label={`Hora de cierre ${index + 1} `}
+                    label={`Hora de cierre ${index + 1}`}
                     placeholder="Hora de cierre"
                     labelPlacement="outside"
                     classNames={{ base: 'col-span-2 md:col-span-1' }}
-                    type="time"
-                    value={field.value}
-                    onChange={field.onChange}
                   />
                 );
               }}

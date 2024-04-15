@@ -1,5 +1,6 @@
 'use client';
 import { addScholarToChat, addScholarToWorkshop } from '@/lib/db/utils/Workshops';
+import { addScholarToVolunteer } from '@/lib/db/utils/volunteer';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { Autocomplete, AutocompleteItem, Avatar, Button, useDisclosure } from '@nextui-org/react';
@@ -11,7 +12,7 @@ import BasicModal from './BasicModal';
 interface ActivityPanelInfoProps {
   scholars: Scholar[];
   activityId: string;
-  kindOfActivity: 'workshop' | 'chat';
+  kindOfActivity: 'workshop' | 'chat' | 'volunteer';
 }
 
 const AddScholarToActivity: React.FC<ActivityPanelInfoProps> = ({
@@ -30,6 +31,9 @@ const AddScholarToActivity: React.FC<ActivityPanelInfoProps> = ({
       } else if (kindOfActivity === 'chat') {
         await addScholarToChat(activityId, selectedScholar.id);
         revalidateSpecificPath(`/admin/chats/${activityId}`);
+      } else if (kindOfActivity === 'volunteer') {
+        await addScholarToVolunteer(activityId, selectedScholar.id);
+        revalidateSpecificPath(`/admin/volunteer/${activityId}`);
       }
     }
   };
