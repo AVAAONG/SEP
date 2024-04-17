@@ -67,7 +67,7 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
         if (key in valuesToUpdate) {
           const value = valuesToUpdate[key as keyof FormValues];
           if (value !== undefined && value !== null) {
-            setValue(key as keyof FormValues, value);
+            setValue(key as keyof Omit<FormValues, 'id'>, value);
           }
         }
       }
