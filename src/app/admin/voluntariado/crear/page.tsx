@@ -1,7 +1,11 @@
 import VolunteerForm from '@/components/admin/forms/volunteer/form';
+import MainScheduledCard from '@/components/scheduledActivitiesCard/ScheduledCard';
+import ScheduledCardsWrap from '@/components/scheduledActivitiesCard/ScheduledCardsWrap';
+import { getScheduledVolunteers } from '@/lib/db/utils/volunteer';
 
 export const dynamic = 'force-dynamic';
 const Page = async ({ searchParams }: { searchParams: { activityToEdit: string | null } }) => {
+  const scheduledVolunteer = await getScheduledVolunteers();
   return (
     <div className="min-h-screen flex flex-col md:flex-row gap-8 p-4">
       <div className=" w-full md:w-1/2">
@@ -13,7 +17,7 @@ const Page = async ({ searchParams }: { searchParams: { activityToEdit: string |
         </div>
       </div>
       <div className="w-full md:w-1/2 pt-0 flex flex-col items-center ">
-        {/* <ScheduleChatCard activities={scheduledChats} /> */}
+        <ScheduledCardsWrap activities={scheduledVolunteer} />
       </div>
     </div>
   );

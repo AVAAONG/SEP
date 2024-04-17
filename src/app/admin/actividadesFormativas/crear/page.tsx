@@ -1,5 +1,5 @@
-import ScheduleChatCard from '@/components/ScheduleChatCard';
 import WorkshopCreationForm from '@/components/admin/WorkshopCreationForm';
+import ScheduledCardsWrap from '@/components/scheduledActivitiesCard/ScheduledCardsWrap';
 import { getScheduledWorkshops } from '@/lib/db/utils/Workshops';
 import { getWorkshopSpeakersWithParams } from '@/lib/db/utils/speaker';
 import { Speaker } from '@prisma/client';
@@ -21,7 +21,7 @@ const Page = async ({ searchParams }: { searchParams: { activityToEdit: string |
         <WorkshopCreationForm speakers={speakers as Speaker[]} workshopForEdit={workshop} />
       </div>
       <div className="w-full md:w-1/2 pt-0 flex flex-col items-center">
-        <ScheduleChatCard activities={scheduledWorkshops} />
+        <ScheduledCardsWrap activities={scheduledWorkshops} />
       </div>
     </div>
   );
