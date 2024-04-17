@@ -166,3 +166,40 @@ export const asignVolunteerHours = async (volunteerAttendanceId: string, asigned
 		}
 	})
 }
+
+
+
+export const deleteVolunteerFromDatabase = async (volunteerId: string) => {
+	await prisma.volunteer.delete({
+		where: {
+			id: volunteerId
+		},
+		include: {
+			volunteer_attendance: true
+		}
+	})
+}
+
+export const getScheduledVolunteers = async () => {
+	const volunteers = await prisma.volunteer.findMany({
+		where: {
+			status: 'SCHEDULED'
+		},
+	})
+	return volunteers
+}
+
+
+export const changeVolunteerStatusInBulk = async (ids: string[], status: VolunteerStatus) => {
+	const workshops = await prisma.volunteer.updateMany({
+		where: {
+			id: {
+				in: ids,
+			},
+		},
+		data: {
+			status: status,
+		},
+	});
+	return workshops;
+}
