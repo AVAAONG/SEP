@@ -1,5 +1,5 @@
 'use client';
-import { PieChartComponent } from './charts';
+import { DonutChartComponent } from './charts';
 import { ChatsWithAllData } from './table/columns/chatsColumns';
 import { WorkshopWithAllData } from './table/columns/workshopColumns';
 
@@ -30,7 +30,7 @@ interface ActivityByScheduleChartProps {
 const ActivityByScheduleChart: React.FC<ActivityByScheduleChartProps> = ({ activities }) => {
   const { morning, afternoon } = countActivitiesBySchedule(activities);
   return (
-    <PieChartComponent
+    <DonutChartComponent
       data={[
         {
           label: 'Manañas',
@@ -38,6 +38,7 @@ const ActivityByScheduleChart: React.FC<ActivityByScheduleChartProps> = ({ activ
         },
         { label: 'Tardes', value: afternoon },
       ]}
+      chartTitle="Distribución por horario"
     />
   );
 };

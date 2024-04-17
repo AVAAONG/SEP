@@ -1,6 +1,6 @@
 import ActivityByScheduleChart from '@/components/activityByScheduleChart';
 import AdminStats from '@/components/admin/AdminStats';
-import { MixedAreaChartComponent, PieChartComponent } from '@/components/charts';
+import { DonutChartComponent, MixedAreaChartComponent } from '@/components/charts';
 import DateSelector from '@/components/commons/datePicker';
 import Table from '@/components/table/Table';
 import WorkshopColumns from '@/components/table/columns/workshopColumns';
@@ -25,9 +25,15 @@ const page = async ({
   const workshopObjectForTable = createAdminWorkshopsObjectForTable(workshops);
   const activitiesByStatus = await categorizeActivityByStatus(workshops);
 
-  const workshopPropertiesCounts = await countWorkshopProperties(activitiesByStatus.ATTENDANCE_CHECKED);
+  const workshopPropertiesCounts = await countWorkshopProperties(
+    activitiesByStatus.ATTENDANCE_CHECKED
+  );
   const workshopPropertiesFormatedForCharts = await formatCountsForCharts(workshopPropertiesCounts);
-  const stats = await createAdminStatsForActivities(activitiesByStatus, workshops.length, 'workshop');
+  const stats = await createAdminStatsForActivities(
+    activitiesByStatus,
+    workshops.length,
+    'workshop'
+  );
 
   const { barSeries, lineSeries } = await getActivityAttendancePerMonth(
     activitiesByStatus.ATTENDANCE_CHECKED
@@ -42,20 +48,16 @@ const page = async ({
         <MixedAreaChartComponent areaSeries={lineSeries} barSeries={barSeries} />
       </div>
       <div className="w-full grid md:grid-cols-5 justify-center items-center rounded-lg bg-white p-4">
-        <div className="md:col-start-2">
-          <h3 className="truncate font-semibold text-center text-sm">
-            Distribución por competencia
-          </h3>
-          <PieChartComponent data={workshopPropertiesFormatedForCharts.skills} />
-        </div>
-        <div>
-          <h3 className="truncate font-semibold text-center text-sm">Distribución por modalidad</h3>
-          <PieChartComponent data={workshopPropertiesFormatedForCharts.modality} />
-        </div>
-        <div>
-          <h3 className="truncate font-semibold text-center text-sm">Distribución por horario</h3>
-          <ActivityByScheduleChart activities={activitiesByStatus.ATTENDANCE_CHECKED} />
-        </div>
+        <div></div>
+        <DonutChartComponent
+          data={workshopPropertiesFormatedForCharts.skills}
+          chartTitle="Distribución por competencia"
+        />
+        <DonutChartComponent
+          data={workshopPropertiesFormatedForCharts.modality}
+          chartTitle="Distribución por modalidad"
+        />
+        <ActivityByScheduleChart activities={activitiesByStatus.ATTENDANCE_CHECKED} />
       </div>
       <div className="w-full ">
         <Table
