@@ -1,6 +1,6 @@
 import ActivityByScheduleChart from '@/components/activityByScheduleChart';
 import AdminStats from '@/components/admin/AdminStats';
-import { MixedAreaChartComponent, PieChartComponent } from '@/components/charts';
+import { DonutChartComponent, MixedAreaChartComponent } from '@/components/charts';
 import DateSelector from '@/components/commons/datePicker';
 import Table from '@/components/table/Table';
 import ChatColumns from '@/components/table/columns/chatsColumns';
@@ -29,10 +29,9 @@ const page = async ({
   const chatPropertiesFormatedForCharts = await formatCountsForCharts(chatPropertiesCounts);
   const stats = await createAdminStatsForActivities(activitiesByStatus, chats.length, 'chat');
 
-  const { barSeries, lineSeries } = getActivityAttendancePerMonth(
+  const { barSeries, lineSeries } = await getActivityAttendancePerMonth(
     activitiesByStatus.ATTENDANCE_CHECKED
   );
-  
 
   return (
     <div className="w-full flex flex-col gap-6  items-center ">
@@ -43,19 +42,17 @@ const page = async ({
       <div className="w-full  rounded-lg bg-white">
         <MixedAreaChartComponent areaSeries={lineSeries} barSeries={barSeries} />
       </div>
-      <div className="w-full flex h-80 gap-6 justify-center items-center rounded-lg bg-white">
-        <div>
-          <h3 className="truncate font-semibold text-center text-sm">Distribución por nivel</h3>
-          <PieChartComponent data={chatPropertiesFormatedForCharts.level} />
-        </div>
-        <div>
-          <h3 className="truncate font-semibold text-center text-sm">Distribución por modalidad</h3>
-          <PieChartComponent data={chatPropertiesFormatedForCharts.modality} />
-        </div>
-        <div>
-          <h3 className="truncate font-semibold text-center text-sm">Distribución por horario</h3>
-          <ActivityByScheduleChart activities={activitiesByStatus.ATTENDANCE_CHECKED} />
-        </div>
+      <div className="w-full grid md:grid-cols-5 justify-center items-center rounded-lg bg-white p-4">
+        <div></div>
+        <DonutChartComponent
+          data={chatPropertiesFormatedForCharts.level}
+          chartTitle="Distribución por nivel"
+        />
+        <DonutChartComponent
+          data={chatPropertiesFormatedForCharts.modality}
+          chartTitle="Distribución por modalidad"
+        />
+        <ActivityByScheduleChart activities={activitiesByStatus.ATTENDANCE_CHECKED} />
       </div>
       <div className="w-full ">
         <Table
