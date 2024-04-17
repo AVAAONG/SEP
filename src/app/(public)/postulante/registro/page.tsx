@@ -1,4 +1,5 @@
 import SelectComponent from '@/components/Select';
+import StepButton from '@/components/public/admision/form/StepButton';
 import Aside from '@/components/public/signin/Aside';
 import { Button, Input, Textarea } from '@nextui-org/react';
 import { StudyArea } from '@prisma/client';
@@ -69,11 +70,11 @@ const page = async ({
   };
 
   return (
-    <main className="w-full flex flex-col md:flex-row-reverse min-h-screen md:overflow-hidden ">
+    <main className="bg-gray-100 w-full flex flex-col md:flex-row-reverse min-h-screen md:overflow-hidden ">
       <Aside cookieValue="admin" />
       <section className="p-4 md:p-24 justify-center flex md:w-5/6 flex-col gap-8">
         <h1 className="text-center text-3xl md:text-4xl font-bold text-primary-light">
-          Postulación al Programa Excelencia Academica (ProExcelencia)
+          Formulario de Postulación para el Programa Excelencia (ProExcelencia) AVAA
         </h1>
         <form action={handleSubmit}>
           {searchParams?.paso === undefined && (
@@ -103,7 +104,7 @@ const page = async ({
               </div>
               <Input type="text" autoFocus isRequired label="Nombre(s)" />
               <Input type="text" isRequired label="Apellido(s)" />
-              <Input type="number" label="Cédula de identidad" />
+              <Input type="number" isRequired label="Cédula de identidad" />
               <SelectComponent
                 label="Género"
                 items={[
@@ -112,22 +113,14 @@ const page = async ({
                 ]}
               />
               <Input type="date" placeholder="YYY/MM/DD" isRequired label="Fecha de nacimiento" />
-              <SelectComponent label="Estado de origen" items={VENEZUELA_STATES} />
+              <SelectComponent label="Estado de procedencia" items={VENEZUELA_STATES} />
               <Input
                 isRequired
                 type="text"
-                label="Dirección de residencia"
+                label="Dirección de residencia actual"
                 className="md:col-span-2"
               />
-              <Button color="success" className="md:col-start-2 ">
-                <Link
-                  className="w-full h-full flex items-center justify-center"
-                  replace={false}
-                  href="?paso=contacto"
-                >
-                  Siguiente
-                </Link>
-              </Button>
+              <StepButton step="contacto" />
             </div>
           )}
           {searchParams?.paso === 'contacto' && (
