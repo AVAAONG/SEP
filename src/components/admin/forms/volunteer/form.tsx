@@ -7,32 +7,22 @@ import volunteerSchema from '@/lib/schemas/volunteerSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input, Textarea } from '@nextui-org/input';
 import { Select, SelectItem } from '@nextui-org/select';
-import { KindOfVolunteer, Modality, VolunteerProject, VolunteerStatus } from '@prisma/client';
+import { VolunteerStatus } from '@prisma/client';
 import { useEffect } from 'react';
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 import FormButtonGroup, { ButtonGroupEventName } from '../commons/FormButtonGroup';
 import { default as createVolunteerObject } from './createVolunteerObject';
 
-interface FormValues {
-  id: string;
-  title: string;
-  dates: { date: string; startHour: string; endHour: string }[];
-  beneficiary: string;
-  kindOfVolunteer: KindOfVolunteer;
-  avalible_spots: number;
-  modality: Modality;
-  volunteerProject: VolunteerProject;
-  description: string;
-  supervisor: string;
-}
+type Schema = z.infer<typeof volunteerSchema>;
+type FormValues = Schema & { id: string };
 interface IVolunteerForm {
   kind: 'edit' | 'create';
   valuesToUpdate?: FormValues;
 }
 
 const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
-  const methods = useForm<z.infer<typeof volunteerSchema>>({
+  const methods = useForm<Schema>({
     resolver: zodResolver(volunteerSchema),
   });
 
@@ -74,7 +64,7 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
     }
   }, [valuesToUpdate, setValue]);
 
-  const handleFormSubmit = async (data: z.infer<typeof volunteerSchema>, event: any) => {
+  const handleFormSubmit = async (data: Schema, event: any) => {
     const buttonType = ((event?.nativeEvent as SubmitEvent)?.submitter as HTMLButtonElement)
       ?.name as ButtonGroupEventName;
     let status = '' as VolunteerStatus;
