@@ -92,6 +92,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
             formResponses={formResponses}
             kindOfActivity="workshop"
             scholarsEmails={scholarEmails}
+            activity={workshop}
           />
         </div>
       </ActivityPanelInfo>
