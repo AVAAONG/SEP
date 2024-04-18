@@ -164,7 +164,7 @@ const page = async ({ params }: { params: { volunteerId: shortUUID.SUUID } }) =>
               />
 
               <QuitScholarFromActivity
-                scholars={notEnrolledScholars}
+                scholars={scholars}
                 activityId={volunteerId}
                 kindOfActivity="volunteer"
               />
