@@ -3,7 +3,7 @@
 import { COLOR_BASED_ON_PERCENTAGE, getColorBasedOnPercentage, parseSatisfactionFormResponsesFromDatabase } from "@/components/activityActions/satisfactionForm/utils";
 import { ChatsWithAllData } from "@/components/table/columns/chatsColumns";
 import { WorkshopWithAllData } from "@/components/table/columns/workshopColumns";
-import { ActivityStatus, Chat, Volunteer, Workshop, WorkshopSafisfactionForm } from "@prisma/client";
+import { ActivityStatus, Chat, Volunteer, VolunteerStatus, Workshop, WorkshopSafisfactionForm } from "@prisma/client";
 import { VolunteerWithAllData } from "../db/types";
 import { parseChatLevelFromDatabase, parseKindOfVolunteerFromDatabase, parseModalityFromDatabase, parseSkillFromDatabase, parseVolunteerProject, parseWorkshopKindFromDatabase, parseWorkshopYearFromDatabase } from "../utils2";
 
@@ -267,13 +267,53 @@ const countVolunteerProperties = async (volunteers: VolunteerWithAllData[]) => {
         const volunteerKind = parseKindOfVolunteerFromDatabase(volunteer.kind_of_volunteer);
         const volunteerModality = parseModalityFromDatabase(volunteer.modality)
         const volunteerAsociatedProject = parseVolunteerProject(volunteer.VolunteerProject)
-        counts.kindOfVolunteer[volunteerKind] = (counts.kindOfVolunteer[volunteerKind] || 0) + 1;
-        counts.modality[volunteerModality] = (counts.modality[volunteerModality] || 0) + 1;
-        counts.asociatedProject[volunteerAsociatedProject] = (counts.asociatedProject[volunteerAsociatedProject] || 0) + 1;
+        const volunteerHours = Number((volunteer.volunteer_attendance.reduce((acc, attendance) => {
+            return acc + attendance.asigned_hours;
+        }, 0) / volunteer.volunteer_attendance.length).toFixed(2));
+        counts.kindOfVolunteer[volunteerKind] = (counts.kindOfVolunteer[volunteerKind] || 0) + volunteerHours;
+        counts.modality[volunteerModality] = (counts.modality[volunteerModality] || 0) + volunteerHours;
+        counts.asociatedProject[volunteerAsociatedProject] = (counts.asociatedProject[volunteerAsociatedProject] || 0) + volunteerHours;
     });
 
     return counts;
 };
+
+
+const createAdminStatsForVolunteers = async (activitiesByStatus: Record<VolunteerStatus, Volunteer[]>, totalAmountOfActivities: number,) => {
+
+    const doneVolunteerPercentage = Number(
+        ((activitiesByStatus.APPROVED.length / totalAmountOfActivities) * 100).toFixed(0)
+    );
+    const suspendedWorkshopsPercentage = Number(
+        ((activitiesByStatus.REJECTED.length / totalAmountOfActivities) * 100).toFixed(0)
+    );
+
+    const stats = [
+        {
+            name: `Horas de voluntariado realizadas`,
+            stat: activitiesByStatus.APPROVED.length || 0,
+            changeType: 'increase',
+            comparationText: null,
+            comparation: doneVolunteerPercentage,
+            tooltipText: `${doneVolunteerPercentage}% de las actividades fueron realizad${gender}s`,
+        },
+        {
+            name: `${mainText} suspendid${gender}s`,
+            stat: activitiesByStatus.SUSPENDED.length || 0,
+            changeType: 'increase',
+            comparationText: `De ${totalAmountOfActivities || 0} actividades ofertad${gender}s`,
+            comparation: suspendedWorkshopsPercentage,
+            tooltipText: `${suspendedWorkshopsPercentage}% de las actividades fueron cancelad${gender}s`,
+        },
+        {
+            name: `${mainText} agendadas`,
+            stat: activitiesByStatus.SCHEDULED.length + activitiesByStatus.SENT.length || 0,
+            changeType: 'increase',
+            comparationText: null,
+        },
+    ];
+    return stats
+}
 
 
 

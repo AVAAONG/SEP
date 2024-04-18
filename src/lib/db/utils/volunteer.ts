@@ -203,3 +203,12 @@ export const changeVolunteerStatusInBulk = async (ids: string[], status: Volunte
 	});
 	return workshops;
 }
+
+export const getVolunteers = async () => {
+	const volunteers = await prisma.volunteer.findMany({
+		include: {
+			volunteer_attendance: true,
+		},
+	});
+	return volunteers;
+}
