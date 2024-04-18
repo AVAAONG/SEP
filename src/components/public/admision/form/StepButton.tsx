@@ -1,5 +1,7 @@
-import { Button } from '@nextui-org/react';
+import { Button } from '@nextui-org/button';
 import Link from 'next/link';
+
+const STEPS = ['personal', 'contact', 'academic', 'documents', 'summary'];
 
 const StepButton = ({ step }: { step: string }) => {
   return (

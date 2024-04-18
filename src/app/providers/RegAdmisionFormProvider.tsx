@@ -1,13 +1,21 @@
 'use client';
+import { Gender } from '@prisma/client';
 import { ReactNode, createContext, useContext, useEffect, useReducer } from 'react';
 
 interface State {
-  data: string;
+  photo: string;
+  first_names: string;
+  last_names: string;
+  dni: number;
+  gender: Gender;
+  birthdate: string;
+  state: string
+  address: string
 }
 
 interface Action {
   type: string;
-  payload: string;
+  payload: State;
 }
 
 const RegFormContext = createContext<[State, React.Dispatch<Action>] | undefined>(undefined);
@@ -18,8 +26,10 @@ export const useRegFormContext = () => {
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case 'SET_DATA':
-      return { ...state, data: action.payload };
+    case 'SET_PHOTO':
+      return { ...state, photo: action.payload.photo };
+    case 'SET_PERSONAL_INFORMATION':
+      return { ...state, ...action.payload };
     default:
       return state;
   }
