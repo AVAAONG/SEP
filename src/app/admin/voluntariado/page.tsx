@@ -28,9 +28,7 @@ const page = async ({
   const volunteerPropertiesCount = await countVolunteerProperties(volunteersByStatus.APPROVED);
   const volunteerDataForCharts = await formatCountsForCharts(volunteerPropertiesCount);
   const volunteerDataForTable = createAdminVolunteerActivitiesForTable(volunteers);
-  const { barSeries, lineSeries } = await getActivityAttendancePerMonth(
-    volunteersByStatus.APPROVED
-  );
+  const { barSeries } = await getActivityAttendancePerMonth(volunteersByStatus.APPROVED);
   return (
     <div className="min-h-screen">
       <DateSelector />
