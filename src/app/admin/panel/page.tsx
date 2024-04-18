@@ -23,7 +23,7 @@ const page = async () => {
     (chat) => chat.activity_status === 'ATTENDANCE_CHECKED'
   ).length;
   const volunteerHours = volunteer.reduce((total, volunteer) => {
-    if (volunteer.attendance.status === 'APPROVED') {
+    if (volunteer.volunteer.status === 'APPROVED') {
       return total + volunteer.asigned_hours;
     } else {
       return total;
