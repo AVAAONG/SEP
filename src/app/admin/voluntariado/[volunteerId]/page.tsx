@@ -1,6 +1,7 @@
 import AddScholarToActivity from '@/components/AddScholarToActivity';
 import DisplayDate from '@/components/DisplayDate';
 import DisplayTime from '@/components/DisplayTime';
+import QuitScholarFromActivity from '@/components/QuitScholarFromActivity';
 import VolunteerStatusWidget from '@/components/VolunteerStatus';
 import Table from '@/components/table/Table';
 import ScholarVolunteerAttendance from '@/components/table/columns/scholarsVolunteerAttendance/columns';
@@ -82,6 +83,14 @@ const page = async ({ params }: { params: { volunteerId: shortUUID.SUUID } }) =>
                     </div>
                     <div className="space-y-sm">
                       <h3 className="text-sm leading-6 text-secondary">
+                        Fecha de cierre {index + 1}:
+                      </h3>
+                      <p className="text-base font-semibold">
+                        <DisplayDate date={end_dates[index].toISOString()} />
+                      </p>
+                    </div>
+                    <div className="space-y-sm">
+                      <h3 className="text-sm leading-6 text-secondary">
                         Hora de cierre {index + 1}:
                       </h3>
                       <p className="text-base font-semibold">
@@ -102,7 +111,7 @@ const page = async ({ params }: { params: { volunteerId: shortUUID.SUUID } }) =>
               {proof && (
                 <div className="flex gap-3">
                   <p className="font-bold">Carta de voluntariado</p>
-                  <Link href={proofLink}>
+                  <Link href={proofLink || ''}>
                     <DocumentIcon className="h-5 w-5 text-primary-light cursor-pointer" />
                   </Link>
                 </div>
@@ -149,6 +158,12 @@ const page = async ({ params }: { params: { volunteerId: shortUUID.SUUID } }) =>
               tableHeadersForSearch={[]}
             >
               <AddScholarToActivity
+                scholars={notEnrolledScholars}
+                activityId={volunteerId}
+                kindOfActivity="volunteer"
+              />
+
+              <QuitScholarFromActivity
                 scholars={notEnrolledScholars}
                 activityId={volunteerId}
                 kindOfActivity="volunteer"

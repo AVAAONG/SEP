@@ -156,6 +156,35 @@ export const addScholarToVolunteer = async (
 }
 
 
+export const deleteScholarFromVolunteer = async (
+	chatId: string,
+	scholarId: string
+) => {
+	// Start a transaction
+	await prisma.$transaction(async (prisma) => {
+		// Check if the scholar is already enrolled in the workshop
+		const existingAttendance = await prisma.volunteerAttendance.findFirst({
+			where: {
+				volunteer: {
+					id: chatId,
+				},
+				scholar: {
+					scholarId,
+				},
+			},
+		});
+
+		// If the scholar is enrolled delete it.
+		if (existingAttendance) await prisma.volunteerAttendance.delete({
+			where: {
+				id: existingAttendance.id,
+			},
+		});
+	});
+}
+
+
+
 export const asignVolunteerHours = async (volunteerAttendanceId: string, asignedHours: number) => {
 	await prisma.volunteerAttendance.update({
 		where: {

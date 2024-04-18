@@ -56,17 +56,18 @@ const ScholarVolunteerAttendance: Column<IScholarVolunteerAtendance>[] = [
         await asignVolunteerHours(cell.row.original.id, hours);
       };
       return (
-        <Input
-          type="number"
-          radius="sm"
-          className="w-24"
-          labelPlacement="outside"
-          value={Number(asignedHous)}
-          onValueChange={async (value) => {
-            setAsignedHours(Number(value));
-            await handle(Number(value));
-          }}
-        />
+        <div>
+          <Input
+            type="number"
+            radius="sm"
+            className="w-24"
+            value={asignedHous.toString()}
+            onValueChange={async (value) => {
+              setAsignedHours(Number(value));
+              await handle(Number(value));
+            }}
+          />
+        </div>
       );
     },
   },

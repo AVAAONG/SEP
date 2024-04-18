@@ -1,5 +1,6 @@
 'use client';
 import { deleteScholarFromChat, deleteScholarFromWorkshop } from '@/lib/db/utils/Workshops';
+import { deleteScholarFromVolunteer } from '@/lib/db/utils/volunteer';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { Autocomplete, AutocompleteItem, Avatar, Button, useDisclosure } from '@nextui-org/react';
@@ -11,7 +12,7 @@ import BasicModal from './BasicModal';
 interface ActivityPanelInfoProps {
   scholars: Scholar[];
   activityId: string;
-  kindOfActivity: 'workshop' | 'chat';
+  kindOfActivity: 'workshop' | 'chat' | 'volunteer';
 }
 
 const QuitScholarFromActivity: React.FC<ActivityPanelInfoProps> = ({
@@ -30,6 +31,9 @@ const QuitScholarFromActivity: React.FC<ActivityPanelInfoProps> = ({
       } else if (kindOfActivity === 'chat') {
         await deleteScholarFromChat(activityId, selectedScholar.id);
         revalidateSpecificPath(`/admin/chats/${activityId}`);
+      } else if (kindOfActivity === 'volunteer') {
+        await deleteScholarFromVolunteer(activityId, selectedScholar.id);
+        revalidateSpecificPath(`/admin/volunteer/${activityId}`);
       }
     }
   };
