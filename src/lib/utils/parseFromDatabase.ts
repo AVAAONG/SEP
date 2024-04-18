@@ -62,7 +62,7 @@ export const getCollageName = (university: Collages) => {
     case 'UBV':
       return `Universidad Bolivariana de Venezuela (${university})`;
     default:
-      return `Error`;
+      return university;
   }
 };
 

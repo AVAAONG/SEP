@@ -4,6 +4,7 @@ import { cookies } from 'next/headers';
 import { CHAT_CALENDAR_ID, WORKSHOP_CALENDAR_ID } from './constants';
 import { enroleScholarInChat, enroleScholarInWorkshop } from './db/utils/Workshops';
 import { getScholarByEmail } from './db/utils/users';
+import { getCollageName } from './utils/parseFromDatabase';
 
 const handler = async (cookieValue: string) => {
   const cookieStore = cookies();
@@ -59,7 +60,7 @@ export const createCVACard = async (
         "email": scholar?.email,
         "phoneNumber": scholar?.cell_phone_Number,
         "carrer": scholar?.collage_information[0].career,
-        "collage": scholar?.collage_information[0].collage,
+        "collage": getCollageName(scholar?.collage_information[0].collage),
         "programToApply": programName
       }),
     }
