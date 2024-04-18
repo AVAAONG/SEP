@@ -79,7 +79,6 @@ function Table<T extends object>({
         />
         <div className="flex gap-3">
           {children && children}
-          <ExpandTableButton isExpanded={isExpanded} toggleExpanded={toggleExpanded} />
           <Button
             onPress={async () => {
               const exportData = data.map((row) => processRow(row, preprocessedColumns));
@@ -90,6 +89,7 @@ function Table<T extends object>({
           >
             Exportar
           </Button>
+          <ExpandTableButton isExpanded={isExpanded} toggleExpanded={toggleExpanded} />
         </div>
       </div>
 

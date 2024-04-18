@@ -91,7 +91,7 @@ const ExportButton: React.FC<ExportButtonProps> = ({
       type="button"
       startContent={<ArrowUpTrayIcon className="w-5 h-5 text-primary-1" />}
     >
-      Exportar asistencia
+      Exportar lista
     </Button>
   );
 };
