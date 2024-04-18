@@ -112,6 +112,25 @@ const categorizeActivityByStatus = async (activities: WorkshopWithAllData[] | Ch
     return categorizedActivities;
 };
 
+
+const categorizeVolunteerByStatus = async (activities: VolunteerWithAllData[]) => {
+    const categorizedActivities: Record<VolunteerStatus, VolunteerWithAllData[]> = {
+        APPROVED: [],
+        PENDING: [],
+        REJECTED: [],
+        SCHEDULED: [],
+        SENT: [],
+    };
+
+    activities.forEach(activity => {
+        if (activity.status in categorizedActivities) {
+            categorizedActivities[activity.status].push(activity);
+        }
+    });
+
+    return categorizedActivities;
+};
+
 const createAdminStatsForActivities = async (activitiesByStatus: Record<ActivityStatus, WorkshopWithAllData[] | ChatsWithAllData[]>, totalAmountOfActivities: number, kindOfActivity: 'workshop' | 'chat') => {
 
     const mainText = kindOfActivity === 'workshop' ? 'Actividades formativas' : 'Chats clubs';
@@ -157,7 +176,7 @@ const createAdminStatsForActivities = async (activitiesByStatus: Record<Activity
     return stats
 }
 
-const countActivityAttendancePerMonth = async (workshops: WorkshopWithAllData[]) => {
+const countActivityAttendancePerMonth = async (workshops: WorkshopWithAllData[] | VolunteerWithAllData[] | ChatsWithAllData[]) => {
     const stats: {
         activitiesByMonth: Record<number, number>;
         workshopsWithHighAttendancePerMonth: Record<string, number>;
@@ -183,8 +202,6 @@ const countActivityAttendancePerMonth = async (workshops: WorkshopWithAllData[])
         }
 
     });
-
-
     return stats;
 };
 
@@ -220,7 +237,7 @@ const formatActivityAttendancePerMonthForChart = async (stats: {
     return { lineSeries, barSeries };
 }
 
-const getActivityAttendancePerMonth = async (workshops: WorkshopWithAllData[]) => {
+const getActivityAttendancePerMonth = async (workshops: WorkshopWithAllData[] | VolunteerWithAllData[] | ChatsWithAllData[]) => {
     const stats = await countActivityAttendancePerMonth(workshops);
     const chartSeries = await formatActivityAttendancePerMonthForChart(stats);
     return chartSeries;
@@ -279,45 +296,8 @@ const countVolunteerProperties = async (volunteers: VolunteerWithAllData[]) => {
 };
 
 
-const createAdminStatsForVolunteers = async (activitiesByStatus: Record<VolunteerStatus, Volunteer[]>, totalAmountOfActivities: number,) => {
-
-    const doneVolunteerPercentage = Number(
-        ((activitiesByStatus.APPROVED.length / totalAmountOfActivities) * 100).toFixed(0)
-    );
-    const suspendedWorkshopsPercentage = Number(
-        ((activitiesByStatus.REJECTED.length / totalAmountOfActivities) * 100).toFixed(0)
-    );
-
-    const stats = [
-        {
-            name: `Horas de voluntariado realizadas`,
-            stat: activitiesByStatus.APPROVED.length || 0,
-            changeType: 'increase',
-            comparationText: null,
-            comparation: doneVolunteerPercentage,
-            tooltipText: `${doneVolunteerPercentage}% de las actividades fueron realizad${gender}s`,
-        },
-        {
-            name: `${mainText} suspendid${gender}s`,
-            stat: activitiesByStatus.SUSPENDED.length || 0,
-            changeType: 'increase',
-            comparationText: `De ${totalAmountOfActivities || 0} actividades ofertad${gender}s`,
-            comparation: suspendedWorkshopsPercentage,
-            tooltipText: `${suspendedWorkshopsPercentage}% de las actividades fueron cancelad${gender}s`,
-        },
-        {
-            name: `${mainText} agendadas`,
-            stat: activitiesByStatus.SCHEDULED.length + activitiesByStatus.SENT.length || 0,
-            changeType: 'increase',
-            comparationText: null,
-        },
-    ];
-    return stats
-}
-
-
 
 export {
-    categorizeActivityByStatus, countActivityByModality, countActivitySatisfactionForm, countChatProperties, countVolunteerProperties, countWorkshopProperties, createAdminStatsForActivities, formatCountsForCharts, getActivityAttendancePerMonth
+    categorizeActivityByStatus, categorizeVolunteerByStatus, countActivityByModality, countActivitySatisfactionForm, countChatProperties, countVolunteerProperties, countWorkshopProperties, createAdminStatsForActivities, formatCountsForCharts, getActivityAttendancePerMonth
 };
 
