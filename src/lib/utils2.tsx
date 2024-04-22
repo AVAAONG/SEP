@@ -113,7 +113,7 @@ export const parseChatLevelFromDatabase = (level: Level) => {
     case 'INTERMEDIATE':
       return 'Intermedio';
     default:
-      return 'BASIC';
+      return 'Básico';
   }
 };
 

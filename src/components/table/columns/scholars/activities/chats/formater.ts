@@ -1,10 +1,9 @@
 import { ChatsWithAllData } from "@/components/table/columns/chatsColumns";
+import { parseChatLevelFromDatabase, parseModalityFromDatabase, parseWorkshopStatusFromDatabase } from "@/lib/utils2";
 import { KindOfSpeaker } from "@prisma/client";
-import { parseChatLevelFromDatabase, parseModalityFromDatabase, parseWorkshopStatusFromDatabase } from "../utils2";
+import AdminChatColumns from "./columns";
 
-
-
-const createAdminChatsObjectForTable = (chats: ChatsWithAllData[]) => {
+const createAdminChatsObjectForTable = (chats: ChatsWithAllData[]): AdminChatColumns[] => {
 
     return chats.map((chat) => {
         const speakerNames: string[] = [];
@@ -23,8 +22,9 @@ const createAdminChatsObjectForTable = (chats: ChatsWithAllData[]) => {
         const attendedScholars = chat.scholar_attendance.filter((a) => a.attendance === 'ATTENDED')
             .length;
         const enrrolledScholars = chat.scholar_attendance.filter(
-            (a) => a.attendance === 'ENROLLED' || 'ATTENDED' || 'NOT_ATTENDED' || 'JUSTIFY'
+            (a) => a.attendance !== 'CANCELLED'
         ).length;
+
         return {
             id: chat.id,
             title: chat.title,
@@ -34,9 +34,6 @@ const createAdminChatsObjectForTable = (chats: ChatsWithAllData[]) => {
             modality: parseModalityFromDatabase(chat.modality),
             platform: chat.platform,
             level: parseChatLevelFromDatabase(chat.level),
-            scholarsEnrroled: chat.scholar_attendance.filter(
-                (a) => a.attendance === 'ENROLLED' || 'ATTENDED'
-            ).length,
             attendedScholars,
             enrrolledScholars,
             speakerNames,
@@ -47,7 +44,4 @@ const createAdminChatsObjectForTable = (chats: ChatsWithAllData[]) => {
         };
     });
 }
-export {
-    createAdminChatsObjectForTable
-};
-
+export default createAdminChatsObjectForTable;
