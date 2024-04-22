@@ -34,9 +34,18 @@ export interface PanelCardProps {
   link: string;
   icon: JSX.Element;
   kind: 'workshop' | 'chat' | 'volunteer' | 'scholar';
+  replace?: boolean;
 }
 
-const PanelCard: React.FC<PanelCardProps> = ({ title, subtitle, data, link, icon, kind }) => {
+const PanelCard: React.FC<PanelCardProps> = ({
+  title,
+  subtitle,
+  data,
+  link,
+  icon,
+  kind,
+  replace = true,
+}) => {
   return (
     <div className="w-full relative border-1 border-gray-300 dark:border-green-800 bg-white dark:bg-black pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden">
       <dt>
@@ -55,6 +64,7 @@ const PanelCard: React.FC<PanelCardProps> = ({ title, subtitle, data, link, icon
           <Link
             color="foreground"
             href={link}
+            replace={replace}
             className={`block font-medium text-sm  ${colorVariants[kind]['subtitleColor']} w-full text-left truncate`}
           >
             {subtitle}

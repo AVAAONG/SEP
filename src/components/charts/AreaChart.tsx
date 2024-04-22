@@ -1,6 +1,5 @@
 'use client';
 import Chart from 'react-apexcharts';
-import { COLORS } from './common/chartConstants';
 
 interface AreaChartProps {
   series: ApexAxisChartSeries;
@@ -33,7 +32,7 @@ const AreaChart = ({ series, title, xAxysType }: AreaChartProps) => {
         formatter: (value) => Math.round(value).toString(), // Display y-axis labels as integers
       },
     },
-    colors: COLORS,
+    colors: series.map((d) => d.color),
   };
 
   return <Chart options={options} series={series} seriestype="bar" height={250} />;
