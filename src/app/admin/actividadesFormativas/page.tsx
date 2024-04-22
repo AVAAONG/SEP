@@ -3,7 +3,9 @@ import AdminStats from '@/components/admin/AdminStats';
 import { DonutChartComponent, MixedAreaChartComponent } from '@/components/charts';
 import DateSelector from '@/components/commons/datePicker';
 import Table from '@/components/table/Table';
-import WorkshopColumns from '@/components/table/columns/workshopColumns';
+import WorkshopAdminColumns from '@/components/table/columns/scholars/activities/workshop/columns';
+import createAdminWorkshopsObjectForTable from '@/components/table/columns/scholars/activities/workshop/formater';
+import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
 import { getWorkshops } from '@/lib/db/utils/Workshops';
 import {
   categorizeActivityByStatus,
@@ -13,20 +15,22 @@ import {
   getActivityAttendancePerMonth,
 } from '@/lib/utils/activityFilters';
 import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
-import { createAdminWorkshopsObjectForTable } from '@/lib/utils/parseDataForTable';
 
 const page = async ({
   searchParams,
 }: {
   searchParams?: { year: string; month: string; quarter: string };
 }) => {
-  const resultWorkshops = await getWorkshops();
-  const workshops = await filterActivitiesBySearchParams(resultWorkshops, searchParams);
+  const resultWorkshops = (await getWorkshops()) as WorkshopWithAllData[];
+  const workshops = (await filterActivitiesBySearchParams(
+    resultWorkshops,
+    searchParams
+  )) as WorkshopWithAllData[];
   const workshopObjectForTable = createAdminWorkshopsObjectForTable(workshops);
   const activitiesByStatus = await categorizeActivityByStatus(workshops);
 
   const workshopPropertiesCounts = await countWorkshopProperties(
-    activitiesByStatus.ATTENDANCE_CHECKED
+    activitiesByStatus.ATTENDANCE_CHECKED as WorkshopWithAllData[]
   );
   const workshopPropertiesFormatedForCharts = await formatCountsForCharts(workshopPropertiesCounts);
   const stats = await createAdminStatsForActivities(
@@ -62,7 +66,7 @@ const page = async ({
       <div className="w-full ">
         <Table
           tableData={workshopObjectForTable}
-          tableColumns={WorkshopColumns}
+          tableColumns={WorkshopAdminColumns}
           tableHeadersForSearch={[{ option: 'parsedStatus', label: 'Estatus' }]}
         />
       </div>
