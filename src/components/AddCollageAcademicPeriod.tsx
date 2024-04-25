@@ -63,6 +63,8 @@ const AddCollageAcademicPeriod = ({
       grade: data.grade,
       current_academic_period: data.current_academic_period,
       record: '',
+      start_date: new Date(data.start_date).toISOString(),
+      end_date: new Date(data.end_date).toISOString(),
     };
     if (record) {
       const recordBase64 = await readFileAsBase64(record);
