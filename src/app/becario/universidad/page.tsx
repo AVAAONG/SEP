@@ -1,6 +1,4 @@
-import AddCollageAcademicPeriod from '@/components/AddCollageAcademicPeriod';
-import Table from '@/components/table/Table';
-import CollageAcademicPeriodsColumns from '@/components/table/columns/collageAcademicPeriodsColumns';
+import CollagePeriodsIntermediateComponent from '@/components/CollagePeriodsIntermediateComponent';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { getBlobFile } from '@/lib/azure/azure';
 import { getCollageInformationByScholar } from '@/lib/db/utils/collage';
@@ -15,8 +13,8 @@ const page = async () => {
       return {
         id: collagePeriod.id,
         current_academic_period: collagePeriod.current_academic_period,
-        startDate: new Date(collagePeriod.start_date).toLocaleDateString(),
-        endDate: new Date(collagePeriod.end_date).toLocaleDateString(),
+        startDate: new Date(collagePeriod.start_date).toISOString(),
+        endDate: new Date(collagePeriod.end_date).toISOString(),
         grade: collagePeriod.grade,
         modality: parseModalityFromDatabase(collagePeriod?.class_modality),
         record: collagePeriod.record ? await getBlobFile(collagePeriod.record) : null,
@@ -30,13 +28,11 @@ const page = async () => {
         Información sobre el periodo academico
       </h1>
       <div className="w-full">
-        <Table
-          tableData={collagePeriods || []}
-          tableColumns={CollageAcademicPeriodsColumns}
-          tableHeadersForSearch={[]}
-        >
-          <AddCollageAcademicPeriod collageInformationId={collageInformation?.id || null} />
-        </Table>
+        <CollagePeriodsIntermediateComponent
+          collageInformationId={collageInformation?.id}
+          collagePeriodForUpdate={collageInformation?.collage_period}
+          collagePeriodsForTable={collagePeriods}
+        />
       </div>
     </div>
   );
