@@ -43,3 +43,9 @@ export const getApprovedAndAttendedVolunteers = (volunteers: IVolunteer[]) => {
     totalVolunteerHours += externalVolunteerHours + internalVolunteerHours;
     return { externalVolunteerHours, internalVolunteerHours, totalVolunteerHours };
 }
+
+
+export const getApprovedAndAttendedVolunteerActivities = (volunteers: IVolunteer[]) => {
+    return volunteers.filter(volunteer => volunteer.status === 'APPROVED' && volunteer.volunteer_attendance[0].attendance === 'ATTENDED');
+
+}

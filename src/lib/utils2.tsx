@@ -1,6 +1,7 @@
 import {
   ActivityStatus,
   CVASchedule,
+  KindOfVolunteer,
   Level,
   Modality,
   ScholarAttendance,
@@ -9,6 +10,7 @@ import {
   VolunteerStatus,
   WorkshopYear,
 } from '@prisma/client';
+import { CHAT_CALENDAR_ID, VOLUNTEERS_CALENDAR_ID, WORKSHOP_CALENDAR_ID } from './constants';
 
 export const parseSkillFromDatabase = (skill: Skill) => {
   switch (skill) {
@@ -111,7 +113,7 @@ export const parseChatLevelFromDatabase = (level: Level) => {
     case 'INTERMEDIATE':
       return 'Intermedio';
     default:
-      return 'BASIC';
+      return 'Básico';
   }
 };
 
@@ -169,4 +171,13 @@ export const parseVolunteerProject = (value: VolunteerProject | null | undefined
     default:
       return value;
   }
+};
+
+export const getCalendarId = (
+  activity: { level: Level } | { kind_of_volunteer: KindOfVolunteer } | { year: WorkshopYear[] }
+) => {
+  if ('level' in activity) return CHAT_CALENDAR_ID;
+  else if ('kind_of_volunteer' in activity) return VOLUNTEERS_CALENDAR_ID;
+  else if ('year' in activity) return WORKSHOP_CALENDAR_ID;
+  else return 'primary';
 };

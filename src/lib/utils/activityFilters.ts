@@ -3,7 +3,7 @@
 import { COLOR_BASED_ON_PERCENTAGE, getColorBasedOnPercentage, parseSatisfactionFormResponsesFromDatabase } from "@/components/activityActions/satisfactionForm/utils";
 import { ChatsWithAllData } from "@/components/table/columns/chatsColumns";
 import { WorkshopWithAllData } from "@/components/table/columns/workshopColumns";
-import { ActivityStatus, Chat, Volunteer, Workshop, WorkshopSafisfactionForm } from "@prisma/client";
+import { ActivityStatus, Chat, Volunteer, VolunteerStatus, Workshop, WorkshopSafisfactionForm } from "@prisma/client";
 import { VolunteerWithAllData } from "../db/types";
 import { parseChatLevelFromDatabase, parseKindOfVolunteerFromDatabase, parseModalityFromDatabase, parseSkillFromDatabase, parseVolunteerProject, parseWorkshopKindFromDatabase, parseWorkshopYearFromDatabase } from "../utils2";
 
@@ -112,6 +112,25 @@ const categorizeActivityByStatus = async (activities: WorkshopWithAllData[] | Ch
     return categorizedActivities;
 };
 
+
+const categorizeVolunteerByStatus = async (activities: VolunteerWithAllData[]) => {
+    const categorizedActivities: Record<VolunteerStatus, VolunteerWithAllData[]> = {
+        APPROVED: [],
+        PENDING: [],
+        REJECTED: [],
+        SCHEDULED: [],
+        SENT: [],
+    };
+
+    activities.forEach(activity => {
+        if (activity.status in categorizedActivities) {
+            categorizedActivities[activity.status].push(activity);
+        }
+    });
+
+    return categorizedActivities;
+};
+
 const createAdminStatsForActivities = async (activitiesByStatus: Record<ActivityStatus, WorkshopWithAllData[] | ChatsWithAllData[]>, totalAmountOfActivities: number, kindOfActivity: 'workshop' | 'chat') => {
 
     const mainText = kindOfActivity === 'workshop' ? 'Actividades formativas' : 'Chats clubs';
@@ -157,7 +176,7 @@ const createAdminStatsForActivities = async (activitiesByStatus: Record<Activity
     return stats
 }
 
-const countActivityAttendancePerMonth = async (workshops: WorkshopWithAllData[]) => {
+const countActivityAttendancePerMonth = async (workshops: WorkshopWithAllData[] | VolunteerWithAllData[] | ChatsWithAllData[]) => {
     const stats: {
         activitiesByMonth: Record<number, number>;
         workshopsWithHighAttendancePerMonth: Record<string, number>;
@@ -183,8 +202,6 @@ const countActivityAttendancePerMonth = async (workshops: WorkshopWithAllData[])
         }
 
     });
-
-
     return stats;
 };
 
@@ -220,7 +237,7 @@ const formatActivityAttendancePerMonthForChart = async (stats: {
     return { lineSeries, barSeries };
 }
 
-const getActivityAttendancePerMonth = async (workshops: WorkshopWithAllData[]) => {
+const getActivityAttendancePerMonth = async (workshops: WorkshopWithAllData[] | VolunteerWithAllData[] | ChatsWithAllData[]) => {
     const stats = await countActivityAttendancePerMonth(workshops);
     const chartSeries = await formatActivityAttendancePerMonthForChart(stats);
     return chartSeries;
@@ -267,9 +284,12 @@ const countVolunteerProperties = async (volunteers: VolunteerWithAllData[]) => {
         const volunteerKind = parseKindOfVolunteerFromDatabase(volunteer.kind_of_volunteer);
         const volunteerModality = parseModalityFromDatabase(volunteer.modality)
         const volunteerAsociatedProject = parseVolunteerProject(volunteer.VolunteerProject)
-        counts.kindOfVolunteer[volunteerKind] = (counts.kindOfVolunteer[volunteerKind] || 0) + 1;
-        counts.modality[volunteerModality] = (counts.modality[volunteerModality] || 0) + 1;
-        counts.asociatedProject[volunteerAsociatedProject] = (counts.asociatedProject[volunteerAsociatedProject] || 0) + 1;
+        const volunteerHours = Number((volunteer.volunteer_attendance.reduce((acc, attendance) => {
+            return acc + attendance.asigned_hours;
+        }, 0) / volunteer.volunteer_attendance.length).toFixed(2));
+        counts.kindOfVolunteer[volunteerKind] = (counts.kindOfVolunteer[volunteerKind] || 0) + volunteerHours;
+        counts.modality[volunteerModality] = (counts.modality[volunteerModality] || 0) + volunteerHours;
+        counts.asociatedProject[volunteerAsociatedProject] = (counts.asociatedProject[volunteerAsociatedProject] || 0) + volunteerHours;
     });
 
     return counts;
@@ -278,6 +298,6 @@ const countVolunteerProperties = async (volunteers: VolunteerWithAllData[]) => {
 
 
 export {
-    categorizeActivityByStatus, countActivityByModality, countActivitySatisfactionForm, countChatProperties, countVolunteerProperties, countWorkshopProperties, createAdminStatsForActivities, formatCountsForCharts, getActivityAttendancePerMonth
+    categorizeActivityByStatus, categorizeVolunteerByStatus, countActivityByModality, countActivitySatisfactionForm, countChatProperties, countVolunteerProperties, countWorkshopProperties, createAdminStatsForActivities, formatCountsForCharts, getActivityAttendancePerMonth
 };
 

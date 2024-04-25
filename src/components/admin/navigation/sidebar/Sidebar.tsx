@@ -112,7 +112,7 @@ const Sidebar = () => {
           buttonName="Formulario de postulación"
           Icon={linkIcon()}
           itemList={[]}
-          link="/postulantes/registro"
+          link="/postulante/registro"
         />
       </div>
     </aside>

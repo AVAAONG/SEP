@@ -11,7 +11,7 @@ interface AreaBarChartProps {
     name: string;
     color: string;
     type: string;
-  };
+  } | null;
   barSeries: {
     data: {
       x: string;
@@ -41,7 +41,12 @@ const MixedChart = ({ areaSeries, barSeries }: AreaBarChartProps) => {
     },
     colors: COLORS,
   };
-  const series = [areaSeries, barSeries];
+  let series = [];
+  if (areaSeries) {
+    series = [areaSeries, barSeries];
+  } else {
+    series = [barSeries];
+  }
   return <Chart options={options} series={series} type="line" height={250} />;
 };
 

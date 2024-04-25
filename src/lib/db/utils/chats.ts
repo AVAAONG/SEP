@@ -333,3 +333,18 @@ export const changeChatStatus = async (id: string, status: ActivityStatus) => {
   });
   return chat;
 };
+
+
+export const changeChatStatusInBulk = async (ids: string[], status: ActivityStatus) => {
+  const chats = await prisma.chat.updateMany({
+    where: {
+      id: {
+        in: ids,
+      },
+    },
+    data: {
+      activity_status: status,
+    },
+  });
+  return chats;
+};

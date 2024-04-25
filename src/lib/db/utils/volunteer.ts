@@ -88,3 +88,156 @@ export const changeScholarVolunteerStatus = async (volunteerId: string, voluntee
 		}
 	})
 }
+
+
+export const createVolunteer = async (volunteer: Prisma.VolunteerCreateArgs) => {
+	const createdVolunteer = await prisma.volunteer.create(volunteer);
+	return createdVolunteer;
+};
+export const updateVolunteer = async (volunteerId: string, volunteer: Prisma.VolunteerCreateArgs) => {
+	const createdVolunteer = await prisma.volunteer.update({
+		where: {
+			id: volunteerId
+		},
+		data: {
+			...volunteer
+		}
+	});
+	return createdVolunteer;
+};
+
+
+export const addScholarToVolunteer = async (
+	volunteerId: string,
+	scholarId: string,
+) => {
+	// Start a transaction
+	await prisma.$transaction(async (prisma) => {
+		// Check if the scholar is already enrolled in the workshop
+		const existingAttendance = await prisma.volunteerAttendance.findFirst({
+			where: {
+				volunteer: {
+					id: volunteerId,
+				},
+				scholar: {
+					scholarId,
+				},
+			},
+		});
+		// If the scholar is not already enrolled, add the attendance
+		if (!existingAttendance) {
+			const workshop = await prisma.volunteer.findUnique({
+				where: {
+					id: volunteerId,
+				},
+				include: {
+					volunteer_attendance: true,
+				}
+			});
+
+			await prisma.volunteerAttendance.create({
+				data: {
+					volunteer: {
+						connect: {
+							id: volunteerId,
+						},
+					},
+					scholar: {
+						connect: {
+							scholarId,
+						},
+					},
+					attendance: 'ENROLLED',
+					asigned_hours: 0
+				},
+			});
+		}
+	});
+}
+
+
+export const deleteScholarFromVolunteer = async (
+	chatId: string,
+	scholarId: string
+) => {
+	// Start a transaction
+	await prisma.$transaction(async (prisma) => {
+		// Check if the scholar is already enrolled in the workshop
+		const existingAttendance = await prisma.volunteerAttendance.findFirst({
+			where: {
+				volunteer: {
+					id: chatId,
+				},
+				scholar: {
+					scholarId,
+				},
+			},
+		});
+
+		// If the scholar is enrolled delete it.
+		if (existingAttendance) await prisma.volunteerAttendance.delete({
+			where: {
+				id: existingAttendance.id,
+			},
+		});
+	});
+}
+
+
+
+export const asignVolunteerHours = async (volunteerAttendanceId: string, asignedHours: number) => {
+	await prisma.volunteerAttendance.update({
+		where: {
+			id: volunteerAttendanceId
+		},
+		data: {
+			asigned_hours: asignedHours
+		}
+	})
+}
+
+
+
+export const deleteVolunteerFromDatabase = async (volunteerId: string) => {
+	await prisma.volunteer.delete({
+		where: {
+			id: volunteerId
+		},
+		include: {
+			volunteer_attendance: true
+		}
+	})
+}
+
+export const getScheduledVolunteers = async () => {
+	const volunteers = await prisma.volunteer.findMany({
+		where: {
+			status: 'SCHEDULED'
+		},
+	})
+	return volunteers
+}
+
+
+export const changeVolunteerStatusInBulk = async (ids: string[], status: VolunteerStatus) => {
+	const workshops = await prisma.volunteer.updateMany({
+		where: {
+			id: {
+				in: ids,
+			},
+		},
+		data: {
+			status: status,
+		},
+	});
+	return workshops;
+}
+
+export const getVolunteers = async () => {
+	const volunteers = await prisma.volunteer.findMany({
+		include: {
+			volunteer_attendance: true,
+		},
+	});
+	return volunteers;
+}

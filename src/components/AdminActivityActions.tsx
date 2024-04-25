@@ -1,21 +1,27 @@
+import { VolunteerWithAllData } from '@/lib/db/types';
 import { getWorkshopSpeakersWithParams } from '@/lib/db/utils/speaker';
 import StatusUpdateButton from './activityActions/StatusUpdate/StatusUpdate';
 import EditActivity from './activityActions/editActivity/EditActivity';
+import GenerateWhatsAppMessageButton from './activityActions/generateWhatsAppMessage/generateWhatsAppMessageButton';
 import SatisfactionFormResults from './activityActions/satisfactionForm/satisfactionFormResults';
 import {
   SatisfactionFormResponses,
   transformFormResponses,
 } from './activityActions/satisfactionForm/utils';
+import { ChatsWithAllData } from './table/columns/chatsColumns';
+import { WorkshopWithAllData } from './table/columns/workshopColumns';
 
 const AdminActivityActions = async ({
   kindOfActivity,
   activityId,
   scholarsEmails,
   formResponses,
+  activity,
 }: {
   kindOfActivity: 'workshop' | 'chat';
   scholarsEmails: (string | null)[];
   activityId: string;
+  activity: WorkshopWithAllData | ChatsWithAllData | VolunteerWithAllData;
   formResponses: SatisfactionFormResponses[];
 }) => {
   const satisfactionFormChartData = transformFormResponses(formResponses);
@@ -36,6 +42,7 @@ const AdminActivityActions = async ({
           scholarsEmails={scholarsEmails}
         />
         <SatisfactionFormResults satisfactionFormChartData={satisfactionFormChartData} />
+        <GenerateWhatsAppMessageButton activity={activity} />
       </div>
     </>
   );

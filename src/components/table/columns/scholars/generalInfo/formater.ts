@@ -20,8 +20,7 @@ export const formatScholarsToGeneralInfoTable = async (scholars: ScholarWithAllD
         } = scholar;
         return {
             id,
-            first_names,
-            last_names,
+            name: first_names + ' ' + last_names,
             profilePhoto: photo ? await getBlobImage(photo) : null,
             dni,
             birthdate: moment(birthdate).format('DD/MM/YYYY'),

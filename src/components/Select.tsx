@@ -8,7 +8,7 @@ interface SelectProps {
 
 const SelectComponent: React.FC<SelectProps> = ({ items, label }) => {
   return (
-    <Select label={label}>
+    <Select label={label} isRequired>
       {items.map((item) => (
         <SelectItem key={item.value} value={item.value}>
           {item.label}

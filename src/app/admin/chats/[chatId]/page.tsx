@@ -105,6 +105,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
             kindOfActivity="chat"
             formResponses={formResponses}
             scholarsEmails={scholarEmails}
+            activity={chat}
           />
         </div>
       </ActivityPanelInfo>

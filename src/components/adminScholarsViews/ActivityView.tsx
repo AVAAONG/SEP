@@ -14,29 +14,32 @@ const ActivitiesInfo = async ({
   searchParams?: { year: string; month: string; quarter: string };
 }) => {
   const scholars = await getScholarsWithActivities();
-  const df = await Promise.all(scholars.map(async (scholar) => {
-    const f = await filterActivitiesBySearchParams(
-      scholar.program_information.attended_chats.map((chat) => chat.chat),
-      searchParams
-    );
-    const g = await filterActivitiesBySearchParams(
-      scholar.program_information.attended_workshops?.map((workshop) => workshop.workshop),
-      searchParams
-    );
-    const tt = await filterActivitiesBySearchParams(
-      scholar.program_information.volunteerAttendance?.map((workshop) => workshop.volunteer),
-      searchParams
-    );
-    return {
-      ...scholar,
-      program_information: {
-        ...scholar.program_information,
-        attended_chats: f,
-        attended_workshops: g,
-        volunteerAttendance: tt,
-      },
-    };
-  }));
+  const df = await Promise.all(
+    scholars.map(async (scholar) => {
+      const f = await filterActivitiesBySearchParams(
+        scholar.program_information.attended_chats.map((chat) => chat.chat),
+        searchParams
+      );
+      const g = await filterActivitiesBySearchParams(
+        scholar.program_information.attended_workshops?.map((workshop) => workshop.workshop),
+        searchParams
+      );
+      const tt = await filterActivitiesBySearchParams(
+        scholar.program_information.volunteerAttendance?.map((volunteer) => volunteer.volunteer),
+        searchParams
+      );
+      console.log(tt);
+      return {
+        ...scholar,
+        program_information: {
+          ...scholar.program_information,
+          attended_chats: f,
+          attended_workshops: g,
+          volunteerAttendance: tt,
+        },
+      };
+    })
+  );
 
   const data = await formatScholarsActivitiesForActivitiesTable(df);
   const scholarsPropertiesCount = countScholarActivitiesProperties(df);

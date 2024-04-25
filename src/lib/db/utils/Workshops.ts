@@ -556,7 +556,11 @@ export const getScholarsWithActivities = async () => {
               }
             },
             include: {
-              volunteer: true,
+              volunteer: {
+                include: {
+                  volunteer_attendance: true,
+                }
+              },
             }
           },
         },
@@ -1024,4 +1028,19 @@ export const updatechatAttendanceSatisfactionForm = async (
     },
   });
   return chat;
+}
+
+
+export const changeWorkshopStatusInBulk = async (ids: string[], status: ActivityStatus) => {
+  const workshops = await prisma.workshop.updateMany({
+    where: {
+      id: {
+        in: ids,
+      },
+    },
+    data: {
+      activity_status: status,
+    },
+  });
+  return workshops;
 }
