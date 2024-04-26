@@ -1,4 +1,5 @@
 'use client';
+import ComboboxInput from '@/components/commons/ComboBox';
 import DateInput from '@/components/commons/DateInput';
 import PlatformInput from '@/components/commons/PlatformInput';
 import { createCalendarEvent, updateCalendarEvent } from '@/lib/calendar/calendar';
@@ -11,9 +12,7 @@ import { createWorkshop, editWorkshop } from '@/lib/db/utils/Workshops';
 import workshopCreationFormSchema from '@/lib/schemas/workshopCreationFormSchema';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Avatar } from '@nextui-org/avatar';
 import { Checkbox, CheckboxGroup } from '@nextui-org/checkbox';
-import { Chip } from '@nextui-org/chip';
 import { Input, Textarea } from '@nextui-org/input';
 import { Select, SelectItem } from '@nextui-org/select';
 import { Prisma, WorkshopYear } from '@prisma/client';
@@ -38,11 +37,7 @@ interface WorkshopCreationFormProps {
   kind: 'edit' | 'create';
   workshopForEdit: WorkshopWithSpeaker | undefined;
 }
-const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
-  speakers,
-  workshopForEdit,
-  kind,
-}) => {
+const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, workshopForEdit, kind }) => {
   const {
     control,
     handleSubmit,
@@ -274,64 +269,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
             );
           }}
         />
-        <Controller
-          name="speakersId"
-          control={control}
-          rules={{ required: true }}
-          shouldUnregister={true}
-          render={({ field, formState }) => {
-            return (
-              <Select
-                value={field.value}
-                onChange={field.onChange}
-                items={speakers}
-                isMultiline={true}
-                selectionMode="multiple"
-                isInvalid={!!formState.errors?.['speakersId']?.message}
-                errorMessage={formState.errors?.['speakersId']?.message?.toString()}
-                classNames={{
-                  base: 'col-span-2',
-                }}
-                radius="sm"
-                label="Facilitador(es)"
-                labelPlacement="outside"
-                defaultSelectedKeys={[field.value]}
-                renderValue={(items) => {
-                  return (
-                    <div className="flex flex-wrap gap-2">
-                      {items.map((item) => (
-                        <Chip key={item.key}>
-                          {item.data?.first_names} {item.data?.last_names}
-                        </Chip>
-                      ))}
-                    </div>
-                  );
-                }}
-              >
-                {(speaker) => (
-                  <SelectItem
-                    classNames={{ base: 'col-span-2 md:col-span-1' }}
-                    key={speaker.id}
-                    textValue={`${speaker.first_names} ${speaker.last_names}`}
-                  >
-                    <div className="flex gap-2 items-center">
-                      <Avatar
-                        alt={speaker.first_names}
-                        className="flex-shrink-0"
-                        size="sm"
-                        src={speaker.image || ''}
-                      />
-                      <div className="flex flex-col">
-                        <span className="text-small">{`${speaker.first_names} ${speaker.last_names}`}</span>
-                        <span className="text-tiny text-default-400">{speaker.email}</span>
-                      </div>
-                    </div>
-                  </SelectItem>
-                )}
-              </Select>
-            );
-          }}
-        />
+        <ComboboxInput speakers={speakers} />
         <Controller
           name="avalible_spots"
           control={control}
@@ -471,4 +409,4 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
   );
 };
 
-export default WorkshopCreationForm;
+export default WorkshopForm;
