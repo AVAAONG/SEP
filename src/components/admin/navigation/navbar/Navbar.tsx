@@ -1,5 +1,4 @@
 'use client';
-import ChapterSelector from '@/components/ChapterSelector';
 import ThemeToggleButton from '@/components/scholar/NavigationBar/ThemeToggleButton';
 import ProfileDropdown from '@/components/scholar/ProfileDropdown';
 import { sidebarAtom } from '@/lib/state/mainState';
@@ -28,7 +27,7 @@ const Navbar = () => {
               <MenuIcon />
             </div>
           </button>
-          <ChapterSelector />
+          {/** <ChapterSelector /> */}
         </div>
 
         <div className="flex gap-4 ">
