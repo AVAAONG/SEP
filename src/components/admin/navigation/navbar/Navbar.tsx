@@ -1,4 +1,5 @@
 'use client';
+import ChapterSelector from '@/components/ChapterSelector';
 import ThemeToggleButton from '@/components/scholar/NavigationBar/ThemeToggleButton';
 import ProfileDropdown from '@/components/scholar/ProfileDropdown';
 import { sidebarAtom } from '@/lib/state/mainState';
@@ -15,17 +16,21 @@ const Navbar = () => {
   useSWR(`/api/setAuthCookie?cookieValue=admin`, fetcher);
 
   return (
-    <nav className="block h-10 w-full left-0 right-0 top-0 mb-4">
+    <nav className="block h-12 w-full left-0 right-0 top-0 mb-4">
       <div className="flex justify-between gap-4">
-        <button
-          onClick={setUpSidebar}
-          type="button"
-          className="w-6 text-primary-light font-medium p-2 text-xl"
-        >
-          <div className="w-6 font-bold">
-            <MenuIcon />
-          </div>
-        </button>
+        <div className="flex gap-8 justify-center items-center">
+          <button
+            onClick={setUpSidebar}
+            type="button"
+            className="w-6 text-primary-light font-medium p-2 text-xl"
+          >
+            <div className="w-6 font-bold">
+              <MenuIcon />
+            </div>
+          </button>
+          <ChapterSelector />
+        </div>
+
         <div className="flex gap-4 ">
           <div className="inline-flex items-center p-2 text-sm rounded-lg">
             <ThemeToggleButton />
