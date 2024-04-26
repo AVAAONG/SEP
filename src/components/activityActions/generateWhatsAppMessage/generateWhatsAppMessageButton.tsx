@@ -17,7 +17,7 @@ const GenerateWhatsAppMessageButton: React.FC<GenerateWhatsAppMessageButtonProps
   return (
     <>
       <Button className="w-full" onPress={attendanceCheckedModal.onOpen}>
-        Crear mensaje para incitar a los becarios a inscribirse
+        Crear mensaje WhatsApp
       </Button>
       <BasicModal
         scroll={true}
