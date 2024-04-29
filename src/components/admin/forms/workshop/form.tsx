@@ -1,5 +1,4 @@
 'use client';
-import ComboboxInput from '@/components/commons/ComboBox';
 import DateInput from '@/components/commons/DateInput';
 import PlatformInput from '@/components/commons/PlatformInput';
 import { createCalendarEvent, updateCalendarEvent } from '@/lib/calendar/calendar';
@@ -20,6 +19,7 @@ import moment from 'moment';
 import { useRouter } from 'next/navigation';
 import { BaseSyntheticEvent, useEffect } from 'react';
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';
+import { default as Combobox } from 'react-select';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 import FormButtonGroup from '../commons/FormButtonGroup';
@@ -204,6 +204,11 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, workshopF
     router.push('/admin/actividadesFormativas/crear');
   };
 
+  const speakersForCombobox = speakers.map((speaker) => ({
+    value: speaker.id,
+    label: `${speaker.first_names} ${speaker.last_names}`,
+  }));
+
   return (
     <>
       <form
@@ -269,7 +274,45 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, workshopF
             );
           }}
         />
-        <ComboboxInput speakers={speakers} />
+        <div>
+          <span className="text-sm">Facilitador(es)</span>
+          <Controller
+            name="asociated_skill"
+            control={control}
+            rules={{ required: true }}
+            shouldUnregister={true}
+            render={({ field, formState }) => {
+              return (
+                <Combobox
+                  // defaultValue={}
+                  isMulti
+                  className="!rounded-lg z-50 py-2"
+                  options={speakersForCombobox}
+                  styles={{
+                    control: (baseStyles: object, _state: object) => ({
+                      ...baseStyles,
+                      padding: '1px 5px', // Increase vertical padding
+                      borderRadius: '10px', // Set rounded corners
+                      borderColor: 'transparent', // Set border color as transparent
+                      outline: 'none', // Remove outline
+                      boxShadow: 'none', // Remove boxShadow (ring)
+                      '&:hover': {
+                        backgroundColor: '#f3f4f6',
+                      },
+                      '&:focus': {
+                        outline: 'none', // Remove outline on focus
+                      },
+                      '&:active': {
+                        outline: 'none', // Remove outline on active
+                      },
+                    }),
+                  }}
+                />
+              );
+            }}
+          />
+        </div>
+
         <Controller
           name="avalible_spots"
           control={control}
