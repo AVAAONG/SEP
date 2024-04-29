@@ -18,7 +18,16 @@ const Page = async ({ searchParams }: { searchParams: { activityToEdit: string |
   return (
     <div className="min-h-screen flex flex-col md:flex-row gap-8 p-4">
       <div className=" w-full md:w-1/2">
-        <WorkshopForm speakers={speakers as Speaker[]} workshopForEdit={workshop} kind="create" />
+        <h1 className="col-span-2 text-center w-full font-semibold text-2xl text-primary-light uppercase tracking-widest">
+          Crear actividad formativa
+        </h1>
+        <div>
+          <WorkshopForm
+            speakers={speakers as Speaker[]}
+            valuesToUpdate={workshop}
+            kind={searchParams.activityToEdit ? 'edit' : 'create'}
+          />
+        </div>
       </div>
       <div className="w-full md:w-1/2 pt-0 flex flex-col items-center">
         <ScheduledCardsWrap activities={scheduledWorkshops} />
