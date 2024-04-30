@@ -17,7 +17,7 @@ const scholarAcademicPeriodCreationSchema = z.object({
         .number()
         .positive()
         .min(1, { message: 'Debes seleccionar una calificación' }),
-    record: z.string().min(1, { message: 'Debes seleccionar el comprobante' }),
+    record: z.string().optional(),
     start_date: z.coerce.date().min(new Date(0), { message: 'Debes seleccionar una fecha valida' }),
     end_date: z.coerce.date().min(new Date(0), { message: 'Debes seleccionar una fecha valida' }),
 

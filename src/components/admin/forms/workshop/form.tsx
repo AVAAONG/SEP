@@ -1,29 +1,34 @@
 'use client';
 import DateInput from '@/components/commons/DateInput';
+import PlatformCoordinatesInput from '@/components/commons/PlatformCoordinatesInputs';
 import PlatformInput from '@/components/commons/PlatformInput';
-import { createCalendarEvent, updateCalendarEvent } from '@/lib/calendar/calendar';
-import { formatDatesClient } from '@/lib/calendar/clientUtils';
+import { createCalendarEvent, deleteCalendarEvent } from '@/lib/calendar/calendar';
 import { IWorkshopCalendar } from '@/lib/calendar/d';
 import { formatDates } from '@/lib/calendar/utils';
-import { MODALITY, PROGRAM_COMPONENTS, WORKSHOP_TYPES, WORKSHOP_YEAR } from '@/lib/constants';
+import {
+  MODALITY,
+  PROGRAM_COMPONENTS,
+  WORKSHOP_CALENDAR_ID,
+  WORKSHOP_TYPES,
+  WORKSHOP_YEAR,
+} from '@/lib/constants';
 import { WorkshopWithSpeaker } from '@/lib/db/types';
-import { createWorkshop, editWorkshop } from '@/lib/db/utils/Workshops';
+import { createWorkshop, updateWorkshop } from '@/lib/db/utils/Workshops';
 import workshopCreationFormSchema from '@/lib/schemas/workshopCreationFormSchema';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Avatar } from '@nextui-org/avatar';
 import { Checkbox, CheckboxGroup } from '@nextui-org/checkbox';
-import { Chip } from '@nextui-org/chip';
 import { Input, Textarea } from '@nextui-org/input';
 import { Select, SelectItem } from '@nextui-org/select';
-import { Prisma, WorkshopYear } from '@prisma/client';
-import moment from 'moment';
-import { useRouter } from 'next/navigation';
 import { BaseSyntheticEvent, useEffect } from 'react';
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';
+import { default as Combobox } from 'react-select';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 import FormButtonGroup from '../commons/FormButtonGroup';
+import createWorkshopObject from './lib/createWorkshopObject';
+import formatWorkshop from './lib/formatWorkshopForEdit';
+import { determineStatus } from './lib/utils';
 
 type Schema = z.infer<typeof workshopCreationFormSchema>;
 
@@ -36,13 +41,9 @@ interface WorkshopCreationFormProps {
     image?: string | null;
   }[];
   kind: 'edit' | 'create';
-  workshopForEdit: WorkshopWithSpeaker | undefined;
+  valuesToUpdate: WorkshopWithSpeaker | undefined;
 }
-const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
-  speakers,
-  workshopForEdit,
-  kind,
-}) => {
+const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToUpdate, kind }) => {
   const {
     control,
     handleSubmit,
@@ -52,178 +53,99 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
   } = useForm<Schema>({
     resolver: zodResolver(workshopCreationFormSchema),
   });
+
   useEffect(() => {
-    reset();
-    if (workshopForEdit) {
-      const formatedChat: Schema = {
-        title: workshopForEdit?.title ?? '',
-        dates: [
-          {
-            date: moment(workshopForEdit?.start_dates[0]).format('YYYY-MM-DD'),
-            startHour: moment(workshopForEdit?.start_dates[0]).format('HH:mm'),
-            endHour: moment(workshopForEdit?.end_dates[0]).format('HH:mm'),
-          },
-        ],
-        modality: workshopForEdit?.modality!,
-        speakersId: workshopForEdit?.speaker.map((speaker) => speaker.id).toString()!,
-        platformInPerson: workshopForEdit?.platform ?? '',
-        platformOnline: workshopForEdit?.platform ?? '',
-        description: workshopForEdit?.description ?? undefined,
-        avalible_spots: workshopForEdit?.avalible_spots ?? 0,
-        asociated_skill: workshopForEdit?.asociated_skill!,
-        kindOfWorkshop: workshopForEdit?.kindOfWorkshop!,
-        year: workshopForEdit?.year as unknown as WorkshopYear[],
-      };
-      Object.keys(formatedChat).forEach((key) => {
-        if (key in formatedChat) {
-          const valueKey = key as keyof typeof formatedChat;
-          if (formatedChat[valueKey] !== undefined) {
-            setValue(valueKey, formatedChat[valueKey]);
-          }
-        }
-      });
-    }
-  }, [workshopForEdit, setValue]);
-  const router = useRouter();
+    if (!valuesToUpdate) return;
+    const formatedWorkshop = formatWorkshop(valuesToUpdate);
+    Object.entries(formatedWorkshop).forEach(([key, value]) => {
+      if (value !== undefined) {
+        setValue(key as keyof typeof formatedWorkshop, value);
+      }
+    });
+  }, [valuesToUpdate, setValue]);
+
+  const speakersForCombobox = speakers.map((speaker) => ({
+    value: speaker.id,
+    label: `${speaker.first_names} ${speaker.last_names}`,
+    email: speaker.email,
+  }));
 
   const modality = useWatch({
     control,
     name: 'modality',
+  });
+  const platformOnline = useWatch({
+    control,
+    name: 'platformOnline',
   });
   const fieldArray = useFieldArray({
     control,
     name: 'dates',
   });
 
+  const onReset = () => {
+    // Reset the form state
+    reset({
+      dates: [{ date: '', startHour: '', endHour: '' }],
+    });
+  };
+
   const handleFormSubmit = async (
     data: z.infer<typeof workshopCreationFormSchema>,
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
     const buttonType = ((event?.nativeEvent as SubmitEvent)?.submitter as HTMLButtonElement)?.name;
-    const dates = formatDatesClient(data.dates); //client formating
+    const status = determineStatus(buttonType);
+
     const calendarDates = await formatDates(data.dates); //server formating
-    const workshopSpeakersId = data.speakersId.split(',');
-    const speakersData = workshopSpeakersId
-      .map((speakerId: string) => {
-        const speaker = speakers.find((speaker) => speaker.id === speakerId);
-        if (!speaker) return null;
-        return {
-          id: speaker?.id,
-          speakerName: `${speaker?.first_names.split(' ')[0]} ${speaker?.last_names.split(' ')[0]}`,
-          speakerEmail: speaker?.email,
-        };
-      })
-      .filter((speaker) => speaker !== null) as IWorkshopCalendar['speakersData'];
-    const { platformInPerson, platformOnline, speakersId, ...restData } = data;
+    const { platformInPerson, platformOnline, speakers, ...restData } = data;
+
     const calendarWorkshop: IWorkshopCalendar = {
       platform: platformInPerson ? platformInPerson : platformOnline!,
-      speakersData,
+      speakersData: speakers,
       ...calendarDates,
       ...restData,
       description: data.description ? data.description : null,
     };
 
-    if (buttonType === 'edit') {
-      const meetingDetails = await updateCalendarEvent(
-        workshopForEdit?.calendar_ids!,
-        calendarWorkshop,
-        workshopForEdit?.meeting_id!
-      );
-
-      const editedWorkshop: Prisma.WorkshopUpdateArgs = {
-        where: {
-          id: workshopForEdit?.id!,
-        },
-        data: {
-          title: data.title,
-          avalible_spots: z.coerce.number().parse(data.avalible_spots),
-          platform: data.platformInPerson ? data.platformInPerson : data.platformOnline!,
-          description: data.description ? data.description : null,
-          ...dates,
-          modality: data.modality,
-          asociated_skill: data.asociated_skill,
-          activity_status: 'SCHEDULED',
-          calendar_ids: workshopForEdit?.calendar_ids!,
-          kindOfWorkshop: data.kindOfWorkshop,
-          year: data.year as unknown as WorkshopYear[],
-          meeting_id: meetingDetails.map(
-            (meetingDetail) => meetingDetail.meetingId || ''
-          ) as string[],
-          meeting_link: meetingDetails.map(
-            (meetingDetail) => meetingDetail.meetingLink || ''
-          ) as string[],
-          meeting_password: meetingDetails.map(
-            (meetingDetail) => meetingDetail.meetingPassword || ''
-          ) as string[],
-          speaker: {
-            connect: calendarWorkshop.speakersData.map((speaker) => ({ id: speaker.id })),
-          },
-        },
-      };
-      await editWorkshop(editedWorkshop);
-    } else {
-      const [eventsIds, meetingDetails] = await createCalendarEvent(calendarWorkshop);
-      const workshop: Prisma.WorkshopCreateArgs = {
-        data: {
-          title: data.title,
-          avalible_spots: z.coerce.number().parse(data.avalible_spots),
-          platform: data.platformInPerson ? data.platformInPerson : data.platformOnline!,
-          description: data.description ? data.description : null,
-          kindOfWorkshop: data.kindOfWorkshop,
-          calendar_ids: [...eventsIds],
-          ...dates,
-          year: data.year as unknown as WorkshopYear[],
-          modality: data.modality,
-          asociated_skill: data.asociated_skill,
-          activity_status: 'SCHEDULED',
-          speaker: {
-            connect: calendarWorkshop.speakersData.map((speaker) => ({ id: speaker.id })),
-          },
-        },
-      };
-      if (data.modality === 'ONLINE') {
-        workshop.data.meeting_id = meetingDetails.map(
-          (meetingDetail) => meetingDetail.meetingId || null
-        ) as string[];
-        workshop.data.meeting_link = meetingDetails.map(
-          (meetingDetail) => meetingDetail.meetingLink || null
-        ) as string[];
-        workshop.data.meeting_password = ['null'];
-        if (platformOnline === 'ZOOM') {
-          workshop.data.meeting_password = meetingDetails.map(
-            (meetingDetail) => meetingDetail.meetingPassword || null
-          ) as string[];
-        }
-      }
-      if (buttonType === 'schedule') {
-        workshop.data.activity_status = 'SCHEDULED';
-        await createWorkshop(workshop);
-      } else if (buttonType === 'send') {
-        workshop.data.activity_status = 'SENT';
-        await createWorkshop(workshop);
-      } else {
-      }
+    const [eventsIds, meetingDetails] = await createCalendarEvent(calendarWorkshop);
+    let meetingCoordinates = meetingDetails;
+    if (data.platformOnline !== 'ZOOM') {
+      meetingCoordinates.push({
+        meetingId: data.meetingId,
+        meetingLink: data.meetingLink,
+        meetingPassword: data.meetingPass,
+      });
     }
-    reset();
+
+    if (buttonType === 'edit' && valuesToUpdate) {
+      valuesToUpdate.calendar_ids.map(
+        async (id) => await deleteCalendarEvent(WORKSHOP_CALENDAR_ID, id)
+      );
+      const workshop = createWorkshopObject(data, status, eventsIds, meetingCoordinates);
+      await updateWorkshop(valuesToUpdate?.id, workshop);
+    } else {
+      const workshop = createWorkshopObject(data, status, eventsIds, meetingDetails);
+      await createWorkshop(workshop);
+    }
+    onReset();
     await revalidateSpecificPath('/admin/actividadesFormativas/crear');
-    router.push('/admin/actividadesFormativas/crear');
   };
 
   return (
     <>
       <form
-        onSubmit={handleSubmit((data, event) =>
-          toast.promise(handleFormSubmit(data, event), {
-            pending: 'Creando actividad...',
-            success: 'Actividad creada con éxito',
-            error: 'Ocurrió un error al crear la actividad',
-          })
+        onSubmit={handleSubmit(
+          (data, event) =>
+            toast.promise(handleFormSubmit(data, event), {
+              pending: 'Creando actividad...',
+              success: 'Actividad creada con éxito',
+              error: 'Ocurrió un error al crear la actividad',
+            }),
+          (errors) => console.log(errors)
         )}
         className="grid grid-cols-2 w-full items-center justify-center gap-4"
       >
-        <h1 className="col-span-2 text-center w-full font-semibold text-2xl text-primary-light uppercase tracking-widest">
-          crear actividad formativa
-        </h1>
         <Controller
           name="title"
           control={control}
@@ -240,6 +162,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
                 type="text"
                 label="Título"
                 radius="sm"
+                isRequired
                 classNames={{ base: 'col-span-2 h-fit' }}
                 labelPlacement="outside"
               />
@@ -256,6 +179,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
             return (
               <Select
                 value={field.value}
+                isRequired
                 onChange={field.onChange}
                 isInvalid={!!formState.errors?.['asociated_skill']?.message}
                 errorMessage={formState.errors?.['asociated_skill']?.message?.toString()}
@@ -274,64 +198,47 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
             );
           }}
         />
-        <Controller
-          name="speakersId"
-          control={control}
-          rules={{ required: true }}
-          shouldUnregister={true}
-          render={({ field, formState }) => {
-            return (
-              <Select
-                value={field.value}
-                onChange={field.onChange}
-                items={speakers}
-                isMultiline={true}
-                selectionMode="multiple"
-                isInvalid={!!formState.errors?.['speakersId']?.message}
-                errorMessage={formState.errors?.['speakersId']?.message?.toString()}
-                classNames={{
-                  base: 'col-span-2',
-                }}
-                radius="sm"
-                label="Facilitador(es)"
-                labelPlacement="outside"
-                defaultSelectedKeys={[field.value]}
-                renderValue={(items) => {
-                  return (
-                    <div className="flex flex-wrap gap-2">
-                      {items.map((item) => (
-                        <Chip key={item.key}>
-                          {item.data?.first_names} {item.data?.last_names}
-                        </Chip>
-                      ))}
-                    </div>
-                  );
-                }}
-              >
-                {(speaker) => (
-                  <SelectItem
-                    classNames={{ base: 'col-span-2 md:col-span-1' }}
-                    key={speaker.id}
-                    textValue={`${speaker.first_names} ${speaker.last_names}`}
-                  >
-                    <div className="flex gap-2 items-center">
-                      <Avatar
-                        alt={speaker.first_names}
-                        className="flex-shrink-0"
-                        size="sm"
-                        src={speaker.image || ''}
-                      />
-                      <div className="flex flex-col">
-                        <span className="text-small">{`${speaker.first_names} ${speaker.last_names}`}</span>
-                        <span className="text-tiny text-default-400">{speaker.email}</span>
-                      </div>
-                    </div>
-                  </SelectItem>
-                )}
-              </Select>
-            );
-          }}
-        />
+        <div>
+          <span className="text-sm">Facilitador(es)</span>
+          <Controller
+            name="speakers"
+            control={control}
+            rules={{ required: true }}
+            shouldUnregister={true}
+            render={({ field, formState }) => {
+              return (
+                <Combobox
+                  // defaultValue={}
+                  isMulti
+                  {...field}
+                  required={true}
+                  className="!rounded-lg z-50 py-2"
+                  options={speakersForCombobox}
+                  styles={{
+                    control: (baseStyles: object, _state: object) => ({
+                      ...baseStyles,
+                      padding: '1px 5px', // Increase vertical padding
+                      borderRadius: '10px', // Set rounded corners
+                      borderColor: 'transparent', // Set border color as transparent
+                      outline: 'none', // Remove outline
+                      boxShadow: 'none', // Remove boxShadow (ring)
+                      '&:hover': {
+                        backgroundColor: '#f3f4f6',
+                      },
+                      '&:focus': {
+                        outline: 'none', // Remove outline on focus
+                      },
+                      '&:active': {
+                        outline: 'none', // Remove outline on active
+                      },
+                    }),
+                  }}
+                />
+              );
+            }}
+          />
+        </div>
+
         <Controller
           name="avalible_spots"
           control={control}
@@ -340,6 +247,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
           render={({ field, formState }) => {
             return (
               <Input
+                isRequired
                 value={field.value?.toString()}
                 onChange={field.onChange}
                 isInvalid={!!formState.errors?.avalible_spots?.message}
@@ -361,6 +269,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
           render={({ field, formState }) => {
             return (
               <Select
+                isRequired
                 value={field.value}
                 onChange={field.onChange}
                 isInvalid={!!formState.errors?.['modality']?.message}
@@ -380,6 +289,9 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
             );
           }}
         />
+
+        <PlatformInput modality={modality} control={control} />
+        <PlatformCoordinatesInput control={control} platform={platformOnline} />
         <Controller
           name="kindOfWorkshop"
           control={control}
@@ -388,6 +300,7 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
           render={({ field, formState }) => {
             return (
               <Select
+                isRequired
                 value={field.value}
                 onChange={field.onChange}
                 isInvalid={!!formState.errors?.['kindOfWorkshop']?.message}
@@ -407,8 +320,6 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
             );
           }}
         />
-        <PlatformInput modality={modality} control={control} />
-
         <Controller
           name="year"
           control={control}
@@ -455,20 +366,17 @@ const WorkshopCreationForm: React.FC<WorkshopCreationFormProps> = ({
                 classNames={{
                   base: 'col-span-2 h-fit w-full',
                 }}
-                placeholder="(Opcional) Coloca la descripcion de la actividad"
+                placeholder="(Opcional) Coloca la descripción de la actividad"
               />
             );
           }}
         />
         <div className="flex gap-4 col-span-2">
-          <FormButtonGroup
-            isDisabled={!isValid || isSubmitting}
-            onlyEdit={kind === 'create' ? false : true}
-          />
+          <FormButtonGroup isDisabled={isSubmitting} onlyEdit={kind === 'create' ? false : true} />
         </div>
       </form>
     </>
   );
 };
 
-export default WorkshopCreationForm;
+export default WorkshopForm;

@@ -111,7 +111,7 @@ const ScheduledCard: React.FC<ScheduledCardI> = ({ activities }) => {
                   editModal.onClose();
                   setbuttonIsDisabled(true);
                 }}
-                confirmText="Eliminar"
+                confirmText="Editar"
               />
             </>
           </ScheduledCardSelect>

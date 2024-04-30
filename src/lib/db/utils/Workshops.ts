@@ -78,12 +78,6 @@ export const getWorkshopsCount = async (): Promise<number> => {
   }
 };
 
-const updateWorkshop = async (id: shortUUID.SUUID, data: Workshop) => {
-  const workshop = await prisma.workshop.update({
-    where: { id },
-    data,
-  });
-};
 
 export const changeScholarAttendance = async (
   workshopAttendanceId: string,
@@ -957,9 +951,14 @@ export const sendWorkshopsToScholar = async (workshopId: string) => {
   });
 };
 
-export const editWorkshop = async (workshop: Prisma.WorkshopUpdateArgs) => {
-  const editedworkshop = await prisma.workshop.update(workshop);
-  return editedworkshop;
+export const updateWorkshop = async (workshopId: string, workshop: Prisma.WorkshopCreateArgs) => {
+  const createdVolunteer = await prisma.workshop.update({
+    where: {
+      id: workshopId
+    },
+    ...workshop
+  });
+  return createdVolunteer;
 };
 
 export const deleteWorkshopFromDatabase = async (id: string) => {

@@ -81,8 +81,8 @@ const createEventDetails = async (
 
   const attendees = values.speakersData.map((speaker) => {
     return {
-      email: speaker.speakerEmail ? speaker.speakerEmail : 'avaatecnologia@gmail.com',
-      displayName: speaker.speakerName,
+      email: speaker.email ? speaker.email : 'avaatecnologia@gmail.com',
+      displayName: speaker.email,
       organizer: true,
       responseStatus: 'accepted',
     };
@@ -279,7 +279,7 @@ const updateEventDetails = async (
   let eventDetails: calendar_v3.Schema$Event;
 
   const attendees = values.speakersData.map((speaker) => {
-    return { email: speaker.speakerEmail ? speaker.speakerEmail : 'avaatecnologia@gmail.com', displayName: speaker.speakerName };
+    return { email: speaker.email ? speaker.email : 'avaatecnologia@gmail.com', displayName: speaker.label };
   });
 
   if (modality === 'IN_PERSON') {

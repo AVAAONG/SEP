@@ -2,7 +2,6 @@
 import BasicModal from '@/components/BasicModal';
 import { Button } from '@nextui-org/button';
 import { useDisclosure } from '@nextui-org/react';
-import WorkshopForm from '../createActivity/forms/WorkshopForm';
 
 interface EditActivityProps {
   activityId: string;
@@ -30,7 +29,7 @@ const EditActivity: React.FC<EditActivityProps> = ({ activityId, speakers }) => 
         onOpenChange={attendanceCheckedModal.onOpenChange}
         isButtonDisabled={false}
         title="Editar actividad"
-        Content={() => <WorkshopForm workshopForEdit={undefined} speakers={speakers} />}
+        Content={() => <></>}
         onConfirm={() => {}}
         confirmText="Cerrar"
       />

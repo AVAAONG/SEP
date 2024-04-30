@@ -79,7 +79,7 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
         status = 'SENT';
         break;
       case 'edit':
-        status = 'APPROVED';
+        status = 'SCHEDULED';
         break;
     }
     const volunteer = createVolunteerObject(data, status);

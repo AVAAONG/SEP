@@ -361,22 +361,30 @@ export const getScholarDoneActivitiesCount = async (scholar_id: string, year: nu
         ],
       },
     }),
-    prisma.volunteer.findMany({
+    prisma.volunteerAttendance.findMany({
       where: {
         AND: [
           {
-            volunteer_attendance: {
-              some: {
-                scholar: {
-                  scholarId: scholar_id,
-                },
-              },
+            scholar: {
+              scholarId: scholar_id,
+            },
+          },
+          {
+            attendance: 'ATTENDED',
+          },
+          {
+            volunteer: {
+              status: 'APPROVED',
             },
           },
         ],
       },
       include: {
-        volunteer_attendance: true
+        volunteer: {
+          include: {
+            volunteer_attendance: true
+          }
+        }
       }
     }),
   ]);
@@ -391,9 +399,10 @@ export const getScholarDoneActivitiesCount = async (scholar_id: string, year: nu
     chat.start_dates.some((date) => date >= yearStart && date <= yearEnd)
   ).length;
   const volunteers = allVolunteers.filter((volunteer) =>
-    volunteer.start_dates.some((date) => date >= yearStart && date <= yearEnd)
+    volunteer.volunteer.start_dates.some((date) => date >= yearStart && date <= yearEnd)
   );
-  const { totalVolunteerHours } = getApprovedAndAttendedVolunteers(volunteers)
+
+  const { totalVolunteerHours } = getApprovedAndAttendedVolunteers(volunteers.map((volunteer) => volunteer.volunteer))
 
   return [workshops, chats, totalVolunteerHours];
 };

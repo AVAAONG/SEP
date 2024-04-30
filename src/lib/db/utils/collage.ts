@@ -18,6 +18,26 @@ export const createAcademicPeriod = async (data: Prisma.ScholarCollagePeriodCrea
     return academicPeriod;
 }
 
+export const updateAcademicPeriod = async (data: Prisma.ScholarCollagePeriodUpdateInput, collagePeriodId: string) => {
+    const academicPeriod = await prisma.scholarCollagePeriod.update({
+        where: {
+            id: collagePeriodId,
+        },
+        data
+    })
+    return academicPeriod;
+}
+
+export const deleteAcademicPeriod = async (collagePeriodId: string) => {
+    const academicPeriod = await prisma.scholarCollagePeriod.delete({
+        where: {
+            id: collagePeriodId,
+        },
+    })
+    return academicPeriod;
+}
+
+
 
 export const getCollageInformationByScholar = async (scholarId: string) => {
     const collageInformation = await prisma.scholarCollageInformation.findFirst({

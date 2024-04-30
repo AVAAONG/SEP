@@ -1,9 +1,10 @@
 'use client';
-import { uploadBlob } from '@/lib/azure/azure';
+import { deleteBlob, getBlobFile, uploadBlob } from '@/lib/azure/azure';
 import { MODALITY } from '@/lib/constants';
-import { createAcademicPeriod } from '@/lib/db/utils/collage';
+import { createAcademicPeriod, updateAcademicPeriod } from '@/lib/db/utils/collage';
 import scholarAcademicPeriodCreationSchema from '@/lib/schemas/scholar/scholarAcademicPeriodCreationSchema';
 import { revalidateSpecificPath } from '@/lib/serverAction';
+import { ClipboardIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@nextui-org/button';
 import {
@@ -17,12 +18,13 @@ import {
   SelectItem,
   useDisclosure,
 } from '@nextui-org/react';
-import { Prisma } from '@prisma/client';
-import { BaseSyntheticEvent, useState } from 'react';
+import { Prisma, ScholarCollagePeriod } from '@prisma/client';
+import moment from 'moment';
+import Link from 'next/link';
+import { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
-
 const readFileAsBase64 = (file: File | null): Promise<string> => {
   if (file) {
     return new Promise((resolve, reject) => {
@@ -38,8 +40,12 @@ const readFileAsBase64 = (file: File | null): Promise<string> => {
 
 const AddCollageAcademicPeriod = ({
   collageInformationId,
+  edit,
+  collagePeriod,
 }: {
   collageInformationId: string | null;
+  edit: boolean;
+  collagePeriod?: ScholarCollagePeriod | null;
 }) => {
   const [record, setRecord] = useState<File | null>(null);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -52,6 +58,23 @@ const AddCollageAcademicPeriod = ({
   } = useForm<z.infer<typeof scholarAcademicPeriodCreationSchema>>({
     resolver: zodResolver(scholarAcademicPeriodCreationSchema),
   });
+
+  const [href, setHref] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (collagePeriod?.record) {
+      getBlobFile(collagePeriod.record).then(setHref);
+    }
+  }, [collagePeriod]);
+
+  if (edit && collagePeriod) {
+    setValue('start_date', moment(collagePeriod.start_date).format('YYYY-MM-DD'));
+    setValue('end_date', moment(collagePeriod.end_date).format('YYYY-MM-DD'));
+    setValue('current_academic_period', collagePeriod.current_academic_period);
+    setValue('class_modality', collagePeriod.class_modality);
+    setValue('grade', collagePeriod.grade);
+  }
+
   const saveData = async (
     data: z.infer<typeof scholarAcademicPeriodCreationSchema>,
     event: BaseSyntheticEvent<object, any, any> | undefined
@@ -62,26 +85,35 @@ const AddCollageAcademicPeriod = ({
       class_modality: data.class_modality,
       grade: data.grade,
       current_academic_period: data.current_academic_period,
-      record: '',
+      start_date: new Date(data.start_date).toISOString(),
+      end_date: new Date(data.end_date).toISOString(),
     };
     if (record) {
+      if (edit) await deleteBlob(collagePeriod?.record!);
       const recordBase64 = await readFileAsBase64(record);
       const recordForDb = await uploadBlob(recordBase64, 'application/pdf', 'files');
       scholarAcademicPeriod.record = recordForDb!;
     }
-    await createAcademicPeriod(scholarAcademicPeriod, collageInformationId);
+    if (edit && collagePeriod) await updateAcademicPeriod(scholarAcademicPeriod, collagePeriod.id);
+    else await createAcademicPeriod(scholarAcademicPeriod, collageInformationId);
     await revalidateSpecificPath('becario/universidad');
     onClose();
   };
   return (
     <>
-      <Button
-        isDisabled={collageInformationId === null}
-        onPress={onOpen}
-        className="col-span-2 lg:col-span-1 text-white bg-green-600 hover:bg-green-500 hover:text-green-900 font-medium rounded-lg text-sm px-3 py-1.5 text-center"
-      >
-        Agregar periodo academico
-      </Button>
+      {!edit ? (
+        <Button
+          isDisabled={collageInformationId === null}
+          onPress={onOpen}
+          className="col-span-2 lg:col-span-1 text-white bg-green-600 hover:bg-green-500 hover:text-green-900 font-medium rounded-lg text-sm px-3 py-1.5 text-center"
+        >
+          Agregar periodo academico
+        </Button>
+      ) : (
+        <Button isIconOnly variant="light" onPress={onOpen}>
+          <PencilSquareIcon className="w-4 h-4" />
+        </Button>
+      )}
       <Modal
         size="3xl"
         isOpen={isOpen}
@@ -230,6 +262,11 @@ const AddCollageAcademicPeriod = ({
                     render={({ field, formState }) => {
                       return (
                         <div className="flex gap-2 text-sm flex-col col-span-2 md:col-span-1">
+                          {href && (
+                            <Link href={href}>
+                              <ClipboardIcon className="w-4 h-4" />
+                            </Link>
+                          )}
                           <label htmlFor="recorInput">
                             Comprobante del modulo (Solo documentos PDF)
                           </label>
