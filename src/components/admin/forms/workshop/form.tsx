@@ -47,7 +47,7 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting, isValid },
+    formState: { isSubmitting, isValid, isDirty },
     reset,
     setValue,
   } = useForm<Schema>({
@@ -63,7 +63,6 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
   };
 
   useEffect(() => {
-    onReset();
     if (!valuesToUpdate) return;
     const formatedWorkshop = formatWorkshop(valuesToUpdate);
     Object.entries(formatedWorkshop).forEach(([key, value]) => {
@@ -72,7 +71,7 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
       }
       revalidateSpecificPath('/admin/actividadesFormativas/crear/**');
     });
-  }, [valuesToUpdate, setValue]);
+  }, [valuesToUpdate, setValue, isDirty]);
 
   const speakersForCombobox = speakers.map((speaker) => ({
     value: speaker.id,
@@ -99,7 +98,7 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
   ) => {
     const buttonType = ((event?.nativeEvent as SubmitEvent)?.submitter as HTMLButtonElement)?.name;
     const status = determineStatus(buttonType);
-
+    console.log(data.dates);
     const calendarDates = await formatDates(data.dates); //server formating
     const { platformInPerson, platformOnline, speakers, ...restData } = data;
 
@@ -187,6 +186,7 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
                 classNames={{ base: 'col-span-2 md:col-span-1' }}
                 radius="sm"
                 label="Competencia asociada"
+                selectedKeys={[field.value]}
                 defaultSelectedKeys={[field.value]}
                 labelPlacement="outside"
               >
@@ -276,6 +276,7 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
                 radius="sm"
                 label="Modalidad"
                 labelPlacement="outside"
+                selectedKeys={[field.value]}
                 defaultSelectedKeys={[field.value]}
               >
                 {MODALITY.map((modality) => (
@@ -305,6 +306,7 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
                 classNames={{ base: 'col-span-2 md:col-span-1' }}
                 radius="sm"
                 label="Tipo de actividad formativa"
+                selectedKeys={[field.value]}
                 defaultSelectedKeys={[field.value]}
                 labelPlacement="outside"
               >
