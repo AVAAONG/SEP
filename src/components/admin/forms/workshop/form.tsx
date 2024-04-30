@@ -54,13 +54,23 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
     resolver: zodResolver(workshopCreationFormSchema),
   });
 
+  const onReset = () => {
+    // Reset the form state
+    reset({
+      dates: [{ date: '', startHour: '', endHour: '' }],
+      speakers: [],
+    });
+  };
+
   useEffect(() => {
+    onReset();
     if (!valuesToUpdate) return;
     const formatedWorkshop = formatWorkshop(valuesToUpdate);
     Object.entries(formatedWorkshop).forEach(([key, value]) => {
       if (value !== undefined) {
         setValue(key as keyof typeof formatedWorkshop, value);
       }
+      revalidateSpecificPath('/admin/actividadesFormativas/crear/**');
     });
   }, [valuesToUpdate, setValue]);
 
@@ -82,13 +92,6 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
     control,
     name: 'dates',
   });
-
-  const onReset = () => {
-    // Reset the form state
-    reset({
-      dates: [{ date: '', startHour: '', endHour: '' }],
-    });
-  };
 
   const handleFormSubmit = async (
     data: z.infer<typeof workshopCreationFormSchema>,
@@ -150,7 +153,6 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
           name="title"
           control={control}
           rules={{ required: true }}
-          shouldUnregister={true}
           render={({ field, formState }) => {
             return (
               <Input
@@ -174,7 +176,6 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
           name="asociated_skill"
           control={control}
           rules={{ required: true }}
-          shouldUnregister={true}
           render={({ field, formState }) => {
             return (
               <Select
@@ -204,7 +205,6 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
             name="speakers"
             control={control}
             rules={{ required: true }}
-            shouldUnregister={true}
             render={({ field, formState }) => {
               return (
                 <Combobox
@@ -243,7 +243,6 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
           name="avalible_spots"
           control={control}
           rules={{ required: true }}
-          shouldUnregister={true}
           render={({ field, formState }) => {
             return (
               <Input
@@ -265,7 +264,6 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
           name="modality"
           control={control}
           rules={{ required: true }}
-          shouldUnregister={true}
           render={({ field, formState }) => {
             return (
               <Select
@@ -296,7 +294,6 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
           name="kindOfWorkshop"
           control={control}
           rules={{ required: true }}
-          shouldUnregister={true}
           render={({ field, formState }) => {
             return (
               <Select
@@ -324,7 +321,6 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
           name="year"
           control={control}
           rules={{ required: true }}
-          shouldUnregister={true}
           render={({ field, formState }) => {
             return (
               <CheckboxGroup
@@ -352,7 +348,6 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
           name="description"
           control={control}
           rules={{ required: true }}
-          shouldUnregister={true}
           render={({ field, formState }) => {
             return (
               <Textarea

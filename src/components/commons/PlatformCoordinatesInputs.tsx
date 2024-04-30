@@ -15,7 +15,6 @@ const PlatformCoordinatesInput = ({ platform, control }: PlatformCoordinatesInpu
           name="meetingId"
           control={control}
           rules={{ required: true }}
-          shouldUnregister={true}
           render={({ field, formState }) => {
             return (
               <Input
@@ -36,7 +35,6 @@ const PlatformCoordinatesInput = ({ platform, control }: PlatformCoordinatesInpu
           name="meetingLink"
           control={control}
           rules={{ required: true }}
-          shouldUnregister={true}
           render={({ field, formState }) => {
             return (
               <Input
@@ -44,7 +42,7 @@ const PlatformCoordinatesInput = ({ platform, control }: PlatformCoordinatesInpu
                 onChange={field.onChange}
                 isInvalid={!!formState.errors?.['meetingLink']?.message}
                 errorMessage={formState.errors?.['meetingLink']?.message?.toString()}
-                type="text"
+                type="url"
                 label="Link de la reunión"
                 radius="sm"
                 classNames={{ base: 'col-span-2 md:col-span-1' }}
@@ -57,7 +55,6 @@ const PlatformCoordinatesInput = ({ platform, control }: PlatformCoordinatesInpu
           name="meetingPass"
           control={control}
           rules={{ required: true }}
-          shouldUnregister={true}
           render={({ field, formState }) => {
             return (
               <Input

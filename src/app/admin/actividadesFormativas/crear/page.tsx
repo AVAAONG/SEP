@@ -1,9 +1,10 @@
+'use server';
 import WorkshopForm from '@/components/admin/forms/workshop/form';
 import ScheduledCardsWrap from '@/components/scheduledActivitiesCard/ScheduledCardsWrap';
 import { getScheduledWorkshops } from '@/lib/db/utils/Workshops';
 import { getWorkshopSpeakersWithParams } from '@/lib/db/utils/speaker';
 import { Speaker } from '@prisma/client';
-export const dynamic = 'force-dynamic';
+export const dynamic = async () => 'force-dynamic';
 const Page = async ({ searchParams }: { searchParams: { activityToEdit: string | null } }) => {
   const scheduledWorkshops = await getScheduledWorkshops();
   const speakers = await getWorkshopSpeakersWithParams({
@@ -14,7 +15,9 @@ const Page = async ({ searchParams }: { searchParams: { activityToEdit: string |
     image: true,
   });
 
-  const workshop = scheduledWorkshops.find((chat) => chat.id === searchParams.activityToEdit);
+  const workshop = scheduledWorkshops.find((workshop) => {
+    workshop.id === searchParams.activityToEdit;
+  });
   return (
     <div className="min-h-screen flex flex-col md:flex-row gap-8 p-4">
       <div className=" w-full md:w-1/2">
@@ -23,9 +26,10 @@ const Page = async ({ searchParams }: { searchParams: { activityToEdit: string |
         </h1>
         <div>
           <WorkshopForm
+            key={workshop?.id} // Add this line
             speakers={speakers as Speaker[]}
             valuesToUpdate={workshop}
-            kind={searchParams.activityToEdit ? 'edit' : 'create'}
+            kind={workshop ? 'edit' : 'create'}
           />
         </div>
       </div>
