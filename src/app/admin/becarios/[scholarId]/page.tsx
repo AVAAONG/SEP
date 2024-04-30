@@ -1,5 +1,6 @@
 import ScholarDropdown from '@/components/ScholarDropdown';
 import ScholarStatus from '@/components/ScholarStatus';
+import AdminScholarDialogsButtons from '@/components/adminScholarDialogInformation/adminScholarDialogsButtons';
 import { AreaChartComponent } from '@/components/charts';
 import PanelCard, { PanelCardProps } from '@/components/commons/PanelCard';
 import DateSelector from '@/components/commons/datePicker';
@@ -30,7 +31,7 @@ import {
   getAttendedWorkshops,
 } from '@/lib/utils/getAttendedActivities';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
-import { Avatar, Button, Tooltip } from '@nextui-org/react';
+import { Avatar, Tooltip } from '@nextui-org/react';
 import Link from 'next/link';
 import { chatIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs';
 import React from 'react';
@@ -110,72 +111,32 @@ const page = async ({
     },
   ];
 
-  const workshopsByMonth: Record<number, number> =
-    atendedWorkshops?.reduce((acc, workshop) => {
-      const month = new Date(workshop.start_dates[0]).getMonth();
+  const countByMonth = (items) => {
+    return items?.reduce((acc, item) => {
+      const month = new Date(item.start_dates[0] || item.start_dates).getMonth();
       acc[month] = (acc[month] || 0) + 1;
       return acc;
-    }, {}) || {};
+    }, Array(12).fill(0)) || Array(12).fill(0);
+  };
 
-  const chatsByMonth: Record<number, number> =
-    atendedChats?.reduce((acc, chat) => {
-      const month = new Date(chat.start_dates).getMonth();
-      acc[month] = (acc[month] || 0) + 1;
-      return acc;
-    }, {}) || {};
+  const workshopsByMonth = countByMonth(atendedWorkshops);
+  const chatsByMonth = countByMonth(atendedChats);
+  const volunteersByMonth = countByMonth(atendedVolunteers);
 
-  const volunteersByMonth: Record<number, number> =
-    atendedVolunteers?.reduce((acc, volunteer) => {
-      const month = new Date(volunteer.start_dates).getMonth();
-      acc[month] = (acc[month] || 0) + 1;
-      return acc;
-    }, {}) || {};
-
-  // Add null values for months without chats
-  for (let month = 0; month < 12; month++) {
-    if (!(month in workshopsByMonth)) {
-      workshopsByMonth[month] = 0;
-    }
-  }
-  for (let month = 0; month < 12; month++) {
-    if (!(month in volunteersByMonth)) {
-      volunteersByMonth[month] = 0;
-    }
-  }
-  for (let month = 0; month < 12; month++) {
-    if (!(month in chatsByMonth)) {
-      chatsByMonth[month] = 0;
-    }
-  }
-
-  let areaChartSeries = [];
-
-  areaChartSeries.push({
-    name: 'Actividades formativas',
-    data: Object.entries(workshopsByMonth).map(([month, count]) => ({
+  const createAreaChartSeries = (name: string, data, color: string) => ({
+    name,
+    data: data.map((count, month) => ({
       x: new Date(0, month),
       y: count,
     })),
-    color: '#1d4ed8',
+    color,
   });
 
-  areaChartSeries.push({
-    name: 'Chats',
-    data: Object.entries(chatsByMonth).map(([month, count]) => ({
-      x: new Date(0, month),
-      y: count,
-    })),
-    color: '#ef4444',
-  });
-
-  areaChartSeries.push({
-    name: 'Actividades de voluntariado',
-    data: Object.entries(volunteersByMonth).map(([month, count]) => ({
-      x: new Date(0, month),
-      y: count,
-    })),
-    color: '#22c55e',
-  });
+  let areaChartSeries = [
+    createAreaChartSeries('Actividades formativas', workshopsByMonth, '#1d4ed8'),
+    createAreaChartSeries('Chats', chatsByMonth, '#ef4444'),
+    createAreaChartSeries('Actividades de voluntariado', volunteersByMonth, '#22c55e'),
+  ];
 
   return (
     <section className="flex flex-col gap-4 lg:p-6 pt-0">
@@ -209,9 +170,7 @@ const page = async ({
             </div>
           </div>
           <div className="flex gap-3">
-            <Button radius="sm">Informacion universitaria</Button>
-            <Button radius="sm">CVA</Button>
-            <Button radius="sm">Datos de contacto</Button>
+            <AdminScholarDialogsButtons collage={scholar?.collage_information?.[0]} />
           </div>
         </div>
       </div>
