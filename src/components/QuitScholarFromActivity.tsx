@@ -2,7 +2,7 @@
 import { deleteScholarFromChat, deleteScholarFromWorkshop } from '@/lib/db/utils/Workshops';
 import { deleteScholarFromVolunteer } from '@/lib/db/utils/volunteer';
 import { revalidateSpecificPath } from '@/lib/serverAction';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Autocomplete, AutocompleteItem, Avatar, Button, useDisclosure } from '@nextui-org/react';
 import { Scholar } from '@prisma/client';
 import { useMemo, useState } from 'react';
@@ -45,7 +45,7 @@ const QuitScholarFromActivity: React.FC<ActivityPanelInfoProps> = ({
         color="danger"
         radius="sm"
         className="text-white"
-        startContent={<PlusIcon className="h-5 w-5" />}
+        startContent={<XMarkIcon className="h-5 w-5" />}
         isDisabled={false}
       >
         Eliminar becario
