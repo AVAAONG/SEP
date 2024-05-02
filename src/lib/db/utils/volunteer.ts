@@ -1,5 +1,5 @@
 'use server';
-import { Prisma, VolunteerAttendance, VolunteerStatus } from "@prisma/client";
+import { Prisma, ScholarAttendance, VolunteerAttendance, VolunteerStatus } from "@prisma/client";
 import { prisma } from "./prisma";
 
 export const createExternalVolunteer = async (volunteer: Prisma.VolunteerCreateInput,
@@ -241,3 +241,17 @@ export const getVolunteers = async () => {
 	});
 	return volunteers;
 }
+
+export const changeScholarVolunteerAttendance = async (
+	volunteerAttendanceId: string,
+	attendance: ScholarAttendance
+) => {
+	await prisma.volunteerAttendance.update({
+		where: {
+			id: volunteerAttendanceId,
+		},
+		data: {
+			attendance: attendance,
+		},
+	});
+};

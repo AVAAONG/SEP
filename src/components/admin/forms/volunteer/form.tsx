@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input, Textarea } from '@nextui-org/input';
 import { Select, SelectItem } from '@nextui-org/select';
 import { VolunteerStatus } from '@prisma/client';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
@@ -22,6 +23,7 @@ interface IVolunteerForm {
 }
 
 const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
+  const router = useRouter();
   const methods = useForm<Schema>({
     resolver: zodResolver(volunteerSchema),
   });
@@ -84,7 +86,10 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
     }
     const volunteer = createVolunteerObject(data, status);
     if (kind === 'edit' && valuesToUpdate) await updateVolunteer(valuesToUpdate.id, volunteer);
-    if (kind === 'create') await createVolunteer(volunteer);
+    if (kind === 'create') {
+      const createdVolunteer = await createVolunteer(volunteer);
+      router.push(`/admin/voluntariado/${createdVolunteer.id}`);
+    }
     onReset();
   };
 
