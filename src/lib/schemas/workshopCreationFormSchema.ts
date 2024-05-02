@@ -9,10 +9,7 @@ const workshopCreationFormSchema = z
       .object({
         date: z
           .string()
-          .min(1, { message: 'Debes especificar la fecha' })
-          .refine((date) => new Date(date) >= new Date(), {
-            message: 'La fecha no puede ser menor a la actual',
-          }),
+          .min(1, { message: 'Debes especificar la fecha' }),
         startHour: z.string().min(1, { message: 'Debes especificar la hora de inicio' }),
         endHour: z.string().min(1, { message: 'Debes especificar la hora de cierre' }),
       })

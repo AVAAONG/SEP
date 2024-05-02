@@ -2,6 +2,7 @@
 import DateInput from '@/components/commons/DateInput';
 import PlatformCoordinatesInput from '@/components/commons/PlatformCoordinatesInputs';
 import PlatformInput from '@/components/commons/PlatformInput';
+import createWorkshopInvitationMessage from '@/components/emailTemplateMessage/WorkshopInvitationMessage';
 import { createCalendarEvent, deleteCalendarEvent } from '@/lib/calendar/calendar';
 import { IWorkshopCalendar } from '@/lib/calendar/d';
 import { formatDates } from '@/lib/calendar/utils';
@@ -15,6 +16,7 @@ import {
 import { WorkshopWithSpeaker } from '@/lib/db/types';
 import { createWorkshop, updateWorkshop } from '@/lib/db/utils/Workshops';
 import workshopCreationFormSchema from '@/lib/schemas/workshopCreationFormSchema';
+import { sendActivitiesEmail } from '@/lib/sendEmails';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, CheckboxGroup } from '@nextui-org/checkbox';
@@ -98,7 +100,6 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
   ) => {
     const buttonType = ((event?.nativeEvent as SubmitEvent)?.submitter as HTMLButtonElement)?.name;
     const status = determineStatus(buttonType);
-    console.log(data.dates);
     const calendarDates = await formatDates(data.dates); //server formating
     const { platformInPerson, platformOnline, speakers, ...restData } = data;
 
@@ -129,6 +130,13 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
     } else {
       const workshop = createWorkshopObject(data, status, eventsIds, meetingDetails);
       await createWorkshop(workshop);
+      if (buttonType === 'send') {
+        const workshopInvitationMessage = createWorkshopInvitationMessage();
+        await sendActivitiesEmail(
+          workshopInvitationMessage,
+          '¡Se han agregado actividades formativas!'
+        );
+      }
     }
     onReset();
     await revalidateSpecificPath('/admin/actividadesFormativas/crear');
