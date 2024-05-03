@@ -28,7 +28,6 @@ const ActivitiesInfo = async ({
         scholar.program_information.volunteerAttendance?.map((volunteer) => volunteer.volunteer),
         searchParams
       );
-      console.log(tt);
       return {
         ...scholar,
         program_information: {
