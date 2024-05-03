@@ -22,6 +22,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, CheckboxGroup } from '@nextui-org/checkbox';
 import { Input, Textarea } from '@nextui-org/input';
 import { Select, SelectItem } from '@nextui-org/select';
+import { useRouter } from 'next/navigation';
 import { BaseSyntheticEvent, useEffect } from 'react';
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { default as Combobox } from 'react-select';
@@ -55,6 +56,7 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
   } = useForm<Schema>({
     resolver: zodResolver(workshopCreationFormSchema),
   });
+  const router = useRouter();
 
   const onReset = () => {
     // Reset the form state
@@ -140,6 +142,7 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
     }
     onReset();
     await revalidateSpecificPath('/admin/actividadesFormativas/crear');
+    router.push('/admin/actividadesFormativas/crear');
   };
 
   return (
@@ -159,7 +162,6 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
         <Controller
           name="title"
           control={control}
-          rules={{ required: true }}
           render={({ field, formState }) => {
             return (
               <Input
@@ -377,7 +379,10 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
           }}
         />
         <div className="flex gap-4 col-span-2">
-          <FormButtonGroup isDisabled={isSubmitting} onlyEdit={kind === 'create' ? false : true} />
+          <FormButtonGroup
+            isDisabled={!isValid || isSubmitting}
+            onlyEdit={kind === 'create' ? false : true}
+          />
         </div>
       </form>
     </>
