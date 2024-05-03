@@ -33,14 +33,19 @@ const SatisfactionFormResults: React.FC<SatisfactionFormResultsProps> = ({
             <div>
               <div className="flex flex-row gap-4 text-sm">
                 <h3>Leyenda</h3>
-                {Object.entries(COLORS_BASED_ON_RESPONSE).map(([label, color]) => (
-                  <div className="flex flex-row gap-2 items-center">
-                    <div className={`w-4 h-4 bg-[${color}] rounded-full`}></div>
-                    <p>{label}</p>
-                  </div>
-                ))}
+                {Object.entries(COLORS_BASED_ON_RESPONSE).map(([label, color]) => {
+                  return (
+                    <div className="flex flex-row gap-2 items-center">
+                      <div
+                        style={{ backgroundColor: color }}
+                        className="w-4 h-4 rounded-full"
+                      ></div>
+                      <p>{label}</p>
+                    </div>
+                  );
+                })}
               </div>
-              <div className="grid grid-cols-4 gap-4 p-4 ">
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 ">
                 {satisfactionFormChartData.map((response, index) => {
                   const title = getSatisfactionFormTitleAndQuestion(response.name);
                   return (
