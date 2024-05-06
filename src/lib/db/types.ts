@@ -29,3 +29,17 @@ const volunteerAttendanceWithVolunteer = Prisma.validator<Prisma.VolunteerAttend
 });
 
 export type VolunteerAttendanceWithVolunteer = Prisma.VolunteerAttendanceGetPayload<typeof volunteerAttendanceWithVolunteer>;
+
+
+
+const volunteerAttendanceWithScholar = Prisma.validator<Prisma.VolunteerAttendanceDefaultArgs>()({
+  include: {
+    scholar: {
+      include: {
+        scholar: true,
+      }
+    },
+  },
+});
+
+export type VolunteerAttendanceWithScholar = Prisma.VolunteerAttendanceGetPayload<typeof volunteerAttendanceWithScholar>;

@@ -340,11 +340,7 @@ export const getVolunteer = async (id: shortUUID.SUUID) => {
         include: {
           scholar: {
             include: {
-              scholar: {
-                include: {
-                  collage_information: true,
-                },
-              },
+              scholar: true
             },
           },
         },

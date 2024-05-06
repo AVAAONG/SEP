@@ -1,21 +1,21 @@
 'use client';
 import { asignVolunteerHours, changeScholarVolunteerAttendance } from '@/lib/db/utils/volunteer';
 import { revalidateSpecificPath } from '@/lib/serverAction';
-import { Avatar, Chip, Input } from '@nextui-org/react';
+import { Chip, Input } from '@nextui-org/react';
 import { ScholarAttendance } from '@prisma/client';
 import { useState } from 'react';
 import { Cell, CellValue, Column } from 'react-table';
 import { toast } from 'react-toastify';
+import ScholarColumnWidget from '../scholars/commons/ScholarWidget';
 
 // NoPriv = No Privilege (This show data without allow scholars to pass attendance)
 
 export interface IScholarVolunteerAtendance {
   id: string;
-  first_names: string;
-  last_names: string;
+  names: string;
   photo: string | null;
   email: string | null;
-  asignedHours: number;
+  asignedHours: number | undefined;
   whatsAppNumber: string | null;
   attendance?: ScholarAttendance;
 }
@@ -30,21 +30,14 @@ const ScholarVolunteerAttendance: Column<IScholarVolunteerAtendance>[] = [
   },
   {
     Header: 'Nombre',
-    accessor: (row: IScholarVolunteerAtendance) => `${row.first_names} ${row.last_names}`,
+    accessor: 'names',
     Cell: ({ value, cell }: { value: CellValue; cell: Cell<IScholarVolunteerAtendance> }) => {
       return (
-        <div className="flex items-center w-fit">
-          <div className="flex-shrink-0 w-8 h-8">
-            <Avatar
-              className="w-full h-full rounded-full"
-              src={cell.row.original.photo || undefined}
-              alt="Foto de perfil"
-            />
-          </div>
-          <p className="block ml-4 text-start w-64 text-sm font-medium text-gray-900 dark:text-slate-100 ">
-            {value}
-          </p>
-        </div>
+        <ScholarColumnWidget
+          scholarId={cell.row.original.id}
+          scholarName={value}
+          scholarPhoto={cell.row.original.photo}
+        />
       );
     },
   },
@@ -57,12 +50,15 @@ const ScholarVolunteerAttendance: Column<IScholarVolunteerAtendance>[] = [
         await asignVolunteerHours(cell.row.original.id, hours);
       };
       return (
-        <div>
+        <div className="w-24 m-auto">
           <Input
             type="number"
             radius="sm"
+            classNames={{
+              input: '!appearance-none',
+            }}
             className="w-24"
-            value={asignedHous.toString()}
+            value={asignedHous?.toString()}
             onValueChange={async (value) => {
               setAsignedHours(Number(value));
               await handle(Number(value));
