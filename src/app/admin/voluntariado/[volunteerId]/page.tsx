@@ -163,10 +163,8 @@ const page = async ({ params }: { params: { volunteerId: shortUUID.SUUID } }) =>
               </p>
             </div>
           </div>
-          <EditActivity
-            kindOfActivity="volunteer"
-            valuesToUpdate={volunteer}
-          />
+          <EditActivity kindOfActivity="volunteer" valuesToUpdate={volunteer} />
+          ``
         </div>
       </section>
       <section className="w-full space-y-3">
