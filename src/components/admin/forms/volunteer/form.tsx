@@ -81,7 +81,7 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
         status = 'SENT';
         break;
       case 'edit':
-        status = 'SCHEDULED';
+        status = valuesToUpdate?.status as VolunteerStatus; // if volunteer is already created, keep the status as it is
         break;
     }
     const volunteer = createVolunteerObject(data, status);
