@@ -24,6 +24,7 @@ const EditActivity: React.FC<EditActivityProps> = ({ valuesToUpdate, speakers })
   return (
     <>
       <Button
+        radius="sm"
         startContent={<PencilSquareIcon className="w-5 h-5" />}
         className="w-full"
         onPress={onOpen}

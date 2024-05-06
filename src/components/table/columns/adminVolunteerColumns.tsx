@@ -1,6 +1,6 @@
 'use client';
 import DisplayDate from '@/components/DisplayDate';
-import { changeScholarVolunteerStatus } from '@/lib/db/utils/volunteer';
+import { changeVolunteerStatus } from '@/lib/db/utils/volunteer';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import { Tooltip } from '@nextui-org/react';
@@ -67,7 +67,7 @@ const ExternalVolunteerAdminColumns: Column<VolunteerTableDetails>[] = [
     Cell: ({ value, cell }) => {
       const [attendace, setAttendance] = useState(value);
       const handleStatusChange = async (status: VolunteerStatus) => {
-        await changeScholarVolunteerStatus(cell.row.original.id, status);
+        await changeVolunteerStatus(cell.row.original.id, status);
         setAttendance(status);
         await debaunceTest();
       };

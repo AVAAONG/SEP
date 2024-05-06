@@ -78,7 +78,7 @@ export const getExternalVolunteer = async () => {
 }
 
 
-export const changeScholarVolunteerStatus = async (volunteerId: string, volunteerStatus: VolunteerStatus) => {
+export const changeVolunteerStatus = async (volunteerId: string, volunteerStatus: VolunteerStatus) => {
 	await prisma.volunteer.update({
 		where: {
 			id: volunteerId
