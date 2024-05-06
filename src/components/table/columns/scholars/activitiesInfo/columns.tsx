@@ -4,8 +4,7 @@ import ScholarColumnWidget from '../commons/ScholarWidget';
 
 export interface ScholarActivitiesInformationColumnsProps {
   id: string;
-  first_names: string;
-  last_names: string;
+  names: string;
   profilePhoto: string | null;
   whatsAppNumber: string | null;
   email: string | null;
@@ -16,8 +15,7 @@ export interface ScholarActivitiesInformationColumnsProps {
 const scholarActivitiesInformationColumns: Column<ScholarActivitiesInformationColumnsProps>[] = [
   {
     Header: 'Nombre',
-    accessor: (row: ScholarActivitiesInformationColumnsProps) =>
-      `${row.first_names} ${row.last_names}`,
+    accessor: 'names',
     Cell: ({
       value,
       cell,

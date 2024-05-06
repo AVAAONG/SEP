@@ -16,8 +16,7 @@ export const formatScholarsActivitiesForActivitiesTable = async (scholars: any[]
         const { totalVolunteerHours } = getApprovedAndAttendedVolunteers(program_information?.volunteerAttendance)
         return {
             id,
-            first_names,
-            last_names,
+            names: first_names + " " + last_names,
             profilePhoto: photo ? await getBlobImage(photo) : null,
             whatsAppNumber: whatsapp_number,
             email,
