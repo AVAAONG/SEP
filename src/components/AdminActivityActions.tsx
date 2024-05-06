@@ -1,7 +1,6 @@
 import { VolunteerWithAllData } from '@/lib/db/types';
 import { getWorkshopSpeakersWithParams } from '@/lib/db/utils/speaker';
 import StatusUpdateButton from './activityActions/StatusUpdate/StatusUpdate';
-import EditActivity from './activityActions/editActivity/EditActivity';
 import GenerateWhatsAppMessageButton from './activityActions/generateWhatsAppMessage/generateWhatsAppMessageButton';
 import SatisfactionFormResults from './activityActions/satisfactionForm/satisfactionFormResults';
 import {
@@ -35,7 +34,6 @@ const AdminActivityActions = async ({
   return (
     <>
       <div className="grid grid-cols-2 gap-4 w-full">
-        <EditActivity activityId={activityId} speakers={speakers} />
         <StatusUpdateButton
           kindOfActivity={kindOfActivity}
           activityForChangeId={activityId}

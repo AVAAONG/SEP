@@ -7,19 +7,19 @@ import volunteerSchema from '@/lib/schemas/volunteerSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input, Textarea } from '@nextui-org/input';
 import { Select, SelectItem } from '@nextui-org/select';
-import { VolunteerStatus } from '@prisma/client';
+import { Volunteer, VolunteerStatus } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 import FormButtonGroup, { ButtonGroupEventName } from '../commons/FormButtonGroup';
 import { default as createVolunteerObject } from './createVolunteerObject';
+import formatVolunteer from './formatVolunteerToEdit';
 
 type Schema = z.infer<typeof volunteerSchema>;
-type FormValues = Schema & { id: string };
 interface IVolunteerForm {
   kind: 'edit' | 'create';
-  valuesToUpdate?: FormValues;
+  valuesToUpdate?: Volunteer;
 }
 
 const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
@@ -54,12 +54,12 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
 
   useEffect(() => {
     if (valuesToUpdate) {
-      for (const key in valuesToUpdate) {
-        if (key === 'id') continue; // Skip if the key is 'id'
-        if (key in valuesToUpdate) {
-          const value = valuesToUpdate[key as keyof FormValues];
+      const volunteer = formatVolunteer(valuesToUpdate);
+      for (const key in volunteer) {
+        if (key in volunteer) {
+          const value = volunteer[key as keyof Schema];
           if (value !== undefined && value !== null) {
-            setValue(key as keyof Omit<FormValues, 'id'>, value);
+            setValue(key as keyof Schema, value);
           }
         }
       }

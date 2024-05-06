@@ -3,6 +3,7 @@ import DisplayDate from '@/components/DisplayDate';
 import DisplayTime from '@/components/DisplayTime';
 import QuitScholarFromActivity from '@/components/QuitScholarFromActivity';
 import VolunteerStatusWidget from '@/components/VolunteerStatus';
+import EditActivity from '@/components/activityActions/editActivity/EditActivity';
 import Table from '@/components/table/Table';
 import ScholarVolunteerAttendance from '@/components/table/columns/scholarsVolunteerAttendance/columns';
 import { formatScholarDataForVolunteerAttendanceTable } from '@/components/table/columns/scholarsVolunteerAttendance/formater';
@@ -42,6 +43,10 @@ const page = async ({ params }: { params: { volunteerId: shortUUID.SUUID } }) =>
     volunteer_attendance
   );
   const notEnrolledScholars = await getNotEnrolledScholarsInVolunteer(volunteerId);
+  const totalHours = scholarAttendanceDataForTable.reduce(
+    (acc, scholar) => acc + (scholar.asignedHours || 0),
+    0
+  );
 
   return (
     <div className="min-h-screen flex flex-col gap-4">
@@ -144,6 +149,24 @@ const page = async ({ params }: { params: { volunteerId: shortUUID.SUUID } }) =>
               </div>
             </div>
           </div>
+        </div>
+        <div className="w-full lg:w-1/2">
+          <div className="w-full grid grid-cols-2 gap-4">
+            <div className="rounded-lg border text-card-foreground shadow-sm w-full overflow-hidden">
+              <div className="flex flex-col space-y-1.5 p-6 ">
+                <h3 className="text-lg font-semibold whitespace-nowrap leading-none tracking-tight truncate">
+                  Total de horas hombre invertidas
+                </h3>
+              </div>
+              <p className="text-4xl font-semibold whitespace-nowrap leading-none tracking-tight p-6">
+                {totalHours}
+              </p>
+            </div>
+          </div>
+          <EditActivity
+            kindOfActivity="volunteer"
+            valuesToUpdate={volunteer}
+          />
         </div>
       </section>
       <section className="w-full space-y-3">

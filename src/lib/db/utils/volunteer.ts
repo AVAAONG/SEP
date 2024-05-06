@@ -99,9 +99,7 @@ export const updateVolunteer = async (volunteerId: string, volunteer: Prisma.Vol
 		where: {
 			id: volunteerId
 		},
-		data: {
-			...volunteer
-		}
+		...volunteer
 	});
 	return createdVolunteer;
 };
