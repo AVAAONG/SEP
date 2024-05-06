@@ -538,21 +538,6 @@ export const getScholarsWithActivities = async () => {
               workshop: true,
             }
           },
-          volunteerAttendance: {
-            where: {
-              attendance: 'ATTENDED',
-              volunteer: {
-                status: 'APPROVED',
-              }
-            },
-            include: {
-              volunteer: {
-                include: {
-                  volunteer_attendance: true,
-                }
-              },
-            }
-          },
         },
       },
     },
@@ -592,6 +577,34 @@ export const getScholarsWithActivities = async () => {
         chat: true
       }
     });
+
+    const volunteers = await prisma.volunteer.findMany({
+      where: {
+        status: 'APPROVED',
+      },
+      include: {
+        volunteer_attendance: {
+          where: {
+            AND: [
+              {
+                scholar: {
+                  scholarId: scholar.id,
+                },
+              },
+              {
+                attendance: 'ATTENDED'
+              }
+            ],
+          }
+        }
+      }
+    });
+    const volunteersWithAttendance = volunteers.map(volunteer => ({
+      ...volunteer,
+      volunteer_attendance: volunteer.volunteer_attendance.map(va => ({
+        ...va
+      }))
+    }));
     // Remove duplicate chats
     const chatIds = new Set();
     sample = sample.filter(chatAttendance => {
@@ -605,6 +618,7 @@ export const getScholarsWithActivities = async () => {
       program_information: {
         ...scholar.program_information,
         attended_chats: sample,
+        volunteerAttendance: volunteersWithAttendance
       },
     };
   }));

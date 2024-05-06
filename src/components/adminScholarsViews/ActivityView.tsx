@@ -25,7 +25,7 @@ const ActivitiesInfo = async ({
         searchParams
       );
       const tt = await filterActivitiesBySearchParams(
-        scholar.program_information.volunteerAttendance?.map((volunteer) => volunteer.volunteer),
+        scholar.program_information.volunteerAttendance?.map((volunteer) => volunteer),
         searchParams
       );
       return {

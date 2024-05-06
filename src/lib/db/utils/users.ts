@@ -361,32 +361,27 @@ export const getScholarDoneActivitiesCount = async (scholar_id: string, year: nu
         ],
       },
     }),
-    prisma.volunteerAttendance.findMany({
+    prisma.volunteer.findMany({
       where: {
-        AND: [
-          {
-            scholar: {
-              scholarId: scholar_id,
-            },
-          },
-          {
-            attendance: 'ATTENDED',
-          },
-          {
-            volunteer: {
-              status: 'APPROVED',
-            },
-          },
-        ],
+        status: 'APPROVED',
       },
       include: {
-        volunteer: {
-          include: {
-            volunteer_attendance: true
+        volunteer_attendance: {
+          where: {
+            AND: [
+              {
+                scholar: {
+                  scholarId: scholar_id,
+                },
+              },
+              {
+                attendance: 'ATTENDED'
+              }
+            ],
           }
         }
       }
-    }),
+    })
   ]);
 
   const yearStart = new Date(year, 0, 1);
@@ -399,10 +394,16 @@ export const getScholarDoneActivitiesCount = async (scholar_id: string, year: nu
     chat.start_dates.some((date) => date >= yearStart && date <= yearEnd)
   ).length;
   const volunteers = allVolunteers.filter((volunteer) =>
-    volunteer.volunteer.start_dates.some((date) => date >= yearStart && date <= yearEnd)
+    volunteer.start_dates.some((date) => date >= yearStart && date <= yearEnd)
   );
 
-  const { totalVolunteerHours } = getApprovedAndAttendedVolunteers(volunteers.map((volunteer) => volunteer.volunteer))
+  const volunteersWithAttendance = volunteers.map(volunteer => ({
+    ...volunteer,
+    volunteer_attendance: volunteer.volunteer_attendance.map(va => ({
+      ...va
+    }))
+  }));
+  const { totalVolunteerHours } = getApprovedAndAttendedVolunteers(volunteersWithAttendance)
 
   return [workshops, chats, totalVolunteerHours];
 };
