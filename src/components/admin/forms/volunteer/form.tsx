@@ -11,6 +11,7 @@ import { Volunteer, VolunteerStatus } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
 import FormButtonGroup, { ButtonGroupEventName } from '../commons/FormButtonGroup';
 import { default as createVolunteerObject } from './createVolunteerObject';
@@ -96,7 +97,13 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
   return (
     <>
       <form
-        onSubmit={handleSubmit(handleFormSubmit)}
+        onSubmit={handleSubmit((data, event) =>
+          toast.promise(handleFormSubmit(data, event), {
+            pending: `${kind === 'edit' ? 'Editando' : 'Creando'} actividad...`,
+            success: `Actividad ${kind === 'edit' ? 'editada' : 'creada'} con éxito`,
+            error: `Ocurrió un error al ${kind === 'edit' ? 'editar' : 'crear'} la actividad`,
+          })
+        )}
         className="grid grid-cols-2 w-full items-center justify-center gap-4"
       >
         <Controller
