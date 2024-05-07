@@ -39,15 +39,26 @@ export const formatDatesClient = (
         date: string;
         startHour: string;
         endHour: string;
+        endDate?: string; // Optional endDate
     }[]
 ): {
     start_dates: string[];
     end_dates: string[];
 } => {
-    const start_dates = dates.map(({ date, startHour }) =>
-        combineDateAndTime(date.trim(), startHour.trim())
-    );
-    const end_dates = dates.map(({ date, endHour }) => combineDateAndTime(date.trim(), endHour.trim()));
+    const start_dates = dates.map(({ date, startHour, endHour }) => {
+        // For start_dates, use date with startHour and endHour
+        const startDateTime = combineDateAndTime(date.trim(), startHour.trim());
+        // Assuming the requirement is to have a single ISO string for start and end times
+        return `${startDateTime}`;
+    });
+
+    const end_dates = dates.map(({ endDate, date, startHour, endHour }) => {
+        // Use endDate if provided, otherwise fallback to date
+        const effectiveEndDate = endDate || date;
+        const endDateTime = combineDateAndTime(effectiveEndDate.trim(), endHour.trim());
+        // Assuming the requirement is to have a single ISO string for start and end times
+        return `${endDateTime}`;
+    });
+
     return { start_dates, end_dates };
 };
-

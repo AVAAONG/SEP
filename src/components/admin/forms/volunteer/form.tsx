@@ -126,7 +126,7 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
             );
           }}
         />
-        <DateInput control={control} fieldArray={fieldArray} />
+        <DateInput control={control} fieldArray={fieldArray} haveClosedDate={true} />
         <Controller
           name="beneficiary"
           control={control}
@@ -271,15 +271,13 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
         <Controller
           name="description"
           control={control}
-          rules={{ required: true }}
           render={({ field, formState }) => {
             return (
               <Textarea
                 radius="sm"
-                value={field.value || undefined}
-                onChange={field.onChange}
-                isInvalid={!!formState.errors?.['description']?.message}
-                errorMessage={formState.errors?.['description']?.message?.toString()}
+                {...field}
+                isInvalid={!!formState.errors?.description?.message}
+                errorMessage={formState.errors?.description?.message?.toString()}
                 label="Descripción"
                 labelPlacement="outside"
                 classNames={{
