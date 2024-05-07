@@ -1,6 +1,7 @@
 import { ScholarStatus } from "@prisma/client";
 import moment from "moment";
 import { parseModalityFromDatabase } from "../utils2";
+import { getApprovedAndAttendedVolunteers } from "./getAttendedActivities";
 import { parseAvaaAdmisionYear, parseCvaLocationFromDatabase, parseKindOfCollageFromDatabase, parseStudiRegimeFromDatabase, parseStudyAreaFromDatabase } from "./parseFromDatabase";
 
 export const countScholarGeneralProperties = (scholars: any[]) => {
@@ -97,10 +98,13 @@ export const countScholarActivitiesProperties = (scholars: any[]) => {
         const TOTAL_VOLUNTEER_HOURS = 100;
         const doneChats = scholar.program_information?.attended_chats.length;
         const doneWorkshops = scholar.program_information?.attended_workshops.length;
-        const doneVolunteerHours = scholar.program_information?.volunteerAttendance.reduce((total: number, volunteer: { asigned_hours: number }) => total + volunteer.asigned_hours, 0);
+
+        const { totalVolunteerHours } = getApprovedAndAttendedVolunteers(scholar.program_information?.volunteerAttendance)
+
         const workshopPercentage = (doneWorkshops / TOTAL_WORKSHOPS_AND_CHATS) * 100;
         const chatPercentage = (doneChats / TOTAL_WORKSHOPS_AND_CHATS) * 100;
-        const volunteerPercentage = (doneVolunteerHours / TOTAL_VOLUNTEER_HOURS) * 100;
+
+        const volunteerPercentage = (totalVolunteerHours / TOTAL_VOLUNTEER_HOURS) * 100;
 
         updateCounts(workshopPercentage, counts.workshopsPercentage);
         updateCounts(chatPercentage, counts.chatPercentage);

@@ -25,7 +25,7 @@ const ActivitiesInfo = async ({
         searchParams
       );
       const tt = await filterActivitiesBySearchParams(
-        scholar.program_information.volunteerAttendance?.map((volunteer) => volunteer),
+        scholar.program_information.volunteerAttendance?.map((volunteer) => volunteer.volunteer),
         searchParams
       );
       return {
@@ -39,6 +39,7 @@ const ActivitiesInfo = async ({
       };
     })
   );
+  console.log(df[2].program_information);
 
   const data = await formatScholarsActivitiesForActivitiesTable(df);
   const scholarsPropertiesCount = countScholarActivitiesProperties(df);

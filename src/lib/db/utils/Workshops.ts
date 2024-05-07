@@ -504,18 +504,8 @@ export const getScholarsWithActivities = async () => {
   const scholars = await prisma.scholar.findMany({
     where: {
       AND: [
-        {
-          program_information: {
-            chapter: {
-              id: 'Rokk6_XCAJAg45heOEzYb'
-            },
-          },
-        },
-        {
-          program_information: {
-            scholar_condition: 'ACTIVE',
-          }
-        }
+        { program_information: { chapter_id: 'Rokk6_XCAJAg45heOEzYb' } },
+        { program_information: { scholar_condition: 'ACTIVE' } },
       ]
     },
     select: {
@@ -530,84 +520,51 @@ export const getScholarsWithActivities = async () => {
           attended_workshops: {
             where: {
               attendance: 'ATTENDED',
-              workshop: {
-                activity_status: 'ATTENDANCE_CHECKED',
-              }
+              workshop: { activity_status: 'ATTENDANCE_CHECKED' }
             },
-            include: {
-              workshop: true,
-            }
+            include: { workshop: true }
           },
         },
       },
     },
   });
 
-  const total = await Promise.all(scholars.map(async (scholar) => {
-    let sample = await prisma.chatAttendance.findMany({
+  // Consider batching these queries if performance is a concern
+  const scholarsWithAttendance = await Promise.all(scholars.map(async (scholar) => {
+    const chatAttendances = await prisma.chatAttendance.findMany({
       where: {
-        chat: {
-          activity_status: 'ATTENDANCE_CHECKED'
-        },
+        chat: { activity_status: 'ATTENDANCE_CHECKED' },
         OR: [
-          {
-            AND: [
-              {
-                scholar: {
-                  scholarId: scholar.id,
-                },
-              },
-              {
-                attendance: 'ATTENDED'
-              },
-            ]
-          },
-          {
-            chat: {
-              speaker: {
-                some: {
-                  id: scholar.id,
-                },
-              },
-            }
-          },
+          { scholar: { scholarId: scholar.id }, attendance: 'ATTENDED' },
+          { chat: { speaker: { some: { id: scholar.id } } } }
         ],
       },
-      include: {
-        chat: true
-      }
+      include: { chat: true },
     });
 
-    const volunteers = await prisma.volunteer.findMany({
+    const volunteerAttendances = await prisma.volunteerAttendance.findMany({
       where: {
-        status: 'APPROVED',
+        scholar: { scholarId: scholar.id },
+        attendance: 'ATTENDED',
+        volunteer: { status: 'APPROVED' }, // Include volunteer status check
       },
       include: {
-        volunteer_attendance: {
-          where: {
-            AND: [
-              {
-                scholar: {
-                  scholarId: scholar.id,
-                },
+        volunteer: {
+          include: {
+            volunteer_attendance: {
+              where: {
+                scholar: { scholarId: scholar.id },
+                attendance: 'ATTENDED',
               },
-              {
-                attendance: 'ATTENDED'
-              }
-            ],
+            }
           }
         }
       }
     });
-    const volunteersWithAttendance = volunteers.map(volunteer => ({
-      ...volunteer,
-      volunteer_attendance: volunteer.volunteer_attendance.map(va => ({
-        ...va
-      }))
-    }));
-    // Remove duplicate chats
+
+    // Remove duplicate chats (same optimization as before)
     const chatIds = new Set();
-    sample = sample.filter(chatAttendance => {
+    const uniqueChatAttendances = chatAttendances.filter(chatAttendance => {
       const duplicate = chatIds.has(chatAttendance.chat.id);
       chatIds.add(chatAttendance.chat.id);
       return !duplicate;
@@ -617,12 +574,13 @@ export const getScholarsWithActivities = async () => {
       ...scholar,
       program_information: {
         ...scholar.program_information,
-        attended_chats: sample,
-        volunteerAttendance: volunteersWithAttendance
+        attended_chats: uniqueChatAttendances,
+        volunteerAttendance: volunteerAttendances
       },
     };
   }));
-  return total;
+
+  return scholarsWithAttendance;
 }
 
 export const getChatsByScholar = async (scholarId: string) => {
