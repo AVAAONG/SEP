@@ -284,9 +284,9 @@ const countVolunteerProperties = async (volunteers: VolunteerWithAllData[]) => {
         const volunteerKind = parseKindOfVolunteerFromDatabase(volunteer.kind_of_volunteer);
         const volunteerModality = parseModalityFromDatabase(volunteer.modality)
         const volunteerAsociatedProject = parseVolunteerProject(volunteer.VolunteerProject)
-        const volunteerHours = Number((volunteer.volunteer_attendance.reduce((acc, attendance) => {
+        const volunteerHours = volunteer.volunteer_attendance.reduce((acc, attendance) => {
             return acc + attendance.asigned_hours;
-        }, 0) / volunteer.volunteer_attendance.length).toFixed(2));
+        }, 0);
         counts.kindOfVolunteer[volunteerKind] = (counts.kindOfVolunteer[volunteerKind] || 0) + volunteerHours;
         counts.modality[volunteerModality] = (counts.modality[volunteerModality] || 0) + volunteerHours;
         counts.asociatedProject[volunteerAsociatedProject] = (counts.asociatedProject[volunteerAsociatedProject] || 0) + volunteerHours;

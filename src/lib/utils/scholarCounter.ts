@@ -98,14 +98,10 @@ export const countScholarActivitiesProperties = (scholars: any[]) => {
         const TOTAL_VOLUNTEER_HOURS = 100;
         const doneChats = scholar.program_information?.attended_chats.length;
         const doneWorkshops = scholar.program_information?.attended_workshops.length;
-
         const { totalVolunteerHours } = getApprovedAndAttendedVolunteers(scholar.program_information?.volunteerAttendance)
-
         const workshopPercentage = (doneWorkshops / TOTAL_WORKSHOPS_AND_CHATS) * 100;
         const chatPercentage = (doneChats / TOTAL_WORKSHOPS_AND_CHATS) * 100;
-
         const volunteerPercentage = (totalVolunteerHours / TOTAL_VOLUNTEER_HOURS) * 100;
-
         updateCounts(workshopPercentage, counts.workshopsPercentage);
         updateCounts(chatPercentage, counts.chatPercentage);
         updateCounts(volunteerPercentage, counts.volunteerPercentage);

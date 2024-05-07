@@ -7,7 +7,7 @@ const createAdminVolunteerActivitiesForTable = (volunteers: VolunteerWithAllData
     return volunteers.map((volunteer) => {
         const averageVolunteerHours = volunteer.volunteer_attendance.reduce((acc, attendance) => {
             return acc + attendance.asigned_hours;
-        }, 0) / volunteer.volunteer_attendance.length;
+        }, 0);
         return {
             id: volunteer.id,
             title: volunteer.title,
