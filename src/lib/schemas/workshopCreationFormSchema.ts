@@ -54,9 +54,9 @@ const workshopCreationFormSchema = z
     })),
     year: z.nativeEnum(WorkshopYear).array().min(1, { message: 'Debes elegir al menos un año' }),
     description: z.string().trim().optional(),
-    meetingId: z.string().trim().optional(),
-    meetingLink: z.string().trim().nullable(),
-    meetingPass: z.string().trim().nullable(),
+    meetingId: z.string().trim().nullable().optional(),
+    meetingLink: z.string().trim().nullable().optional(),
+    meetingPass: z.string().trim().nullable().optional(),
   })
   .refine((data) => {
     let isValid = true;

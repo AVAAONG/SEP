@@ -17,7 +17,7 @@ import createEventObject from './calendarEventObject';
 import { IChatCalendar, IWorkshopCalendar } from './d';
 import { getMeetEventLink, substractMonths } from './utils';
 
-interface MeetingDetails {
+export interface MeetingDetails {
   meetingLink: string | null | undefined;
   meetingId: string | null | undefined;
   meetingPassword?: string | null | undefined;

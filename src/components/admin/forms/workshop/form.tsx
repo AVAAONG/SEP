@@ -3,7 +3,7 @@ import DateInput from '@/components/commons/DateInput';
 import PlatformCoordinatesInput from '@/components/commons/PlatformCoordinatesInputs';
 import PlatformInput from '@/components/commons/PlatformInput';
 import createWorkshopInvitationMessage from '@/components/emailTemplateMessage/WorkshopInvitationMessage';
-import { createCalendarEvent, deleteCalendarEvent } from '@/lib/calendar/calendar';
+import { MeetingDetails, createCalendarEvent, deleteCalendarEvent } from '@/lib/calendar/calendar';
 import { IWorkshopCalendar } from '@/lib/calendar/d';
 import { formatDates } from '@/lib/calendar/utils';
 import {
@@ -112,10 +112,18 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
       ...restData,
       description: data.description ? data.description : null,
     };
+    let eventsIds: string[] = [];
+    let meetingDetails: MeetingDetails[] = [];
 
-    const [eventsIds, meetingDetails] = await createCalendarEvent(calendarWorkshop);
+    //avoid create a calendar event when the workshop is in 'create mode'
+    if (buttonType !== 'create') {
+      const [eventos, meet] = await createCalendarEvent(calendarWorkshop);
+      eventsIds = eventos;
+      meetingDetails = meet;
+    }
+
     let meetingCoordinates = meetingDetails;
-    if (data.platformOnline !== 'ZOOM') {
+    if (buttonType !== 'create' && data.platformOnline !== 'ZOOM') {
       meetingCoordinates.push({
         meetingId: data.meetingId,
         meetingLink: data.meetingLink,
@@ -129,9 +137,10 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
       );
       const workshop = createWorkshopObject(data, status, eventsIds, meetingCoordinates);
       await updateWorkshop(valuesToUpdate?.id, workshop);
+      router.push('/admin/actividadesFormativas/crear');
     } else {
       const workshop = createWorkshopObject(data, status, eventsIds, meetingDetails);
-      await createWorkshop(workshop);
+      const createdWorkshop = await createWorkshop(workshop);
       if (buttonType === 'send') {
         const workshopInvitationMessage = createWorkshopInvitationMessage();
         await sendActivitiesEmail(
@@ -139,10 +148,12 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
           '¡Se han agregado actividades formativas!'
         );
       }
+      if (buttonType === 'create') {
+        router.push(`/admin/actividadesFormativas/${createdWorkshop.id}`);
+      }
     }
-    onReset();
     await revalidateSpecificPath('/admin/actividadesFormativas/crear');
-    router.push('/admin/actividadesFormativas/crear');
+    onReset();
   };
 
   return (
@@ -379,10 +390,7 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
           }}
         />
         <div className="flex gap-4 col-span-2">
-          <FormButtonGroup
-            isDisabled={!isValid || isSubmitting}
-            onlyEdit={kind === 'create' ? false : true}
-          />
+          <FormButtonGroup isDisabled={isSubmitting} onlyEdit={kind === 'create' ? false : true} />
         </div>
       </form>
     </>
