@@ -7,6 +7,7 @@ enum Skill {
     SELF_MANAGEMENT
     ICT
     ENTREPRENEURSHIP
+    TEAM_WORK
 }
 
 enum WorkshopYear {

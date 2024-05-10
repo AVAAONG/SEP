@@ -30,7 +30,7 @@ type Count = {
 
 const countWorkshopProperties = async (workshops: WorkshopWithAllData[]) => {
     const counts = {
-        skills: {} as Record<"Ejercicio ciudadano" | "Emprendimiento" | "Gerencia de sí mismo" | "Liderazgo" | "TIC", number>,
+        skills: {} as Record<"Ejercicio ciudadano" | "Emprendimiento" | "Gerencia de sí mismo" | "Liderazgo" | "TIC" | "Trabajo en equipo", number>,
         years: {} as Record<string, number>,
         kinds: {} as Record<"Taller" | "Cine foro" | "Foro" | "Webinar" | "Charla" | "Conversatorio" | "sin definir", number>,
         modality: {} as Record<"Presencial" | "Virtual" | "Hibrida", number>,

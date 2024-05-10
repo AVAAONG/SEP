@@ -52,6 +52,7 @@ export const PROGRAM_COMPONENTS = [
   { label: 'Gerencia de sí mismo', value: 'SELF_MANAGEMENT' },
   { label: 'TIC', value: 'ICT' },
   { label: 'Emprendimiento', value: 'ENTREPRENEURSHIP' },
+  { label: 'Trabajo en equipo', value: 'TEAM_WORK' },
 ];
 
 export const WORKSHOP_TYPES = [
@@ -59,6 +60,7 @@ export const WORKSHOP_TYPES = [
   { label: 'Cine Foro', value: 'CINEMA_FORUM' },
   { label: 'Foro', value: 'FORUM' },
   { label: 'Webinar', value: 'WEBINAR' },
+  { label: 'Curso', value: 'COURSE' },
   { label: 'Charla', value: 'TALK' },
   { label: 'Conversatorio', value: 'CONVERSATORIO' },
 ];
