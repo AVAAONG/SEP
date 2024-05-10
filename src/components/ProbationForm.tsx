@@ -1,4 +1,5 @@
 'use client';
+import { ScholarWithAllData } from '@/lib/db/types';
 import { setProbationToScholar } from '@/lib/db/utils/users';
 import probationFormSchema from '@/lib/schemas/probationFormSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,7 +17,6 @@ import { ScholarStatus } from '@prisma/client';
 import React, { BaseSyntheticEvent } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { ScholarWithAllData } from './EditScholarForm';
 interface ProbationFormProps {
   isOpen: boolean;
   onOpenChange: () => void;

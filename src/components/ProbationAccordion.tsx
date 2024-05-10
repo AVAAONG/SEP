@@ -1,7 +1,7 @@
 'use client';
+import { ScholarWithAllData } from '@/lib/db/types';
 import { CalendarDaysIcon } from '@heroicons/react/24/outline';
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
-import { ScholarWithAllData } from './EditScholarForm';
 
 interface ProbationAccordionProps {
   scholarInProbation: ScholarWithAllData;
@@ -35,14 +35,16 @@ const ProbationAccordion: React.FC<ProbationAccordionProps> = ({ scholarInProbat
             aria-label={'sdf'}
             className="group-[.is-splitted]:p-0 p-0 w-full"
             classNames={{
-              content: `${probationInfo.kind_of_probation === 'PROBATION_I'
-                ? '!bg-yellow-300'
-                : '!bg-rose-300'
-                } rounded-b-lg pb-0`,
-              base: `${probationInfo.kind_of_probation === 'PROBATION_I'
-                ? '!bg-yellow-500'
-                : '!bg-rose-500'
-                }`,
+              content: `${
+                probationInfo.kind_of_probation === 'PROBATION_I'
+                  ? '!bg-yellow-300'
+                  : '!bg-rose-300'
+              } rounded-b-lg pb-0`,
+              base: `${
+                probationInfo.kind_of_probation === 'PROBATION_I'
+                  ? '!bg-yellow-500'
+                  : '!bg-rose-500'
+              }`,
               title:
                 'text-light dark:text-secondary-dark text-xl font-semibold leading-none tracking-tight',
               indicator: '-mt-2 opacity-100 text-white text-center pr-4',

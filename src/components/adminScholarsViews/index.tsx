@@ -1,4 +1,4 @@
-import { ScholarWithAllData } from '../EditScholarForm';
+import { ScholarWithAllData } from '@/lib/db/types';
 import ActivitiesInfo from './ActivityView';
 import CollageInfo from './CollageInfo';
 import CvaInfo from './CvaInfo';

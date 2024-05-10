@@ -1,8 +1,8 @@
-import { ScholarWithAllData } from "@/components/EditScholarForm";
 import { getBlobImage } from "@/lib/azure/azure";
 import { parseAvaaAdmisionYear, parseProbationFromDatabase } from "@/lib/utils/parseFromDatabase";
 import moment from "moment";
 import { ScholarGeneralInformationColumnProps } from "./columns";
+import { ScholarWithAllData } from "@/lib/db/types";
 
 export const formatScholarsToGeneralInfoTable = async (scholars: ScholarWithAllData[]): Promise<ScholarGeneralInformationColumnProps[]> => {
     const data = scholars.map(async (scholar) => {
