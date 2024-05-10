@@ -3,9 +3,10 @@ import exportDataToExcel from '@/lib/utils/exportFunctions/commonExport';
 import processRow from '@/lib/utils/exportFunctions/tableExportUtils';
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 import { Button } from '@nextui-org/react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Column,
+  SortingRule,
   useFilters,
   useGlobalFilter,
   usePagination,
@@ -33,6 +34,7 @@ function Table<T extends object>({
   const data = useMemo(() => tableData, [tableData]);
   const columns = useMemo(() => tableColumns, [tableColumns]);
   const [isExpanded, toggleExpanded] = useState(false);
+  const [sortingState, setSortingState] = useState<SortingRule<T>[]>([]);
 
   const {
     getTableProps,
@@ -49,7 +51,21 @@ function Table<T extends object>({
     canNextPage,
     canPreviousPage,
     pageOptions,
-  } = useTable({ columns, data }, useFilters, useGlobalFilter, useSortBy, usePagination);
+    state,
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState: {
+        // Add initialState
+        sortBy: sortingState, // Load the initial sort state
+      },
+    },
+    useFilters,
+    useGlobalFilter,
+    useSortBy,
+    usePagination
+  );
 
   const allowPagination = (allowPagination: boolean) => {
     const o = allowPagination ? rows : page;
@@ -61,6 +77,10 @@ function Table<T extends object>({
     ...column,
     isDate: column.Header?.toString().toLocaleLowerCase().startsWith('fecha'),
   }));
+
+  useEffect(() => {
+    setSortingState(state.sortBy);
+  }, [state.sortBy]);
 
   return (
     <div
