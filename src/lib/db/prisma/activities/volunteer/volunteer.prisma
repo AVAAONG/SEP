@@ -27,6 +27,8 @@ enum VolunteerProject {
     OFFICE
     CHAT_CLUBS
     EXTERNAL
+    SCHOLARS_COMMITTEE
+    OTHER
 }
 
 model Volunteer {

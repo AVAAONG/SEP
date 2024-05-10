@@ -168,6 +168,10 @@ export const parseVolunteerProject = (value: VolunteerProject | null | undefined
       return 'Chat clubs';
     case 'EXTERNAL':
       return 'Externo';
+    case 'SCHOLARS_COMMITTEE':
+      return 'Comité de becarios';
+    case 'OTHER':
+      return 'Otro';
     default:
       return value;
   }

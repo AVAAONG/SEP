@@ -80,11 +80,13 @@ export const VOLUNTEER_PROJECT: {
     { label: 'UMAA', value: 'UMAA' },
     { label: 'OAL', value: 'OAL' },
     { label: 'ALV', value: 'ALV' },
-    { label: 'UVPL', value: 'UVPL' },
+    { label: 'UVPLV', value: 'UVPL' },
     { label: 'GA', value: 'GA' },
+    { label: 'Comite de becarios', value: 'SCHOLARS_COMMITTEE' },
     { label: 'Oficina', value: 'OFFICE' },
     { label: 'ChatClubs', value: 'CHAT_CLUBS' },
     { label: 'Externo', value: 'EXTERNAL' },
+    { label: 'Otro', value: 'OTHER' },
   ];
 
 export const ONLINE_PLATFORMS = [
