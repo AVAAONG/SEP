@@ -87,7 +87,7 @@ function Table<T extends object>({
             startContent={<ArrowUpTrayIcon className="w-5 h-5 text-primary-1" />}
             className="w-auto flex gap-2 items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10  dark:focus:ring-gray-700 dark:bg-slate-950 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
           >
-            Exportar
+            <span className="hidden sm:inline">Exportar</span>
           </Button>
           <ExpandTableButton isExpanded={isExpanded} toggleExpanded={toggleExpanded} />
         </div>
