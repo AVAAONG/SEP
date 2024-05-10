@@ -1,6 +1,6 @@
-import { WorkshopAttendance } from "@prisma/client";
+import { ChatAttendance, VolunteerAttendance, WorkshopAttendance } from "@prisma/client";
 
-export const countScholarStatusesInActivity = (scholarActivityAtendance: WorkshopAttendance[]) => {
+export const countScholarStatusesInActivity = (scholarActivityAtendance: WorkshopAttendance[] | ChatAttendance[] | VolunteerAttendance[]) => {
     const attendanceCounts = scholarActivityAtendance?.reduce(
         (counts, scholar_att) => {
             switch (scholar_att.attendance) {
@@ -16,6 +16,9 @@ export const countScholarStatusesInActivity = (scholarActivityAtendance: Worksho
                 case 'ENROLLED':
                     counts.enroledScholars++;
                     break;
+                case 'JUSTIFY':
+                    counts.justifiedScolars++;
+                    break;
                 default:
                     break;
             }
@@ -26,6 +29,7 @@ export const countScholarStatusesInActivity = (scholarActivityAtendance: Worksho
             unAttendedScholarsCount: 0,
             cancelledScholarsCount: 0,
             enroledScholars: 0,
+            justifiedScolars: 0,
         }
     );
     return attendanceCounts;

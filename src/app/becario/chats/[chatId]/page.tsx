@@ -1,4 +1,5 @@
 import ActivityPanelInfo from '@/components/ActivityPanelInfo';
+import ActivityScholarStatusesCount from '@/components/ActivityScholarStatusesCount';
 import ScholarActivitySatisfactionSurvey from '@/components/ScholarActivitySatisfactionSurvey';
 import ScholarAttendanceWidget from '@/components/ScholarAttendanceWidget';
 import StatusUpdateButton from '@/components/activityActions/StatusUpdate/StatusUpdate';
@@ -56,10 +57,17 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
     ? scholarsAttendance.map((attendance) => attendance.scholar.scholar.email)
     : [];
   return (
-    <div className="min-h-screen flex flex-col gap-4">
+    <div className="min-h-screen flex flex-col gap-4 w-full">
       <ActivityPanelInfo activity={chat as ChatWithSpeaker}>
-        {chat?.speaker[0].id === se?.scholarId ? (
-          <></>
+        {isTheSpeaker ? (
+          <div className="flex flex-col gap-4">
+            <ActivityScholarStatusesCount scholarAttendance={scholarsAttendance} />
+            <StatusUpdateButton
+              kindOfActivity="chat"
+              activityForChangeId={chatId}
+              scholarsEmails={scholarEmails}
+            />
+          </div>
         ) : (
           <div className="w-full flex gap-4  items-center justify-end">
             <div className="flex gap-2 items-center justify-center">
@@ -70,15 +78,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
                 <ScholarAttendanceWidget value={scholarAttendance} />
               </div>
             </div>
-            {scholarAttendance === 'SPEAKER' && (
-              <div className="w-fit">
-                <StatusUpdateButton
-                  kindOfActivity="chat"
-                  activityForChangeId={chatId}
-                  scholarsEmails={scholarEmails}
-                />
-              </div>
-            )}
+
             <div className="flex gap-4">
               {scholarAttendance === 'ENROLLED' && (
                 <CeaseSpotButtonProps
