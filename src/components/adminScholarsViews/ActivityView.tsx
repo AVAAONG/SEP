@@ -39,7 +39,6 @@ const ActivitiesInfo = async ({
       };
     })
   );
-  console.log(df[2].program_information);
 
   const data = await formatScholarsActivitiesForActivitiesTable(df);
   const scholarsPropertiesCount = countScholarActivitiesProperties(df);
