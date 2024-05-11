@@ -30,7 +30,7 @@ export const getApprovedAndAttendedVolunteers = (volunteers: IVolunteer[]) => {
         totalVolunteerHours: number = 0;
     volunteers.forEach(volunteer => {
         const volunteerAttendance = volunteer.volunteer_attendance[0];
-        if (volunteer.status === 'APPROVED' && volunteerAttendance.attendance === 'ATTENDED') {
+        if (volunteer.status === 'APPROVED' && volunteerAttendance?.attendance === 'ATTENDED') {
             if (volunteer.kind_of_volunteer === 'INTERNAL') internalVolunteerHours += volunteerAttendance.asigned_hours;
             else {
                 if (externalVolunteerHours < 40) {
