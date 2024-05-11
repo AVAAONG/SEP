@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
 import { Prisma } from '@prisma/client';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { BaseSyntheticEvent, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -26,6 +27,7 @@ const readFileAsBase64 = (file: File | null): Promise<string> => {
 };
 
 const page = () => {
+  const router = useRouter();
   const sesion = useSession();
   const {
     handleSubmit,
@@ -58,9 +60,10 @@ const page = () => {
       status: 'PENDING',
     };
     if (!sesion.data?.scholarId) throw new Error('No se encontro el id del becario');
-    await createExternalVolunteer(volunteerData, sesion.data?.scholarId, data.asigned_hours);
+    const externalVolunteer = await createExternalVolunteer(volunteerData, sesion.data?.scholarId, data.asigned_hours);
     reset(undefined);
     setSelectedDocument(null);
+    router.push(`/becario/voluntariado/${externalVolunteer.id}`);
   };
   return (
     <section className="flex flex-col md:px-12 justify-start items-center w-full gap-4">

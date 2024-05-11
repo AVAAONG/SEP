@@ -6,7 +6,7 @@ export const createExternalVolunteer = async (volunteer: Prisma.VolunteerCreateI
 	scholarId: string,
 	asignedHours: number
 ) => {
-	await prisma.volunteer.create({
+	return await prisma.volunteer.create({
 		data: {
 			kind_of_volunteer: 'EXTERNAL',
 			status: 'PENDING',
