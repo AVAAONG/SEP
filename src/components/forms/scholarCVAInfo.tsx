@@ -3,11 +3,11 @@ import { deleteBlobFile, uploadBlob } from '@/lib/azure/azure';
 import { createCvaInformation, updateCvaInformation } from '@/lib/db/utils/cva';
 import scholarCVAInformationSchema from '@/lib/schemas/scholar/scholarCVAInformationSchema';
 import { revalidateSpecificPath } from '@/lib/serverAction';
+import { formatDateToDisplayInInput, formatDateToStoreInDB } from '@/lib/utils/dates';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input, Select, SelectItem, Textarea, Tooltip } from '@nextui-org/react';
-import { CvaLocation, Prisma, ScholarCVAInformation } from '@prisma/client';
-import moment from 'moment';
+import { CvaLocation, ScholarCVAInformation as IScholarCVAInformation, Prisma } from '@prisma/client';
 import Link from 'next/link';
 import { BaseSyntheticEvent, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
@@ -33,7 +33,7 @@ const ScholarCVAInformation = ({
   certificateUrl,
   scholarId,
 }: {
-  scholarCvaInformation: ScholarCVAInformation | null;
+  scholarCvaInformation: IScholarCVAInformation | null;
   certificateUrl: string | null;
   scholarId: string;
 }) => {
@@ -44,11 +44,11 @@ const ScholarCVAInformation = ({
       already_finished_cva: scholarCvaInformation?.already_finished_cva === true ? 'YES' : 'NO',
       is_in_cva: scholarCvaInformation?.is_in_cva === true ? 'YES' : 'NO',
       cva_ended_date: scholarCvaInformation.cva_ended_date
-        ? moment(scholarCvaInformation?.cva_ended_date).format('YYYY-MM-DD')
+        ? formatDateToDisplayInInput(scholarCvaInformation?.cva_ended_date)
         : null,
       cva_location: scholarCvaInformation?.cva_location as CvaLocation,
       cva_started_date: scholarCvaInformation.cva_started_date
-        ? moment(scholarCvaInformation?.cva_started_date).format('YYYY-MM-DD')
+        ? formatDateToDisplayInInput(scholarCvaInformation?.cva_started_date)
         : null,
       not_started_cva_reason: scholarCvaInformation?.not_started_cva_reason,
     }
@@ -78,10 +78,10 @@ const ScholarCVAInformation = ({
       | Prisma.ScholarCVAInformationUpdateInput
       | Prisma.ScholarCVAInformationCreateInput = {
       already_finished_cva: data.already_finished_cva === 'YES',
-      cva_ended_date: data.cva_ended_date ? new Date(data.cva_ended_date).toISOString() : null,
+      cva_ended_date: data.cva_ended_date ? formatDateToStoreInDB(data.cva_ended_date) : null,
       cva_location: data.cva_location,
       cva_started_date: data.cva_started_date
-        ? new Date(data.cva_started_date).toISOString()
+        ? formatDateToStoreInDB(data.cva_started_date)
         : null,
       is_in_cva: data.is_in_cva === 'YES',
       not_started_cva_reason: data.not_started_cva_reason,
