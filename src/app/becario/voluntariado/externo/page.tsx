@@ -3,6 +3,7 @@ import { uploadBlob } from '@/lib/azure/azure';
 import { MODALITY } from '@/lib/constants';
 import { createExternalVolunteer } from '@/lib/db/utils/volunteer';
 import externalVolunteerSubmisionSchema from '@/lib/schemas/scholar/externalVolunteerSubmisionSchema';
+import { formatDateToStoreInDB } from '@/lib/utils/dates';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
 import { Prisma } from '@prisma/client';
@@ -48,11 +49,11 @@ const page = () => {
     const volunteerData: Prisma.VolunteerCreateInput = {
       beneficiary: data.beneficiary,
       description: data.description,
-      end_dates: [new Date(data.end_dates).toISOString()],
+      end_dates: [formatDateToStoreInDB(data.end_dates)],
       modality: data.modality,
       platform: data.platform,
       proof,
-      start_dates: [new Date(data.start_dates).toISOString()],
+      start_dates: [formatDateToStoreInDB(data.start_dates)],
       supervisor: data.supervisor,
       supervisor_email: data.supervisor_email,
       title: data.title,
