@@ -1,6 +1,7 @@
 'use client';
+import moment from 'moment-timezone';
+import 'moment/locale/es';
 import { useEffect, useState } from 'react';
-
 interface DisplayDateProps {
   date: string;
   kind?: 'short' | 'long';
@@ -18,22 +19,13 @@ const DisplayDate: React.FC<DisplayDateProps> = ({ date, kind = 'long' }) => {
     if (kind === 'long') {
       return (
         <>
-          {new Date(date).toLocaleDateString('es-ES', {
-            weekday: 'long',
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric',
-          })}
+          {moment(date, moment.ISO_8601, true).locale('es').format('dddd, DD [de] MMMM [de] YYYY')}
         </>
       );
     } else {
       return (
         <>
-          {new Date(date).toLocaleDateString('es-ES', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-          })}
+          {moment.utc(date, moment.ISO_8601, true).tz('America/Caracas').format('DD/MM/YYYY')}
         </>
       );
     }

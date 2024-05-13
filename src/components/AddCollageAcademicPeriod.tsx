@@ -19,7 +19,8 @@ import {
   useDisclosure,
 } from '@nextui-org/react';
 import { Prisma, ScholarCollagePeriod } from '@prisma/client';
-import moment from 'moment';
+import moment from 'moment-timezone';
+import 'moment/locale/es';
 import Link from 'next/link';
 import { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -52,7 +53,7 @@ const AddCollageAcademicPeriod = ({
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting, isValid },
+    formState: { isSubmitting, isValid, isDirty },
     reset,
     setValue,
   } = useForm<z.infer<typeof scholarAcademicPeriodCreationSchema>>({
@@ -65,7 +66,7 @@ const AddCollageAcademicPeriod = ({
     if (collagePeriod?.record) {
       getBlobFile(collagePeriod.record).then(setHref);
     }
-  }, [collagePeriod]);
+  }, [collagePeriod, isDirty]);
 
   if (edit && collagePeriod) {
     setValue('start_date', moment(collagePeriod.start_date).format('YYYY-MM-DD'));
@@ -85,8 +86,8 @@ const AddCollageAcademicPeriod = ({
       class_modality: data.class_modality,
       grade: data.grade,
       current_academic_period: data.current_academic_period,
-      start_date: new Date(data.start_date).toISOString(),
-      end_date: new Date(data.end_date).toISOString(),
+      start_date: moment.tz(data.start_date, 'YYYY-MM-DD', 'America/Caracas').utc().toISOString(),
+      end_date: moment.tz(data.end_date, 'YYYY-MM-DD', 'America/Caracas').utc().toISOString(),
     };
     if (record) {
       if (edit) await deleteBlob(collagePeriod?.record!);
