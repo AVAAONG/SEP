@@ -4,6 +4,7 @@ import { MODALITY } from '@/lib/constants';
 import { createAcademicPeriod, updateAcademicPeriod } from '@/lib/db/utils/collage';
 import scholarAcademicPeriodCreationSchema from '@/lib/schemas/scholar/scholarAcademicPeriodCreationSchema';
 import { revalidateSpecificPath } from '@/lib/serverAction';
+import { formatDateToDisplayInInput, formatDateToStoreInDB } from '@/lib/utils/dates';
 import { ClipboardIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@nextui-org/button';
@@ -19,8 +20,6 @@ import {
   useDisclosure,
 } from '@nextui-org/react';
 import { Prisma, ScholarCollagePeriod } from '@prisma/client';
-import moment from 'moment-timezone';
-import 'moment/locale/es';
 import Link from 'next/link';
 import { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -69,8 +68,8 @@ const AddCollageAcademicPeriod = ({
   }, [collagePeriod, isDirty]);
 
   if (edit && collagePeriod) {
-    setValue('start_date', moment(collagePeriod.start_date).format('YYYY-MM-DD'));
-    setValue('end_date', moment(collagePeriod.end_date).format('YYYY-MM-DD'));
+    setValue('start_date', formatDateToDisplayInInput(collagePeriod.start_date))
+    setValue('end_date', formatDateToDisplayInInput(collagePeriod.end_date));
     setValue('current_academic_period', collagePeriod.current_academic_period);
     setValue('class_modality', collagePeriod.class_modality);
     setValue('grade', collagePeriod.grade);
@@ -86,8 +85,8 @@ const AddCollageAcademicPeriod = ({
       class_modality: data.class_modality,
       grade: data.grade,
       current_academic_period: data.current_academic_period,
-      start_date: moment.tz(data.start_date, 'YYYY-MM-DD', 'America/Caracas').utc().toISOString(),
-      end_date: moment.tz(data.end_date, 'YYYY-MM-DD', 'America/Caracas').utc().toISOString(),
+      start_date: formatDateToStoreInDB(data.start_date),
+      end_date: formatDateToStoreInDB(data.end_date),
     };
     if (record) {
       if (edit) await deleteBlob(collagePeriod?.record!);
