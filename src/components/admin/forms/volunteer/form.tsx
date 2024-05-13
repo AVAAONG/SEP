@@ -85,7 +85,7 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
         status = valuesToUpdate?.status as VolunteerStatus; // if volunteer is already created, keep the status as it is
         break;
     }
-    const volunteer = createVolunteerObject(data, status);
+    const volunteer = await createVolunteerObject(data, status);
     if (kind === 'edit' && valuesToUpdate) await updateVolunteer(valuesToUpdate.id, volunteer);
     if (kind === 'create') {
       const createdVolunteer = await createVolunteer(volunteer);

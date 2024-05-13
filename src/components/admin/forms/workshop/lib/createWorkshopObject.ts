@@ -1,4 +1,4 @@
-import { formatDatesClient } from '@/lib/calendar/clientUtils';
+import { formatDates } from '@/lib/calendar/clientUtils';
 import workshopCreationFormSchema from '@/lib/schemas/workshopCreationFormSchema';
 import { ActivityStatus, Prisma, WorkshopYear } from '@prisma/client';
 import { z } from 'zod';
@@ -10,7 +10,7 @@ interface MeetingDetail {
 }
 
 type MeetingDetails = Array<MeetingDetail>;
-const createWorkshopObject = (
+const createWorkshopObject = async (
   data: z.infer<typeof workshopCreationFormSchema>,
   status: ActivityStatus,
   calendarIds: string[],
@@ -26,7 +26,7 @@ const createWorkshopObject = (
     meeting_password.push(meetingDetail.meetingPassword || '');
   });
 
-  const dates = formatDatesClient(data.dates); //client formating
+  const dates = await formatDates(data.dates); //client formating
   let workshop: Prisma.WorkshopCreateArgs = {
     data: {
       title: data.title,

@@ -1,4 +1,4 @@
-import { formatDatesClient } from '@/lib/calendar/clientUtils';
+import { formatDates } from '@/lib/calendar/clientUtils';
 import chatCreationFormSchema from '@/lib/schemas/chatCreationFormSchema';
 import { ActivityStatus, Prisma } from '@prisma/client';
 import { z } from 'zod';
@@ -10,7 +10,7 @@ interface MeetingDetail {
 }
 
 type MeetingDetails = Array<MeetingDetail>;
-const createChatObject = (
+const createChatObject = async (
     data: z.infer<typeof chatCreationFormSchema>,
     status: ActivityStatus,
     calendarIds: string[],
@@ -26,7 +26,7 @@ const createChatObject = (
         meeting_password.push(meetingDetail.meetingPassword || '');
     });
 
-    const dates = formatDatesClient(data.dates); //client formating
+    const dates = await formatDates(data.dates); //client formating
     let workshop: Prisma.ChatCreateArgs = {
         data: {
             title: data.title,

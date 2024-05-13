@@ -4,8 +4,8 @@ import PlatformCoordinatesInput from '@/components/commons/PlatformCoordinatesIn
 import PlatformInput from '@/components/commons/PlatformInput';
 import createWorkshopInvitationMessage from '@/components/emailTemplateMessage/WorkshopInvitationMessage';
 import { MeetingDetails, createCalendarEvent, deleteCalendarEvent } from '@/lib/calendar/calendar';
+import { formatDates } from '@/lib/calendar/clientUtils';
 import { IWorkshopCalendar } from '@/lib/calendar/d';
-import { formatDates } from '@/lib/calendar/utils';
 import {
   MODALITY,
   PROGRAM_COMPONENTS,
@@ -135,11 +135,11 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
       valuesToUpdate.calendar_ids.map(
         async (id) => await deleteCalendarEvent(WORKSHOP_CALENDAR_ID, id)
       );
-      const workshop = createWorkshopObject(data, status, eventsIds, meetingCoordinates);
+      const workshop = await createWorkshopObject(data, status, eventsIds, meetingCoordinates);
       await updateWorkshop(valuesToUpdate?.id, workshop);
       router.push('/admin/actividadesFormativas/crear');
     } else {
-      const workshop = createWorkshopObject(data, status, eventsIds, meetingDetails);
+      const workshop = await createWorkshopObject(data, status, eventsIds, meetingDetails);
       const createdWorkshop = await createWorkshop(workshop);
       if (buttonType === 'send') {
         const workshopInvitationMessage = createWorkshopInvitationMessage();

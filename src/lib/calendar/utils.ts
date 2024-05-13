@@ -5,89 +5,7 @@
  */
 
 import { Skill } from '@prisma/client';
-import axios, { AxiosRequestConfig } from 'axios';
-import moment from 'moment-timezone';
 import { Calendar } from '../googleAPI/auth';
-
-/**
- * It creates an 'Add to my calendar' Link
- *
- * @see link https://stackoverflow.com/questions/5831877/how-do-i-create-a-link-to-add-an-entry-to-a-calendar for more information about how to create the link
- * @param name the name of the event
- * @param platform the platform where the event will be hosted
- * @param calendarDescription the description of the event
- * @param startDate the start date of the event
- * @param endDate the end date of the event
- * @returns 'Add to my calendar' link
- */
-export const getPublicEventLink = async (
-  name: string,
-  platform: string,
-  calendarDescription: string,
-  startDate: string,
-  endDate: string
-): Promise<string> => {
-  // give format to the location, description and dates
-  const encodedLocation = encodeURIComponent(platform);
-  const calendarName = encodeURIComponent(name);
-  const encodeDescription = encodeURIComponent(calendarDescription);
-  const calendarStartDate = startDate.replaceAll('-', '').replaceAll(':', '').replaceAll('.', '');
-  const calendarEndDate = endDate.replaceAll('-', '').replaceAll(':', '').replaceAll('.', '');
-
-  let addUrl = '';
-
-  if (platform === 'padlet') {
-    const startDay = startDate
-      .replaceAll('-', '')
-      .replaceAll(':', '')
-      .replaceAll('.', '')
-      .slice(0, -11);
-    const endDayISO = addDays(endDate, 3);
-    const endDay = endDayISO
-      .replaceAll('-', '')
-      .replaceAll(':', '')
-      .replaceAll('.', '')
-      .slice(0, -11);
-    addUrl = `http://www.google.com/calendar/event?action=TEMPLATE&text=${calendarName}&dates=${startDay}/${endDay}&details=${encodeDescription}&location=${encodedLocation}`;
-  } else {
-    addUrl = `http://www.google.com/calendar/event?action=TEMPLATE&text=${calendarName}&dates=${calendarStartDate}/${calendarEndDate}&details=${encodeDescription}&location=${encodedLocation}`;
-  }
-  const shortADDurl = await shortenLink(addUrl);
-  return shortADDurl;
-};
-
-/**
- * Generates a short url link by using the firebase Dynamic links API
- *
- * @see link https://firebase.google.com/docs/dynamic-links/rest for details about the firebase dynamic links API
- * It uses the rest API of firebase dynamic links to create a shortn link
- * @param link the link we want to shorten
- * @returns the shortened link
- * */
-const shortenLink = async (link: string): Promise<string> => {
-  const webApiKey = process.env.GOOOGLE_WEB_API_KEY;
-  const data = {
-    dynamicLinkInfo: {
-      domainUriPrefix: 'https://proexcelencia.page.link',
-      link,
-    },
-    suffix: {
-      option: 'SHORT',
-    },
-  };
-  const config: AxiosRequestConfig = {
-    headers: {
-      'content-type': 'application/json',
-    },
-  };
-  const response = await axios.post(
-    `https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=${webApiKey}`,
-    data,
-    config
-  );
-
-  return response.data.shortLink;
-};
 
 /**
  * it substracts the hours passed as argument to the date passed as argument
@@ -133,35 +51,6 @@ export const substractMonths = (montsTosubstract: number) => {
   date.setMonth(date.getMonth() - montsTosubstract);
   return date.toISOString();
 };
-
-/**
- * it formats the date passed as argument to the format needed by the calendar api
- *
- * @remarks the format needed by the calendar api is `aaaa-mm-ddThh:mm:ss-hh:mm`
- * @remarks If the end hour is not passed as argument, it will add 2 hours to the start hour and set it as the end hour
- *
- * @param date the date of the event (the format should be passed as `aaaa-mm-dd`)
- * @param startingHour the hour of the event (the format should be passed as `hh:mm`)
- * @returns the date object of the start and end hour in ISO string format
- */
-function combineDateAndTime(dateString: string, timeString: string): string {
-  // Parse the input date and time
-  const parsedDate = moment(dateString, 'YYYY-MM-DD');
-  const parsedTime = moment(timeString, 'HH:mm');
-
-  // Combine the date and time
-  const combinedDateTime = parsedDate.set({
-    hour: parsedTime.hour(),
-    minute: parsedTime.minute(),
-    second: 0, // Optional: Set seconds to 0
-    millisecond: 0, // Optional: Set milliseconds to 0
-  });
-  // Convert to UTC based on the specified time zone
-  const utcDateTime = combinedDateTime.utc();
-  // Return the ISO string
-  return utcDateTime.toISOString();
-}
-
 
 
 /**
@@ -211,30 +100,3 @@ export const mapWorkshopSkill = (skill: Skill): string => {
   }
 };
 
-export const formatDates = (
-  dates: {
-    date: string;
-    startHour: string;
-    endHour: string;
-  }[]
-): {
-  start_dates: string[];
-  end_dates: string[];
-} => {
-  const start_dates = dates.map(({ date, startHour }) =>
-    combineDateAndTime(date.trim(), startHour.trim())
-  );
-  const end_dates = dates.map(({ date, endHour }) => combineDateAndTime(date.trim(), endHour.trim()));
-  return { start_dates, end_dates };
-};
-
-export const sumHours = (startHours: string[], endHours: string[]) => {
-  let hours: number = 0;
-  startHours.forEach((startDate, index) => {
-    const endDate = endHours[index];
-    hours = hours + moment(endDate).diff(moment(startDate), 'minutes') / 60;
-    startHours.push(startDate);
-    endHours.push(endDate);
-  });
-  return hours;
-};

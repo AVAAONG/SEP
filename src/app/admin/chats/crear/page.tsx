@@ -20,7 +20,7 @@ const Page = async ({ searchParams }: { searchParams: { activityToEdit: string |
           Crear actividad chat club
         </h1>
         <div>
-          <ChatForm speakers={speakers as Speaker[]} valuesToUpdate={chat} kind='create' />
+          <ChatForm speakers={speakers as Speaker[]} valuesToUpdate={chat} kind={chat ? 'edit' : 'create'} />
         </div>
       </div>
       <div className="w-full md:w-1/2 pt-0 flex flex-col items-center ">

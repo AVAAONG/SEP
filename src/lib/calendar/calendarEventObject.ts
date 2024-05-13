@@ -23,19 +23,16 @@ const createDefaultEvent = (
   attendees?: calendar_v3.Schema$EventAttendee[]
 ) => {
 
-  const startDateWithNoOffset = start.split('Z')[0];
-  const endDateWithNoOffset = end.split('Z')[0];
-
   const defaultEvent: calendar_v3.Schema$Event = {
     summary: title,
     description: calendarDescription,
     location: parsePlatformFromDatabase(platform),
     start: {
-      dateTime: startDateWithNoOffset,
+      dateTime: start,
       timeZone: 'America/Caracas',
     },
     end: {
-      dateTime: endDateWithNoOffset,
+      dateTime: end,
       timeZone: 'America/Caracas',
     },
     visibility: 'public',

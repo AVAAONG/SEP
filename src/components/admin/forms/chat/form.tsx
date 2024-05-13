@@ -4,8 +4,8 @@ import PlatformCoordinatesInput from '@/components/commons/PlatformCoordinatesIn
 import PlatformInput from '@/components/commons/PlatformInput';
 import createChatInvitationMessage from '@/components/emailTemplateMessage/ChatInvitationMessage';
 import { MeetingDetails, createCalendarEvent, deleteCalendarEvent } from '@/lib/calendar/calendar';
+import { formatDates } from '@/lib/calendar/clientUtils';
 import { IChatCalendar } from '@/lib/calendar/d';
-import { formatDates } from '@/lib/calendar/utils';
 import { CHAT_CALENDAR_ID, CHAT_LEVELS, MODALITY } from '@/lib/constants';
 import { ChatWithSpeaker } from '@/lib/db/types';
 import { createChat, updateChat } from '@/lib/db/utils/chats';
@@ -48,6 +48,17 @@ const ChatForm: React.FC<ChatFormProps> = ({ speakers, valuesToUpdate, kind }) =
     resolver: zodResolver(chatCreationFormSchema),
   });
 
+  useEffect(() => {
+    if (!valuesToUpdate) return;
+    const formatedChat = formatChat(valuesToUpdate);
+    Object.entries(formatedChat).forEach(([key, value]) => {
+      if (value !== undefined) {
+        setValue(key as keyof typeof formatedChat, value);
+      }
+      revalidateSpecificPath('/admin/chats/crear/**');
+    });
+  }, [valuesToUpdate, setValue, isDirty]);
+
   const speakersForCombobox = speakers.map((speaker) => ({
     value: speaker.id,
     label: `${speaker.first_names} ${speaker.last_names}`,
@@ -68,16 +79,7 @@ const ChatForm: React.FC<ChatFormProps> = ({ speakers, valuesToUpdate, kind }) =
     name: 'platformOnline',
   });
 
-  useEffect(() => {
-    if (!valuesToUpdate) return;
-    const formatedChat = formatChat(valuesToUpdate);
-    Object.entries(formatedChat).forEach(([key, value]) => {
-      if (value !== undefined) {
-        setValue(key as keyof typeof formatedChat, value);
-      }
-      revalidateSpecificPath('/admin/chats/crear/**');
-    });
-  }, [valuesToUpdate, setValue, isDirty]);
+
 
   const router = useRouter();
 
@@ -97,6 +99,7 @@ const ChatForm: React.FC<ChatFormProps> = ({ speakers, valuesToUpdate, kind }) =
     const buttonType = ((event?.nativeEvent as SubmitEvent)?.submitter as HTMLButtonElement)?.name;
     const status = determineStatus(buttonType);
     const calendarDates = await formatDates(data.dates); //server formating
+    console.log('calendarDates', calendarDates)
     const { platformInPerson, platformOnline, speakers, ...restData } = data;
     const calendarWorkshop: IChatCalendar = {
       platform: platformInPerson ? platformInPerson : platformOnline!,
@@ -127,11 +130,11 @@ const ChatForm: React.FC<ChatFormProps> = ({ speakers, valuesToUpdate, kind }) =
       valuesToUpdate.calendar_ids.map(
         async (id) => await deleteCalendarEvent(CHAT_CALENDAR_ID, id)
       );
-      const chat = createChatObject(data, status, eventsIds, meetingCoordinates);
+      const chat = await createChatObject(data, status, eventsIds, meetingCoordinates);
       await updateChat(valuesToUpdate?.id, chat);
       router.push('/admin/chats/crear');
     } else {
-      const chat = createChatObject(data, status, eventsIds, meetingDetails);
+      const chat = await createChatObject(data, status, eventsIds, meetingDetails);
       const createdChat = await createChat(chat);
       if (buttonType === 'send') {
         const chatInvitationMessage = createChatInvitationMessage();
