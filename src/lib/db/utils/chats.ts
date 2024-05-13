@@ -348,3 +348,13 @@ export const changeChatStatusInBulk = async (ids: string[], status: ActivityStat
   });
   return chats;
 };
+
+export const updateChat = async (chatId: string, chat: Prisma.ChatCreateArgs) => {
+  const createdVolunteer = await prisma.chat.update({
+    where: {
+      id: chatId
+    },
+    ...chat
+  });
+  return createdVolunteer;
+};

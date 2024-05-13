@@ -49,8 +49,15 @@ const chatCreationFormSchema = z
       .min(1, { message: 'Debe tener al menos un cupo disponible' }),
     platformOnline: z.string().trim().optional(),
     platformInPerson: z.string().trim().optional(),
-    speakersId: z.string().min(1, { message: 'Debes elegir al menos un facilitador' }).trim(),
+    speakers: z.array(z.object({
+      value: z.string(),
+      label: z.string(),
+      email: z.string().nullable(),
+    })),
     description: z.string().trim().optional(),
+    meetingId: z.string().trim().nullable().optional(),
+    meetingLink: z.string().trim().nullable().optional(),
+    meetingPass: z.string().trim().nullable().optional(),
   })
   .refine((data) => {
     let isValid = true;
