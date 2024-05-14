@@ -7,7 +7,7 @@ const AdminScholarDialogsButtons: React.FC = ({ collage }) => {
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     return (
         <>
-            <Button onPress={onOpen} radius="sm">Informacion universitaria</Button>
+            <Button onPress={onOpen} radius="sm">Información universitaria</Button>
             <BasicModal
                 size="2xl"
                 isOpen={isOpen}
