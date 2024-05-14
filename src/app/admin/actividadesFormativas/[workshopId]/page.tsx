@@ -88,9 +88,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
         <div className="flex flex-col gap-4">
           <ActivityScholarStatusesCount scholarAttendance={scholar_attendance} />
           <AdminActivityActions
-            activityId={workshopId}
             formResponses={formResponses}
-            kindOfActivity="workshop"
             scholarsEmails={scholarEmails}
             activity={workshop}
           />
@@ -126,10 +124,10 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
                 hour={
                   start_dates
                     ? new Date(start_dates[0]).toLocaleTimeString('es-ES', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: true,
-                      })
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true,
+                    })
                     : ''
                 }
                 modality={parseModalityFromDatabase(modality as Modality)}

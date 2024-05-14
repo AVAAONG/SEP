@@ -26,7 +26,7 @@ const ActivityEditFormModal: React.FC<ActivityEditFormModalProps> = ({ activity 
         className="w-full"
         onPress={onOpen}
       >
-        <span className='hidden md:inline'>
+        <span className='hidden md:block w-full'>
           Editar
         </span>
       </Button>

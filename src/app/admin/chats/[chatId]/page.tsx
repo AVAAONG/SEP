@@ -102,8 +102,6 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
         <div className="flex flex-col gap-4">
           <ActivityScholarStatusesCount scholarAttendance={scholar_attendance} />
           <AdminActivityActions
-            activityId={chatId}
-            kindOfActivity="chat"
             formResponses={formResponses}
             scholarsEmails={scholarEmails}
             activity={chat}
