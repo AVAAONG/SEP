@@ -60,6 +60,18 @@ export type ScholarsCvaInformation =
 
 export const getScholarsCvaInformation = async (): Promise<ScholarsCvaInformation[]> => {
     const cvaInformation = await prisma.scholar.findMany({
+        where: {
+            program_information: {
+                scholar_condition: {
+                    equals: 'ACTIVE',
+                },
+                chapter: {
+                    id: {
+                        equals: 'Rokk6_XCAJAg45heOEzYb',
+                    },
+                },
+            },
+        },
         select: {
             id: true,
             first_names: true,
