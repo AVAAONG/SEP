@@ -35,7 +35,7 @@ const SatisfactionFormResults: React.FC<SatisfactionFormResultsProps> = ({
           <div className="flex flex-col">
             <div>
               <div className="flex flex-row gap-4 text-sm">
-                <h3>Leyenda</h3>
+                <h3>Leyenda 👉</h3>
                 {Object.entries(COLORS_BASED_ON_RESPONSE).map(([label, color]) => {
                   return (
                     <div className="flex flex-row gap-2 items-center">

@@ -44,41 +44,29 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
   const scholarEmails = scholar_attendance
     ? scholar_attendance.map((attendance) => attendance.scholar.scholar.email)
     : [];
+  const defaultForm = {
+    activity_organization: 0,
+    activity_number_of_participants: 0,
+    activity_lenght: 0,
+    activity_relevance_for_scholar: 0,
+    speaker_theory_practice_mix: 0,
+    speaker_knowledge_of_activity: 0,
+    speaker_foment_scholar_to_participate: 0,
+    speaker_knowledge_transmition: 0,
+    content_match_necesities: 0,
+    content_knowledge_adquisition: 0,
+    content_knowledge_expansion: 0,
+    content_personal_development: 0,
+    general_satisfaction: 0,
+  };
 
   const formResponses = scholar_attendance
     .filter((scholar) => scholar.attendance === 'ATTENDED')
     .map((attendance) => {
       const form = attendance.satisfaction_form;
-      if (!form)
-        return {
-          activity_organization: 0,
-          activity_number_of_participants: 0,
-          activity_lenght: 0,
-          activity_relevance_for_scholar: 0,
-          speaker_theory_practice_mix: 0,
-          speaker_knowledge_of_activity: 0,
-          speaker_foment_scholar_to_participate: 0,
-          speaker_knowledge_transmition: 0,
-          content_match_necesities: 0,
-          content_knowledge_adquisition: 0,
-          content_knowledge_expansion: 0,
-          content_personal_development: 0,
-          general_satisfaction: 0,
-        };
       return {
-        activity_organization: form.activity_organization,
-        activity_number_of_participants: form.activity_number_of_participants,
-        activity_lenght: form.activity_lenght,
-        activity_relevance_for_scholar: form.activity_relevance_for_scholar,
-        speaker_theory_practice_mix: form.speaker_theory_practice_mix,
-        speaker_knowledge_of_activity: form.speaker_knowledge_of_activity,
-        speaker_foment_scholar_to_participate: form.speaker_foment_scholar_to_participate,
-        speaker_knowledge_transmition: form.speaker_knowledge_transmition,
-        content_match_necesities: form.content_match_necesities,
-        content_knowledge_adquisition: form.content_knowledge_adquisition,
-        content_knowledge_expansion: form.content_knowledge_expansion,
-        content_personal_development: form.content_personal_development,
-        general_satisfaction: form.general_satisfaction,
+        ...defaultForm,
+        ...form,
       };
     });
 
