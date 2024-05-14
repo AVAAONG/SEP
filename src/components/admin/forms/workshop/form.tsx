@@ -25,28 +25,21 @@ import { Select, SelectItem } from '@nextui-org/select';
 import { useRouter } from 'next/navigation';
 import { BaseSyntheticEvent, useEffect } from 'react';
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';
-import { default as Combobox } from 'react-select';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 import FormButtonGroup from '../commons/FormButtonGroup';
+import SpeakerInput from '../commons/SpeakerInput';
 import createWorkshopObject from './lib/createWorkshopObject';
 import formatWorkshop from './lib/formatWorkshopForEdit';
 import { determineStatus } from './lib/utils';
 
 type Schema = z.infer<typeof workshopCreationFormSchema>;
 
-interface WorkshopCreationFormProps {
-  speakers: {
-    id: string;
-    first_names: string;
-    last_names: string;
-    email: string | null;
-    image?: string | null;
-  }[];
+interface WorkshopFormProps {
   kind: 'edit' | 'create';
   valuesToUpdate: WorkshopWithSpeaker | undefined;
 }
-const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToUpdate, kind }) => {
+const WorkshopForm: React.FC<WorkshopFormProps> = ({ valuesToUpdate, kind }) => {
   const {
     control,
     handleSubmit,
@@ -76,12 +69,6 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
       revalidateSpecificPath('/admin/actividadesFormativas/crear/**');
     });
   }, [valuesToUpdate, setValue, isDirty]);
-
-  const speakersForCombobox = speakers.map((speaker) => ({
-    value: speaker.id,
-    label: `${speaker.first_names} ${speaker.last_names}`,
-    email: speaker.email,
-  }));
 
   const modality = useWatch({
     control,
@@ -220,46 +207,7 @@ const WorkshopForm: React.FC<WorkshopCreationFormProps> = ({ speakers, valuesToU
             );
           }}
         />
-        <div>
-          <span className="text-sm">Facilitador(es)</span>
-          <Controller
-            name="speakers"
-            control={control}
-            rules={{ required: true }}
-            render={({ field, formState }) => {
-              return (
-                <Combobox
-                  // defaultValue={}
-                  isMulti
-                  {...field}
-                  required={true}
-                  className="!rounded-lg z-50 py-2"
-                  options={speakersForCombobox}
-                  styles={{
-                    control: (baseStyles: object, _state: object) => ({
-                      ...baseStyles,
-                      padding: '1px 5px', // Increase vertical padding
-                      borderRadius: '10px', // Set rounded corners
-                      borderColor: 'transparent', // Set border color as transparent
-                      outline: 'none', // Remove outline
-                      boxShadow: 'none', // Remove boxShadow (ring)
-                      '&:hover': {
-                        backgroundColor: '#f3f4f6',
-                      },
-                      '&:focus': {
-                        outline: 'none', // Remove outline on focus
-                      },
-                      '&:active': {
-                        outline: 'none', // Remove outline on active
-                      },
-                    }),
-                  }}
-                />
-              );
-            }}
-          />
-        </div>
-
+        <SpeakerInput control={control} kind='workshop' />
         <Controller
           name="avalible_spots"
           control={control}

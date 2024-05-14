@@ -1,26 +1,23 @@
 'use client';
+import ChatForm from '@/components/admin/forms/chat/form';
 import VolunteerForm from '@/components/admin/forms/volunteer/form';
+import WorkshopForm from '@/components/admin/forms/workshop/form';
+import { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
+import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
+import { determineActivityKindByTipe } from '@/lib/activities/utils';
 import { VolunteerWithAllData } from '@/lib/db/types';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { Button } from '@nextui-org/button';
 import { Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from '@nextui-org/react';
 import React from 'react';
 
-interface EditActivityProps {
-  speakers?: {
-    id: string;
-    first_names: string;
-    last_names: string;
-    email: string | null;
-    image?: string | null;
-  }[];
-  kindOfActivity: 'workshop' | 'chat' | 'volunteer';
-  valuesToUpdate: VolunteerWithAllData;
+interface ActivityEditFormModalProps {
+  activity: VolunteerWithAllData | ChatsWithAllData | WorkshopWithAllData
 }
 
-const EditActivity: React.FC<EditActivityProps> = ({ valuesToUpdate, speakers }) => {
+const ActivityEditFormModal: React.FC<ActivityEditFormModalProps> = ({ activity }) => {
   const { isOpen, onOpenChange, onOpen } = useDisclosure();
-
+  const kindOfActivity = determineActivityKindByTipe(activity)
   return (
     <>
       <Button
@@ -29,7 +26,9 @@ const EditActivity: React.FC<EditActivityProps> = ({ valuesToUpdate, speakers })
         className="w-full"
         onPress={onOpen}
       >
-        Editar Actividad
+        <span className='hidden md:inline'>
+          Editar
+        </span>
       </Button>
       <Modal
         isOpen={isOpen}
@@ -50,7 +49,22 @@ const EditActivity: React.FC<EditActivityProps> = ({ valuesToUpdate, speakers })
                   Editar actividad
                 </ModalHeader>
                 <ModalBody className="flex flex-col items-center">
-                  <VolunteerForm kind="edit" valuesToUpdate={valuesToUpdate} />
+                  {
+
+                    kindOfActivity === 'volunteer' && (
+                      <VolunteerForm kind="edit" valuesToUpdate={activity as VolunteerWithAllData} />
+                    )
+                  }
+                  {
+                    kindOfActivity === 'workshop' && (
+                      <WorkshopForm kind="edit" valuesToUpdate={activity as WorkshopWithAllData} />
+                    )
+                  }
+                  {
+                    kindOfActivity === 'chat' && (
+                      <ChatForm kind="edit" valuesToUpdate={activity as ChatsWithAllData} />
+                    )
+                  }
                 </ModalBody>
               </>
             );
@@ -61,4 +75,4 @@ const EditActivity: React.FC<EditActivityProps> = ({ valuesToUpdate, speakers })
   );
 };
 
-export default EditActivity;
+export default ActivityEditFormModal;

@@ -3,7 +3,7 @@ import DisplayDate from '@/components/DisplayDate';
 import DisplayTime from '@/components/DisplayTime';
 import QuitScholarFromActivity from '@/components/QuitScholarFromActivity';
 import VolunteerStatusWidget from '@/components/VolunteerStatus';
-import EditActivity from '@/components/activityActions/editActivity/EditActivity';
+import ActivityEditFormModal from '@/components/activityActions/editActivity/ActivityEditFormModal';
 import VolunteerStatusUpdate from '@/components/activityActions/volunteerStatusUpdate/VolunteerStatusUpdate';
 import Table from '@/components/table/Table';
 import ScholarVolunteerAttendance from '@/components/table/columns/scholarsVolunteerAttendance/columns';
@@ -179,7 +179,7 @@ const page = async ({ params }: { params: { volunteerId: shortUUID.SUUID } }) =>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4 ">
-            <EditActivity kindOfActivity="volunteer" valuesToUpdate={volunteer} />
+            <ActivityEditFormModal activity={volunteer} />
             <VolunteerStatusUpdate volunteerId={volunteerId} />
           </div>
         </div>

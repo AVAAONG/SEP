@@ -15,13 +15,13 @@ import { z } from 'zod';
  */
 interface DateInputProps {
   control:
-    | Control<z.infer<typeof workshopCreationFormSchema>>
-    | Control<z.infer<typeof chatCreationFormSchema>>
-    | Control<z.infer<typeof volunteerSchema>>;
+  | Control<z.infer<typeof workshopCreationFormSchema>>
+  | Control<z.infer<typeof chatCreationFormSchema>>
+  | Control<z.infer<typeof volunteerSchema>>;
   fieldArray:
-    | UseFieldArrayReturn<z.infer<typeof workshopCreationFormSchema>>
-    | UseFieldArrayReturn<z.infer<typeof chatCreationFormSchema>>
-    | UseFieldArrayReturn<z.infer<typeof volunteerSchema>>;
+  | UseFieldArrayReturn<z.infer<typeof workshopCreationFormSchema>>
+  | UseFieldArrayReturn<z.infer<typeof chatCreationFormSchema>>
+  | UseFieldArrayReturn<z.infer<typeof volunteerSchema>>;
   haveClosedDate?: boolean; // Added this line
 }
 
@@ -73,11 +73,10 @@ const DateInput: React.FC<DateInputProps> = ({ control, fieldArray, haveClosedDa
                   isIconOnly
                   radius="full"
                   onClick={isLastInput ? addInput : () => remove(index)}
-                  className={`translate-x-4 translate-y-2 text-white z-50  ${
-                    isLastInput
+                  className={`translate-x-4 translate-y-2 text-white z-50  ${isLastInput
                       ? 'bg-gray-300 hover:bg-primary-light'
                       : 'bg-red-200 hover:bg-red-700'
-                  }`}
+                    }`}
                 >
                   {isLastInput ? '+' : '-'}
                 </Button>
@@ -86,7 +85,7 @@ const DateInput: React.FC<DateInputProps> = ({ control, fieldArray, haveClosedDa
                 name={`dates.${index}.date`}
                 control={control as Control<z.infer<typeof workshopCreationFormSchema>>}
                 rules={{ required: true }}
-                render={({ field, fieldState, formState }) => {
+                render={({ field, formState }) => {
                   const errorMessage = formState.errors?.dates?.[index]?.date?.message;
 
                   return (

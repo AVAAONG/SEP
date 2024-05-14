@@ -1,6 +1,7 @@
 import { VolunteerWithAllData } from '@/lib/db/types';
 import { getWorkshopSpeakersWithParams } from '@/lib/db/utils/speaker';
 import StatusUpdateButton from './activityActions/StatusUpdate/StatusUpdate';
+import ActivityEditFormModal from './activityActions/editActivity/ActivityEditFormModal';
 import GenerateWhatsAppMessageButton from './activityActions/generateWhatsAppMessage/generateWhatsAppMessageButton';
 import SatisfactionFormResults from './activityActions/satisfactionForm/satisfactionFormResults';
 import {
@@ -41,6 +42,7 @@ const AdminActivityActions = async ({
         />
         <SatisfactionFormResults satisfactionFormChartData={satisfactionFormChartData} />
         <GenerateWhatsAppMessageButton activity={activity} />
+        <ActivityEditFormModal activity={activity} />
       </div>
     </>
   );

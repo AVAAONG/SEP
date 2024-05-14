@@ -18,26 +18,19 @@ import { Select, SelectItem } from '@nextui-org/select';
 import { useRouter } from 'next/navigation';
 import { BaseSyntheticEvent, useEffect } from 'react';
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';
-import { default as Combobox } from 'react-select';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 import FormButtonGroup from '../commons/FormButtonGroup';
+import SpeakerInput from '../commons/SpeakerInput';
 import { determineStatus } from '../workshop/lib/utils';
 import createChatObject from './lib/createChatObject';
 import formatChat from './lib/formatChatForEdit';
 
 interface ChatFormProps {
-  speakers: {
-    id: string;
-    first_names: string;
-    last_names: string;
-    email: string | null;
-    image?: string | null;
-  }[];
   kind: 'edit' | 'create';
   valuesToUpdate: ChatWithSpeaker | undefined;
 }
-const ChatForm: React.FC<ChatFormProps> = ({ speakers, valuesToUpdate, kind }) => {
+const ChatForm: React.FC<ChatFormProps> = ({ valuesToUpdate, kind }) => {
   const {
     control,
     handleSubmit,
@@ -58,13 +51,6 @@ const ChatForm: React.FC<ChatFormProps> = ({ speakers, valuesToUpdate, kind }) =
       revalidateSpecificPath('/admin/chats/crear/**');
     });
   }, [valuesToUpdate, setValue, isDirty]);
-
-  const speakersForCombobox = speakers.map((speaker) => ({
-    value: speaker.id,
-    label: `${speaker.first_names} ${speaker.last_names}`,
-    email: speaker.email,
-  }));
-
 
   const modality = useWatch({
     control,
@@ -99,7 +85,6 @@ const ChatForm: React.FC<ChatFormProps> = ({ speakers, valuesToUpdate, kind }) =
     const buttonType = ((event?.nativeEvent as SubmitEvent)?.submitter as HTMLButtonElement)?.name;
     const status = determineStatus(buttonType);
     const calendarDates = await formatDates(data.dates); //server formating
-    console.log('calendarDates', calendarDates)
     const { platformInPerson, platformOnline, speakers, ...restData } = data;
     const calendarWorkshop: IChatCalendar = {
       platform: platformInPerson ? platformInPerson : platformOnline!,
@@ -212,45 +197,7 @@ const ChatForm: React.FC<ChatFormProps> = ({ speakers, valuesToUpdate, kind }) =
             </Select>
           )}
         />
-        <div>
-          <span className="text-sm">Facilitador(es)</span>
-          <Controller
-            name="speakers"
-            control={control}
-            rules={{ required: true }}
-            render={({ field, formState }) => {
-              return (
-                <Combobox
-                  // defaultValue={}
-                  isMulti
-                  {...field}
-                  required={true}
-                  className="!rounded-lg z-50 py-2"
-                  options={speakersForCombobox}
-                  styles={{
-                    control: (baseStyles: object, _state: object) => ({
-                      ...baseStyles,
-                      padding: '1px 5px', // Increase vertical padding
-                      borderRadius: '10px', // Set rounded corners
-                      borderColor: 'transparent', // Set border color as transparent
-                      outline: 'none', // Remove outline
-                      boxShadow: 'none', // Remove boxShadow (ring)
-                      '&:hover': {
-                        backgroundColor: '#f3f4f6',
-                      },
-                      '&:focus': {
-                        outline: 'none', // Remove outline on focus
-                      },
-                      '&:active': {
-                        outline: 'none', // Remove outline on active
-                      },
-                    }),
-                  }}
-                />
-              );
-            }}
-          />
-        </div>
+        <SpeakerInput control={control} kind='workshop' />
         <Controller
           name="avalible_spots"
           control={control}

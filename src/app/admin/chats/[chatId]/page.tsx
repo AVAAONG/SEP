@@ -54,6 +54,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
         dni: scholar.dni,
       };
     });
+
   const scholarEmails = scholar_attendance
     ? scholar_attendance.map((attendance) => attendance.scholar.scholar.email)
     : [];
@@ -107,6 +108,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
             scholarsEmails={scholarEmails}
             activity={chat}
           />
+
         </div>
       </ActivityPanelInfo>
       <section className="w-full space-y-3">
@@ -133,10 +135,10 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
                 hour={
                   start_dates
                     ? new Date(start_dates[0]).toLocaleTimeString('es-ES', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: true,
-                      })
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true,
+                    })
                     : ''
                 }
                 modality={parseModalityFromDatabase(modality as Modality)}

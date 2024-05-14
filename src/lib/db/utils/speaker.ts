@@ -191,3 +191,31 @@ export const getChatSpeakerForStats = async () => {
     },
   });
 }
+
+export const getSpeakersForInput = async (kind: 'workshop' | 'chat') => {
+  const fieldsNeeded = {
+    id: true,
+    first_names: true,
+    last_names: true,
+    email: true,
+  }
+  const speakerKind = kind === 'workshop' ? 'WORKSHOPS' : 'CHATS';
+  try {
+    const speakers = await prisma.speaker.findMany({
+      select: fieldsNeeded,
+      where: {
+        OR: [
+          { speaker_kind: 'CHATS_AND_WORKSHOPS' },
+          { speaker_kind: speakerKind }
+        ]
+      },
+      orderBy: {
+        first_names: 'asc'
+      }
+    });
+    return speakers;
+  } catch (e) {
+  } finally {
+    await prisma.$disconnect();
+  }
+}
