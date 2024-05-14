@@ -67,3 +67,11 @@ const scholarWithAllData = Prisma.validator<Prisma.ScholarDefaultArgs>()({
   },
 });
 export type ScholarWithAllData = Prisma.ScholarGetPayload<typeof scholarWithAllData>;
+
+const schollarCollageInformationWithCollagePeriod = Prisma.validator<Prisma.ScholarCollageInformationDefaultArgs>()({
+  include: {
+    collage_period: true,
+  },
+});
+
+export type SchollarCollageInformationWithCollagePeriod = Prisma.ScholarCollageInformationGetPayload<typeof schollarCollageInformationWithCollagePeriod>;

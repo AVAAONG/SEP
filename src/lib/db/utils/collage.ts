@@ -39,7 +39,7 @@ export const deleteAcademicPeriod = async (collagePeriodId: string) => {
 
 
 
-export const getCollageInformationByScholar = async (scholarId: string) => {
+export const getScholarCollageInformation = async (scholarId: string) => {
     const collageInformation = await prisma.scholarCollageInformation.findFirst({
         where: {
             scholar_id: scholarId

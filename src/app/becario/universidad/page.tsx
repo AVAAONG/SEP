@@ -1,13 +1,13 @@
 import CollagePeriodsIntermediateComponent from '@/components/CollagePeriodsIntermediateComponent';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { getBlobFile } from '@/lib/azure/azure';
-import { getCollageInformationByScholar } from '@/lib/db/utils/collage';
+import { getScholarCollageInformation } from '@/lib/db/utils/collage';
 import { parseModalityFromDatabase } from '@/lib/utils2';
 import { getServerSession } from 'next-auth';
 
 const page = async () => {
   const session = await getServerSession(authOptions);
-  const collageInformation = await getCollageInformationByScholar(session?.scholarId!);
+  const collageInformation = await getScholarCollageInformation(session?.scholarId!);
   const collagePeriods = await Promise.all(
     collageInformation?.collage_period.map(async (collagePeriod) => {
       return {

@@ -1,5 +1,5 @@
 import AddressInformation from '@/components/scholar/config/AddressInformation';
-import CollageInformation from '@/components/scholar/config/CollageInformation';
+import CollageInformationForm from '@/components/scholar/config/CollageInformationForm';
 import GeneralInformation from '@/components/scholar/config/GeneralInformation';
 import JobInformationForm from '@/components/scholar/config/JobInformation';
 import ProfilePic from '@/components/scholar/config/ProfilePic';
@@ -40,7 +40,7 @@ const page = async () => {
           <AddressInformation scholar={scholar} />
         </div>
         <div className={classNames}>
-          <CollageInformation scholarCollage={scholar?.collage_information?.[0]} />
+          <CollageInformationForm scholarCollage={scholar?.collage_information?.[0]} />
         </div>
         <div className={classNames}>
           <JobInformationForm

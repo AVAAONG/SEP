@@ -170,7 +170,7 @@ const page = async ({
             </div>
           </div>
           <div className="flex gap-3">
-            <AdminScholarDialogsButtons collage={scholar?.collage_information?.[0]} />
+            <AdminScholarDialogsButtons scholarId={scholarId} />
           </div>
         </div>
       </div>

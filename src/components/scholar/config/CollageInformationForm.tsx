@@ -31,7 +31,7 @@ const readFileAsBase64 = (file: File | null): Promise<string> => {
   }
 };
 
-const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage }) => {
+const CollageInformationForm: React.FC<CollageInformationProps> = ({ scholarCollage }) => {
   const [schedule, setSchedule] = useState<string | null | undefined>(
     scholarCollage?.career_schedule
   );
@@ -605,4 +605,4 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
   );
 };
 
-export default CollageInformation;
+export default CollageInformationForm;
