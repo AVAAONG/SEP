@@ -96,7 +96,10 @@ const ChatForm: React.FC<ChatFormProps> = ({ valuesToUpdate, kind }) => {
     let eventsIds: string[] = [];
     let meetingDetails: MeetingDetails[] = [];
 
-    if (buttonType !== 'create') {
+    if (buttonType !== 'create' ||
+      valuesToUpdate?.activity_status === 'ATTENDANCE_CHECKED' ||
+      valuesToUpdate?.activity_status === 'SUSPENDED'
+    ) {
       const [eventos, meet] = await createCalendarEvent(calendarWorkshop);
       eventsIds = eventos;
       meetingDetails = meet;
@@ -112,12 +115,21 @@ const ChatForm: React.FC<ChatFormProps> = ({ valuesToUpdate, kind }) => {
     }
 
     if (buttonType === 'edit' && valuesToUpdate) {
-      valuesToUpdate.calendar_ids.map(
-        async (id) => await deleteCalendarEvent(CHAT_CALENDAR_ID, id)
-      );
-      const chat = await createChatObject(data, status, eventsIds, meetingCoordinates);
-      await updateChat(valuesToUpdate?.id, chat);
-      router.push('/admin/chats/crear');
+
+
+      if (valuesToUpdate.calendar_ids.length < 1 ||
+        valuesToUpdate.activity_status === 'ATTENDANCE_CHECKED' ||
+        valuesToUpdate.activity_status === 'SUSPENDED') { }
+
+      else {
+        valuesToUpdate.calendar_ids.map(
+          async (id) => await deleteCalendarEvent(CHAT_CALENDAR_ID, id)
+        );
+        const chat = await createChatObject(data, status, eventsIds, meetingCoordinates);
+        await updateChat(valuesToUpdate?.id, chat);
+        router.push('/admin/chats/crear');
+      }
+
     } else {
       const chat = await createChatObject(data, status, eventsIds, meetingDetails);
       const createdChat = await createChat(chat);

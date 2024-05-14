@@ -103,7 +103,10 @@ const WorkshopForm: React.FC<WorkshopFormProps> = ({ valuesToUpdate, kind }) => 
     let meetingDetails: MeetingDetails[] = [];
 
     //avoid create a calendar event when the workshop is in 'create mode'
-    if (buttonType !== 'create') {
+    if (buttonType !== 'create' ||
+      valuesToUpdate?.activity_status === 'ATTENDANCE_CHECKED' ||
+      valuesToUpdate?.activity_status === 'SUSPENDED'
+    ) {
       const [eventos, meet] = await createCalendarEvent(calendarWorkshop);
       eventsIds = eventos;
       meetingDetails = meet;
@@ -119,12 +122,21 @@ const WorkshopForm: React.FC<WorkshopFormProps> = ({ valuesToUpdate, kind }) => 
     }
 
     if (buttonType === 'edit' && valuesToUpdate) {
-      valuesToUpdate.calendar_ids.map(
-        async (id) => await deleteCalendarEvent(WORKSHOP_CALENDAR_ID, id)
-      );
-      const workshop = await createWorkshopObject(data, status, eventsIds, meetingCoordinates);
-      await updateWorkshop(valuesToUpdate?.id, workshop);
-      router.push('/admin/actividadesFormativas/crear');
+
+      if (valuesToUpdate.calendar_ids.length < 1 ||
+        valuesToUpdate.activity_status === 'ATTENDANCE_CHECKED' ||
+        valuesToUpdate.activity_status === 'SUSPENDED') { }
+
+      else {
+        valuesToUpdate.calendar_ids.map(
+          async (id) => await deleteCalendarEvent(WORKSHOP_CALENDAR_ID, id)
+        );
+        const workshop = await createWorkshopObject(data, status, eventsIds, meetingCoordinates);
+        await updateWorkshop(valuesToUpdate?.id, workshop);
+        router.push('/admin/actividadesFormativas/crear');
+      }
+
+
     } else {
       const workshop = await createWorkshopObject(data, status, eventsIds, meetingDetails);
       const createdWorkshop = await createWorkshop(workshop);
