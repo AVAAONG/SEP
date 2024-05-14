@@ -169,7 +169,7 @@ const page = async ({
               <ScholarDropdown scholar={scholar} />
             </div>
           </div>
-          <div className="flex gap-3">
+          <div className="w-full flex gap-3 justify-center md:justify-start">
             <AdminScholarDialogsButtons scholarId={scholarId} />
           </div>
         </div>

@@ -75,3 +75,11 @@ const schollarCollageInformationWithCollagePeriod = Prisma.validator<Prisma.Scho
 });
 
 export type SchollarCollageInformationWithCollagePeriod = Prisma.ScholarCollageInformationGetPayload<typeof schollarCollageInformationWithCollagePeriod>;
+
+const schollarCvaInformationWithModules = Prisma.validator<Prisma.ScholarCVAInformationDefaultArgs>()({
+  include: {
+    modules: true,
+  },
+});
+
+export type SchollarCvaInformationWithModules = Prisma.ScholarCVAInformationGetPayload<typeof schollarCvaInformationWithModules>;

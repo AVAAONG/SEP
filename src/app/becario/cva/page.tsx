@@ -4,13 +4,13 @@ import Table from '@/components/table/Table';
 import CvaModulesColumns from '@/components/table/columns/cvaModuleColumns';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { getBlobFile } from '@/lib/azure/azure';
-import { getCvaInformationByScholar } from '@/lib/db/utils/cva';
+import { getScholarCvaInformation } from '@/lib/db/utils/cva';
 import { parseCvaScheduleFromDatabase, parseModalityFromDatabase } from '@/lib/utils2';
 import { getServerSession } from 'next-auth';
 
 const page = async () => {
   const session = await getServerSession(authOptions);
-  const cvaInformation = await getCvaInformationByScholar(session?.scholarId!);
+  const cvaInformation = await getScholarCvaInformation(session?.scholarId!);
   const cvaCertificate = await getBlobFile(cvaInformation?.certificate);
   const cvaModules = await Promise.all(
     cvaInformation?.modules.map(async (module) => {

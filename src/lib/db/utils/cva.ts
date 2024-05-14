@@ -2,7 +2,7 @@
 import { Prisma, Scholar } from "@prisma/client";
 import { prisma } from "./prisma";
 
-export const getCvaInformationByScholar = async (scholarId: string) => {
+export const getScholarCvaInformation = async (scholarId: string) => {
     const cvaInformation = await prisma.scholarCVAInformation.findUnique({
         where: {
             scholarId
