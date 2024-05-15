@@ -4,9 +4,9 @@ import { createCvaInformation, updateCvaInformation } from '@/lib/db/utils/cva';
 import scholarCVAInformationSchema from '@/lib/schemas/scholar/scholarCVAInformationSchema';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { formatDateToDisplayInInput, formatDateToStoreInDB } from '@/lib/utils/dates';
-import { DocumentTextIcon } from '@heroicons/react/24/outline';
+import { ArrowUpTrayIcon, PaperClipIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Input, Select, SelectItem, Textarea, Tooltip } from '@nextui-org/react';
+import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
 import { CvaLocation, ScholarCVAInformation as IScholarCVAInformation, Prisma } from '@prisma/client';
 import Link from 'next/link';
 import { BaseSyntheticEvent, useState } from 'react';
@@ -218,6 +218,64 @@ const ScholarCVAInformation = ({
                   <Controller
                     name="certificate"
                     control={control}
+                    render={({ field, formState }) => {
+                      return (
+                        <div className="h-fit flex gap-2 text-sm flex-col ">
+                          <label htmlFor="certificate" className='text-sm'>
+                            Certificado del CVA
+                          </label>
+                          <div className='flex gap-4 p-2.5 rounded-md items-center justify-between bg-white dark:bg-neutral-800 '>
+                            <div className="w-5 h-5">
+                              {certificateUrl && (
+                                <Link href={certificateUrl}>
+                                  <PaperClipIcon />
+                                </Link>
+                              )}
+                            </div>
+                            <input
+                              onChange={async (e) => {
+                                if (scholarCvaInformation?.certificate) {
+                                  await deleteBlobFile(scholarCvaInformation?.certificate!);
+                                  await updateCvaInformation(scholarCvaInformation?.scholarId, {
+                                    certificate: null,
+                                  });
+                                }
+                                setCertificate((prev) => {
+                                  prev = e?.target.files?.[0] || null;
+                                  return prev;
+                                });
+                                field.onChange(e);
+                              }}
+                              type="file"
+                              id="certificate"
+                              accept="application/pdf"
+                              placeholder="Constancia"
+                              style={{ display: 'none' }}
+                            />
+                            <label htmlFor={certificateUrl ? '' : 'certificate'} className={certificateUrl ? "flex items-center text-sm " : "flex items-center text-sm cursor-pointer"}>
+                              {certificateUrl || field.value ?
+                                <>
+                                  {
+                                    certificateUrl ? <Link href={certificateUrl}>
+                                      Certificado cargado
+                                    </Link> : 'Certificado cargado'
+                                  }
+
+                                </>
+                                : 'Subir archivo'}
+
+                            </label>
+                            <label htmlFor='certificate' className='cursor-pointer'>
+                              <ArrowUpTrayIcon className='w-5 h-5 cursor-pointer' />
+                            </label>
+                          </div>
+                        </div>
+                      );
+                    }}
+                  />
+                  {/* <Controller
+                    name="certificate"
+                    control={control}
                     rules={{ required: true }}
                     render={({ field, formState }) => {
                       return (
@@ -258,7 +316,7 @@ const ScholarCVAInformation = ({
                         </Link>
                       </div>
                     </Tooltip>
-                  )}
+                  )} */}
                 </>
               ) : (
                 <>
