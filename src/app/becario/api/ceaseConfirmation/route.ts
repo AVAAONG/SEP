@@ -49,7 +49,9 @@ export async function GET(req: Request) {
     await sendGenericEmail(
         createEnrollementConfirmationMessage(
             scholarWhoReceiveName,
-            `www.programaexcelencia.org/becario/actividadesFormativas/${activityId}`,
+            kindOfActivity === 'workshop'
+                ? `www.programaexcelencia.org/becario/actividadesFormativas/${activityId}`
+                : `www.programaexcelencia.org/becario/chats/${activityId}`,
             activityName
         ),
         scholarWhoReceiveEmail,

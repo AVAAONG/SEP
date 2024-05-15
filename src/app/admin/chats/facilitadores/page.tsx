@@ -3,6 +3,7 @@ import Table from '@/components/table/Table';
 import chatSpeakerColumns from '@/components/table/columns/chatSpeakerColumns';
 import { prisma } from '@/lib/db/utils/prisma';
 import { getChatSpeakersCountByGender, getChatSpeakersWithParams } from '@/lib/db/utils/speaker';
+import { Button, Link } from '@nextui-org/react';
 import { Prisma } from '@prisma/client';
 import { userIcon } from 'public/svgs/svgs';
 import {
@@ -136,8 +137,17 @@ const page = async () => {
             <p className="text-2xl font-semibold text-gray-900">{chatSpeakerManCount}</p>
           </dd>
         </div>
-        <div className="flex">
+        <div className="flex flex-col gap-4">
           <ChatSpeakerFormCreation scholars={scholars} />
+          <Button
+            href="facilitadores/estadisticas"
+            as={Link}
+            color="success"
+            showAnchorIcon
+            variant="solid"
+          >
+            Ver estadisticas
+          </Button>
         </div>
       </div>
       <div className="w-full h-fit">

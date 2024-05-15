@@ -1,5 +1,5 @@
-import ScheduleChatCard from '@/components/ScheduleChatCard';
 import ChatCreationForm from '@/components/admin/ChatCreationForm';
+import ScheduledCardsWrap from '@/components/scheduledActivitiesCard/ScheduledCardsWrap';
 import { getChatSpeakerWithParams, getScheduleChats } from '@/lib/db/utils/chats';
 import { Speaker } from '@prisma/client';
 export const dynamic = 'force-dynamic';
@@ -19,7 +19,7 @@ const Page = async ({ searchParams }: { searchParams: { activityToEdit: string |
         <ChatCreationForm speakers={speakers as Speaker[]} chatForEdit={chat} />
       </div>
       <div className="w-full md:w-1/2 pt-0 flex flex-col items-center ">
-        <ScheduleChatCard activities={scheduledChats} />
+        <ScheduledCardsWrap activities={scheduledChats} />
       </div>
     </div>
   );

@@ -1,3 +1,5 @@
+import { VolunteerProject } from "@prisma/client";
+
 export const CLIENT_ID = process.env.GOOGLE_ADMIN_API_CLIENT_ID;
 export const CLIENT_SECRET = process.env.GOOGLE_ADMIN_API_CLIENT_SECRET;
 export const REDIRECT_URL = 'http://localhost:3000/api/auth/callback/adminGoogle';
@@ -66,6 +68,22 @@ export const MODALITY = [
   { label: 'Virtual', value: 'ONLINE' },
   { label: 'Híbrido', value: 'HYBRID' },
 ];
+
+
+
+export const VOLUNTEER_PROJECT: {
+  label: string;
+  value: VolunteerProject;
+}[] = [
+    { label: 'UMAA', value: 'UMAA' },
+    { label: 'OAL', value: 'OAL' },
+    { label: 'ALV', value: 'ALV' },
+    { label: 'UVPL', value: 'UVPL' },
+    { label: 'GA', value: 'GA' },
+    { label: 'Oficina', value: 'OFFICE' },
+    { label: 'ChatClubs', value: 'CHAT_CLUBS' },
+    { label: 'Externo', value: 'EXTERNAL' },
+  ];
 
 export const ONLINE_PLATFORMS = [
   { label: 'Zoom', value: 'ZOOM' },
@@ -166,7 +184,7 @@ export const COLLAGE_LONG_AND_SHORT = [
   },
   { value: 'UMA', label: 'Universidad Monteávila (UMA)' },
   { value: 'UJMV', label: 'Universidad José María Vargas (UJMV)' },
-  { value: 'UMC', label: 'Universidad Metropolitana de Caracas (UMC)' },
+  { value: 'UMC', label: 'Universidad Nacional Experimental Marítima del Caribe (UMC)' },
   { value: 'UPEL', label: 'Universidad Pedagógica Experimental Libertador (UPEL)' },
   { value: 'CUR', label: 'Colegio Universitario de Rehabilitación May Hamilton (CUR)' },
   { value: 'USM', label: 'Universidad Santa María (USM)' },

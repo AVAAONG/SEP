@@ -56,7 +56,7 @@ const EnrrollActivitiCard: React.FC<EnrrollActivitiCardProps> = ({ activity, sch
     else if (isFull) return true;
     else return false;
   };
-
+  const activityTitle = title;
   return (
     <>
       <Card className="min-w-[350px] max-w-[350px]" radius="sm">
@@ -201,8 +201,10 @@ const EnrrollActivitiCard: React.FC<EnrrollActivitiCardProps> = ({ activity, sch
           await sendGenericEmail(
             createEnrollementConfirmationMessage(
               scholar.name,
-              `www.programaexcelencia.org/becario/actividadesFormativas/${id}`,
-              title
+              kindOfActivity === 'workshop'
+                ? `https://www.programaexcelencia.org/becario/actividadesFormativas/${id}`
+                : `https://www.programaexcelencia.org/becario/chats/${id}`,
+              activityTitle
             ),
             scholar.email,
             'Confirmación de inscripción'

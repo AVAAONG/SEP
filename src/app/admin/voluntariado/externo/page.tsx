@@ -12,7 +12,7 @@ const page = async ({
 }) => {
   const volunteerData = await getExternalVolunteer();
 
-  const volunteers = filterActivitiesBySearchParams(volunteerData, searchParams);
+  const volunteers = await filterActivitiesBySearchParams(volunteerData, searchParams);
   const v = volunteers.map((volunteer) => {
     return {
       scholarNames:

@@ -1,185 +1,84 @@
-import StatsCard from '@/components/StatsCard';
-import Table from '@/components/table/Table';
-import scholarAllInformationCollumn from '@/components/table/columns/scholarAllInformationColumns';
-import createSocialMediaIcons from '@/lib/createSocialInfo';
-import { getScholarcountByGender, getScholarsWithAllData } from '@/lib/db/utils/users';
-import { parseAvaaAdmisionYear, parseStudyAreaFromDatabase } from '@/lib/parseFromDatabase';
-import { createArrayFromObject, reduceByProperty } from '@/lib/utils';
-import moment from 'moment';
-import dynamic from 'next/dynamic';
-import Link from 'next/link';
-import { ExternalStatsIcon } from 'public/svgs/svgs';
+import TogleTab from '@/components/TogleTab';
+import AdminStats from '@/components/admin/AdminStats';
+import AdminScholarsView from '@/components/adminScholarsViews';
+import { getScholarsWithAllData } from '@/lib/db/utils/users';
+import { countScholarGeneralProperties } from '@/lib/utils/scholarCounter';
 
-/**
- * @see https://stackoverflow.com/questions/67784672/react-next-js-doesnt-seem-to-work-with-apexcharts for more info
- */
-const DonutChartComponent = dynamic(() => import('@/components/charts/DonutChart'), { ssr: false });
-const PieChartComponent = dynamic(() => import('@/components/charts/Pie'), { ssr: false });
+const TAB_OPTIONS = [
+  { key: 'general', title: 'General' },
+  { key: 'collage', title: 'Universidad' },
+  { key: 'cva', title: 'CVA' },
+  // { key: 'job', title: 'Trabajo' },
+  { key: 'activities', title: 'Actividades' },
+  // { key: 'contact', title: 'Datos de contacto' },
+];
 
-const page = async () => {
+const page = async ({
+  searchParams,
+}: {
+  searchParams?: {
+    selectedKey:
+    | 'general'
+    | 'collage'
+    | 'cva'
+    | 'job'
+    | 'mentorship'
+    | 'activities'
+    | 'contact'
+    | undefined;
+  };
+}) => {
+  const view = searchParams?.selectedKey;
   const scholars = await getScholarsWithAllData();
-  const [womenScholars, menScholars] = await getScholarcountByGender();
+  const scholarsPropertiesCount = countScholarGeneralProperties(scholars);
 
-  const activeScholarsByStatus = reduceByProperty(
-    scholars,
-    'program_information',
-    'scholar_status'
+  const probationI = Number(((scholarsPropertiesCount.status.PROBATION_I / scholars.length) * 100).toFixed(0))
+  const probationII = Number(
+    ((scholarsPropertiesCount.status.PROBATION_II / scholars.length) * 100).toFixed(0)
   );
-  const activeScholarsByAvaYear = scholars.reduce(
-    (acc, scholar) => {
-      const year = scholar.program_information?.program_admission_date ?? 'Unknown';
-      const avaaYears = year ? moment().diff(moment(year), 'years') : 0;
-      const accValue = parseAvaaAdmisionYear(avaaYears);
-      acc[accValue] = (acc[accValue] || 0) + 1;
-      return acc;
-    },
-    {} as Record<string, number>
-  );
-  const activeScholarsByAvaYearArray = createArrayFromObject(activeScholarsByAvaYear);
-
-  const scholarsWithSocialNetworks = scholars?.map((scholar) => {
-    const { twitter_user, facebook_user, instagram_user, linkedin_user } = scholar;
-    const socialMedia = createSocialMediaIcons(
-      twitter_user,
-      facebook_user,
-      instagram_user,
-      linkedin_user
-    );
-    return { ...scholar, socialMedia };
-  });
-
-  const scholarTableData = scholarsWithSocialNetworks?.map((scholar) => {
-    const {
-      id,
-      first_names,
-      last_names,
-      dni,
-      birthdate,
-      local_phone_number,
-      cell_phone_Number,
-      whatsapp_number,
-      email,
-      collage_information,
-      program_information,
-      socialMedia,
-      gender,
-    } = scholar;
-    return {
-      id,
-      first_names,
-      socialMedia,
-      last_names,
-      dni,
-      birthdate: moment(birthdate).format('DD/MM/YYYY'),
-      years: moment().diff(moment(birthdate), 'years'),
-      local_phone_number: local_phone_number!,
-      cell_phone_Number: cell_phone_Number!,
-      whatsapp_number: whatsapp_number!,
-      gender: gender!,
-      email,
-      collage: collage_information[0]?.collage!,
-      career: collage_information[0]?.career!,
-      studyArea: parseStudyAreaFromDatabase(collage_information[0]?.study_area!),
-      avaaStarteYear: moment(program_information?.program_admission_date).format('DD/MM/YYYY'),
-      yearsInAvaa: parseAvaaAdmisionYear(
-        moment().diff(moment(program_information?.program_admission_date), 'years')
-      ),
-      atendedChats: program_information?.attended_chats.filter((attendance) => {
-        return (
-          attendance.attendance === 'ATTENDED' &&
-          (attendance.chat.activity_status === 'DONE' ||
-            attendance.chat.activity_status === 'ATTENDANCE_CHECKED')
-        );
-      }).length!,
-      atendedWorkshops: program_information?.attended_workshops.filter((attendance) => {
-        return (
-          attendance.attendance === 'ATTENDED' &&
-          (attendance.workshop.activity_status === 'DONE' ||
-            attendance.workshop.activity_status === 'ATTENDANCE_CHECKED')
-        );
-      }).length!,
-    };
-  });
-  const studyAreaCounts: Record<string, number> = {};
-  scholars.forEach((scholar) => {
-    scholar.collage_information.forEach((collage) => {
-      const studyArea = parseStudyAreaFromDatabase(collage.study_area!);
-      studyAreaCounts[studyArea] = (studyAreaCounts[studyArea] || 0) + 1;
-    });
-  });
-  const studyAreaData = Object.entries(studyAreaCounts).map(([label, value]) => ({ label, value }));
 
   return (
     <div className="flex flex-col w-full gap-4">
-      <StatsCard
+      <AdminStats
         stats={[
           {
-            name: 'Becarios activos',
+            name: `Becarios activos`,
             stat: scholars.length || 0,
-            previousStat: 250,
-            change: Number((((250 - scholars.length) / 250) * 100).toFixed(2)),
+            changeType: 'increase',
+            comparationText: null,
+            tooltipText: null,
+          },
+          {
+            name: `Becarios próximos a egresar`,
+            stat: 0,
+            changeType: 'increase',
+            comparationText: `De ${scholars.length || 0} becarios activos`,
+            comparation: 0,
+            tooltipText: `0% de los becar ios se encuentran proximos a egresar`,
+          },
+          {
+            name: `Becarios en probatorio I`,
+            stat: scholarsPropertiesCount.status.PROBATION_I || 0,
             changeType: 'decrease',
+            comparationText: `De ${scholars.length || 0} becarios activos`,
+            comparation: probationI,
+            tooltipText: `${probationI}% de los becarios se encuentran en Probatorio 1`,
           },
           {
-            name: 'Becarios en probatorio I',
-            stat: activeScholarsByStatus.PROBATORIO_2 || 0,
-            previousStat: 250,
-            change: 0,
-            changeType: 'increase',
-          },
-          {
-            name: 'Becarios en probatorio II',
-            stat: activeScholarsByStatus.PROBATORIO_1 || 0,
-            previousStat: 250,
-            change: 0,
-            changeType: 'increase',
+            name: `Becarios en probatorio II`,
+            stat: scholarsPropertiesCount.status.PROBATION_II || 0,
+            changeType: 'decrease',
+            comparationText: `De ${scholars.length || 0} becarios activos`,
+            comparation: probationII,
+            tooltipText: `${probationII}% de los becarios se encuentran en Probatorio 2`,
           },
         ]}
       />
-      <h2 className="font-bold uppercase text-base tracking-wide px-4 mt-4"> Resumen</h2>
-
-      <div className="flex flex-col w-full h-full bg-white dark:bg-black rounded-lg py-4 justify-center shadow-md ">
-        <div className="w-full flex justify-end h-5 text-primary-1">
-          <Link href={'/admin/becarios/estadisticas'} className="w-5 h-5 text-primary-1 -mt-3 mr-1">
-            <ExternalStatsIcon />
-          </Link>
-        </div>
-        <div className="-mt-4 px-2 flex flex-col md:flex-row gap-8 md:gap-2 w-full h-full">
-          <div className="w-full md:w-2/5 flex flex-col items-center gap-2 h-full">
-            <h3 className="text-sm font-bold uppercase">
-              Distribución de becarios area de estudio
-            </h3>
-            <div className="w-7/12 h-full min-w-max">
-              <PieChartComponent data={studyAreaData} />
-            </div>
-          </div>
-          <div className="w-full md:w-1/3 flex flex-col items-center gap-2 h-full">
-            <h3 className="text-sm font-bold uppercase">Distribución de becarios por género</h3>
-            <div className="w-10/12 h-full min-w-max">
-              <DonutChartComponent
-                data={[
-                  { label: 'Becarios', value: menScholars },
-                  { label: 'Becarias', value: womenScholars },
-                ]}
-              />
-            </div>
-          </div>
-          <div className="w-full md:w-1/3 flex flex-col items-center gap-2 h-full">
-            <h3 className="text-sm font-bold uppercase">Distribución de becarios por año</h3>
-            <div className="w-9/12 h-full min-w-max">
-              <PieChartComponent data={activeScholarsByAvaYearArray} />
-            </div>
-          </div>
-        </div>
+      <div className="mx-auto">
+        <TogleTab options={TAB_OPTIONS} />
       </div>
-      <h2 className="font-bold  uppercase text-base tracking-wide px-4 mt-4"> Base de datos</h2>
-      <div className="w-full h-full">
-        <Table
-          tableColumns={scholarAllInformationCollumn}
-          tableData={scholarTableData}
-          tableHeadersForSearch={[]}
-        />
-      </div>
+      <h2 className="font-bold uppercase text-base tracking-wide px-4 mt-4">Resumen</h2>
+      <AdminScholarsView scholars={scholars} view={view} searchs={searchParams} />
     </div>
   );
 };

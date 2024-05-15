@@ -188,22 +188,6 @@ export const getCalendarEvents = async (calendarId: string = 'primary') => {
 };
 
 /**
- * Evaluates wheter the calendar under the id exist or not. If exist returns that id, if not, returns the id of the users default calendar.
- *
- */
-const getCalendarId = async (calendarId: string): Promise<string> => {
-  let calendar = await Calendar.calendars.get({ calendarId });
-  let id = '';
-
-  if (calendar.data.id === null || calendar.data.id === undefined) {
-    id = 'primary';
-  } else {
-    id = 'primary';
-  }
-  return id;
-};
-
-/**
  * Lists all the calendars in the user's Google account and returns an array of calendar IDs.
  * @returns An array of calendar IDs.
  * @example

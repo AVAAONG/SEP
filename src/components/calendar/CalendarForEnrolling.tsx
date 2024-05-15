@@ -219,7 +219,9 @@ const CalendarForEnrrolling = ({
           await sendGenericEmail(
             createEnrollementConfirmationMessage(
               scholar.name,
-              `www.programaexcelencia.org/becario/actividadesFormativas/${selectedEvent.id}`,
+              selectedEvent.kindOfActivity === 'workshop'
+                ? `https://www.programaexcelencia.org/becario/actividadesFormativas/${selectedEvent.id}`
+                : `https://www.programaexcelencia.org/becario/chats/${selectedEvent.id}`,
               selectedEvent.originalTitle
             ),
             scholar.email,

@@ -125,11 +125,11 @@ const CollageInformation: React.FC<CollageInformationProps> = ({ scholarCollage 
       scholarCollageInfo.career_schedule = schedule!;
       scholarCollageInfo.collage_study_proof = proof!;
     }
-
     scholarCollageInfo.collage_start_date = new Date(data.collage_start_date).toISOString();
-    scholarCollageInfo.collage_end_date = data.collage_end_date
-      ? new Date(data.collage_end_date).toISOString()
-      : null;
+    scholarCollageInfo.collage_end_date =
+      data.collage_end_date && !isNaN(Date.parse(data.collage_end_date))
+        ? new Date(data.collage_end_date).toISOString()
+        : null;
 
     scholarCollageInfo.have_schooolarship = data.have_schooolarship === 'SI' ? true : false;
     scholarCollageInfo.academic_load_completed =

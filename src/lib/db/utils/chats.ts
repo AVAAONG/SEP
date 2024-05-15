@@ -250,6 +250,7 @@ export const getChat = async (id: shortUUID.SUUID) => {
       speaker: true,
       scholar_attendance: {
         include: {
+          ChatSafisfactionForm: true,
           scholar: {
             include: {
               scholar: {
@@ -331,4 +332,19 @@ export const changeChatStatus = async (id: string, status: ActivityStatus) => {
     },
   });
   return chat;
+};
+
+
+export const changeChatStatusInBulk = async (ids: string[], status: ActivityStatus) => {
+  const chats = await prisma.chat.updateMany({
+    where: {
+      id: {
+        in: ids,
+      },
+    },
+    data: {
+      activity_status: status,
+    },
+  });
+  return chats;
 };

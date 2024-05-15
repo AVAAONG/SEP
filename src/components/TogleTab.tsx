@@ -3,9 +3,16 @@ import { Tab, Tabs } from '@nextui-org/react';
 import { useSearchParams } from 'next/navigation';
 import React from 'react';
 
-const TogleTab = () => {
+interface TogleTabProps {
+  options: {
+    key: string;
+    title: string;
+  }[];
+}
+
+const TogleTab: React.FC<TogleTabProps> = ({ options }) => {
   const { get } = useSearchParams();
-  const selectedKeyQueryParam = get('selectedKey') || 'calendar';
+  const selectedKeyQueryParam = get('selectedKey') || options[0].key;
 
   const handleSelectionChange = (key: React.Key) => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -20,13 +27,16 @@ const TogleTab = () => {
         selectedKey={selectedKeyQueryParam}
         onSelectionChange={handleSelectionChange}
         aria-label="Tabs colors"
+        className="!text-white"
         classNames={{
           tabList: 'bg-gray-100 dark:bg-gray-800',
+          tab: '!text-white',
         }}
         radius="full"
       >
-        <Tab key="calendar" title="Calendario" />
-        <Tab key="list" title="Lista" />
+        {options.map((option) => (
+          <Tab className="!text-white" key={option.key} title={option.title} />
+        ))}
       </Tabs>
     </div>
   );

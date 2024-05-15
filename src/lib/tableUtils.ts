@@ -1,10 +1,11 @@
 import { ChatAttendance, Scholar, ScholarAttendance, WorkshopAttendance } from '@prisma/client';
+import { getBlobImage } from './azure/azure';
 
-export const formatScholarDataForAttendanceTable = (
+export const formatScholarDataForAttendanceTable = async (
   scholars: Scholar[],
   scholarAttendance: ChatAttendance[] | WorkshopAttendance[]
 ) => {
-  return scholars.map((scholar) => {
+  const scholarDataPromises = scholars.map(async (scholar) => {
     const attendance = scholarAttendance.find(
       (a: ChatAttendance | WorkshopAttendance) => a.scholar.scholar.id === scholar.id
     );
@@ -21,6 +22,10 @@ export const formatScholarDataForAttendanceTable = (
       kindOfActivity,
       attendance: attendance.attendance as ScholarAttendance,
       attendanceId: attendance.id,
+      profilePhoto: scholar.photo ? await getBlobImage(scholar.photo) : null,
     };
   });
+
+  const scholarData = await Promise.all(scholarDataPromises);
+  return scholarData;
 };

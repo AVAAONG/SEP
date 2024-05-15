@@ -1,4 +1,8 @@
 'use client';
+import exportDataToExcel from '@/lib/utils/exportFunctions/commonExport';
+import processRow from '@/lib/utils/exportFunctions/tableExportUtils';
+import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
+import { Button } from '@nextui-org/react';
 import { useMemo, useState } from 'react';
 import {
   Column,
@@ -10,8 +14,8 @@ import {
 } from 'react-table';
 import { SortIcon, SortIconDown, SortIconReverse } from '../../../public/svgs/svgs';
 import TableFooter from './TableFooter';
-import TableHeader from './TableHeader';
 import ExpandTableButton from './headerComponents/ExpandTableButton';
+import TableSearhButton from './headerComponents/TableSearhButton';
 
 interface TableProps<T extends object> {
   tableData: T[];
@@ -44,7 +48,6 @@ function Table<T extends object>({
     previousPage,
     canNextPage,
     canPreviousPage,
-
     pageOptions,
   } = useTable({ columns, data }, useFilters, useGlobalFilter, useSortBy, usePagination);
 
@@ -53,22 +56,43 @@ function Table<T extends object>({
     return o;
   };
 
+  // determine if the value of the column is a date
+  const preprocessedColumns = columns.map((column: Column<T>) => ({
+    ...column,
+    isDate: column.Header?.toString().toLocaleLowerCase().startsWith('fecha'),
+  }));
+
   return (
     <div
-      className={`${isExpanded
-        ? 'absolute top-0  left-0 right-0 z-50 '
-        : 'relative overflow-hidden min-h-max shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full'
-        }  bg-white shadow-md `}
+      className={`${
+        isExpanded
+          ? 'absolute top-0 left-0 right-0 z-50 min-h-screen '
+          : 'relative overflow-hidden min-h-max shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full'
+      }  bg-white shadow-md `}
     >
-      <TableHeader
-        optionsForFilter={tableHeadersForSearch}
-        setFilter={setFilter}
-        setGlobalFilter={setGlobalFilter}
-        filterValue={globalFilter}
-      >
-        <ExpandTableButton isExpanded={isExpanded} toggleExpanded={toggleExpanded} />
-        {children && children}
-      </TableHeader>
+      <div className="flex flex-col px-4 py-3 gap-3 md:flex-row md:items-center md:justify-between md:space-y-0 ">
+        <TableSearhButton
+          optionsForFilter={tableHeadersForSearch}
+          setFilter={setFilter}
+          setGlobalFilter={setGlobalFilter}
+          filterValue={globalFilter}
+        />
+        <div className="flex gap-3">
+          {children && children}
+          <Button
+            onPress={async () => {
+              const exportData = data.map((row) => processRow(row, preprocessedColumns));
+              await exportDataToExcel(exportData, 'Reporte');
+            }}
+            startContent={<ArrowUpTrayIcon className="w-5 h-5 text-primary-1" />}
+            className="w-auto flex gap-2 items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10  dark:focus:ring-gray-700 dark:bg-slate-950 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+          >
+            Exportar
+          </Button>
+          <ExpandTableButton isExpanded={isExpanded} toggleExpanded={toggleExpanded} />
+        </div>
+      </div>
+
       <div className="flow-root w-full overflow-x-scroll mt-2">
         <table {...getTableProps()} className="w-full  text-sm text-left text-gray-300 ">
           <thead className="text-xs text-primary-light  text-center border-b-[1px] border-primary-light text-ellipsis  dark:bg-slate-950">

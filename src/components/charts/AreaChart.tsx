@@ -32,7 +32,7 @@ const AreaChart = ({ series, title, xAxysType }: AreaChartProps) => {
         formatter: (value) => Math.round(value).toString(), // Display y-axis labels as integers
       },
     },
-    colors: ['#23a217', '#eab308', '#1d4ed8', '#b91c1c'],
+    colors: series.map((d) => d.color),
   };
 
   return <Chart options={options} series={series} seriestype="bar" height={250} />;

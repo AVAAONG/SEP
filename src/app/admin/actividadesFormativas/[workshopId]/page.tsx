@@ -1,125 +1,99 @@
 import ActivityPanelInfo from '@/components/ActivityPanelInfo';
+import ActivityScholarStatusesCount from '@/components/ActivityScholarStatusesCount';
+import AddScholarToActivity from '@/components/AddScholarToActivity';
+import AdminActivityActions from '@/components/AdminActivityActions';
+import QuitScholarFromActivity from '@/components/QuitScholarFromActivity';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
 import { WorkshopWithSpeaker } from '@/lib/db/types';
 import { getWorkshop } from '@/lib/db/utils/Workshops';
-import { prisma } from '@/lib/db/utils/prisma';
+import { getNotEnrolledScholarsInWorkshop } from '@/lib/db/utils/users';
 import { formatScholarDataForAttendanceTable } from '@/lib/tableUtils';
 import ExportButton from '@/lib/temp';
 import { parseModalityFromDatabase, parseSkillFromDatabase } from '@/lib/utils2';
 import { Modality } from '@prisma/client';
+import { notFound } from 'next/navigation';
 import shortUUID from 'short-uuid';
 
 const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => {
-  const workshopId = params.workshopId || ('null' as shortUUID.SUUID);
+  const workshopId = params.workshopId;
+  if (!workshopId) return null;
   const workshop = await getWorkshop(workshopId);
-  const {
-    title,
-    start_dates,
-    end_dates,
-    description,
-    speaker,
-    modality,
-    asociated_skill,
-    platform,
-    scholar_attendance,
-  } = workshop || {};
+  if (!workshop) return notFound();
 
-  const scholarAttendanceDataForTable = formatScholarDataForAttendanceTable(
+  const scholars = await getNotEnrolledScholarsInWorkshop(workshopId);
+
+  const { title, start_dates, speaker, modality, asociated_skill, platform, scholar_attendance } =
+    workshop || {};
+
+  const scholarAttendanceDataForTable = await formatScholarDataForAttendanceTable(
     scholar_attendance ? scholar_attendance.map((a) => a.scholar.scholar) : [],
     scholar_attendance ? scholar_attendance : []
   );
-  const scholarDataToExport = scholarAttendanceDataForTable.map((scholar) => {
-    return {
-      names: scholar.first_names.split(' ')[0] + ' ' + scholar.last_names.split(' ')[0],
-      dni: scholar.dni,
-    };
-  });
+  const scholarsForQuit = scholar_attendance
+    ? scholar_attendance.map((a) => a.scholar.scholar)
+    : [];
+  const scholarDataToExport = scholarAttendanceDataForTable
+    .filter((scholar) => scholar.attendance === 'ENROLLED')
+    .map((scholar) => {
+      return {
+        names: scholar.first_names.split(' ')[0] + ' ' + scholar.last_names.split(' ')[0],
+        dni: scholar.dni,
+      };
+    });
+  const scholarEmails = scholar_attendance
+    ? scholar_attendance.map((attendance) => attendance.scholar.scholar.email)
+    : [];
 
-  let attendedScholarsCount = 0;
-  let unAttendedScholarsCount = 0;
-  let cancelledScholarsCount = 0;
-  let enroledScholars = 0;
-
-  scholar_attendance?.forEach((scholar_att) => {
-    switch (scholar_att.attendance) {
-      case 'ATTENDED':
-        attendedScholarsCount++;
-        break;
-      case 'NOT_ATTENDED':
-        unAttendedScholarsCount++;
-        break;
-      case 'CANCELLED':
-        cancelledScholarsCount++;
-        break;
-      case 'ENROLLED':
-        enroledScholars++;
-        break;
-      default:
-        break;
-    }
-  });
-
-  const g = [
-    {
-      title: 'Total de inscritos',
-      value: enroledScholars,
-    },
-    {
-      title: 'Total de asistentes',
-      value: attendedScholarsCount,
-    },
-    {
-      title: 'Total de inasistentes',
-      value: unAttendedScholarsCount,
-    },
-    {
-      title: 'Total de cancelaciones',
-      value: cancelledScholarsCount,
-    },
-  ];
-
-  const allowSatisfactionSurvey = async () => {
-    if (workshop?.activity_status === 'DONE') {
-      await prisma.workshop.update({
-        where: {
-          id: workshopId,
-        },
-        data: {
-          activity_status: 'ATTENDANCE_CHECKED',
-        },
-      });
-      return 'Encuesta de satisfacción enviada';
-    } else if (workshop?.activity_status === 'ATTENDANCE_CHECKED') {
-      return 'La encuesta de satisfaccion ya ha sido enviada';
-    }
-  };
+  const formResponses = scholar_attendance
+    .filter((scholar) => scholar.attendance === 'ATTENDED')
+    .map((attendance) => {
+      const form = attendance.satisfaction_form;
+      if (!form)
+        return {
+          activity_organization: 0,
+          activity_number_of_participants: 0,
+          activity_lenght: 0,
+          activity_relevance_for_scholar: 0,
+          speaker_theory_practice_mix: 0,
+          speaker_knowledge_of_activity: 0,
+          speaker_foment_scholar_to_participate: 0,
+          speaker_knowledge_transmition: 0,
+          content_match_necesities: 0,
+          content_knowledge_adquisition: 0,
+          content_knowledge_expansion: 0,
+          content_personal_development: 0,
+          general_satisfaction: 0,
+        };
+      return {
+        activity_organization: form.activity_organization,
+        activity_number_of_participants: form.activity_number_of_participants,
+        activity_lenght: form.activity_lenght,
+        activity_relevance_for_scholar: form.activity_relevance_for_scholar,
+        speaker_theory_practice_mix: form.speaker_theory_practice_mix,
+        speaker_knowledge_of_activity: form.speaker_knowledge_of_activity,
+        speaker_foment_scholar_to_participate: form.speaker_foment_scholar_to_participate,
+        speaker_knowledge_transmition: form.speaker_knowledge_transmition,
+        content_match_necesities: form.content_match_necesities,
+        content_knowledge_adquisition: form.content_knowledge_adquisition,
+        content_knowledge_expansion: form.content_knowledge_expansion,
+        content_personal_development: form.content_personal_development,
+        general_satisfaction: form.general_satisfaction,
+      };
+    });
 
   return (
     <div className="space-y-6  min-h-screen">
       <ActivityPanelInfo activity={workshop as WorkshopWithSpeaker}>
-        <div className="w-full grid grid-cols-2 gap-4">
-          {g.map(({ title, value }) => (
-            <div className="rounded-lg border text-card-foreground shadow-sm w-full">
-              <div className="flex flex-col space-y-1.5 p-6 ">
-                <h3 className="text-lg font-semibold whitespace-nowrap leading-none tracking-tight">
-                  {title}
-                </h3>
-              </div>
-              <p className="text-4xl font-semibold whitespace-nowrap leading-none tracking-tight p-6">
-                {value}
-              </p>
-            </div>
-          ))}
-          {/* {workshop?.activity_status === 'SENT' && (
-            <Button
-              color="success"
-              className="text-white"
-              onPress={async () => allowSatisfactionSurvey()}
-            >
-              Habilitar encuesta de satisfacción
-            </Button>
-          )} */}
+        <div className="flex flex-col gap-4">
+          <ActivityScholarStatusesCount scholarAttendance={scholar_attendance} />
+          <AdminActivityActions
+            activityId={workshopId}
+            formResponses={formResponses}
+            kindOfActivity="workshop"
+            scholarsEmails={scholarEmails}
+            activity={workshop}
+          />
         </div>
       </ActivityPanelInfo>
 
@@ -134,6 +108,17 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
               tableData={scholarAttendanceDataForTable}
               tableHeadersForSearch={[]}
             >
+              <AddScholarToActivity
+                scholars={scholars}
+                activityId={workshopId}
+                kindOfActivity="workshop"
+              />
+              <QuitScholarFromActivity
+                scholars={scholarsForQuit}
+                activityId={workshopId}
+                kindOfActivity="workshop"
+              />
+
               <ExportButton
                 activityTitle={title!}
                 competenceOrLevel={parseSkillFromDatabase(asociated_skill!)}
@@ -141,10 +126,10 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
                 hour={
                   start_dates
                     ? new Date(start_dates[0]).toLocaleTimeString('es-ES', {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      hour12: true,
-                    })
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true,
+                      })
                     : ''
                 }
                 modality={parseModalityFromDatabase(modality as Modality)}

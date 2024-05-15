@@ -41,14 +41,15 @@ const BasicModal: React.FC<BasicModalProps> = ({
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1">
-              {link ? (<>
-                <Link href={link}>
-                  {title}
-                </Link>
-              </>) : (<> {title} </>)}
-
+              {link ? (
+                <>
+                  <Link href={link}>{title}</Link>
+                </>
+              ) : (
+                <> {title} </>
+              )}
             </ModalHeader>
-            <ModalBody>
+            <ModalBody className="overflow-y-scroll">
               <Content />
             </ModalBody>
             <ModalFooter>
