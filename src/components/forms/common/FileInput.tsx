@@ -39,7 +39,7 @@ const FileInput: React.FC<FileInputProps> = ({
               radius="sm"
               className={
                 existingFileUrl || field.value
-                  ? 'w-full !rounded-tr-none !rounded-br-none  flex gap-4 p-2.5 items-center justify-between !bg-white dark:!bg-zinc-700 hover:!bg-gray-200'
+                  ? 'w-full !rounded-tr-none !rounded-br-none  flex gap-4 p-2.5 items-center justify-between !bg-secondary-2 dark:!bg-zinc-700 hover:!bg-secondary-1'
                   : 'w-full  flex gap-4 p-2.5 items-center justify-between !bg-white dark:!bg-zinc-700 hover:!bg-gray-200'
               }
             >
