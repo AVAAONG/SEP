@@ -1,4 +1,4 @@
-import { ArrowUpTrayIcon, CheckBadgeIcon, PaperClipIcon } from '@heroicons/react/24/outline';
+import { ArrowUpTrayIcon, CheckBadgeIcon } from '@heroicons/react/24/outline';
 import { Button } from '@nextui-org/button';
 import { Tooltip } from '@nextui-org/tooltip';
 import Link from 'next/link';
@@ -47,10 +47,10 @@ const FileInput: React.FC<FileInputProps> = ({
                 <>
                   {existingFileUrl ? (
                     <Link href={existingFileUrl} className="w-6 h-6 text-primary-light">
-                      <CheckBadgeIcon />
+                      <CheckBadgeIcon className="font-bold" />
                     </Link>
                   ) : (
-                    <PaperClipIcon className="w-5 h-5" />
+                    <CheckBadgeIcon className="w-6 h-6" />
                   )}
                 </>
               ) : null}
