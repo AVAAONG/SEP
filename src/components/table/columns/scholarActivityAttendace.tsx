@@ -20,7 +20,7 @@ const ScholarActivityAttendance: Column<IScholarForAttendanceTable>[] = [
   },
   {
     Header: 'Nombre',
-    accessor: (row: IScholarForAttendanceTable) => `${row.first_names} ${row.last_names}`,
+    accessor: 'name',
     Cell: ({ value, cell }: { value: CellValue; cell: Cell<IScholarForAttendanceTable> }) => {
       const id = cell.row.original.id;
       const career = '';

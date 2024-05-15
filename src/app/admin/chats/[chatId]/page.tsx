@@ -18,8 +18,7 @@ import shortUUID from 'short-uuid';
 
 export interface IScholarForAttendanceTable {
   id: string;
-  first_names: string;
-  last_names: string;
+  name: string;
   email: string | null;
   kindOfActivity: 'workshop' | 'chat';
   phone_number: string | null;
@@ -51,15 +50,13 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
     .filter((scholar) => scholar.attendance === 'ENROLLED')
     .map((scholar) => {
       return {
-        names: scholar.first_names.split(' ')[0] + ' ' + scholar.last_names.split(' ')[0],
+        names: scholar.name,
         dni: scholar.dni,
       };
     });
 
-  const {
-    attendedScholarEmails,
-    enrolledScholarEmails
-  } = getScholarEmailsByAttendanceStatus(scholar_attendance)
+  const { attendedScholarEmails, enrolledScholarEmails } =
+    getScholarEmailsByAttendanceStatus(scholar_attendance);
 
   const defaultForm = {
     activity_organization: 0,
@@ -94,11 +91,9 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
           <ActivityScholarStatusesCount scholarAttendance={scholar_attendance} />
           <AdminActivityActions
             formResponses={formResponses}
-            scholarsEmails={[...attendedScholarEmails,
-            ...enrolledScholarEmails]}
+            scholarsEmails={[...attendedScholarEmails, ...enrolledScholarEmails]}
             activity={chat}
           />
-
         </div>
       </ActivityPanelInfo>
       <section className="w-full space-y-3">
@@ -125,10 +120,10 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
                 hour={
                   start_dates
                     ? new Date(start_dates[0]).toLocaleTimeString('es-ES', {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      hour12: true,
-                    })
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true,
+                      })
                     : ''
                 }
                 modality={parseModalityFromDatabase(modality as Modality)}

@@ -16,8 +16,7 @@ export const formatScholarsToCvaInfoTable = async (scholars: ScholarsCvaInformat
         } = scholar;
         return {
             id,
-            first_names,
-            last_names,
+            name: first_names + ' ' + last_names,
             profilePhoto: photo ? await getBlobImage(photo) : null,
             dni,
             isInCva: cva_information?.is_in_cva ? 'Sí' : 'No',
