@@ -79,7 +79,7 @@ const WorkshopAdminColumns: Column<WorkshopDetails>[] = [
     },
   },
   {
-    Header: 'Inicio',
+    Header: 'Cierre',
     accessor: 'endHour',
     Cell: ({ value }) => {
       return <DisplayTime time={value} />;
