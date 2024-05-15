@@ -213,7 +213,6 @@ const AddCvaModule: React.FC<{
                     onFileChange={async (file) => {
                       if (cvaModule?.record) await deleteBlobFile(cvaModule?.record);
                       setRecord((prev) => {
-                        console.log(file?.target.files?.[0]);
                         prev = file?.target.files?.[0] || null;
                         return prev;
                       });
