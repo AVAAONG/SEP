@@ -4,7 +4,7 @@ import { MODALITY } from '@/lib/constants';
 import { createCvaModule, updateCVAModule } from '@/lib/db/utils/cva';
 import scholarCVAModuleSchema from '@/lib/schemas/scholar/scholarCVAModuleSchema';
 import { revalidateSpecificPath } from '@/lib/serverAction';
-import { ArrowUpTrayIcon, PaperClipIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
+import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@nextui-org/button';
 import {
@@ -19,11 +19,11 @@ import {
   useDisclosure,
 } from '@nextui-org/react';
 import { Prisma, ScholarCvaModule } from '@prisma/client';
-import Link from 'next/link';
 import { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
+import FileInput from './forms/common/FileInput';
 
 const readFileAsBase64 = (file: File | null): Promise<string> => {
   if (file) {
@@ -38,7 +38,11 @@ const readFileAsBase64 = (file: File | null): Promise<string> => {
   }
 };
 
-const AddCvaModule: React.FC<{ cvaInformationId: string | null, edit: boolean, cvaModule: ScholarCvaModule | null }> = ({ cvaInformationId, edit, cvaModule }) => {
+const AddCvaModule: React.FC<{
+  cvaInformationId: string | null;
+  edit: boolean;
+  cvaModule: ScholarCvaModule | null;
+}> = ({ cvaInformationId, edit, cvaModule }) => {
   const [record, setRecord] = useState<File | null>(null);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const {
@@ -50,7 +54,7 @@ const AddCvaModule: React.FC<{ cvaInformationId: string | null, edit: boolean, c
   } = useForm<z.infer<typeof scholarCVAModuleSchema>>({
     resolver: zodResolver(scholarCVAModuleSchema),
   });
-  const [href, setHref] = useState<string | null>(null);
+  const [href, setHref] = useState<string | undefined | null>(undefined);
 
   useEffect(() => {
     if (cvaModule?.record) {
@@ -91,8 +95,6 @@ const AddCvaModule: React.FC<{ cvaInformationId: string | null, edit: boolean, c
   };
   return (
     <>
-
-
       {!edit ? (
         <Button
           isDisabled={cvaInformationId === null}
@@ -203,58 +205,20 @@ const AddCvaModule: React.FC<{ cvaInformationId: string | null, edit: boolean, c
                       );
                     }}
                   />
-                  <Controller
-                    name="record"
+                  <FileInput
                     control={control}
-                    render={({ field, formState }) => {
-                      return (
-                        <div className="col-span-2 md:col-span-1 h-fit flex gap-2 text-sm flex-col ">
-                          <label htmlFor="recorInput">
-                            Comprobante del modulo
-                          </label>
-                          <div className='flex gap-4 p-2.5 rounded-md items-center justify-between bg-white dark:bg-neutral-800 '>
-                            <div className="w-5 h-5">
-                              {href && (
-                                <Link href={href}>
-                                  <PaperClipIcon />
-                                </Link>
-                              )}
-                            </div>
-                            <input
-                              onChange={async (e) => {
-                                if (cvaModule?.record) await deleteBlobFile(cvaModule?.record);
-                                setRecord((prev) => {
-                                  prev = e?.target.files?.[0] || null;
-                                  return prev;
-                                });
-                                field.onChange(e);
-                              }}
-                              type="file"
-                              id="cva_module"
-                              accept=".pdf, .jpg, .jpeg, .png"
-                              placeholder="Constancia"
-                              style={{ display: 'none' }}
-                            />
-                            <label htmlFor={href ? '' : 'cva_module'} className={href ? "flex items-center text-sm " : "flex items-center text-sm cursor-pointer"}>
-                              {href || field.value ?
-                                <>
-                                  {
-                                    href ? <Link href={href}>
-                                      Comprobante del modulo cargado
-                                    </Link> : 'Comprobante del modulo cargado'
-                                  }
-
-                                </>
-                                : 'Subir archivo'}
-
-                            </label>
-                            <label htmlFor='cva_module' className='cursor-pointer'>
-                              <ArrowUpTrayIcon className='w-5 h-5 cursor-pointer' />
-                            </label>
-                          </div>
-                        </div>
-                      );
+                    label="Comprobante del modulo"
+                    name="record"
+                    acceptedFileTypes={['.pdf']}
+                    onFileChange={async (file) => {
+                      if (cvaModule?.record) await deleteBlobFile(cvaModule?.record);
+                      setRecord((prev) => {
+                        console.log(file?.target.files?.[0]);
+                        prev = file?.target.files?.[0] || null;
+                        return prev;
+                      });
                     }}
+                    existingFileUrl={href}
                   />
                   <Controller
                     name="schedule"
@@ -313,7 +277,7 @@ const AddCvaModule: React.FC<{ cvaInformationId: string | null, edit: boolean, c
             )}
           </ModalContent>
         </form>
-      </Modal >
+      </Modal>
     </>
   );
 };
