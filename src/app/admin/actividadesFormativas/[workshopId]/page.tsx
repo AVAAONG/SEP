@@ -5,6 +5,7 @@ import AdminActivityActions from '@/components/AdminActivityActions';
 import QuitScholarFromActivity from '@/components/QuitScholarFromActivity';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
+import { getScholarEmailsByAttendanceStatus } from '@/lib/activities/utils';
 import { WorkshopWithSpeaker } from '@/lib/db/types';
 import { getWorkshop } from '@/lib/db/utils/Workshops';
 import { getNotEnrolledScholarsInWorkshop } from '@/lib/db/utils/users';
@@ -41,9 +42,13 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
         dni: scholar.dni,
       };
     });
-  const scholarEmails = scholar_attendance
-    ? scholar_attendance.map((attendance) => attendance.scholar.scholar.email)
-    : [];
+
+  const {
+    attendedScholarEmails,
+    enrolledScholarEmails
+  } = getScholarEmailsByAttendanceStatus(scholar_attendance)
+
+
   const defaultForm = {
     activity_organization: 0,
     activity_number_of_participants: 0,
@@ -77,7 +82,8 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
           <ActivityScholarStatusesCount scholarAttendance={scholar_attendance} />
           <AdminActivityActions
             formResponses={formResponses}
-            scholarsEmails={scholarEmails}
+            scholarsEmails={[...attendedScholarEmails,
+            ...enrolledScholarEmails]}
             activity={workshop}
           />
         </div>

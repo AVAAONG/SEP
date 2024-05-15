@@ -5,6 +5,7 @@ import AdminActivityActions from '@/components/AdminActivityActions';
 import QuitScholarFromActivity from '@/components/QuitScholarFromActivity';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
+import { getScholarEmailsByAttendanceStatus } from '@/lib/activities/utils';
 import { ChatWithSpeaker } from '@/lib/db/types';
 import { getChat } from '@/lib/db/utils/chats';
 import { getNotEnrolledScholarsInChat } from '@/lib/db/utils/users';
@@ -55,9 +56,10 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
       };
     });
 
-  const scholarEmails = scholar_attendance
-    ? scholar_attendance.map((attendance) => attendance.scholar.scholar.email)
-    : [];
+  const {
+    attendedScholarEmails,
+    enrolledScholarEmails
+  } = getScholarEmailsByAttendanceStatus(scholar_attendance)
 
   const defaultForm = {
     activity_organization: 0,
@@ -92,7 +94,8 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
           <ActivityScholarStatusesCount scholarAttendance={scholar_attendance} />
           <AdminActivityActions
             formResponses={formResponses}
-            scholarsEmails={scholarEmails}
+            scholarsEmails={[...attendedScholarEmails,
+            ...enrolledScholarEmails]}
             activity={chat}
           />
 
