@@ -1,7 +1,5 @@
-import AddCvaModule from '@/components/AddCvaModule';
 import ScholarCVAInformation from '@/components/forms/scholarCVAInfo';
-import Table from '@/components/table/Table';
-import CvaModulesColumns from '@/components/table/columns/cvaModuleColumns';
+import CvaModulesTable from '@/components/table/columns/scholar/cva/ScholarCVAModulesTable';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { getBlobFile } from '@/lib/azure/azure';
 import { getScholarCvaInformation } from '@/lib/db/utils/cva';
@@ -34,13 +32,12 @@ const page = async () => {
         />
       </div>
       <div className="w-full">
-        <Table
-          tableData={cvaModules || []}
-          tableColumns={CvaModulesColumns}
-          tableHeadersForSearch={[]}
-        >
-          <AddCvaModule cvaInformationId={cvaInformation?.id || null} />
-        </Table>
+        <CvaModulesTable
+          cvaInformationId={cvaInformation?.id}
+          cvaModulesForTable={cvaModules}
+          cvaModuleForUpdate={cvaInformation?.modules}
+
+        />
       </div>
     </div>
   );

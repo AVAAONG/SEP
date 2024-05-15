@@ -17,7 +17,7 @@ const scholarCVAModuleSchema = z.object({
     .number()
     .positive()
     .min(1, { message: 'Debes seleccionar una calificación' }),
-  record: z.string().min(1, { message: 'Debes seleccionar el comprobante' }),
+  record: z.string().optional(),
   schedule: z.nativeEnum(CVASchedule, {
     errorMap: (issue, _ctx) => {
       switch (issue.code) {

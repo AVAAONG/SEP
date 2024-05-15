@@ -51,6 +51,17 @@ export const createCvaModule = async (data: Prisma.ScholarCvaModuleCreateInput, 
 }
 
 
+
+export const updateCVAModule = async (cvaModuleId: string, data: Prisma.ScholarCvaModuleCreateInput) => {
+    const cvaModule = await prisma.scholarCvaModule.update({
+        where: {
+            id: cvaModuleId,
+        },
+        data
+    })
+    return cvaModule;
+}
+
 export type ScholarsCvaInformation =
     (Pick<Scholar, 'id' | 'first_names' | 'last_names' | 'photo' | 'dni'> & {
         cva_information?: Prisma.ScholarCVAInformationGetPayload<{
@@ -93,3 +104,14 @@ export const getScholarsCvaInformation = async (): Promise<ScholarsCvaInformatio
     })
     return cvaInformation;
 }
+
+
+export const deleteCvaModule = async (cvaModuleId: string) => {
+    const academicPeriod = await prisma.scholarCvaModule.delete({
+        where: {
+            id: cvaModuleId,
+        },
+    })
+    return academicPeriod;
+}
+
