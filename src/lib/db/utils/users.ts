@@ -790,3 +790,53 @@ export const updateProfilePicture = async (id: string, image: string | null) => 
   });
   return scholar;
 }
+
+
+export const getScholarsDataForEdusa = async () => {
+  const scholars = await prisma.scholar.findMany({
+    where: {
+      OR: [
+        {
+          program_information: {
+            scholar_condition: 'ACTIVE',
+          },
+        },
+        {
+          program_information: {
+            scholar_condition: 'ALUMNI',
+          },
+        },
+      ]
+    },
+    select: {
+      first_names: true,
+      last_names: true,
+      dni: true,
+      email: true,
+      cell_phone_Number: true,
+      program_information: {
+        select: {
+          scholar_condition: true,
+        }
+      },
+      collage_information: {
+        select: {
+          career: true,
+          collage: true,
+        }
+      }
+    }
+  });
+
+  return scholars.map((scholar) => {
+    return {
+      name: scholar.first_names + ' ' + scholar.last_names,
+      dni: scholar.dni,
+      email: scholar.email,
+      phone: scholar.cell_phone_Number,
+      condition: scholar.program_information.scholar_condition,
+      carreer: scholar.collage_information[0].career,
+      collage: scholar.collage_information[0].collage
+    }
+  });
+}
