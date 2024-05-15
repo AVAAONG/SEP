@@ -26,6 +26,7 @@ interface WorkshopDetails {
   date: string;
   parsedStatus: string;
   startHour: string;
+  endHour: string;
   status: ActivityStatus;
   skill: string; // Assuming parseSkillFromDatabase returns a string
   modality: string; // Assuming parseModalityFromDatabase returns a string
@@ -73,6 +74,13 @@ const WorkshopAdminColumns: Column<WorkshopDetails>[] = [
   {
     Header: 'Inicio',
     accessor: 'startHour',
+    Cell: ({ value }) => {
+      return <DisplayTime time={value} />;
+    },
+  },
+  {
+    Header: 'Inicio',
+    accessor: 'endHour',
     Cell: ({ value }) => {
       return <DisplayTime time={value} />;
     },

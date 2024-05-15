@@ -31,6 +31,7 @@ const createAdminWorkshopsObjectForTable = (workshops: WorkshopWithAllData[]) =>
             speakerCompany,
             date: new Date(workshop.start_dates[0]).toISOString(),
             startHour: new Date(workshop.start_dates[0]).toISOString(),
+            endHour: new Date(workshop.end_dates[0]).toISOString(),
             status: workshop.activity_status,
             parsedStatus: parseWorkshopStatusFromDatabase(workshop.activity_status),
             skill: parseSkillFromDatabase(workshop.asociated_skill),
