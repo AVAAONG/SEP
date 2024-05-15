@@ -4,16 +4,19 @@ import { createCvaInformation, updateCvaInformation } from '@/lib/db/utils/cva';
 import scholarCVAInformationSchema from '@/lib/schemas/scholar/scholarCVAInformationSchema';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { formatDateToDisplayInInput, formatDateToStoreInDB } from '@/lib/utils/dates';
-import { ArrowUpTrayIcon, PaperClipIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
-import { CvaLocation, ScholarCVAInformation as IScholarCVAInformation, Prisma } from '@prisma/client';
-import Link from 'next/link';
+import {
+  CvaLocation,
+  ScholarCVAInformation as IScholarCVAInformation,
+  Prisma,
+} from '@prisma/client';
 import { BaseSyntheticEvent, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import shortUUID from 'short-uuid';
 import { z } from 'zod';
+import FileInput from './common/FileInput';
 
 const readFileAsBase64 = (file: File | null): Promise<string> => {
   if (file) {
@@ -41,17 +44,17 @@ const ScholarCVAInformation = ({
 
   let defaultValues = scholarCvaInformation
     ? {
-      already_finished_cva: scholarCvaInformation?.already_finished_cva === true ? 'YES' : 'NO',
-      is_in_cva: scholarCvaInformation?.is_in_cva === true ? 'YES' : 'NO',
-      cva_ended_date: scholarCvaInformation.cva_ended_date
-        ? formatDateToDisplayInInput(scholarCvaInformation?.cva_ended_date)
-        : null,
-      cva_location: scholarCvaInformation?.cva_location as CvaLocation,
-      cva_started_date: scholarCvaInformation.cva_started_date
-        ? formatDateToDisplayInInput(scholarCvaInformation?.cva_started_date)
-        : null,
-      not_started_cva_reason: scholarCvaInformation?.not_started_cva_reason,
-    }
+        already_finished_cva: scholarCvaInformation?.already_finished_cva === true ? 'YES' : 'NO',
+        is_in_cva: scholarCvaInformation?.is_in_cva === true ? 'YES' : 'NO',
+        cva_ended_date: scholarCvaInformation.cva_ended_date
+          ? formatDateToDisplayInInput(scholarCvaInformation?.cva_ended_date)
+          : null,
+        cva_location: scholarCvaInformation?.cva_location as CvaLocation,
+        cva_started_date: scholarCvaInformation.cva_started_date
+          ? formatDateToDisplayInInput(scholarCvaInformation?.cva_started_date)
+          : null,
+        not_started_cva_reason: scholarCvaInformation?.not_started_cva_reason,
+      }
     : undefined;
   const {
     control,
@@ -80,9 +83,7 @@ const ScholarCVAInformation = ({
       already_finished_cva: data.already_finished_cva === 'YES',
       cva_ended_date: data.cva_ended_date ? formatDateToStoreInDB(data.cva_ended_date) : null,
       cva_location: data.cva_location,
-      cva_started_date: data.cva_started_date
-        ? formatDateToStoreInDB(data.cva_started_date)
-        : null,
+      cva_started_date: data.cva_started_date ? formatDateToStoreInDB(data.cva_started_date) : null,
       is_in_cva: data.is_in_cva === 'YES',
       not_started_cva_reason: data.not_started_cva_reason,
     };
@@ -215,16 +216,35 @@ const ScholarCVAInformation = ({
                       );
                     }}
                   />
-                  <Controller
+                  <FileInput
+                    control={control}
+                    label="Certificado del CVA"
+                    name="certificate"
+                    acceptedFileTypes={['application/pdf']}
+                    onFileChange={async (file) => {
+                      if (scholarCvaInformation?.certificate) {
+                        await deleteBlobFile(scholarCvaInformation?.certificate!);
+                        await updateCvaInformation(scholarCvaInformation?.scholarId, {
+                          certificate: null,
+                        });
+                      }
+                      setCertificate((prev) => {
+                        prev = file?.target.files?.[0] || null;
+                        return prev;
+                      });
+                    }}
+                    existingFileUrl={certificateUrl}
+                  />
+                  {/* <Controller
                     name="certificate"
                     control={control}
                     render={({ field, formState }) => {
                       return (
                         <div className="h-fit flex gap-2 text-sm flex-col ">
-                          <label htmlFor="certificate" className='text-sm'>
+                          <label htmlFor="certificate" className="text-sm">
                             Certificado del CVA
                           </label>
-                          <div className='flex gap-4 p-2.5 rounded-md items-center justify-between bg-white dark:bg-neutral-800 '>
+                          <div className="flex gap-4 p-2.5 rounded-md items-center justify-between bg-white dark:bg-neutral-800 ">
                             <div className="w-5 h-5">
                               {certificateUrl && (
                                 <Link href={certificateUrl}>
@@ -252,71 +272,34 @@ const ScholarCVAInformation = ({
                               placeholder="Constancia"
                               style={{ display: 'none' }}
                             />
-                            <label htmlFor={certificateUrl ? '' : 'certificate'} className={certificateUrl ? "flex items-center text-sm " : "flex items-center text-sm cursor-pointer"}>
-                              {certificateUrl || field.value ?
+                            <label
+                              htmlFor={certificateUrl ? '' : 'certificate'}
+                              className={
+                                certificateUrl
+                                  ? 'flex items-center text-sm '
+                                  : 'flex items-center text-sm cursor-pointer'
+                              }
+                            >
+                              {certificateUrl || field.value ? (
                                 <>
-                                  {
-                                    certificateUrl ? <Link href={certificateUrl}>
-                                      Certificado cargado
-                                    </Link> : 'Certificado cargado'
-                                  }
-
+                                  {certificateUrl ? (
+                                    <Link href={certificateUrl}>Certificado cargado</Link>
+                                  ) : (
+                                    'Certificado cargado'
+                                  )}
                                 </>
-                                : 'Subir archivo'}
-
+                              ) : (
+                                'Subir archivo'
+                              )}
                             </label>
-                            <label htmlFor='certificate' className='cursor-pointer'>
-                              <ArrowUpTrayIcon className='w-5 h-5 cursor-pointer' />
+                            <label htmlFor="certificate" className="cursor-pointer">
+                              <ArrowUpTrayIcon className="w-5 h-5 cursor-pointer" />
                             </label>
                           </div>
                         </div>
                       );
                     }}
-                  />
-                  {/* <Controller
-                    name="certificate"
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field, formState }) => {
-                      return (
-                        <div className="flex gap-2 text-sm flex-col">
-                          <label htmlFor="certificateInput">
-                            Certificado del CVA (Solo documentos PDF)
-                          </label>
-                          <input
-                            id="certificateInput"
-                            value={field.value?.toString()}
-                            onChange={async (e) => {
-                              if (scholarCvaInformation?.certificate) {
-                                await deleteBlobFile(scholarCvaInformation?.certificate!);
-                                await updateCvaInformation(scholarCvaInformation?.scholarId, {
-                                  certificate: null,
-                                });
-                              }
-                              setCertificate((prev) => {
-                                prev = e?.target.files?.[0] || null;
-                                return prev;
-                              });
-                              field.onChange(e);
-                            }}
-                            type="file"
-                            className="flex items-center"
-                            accept="application/pdf"
-                            placeholder="Constancia"
-                          />
-                        </div>
-                      );
-                    }}
-                  />
-                  {scholarCvaInformation?.certificate && (
-                    <Tooltip content="Certificado del CVA">
-                      <div className="m-auto">
-                        <Link href={certificateUrl ?? ''}>
-                          <DocumentTextIcon className="w-10 h-10 text-primary-light" />
-                        </Link>
-                      </div>
-                    </Tooltip>
-                  )} */}
+                  /> */}
                 </>
               ) : (
                 <>
