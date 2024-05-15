@@ -91,7 +91,6 @@ const GeneralInformation: React.FC<GeneralInformationProps> = ({ scholar }) => {
             name="gender"
             control={control}
             rules={{ required: true }}
-            shouldUnregister={true}
             render={({ field, formState }) => {
               return (
                 <Select
