@@ -3,6 +3,7 @@ import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns'
 import { BigCalendarEventType } from '@/types/Calendar';
 import { ActivityStatus, Chat, KindOfSpeaker, Workshop } from '@prisma/client';
 import { headers } from 'next/headers';
+import { determineActivityKindByTipe } from './activities/utils';
 import { ACTIVITIES_CALENDAR_COLORS } from './constants';
 import { parseChatLevelFromDatabase, parseModalityFromDatabase, parsePlatformFromDatabase, parseSkillFromDatabase } from './utils2';
 
@@ -135,12 +136,16 @@ export const formatActivitiesForEnrollement = (
 ): ActivitiesForEnrollement[] => {
   return activities.flatMap((activity) => {
     const { id, title, start_dates, end_dates, description, modality, activity_status, platform, avalible_spots, calendar_ids } = activity;
-    const kindOfActivity: 'chat' | 'workshop' = 'level' in activity ? 'chat' : 'workshop';
+    const kindOfActivity = determineActivityKindByTipe(activity);
     const colors = ACTIVITIES_CALENDAR_COLORS.find((activity) => activity.activity === kindOfActivity);
+    //arreglar
     const eventUrl = getActivityUrl(id, kindOfActivity === 'workshop' ? 'actividadesFormativas' : 'chats', 'scholar');
+
     const bgColor = getBgColor(colors, activity_status);
+
     const enrolledCount = (activity.scholar_attendance as { attendance: string }[]).filter((a) => a.attendance === 'ENROLLED' || a.attendance === 'ATTENDED' || a.attendance === 'NOT_ATTENDED').length;
     const isFull = enrolledCount >= activity.avalible_spots;
+    // en vez de facilitadores colocar al proyecto y al encargado.
     const speakerNames: string[] = [];
     const speakerImages: (string | undefined)[] = [];
     const speakerIds: string[] = [];

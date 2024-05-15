@@ -208,7 +208,23 @@ export const getSentActivitiesWhereScholarIsNotEnrroled = async (
         scholar_attendance: true,
       },
     }),
-    prisma.volunteer.findMany(),
+    prisma.volunteer.findMany(
+      {
+        where: {
+          status: 'SENT',
+          volunteer_attendance: {
+            none: {
+              scholar: {
+                scholarId: scholarId,
+              },
+            },
+          },
+        },
+        include: {
+          volunteer_attendance: true,
+        },
+      }
+    ),
   ]);
   return [workshops, chats, volunteer];
 };
