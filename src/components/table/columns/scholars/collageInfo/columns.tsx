@@ -6,8 +6,7 @@ import ScholarColumnWidget from '../commons/ScholarWidget';
 
 export interface scholarCollageInformationColumnsProps {
   id: string;
-  first_names: string;
-  last_names: string;
+  name: string;
   profilePhoto: string | null;
   dni: string;
   kindOfCollage: string;
@@ -25,8 +24,7 @@ export interface scholarCollageInformationColumnsProps {
 const scholarCollageInformationColumns: Column<scholarCollageInformationColumnsProps>[] = [
   {
     Header: 'Nombre',
-    accessor: (row: scholarCollageInformationColumnsProps) =>
-      `${row.first_names} ${row.last_names}`,
+    accessor: 'name',
     Cell: ({
       value,
       cell,

@@ -15,8 +15,7 @@ export const formatScholarsToCollageinfoTable = async (scholars: ScholarWithAllD
         } = scholar;
         return {
             id,
-            first_names,
-            last_names,
+            name: first_names + ' ' + last_names,
             profilePhoto: photo ? await getBlobImage(photo) : null,
             dni,
             kindOfCollage: parseKindOfCollageFromDatabase(collage_information[0]?.kind_of_collage!),
