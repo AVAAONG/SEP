@@ -132,24 +132,28 @@ export const addScholarToVolunteer = async (
 					volunteer_attendance: true,
 				}
 			});
-
-			await prisma.volunteerAttendance.create({
-				data: {
-					volunteer: {
-						connect: {
-							id: volunteerId,
+			const totalAttendance = workshop?.volunteer_attendance.filter(attendance => attendance.attendance === 'ENROLLED').length || 0;
+			if (totalAttendance >= workshop?.avalible_spots!) { }
+			else {
+				await prisma.volunteerAttendance.create({
+					data: {
+						volunteer: {
+							connect: {
+								id: volunteerId,
+							},
 						},
-					},
-					scholar: {
-						connect: {
-							scholarId,
+						scholar: {
+							connect: {
+								scholarId,
+							},
 						},
+						attendance: 'ENROLLED',
+						asigned_hours: 0
 					},
-					attendance: 'ENROLLED',
-					asigned_hours: 0
-				},
-			});
+				});
+			}
 		}
+
 	});
 }
 

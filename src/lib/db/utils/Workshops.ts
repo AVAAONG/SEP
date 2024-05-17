@@ -5,6 +5,8 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
+import { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
+import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
 import {
   ActivityStatus,
   Chat,
@@ -15,6 +17,7 @@ import {
   Workshop
 } from '@prisma/client';
 import shortUUID from 'short-uuid';
+import { VolunteerWithAllData } from '../types';
 import { prisma } from './prisma';
 
 export const getWorkshopsByScholar = async (scholarId: string) => {
@@ -156,38 +159,47 @@ export const getAllActivities = async (): Promise<[Workshop[], Chat[], Volunteer
   return [workshops, chats, volunteer];
 };
 
-export const getSentActivitiesWhereScholarIsNotEnrroled = async (
+export const getSentActivitiesWhereScholarIsNotEnrolled = async (
   scholarId: string
-): Promise<[Workshop[], Chat[], Volunteer[]]> => {
+): Promise<(WorkshopWithAllData | ChatsWithAllData | VolunteerWithAllData)[]> => {
+
+  // Common Filter for Workshops and Chats
+  const commonWhere: Prisma.WorkshopWhereInput & Prisma.ChatWhereInput = {
+    activity_status: 'SENT',
+    scholar_attendance: {
+      none: {
+        scholar: {
+          scholarId: scholarId,
+        },
+      },
+    },
+    speaker: {
+      none: {
+        id: scholarId
+      }
+    }
+  };
+
+  // Common Include for Workshops and Chats
+  const commonInclude = {
+    speaker: true,
+    scholar_attendance: true,
+  };
+
+  // Using a single transaction for better efficiency
   const [workshops, chats, volunteer] = await prisma.$transaction([
     prisma.workshop.findMany({
-      where: {
-        activity_status: 'SENT',
-        scholar_attendance: {
-          none: {
-            scholar: {
-              scholarId: scholarId,
-            },
-          },
-        },
-      },
-      include: {
-        speaker: {
-          select: {
-            first_names: true,
-            last_names: true,
-            id: true,
-            image: true,
-            job_company: true,
-          },
-        },
-        scholar_attendance: true,
-      },
+      where: commonWhere,
+      include: commonInclude,
     }),
     prisma.chat.findMany({
+      where: commonWhere,
+      include: commonInclude,
+    }),
+    prisma.volunteer.findMany({
       where: {
-        activity_status: 'SENT',
-        scholar_attendance: {
+        status: 'SENT',
+        volunteer_attendance: {
           none: {
             scholar: {
               scholarId: scholarId,
@@ -195,38 +207,11 @@ export const getSentActivitiesWhereScholarIsNotEnrroled = async (
           },
         },
       },
-      include: {
-        speaker: {
-          select: {
-            first_names: true,
-            last_names: true,
-            id: true,
-            image: true,
-            job_company: true,
-          },
-        },
-        scholar_attendance: true,
-      },
+      include: { volunteer_attendance: true }, // Only relevant include for volunteer
     }),
-    prisma.volunteer.findMany(
-      {
-        where: {
-          status: 'SENT',
-          volunteer_attendance: {
-            none: {
-              scholar: {
-                scholarId: scholarId,
-              },
-            },
-          },
-        },
-        include: {
-          volunteer_attendance: true,
-        },
-      }
-    ),
   ]);
-  return [workshops, chats, volunteer];
+
+  return [...workshops, ...chats, ...volunteer];
 };
 
 export const getActivitiesByYear = async (
@@ -258,60 +243,6 @@ export const getActivitiesByYear = async (
   return [workshops, chats, volunteers];
 };
 
-// export const getWorkshopsByScholar = async (scholarId: string) => {
-//   const workshops = await prisma.user.findUnique({
-//     where: { id: scholarId },
-//     include: {
-//       scholar: {
-//         select: {
-//           attendedWorkshpos: true,
-//         },
-//       },
-//     },
-//   });
-//   return workshops;
-// };
-
-// export const getWorkshopsByScholar2 = async (userId: string) => {
-//   try {
-//     const scholarId = await prisma.user.findUnique({
-//       where: { id: userId },
-//       select: {
-//         scholar: {
-//           select: {
-//             id: true,
-//           },
-//         },
-//       },
-//     });
-//     const workshops = await prisma.workshop.findMany({
-//       where: {
-//         scholarAttendance: {
-//           some: {
-//             scholarId: scholarId?.scholar?.id,
-//           },
-//         },
-//       },
-//       include: {
-//         speaker: true,
-//         scholarAttendance: {
-//           where: {
-//             scholarId: scholarId?.scholar?.id,
-//           },
-//           select: {
-//             attendance: true,
-//           },
-//         },
-//       },
-//     });
-//     return workshops;
-//   } catch (err) {
-//     console.log(err);
-//   } finally {
-//     await prisma.$disconnect();
-//   }
-
-// };
 
 export const getScholarEnrolledActivities = async (scholarId: string) => {
   const activities = await prisma.scholar.findUnique({

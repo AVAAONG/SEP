@@ -23,7 +23,7 @@ const page = async () => {
   const [enrrolledWorkshops, enrrolledCHats] = await getActivitiesWhenScholarItsEnrolled(id);
   const events = formatActivityEventsForBigCalendar(
     [...enrrolledWorkshops, ...enrrolledCHats],
-    'scholar'
+    'becario'
   );
   const cardContent: PanelCardProps[] = [
     {

@@ -3,10 +3,6 @@
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './calendar.css';
 
-import { createEnrollementConfirmationMessage } from '@/lib/htmlConfirmationTemplate';
-import { sendGenericEmail } from '@/lib/sendEmails';
-import { handleEnrollment } from '@/lib/serverAction';
-import { ActivitiesForEnrollement } from '@/lib/utils';
 import { BigCalendarEventType } from '@/types/Calendar';
 import { useDisclosure } from '@nextui-org/react';
 import moment from 'moment';
@@ -14,11 +10,6 @@ import 'moment/locale/es';
 import { useSession } from 'next-auth/react';
 import { useMemo, useState } from 'react';
 import { Calendar as BigCalendar, Views, momentLocalizer } from 'react-big-calendar';
-import { toast } from 'react-toastify';
-import BasicModal from '../BasicModal';
-import DisplayDate from '../DisplayDate';
-import DisplayTime from '../DisplayTime';
-import SpeakersColumnWidget from '../SpeakerColumnWidget';
 
 /**
  * Defines the style for each event in the calendar.
@@ -50,7 +41,7 @@ const CalendarForEnrrolling = ({
   events,
   scholar,
 }: {
-  events: ActivitiesForEnrollement[];
+  events: BigCalendarEventType[];
   scholar: {
     id: string;
     name: string;
@@ -106,7 +97,7 @@ const CalendarForEnrrolling = ({
           next: 'Siguiente',
         }}
       />
-      <BasicModal
+      {/* <BasicModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         size="lg"
@@ -186,6 +177,7 @@ const CalendarForEnrrolling = ({
         onConfirm={async () => confirmationModal.onOpen()}
         confirmText={selectedEvent?.isFull ? 'Cupos agotados' : 'Inscribirse'}
       />
+
       <BasicModal
         isOpen={confirmationModal.isOpen}
         onOpenChange={confirmationModal.onOpenChange}
@@ -227,13 +219,12 @@ const CalendarForEnrrolling = ({
             scholar.email,
             'Confirmacion de inscripción'
           );
-
           confirmationModal.onClose();
           onClose();
           setIsCharging(false);
         }}
         confirmText="Confirmar Inscripción"
-      />
+      /> */}
     </>
   );
 };
