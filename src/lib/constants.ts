@@ -41,7 +41,7 @@ export const ACTIVITIES_CALENDAR_COLORS = [
   {
     activity: 'volunteer',
     comingActivities: '#16a34a',
-    pastActivities: '#bbf7d0',
+    pastActivities: '#9ed9b8',
   },
 ];
 // ======================= CONSTANTS FOR WORKSHOP =======================

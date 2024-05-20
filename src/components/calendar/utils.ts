@@ -1,4 +1,5 @@
-import { ActivityKind, ActivityPath, getActivityStatusBasedOnItsType, getActivityUrl } from '@/lib/activities/utils';
+
+import { ActivityKind, ActivityPath, determineActivityKindByTipe, getActivitySpanishPathByType, getActivityStatusBasedOnItsType, getActivityUrl } from '@/lib/activities/utils';
 import { ACTIVITIES_CALENDAR_COLORS } from '@/lib/constants';
 import { VolunteerWithAllData } from '@/lib/db/types';
 import { parseModalityFromDatabase } from '@/lib/utils2';
@@ -15,7 +16,10 @@ const getBgColor = (colors: any, activity_status: string) => {
         activity_status === 'DONE' ||
         activity_status === 'IN_PROGRESS' ||
         activity_status === 'SUSPENDED' ||
-        activity_status === 'REJECTED'
+        activity_status === 'REJECTED' ||
+        activity_status === 'APPROVED' ||
+        activity_status === 'PENDING'
+
     ) {
         bgColor = colors?.pastActivities;
     }
@@ -56,3 +60,26 @@ export const formatActivityForBigCalendar = (
         };
     });
 }
+
+
+
+
+const formatActivitiesForCalendarPanel = (
+    activities: (WorkshopWithAllData | ChatsWithAllData | VolunteerWithAllData)[],
+    link: string = 'becario'
+) => {
+    const results = activities.reduce(
+        (acc: BigCalendarEventType[], activity: WorkshopWithAllData | ChatsWithAllData | VolunteerWithAllData) => {
+            const kindOfActivity = determineActivityKindByTipe(activity);
+            const activityPath = getActivitySpanishPathByType(activity);
+            const formattedActivity = formatActivityForBigCalendar(activity, link, kindOfActivity, activityPath);
+
+            acc = acc.concat(formattedActivity);
+            return acc;
+        }, []
+    );
+
+    return results;
+};
+
+export default formatActivitiesForCalendarPanel;

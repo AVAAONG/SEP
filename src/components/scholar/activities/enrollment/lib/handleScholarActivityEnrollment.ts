@@ -21,6 +21,8 @@ export const handleEnrollment = async (
     scholarName: string,
     activityTitle: string
 ) => {
+    //console log all the arguments of the function
+    console.log(activityId, scholarId, eventId, kindOfActivity, email, scholarName, activityTitle);
     let spanishPath = ''
     if (kindOfActivity === 'workshop') {
         await enroleScholarInWorkshop(activityId, scholarId);

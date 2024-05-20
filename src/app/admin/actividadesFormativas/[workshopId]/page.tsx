@@ -38,16 +38,13 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
     .filter((scholar) => scholar.attendance === 'ENROLLED')
     .map((scholar) => {
       return {
-        names: scholar.first_names.split(' ')[0] + ' ' + scholar.last_names.split(' ')[0],
+        names: scholar.name,
         dni: scholar.dni,
       };
     });
 
-  const {
-    attendedScholarEmails,
-    enrolledScholarEmails
-  } = getScholarEmailsByAttendanceStatus(scholar_attendance)
-
+  const { attendedScholarEmails, enrolledScholarEmails } =
+    getScholarEmailsByAttendanceStatus(scholar_attendance);
 
   const defaultForm = {
     activity_organization: 0,
@@ -82,8 +79,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
           <ActivityScholarStatusesCount scholarAttendance={scholar_attendance} />
           <AdminActivityActions
             formResponses={formResponses}
-            scholarsEmails={[...attendedScholarEmails,
-            ...enrolledScholarEmails]}
+            scholarsEmails={[...attendedScholarEmails, ...enrolledScholarEmails]}
             activity={workshop}
           />
         </div>
@@ -118,10 +114,10 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
                 hour={
                   start_dates
                     ? new Date(start_dates[0]).toLocaleTimeString('es-ES', {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      hour12: true,
-                    })
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true,
+                      })
                     : ''
                 }
                 modality={parseModalityFromDatabase(modality as Modality)}

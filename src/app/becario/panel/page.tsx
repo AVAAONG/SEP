@@ -1,12 +1,12 @@
 import NextEventsList from '@/components/NextEventsList';
 import Calendar from '@/components/calendar/Calendar';
+import formatActivitiesForCalendarPanel from '@/components/calendar/utils';
 import PanelCard, { PanelCardProps } from '@/components/commons/PanelCard';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import {
   getActivitiesWhenScholarItsEnrolled,
   getScholarDoneActivitiesCount,
 } from '@/lib/db/utils/users';
-import { formatActivityEventsForBigCalendar } from '@/lib/utils';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import React from 'react';
@@ -20,11 +20,10 @@ const page = async () => {
   const name = session?.user?.name?.split(' ')[0];
   const [doneWorkshopsCount, doneChatsCount, doneVolunteerCount] =
     await getScholarDoneActivitiesCount(id, actualYear);
-  const [enrrolledWorkshops, enrrolledCHats] = await getActivitiesWhenScholarItsEnrolled(id);
-  const events = formatActivityEventsForBigCalendar(
-    [...enrrolledWorkshops, ...enrrolledCHats],
-    'becario'
-  );
+
+  const enrolledActivities = await getActivitiesWhenScholarItsEnrolled(id);
+
+  const events = formatActivitiesForCalendarPanel(enrolledActivities);
   const cardContent: PanelCardProps[] = [
     {
       title: 'Actividades formativas realizadas',
@@ -70,7 +69,7 @@ const page = async () => {
             <Calendar events={events} />
           </div>
           <div className="w-full lg:w-1/4 p-4 bg-white border border-gray-200 rounded-lg shadow-sm shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950">
-            <NextEventsList activities={[...enrrolledWorkshops, ...enrrolledCHats]} />{' '}
+            <NextEventsList activities={enrolledActivities} />{' '}
           </div>
         </div>
       </div>

@@ -4,20 +4,30 @@ import VolunteerForm from '@/components/admin/forms/volunteer/form';
 import WorkshopForm from '@/components/admin/forms/workshop/form';
 import { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
 import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
-import { determineActivityKindByTipe } from '@/lib/activities/utils';
+import { ActivityKind } from '@/lib/activities/utils';
 import { VolunteerWithAllData } from '@/lib/db/types';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { Button } from '@nextui-org/button';
 import { Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from '@nextui-org/react';
+import { Chat, Volunteer, Workshop } from '@prisma/client';
 import React from 'react';
 
+const determineActivityKindByTipe = (
+  activity: Partial<Workshop> | Partial<Chat> | Partial<Volunteer>
+): ActivityKind => {
+  if ('asociated_skill' in activity) return 'workshop';
+  else if ('level' in activity) return 'chat';
+  else if ('kind_of_volunteer' in activity) return 'volunteer';
+  else return null;
+};
 interface ActivityEditFormModalProps {
-  activity: VolunteerWithAllData | ChatsWithAllData | WorkshopWithAllData
+  activity: VolunteerWithAllData | ChatsWithAllData | WorkshopWithAllData;
 }
 
 const ActivityEditFormModal: React.FC<ActivityEditFormModalProps> = ({ activity }) => {
   const { isOpen, onOpenChange, onOpen } = useDisclosure();
-  const kindOfActivity = determineActivityKindByTipe(activity)
+  const kindOfActivity = determineActivityKindByTipe(activity);
+
   return (
     <>
       <Button
@@ -26,9 +36,7 @@ const ActivityEditFormModal: React.FC<ActivityEditFormModalProps> = ({ activity 
         className="w-full"
         onPress={onOpen}
       >
-        <span className='hidden md:block w-full'>
-          Editar
-        </span>
+        <span className="hidden md:block w-full">Editar</span>
       </Button>
       <Modal
         isOpen={isOpen}
@@ -49,22 +57,15 @@ const ActivityEditFormModal: React.FC<ActivityEditFormModalProps> = ({ activity 
                   Editar actividad
                 </ModalHeader>
                 <ModalBody className="flex flex-col items-center">
-                  {
-
-                    kindOfActivity === 'volunteer' && (
-                      <VolunteerForm kind="edit" valuesToUpdate={activity as VolunteerWithAllData} />
-                    )
-                  }
-                  {
-                    kindOfActivity === 'workshop' && (
-                      <WorkshopForm kind="edit" valuesToUpdate={activity as WorkshopWithAllData} />
-                    )
-                  }
-                  {
-                    kindOfActivity === 'chat' && (
-                      <ChatForm kind="edit" valuesToUpdate={activity as ChatsWithAllData} />
-                    )
-                  }
+                  {kindOfActivity === 'volunteer' && (
+                    <VolunteerForm kind="edit" valuesToUpdate={activity as VolunteerWithAllData} />
+                  )}
+                  {kindOfActivity === 'workshop' && (
+                    <WorkshopForm kind="edit" valuesToUpdate={activity as WorkshopWithAllData} />
+                  )}
+                  {kindOfActivity === 'chat' && (
+                    <ChatForm kind="edit" valuesToUpdate={activity as ChatsWithAllData} />
+                  )}
                 </ModalBody>
               </>
             );

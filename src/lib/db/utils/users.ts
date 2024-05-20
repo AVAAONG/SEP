@@ -409,7 +409,7 @@ export const getScholarDoneActivitiesCount = async (scholar_id: string, year: nu
 };
 
 export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) => {
-  const [workshops, chats] = await prisma.$transaction([
+  const [workshops, chats, volunteers] = await prisma.$transaction([
     prisma.workshop.findMany({
       where: {
         AND: [
@@ -490,7 +490,13 @@ export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) =>
                 },
               },
             },
-
+          },
+          {
+            volunteer_attendance: {
+              some: {
+                attendance: 'ENROLLED',
+              },
+            },
           },
           {
             status: 'SENT',
@@ -499,7 +505,7 @@ export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) =>
       },
     })
   ]);
-  return [chats, workshops];
+  return [...workshops, ...chats, ...volunteers];
 };
 
 export const setProbationToScholar = async (scholarId: string, data: Probation) => {
