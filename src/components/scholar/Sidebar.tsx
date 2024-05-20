@@ -1,7 +1,7 @@
 'use client';
 import logo from '@/../public/proexcelencia-color.png';
 import { scholarSidebarAtom } from '@/lib/state/mainState';
-import { DocumentTextIcon, SparklesIcon } from '@heroicons/react/24/outline';
+import { ArchiveBoxIcon, DocumentTextIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -137,6 +137,12 @@ const Sidebar = () => {
             buttonName="Notas universitarias"
             itemList={[]}
             link={`/${SCHOLAR_PREFIX}/universidad`}
+          />
+          <ScholarDropdownButton
+            Icon={<ArchiveBoxIcon />}
+            buttonName="D.O.S Exchange Programs"
+            itemList={[]}
+            link={`/${SCHOLAR_PREFIX}/dos`}
           />
         </ul>
         {/* FEEDBACK FORM */}

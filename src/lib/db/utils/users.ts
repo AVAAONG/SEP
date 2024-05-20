@@ -831,3 +831,52 @@ export const updateProfilePicture = async (id: string, image: string | null) => 
   });
   return scholar;
 }
+
+
+
+
+export const addDOSExchangeProgramApplication = async (scholarId: string, DOSExchangeProgramData: Prisma.DOSExchangeProgramCreateInput) => {
+  const scholar = await prisma.scholar.update({
+    where: {
+      id: scholarId
+    },
+    data: {
+      dos_exchange_program_applications: {
+        create: {
+          ...DOSExchangeProgramData
+        }
+      }
+    }
+  });
+  return scholar;
+}
+
+export const updateDOSExchangeProgramApplicationd = async (scholarId: string, data: Prisma.DOSExchangeProgramUpdateInput) => {
+  const DOSExchangeProgramApplication = await prisma.scholar.update({
+    where: {
+      id: scholarId,
+    },
+    data
+  })
+  return DOSExchangeProgramApplication;
+}
+
+export const deleteDOSExchangeProgramApplication = async (DOSExchangeProgramId: string) => {
+  const DOSExchangeProgramApplication = await prisma.dOSExchangeProgram.delete({
+    where: {
+      id: DOSExchangeProgramId,
+    },
+  })
+  return DOSExchangeProgramApplication;
+}
+
+
+
+export const getScholarDOSExchangeProgramApplications = async (scholarId: string) => {
+  const DOSExchangeProgramApplication = await prisma.dOSExchangeProgram.findMany({
+    where: {
+      scholar_id: scholarId
+    },
+  })
+  return DOSExchangeProgramApplication;
+}
