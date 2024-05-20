@@ -1,23 +1,50 @@
 'use client';
 import BasicModal from '@/components/BasicModal';
-import { createEnrollementConfirmationMessage } from '@/lib/htmlConfirmationTemplate';
-import { sendGenericEmail } from '@/lib/sendEmails';
-import { handleEnrollment } from '@/lib/serverAction';
+import { ActivityKind } from '@/lib/activities/utils';
 import { Button } from '@nextui-org/button';
 import { useDisclosure } from '@nextui-org/modal';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
+import { handleEnrollment } from '../lib/handleScholarActivityEnrollment';
 
-const EnrollmentDialog = ({ isButtonDisabled, kindOfActivity, isFull }) => {
+interface EnrollmentDialogProps {
+  activityId: string;
+  scholarId: string;
+  eventId: string;
+  kindOfActivity: ActivityKind;
+  scholarEmail: string;
+  scholarName: string;
+  activityTitle: string;
+  isButtonDisabled: boolean;
+}
+
+const EnrollmentDialog: React.FC<EnrollmentDialogProps> = ({
+  activityId,
+  scholarId,
+  eventId,
+  kindOfActivity,
+  scholarEmail,
+  scholarName,
+  activityTitle,
+  isButtonDisabled,
+}) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [isCharging, setIsCharging] = useState(false);
+  let bg = '';
+  if (kindOfActivity === 'workshop') {
+    bg = 'bg-blue-500';
+  } else if (kindOfActivity === 'chat') {
+    bg = 'bg-red-500';
+  } else if (kindOfActivity === 'volunteer') {
+    bg = 'bg-green-500';
+  }
 
   return (
     <>
       <Button
         isDisabled={isButtonDisabled}
         onPress={onOpen}
-        className="bg-red-500 text-white"
+        className={`${bg} text-white`}
         radius="full"
         size="sm"
       >
@@ -37,22 +64,24 @@ const EnrollmentDialog = ({ isButtonDisabled, kindOfActivity, isFull }) => {
             <div>Recuerda, tu participación es vital para el éxito de la actividad. ✨</div>
           </>
         )}
-        isButtonDisabled={isFull || isCharging}
+        isButtonDisabled={isButtonDisabled || isCharging}
         onConfirm={async () => {
           setIsCharging(true);
-          toast.promise(handleEnrollment(id, scholar.id, eventId, kindOfActivity, scholar.email), {
-            pending: 'Realizando inscripción',
-            success: 'Inscripción exitosa 🎉',
-            error: 'Error al inscribirte en la actividad. Inténtalo de nuevo más tarde 🙁',
-          });
-          await sendGenericEmail(
-            createEnrollementConfirmationMessage(
-              scholar.name,
-              `https://www.programaexcelencia.org/becario/chats/${id}`,
+          toast.promise(
+            handleEnrollment(
+              activityId,
+              scholarId,
+              eventId,
+              kindOfActivity,
+              scholarEmail,
+              scholarName,
               activityTitle
             ),
-            scholar.email,
-            'Confirmación de inscripción'
+            {
+              pending: 'Realizando inscripción',
+              success: 'Inscripción exitosa 🎉',
+              error: 'Error al inscribirte en la actividad. Inténtalo de nuevo más tarde 🙁',
+            }
           );
           onClose();
           setIsCharging(false);

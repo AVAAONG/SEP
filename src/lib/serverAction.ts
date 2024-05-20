@@ -1,8 +1,6 @@
 'use server';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
-import { CHAT_CALENDAR_ID, WORKSHOP_CALENDAR_ID } from './constants';
-import { enroleScholarInChat, enroleScholarInWorkshop } from './db/utils/Workshops';
 import { getScholarByEmail } from './db/utils/users';
 import { getCollageName } from './utils/parseFromDatabase';
 
@@ -66,31 +64,4 @@ export const createCVACard = async (
     }
   );
   if (result.status !== 200) throw new Error('Error');
-};
-
-export const handleEnrollment = async (
-  activityId: string,
-  scholarId: string,
-  eventId: string,
-  kindOfActivity: 'workshop' | 'chat',
-  email: string
-) => {
-  if (kindOfActivity === 'workshop') await enroleScholarInWorkshop(activityId, scholarId);
-  else if (kindOfActivity === 'chat') await enroleScholarInChat(activityId, scholarId);
-  revalidatePath('/becario/oferta');
-  const result = await fetch(
-    'https://script.google.com/macros/s/AKfycbzSiMKnlwygmcPdvdGvmeLlvXc_bcdm4tcWcpZ2H7QBbz-g3dBqxgFfzd_G44YaEeKkZA/exec',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        newAttende: email,
-        eventId,
-        calendarId: kindOfActivity === 'workshop' ? WORKSHOP_CALENDAR_ID : CHAT_CALENDAR_ID,
-      }),
-    }
-  );
-  if (result.status !== 200) throw new Error('Error al inscribirte en la actividad');
 };

@@ -40,6 +40,7 @@ export const formatActivityForBigCalendar = (
 
         return {
             id: id,
+            kindOfActivity: kindOfActivity,
             title: `(${eventModalityTitle}) ${title}`,
             allDay: false,
             start: new Date(startDate),

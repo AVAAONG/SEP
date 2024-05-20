@@ -3,6 +3,7 @@ import CalendarForEnrrolling from '@/components/calendar/CalendarForEnrolling';
 import { BigCalendarEventType } from '@/types/Calendar';
 import React, { useEffect, useState } from 'react';
 import ChatEnrollementCard from './activities/enrollment/ChatEnrollmentCard';
+import VolunteerEnrollmentCard from './activities/enrollment/VolunteerEnrollmentCard';
 import WorkshopEnrollementCard from './activities/enrollment/WorkshopEnrollmentCard';
 import {
   ChatEnrollePage,
@@ -62,17 +63,26 @@ const AcvititiesView: React.FC<AcvititiesViewProps> = ({
       {(view === 'calendar' || view === null) && (
         <div className="w-full">
           <div className="h-full min-h-[600px] text-gray-800 capitalize dark:text-gray-300 shadow-sm overflow-x-clip w-full bg-white border border-gray-200  shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 p-2">
-            <CalendarForEnrrolling events={calendarEvents} scholar={scholar} />
+            <CalendarForEnrrolling
+              events={calendarEvents}
+              scholar={scholar}
+              chatsToEnroll={chatsToEnroll}
+              volunteerToEnroll={volunteerToEnroll}
+              workshopsToEnroll={workshopsToEnroll}
+            />
           </div>
         </div>
       )}
       {view === 'activities' && (
         <div className="flex gap-4 w-full flex-wrap items-center justify-center">
           {chatsToEnroll.map((activity) => (
-            <ChatEnrollementCard key={activity.id} activity={activity} />
+            <ChatEnrollementCard key={activity.id} activity={activity} scholar={scholar} />
           ))}
           {workshopsToEnroll.map((activity: WorkshopEnrollePage) => (
             <WorkshopEnrollementCard key={activity.id} activity={activity} scholar={scholar} />
+          ))}
+          {volunteerToEnroll.map((activity: VolunteerEnrollePage) => (
+            <VolunteerEnrollmentCard key={activity.id} activity={activity} scholar={scholar} />
           ))}
         </div>
       )}

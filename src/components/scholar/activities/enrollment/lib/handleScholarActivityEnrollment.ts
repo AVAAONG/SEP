@@ -1,24 +1,33 @@
+import { ActivityKind } from "@/lib/activities/utils";
 import { CHAT_CALENDAR_ID, VOLUNTEERS_CALENDAR_ID, WORKSHOP_CALENDAR_ID } from "@/lib/constants";
 import { enroleScholarInChat, enroleScholarInWorkshop } from "@/lib/db/utils/Workshops";
 import { addScholarToVolunteer } from "@/lib/db/utils/volunteer";
+import { createEnrollementConfirmationMessage } from "@/lib/htmlConfirmationTemplate";
+import { sendGenericEmail } from "@/lib/sendEmails";
 import { revalidatePath } from "next/cache";
 
-const setCalendarId = (kindOfActivity: 'workshop' | 'chat' | 'volunteer') => {
+const setCalendarId = (kindOfActivity: ActivityKind) => {
     if (kindOfActivity === 'workshop') return WORKSHOP_CALENDAR_ID;
     else if (kindOfActivity === 'chat') return CHAT_CALENDAR_ID;
-    else return VOLUNTEERS_CALENDAR_ID;
+    else if (kindOfActivity === 'volunteer') return VOLUNTEERS_CALENDAR_ID;
 }
 
 export const handleEnrollment = async (
     activityId: string,
     scholarId: string,
     eventId: string,
-    kindOfActivity: 'workshop' | 'chat',
-    email: string
+    kindOfActivity: ActivityKind,
+    email: string,
+    scholarName: string,
+    activityTitle: string
 ) => {
-    if (kindOfActivity === 'workshop') await enroleScholarInWorkshop(activityId, scholarId);
-    else if (kindOfActivity === 'chat') await enroleScholarInChat(activityId, scholarId);
-    else if (kindOfActivity === 'volunteer') await addScholarToVolunteer(activityId, scholarId)
+    let spanishPath = ''
+    if (kindOfActivity === 'workshop') {
+        await enroleScholarInWorkshop(activityId, scholarId);
+        spanishPath = 'actividadesFormativas';
+    }
+    else if (kindOfActivity === 'chat') { await enroleScholarInChat(activityId, scholarId); spanishPath = 'chats'; }
+    else if (kindOfActivity === 'volunteer') { await addScholarToVolunteer(activityId, scholarId); spanishPath = 'voluntariado'; }
 
     revalidatePath('/becario/oferta');
     const result = await fetch(
@@ -36,4 +45,13 @@ export const handleEnrollment = async (
         }
     );
     if (result.status !== 200) throw new Error('Error al inscribirte en la actividad');
+    await sendGenericEmail(
+        createEnrollementConfirmationMessage(
+            scholarName,
+            `https://www.programaexcelencia.org/becario/${spanishPath}/${activityId}`,
+            activityTitle
+        ),
+        email,
+        'Confirmación de inscripción'
+    )
 };

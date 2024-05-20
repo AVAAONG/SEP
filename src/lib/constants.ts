@@ -40,8 +40,8 @@ export const ACTIVITIES_CALENDAR_COLORS = [
   },
   {
     activity: 'volunteer',
-    comingActivities: '#295594',
-    pastActivities: '#98b7e1',
+    comingActivities: '#16a34a',
+    pastActivities: '#bbf7d0',
   },
 ];
 // ======================= CONSTANTS FOR WORKSHOP =======================

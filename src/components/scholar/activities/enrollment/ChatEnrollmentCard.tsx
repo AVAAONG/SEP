@@ -9,13 +9,13 @@ import {
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import { Avatar } from '@nextui-org/avatar';
-import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Tooltip, useDisclosure } from '@nextui-org/react';
 import Link from 'next/link';
 import { chatIcon } from 'public/svgs/svgs';
 import React, { useState } from 'react';
 import { ChatEnrollePage } from './lib/formatActivities';
+import EnrollmentDialog from './common/EnrollmentDialog';
 
 interface ChatEnrollementCardProps {
   activity: ChatEnrollePage;
@@ -51,11 +51,6 @@ const ChatEnrollementCard: React.FC<ChatEnrollementCardProps> = ({ activity, sch
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const [isCharging, setIsCharging] = useState(false);
-  //   const isDisabled = () => {
-  //     if (isFull) return true;
-  //     else return false;
-  //   };
-
   return (
     <>
       <Card className="min-w-[350px] max-w-[350px]" radius="sm">
@@ -125,15 +120,16 @@ const ChatEnrollementCard: React.FC<ChatEnrollementCardProps> = ({ activity, sch
               <h5 className="tracking-tight text-default-400">{level}</h5>
             </div>
           </div>
-          <Button
-            isDisabled={!(enroledScholars >= availableSpots)}
-            onPress={onOpen}
-            className="bg-red-500 text-white"
-            radius="full"
-            size="sm"
-          >
-            ¡Inscribirse!
-          </Button>
+          <EnrollmentDialog
+            activityId={id}
+            activityTitle={title}
+            eventId={eventId}
+            isButtonDisabled={availableSpots <= 0}
+            kindOfActivity={kindOfActivity}
+            scholarEmail={scholar.email}
+            scholarId={scholar.id}
+            scholarName={scholar.name}
+          />
         </CardFooter>
       </Card>
     </>

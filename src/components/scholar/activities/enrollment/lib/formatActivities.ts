@@ -4,7 +4,7 @@ import { ActivityKind } from "@/lib/activities/utils";
 import { countScholarStatusesInActivity } from "@/lib/countScholarStatusInActivity";
 import { VolunteerWithAllData } from "@/lib/db/types";
 import { getSpeakersObjectForWidget } from "@/lib/utils";
-import { parseChatLevelFromDatabase, parseModalityFromDatabase, parsePlatformFromDatabase, parseSkillFromDatabase, parseVolunteerProject, parseWorkshopYearFromDatabase } from "@/lib/utils2";
+import { parseChatLevelFromDatabase, parseKindOfVolunteerFromDatabase, parseModalityFromDatabase, parsePlatformFromDatabase, parseSkillFromDatabase, parseVolunteerProject, parseWorkshopYearFromDatabase } from "@/lib/utils2";
 import { $Enums } from "@prisma/client";
 
 
@@ -145,7 +145,7 @@ export const formatVolunteerActivityForEnrollPage = (activity: VolunteerWithAllD
     enroledScholars,
     project: parseVolunteerProject(VolunteerProject),
     beneficiary,
-    kind_of_volunteer,
+    kind_of_volunteer: parseKindOfVolunteerFromDatabase(kind_of_volunteer),
     supervisor
   }
 
