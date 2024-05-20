@@ -48,9 +48,6 @@ const ChatEnrollementCard: React.FC<ChatEnrollementCardProps> = ({ activity, sch
     level,
   } = activity;
 
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-
-  const [isCharging, setIsCharging] = useState(false);
   return (
     <>
       <Card className="min-w-[350px] max-w-[350px]" radius="sm">
