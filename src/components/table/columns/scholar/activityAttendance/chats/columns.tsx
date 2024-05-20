@@ -8,6 +8,7 @@ import ActivityStatusWidgetSpanish, {
 import ScholarAttendanceWidgetSpanish, {
   ScholarAttendanceSpanish,
 } from '@/components/charts/common/widgets/ScholarAttendanceWidgetSpanish';
+import { CheckCircleIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { KindOfSpeaker } from '@prisma/client';
 import Link from 'next/link';
 import { CellProps, Column } from 'react-table';
@@ -27,6 +28,7 @@ export interface IScholarChatColumns {
   modality: string;
   platform: string;
   level: string;
+  satisfactionFormFilled: boolean | null;
 }
 
 const scholarChatAttendaceColumns: Column<IScholarChatColumns>[] = [
@@ -103,6 +105,15 @@ const scholarChatAttendaceColumns: Column<IScholarChatColumns>[] = [
     accessor: 'platform',
     Cell: ({ value }) => {
       return <div className="block overflow-x-scroll w-28">{value}</div>;
+    },
+    disableSortBy: true,
+  },
+  {
+    Header: '¿Encuesta llena?',
+    accessor: 'satisfactionFormFilled',
+    Cell: ({ value }) => {
+      if (value) return <CheckCircleIcon className="h-5 w-5 text-primary-light" />;
+      else return <XMarkIcon className="h-5 w-5 text-red-500" />;
     },
     disableSortBy: true,
   },
