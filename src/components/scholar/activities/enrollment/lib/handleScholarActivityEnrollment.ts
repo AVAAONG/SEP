@@ -1,3 +1,4 @@
+'use server'
 import { ActivityKind } from "@/lib/activities/utils";
 import { CHAT_CALENDAR_ID, VOLUNTEERS_CALENDAR_ID, WORKSHOP_CALENDAR_ID } from "@/lib/constants";
 import { enroleScholarInChat, enroleScholarInWorkshop } from "@/lib/db/utils/Workshops";
@@ -21,15 +22,18 @@ export const handleEnrollment = async (
     scholarName: string,
     activityTitle: string
 ) => {
-    //console log all the arguments of the function
-    console.log(activityId, scholarId, eventId, kindOfActivity, email, scholarName, activityTitle);
     let spanishPath = ''
     if (kindOfActivity === 'workshop') {
         await enroleScholarInWorkshop(activityId, scholarId);
         spanishPath = 'actividadesFormativas';
     }
-    else if (kindOfActivity === 'chat') { await enroleScholarInChat(activityId, scholarId); spanishPath = 'chats'; }
-    else if (kindOfActivity === 'volunteer') { await addScholarToVolunteer(activityId, scholarId); spanishPath = 'voluntariado'; }
+    else if (kindOfActivity === 'chat') {
+        await enroleScholarInChat(activityId, scholarId);
+        spanishPath = 'chats';
+    }
+    else if (kindOfActivity === 'volunteer') {
+        await addScholarToVolunteer(activityId, scholarId); spanishPath = 'voluntariado';
+    }
 
     revalidatePath('/becario/oferta');
     const result = await fetch(
