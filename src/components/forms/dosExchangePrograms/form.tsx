@@ -1,7 +1,10 @@
 'use client';
-import { createAcademicPeriod, updateAcademicPeriod } from '@/lib/db/utils/collage';
+import {
+  addDOSExchangeProgramApplication,
+  updateDOSExchangeProgramApplicationd,
+} from '@/lib/db/utils/users';
 import { revalidateSpecificPath } from '@/lib/serverAction';
-import { formatDateToDisplayInInput, formatDateToStoreInDB } from '@/lib/utils/dates';
+import { formatDateToDisplayInInput } from '@/lib/utils/dates';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@nextui-org/button';
@@ -17,7 +20,7 @@ import {
   Textarea,
   useDisclosure,
 } from '@nextui-org/react';
-import { Prisma, ScholarCollagePeriod } from '@prisma/client';
+import { DOSExchangeProgram, Prisma } from '@prisma/client';
 import { BaseSyntheticEvent } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -25,13 +28,13 @@ import { z } from 'zod';
 import scholarDosExchangeProgramsApplications from './schema';
 
 const AddDOSApplication = ({
-  collageInformationId,
+  scholarId,
   edit,
-  collagePeriod,
+  dosProgramApplication,
 }: {
-  collageInformationId: string | null;
+  scholarId: string;
   edit: boolean;
-  collagePeriod?: ScholarCollagePeriod | null;
+  dosProgramApplication?: DOSExchangeProgram | null;
 }) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const {
@@ -44,37 +47,42 @@ const AddDOSApplication = ({
     resolver: zodResolver(scholarDosExchangeProgramsApplications),
   });
 
-  if (edit && collagePeriod) {
-    setValue('start_date', formatDateToDisplayInInput(collagePeriod.start_date));
-    setValue('end_date', formatDateToDisplayInInput(collagePeriod.end_date));
-    setValue('current_academic_period', collagePeriod.current_academic_period);
-    setValue('class_modality', collagePeriod.class_modality);
-    setValue('grade', collagePeriod.grade);
+  if (edit && dosProgramApplication) {
+    setValue('aplication_date', formatDateToDisplayInInput(dosProgramApplication.aplication_date));
+    setValue('currently_working_org', dosProgramApplication.currently_working_org);
+    setValue('name', dosProgramApplication.name);
+    setValue('program_duration', dosProgramApplication.program_duration);
+    setValue('reached_stage', dosProgramApplication.reached_stage);
+    setValue('selected', dosProgramApplication.selected ? 'SI' : 'NO');
+    setValue('usa_connection', dosProgramApplication.usa_connection);
+    setValue('usa_contact', dosProgramApplication.usa_contact);
+    setValue('usa_state', dosProgramApplication.usa_state);
+    setValue('usa_university', dosProgramApplication.usa_university);
   }
 
   const saveData = async (
     data: z.infer<typeof scholarDosExchangeProgramsApplications>,
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
-    if (!collageInformationId) return;
+    if (!scholarId) return;
     event?.preventDefault();
-    let scholarAcademicPeriod: Prisma.ScholarCollagePeriodCreateInput = {
-      class_modality: data.class_modality,
-      grade: data.grade,
-      current_academic_period: data.current_academic_period,
-      start_date: formatDateToStoreInDB(data.start_date),
-      end_date: formatDateToStoreInDB(data.end_date),
+
+    const dosProgramApplication: Prisma.DOSExchangeProgramCreateInput = {
+      ...data,
+      selected: data.selected === 'SI' ? true : false,
     };
-    if (edit && collagePeriod) await updateAcademicPeriod(scholarAcademicPeriod, collagePeriod.id);
-    else await createAcademicPeriod(scholarAcademicPeriod, collageInformationId);
-    await revalidateSpecificPath('becario/universidad');
+
+    if (edit && dosProgramApplication)
+      await updateDOSExchangeProgramApplicationd(scholarId, dosProgramApplication);
+    else await addDOSExchangeProgramApplication(scholarId, dosProgramApplication);
+    await revalidateSpecificPath('becario/dos');
     onClose();
   };
   return (
     <>
       {!edit ? (
         <Button
-          isDisabled={collageInformationId === null}
+          isDisabled={scholarId === null}
           onPress={onOpen}
           className="col-span-2 lg:col-span-1 text-white bg-green-600 hover:bg-green-500 hover:text-green-900 font-medium rounded-lg text-sm px-3 py-1.5 text-center"
         >
@@ -134,7 +142,7 @@ const AddDOSApplication = ({
                     }}
                   />{' '}
                   <Controller
-                    name="aaplication_date"
+                    name="aplication_date"
                     control={control}
                     rules={{ required: true }}
                     shouldUnregister={true}
@@ -143,8 +151,8 @@ const AddDOSApplication = ({
                         <Input
                           value={field.value?.toString() || undefined}
                           onChange={field.onChange}
-                          isInvalid={!!formState.errors?.aaplication_date?.message}
-                          errorMessage={formState.errors?.aaplication_date?.message?.toString()}
+                          isInvalid={!!formState.errors?.aplication_date?.message}
+                          errorMessage={formState.errors?.aplication_date?.message?.toString()}
                           className="col-span-2 md:col-span-1"
                           type="date"
                           label="Fecha de de aplicación"
@@ -190,7 +198,7 @@ const AddDOSApplication = ({
                           radius="sm"
                           label="Modalidad"
                           className="col-span-2 md:col-span-1"
-                          selectedKeys={}
+                          selectedKeys={field.value}
                           defaultSelectedKeys={field.value ? [field.value] : []}
                         >
                           {[

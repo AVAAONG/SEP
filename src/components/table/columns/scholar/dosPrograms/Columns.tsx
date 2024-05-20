@@ -1,63 +1,44 @@
 'use client';
 
-import AddCollageAcademicPeriod from '@/components/AddCollageAcademicPeriod';
 import DisplayDate from '@/components/DisplayDate';
-import { deleteBlob } from '@/lib/azure/azure';
-import { deleteAcademicPeriod } from '@/lib/db/utils/collage';
+import AddDOSApplication from '@/components/forms/dosExchangePrograms/form';
+import Table from '@/components/table/Table';
+import { deleteDOSExchangeProgramApplication } from '@/lib/db/utils/users';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { DocumentTextIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Button } from '@nextui-org/button';
-import { ScholarCollagePeriod } from '@prisma/client';
+import { DOSExchangeProgram } from '@prisma/client';
 import Link from 'next/link';
 import { Column } from 'react-table';
 import { toast } from 'react-toastify';
 
 interface CollagePeriodsIntermediateComponentProps {
-  collageInformationId: string | undefined;
-  collagePeriodsForTable: {
-    id: string;
-    current_academic_period: number;
-    startDate: string;
-    endDate: string;
-    grade: number;
-    modality: string;
-    record: string | null;
-  }[];
-  collagePeriodForUpdate: ScholarCollagePeriod[] | undefined;
+  scholarId: string | undefined;
+  dosProgramApplication: DOSExchangeProgram[] | null;
 }
 
-const CollagePeriodsIntermediateComponent: React.FC<CollagePeriodsIntermediateComponentProps> = ({
-  collageInformationId,
-  collagePeriodsForTable,
-  collagePeriodForUpdate,
+const DOSExchangeProgramApplicationTable: React.FC<CollagePeriodsIntermediateComponentProps> = ({
+  scholarId,
+  dosProgramApplication,
 }) => {
-  const CollageAcademicPeriodsColumns: Column<{
-    id: string;
-    current_academic_period: number;
-    startDate: string;
-    endDate: string;
-    grade: number;
-    modality: string;
-    record: string | null;
-  }>[] = [
+  const DOSExchangeProgramApplicationColumns: Column<DOSExchangeProgram>[] = [
     {
       Header: 'n°',
-      accessor: 'id',
       Cell: ({ cell }) => {
         return <span className="font-semibold">{cell.row.index + 1}</span>;
       },
     },
     {
       Header: 'Nombre del programa',
-      accessor: 'current_academic_period',
+      accessor: 'name',
     },
     {
       Header: 'Fecha de aplicacion',
-      accessor: 'grade',
+      accessor: 'aplication_date',
     },
     {
       Header: 'Fue seleccionado',
-      accessor: 'modality',
+      accessor: '',
       disableSortBy: true,
     },
     {
@@ -99,14 +80,14 @@ const CollagePeriodsIntermediateComponent: React.FC<CollagePeriodsIntermediateCo
       Cell: ({ cell }) => {
         return (
           <>
-            <AddCollageAcademicPeriod
-              collageInformationId={collageInformationId || null}
-              edit={true}
-              collagePeriod={
-                collagePeriodForUpdate?.filter(
-                  (collagePeriod) => collagePeriod.id === cell.row.original.id
+            <AddDOSApplication
+              scholarId={scholarId}
+              dosProgramApplication={
+                dosProgramApplication?.filter(
+                  (dosProgram) => dosProgram.id === cell.row.original.id
                 )[0] || null
               }
+              edit={true}
             />
           </>
         );
@@ -126,9 +107,8 @@ const CollagePeriodsIntermediateComponent: React.FC<CollagePeriodsIntermediateCo
               onPress={() =>
                 toast.promise(
                   async () => {
-                    if (cell.row.original.record) await deleteBlob(cell.row.original.record);
-                    await deleteAcademicPeriod(cell.row.original.id);
-                    return revalidateSpecificPath(`/becario/universidad`);
+                    await deleteDOSExchangeProgramApplication(cell.row.original.id);
+                    return revalidateSpecificPath(`/becario/dos`);
                   },
                   {
                     pending: 'Borrando periodo academico...',
@@ -145,7 +125,17 @@ const CollagePeriodsIntermediateComponent: React.FC<CollagePeriodsIntermediateCo
       },
     },
   ];
+  return (
+    <>
+      <Table
+        tableData={dosProgramApplication || []}
+        tableColumns={DOSExchangeProgramApplicationColumns}
+        tableHeadersForSearch={[]}
+      >
+        <AddDOSApplication scholarId={scholarId} dosProgramApplication={null} edit={false} />
+      </Table>
+    </>
+  );
+};
 
-
-
-
+export default DOSExchangeProgramApplicationTable;

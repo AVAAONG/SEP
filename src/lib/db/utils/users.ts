@@ -851,10 +851,10 @@ export const addDOSExchangeProgramApplication = async (scholarId: string, DOSExc
   return scholar;
 }
 
-export const updateDOSExchangeProgramApplicationd = async (scholarId: string, data: Prisma.DOSExchangeProgramUpdateInput) => {
-  const DOSExchangeProgramApplication = await prisma.scholar.update({
+export const updateDOSExchangeProgramApplicationd = async (DOSProgramExchangeId: string, data: Prisma.DOSExchangeProgramUpdateInput) => {
+  const DOSExchangeProgramApplication = await prisma.dOSExchangeProgram.update({
     where: {
-      id: scholarId,
+      id: DOSProgramExchangeId,
     },
     data
   })

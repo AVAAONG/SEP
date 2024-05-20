@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const scholarDosExchangeProgramsApplications = z.object({
-    name: z.coerce.number().int().positive().min(1, { message: 'Debes colocar el periodo' }),
+    name: z.string().min(1, { message: 'Debes seleccionar una fecha valida' }),
     aplication_date: z.string().min(1, { message: 'Debes seleccionar una fecha valida' }),
     reached_stage: z.string().min(1, { message: 'Debes seleccionar una etapa' }),
     selected: z.string().min(1, { message: 'Debes seleccionar una etapa' }),

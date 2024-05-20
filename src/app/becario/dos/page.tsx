@@ -1,35 +1,21 @@
-import CollagePeriodsIntermediateComponent from '@/components/CollagePeriodsIntermediateComponent';
+import DOSExchangeProgramApplicationTable from '@/components/table/columns/scholar/dosPrograms/Columns';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
-import { getBlobFile } from '@/lib/azure/azure';
-import { getScholarCollageInformation } from '@/lib/db/utils/collage';
-import { parseModalityFromDatabase } from '@/lib/utils2';
+import { getScholarDOSExchangeProgramApplications } from '@/lib/db/utils/users';
 import { getServerSession } from 'next-auth';
 
 const page = async () => {
   const session = await getServerSession(authOptions);
-  const collageInformation = await getScholarCollageInformation(session?.scholarId!);
-  const collagePeriods = await Promise.all(
-    collageInformation?.collage_period.map(async (collagePeriod) => {
-      return {
-        id: collagePeriod.id,
-        current_academic_period: collagePeriod.current_academic_period,
-        startDate: new Date(collagePeriod.start_date).toISOString(),
-        endDate: new Date(collagePeriod.end_date).toISOString(),
-        grade: collagePeriod.grade,
-        modality: parseModalityFromDatabase(collagePeriod?.class_modality),
-        record: collagePeriod.record ? await getBlobFile(collagePeriod.record) : null,
-      };
-    }) || []
+  const programApplicationsRaw = await getScholarDOSExchangeProgramApplications(
+    session?.scholarId!
   );
 
   return (
     <div className="flex flex-col pt-6 gap-4 min-h-screen">
       <h1 className="text-xl font-semibold  sm:text-2xl ">Department Of State Exchange Programs</h1>
       <div className="w-full">
-        <CollagePeriodsIntermediateComponent
-          collageInformationId={collageInformation?.id}
-          collagePeriodForUpdate={collageInformation?.collage_period}
-          collagePeriodsForTable={collagePeriods}
+        <DOSExchangeProgramApplicationTable
+          scholarId={session?.scholarId!}
+          dosProgramApplication={programApplicationsRaw}
         />
       </div>
     </div>
