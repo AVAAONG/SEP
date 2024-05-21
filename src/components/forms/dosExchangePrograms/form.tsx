@@ -4,7 +4,7 @@ import {
   updateDOSExchangeProgramApplicationd,
 } from '@/lib/db/utils/users';
 import { revalidateSpecificPath } from '@/lib/serverAction';
-import { formatDateToDisplayInInput } from '@/lib/utils/dates';
+import { formatDateToDisplayInInput, formatDateToStoreInDB } from '@/lib/utils/dates';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@nextui-org/button';
@@ -32,7 +32,7 @@ const AddDOSApplication = ({
   edit,
   dosProgramApplication,
 }: {
-  scholarId: string;
+  scholarId: string | undefined;
   edit: boolean;
   dosProgramApplication?: DOSExchangeProgram | null;
 }) => {
@@ -47,7 +47,7 @@ const AddDOSApplication = ({
     resolver: zodResolver(scholarDosExchangeProgramsApplications),
   });
 
-  if (edit && dosProgramApplication) {
+  if (edit && dosProgramApplication && !isDirty) {
     setValue('aplication_date', formatDateToDisplayInInput(dosProgramApplication.aplication_date));
     setValue('currently_working_org', dosProgramApplication.currently_working_org);
     setValue('name', dosProgramApplication.name);
@@ -67,14 +67,18 @@ const AddDOSApplication = ({
     if (!scholarId) return;
     event?.preventDefault();
 
-    const dosProgramApplication: Prisma.DOSExchangeProgramCreateInput = {
+    const dosProgramApplicationCreationData: Prisma.DOSExchangeProgramCreateInput = {
       ...data,
       selected: data.selected === 'SI' ? true : false,
+      aplication_date: formatDateToStoreInDB(data.aplication_date),
     };
 
-    if (edit && dosProgramApplication)
-      await updateDOSExchangeProgramApplicationd(scholarId, dosProgramApplication);
-    else await addDOSExchangeProgramApplication(scholarId, dosProgramApplication);
+    if (edit && dosProgramApplication) {
+      await updateDOSExchangeProgramApplicationd(dosProgramApplication.id, dosProgramApplicationCreationData);
+    }
+    else {
+      await addDOSExchangeProgramApplication(scholarId, dosProgramApplicationCreationData);
+    }
     await revalidateSpecificPath('becario/dos');
     onClose();
   };
@@ -117,7 +121,7 @@ const AddDOSApplication = ({
             {(onClose) => (
               <>
                 <ModalHeader className="col-span-2 text-center w-full font-semibold text-2xl text-primary-light uppercase tracking-widest">
-                  Agregar aplicacion
+                  Agregar aplicación
                 </ModalHeader>
                 <ModalBody className="grid grid-cols-2 w-full items-center justify-center gap-4">
                   <Controller
@@ -196,9 +200,9 @@ const AddDOSApplication = ({
                           errorMessage={formState.errors?.selected?.message?.toString()}
                           classNames={{ base: 'col-span-2 md:col-span-1' }}
                           radius="sm"
-                          label="Modalidad"
+                          label="¿Quedaste seleccionado?"
                           className="col-span-2 md:col-span-1"
-                          selectedKeys={field.value}
+                          selectedKeys={[field.value]}
                           defaultSelectedKeys={field.value ? [field.value] : []}
                         >
                           {[
@@ -237,7 +241,7 @@ const AddDOSApplication = ({
                           errorMessage={formState.errors?.usa_state?.message?.toString()}
                           step="0.01"
                           type="text"
-                          label="Estado en el que hicieron el programa. "
+                          label="Estado en el que hiciste el programa. "
                           radius="sm"
                         />
                       );
@@ -258,7 +262,7 @@ const AddDOSApplication = ({
                           errorMessage={formState.errors?.usa_university?.message?.toString()}
                           step="0.01"
                           type="text"
-                          label="Universidad en el que hicieron el programa."
+                          label="Universidad en el que hiciste el programa."
                           radius="sm"
                         />
                       );
@@ -298,7 +302,6 @@ const AddDOSApplication = ({
                           className="col-span-2 md:col-span-1"
                           isInvalid={!!formState.errors?.usa_contact?.message}
                           errorMessage={formState.errors?.usa_contact?.message?.toString()}
-                          step="0.01"
                           type="text"
                           label="Punto de contacto en USA"
                           radius="sm"
@@ -319,7 +322,6 @@ const AddDOSApplication = ({
                           className="col-span-2 md:col-span-1"
                           isInvalid={!!formState.errors?.currently_working_org?.message}
                           errorMessage={formState.errors?.currently_working_org?.message?.toString()}
-                          step="0.01"
                           type="text"
                           label="Organización en la que trabajan actualmente"
                           radius="sm"
@@ -339,12 +341,12 @@ const AddDOSApplication = ({
                           onChange={field.onChange}
                           isInvalid={!!formState.errors?.usa_connection?.message}
                           errorMessage={formState.errors?.usa_connection?.message?.toString()}
-                          label="Descripción"
+                          label="Punto de contacto en USA"
                           labelPlacement="outside"
                           classNames={{
                             base: 'col-span-2 h-fit w-full',
                           }}
-                          placeholder="(Opcional) Coloca la descripción de la actividad"
+                          placeholder=""
                         />
                       );
                     }}

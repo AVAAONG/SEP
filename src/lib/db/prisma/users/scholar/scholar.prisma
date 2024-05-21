@@ -200,12 +200,12 @@ model DOSExchangeProgram {
     aplication_date       DateTime
     reached_stage         String
     selected              Boolean
-    usa_state             String
-    usa_university        String
-    program_duration      String
-    usa_contact           String
-    currently_working_org String
-    usa_connection        String
+    usa_state             String?
+    usa_university        String?
+    program_duration      String?
+    usa_contact           String?
+    currently_working_org String?
+    usa_connection        String?
     scholar               Scholar? @relation(fields: [scholar_id], references: [id])
     scholar_id            String?
 }

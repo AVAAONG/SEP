@@ -5,10 +5,10 @@ import AddDOSApplication from '@/components/forms/dosExchangePrograms/form';
 import Table from '@/components/table/Table';
 import { deleteDOSExchangeProgramApplication } from '@/lib/db/utils/users';
 import { revalidateSpecificPath } from '@/lib/serverAction';
-import { DocumentTextIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Button } from '@nextui-org/button';
+import { Tooltip } from '@nextui-org/tooltip';
 import { DOSExchangeProgram } from '@prisma/client';
-import Link from 'next/link';
 import { Column } from 'react-table';
 import { toast } from 'react-toastify';
 
@@ -33,45 +33,57 @@ const DOSExchangeProgramApplicationTable: React.FC<CollagePeriodsIntermediateCom
       accessor: 'name',
     },
     {
-      Header: 'Fecha de aplicacion',
+      Header: 'Fecha de aplicación',
       accessor: 'aplication_date',
-    },
-    {
-      Header: 'Fue seleccionado',
-      accessor: '',
-      disableSortBy: true,
+      Cell: ({ value }) => {
+        return <DisplayDate date={value.toISOString()} kind="short" />;
+      },
     },
     {
       Header: 'Etapa alcanzada',
-      accessor: 'startDate',
+      accessor: 'reached_stage',
+    },
+    {
+      Header: 'Seleccionado',
+      accessor: 'selected',
       Cell: ({ value }) => {
-        return <DisplayDate date={value} kind="short" />;
+        return value ? 'Sí' : 'No';
       },
     },
     {
-      Header: 'Fecha de finalización',
-      accessor: 'endDate',
-      Cell: ({ value }) => {
-        return <DisplayDate date={value} kind="short" />;
-      },
+      Header: 'Estado en USA',
+      accessor: 'usa_state',
     },
     {
-      Header: 'Record academico',
+      Header: 'Universidad en USA',
+      accessor: 'usa_university',
+    },
+    {
+      Header: 'Duración del programa',
+      accessor: 'program_duration',
+    },
+    {
+      Header: 'Contacto en USA',
+      accessor: 'usa_contact',
+    },
+    {
+      Header: 'Organización actual',
+      accessor: 'currently_working_org',
+    },
+    {
+      Header: 'Conexión en USA',
+      accessor: 'usa_connection',
       disableSortBy: true,
-      accessor: 'record',
-      Cell: ({ value }) => {
-        return (
-          <div className="m-auto w-6 ">
-            <Link
-              target="_blank"
-              href={value ? value : ''}
-              className="w-6 text-primary-light dark:text-primary-light"
-            >
-              <DocumentTextIcon className="w-6 h-6" />
-            </Link>
-          </div>
-        );
-      },
+      Cell: ({ value }) => (
+        <Tooltip
+          content={value}
+          classNames={{
+            content: 'bg-light dark:bg-dark text-dark dark:text-light',
+          }}
+        >
+          <div className="block w-72 overflow-x-scroll">{value}</div>
+        </Tooltip>
+      ),
     },
     {
       Header: 'Editar registro',
@@ -111,9 +123,9 @@ const DOSExchangeProgramApplicationTable: React.FC<CollagePeriodsIntermediateCom
                     return revalidateSpecificPath(`/becario/dos`);
                   },
                   {
-                    pending: 'Borrando periodo academico...',
-                    success: 'periodo academico eliminado exitosamente',
-                    error: 'Error al eliminar periodo academico',
+                    pending: 'Borrando aplicación...',
+                    success: 'aplicación eliminado exitosamente',
+                    error: 'Error al eliminar aplicación',
                   }
                 )
               }

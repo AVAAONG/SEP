@@ -858,6 +858,7 @@ export const updateDOSExchangeProgramApplicationd = async (DOSProgramExchangeId:
     },
     data
   })
+  console.log(DOSExchangeProgramApplication);
   return DOSExchangeProgramApplication;
 }
 
