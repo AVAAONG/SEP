@@ -201,6 +201,8 @@ enum VolunteerProject {
   OFFICE
   CHAT_CLUBS
   EXTERNAL
+  SCHOLARS_COMMITTEE
+  OTHER
 }
 
 model Volunteer {
@@ -250,6 +252,7 @@ enum Skill {
   SELF_MANAGEMENT
   ICT
   ENTREPRENEURSHIP
+  TEAM_WORK
 }
 
 enum WorkshopYear {
@@ -778,34 +781,35 @@ enum JobSector {
 }
 
 model Scholar {
-  id                         String                      @id @default(nanoid())
-  photo                      String?
-  first_names                String
-  last_names                 String
-  dni                        String                      @unique
-  gender                     Gender
-  birthdate                  DateTime?
-  local_phone_number         String?
-  cell_phone_Number          String?
-  whatsapp_number            String?
-  email                      String?                     @unique
-  country                    String?
-  state                      String?
-  city                       String?
-  address                    String?
-  instagram_user             String?
-  twitter_user               String?
-  facebook_user              String?
-  linkedin_user              String?
-  tiktok_user                String?
-  youtube_user               String?
-  user                       User?
-  program_information        ScholarProgramInformation?
-  collage_information        ScholarCollageInformation[]
-  cva_information            ScholarCVAInformation?
-  job_information            JobInformation[]
-  recruitment_information    RecruitmentInformation?
-  entrepenourshipInformation EntrepenourshipInformation?
+  id                                String                      @id @default(nanoid())
+  photo                             String?
+  first_names                       String
+  last_names                        String
+  dni                               String                      @unique
+  gender                            Gender
+  birthdate                         DateTime?
+  local_phone_number                String?
+  cell_phone_Number                 String?
+  whatsapp_number                   String?
+  email                             String?                     @unique
+  country                           String?
+  state                             String?
+  city                              String?
+  address                           String?
+  instagram_user                    String?
+  twitter_user                      String?
+  facebook_user                     String?
+  linkedin_user                     String?
+  tiktok_user                       String?
+  youtube_user                      String?
+  user                              User?
+  program_information               ScholarProgramInformation?
+  collage_information               ScholarCollageInformation[]
+  cva_information                   ScholarCVAInformation?
+  job_information                   JobInformation[]
+  recruitment_information           RecruitmentInformation?
+  entrepenourshipInformation        EntrepenourshipInformation?
+  dos_exchange_program_applications DOSExchangeProgram[]
 }
 
 model ScholarProgramInformation {
@@ -947,6 +951,22 @@ model EntrepenourshipInformation {
   entrepreneurship_start_date   DateTime?
   scholar                       Scholar   @relation(fields: [scholarId], references: [id])
   scholarId                     String    @unique
+}
+
+model DOSExchangeProgram {
+  id                    String   @id @default(nanoid())
+  name                  String
+  aplication_date       DateTime
+  reached_stage         String
+  selected              Boolean
+  usa_state             String
+  usa_university        String
+  program_duration      String
+  usa_contact           String
+  currently_working_org String
+  usa_connection        String
+  scholar               Scholar? @relation(fields: [scholar_id], references: [id])
+  scholar_id            String?
 }
 
 //
