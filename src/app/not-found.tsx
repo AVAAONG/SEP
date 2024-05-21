@@ -17,7 +17,7 @@ import { NotFoundImage } from '../../public/svgs/svgs';
  */
 const NotFound = () => {
   return (
-    <div className="bg-light dark:bg-dark min-h-full px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
+    <div className="bg-light dark:bg-dark min-h-screen px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
       <div className="max-w-max mx-auto">
         <div className="max-w-xs m-auto">
           <NotFoundImage />
