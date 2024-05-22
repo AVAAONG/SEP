@@ -61,7 +61,11 @@ const ScholarDropdown = ({ scholar }) => {
               description="Retirar a becario del programa"
               color="danger"
               onPress={async () => {
-                await changeScholarCondition(scholar.id, 'WITHDRAWAL');
+                toast.promise(changeScholarCondition(scholar.id, 'WITHDRAWAL'), {
+                  pending: 'Cambiando condición de becario',
+                  success: 'Exito al cambiar condición del becario',
+                  error: 'Error al cambiar condición del becario',
+                });
               }}
             >
               Retiro
@@ -102,14 +106,14 @@ const ScholarDropdown = ({ scholar }) => {
         isOpen={probation1.isOpen}
         onOpenChange={probation1.onOpenChange}
         probationKind="PROBATION_I"
-        onConfirm={() => {}}
+        onConfirm={() => { }}
       />
       <ProbationForm
         scholar={scholar}
         isOpen={probation2.isOpen}
         onOpenChange={probation2.onOpenChange}
         probationKind="PROBATION_II"
-        onConfirm={() => {}}
+        onConfirm={() => { }}
       />
       {/* <EditScholarForm modalIsOpen={editModalIsOpen} set={setEditModalOpen} scholar={scholar} /> */}
     </>
