@@ -20,9 +20,10 @@ import createVolunteerInvitationMessage from '../emailTemplateMessage/VolunteerI
 import ScheduledCard from './ScheduledCard';
 type ScheduledCardsWrapI = {
   activities: ChatWithSpeaker[] | WorkshopWithSpeaker[] | Volunteer[];
+  canSend?: boolean;
 };
 
-const ScheduledCardsWrap: React.FC<ScheduledCardsWrapI> = ({ activities }) => {
+const ScheduledCardsWrap: React.FC<ScheduledCardsWrapI> = ({ activities, canSend = true }) => {
   const [groupSelected, setGroupSelected] = useState<string[]>([]);
   const [buttonIsDisabled, setbuttonIsDisabled] = useState(false);
 
@@ -72,7 +73,7 @@ const ScheduledCardsWrap: React.FC<ScheduledCardsWrapI> = ({ activities }) => {
       </h1>
       <ScrollShadow hideScrollBar className="w-full h-[550px]">
         <CheckboxGroup
-          label="Selecciona las actividades que deseas enviar"
+          label={canSend ? 'Selecciona las actividades que deseas enviar' : ''}
           value={groupSelected}
           onValueChange={setGroupSelected}
           color="success"
@@ -84,43 +85,47 @@ const ScheduledCardsWrap: React.FC<ScheduledCardsWrapI> = ({ activities }) => {
           <ScheduledCard activities={activities} />
         </CheckboxGroup>
       </ScrollShadow>
-      <Button
-        isDisabled={groupSelected?.length === 0}
-        className="bg-gradient-to-tr from-primary-1 to-emerald-500 text-white w-1/2 mt-12"
-        radius="sm"
-        onPress={sendModal.onOpen}
-      >
-        Enviar
-      </Button>
-      <BasicModal
-        isOpen={sendModal.isOpen}
-        onOpenChange={sendModal.onOpenChange}
-        title="¿Estas seguro que deseas enviar las sigientes actividades? 🤨"
-        Content={() => {
-          return (
-            <ul className="flex flex-col gap-3">
-              {groupSelected?.map((id) => {
-                const activity = activities.find((activity) => activity.id === id);
-                return (
-                  <li key={activity?.id}>
-                    <p>✔ {activity?.title}</p>
-                  </li>
-                );
-              })}
-            </ul>
-          );
-        }}
-        isButtonDisabled={buttonIsDisabled}
-        onConfirm={async () => {
-          toast.promise(sendActivities(), {
-            pending: 'Enviando actividades...',
-            success: 'Actividades enviadas de forma correcta 👌',
-            error: 'ERROR: No se pudieron enviar las actividades 🤯',
-          });
-          sendModal.onClose();
-        }}
-        confirmText="Enviar"
-      />
+      {canSend && (
+        <>
+          <Button
+            isDisabled={groupSelected?.length === 0}
+            className="bg-gradient-to-tr from-primary-1 to-emerald-500 text-white w-1/2 mt-12"
+            radius="sm"
+            onPress={sendModal.onOpen}
+          >
+            Enviar
+          </Button>
+          <BasicModal
+            isOpen={sendModal.isOpen}
+            onOpenChange={sendModal.onOpenChange}
+            title="¿Estas seguro que deseas enviar las sigientes actividades? 🤨"
+            Content={() => {
+              return (
+                <ul className="flex flex-col gap-3">
+                  {groupSelected?.map((id) => {
+                    const activity = activities.find((activity) => activity.id === id);
+                    return (
+                      <li key={activity?.id}>
+                        <p>✔ {activity?.title}</p>
+                      </li>
+                    );
+                  })}
+                </ul>
+              );
+            }}
+            isButtonDisabled={buttonIsDisabled}
+            onConfirm={async () => {
+              toast.promise(sendActivities(), {
+                pending: 'Enviando actividades...',
+                success: 'Actividades enviadas de forma correcta 👌',
+                error: 'ERROR: No se pudieron enviar las actividades 🤯',
+              });
+              sendModal.onClose();
+            }}
+            confirmText="Enviar"
+          />
+        </>
+      )}
     </div>
   );
 };

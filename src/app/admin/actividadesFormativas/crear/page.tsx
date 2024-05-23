@@ -17,6 +17,10 @@ const Page = async ({ searchParams }: { searchParams: { activityToEdit: string |
             key={workshop?.id} // Add this line
             valuesToUpdate={workshop}
             kind={workshop ? 'edit' : 'create'}
+            showCreate={workshop ? false : true}
+            showEdit={workshop ? true : false}
+            showSchedule={workshop ? false : true} // Add this line
+            showSend={workshop ? false : true}
           />
         </div>
       </div>

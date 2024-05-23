@@ -38,8 +38,19 @@ type Schema = z.infer<typeof workshopCreationFormSchema>;
 interface WorkshopFormProps {
   kind: 'edit' | 'create';
   valuesToUpdate: WorkshopWithSpeaker | undefined;
+  showEdit: boolean;
+  showSchedule: boolean;
+  showCreate: boolean;
+  showSend: boolean;
 }
-const WorkshopForm: React.FC<WorkshopFormProps> = ({ valuesToUpdate, kind }) => {
+const WorkshopForm: React.FC<WorkshopFormProps> = ({
+  valuesToUpdate,
+  kind,
+  showCreate,
+  showEdit,
+  showSend,
+  showSchedule,
+}) => {
   const {
     control,
     handleSubmit,
@@ -103,7 +114,8 @@ const WorkshopForm: React.FC<WorkshopFormProps> = ({ valuesToUpdate, kind }) => 
     let meetingDetails: MeetingDetails[] = [];
 
     //avoid create a calendar event when the workshop is in 'create mode'
-    if (buttonType !== 'create' ||
+    if (
+      buttonType !== 'create' ||
       valuesToUpdate?.activity_status === 'ATTENDANCE_CHECKED' ||
       valuesToUpdate?.activity_status === 'SUSPENDED'
     ) {
@@ -122,12 +134,12 @@ const WorkshopForm: React.FC<WorkshopFormProps> = ({ valuesToUpdate, kind }) => 
     }
 
     if (buttonType === 'edit' && valuesToUpdate) {
-
-      if (valuesToUpdate.calendar_ids.length < 1 ||
+      if (
+        valuesToUpdate.calendar_ids.length < 1 ||
         valuesToUpdate.activity_status === 'ATTENDANCE_CHECKED' ||
-        valuesToUpdate.activity_status === 'SUSPENDED') { }
-
-      else {
+        valuesToUpdate.activity_status === 'SUSPENDED'
+      ) {
+      } else {
         valuesToUpdate.calendar_ids.map(
           async (id) => await deleteCalendarEvent(WORKSHOP_CALENDAR_ID, id)
         );
@@ -135,8 +147,6 @@ const WorkshopForm: React.FC<WorkshopFormProps> = ({ valuesToUpdate, kind }) => 
         await updateWorkshop(valuesToUpdate?.id, workshop);
         router.push('/admin/actividadesFormativas/crear');
       }
-
-
     } else {
       const workshop = await createWorkshopObject(data, status, eventsIds, meetingDetails);
       const createdWorkshop = await createWorkshop(workshop);
@@ -219,7 +229,7 @@ const WorkshopForm: React.FC<WorkshopFormProps> = ({ valuesToUpdate, kind }) => 
             );
           }}
         />
-        <SpeakerInput control={control} kind='workshop' />
+        <SpeakerInput control={control} kind="workshop" />
         <Controller
           name="avalible_spots"
           control={control}
@@ -350,7 +360,13 @@ const WorkshopForm: React.FC<WorkshopFormProps> = ({ valuesToUpdate, kind }) => 
           }}
         />
         <div className="flex gap-4 col-span-2">
-          <FormButtonGroup isDisabled={isSubmitting} onlyEdit={kind === 'create' ? false : true} />
+          <FormButtonGroup
+            isDisabled={isSubmitting}
+            showCreate={showCreate}
+            showEdit={showEdit}
+            showSend={showSend}
+            showSchedule={showSchedule}
+          />
         </div>
       </form>
     </>

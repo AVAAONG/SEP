@@ -5,6 +5,9 @@ import { getScheduledVolunteers } from '@/lib/db/utils/volunteer';
 export const dynamic = 'force-dynamic';
 const Page = async ({ searchParams }: { searchParams: { activityToEdit: string | null } }) => {
   const scheduledVolunteer = await getScheduledVolunteers();
+  const volunteer = scheduledVolunteer.find(
+    (volunteer) => volunteer.id === searchParams.activityToEdit
+  );
   return (
     <div className="min-h-screen flex flex-col md:flex-row gap-8 p-4">
       <div className=" w-full md:w-1/2">
@@ -12,7 +15,13 @@ const Page = async ({ searchParams }: { searchParams: { activityToEdit: string |
           Crear actividad de voluntariado
         </h1>
         <div>
-          <VolunteerForm kind="create" />
+          <VolunteerForm
+            kind="create"
+            showCreate={volunteer ? false : true}
+            showEdit={volunteer ? true : false}
+            showSchedule={volunteer ? false : true} // Add this line
+            showSend={volunteer ? false : true}
+          />
         </div>
       </div>
       <div className="w-full md:w-1/2 pt-0 flex flex-col items-center ">

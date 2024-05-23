@@ -312,6 +312,35 @@ export const getScheduleChats = async () => {
   return chats;
 };
 
+
+
+export const getScheduleChatsByScholar = async (scholarId: string) => {
+  const chats = await prisma.chat.findMany({
+    where: {
+      AND:
+        [
+          {
+            activity_status: 'SCHEDULED',
+          },
+          {
+            speaker: {
+              some: {
+                id: scholarId
+              }
+            }
+          }
+        ]
+    },
+    orderBy: {
+      start_dates: 'asc',
+    },
+    include: {
+      speaker: true,
+    },
+  });
+  return chats;
+};
+
 export const createChat = async (chat: Prisma.ChatCreateArgs) => {
   const createdChat = await prisma.chat.create(chat);
   return createdChat;

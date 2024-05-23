@@ -1,13 +1,17 @@
 import ChatForm from '@/components/admin/forms/chat/form';
 import ScheduledCardsWrap from '@/components/scheduledActivitiesCard/ScheduledCardsWrap';
-import { getScheduleChats } from '@/lib/db/utils/chats';
+import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
+import { getScheduleChatsByScholar } from '@/lib/db/utils/chats';
+import { getServerSession } from 'next-auth';
 export const dynamic = 'force-dynamic';
 const Page = async ({ searchParams }: { searchParams: { activityToEdit: string | null } }) => {
-  const scheduledChats = await getScheduleChats();
+  const session = await getServerSession(authOptions);
+  if (!session) return;
+  const scheduledChats = await getScheduleChatsByScholar(session?.scholarId);
 
   const chat = scheduledChats.find((chat) => chat.id === searchParams.activityToEdit);
   return (
-    <div className="min-h-screen flex flex-col md:flex-row gap-8 p-4">
+    <div className="min-h-screen flex flex-col md:flex-row gap-8 p-4 bg-gray-100 rounded-lg">
       <div className=" w-full md:w-1/2">
         <h1 className="col-span-2 text-center w-full font-semibold text-2xl text-primary-light uppercase tracking-widest">
           Crear actividad chat club
@@ -17,15 +21,15 @@ const Page = async ({ searchParams }: { searchParams: { activityToEdit: string |
             valuesToUpdate={chat}
             kind={chat ? 'edit' : 'create'}
             key={chat?.id}
-            showCreate={chat ? false : true}
+            showCreate={false}
+            showSend={false}
             showEdit={chat ? true : false}
-            showSchedule={chat ? false : true} // Add this line
-            showSend={chat ? false : true}
+            showSchedule={chat ? false : true}
           />
         </div>
       </div>
       <div className="w-full md:w-1/2 pt-0 flex flex-col items-center ">
-        <ScheduledCardsWrap activities={scheduledChats} />
+        <ScheduledCardsWrap activities={scheduledChats} canSend={false} />
       </div>
     </div>
   );

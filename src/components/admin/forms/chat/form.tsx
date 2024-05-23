@@ -29,8 +29,18 @@ import formatChat from './lib/formatChatForEdit';
 interface ChatFormProps {
   kind: 'edit' | 'create';
   valuesToUpdate: ChatWithSpeaker | undefined;
+  showEdit: boolean;
+  showSchedule: boolean;
+  showCreate: boolean;
+  showSend: boolean;
 }
-const ChatForm: React.FC<ChatFormProps> = ({ valuesToUpdate, kind }) => {
+const ChatForm: React.FC<ChatFormProps> = ({
+  valuesToUpdate,
+  showCreate,
+  showEdit,
+  showSend,
+  showSchedule,
+}) => {
   const {
     control,
     handleSubmit,
@@ -65,10 +75,7 @@ const ChatForm: React.FC<ChatFormProps> = ({ valuesToUpdate, kind }) => {
     name: 'platformOnline',
   });
 
-
-
   const router = useRouter();
-
 
   const onReset = () => {
     // Reset the form state
@@ -96,7 +103,8 @@ const ChatForm: React.FC<ChatFormProps> = ({ valuesToUpdate, kind }) => {
     let eventsIds: string[] = [];
     let meetingDetails: MeetingDetails[] = [];
 
-    if (buttonType !== 'create' ||
+    if (
+      buttonType !== 'create' ||
       valuesToUpdate?.activity_status === 'ATTENDANCE_CHECKED' ||
       valuesToUpdate?.activity_status === 'SUSPENDED'
     ) {
@@ -115,13 +123,12 @@ const ChatForm: React.FC<ChatFormProps> = ({ valuesToUpdate, kind }) => {
     }
 
     if (buttonType === 'edit' && valuesToUpdate) {
-
-
-      if (valuesToUpdate.calendar_ids.length < 1 ||
+      if (
+        valuesToUpdate.calendar_ids.length < 1 ||
         valuesToUpdate.activity_status === 'ATTENDANCE_CHECKED' ||
-        valuesToUpdate.activity_status === 'SUSPENDED') { }
-
-      else {
+        valuesToUpdate.activity_status === 'SUSPENDED'
+      ) {
+      } else {
         valuesToUpdate.calendar_ids.map(
           async (id) => await deleteCalendarEvent(CHAT_CALENDAR_ID, id)
         );
@@ -129,16 +136,12 @@ const ChatForm: React.FC<ChatFormProps> = ({ valuesToUpdate, kind }) => {
         await updateChat(valuesToUpdate?.id, chat);
         router.push('/admin/chats/crear');
       }
-
     } else {
       const chat = await createChatObject(data, status, eventsIds, meetingDetails);
       const createdChat = await createChat(chat);
       if (buttonType === 'send') {
         const chatInvitationMessage = createChatInvitationMessage();
-        await sendActivitiesEmail(
-          chatInvitationMessage,
-          '¡Se han agregado chat clubs de inglés!'
-        );
+        await sendActivitiesEmail(chatInvitationMessage, '¡Se han agregado chat clubs de inglés!');
       }
       if (buttonType === 'create') {
         router.push(`/admin/chats/${createdChat.id}`);
@@ -209,7 +212,7 @@ const ChatForm: React.FC<ChatFormProps> = ({ valuesToUpdate, kind }) => {
             </Select>
           )}
         />
-        <SpeakerInput control={control} kind='workshop' />
+        <SpeakerInput control={control} kind="chat" />
         <Controller
           name="avalible_spots"
           control={control}
@@ -285,7 +288,13 @@ const ChatForm: React.FC<ChatFormProps> = ({ valuesToUpdate, kind }) => {
           }}
         />
         <div className="flex gap-4 col-span-2">
-          <FormButtonGroup isDisabled={isSubmitting} onlyEdit={kind === 'create' ? false : true} />
+          <FormButtonGroup
+            showCreate={showCreate}
+            showEdit={showEdit}
+            showSend={showSend}
+            showSchedule={showSchedule}
+            isDisabled={isSubmitting}
+          />
         </div>
       </form>
     </>

@@ -19,6 +19,11 @@ export default async function RootLayout({
     },
     select: {
       photo: true,
+      program_information: {
+        select: {
+          is_chat_speaker: true,
+        },
+      },
     },
   });
   return (
@@ -30,7 +35,7 @@ export default async function RootLayout({
           email={session?.user?.email}
           scholarId={session?.scholarId}
         />
-        <Sidebar />
+        <Sidebar isSpeaker={image?.program_information?.is_chat_speaker} />
         <MainLayout>{children}</MainLayout>
       </div>
     </>

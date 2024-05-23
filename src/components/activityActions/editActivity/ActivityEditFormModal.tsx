@@ -58,13 +58,34 @@ const ActivityEditFormModal: React.FC<ActivityEditFormModalProps> = ({ activity 
                 </ModalHeader>
                 <ModalBody className="flex flex-col items-center">
                   {kindOfActivity === 'volunteer' && (
-                    <VolunteerForm kind="edit" valuesToUpdate={activity as VolunteerWithAllData} />
+                    <VolunteerForm
+                      kind="edit"
+                      valuesToUpdate={activity as VolunteerWithAllData}
+                      showCreate={false}
+                      showEdit={true}
+                      showSchedule={false}
+                      showSend={false}
+                    />
                   )}
                   {kindOfActivity === 'workshop' && (
-                    <WorkshopForm kind="edit" valuesToUpdate={activity as WorkshopWithAllData} />
+                    <WorkshopForm
+                      kind="edit"
+                      valuesToUpdate={activity as WorkshopWithAllData}
+                      showCreate={false}
+                      showEdit={true}
+                      showSchedule={false}
+                      showSend={false}
+                    />
                   )}
                   {kindOfActivity === 'chat' && (
-                    <ChatForm kind="edit" valuesToUpdate={activity as ChatsWithAllData} />
+                    <ChatForm
+                      kind="edit"
+                      valuesToUpdate={activity as ChatsWithAllData}
+                      showCreate={false}
+                      showEdit={true}
+                      showSchedule={false}
+                      showSend={false}
+                    />
                   )}
                 </ModalBody>
               </>

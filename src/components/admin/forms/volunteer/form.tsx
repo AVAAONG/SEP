@@ -23,9 +23,20 @@ type Schema = z.infer<typeof volunteerSchema>;
 interface IVolunteerForm {
   kind: 'edit' | 'create';
   valuesToUpdate?: Volunteer;
+  showEdit: boolean;
+  showSchedule: boolean;
+  showCreate: boolean;
+  showSend: boolean;
 }
 
-const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
+const VolunteerForm: React.FC<IVolunteerForm> = ({
+  kind,
+  valuesToUpdate,
+  showCreate,
+  showEdit,
+  showSend,
+  showSchedule,
+}) => {
   const router = useRouter();
   const methods = useForm<Schema>({
     resolver: zodResolver(volunteerSchema),
@@ -300,7 +311,10 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
         <div className="flex gap-4 col-span-2">
           <FormButtonGroup
             isDisabled={!isValid || isSubmitting}
-            onlyEdit={kind === 'create' ? false : true}
+            showCreate={showCreate}
+            showEdit={showEdit}
+            showSend={showSend}
+            showSchedule={showSchedule}
           />
         </div>
       </form>
