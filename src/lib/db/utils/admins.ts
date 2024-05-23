@@ -1,8 +1,7 @@
 'use server';
 
-import { AdminProfile, PrismaClient } from '@prisma/client';
-// import { prisma } from './prisma';
-const prisma = new PrismaClient();
+import { AdminProfile, Prisma } from '@prisma/client';
+import { prisma } from './prisma';
 
 export const getAdminsProfiles = async () => {
   const users = await prisma.adminProfile.findMany();
@@ -25,9 +24,9 @@ export const createAdminProfileUser = async (data: AdminProfile) => {
         profilePic: data.profilePic,
         allowedEmail: data.allowedEmail,
         gender: data.gender,
-        allowedActions: {
+        role: {
           connect: {
-            id: data.allowedActions_id,
+            id: data.role_id,
           },
         },
         responsibility: data.responsibility,
@@ -69,3 +68,39 @@ export const deleteadminProfile = async (adminId: string) => {
   });
   return user;
 };
+
+export const createRole = async (name: string, permissions: Prisma.JsonObject) => {
+  await prisma.role.create({
+    data: {
+      name,
+      permissions
+    }
+  })
+}
+
+export const updateRole = async (name: string, permissions: Prisma.JsonObject) => {
+  await prisma.role.update({
+    where: {
+      name
+    },
+    data: {
+      permissions
+    }
+  })
+}
+
+export const getAdminRole = async (adminId: string) => {
+  return await prisma.user.findFirstOrThrow({
+    where: {
+      id: adminId
+    },
+    select: {
+      admin: {
+        select: {
+          role: true,
+          chapter: true
+        }
+      }
+    }
+  })
+}

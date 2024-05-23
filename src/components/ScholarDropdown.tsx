@@ -14,12 +14,9 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import ProbationForm from './ProbationForm';
 const ScholarDropdown = ({ scholar }) => {
-  const [probationKind, setProbationKind] = useState<'PROBATION_I' | 'PROBATION_II'>();
   const [dropdownIsOpen, setDropdownOpen] = useState(false);
-  const [editModalIsOpen, setEditModalOpen] = useState(false);
   const probation1 = useDisclosure();
   const probation2 = useDisclosure();
-  const edit = useDisclosure();
   return (
     <>
       <Dropdown isOpen={dropdownIsOpen} onOpenChange={(open) => setDropdownOpen(open)}>
@@ -30,9 +27,6 @@ const ScholarDropdown = ({ scholar }) => {
         </DropdownTrigger>
         <DropdownMenu
           aria-label="Dropdown menu with description"
-          onAction={(key) => {
-            setProbationKind(key as 'PROBATION_I' | 'PROBATION_II');
-          }}
         >
           <DropdownSection title="Cambiar estatus del becario" showDivider>
             <DropdownItem

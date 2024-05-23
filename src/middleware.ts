@@ -20,23 +20,46 @@ export default async function wrapMiddlewareFunction(req: NextRequestWithAuth, r
   } else if (req.nextUrl.pathname.startsWith('/admin')) {
     signinPath = 'admin';
   }
+
   ///@ts-expect-error
   return withAuth(
     async (request: NextRequestWithAuth) => {
-      if (
-        request.nextUrl.pathname.startsWith('/becario') &&
-        request.nextauth.token?.kind_of_user !== 'SCHOLAR'
-      ) {
+      const { token } = request.nextauth;
+      const { pathname } = request.nextUrl;
+
+      const isAdminRoute = pathname.startsWith('/admin');
+      const isScholarRoute = pathname.startsWith('/becario');
+
+      if (token?.kind_of_user === 'ADMIN' && isAdminRoute) {
+        const response = await fetch(`http://localhost:3000/admin/api/roles?adminId=${token.id}`);
+        const { admin } = await response.json();
+        const adminRoutes = new Map([
+          ['/admin/actividadesFormativas', admin.role.permissions.workshops.read],
+          ['/admin/chats', admin.role.permissions.chats.read],
+          ['/admin/voluntariado', admin.role.permissions.volunteers.read],
+          ['/admin/voluntariado/externo', admin.role.permissions.volunteers.external],
+          ['/admin/becarios', admin.role.permissions.scholars.read],
+          ['/admin/becarios/:path*', admin.role.permissions.scholars.individualRead],
+          ['/admin/captacion', admin.role.permissions.scholars.admission],
+          ['/admin/mentoria', admin.role.permissions.mentorship.read],
+          ['/admin/config', admin.role.permissions.admin.read],
+        ]);
+
+        for (const [route, permission] of adminRoutes) {
+          const regex = new RegExp(`^${route.replace(/:\w+\*/g, '.*').replace(/:\w+/g, '[^/]+')}$`);
+          if (regex.test(pathname) && !permission) {
+            return NextResponse.rewrite(new URL('/accessDenied', request.url));
+          }
+        }
+      }
+
+      if (isScholarRoute && token?.kind_of_user !== 'SCHOLAR') {
         return NextResponse.rewrite(new URL('/accessDenied', request.url));
       }
-      if (
-        request.nextUrl.pathname.startsWith('/admin') &&
-        request.nextauth.token?.kind_of_user !== 'ADMIN'
-      ) {
+      if (isAdminRoute && token?.kind_of_user !== 'ADMIN') {
         return NextResponse.rewrite(new URL('/accessDenied', request.url));
-      } else {
-        return NextResponse.next();
       }
+      return NextResponse.next();
     },
     {
       pages: {
