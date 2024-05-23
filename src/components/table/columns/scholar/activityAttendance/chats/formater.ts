@@ -36,7 +36,7 @@ const createScholarChatAttendanceForTable = (chats: ChatsWithAllData[], scholarI
             speakerKind,
             speakerCompany,
             attendance,
-            satisfactionFormFilled: chat.scholar_attendance[0].satisfaction_form_filled
+            satisfactionFormFilled: chat.scholar_attendance?.[0]?.satisfaction_form_filled
         };
     });
 }

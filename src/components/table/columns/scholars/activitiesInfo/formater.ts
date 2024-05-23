@@ -1,4 +1,5 @@
 import { getBlobImage } from "@/lib/azure/azure";
+import formatDni from "@/lib/db/utils/formatDni";
 import { getApprovedAndAttendedVolunteers } from "@/lib/utils/getAttendedActivities";
 import { ScholarActivitiesInformationColumnsProps } from "./columns";
 
@@ -18,11 +19,13 @@ export const formatScholarsActivitiesForActivitiesTable = async (scholars: any[]
             id,
             name: first_names + ' ' + last_names,
             profilePhoto: photo ? await getBlobImage(photo) : null,
+            dni: formatDni(scholar.dni),
             whatsAppNumber: whatsapp_number,
             email,
             doneWorkshops: program_information?.attended_workshops.length,
             doneChats: program_information?.attended_chats.length,
             doneVolunteerHours: totalVolunteerHours,
+            scholarGrade: scholar.collage_information?.[0]?.collage_period?.[0]?.grade
         };
     });
     return Promise.all(data)

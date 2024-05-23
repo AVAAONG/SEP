@@ -7,10 +7,12 @@ export interface ScholarActivitiesInformationColumnsProps {
   name: string;
   profilePhoto: string | null;
   whatsAppNumber: string | null;
+  dni: string;
   email: string | null;
   doneWorkshops: number | undefined;
   doneChats: number | undefined;
   doneVolunteerHours: number | undefined;
+  scholarGrade: number | undefined;
 }
 const scholarActivitiesInformationColumns: Column<ScholarActivitiesInformationColumnsProps>[] = [
   {
@@ -31,6 +33,10 @@ const scholarActivitiesInformationColumns: Column<ScholarActivitiesInformationCo
     ),
   },
   {
+    Header: 'Cédula',
+    accessor: 'dni',
+  },
+  {
     Header: 'Numero WhatsApp',
     accessor: 'whatsAppNumber',
   },
@@ -49,6 +55,10 @@ const scholarActivitiesInformationColumns: Column<ScholarActivitiesInformationCo
   {
     Header: 'Horas de voluntariado',
     accessor: 'doneVolunteerHours',
+  },
+  {
+    Header: 'Nota académica',
+    accessor: 'scholarGrade',
   },
 ];
 

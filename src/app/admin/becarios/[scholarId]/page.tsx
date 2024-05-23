@@ -112,11 +112,13 @@ const page = async ({
   ];
 
   const countByMonth = (items) => {
-    return items?.reduce((acc, item) => {
-      const month = new Date(item.start_dates[0] || item.start_dates).getMonth();
-      acc[month] = (acc[month] || 0) + 1;
-      return acc;
-    }, Array(12).fill(0)) || Array(12).fill(0);
+    return (
+      items?.reduce((acc, item) => {
+        const month = new Date(item.start_dates[0] || item.start_dates).getMonth();
+        acc[month] = (acc[month] || 0) + 1;
+        return acc;
+      }, Array(12).fill(0)) || Array(12).fill(0)
+    );
   };
 
   const workshopsByMonth = countByMonth(atendedWorkshops);

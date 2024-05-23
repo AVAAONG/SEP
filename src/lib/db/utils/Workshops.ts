@@ -465,6 +465,7 @@ export const getScholarsWithActivities = async () => {
       whatsapp_number: true,
       email: true,
       photo: true,
+      dni: true,
       program_information: {
         select: {
           attended_workshops: {
@@ -473,6 +474,16 @@ export const getScholarsWithActivities = async () => {
               workshop: { activity_status: 'ATTENDANCE_CHECKED' }
             },
             include: { workshop: true }
+          },
+
+        },
+      },
+      collage_information: {
+        select: {
+          collage_period: {
+            orderBy: {
+              created_at: 'desc'
+            }
           },
         },
       },
@@ -532,7 +543,6 @@ export const getScholarsWithActivities = async () => {
 
   return scholarsWithAttendance;
 }
-
 export const getChatsByScholar = async (scholarId: string) => {
   const chats = await prisma.chat.findMany({
     where: {
