@@ -523,27 +523,27 @@ enum AvaaYear {
 /// @author Kevin Bravo (kevinbravo.me)
 
 model AdminProfile {
-  id                String      @id @default(nanoid())
-  profileName       String
-  profilePic        String
-  allowedEmail      String      @unique
-  gender            Gender
-  updated_at        DateTime    @updatedAt
-  responsibility    String
-  chapter           Chapter?    @relation(fields: [chapter_id], references: [id])
-  chapter_id        String?
-  user              User?
-  allowedActions    Controller? @relation(fields: [allowedActions_id], references: [id])
-  allowedActions_id String
+  id             String   @id @default(nanoid())
+  profileName    String
+  profilePic     String
+  allowedEmail   String   @unique
+  gender         Gender
+  updated_at     DateTime @updatedAt
+  responsibility String
+  chapter        Chapter? @relation(fields: [chapter_id], references: [id])
+  chapter_id     String?
+  user           User?
+  role           Role?    @relation(fields: [role_id], references: [id])
+  role_id        String
 
-  @@index([chapter_id, allowedActions_id])
+  @@index([chapter_id, role_id])
 }
 
-model Controller {
-  id             String         @id @default(nanoid())
-  name           String         @unique
-  admin          AdminProfile[]
-  allowedActions Json[]
+model Role {
+  id          String         @id @default(nanoid())
+  name        String         @unique
+  admin       AdminProfile[]
+  permissions Json?
 }
 
 //
@@ -959,12 +959,12 @@ model DOSExchangeProgram {
   aplication_date       DateTime
   reached_stage         String
   selected              Boolean
-  usa_state             String
-  usa_university        String
-  program_duration      String
-  usa_contact           String
-  currently_working_org String
-  usa_connection        String
+  usa_state             String?
+  usa_university        String?
+  program_duration      String?
+  usa_contact           String?
+  currently_working_org String?
+  usa_connection        String?
   scholar               Scholar? @relation(fields: [scholar_id], references: [id])
   scholar_id            String?
 }
