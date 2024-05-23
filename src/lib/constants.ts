@@ -3,13 +3,11 @@ import { VolunteerProject } from "@prisma/client";
 export const CLIENT_ID = process.env.GOOGLE_ADMIN_API_CLIENT_ID;
 export const CLIENT_SECRET = process.env.GOOGLE_ADMIN_API_CLIENT_SECRET;
 export const REDIRECT_URL = 'http://localhost:3000/api/auth/callback/adminGoogle';
+export const GOOGLE_API_REFRESH_TOKEN = process.env.GOOGLE_API_REFRESH_TOKEN;
 
-export const WORKSHOP_CALENDAR_ID =
-  'be4b05254bd3b7658f56172520efc8e1cc4dc70bf54641a56b5d37f65d5741b0@group.calendar.google.com';
-export const CHAT_CALENDAR_ID =
-  '4c33cf47616aea0e0c818290ef4f6369f119c42f7e25baaff330250f5af3a592@group.calendar.google.com';
-export const VOLUNTEERS_CALENDAR_ID =
-  '8a325e7fdbcb87bdb47ea4e1b45f81e83fa7077fe2de99911c7f51215d3e5f7d@group.calendar.google.com';
+export const WORKSHOP_CALENDAR_ID = process.env.GOOGLE_WORKSHOP_CALENDAR_ID
+export const CHAT_CALENDAR_ID = process.env.GOOGLE_CHAT_CALENDAR_ID
+export const VOLUNTEERS_CALENDAR_ID = process.env.GOOGLE_VOLUNTEER_CALENDAR_ID
 
 export const MONTHS = [
   '0',

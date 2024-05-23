@@ -43,12 +43,7 @@ export const GOOGLE_ADMIN_API_CLIENT_SECRET = process.env.GOOGLE_ADMIN_API_CLIEN
  * @see https://developers.google.com/identity/protocols/oauth2/scopes
  */
 export const GOOGLE_ADMIN_SCOPES = [
-  'https://www.googleapis.com/auth/calendar',
-  'https://www.googleapis.com/auth/contacts',
-  'https://mail.google.com/',
-  'https://www.googleapis.com/auth/drive',
-  'https://www.googleapis.com/auth/spreadsheets',
-  'https://www.googleapis.com/auth/forms',
+  'https://www.googleapis.com/auth/calendar.app.created',
   'https://www.googleapis.com/auth/userinfo.profile',
   'https://www.googleapis.com/auth/userinfo.email',
 ];

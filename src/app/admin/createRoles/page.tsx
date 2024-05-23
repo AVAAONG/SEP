@@ -1,6 +1,6 @@
 'use client'
+import { createCalendar } from '@/lib/calendar/calendar'
 import { PartialAreaPermissions, setPermissions } from '@/lib/db/permisions'
-import { createRole } from '@/lib/db/utils/admins'
 import { Button } from '@nextui-org/react'
 
 const CHATS_MANAGER_PERMISSIONS: PartialAreaPermissions = {
@@ -85,7 +85,8 @@ const page = () => {
     const handle = async () => {
         const permisions = setPermissions(PROJECT_MANAGER_PERMISSIONS)
         // await createRole('CHAT_MANAGER', permisions)
-        await createRole('CHAPTER_ADMIN', permisions)
+        // await createRole('CHAPTER_ADMIN', permisions)
+        await createCalendar()
         console.log(permisions)
     }
     return (

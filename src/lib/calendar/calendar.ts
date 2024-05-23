@@ -336,3 +336,32 @@ const updateEventDetails = async (
   }
   return eventDetails;
 };
+
+export const createCalendar = async () => {
+  await setTokens();
+  const calendars: calendar_v3.Schema$Calendar[] = [
+    // {
+    //   summary: 'Actividades Formativas', // Replace with your Calendar Name
+    //   description: "Calendario de actividades formativas del Programa de Excelencia Académica (ProExcelencia) de AVAA",
+    //   timeZone: 'America/Caracas', // Replace with your Time Zone
+    // },
+    // {
+    //   summary: 'Chat clubs de inglés', // Replace with your Calendar Name
+    //   description: "Calendario de chat clubs de inglés del Programa de Excelencia Académica (ProExcelencia) de AVAA",
+    //   timeZone: 'America/Caracas' // Replace with your Time Zone
+    // },
+    // {
+    //   summary: 'Actividades de voluntariado', // Replace with your Calendar Name
+    //   description: "Calendario de actividades de voluntariado del Programa de Excelencia Académica (ProExcelencia) de AVAA",
+    //   timeZone: 'America/Caracas' // Replace with your Time Zone
+    // },
+  ]
+  calendars.map(async (calendar) => {
+    try {
+      const response = await Calendar.calendars.insert({ requestBody: calendar });
+      console.log('Calendar created successfully: ', response.data);
+    } catch (error) {
+      console.error('Error creating calendar: ', error);
+    }
+  })
+}
