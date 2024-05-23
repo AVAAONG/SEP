@@ -4,6 +4,7 @@ import { filterActivitiesBySearchParamsPeriod } from '@/lib/utils/datePickerFilt
 import { countScholarActivitiesProperties } from '@/lib/utils/scholarCounter';
 import { DonutChartComponent } from '../charts';
 import DatePickerByEvaluationBlock from '../commons/datePicker/DatePickerByEvaluationBlock';
+import FollowUpExportButton from '../exportButtons/FollowUpExportButton';
 import Table from '../table/Table';
 import scholarActivitiesInformationColumns from '../table/columns/scholars/activitiesInfo/columns';
 import { formatScholarsActivitiesForActivitiesTable } from '../table/columns/scholars/activitiesInfo/formater';
@@ -43,6 +44,18 @@ const ActivitiesInfo = async ({
   const data = await formatScholarsActivitiesForActivitiesTable(df);
   const scholarsPropertiesCount = countScholarActivitiesProperties(df);
   const dataForCharts = await formatCountsForChartsActivityExpe(scholarsPropertiesCount);
+  const datatoExport = data.map((d) => {
+    return {
+      name: d.name,
+      dni: d.dni,
+      whatsAppNumber: d.whatsAppNumber,
+      email: d.email,
+      doneWorkshops: d.doneWorkshops,
+      doneChats: d.doneChats,
+      doneVolunteerHours: d.doneVolunteerHours,
+      scholarGrade: d.scholarGrade ? d.scholarGrade : 0,
+    };
+  });
 
   return (
     <>
@@ -70,7 +83,9 @@ const ActivitiesInfo = async ({
           tableColumns={scholarActivitiesInformationColumns}
           tableData={data}
           tableHeadersForSearch={[]}
-        />
+        >
+          <FollowUpExportButton datatoExport={datatoExport} />
+        </Table>
       </div>
     </>
   );
