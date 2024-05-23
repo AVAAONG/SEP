@@ -1,9 +1,9 @@
 import { getScholarsWithActivities } from '@/lib/db/utils/Workshops';
 import { formatCountsForChartsActivityExpe } from '@/lib/utils/activityFilters';
-import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
+import { filterActivitiesBySearchParamsPeriod } from '@/lib/utils/datePickerFilters';
 import { countScholarActivitiesProperties } from '@/lib/utils/scholarCounter';
 import { DonutChartComponent } from '../charts';
-import DateSelector from '../commons/datePicker';
+import DatePickerByEvaluationBlock from '../commons/datePicker/DatePickerByEvaluationBlock';
 import Table from '../table/Table';
 import scholarActivitiesInformationColumns from '../table/columns/scholars/activitiesInfo/columns';
 import { formatScholarsActivitiesForActivitiesTable } from '../table/columns/scholars/activitiesInfo/formater';
@@ -16,15 +16,15 @@ const ActivitiesInfo = async ({
   const scholars = await getScholarsWithActivities();
   const df = await Promise.all(
     scholars.map(async (scholar) => {
-      const f = await filterActivitiesBySearchParams(
+      const f = await filterActivitiesBySearchParamsPeriod(
         scholar.program_information.attended_chats.map((chat) => chat.chat),
         searchParams
       );
-      const g = await filterActivitiesBySearchParams(
+      const g = await filterActivitiesBySearchParamsPeriod(
         scholar.program_information.attended_workshops?.map((workshop) => workshop.workshop),
         searchParams
       );
-      const tt = await filterActivitiesBySearchParams(
+      const tt = await filterActivitiesBySearchParamsPeriod(
         scholar.program_information.volunteerAttendance?.map((volunteer) => volunteer.volunteer),
         searchParams
       );
@@ -46,7 +46,7 @@ const ActivitiesInfo = async ({
 
   return (
     <>
-      <DateSelector />
+      <DatePickerByEvaluationBlock />
       <div className="flex flex-col w-full h-full bg-white dark:bg-black rounded-lg py-4 justify-center shadow-md ">
         <div className="w-full grid md:grid-cols-5 justify-center items-center">
           {/* Necesary div to center the charts */} <div></div>

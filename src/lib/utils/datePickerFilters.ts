@@ -26,6 +26,21 @@ const filterActivityByQuarter = (
   return filteredActivities;
 }
 
+const filterActivityByPeriod = (
+  activities: (WorkshopWithAllData | Chat | Volunteer)[],
+  period: 1 | 2 | 3
+): (WorkshopWithAllData | Chat | Volunteer)[] => {
+  return activities.filter((activity) => {
+    const startMonth = new Date(activity.start_dates[0]).getMonth() + 1; // Months are 0-indexed
+
+    if (period === 1) return startMonth >= 1 && startMonth <= 4;
+    if (period === 2) return startMonth >= 5 && startMonth <= 9;
+    if (period === 3) return startMonth >= 10 && startMonth <= 12;
+
+    return false; // Default case (shouldn't happen with type enforcement)
+  });
+};
+
 const filterActivityByYear = (
   activities: (WorkshopWithAllData | Chat | Volunteer)[],
   year: number
@@ -47,6 +62,23 @@ const filterActivitiesBySearchParams = async (
     activities = filterActivityByYear(activityDbList, Number(searchParams?.year));
     if (searchParams?.quarter) {
       activities = filterActivityByQuarter(activities, Number(searchParams?.quarter));
+    }
+    if (searchParams?.month) {
+      activities = filterActivityByMonth(activities, Number(searchParams?.month));
+    }
+  } else activities = activityDbList;
+  return activities;
+};
+
+export const filterActivitiesBySearchParamsPeriod = async (
+  activityDbList: (WorkshopWithAllData | Chat | Volunteer)[],
+  searchParams: { year?: string; quarter?: string; month?: string } | undefined
+): Promise<(WorkshopWithAllData | Chat | Volunteer)[]> => {
+  let activities: (WorkshopWithAllData | Chat | Volunteer)[];
+  if (searchParams?.year) {
+    activities = filterActivityByYear(activityDbList, Number(searchParams?.year));
+    if (searchParams?.quarter) {
+      activities = filterActivityByPeriod(activities, Number(searchParams?.quarter) as 1 | 2 | 3);
     }
     if (searchParams?.month) {
       activities = filterActivityByMonth(activities, Number(searchParams?.month));
