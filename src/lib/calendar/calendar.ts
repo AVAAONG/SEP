@@ -12,6 +12,7 @@ import { CHAT_CALENDAR_ID, WORKSHOP_CALENDAR_ID } from '@/lib/constants';
 import createZoomMeeting, { updateZoomMeeting } from '@/lib/zoom';
 import { calendar_v3 } from '@googleapis/calendar';
 import { Calendar, setTokens } from '../googleAPI/auth';
+import { getCalendarId } from '../utils2';
 import createCalendarDescription from './calendarDescription';
 import createEventObject from './calendarEventObject';
 import { IChatCalendar, IWorkshopCalendar } from './d';
@@ -28,7 +29,7 @@ export const createCalendarEvent = async (
   values: IWorkshopCalendar | IChatCalendar
 ): Promise<[string[], MeetingDetails[]]> => {
   await setTokens();
-  const calendarId = 'asociated_skill' in values ? WORKSHOP_CALENDAR_ID : CHAT_CALENDAR_ID;
+  const calendarId = getCalendarId(values);
   let meetingDetails: MeetingDetails[] = [];
   const { platform } = values;
   const [eventDetails, zoomMeetDetails] = await createEventDetails(values);

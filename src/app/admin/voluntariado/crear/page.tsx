@@ -1,5 +1,4 @@
 import VolunteerForm from '@/components/admin/forms/volunteer/form';
-import MainScheduledCard from '@/components/scheduledActivitiesCard/ScheduledCard';
 import ScheduledCardsWrap from '@/components/scheduledActivitiesCard/ScheduledCardsWrap';
 import { getScheduledVolunteers } from '@/lib/db/utils/volunteer';
 

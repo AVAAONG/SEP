@@ -1,3 +1,4 @@
+'use server';
 import { deleteCalendarEvent } from "@/lib/calendar/calendar";
 import { ChatWithSpeaker, WorkshopWithSpeaker } from "@/lib/db/types";
 import { deleteWorkshopFromDatabase } from "@/lib/db/utils/Workshops";
