@@ -480,7 +480,12 @@ export const getScholarsWithActivities = async () => {
       },
       collage_information: {
         select: {
+          evaluation_scale: true,
           collage_period: {
+            select: {
+              grade: true,
+            },
+
             orderBy: {
               created_at: 'desc'
             }
