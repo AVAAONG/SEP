@@ -20,6 +20,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "prisma:migrate-create-only": "prisma migrate dev --create-only --schema=./src/lib/db/prisma/schema.prisma",
     "prisma:delete": "rm node_modules/.pnpm/@prisma+client@5.11.0_prisma@5.11.0/node_modules/.prisma/client/query_engine-windows.dll.node",
     "prisma:generate": "pnpm run prisma:import && prisma generate --schema=./src/lib/db/prisma/schema.prisma",
     "prisma:migrate": "prisma migrate dev --schema=./src/lib/db/prisma/schema.prisma",
