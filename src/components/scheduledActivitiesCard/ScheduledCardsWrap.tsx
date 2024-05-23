@@ -16,6 +16,7 @@ import { Volunteer } from '@prisma/client';
 import 'moment/locale/es';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
+import createVolunteerInvitationMessage from '../emailTemplateMessage/VolunteerInvitationMessage';
 import ScheduledCard from './ScheduledCard';
 type ScheduledCardsWrapI = {
   activities: ChatWithSpeaker[] | WorkshopWithSpeaker[] | Volunteer[];
@@ -55,10 +56,10 @@ const ScheduledCardsWrap: React.FC<ScheduledCardsWrapI> = ({ activities }) => {
     }
     if (isVolunteerActivity) {
       await revalidateSpecificPath('/admin/voluntarios/crear');
-      const volunteerInvitationMessage = createWorkshopInvitationMessage();
+      const volunteerInvitationMessage = createVolunteerInvitationMessage();
       await sendActivitiesEmail(
         volunteerInvitationMessage,
-        '¡Se han agregado actividades de voluntarios!'
+        '¡Se han agregado actividades de voluntariado!'
       );
     }
     setbuttonIsDisabled(false);

@@ -1,9 +1,11 @@
 'use client';
 import DateInput from '@/components/commons/DateInput';
 import PlatformInput from '@/components/commons/PlatformInput';
+import createVolunteerInvitationMessage from '@/components/emailTemplateMessage/VolunteerInvitationMessage';
 import { MODALITY, VOLUNTEER_PROJECT } from '@/lib/constants';
 import { createVolunteer, updateVolunteer } from '@/lib/db/utils/volunteer';
 import volunteerSchema from '@/lib/schemas/volunteerSchema';
+import { sendActivitiesEmail } from '@/lib/sendEmails';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input, Textarea } from '@nextui-org/input';
 import { Select, SelectItem } from '@nextui-org/select';
@@ -88,6 +90,13 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
     const volunteer = await createVolunteerObject(data, status);
     if (kind === 'edit' && valuesToUpdate) await updateVolunteer(valuesToUpdate.id, volunteer);
     if (kind === 'create') {
+      if (buttonType === 'send') {
+        const volunteerInvitationMessage = createVolunteerInvitationMessage();
+        await sendActivitiesEmail(
+          volunteerInvitationMessage,
+          '¡Se han agregado actividades de voluntariado!'
+        );
+      }
       const createdVolunteer = await createVolunteer(volunteer);
       router.push(`/admin/voluntariado/${createdVolunteer.id}`);
     }
