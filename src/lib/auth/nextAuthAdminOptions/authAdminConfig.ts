@@ -43,7 +43,7 @@ export const GOOGLE_ADMIN_API_CLIENT_SECRET = process.env.GOOGLE_ADMIN_API_CLIEN
  * @see https://developers.google.com/identity/protocols/oauth2/scopes
  */
 export const GOOGLE_ADMIN_SCOPES = [
-  'https://www.googleapis.com/auth/calendar.app.created',
+  // 'https://www.googleapis.com/auth/calendar.app.created',
   'https://www.googleapis.com/auth/userinfo.profile',
   'https://www.googleapis.com/auth/userinfo.email',
 ];
@@ -69,9 +69,6 @@ export const googleAdminProviderConfig: OAuthUserConfig<any> = {
   clientSecret: GOOGLE_ADMIN_API_CLIENT_SECRET,
   authorization: {
     params: {
-      access_type: 'offline',
-      prompt: 'consent',
-      include_granted_scopes: true,
       scope: GOOGLE_ADMIN_SCOPES.join(' '),
     },
   },
