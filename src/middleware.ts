@@ -11,8 +11,8 @@
  */
 
 import { NextRequestWithAuth, withAuth } from 'next-auth/middleware';
+import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
-
 export default async function wrapMiddlewareFunction(req: NextRequestWithAuth, res: Response) {
   let signinPath = '';
   if (req.nextUrl.pathname.startsWith('/becario')) {
@@ -26,12 +26,13 @@ export default async function wrapMiddlewareFunction(req: NextRequestWithAuth, r
     async (request: NextRequestWithAuth) => {
       const { token } = request.nextauth;
       const { pathname } = request.nextUrl;
+      const host = headers().get('host');
 
       const isAdminRoute = pathname.startsWith('/admin');
       const isScholarRoute = pathname.startsWith('/becario');
 
       if (token?.kind_of_user === 'ADMIN' && isAdminRoute) {
-        const response = await fetch(`http://localhost:3000/admin/api/roles?adminId=${token.id}`);
+        const response = await fetch(`https://${host}/admin/api/roles?adminId=${token.id}`);
         const { admin } = await response.json();
         const adminRoutes = new Map([
           ['/admin/actividadesFormativas', admin.role.permissions.workshops.read],
