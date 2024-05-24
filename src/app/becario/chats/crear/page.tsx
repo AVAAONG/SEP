@@ -25,6 +25,7 @@ const Page = async ({ searchParams }: { searchParams: { activityToEdit: string |
             showSend={false}
             showEdit={chat ? true : false}
             showSchedule={chat ? false : true}
+            defaultSpeakerId={session?.scholarId}
           />
         </div>
       </div>

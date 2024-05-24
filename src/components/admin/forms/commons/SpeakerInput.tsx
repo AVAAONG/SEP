@@ -3,24 +3,25 @@ import chatCreationFormSchema from '@/lib/schemas/chatCreationFormSchema';
 import workshopCreationFormSchema from '@/lib/schemas/workshopCreationFormSchema';
 import React, { useEffect, useState } from 'react';
 import { Control, Controller } from 'react-hook-form';
-import { default as Combobox } from 'react-select';
+import { default as Combobox, StylesConfig } from 'react-select';
 import { z } from 'zod';
 
 interface SpeakerInputProps {
   control:
-  | Control<z.infer<typeof workshopCreationFormSchema>>
-  | Control<z.infer<typeof chatCreationFormSchema>>,
+    | Control<z.infer<typeof workshopCreationFormSchema>>
+    | Control<z.infer<typeof chatCreationFormSchema>>;
   kind: 'workshop' | 'chat';
+  defaultSpeakerId?: string;
 }
 
 type OptionsForCombobox = {
   value: string;
   label: string;
   email: string | null;
+  isFixed: boolean;
 };
 
-const SpeakerInput: React.FC<SpeakerInputProps> = ({ control, kind }) => {
-
+const SpeakerInput: React.FC<SpeakerInputProps> = ({ control, kind, defaultSpeakerId }) => {
   const [comboboxOptions, setComboboxOptions] = useState<OptionsForCombobox[]>([]);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -28,13 +29,14 @@ const SpeakerInput: React.FC<SpeakerInputProps> = ({ control, kind }) => {
   useEffect(() => {
     const fetchSpeakers = async () => {
       setIsLoading(true); // Set loading state
-      const speakers = await getSpeakersForInput(kind)
+      const speakers = await getSpeakersForInput(kind);
 
       if (speakers) {
         const options = speakers.map((speaker) => ({
           value: speaker.id,
           label: `${speaker.first_names} ${speaker.last_names}`,
           email: speaker.email,
+          isFixed: speaker.id === defaultSpeakerId,
         }));
         setComboboxOptions(options);
       }
@@ -44,7 +46,21 @@ const SpeakerInput: React.FC<SpeakerInputProps> = ({ control, kind }) => {
     fetchSpeakers();
   }, []); // Empty dependency array ensures this runs once on mount
 
-  if (isLoading) return (<div>🔃 Cargando facilitadores...</div>);
+  const styles: StylesConfig<OptionsForCombobox, true> = {
+    multiValue: (base, state) => {
+      return state.data.isFixed ? { ...base, backgroundColor: 'gray' } : base;
+    },
+    multiValueLabel: (base, state) => {
+      return state.data.isFixed
+        ? { ...base, fontWeight: 'bold', color: 'white', paddingRight: 6 }
+        : base;
+    },
+    multiValueRemove: (base, state) => {
+      return state.data.isFixed ? { ...base, display: 'none' } : base;
+    },
+  };
+
+  if (isLoading) return <div>🔃 Cargando facilitadores...</div>;
 
   return (
     <div>
@@ -58,11 +74,17 @@ const SpeakerInput: React.FC<SpeakerInputProps> = ({ control, kind }) => {
             <Combobox
               // defaultValue={}
               isMulti
+              defaultValue={
+                defaultSpeakerId
+                  ? comboboxOptions.find((option) => option.value === defaultSpeakerId)
+                  : undefined
+              }
               {...field}
               required={true}
+              isClearable={false}
               className="!rounded-lg z-50 py-2"
               options={comboboxOptions}
-              placeholder='Selecciona los facilitadores'
+              placeholder="Selecciona los facilitadores"
               styles={{
                 control: (baseStyles: object, _state: object) => ({
                   ...baseStyles,
@@ -81,12 +103,14 @@ const SpeakerInput: React.FC<SpeakerInputProps> = ({ control, kind }) => {
                     outline: 'none', // Remove outline on active
                   },
                 }),
+                ...styles,
               }}
             />
           );
         }}
       />
-    </div>)
-}
+    </div>
+  );
+};
 
-export default SpeakerInput
+export default SpeakerInput;

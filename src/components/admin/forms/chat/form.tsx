@@ -33,6 +33,7 @@ interface ChatFormProps {
   showSchedule: boolean;
   showCreate: boolean;
   showSend: boolean;
+  defaultSpeakerId?: string;
 }
 const ChatForm: React.FC<ChatFormProps> = ({
   valuesToUpdate,
@@ -40,6 +41,7 @@ const ChatForm: React.FC<ChatFormProps> = ({
   showEdit,
   showSend,
   showSchedule,
+  defaultSpeakerId,
 }) => {
   const {
     control,
@@ -212,7 +214,7 @@ const ChatForm: React.FC<ChatFormProps> = ({
             </Select>
           )}
         />
-        <SpeakerInput control={control} kind="chat" />
+        <SpeakerInput control={control} kind="chat" defaultSpeakerId={defaultSpeakerId} />
         <Controller
           name="avalible_spots"
           control={control}
