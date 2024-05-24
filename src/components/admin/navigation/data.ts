@@ -48,6 +48,6 @@ export const SIDEBAR_ADMIN_ACTIONS = [
   {
     icon: userIcon,
     buttonName: 'Acciones de administrador',
-    itemList: [{ name: 'Control de administradores', link: '/admin/config/adminUsers' }],
+    itemList: [{ name: 'Control de administradores', link: '/admin/configuracion/adminUsers' }],
   },
 ];

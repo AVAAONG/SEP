@@ -832,6 +832,22 @@ export const updateProfilePicture = async (id: string, image: string | null) => 
   return scholar;
 }
 
+export const updateAdminProfilePicture = async (id: string, image: string) => {
+  const scholar = await prisma.adminProfile.update({
+    where: {
+      id,
+    },
+    data: {
+      profilePic: image,
+      user: {
+        update: {
+          image: image
+        }
+      }
+    }
+  });
+  return scholar;
+}
 
 
 

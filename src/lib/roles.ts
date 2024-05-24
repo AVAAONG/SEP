@@ -1,7 +1,4 @@
-'use client';
-import { PartialAreaPermissions, setAllPermissionsTrue, setPermissions } from '@/lib/db/permisions';
-import { updateRole } from '@/lib/db/utils/admins';
-import { Button } from '@nextui-org/react';
+import { PartialAreaPermissions } from "./db/permisions";
 
 const CHATS_MANAGER_PERMISSIONS: PartialAreaPermissions = {
   chats: {
@@ -80,17 +77,3 @@ const CHAPTER_ADMIN_PERMISSIONS: PartialAreaPermissions = {
     chapter: true,
   },
 };
-
-const page = () => {
-  const handle = async () => {
-    const permisions = setPermissions(PROJECT_MANAGER_PERMISSIONS);
-    await updateRole('SUPER_ADMIN', setAllPermissionsTrue());
-    // await createRole('CHAT_MANAGER', permisions)
-    // await createRole('CHAPTER_ADMIN', permisions)
-    // await createCalendar();
-    console.log(permisions);
-  };
-  return <Button onPress={async () => await handle()}>Create Role</Button>;
-};
-
-export default page;

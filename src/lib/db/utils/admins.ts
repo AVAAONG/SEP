@@ -20,6 +20,7 @@ export const createAdminProfileUser = async (data: AdminProfile) => {
   try {
     const adminProfile = await prisma.adminProfile.create({
       data: {
+        id: data.id,
         profileName: data.profileName,
         profilePic: data.profilePic,
         allowedEmail: data.allowedEmail,
