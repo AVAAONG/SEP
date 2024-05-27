@@ -1,16 +1,14 @@
-import AddCvaModule from '@/components/AddCvaModule';
 import ScholarCVAInformation from '@/components/forms/scholarCVAInfo';
-import Table from '@/components/table/Table';
-import CvaModulesColumns from '@/components/table/columns/cvaModuleColumns';
+import CvaModulesTable from '@/components/table/columns/scholar/cva/ScholarCVAModulesTable';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { getBlobFile } from '@/lib/azure/azure';
-import { getCvaInformationByScholar } from '@/lib/db/utils/cva';
+import { getScholarCvaInformation } from '@/lib/db/utils/cva';
 import { parseCvaScheduleFromDatabase, parseModalityFromDatabase } from '@/lib/utils2';
 import { getServerSession } from 'next-auth';
 
 const page = async () => {
   const session = await getServerSession(authOptions);
-  const cvaInformation = await getCvaInformationByScholar(session?.scholarId!);
+  const cvaInformation = await getScholarCvaInformation(session?.scholarId!);
   const cvaCertificate = await getBlobFile(cvaInformation?.certificate);
   const cvaModules = await Promise.all(
     cvaInformation?.modules.map(async (module) => {
@@ -34,13 +32,12 @@ const page = async () => {
         />
       </div>
       <div className="w-full">
-        <Table
-          tableData={cvaModules || []}
-          tableColumns={CvaModulesColumns}
-          tableHeadersForSearch={[]}
-        >
-          <AddCvaModule cvaInformationId={cvaInformation?.id || null} />
-        </Table>
+        <CvaModulesTable
+          cvaInformationId={cvaInformation?.id}
+          cvaModulesForTable={cvaModules}
+          cvaModuleForUpdate={cvaInformation?.modules}
+
+        />
       </div>
     </div>
   );

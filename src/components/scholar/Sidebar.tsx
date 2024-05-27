@@ -1,7 +1,7 @@
 'use client';
 import logo from '@/../public/proexcelencia-color.png';
 import { scholarSidebarAtom } from '@/lib/state/mainState';
-import { DocumentTextIcon, SparklesIcon } from '@heroicons/react/24/outline';
+import { ArchiveBoxIcon, DocumentTextIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -18,43 +18,7 @@ import ScholarDropdownButton from './ScholarDropdownButton';
 
 const SCHOLAR_PREFIX = 'becario';
 
-const SCHOLAR_SIDEBAR_ITEMS = [
-  {
-    Icon: workshopIcon(),
-    buttonName: 'Actividades formativas',
-    itemList: [],
-    link: `/${SCHOLAR_PREFIX}/actividadesFormativas`,
-  },
-  {
-    Icon: chatIcon(),
-    buttonName: 'Chats',
-    itemList: [],
-    link: `/${SCHOLAR_PREFIX}/chats`,
-  },
-  {
-    Icon: volunterIcon(),
-    buttonName: 'Voluntariado',
-    itemList: [
-      {
-        name: 'Registro',
-        link: `/${SCHOLAR_PREFIX}/voluntariado`,
-      },
-      {
-        name: 'Subir voluntariado externo',
-        link: `/${SCHOLAR_PREFIX}/voluntariado/externo`,
-      },
-    ],
-    link: '',
-  },
-  {
-    Icon: <SparklesIcon className="!text-primary-light" />,
-    buttonName: 'Oferta de actividades',
-    itemList: [],
-    link: `/${SCHOLAR_PREFIX}/oferta`,
-  },
-];
-
-const Sidebar = () => {
+const Sidebar = ({ isSpeaker }: { isSpeaker: boolean | undefined }) => {
   const [isSidebarOpen, setSidebarOpen] = useAtom(scholarSidebarAtom);
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
   const pathname = usePathname();
@@ -64,6 +28,54 @@ const Sidebar = () => {
       setSidebarOpen(false);
     }
   }, [pathname]);
+
+  const SCHOLAR_SIDEBAR_ITEMS = [
+    {
+      Icon: workshopIcon(),
+      buttonName: 'Actividades formativas',
+      itemList: [],
+      link: `/${SCHOLAR_PREFIX}/actividadesFormativas`,
+    },
+    {
+      Icon: chatIcon(),
+      buttonName: 'Chats',
+      itemList: isSpeaker
+        ? [
+            {
+              name: 'Registro',
+              link: `/${SCHOLAR_PREFIX}/chats`,
+            },
+            {
+              name: 'Proponer chat',
+              link: `/${SCHOLAR_PREFIX}/chats/crear`,
+            },
+          ]
+        : [],
+      link: isSpeaker ? '' : `/${SCHOLAR_PREFIX}/chats`,
+    },
+    {
+      Icon: volunterIcon(),
+      buttonName: 'Voluntariado',
+      itemList: [
+        {
+          name: 'Registro',
+          link: `/${SCHOLAR_PREFIX}/voluntariado`,
+        },
+        {
+          name: 'Subir voluntariado externo',
+          link: `/${SCHOLAR_PREFIX}/voluntariado/externo`,
+        },
+      ],
+      link: '',
+    },
+    {
+      Icon: <SparklesIcon className="!text-primary-light" />,
+      buttonName: 'Oferta de actividades',
+      itemList: [],
+      link: `/${SCHOLAR_PREFIX}/oferta`,
+    },
+  ];
+
   return (
     <aside
       className={`${
@@ -137,6 +149,12 @@ const Sidebar = () => {
             buttonName="Notas universitarias"
             itemList={[]}
             link={`/${SCHOLAR_PREFIX}/universidad`}
+          />
+          <ScholarDropdownButton
+            Icon={<ArchiveBoxIcon />}
+            buttonName="D.O.S Exchange Programs"
+            itemList={[]}
+            link={`/${SCHOLAR_PREFIX}/dos`}
           />
         </ul>
         {/* FEEDBACK FORM */}

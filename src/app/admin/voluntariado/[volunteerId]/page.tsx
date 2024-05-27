@@ -3,6 +3,8 @@ import DisplayDate from '@/components/DisplayDate';
 import DisplayTime from '@/components/DisplayTime';
 import QuitScholarFromActivity from '@/components/QuitScholarFromActivity';
 import VolunteerStatusWidget from '@/components/VolunteerStatus';
+import ActivityEditFormModal from '@/components/activityActions/editActivity/ActivityEditFormModal';
+import VolunteerStatusUpdate from '@/components/activityActions/volunteerStatusUpdate/VolunteerStatusUpdate';
 import Table from '@/components/table/Table';
 import ScholarVolunteerAttendance from '@/components/table/columns/scholarsVolunteerAttendance/columns';
 import { formatScholarDataForVolunteerAttendanceTable } from '@/components/table/columns/scholarsVolunteerAttendance/formater';
@@ -42,6 +44,14 @@ const page = async ({ params }: { params: { volunteerId: shortUUID.SUUID } }) =>
     volunteer_attendance
   );
   const notEnrolledScholars = await getNotEnrolledScholarsInVolunteer(volunteerId);
+  const totalHours = scholarAttendanceDataForTable.reduce(
+    (acc, scholar) => acc + (scholar.asignedHours || 0),
+    0
+  );
+  const totalAttendants = scholarAttendanceDataForTable.reduce(
+    (acc, scholar) => acc + (scholar.attendance === 'ATTENDED' ? 1 : 0),
+    0
+  );
 
   return (
     <div className="min-h-screen flex flex-col gap-4">
@@ -143,6 +153,34 @@ const page = async ({ params }: { params: { volunteerId: shortUUID.SUUID } }) =>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        <div className="w-full lg:w-1/2 flex flex-col gap-4">
+          <div className="w-full grid grid-cols-2 gap-4">
+            <div className="rounded-lg border text-card-foreground shadow-sm w-full overflow-hidden">
+              <div className="flex flex-col space-y-1.5 p-6 ">
+                <h3 className="text-lg font-semibold whitespace-nowrap leading-none tracking-tight truncate">
+                  horas hombre
+                </h3>
+              </div>
+              <p className="text-4xl font-semibold whitespace-nowrap leading-none tracking-tight p-6">
+                {totalHours}
+              </p>
+            </div>
+            <div className="rounded-lg border text-card-foreground shadow-sm w-full overflow-hidden">
+              <div className="flex flex-col space-y-1.5 p-6 ">
+                <h3 className="text-lg font-semibold whitespace-nowrap leading-none tracking-tight truncate">
+                  Participantes
+                </h3>
+              </div>
+              <p className="text-4xl font-semibold whitespace-nowrap leading-none tracking-tight p-6">
+                {totalAttendants}
+              </p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4 ">
+            <ActivityEditFormModal activity={volunteer} />
+            <VolunteerStatusUpdate volunteerId={volunteerId} />
           </div>
         </div>
       </section>

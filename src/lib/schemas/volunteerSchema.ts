@@ -11,6 +11,7 @@ const volunteerSchema = z
                     .min(1, { message: 'Debes especificar la fecha' }),
                 startHour: z.string().min(1, { message: 'Debes especificar la hora de inicio' }),
                 endHour: z.string().min(1, { message: 'Debes especificar la hora de cierre' }),
+                endDate: z.string().min(1, { message: 'Debes especificar la fecha de cierre' }),
             })
             .array()
             .min(1, { message: 'Debes especificar al menos una' }),

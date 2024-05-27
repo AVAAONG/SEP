@@ -182,7 +182,7 @@ const createWorkshopInvitationMessage = () => {
          <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px 10px 20px;font-family:'Raleway',sans-serif;" align="left">
            
      <!--[if mso]><table width="100%"><tr><td><![endif]-->
-       <h1 class="v-text-align v-font-size" style="margin: 0px; line-height: 140%; text-align: center; word-wrap: break-word; font-family: Arvo; font-size: 25px; font-weight: 400;"><span><span><span><span><span><span><span><span><span><strong> ¡Se han agregado actividades formativas al calendario!</strong></span></span></span></span></span></span></span></span></span></h1>
+       <h1 class="v-text-align v-font-size" style="margin: 0px; line-height: 140%; text-align: center; word-wrap: break-word; font-family: Arvo; font-size: 25px; font-weight: 400;"><span><span><span><span><span><span><span><span><span><strong> ¡Se han agregado actividades formativas a la oferta!</strong></span></span></span></span></span></span></span></span></span></h1>
      <!--[if mso]></td></tr></table><![endif]-->
    
          </td>
@@ -197,7 +197,7 @@ const createWorkshopInvitationMessage = () => {
            
      <div class="v-text-align v-font-size" style="font-size: 14px; line-height: 170%; text-align: center; word-wrap: break-word;">
        <p style="line-height: 170%; margin-top: 12pt; margin-bottom: 12pt;"><span style="color: #000000; white-space-collapse: preserve; line-height: 23.8px;">Hola, Becario 😄</span></p>
-   <p style="line-height: 170%; margin-top: 12pt; margin-bottom: 12pt;"><span style="color: #000000; white-space-collapse: preserve; line-height: 23.8px;">Este correo es para informarte que se han agregado nuevas actividades formativas al calendario 🥳</span></p>
+   <p style="line-height: 170%; margin-top: 12pt; margin-bottom: 12pt;"><span style="color: #000000; white-space-collapse: preserve; line-height: 23.8px;">Este correo es para informarte que se han agregado nuevas actividades formativas a la oferta🥳</span></p>
    <p style="line-height: 170%; margin-top: 12pt; margin-bottom: 12pt;"><span style="color: #000000; white-space-collapse: preserve; line-height: 23.8px;">Te recordamos que:</span><strong><span style="color: #000000; white-space-collapse: preserve; line-height: 23.8px;"> inscribirse es un compromiso</span></strong><span style="color: #000000; white-space-collapse: preserve; line-height: 23.8px;"> 👀, Solo inscribete en las actividades que estes seguro de poder asistir</span></p>
    <p style="line-height: 170%; margin-top: 12pt; margin-bottom: 12pt;"><strong><span style="color: #000000; white-space-collapse: preserve; line-height: 23.8px;">¡Dale clic al botón a continuación para acceder a la oferta!</span></strong></p>
      </div>
@@ -216,7 +216,7 @@ const createWorkshopInvitationMessage = () => {
    <div class="v-text-align" align="center">
      <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://programaexcelencia.org/becario/oferta" style="height:37px; v-text-anchor:middle; width:146px;" arcsize="11%"  stroke="f" fillcolor="#26ac0c"><w:anchorlock/><center style="color:#ffffff;"><![endif]-->
        <a href="https://programaexcelencia.org/becario/oferta" target="_blank" class="v-button v-font-size" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #ffffff; background-color: #26ac0c; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
-         <span style="display:block;padding:10px 20px;line-height:120%;"><strong>¡Ver calendario!</strong></span>
+         <span style="display:block;padding:10px 20px;line-height:120%;"><strong>¡Ver oferta!</strong></span>
        </a>
        <!--[if mso]></center></v:roundrect><![endif]-->
    </div>

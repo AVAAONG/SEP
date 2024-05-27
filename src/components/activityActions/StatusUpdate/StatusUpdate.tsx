@@ -1,4 +1,5 @@
 'use client';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { Button } from '@nextui-org/button';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/dropdown';
 import { useDisclosure } from '@nextui-org/modal';
@@ -22,7 +23,11 @@ const StatusUpdateButton = ({
     <>
       <Dropdown placement="bottom-end">
         <DropdownTrigger>
-          <Button className="w-full">Cambiar estatus</Button>
+          <Button radius='sm'
+            startContent={<ArrowPathIcon className='w-5 h-5' />}
+            className="w-full">        <span className='hidden md:block w-full'>
+              Cambiar estatus
+            </span></Button>
         </DropdownTrigger>
         <DropdownMenu aria-label="Profile Actions" variant="flat">
           <DropdownItem

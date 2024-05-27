@@ -361,32 +361,27 @@ export const getScholarDoneActivitiesCount = async (scholar_id: string, year: nu
         ],
       },
     }),
-    prisma.volunteerAttendance.findMany({
+    prisma.volunteer.findMany({
       where: {
-        AND: [
-          {
-            scholar: {
-              scholarId: scholar_id,
-            },
-          },
-          {
-            attendance: 'ATTENDED',
-          },
-          {
-            volunteer: {
-              status: 'APPROVED',
-            },
-          },
-        ],
+        status: 'APPROVED',
       },
       include: {
-        volunteer: {
-          include: {
-            volunteer_attendance: true
+        volunteer_attendance: {
+          where: {
+            AND: [
+              {
+                scholar: {
+                  scholarId: scholar_id,
+                },
+              },
+              {
+                attendance: 'ATTENDED'
+              }
+            ],
           }
         }
       }
-    }),
+    })
   ]);
 
   const yearStart = new Date(year, 0, 1);
@@ -399,16 +394,22 @@ export const getScholarDoneActivitiesCount = async (scholar_id: string, year: nu
     chat.start_dates.some((date) => date >= yearStart && date <= yearEnd)
   ).length;
   const volunteers = allVolunteers.filter((volunteer) =>
-    volunteer.volunteer.start_dates.some((date) => date >= yearStart && date <= yearEnd)
+    volunteer.start_dates.some((date) => date >= yearStart && date <= yearEnd)
   );
 
-  const { totalVolunteerHours } = getApprovedAndAttendedVolunteers(volunteers.map((volunteer) => volunteer.volunteer))
+  const volunteersWithAttendance = volunteers.map(volunteer => ({
+    ...volunteer,
+    volunteer_attendance: volunteer.volunteer_attendance.map(va => ({
+      ...va
+    }))
+  }));
+  const { totalVolunteerHours } = getApprovedAndAttendedVolunteers(volunteersWithAttendance)
 
   return [workshops, chats, totalVolunteerHours];
 };
 
 export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) => {
-  const [workshops, chats] = await prisma.$transaction([
+  const [workshops, chats, volunteers] = await prisma.$transaction([
     prisma.workshop.findMany({
       where: {
         AND: [
@@ -489,7 +490,13 @@ export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) =>
                 },
               },
             },
-
+          },
+          {
+            volunteer_attendance: {
+              some: {
+                attendance: 'ENROLLED',
+              },
+            },
           },
           {
             status: 'SENT',
@@ -498,7 +505,7 @@ export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) =>
       },
     })
   ]);
-  return [chats, workshops];
+  return [...workshops, ...chats, ...volunteers];
 };
 
 export const setProbationToScholar = async (scholarId: string, data: Probation) => {
@@ -824,6 +831,73 @@ export const updateProfilePicture = async (id: string, image: string | null) => 
   });
   return scholar;
 }
+
+export const updateAdminProfilePicture = async (id: string, image: string) => {
+  const scholar = await prisma.adminProfile.update({
+    where: {
+      id,
+    },
+    data: {
+      profilePic: image,
+      user: {
+        update: {
+          image: image
+        }
+      }
+    }
+  });
+  return scholar;
+}
+
+
+
+export const addDOSExchangeProgramApplication = async (scholarId: string, DOSExchangeProgramData: Prisma.DOSExchangeProgramCreateInput) => {
+  const scholar = await prisma.scholar.update({
+    where: {
+      id: scholarId
+    },
+    data: {
+      dos_exchange_program_applications: {
+        create: {
+          ...DOSExchangeProgramData
+        }
+      }
+    }
+  });
+  return scholar;
+}
+
+export const updateDOSExchangeProgramApplicationd = async (DOSProgramExchangeId: string, data: Prisma.DOSExchangeProgramUpdateInput) => {
+  const DOSExchangeProgramApplication = await prisma.dOSExchangeProgram.update({
+    where: {
+      id: DOSProgramExchangeId,
+    },
+    data
+  })
+  console.log(DOSExchangeProgramApplication);
+  return DOSExchangeProgramApplication;
+}
+
+export const deleteDOSExchangeProgramApplication = async (DOSExchangeProgramId: string) => {
+  const DOSExchangeProgramApplication = await prisma.dOSExchangeProgram.delete({
+    where: {
+      id: DOSExchangeProgramId,
+    },
+  })
+  return DOSExchangeProgramApplication;
+}
+
+
+
+export const getScholarDOSExchangeProgramApplications = async (scholarId: string) => {
+  const DOSExchangeProgramApplication = await prisma.dOSExchangeProgram.findMany({
+    where: {
+      scholar_id: scholarId
+    },
+  })
+  return DOSExchangeProgramApplication;
+}
+
 
 
 export const getScholarsDataForEdusa = async () => {

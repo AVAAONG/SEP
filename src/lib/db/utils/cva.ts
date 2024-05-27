@@ -2,7 +2,7 @@
 import { Prisma, Scholar } from "@prisma/client";
 import { prisma } from "./prisma";
 
-export const getCvaInformationByScholar = async (scholarId: string) => {
+export const getScholarCvaInformation = async (scholarId: string) => {
     const cvaInformation = await prisma.scholarCVAInformation.findUnique({
         where: {
             scholarId
@@ -51,6 +51,17 @@ export const createCvaModule = async (data: Prisma.ScholarCvaModuleCreateInput, 
 }
 
 
+
+export const updateCVAModule = async (cvaModuleId: string, data: Prisma.ScholarCvaModuleCreateInput) => {
+    const cvaModule = await prisma.scholarCvaModule.update({
+        where: {
+            id: cvaModuleId,
+        },
+        data
+    })
+    return cvaModule;
+}
+
 export type ScholarsCvaInformation =
     (Pick<Scholar, 'id' | 'first_names' | 'last_names' | 'photo' | 'dni'> & {
         cva_information?: Prisma.ScholarCVAInformationGetPayload<{
@@ -60,6 +71,18 @@ export type ScholarsCvaInformation =
 
 export const getScholarsCvaInformation = async (): Promise<ScholarsCvaInformation[]> => {
     const cvaInformation = await prisma.scholar.findMany({
+        where: {
+            program_information: {
+                scholar_condition: {
+                    equals: 'ACTIVE',
+                },
+                chapter: {
+                    id: {
+                        equals: 'Rokk6_XCAJAg45heOEzYb',
+                    },
+                },
+            },
+        },
         select: {
             id: true,
             first_names: true,
@@ -81,3 +104,14 @@ export const getScholarsCvaInformation = async (): Promise<ScholarsCvaInformatio
     })
     return cvaInformation;
 }
+
+
+export const deleteCvaModule = async (cvaModuleId: string) => {
+    const academicPeriod = await prisma.scholarCvaModule.delete({
+        where: {
+            id: cvaModuleId,
+        },
+    })
+    return academicPeriod;
+}
+

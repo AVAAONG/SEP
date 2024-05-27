@@ -1,12 +1,12 @@
 'use server';
-import { Prisma, VolunteerAttendance, VolunteerStatus } from "@prisma/client";
+import { Prisma, ScholarAttendance, VolunteerAttendance, VolunteerStatus } from "@prisma/client";
 import { prisma } from "./prisma";
 
 export const createExternalVolunteer = async (volunteer: Prisma.VolunteerCreateInput,
 	scholarId: string,
 	asignedHours: number
 ) => {
-	await prisma.volunteer.create({
+	return await prisma.volunteer.create({
 		data: {
 			kind_of_volunteer: 'EXTERNAL',
 			status: 'PENDING',
@@ -78,7 +78,7 @@ export const getExternalVolunteer = async () => {
 }
 
 
-export const changeScholarVolunteerStatus = async (volunteerId: string, volunteerStatus: VolunteerStatus) => {
+export const changeVolunteerStatus = async (volunteerId: string, volunteerStatus: VolunteerStatus) => {
 	await prisma.volunteer.update({
 		where: {
 			id: volunteerId
@@ -99,9 +99,7 @@ export const updateVolunteer = async (volunteerId: string, volunteer: Prisma.Vol
 		where: {
 			id: volunteerId
 		},
-		data: {
-			...volunteer
-		}
+		...volunteer
 	});
 	return createdVolunteer;
 };
@@ -134,24 +132,28 @@ export const addScholarToVolunteer = async (
 					volunteer_attendance: true,
 				}
 			});
-
-			await prisma.volunteerAttendance.create({
-				data: {
-					volunteer: {
-						connect: {
-							id: volunteerId,
+			const totalAttendance = workshop?.volunteer_attendance.filter(attendance => attendance.attendance === 'ENROLLED').length || 0;
+			if (totalAttendance >= workshop?.avalible_spots!) { }
+			else {
+				await prisma.volunteerAttendance.create({
+					data: {
+						volunteer: {
+							connect: {
+								id: volunteerId,
+							},
 						},
-					},
-					scholar: {
-						connect: {
-							scholarId,
+						scholar: {
+							connect: {
+								scholarId,
+							},
 						},
+						attendance: 'ENROLLED',
+						asigned_hours: 0
 					},
-					attendance: 'ENROLLED',
-					asigned_hours: 0
-				},
-			});
+				});
+			}
 		}
+
 	});
 }
 
@@ -241,3 +243,17 @@ export const getVolunteers = async () => {
 	});
 	return volunteers;
 }
+
+export const changeScholarVolunteerAttendance = async (
+	volunteerAttendanceId: string,
+	attendance: ScholarAttendance
+) => {
+	await prisma.volunteerAttendance.update({
+		where: {
+			id: volunteerAttendanceId,
+		},
+		data: {
+			attendance: attendance,
+		},
+	});
+};

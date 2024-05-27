@@ -1,18 +1,28 @@
 import NextEventsList from '@/components/NextEventsList';
 import Calendar from '@/components/calendar/Calendar';
+import formatActivitiesForCalendarPanel from '@/components/calendar/utils';
 import PanelCard, { PanelCardProps } from '@/components/commons/PanelCard';
 import { getActivitiesByYear } from '@/lib/db/utils/Workshops';
 import { getScholarsCountByCondition } from '@/lib/db/utils/users';
-import { formatActivityEventsForBigCalendar } from '@/lib/utils';
-import { Chat, Workshop } from '@prisma/client';
+import { Chat, Volunteer, Workshop } from '@prisma/client';
 import { chatIcon, userIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs';
 
 const page = async () => {
   const actualYear = new Date().getFullYear();
   const activeScholarsCount = await getScholarsCountByCondition('ACTIVE', 'Rokk6_XCAJAg45heOEzYb');
   const [workshops, chats, volunteer] = await getActivitiesByYear(actualYear);
-  const events = formatActivityEventsForBigCalendar([...workshops, ...chats], 'admin');
-  const sentActivities: (Workshop | Chat)[] = [...workshops, ...chats]
+  const events = formatActivitiesForCalendarPanel([...workshops, ...chats, ...volunteer], 'admin');
+  const volunteerMapped = volunteer.map((volunteer) => {
+    return {
+      ...volunteer,
+      activity_status: volunteer.status,
+    };
+  });
+  const sentActivities: (Workshop | Chat | Volunteer)[] = [
+    ...workshops,
+    ...chats,
+    ...volunteerMapped,
+  ]
     .filter((activity) => activity.activity_status === 'SENT')
     .sort((a, b) => new Date(a.start_dates[0]).getTime() - new Date(b.start_dates[0]).getTime());
 
@@ -22,12 +32,18 @@ const page = async () => {
   const chatsDoneCount = chats.filter(
     (chat) => chat.activity_status === 'ATTENDANCE_CHECKED'
   ).length;
-  const volunteerHours = volunteer.reduce((total, volunteer) => {
-    if (volunteer.volunteer.status === 'APPROVED') {
-      return total + volunteer.asigned_hours;
-    } else {
-      return total;
+
+  const volunteerHours = volunteer.reduce((acc, volunteer) => {
+    if (volunteer.status === 'APPROVED') {
+      return (
+        acc +
+        volunteer.volunteer_attendance.reduce(
+          (acc, attendance) => acc + attendance.asigned_hours,
+          0
+        )
+      );
     }
+    return acc;
   }, 0);
 
   const cardContent: PanelCardProps[] = [

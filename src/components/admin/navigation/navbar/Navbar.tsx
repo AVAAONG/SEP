@@ -1,9 +1,11 @@
 'use client';
 import ThemeToggleButton from '@/components/scholar/NavigationBar/ThemeToggleButton';
 import ProfileDropdown from '@/components/scholar/ProfileDropdown';
+import { getBlobImage } from '@/lib/azure/azure';
 import { sidebarAtom } from '@/lib/state/mainState';
 import { useAtom } from 'jotai';
 import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { MenuIcon } from '../../../../../public/svgs/svgs';
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -13,6 +15,16 @@ const Navbar = () => {
   const { data: session } = useSession();
   const setUpSidebar = () => (isOpen ? setSidebar(false) : setSidebar(true));
   useSWR(`/api/setAuthCookie?cookieValue=admin`, fetcher);
+  const [image, setImage] = useState<string | null | undefined>(' ');
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      const blobImage = await getBlobImage(session?.user?.image);
+      setImage(blobImage || ' ');
+    };
+
+    fetchImage();
+  }, [session?.user?.image]);
 
   return (
     <nav className="block h-12 w-full left-0 right-0 top-0 mb-4">
@@ -38,7 +50,7 @@ const Navbar = () => {
             <ProfileDropdown
               name={session?.user?.name || ' '}
               email={session?.user?.email || ' '}
-              image={session?.user?.image || ' '}
+              image={image}
               type="admin"
             />
           </div>

@@ -8,8 +8,7 @@ import { Cell, CellValue, Column } from 'react-table';
 
 export interface IScholarAttendanceInfoNoPriv {
   id: string;
-  first_names: string;
-  last_names: string;
+  name: string;
   photo: string | null;
   email: string | null;
   whatsAppNumber: string | null;
@@ -26,7 +25,7 @@ const ScholarAttendanceInfoNoPriv: Column<IScholarAttendanceInfoNoPriv>[] = [
   },
   {
     Header: 'Nombre',
-    accessor: (row: IScholarAttendanceInfoNoPriv) => `${row.first_names} ${row.last_names}`,
+    accessor: 'name',
     Cell: ({ value, cell }: { value: CellValue; cell: Cell<IScholarAttendanceInfoNoPriv> }) => {
       return (
         <div className="flex items-center w-fit">

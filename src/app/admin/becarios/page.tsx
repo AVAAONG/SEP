@@ -9,7 +9,7 @@ const TAB_OPTIONS = [
   { key: 'collage', title: 'Universidad' },
   { key: 'cva', title: 'CVA' },
   // { key: 'job', title: 'Trabajo' },
-  { key: 'activities', title: 'Actividades' },
+  { key: 'activities', title: 'Seguimiento' },
   // { key: 'contact', title: 'Datos de contacto' },
 ];
 
@@ -18,21 +18,23 @@ const page = async ({
 }: {
   searchParams?: {
     selectedKey:
-    | 'general'
-    | 'collage'
-    | 'cva'
-    | 'job'
-    | 'mentorship'
-    | 'activities'
-    | 'contact'
-    | undefined;
+      | 'general'
+      | 'collage'
+      | 'cva'
+      | 'job'
+      | 'mentorship'
+      | 'activities'
+      | 'contact'
+      | undefined;
   };
 }) => {
   const view = searchParams?.selectedKey;
   const scholars = await getScholarsWithAllData();
   const scholarsPropertiesCount = countScholarGeneralProperties(scholars);
 
-  const probationI = Number(((scholarsPropertiesCount.status.PROBATION_I / scholars.length) * 100).toFixed(0))
+  const probationI = Number(
+    ((scholarsPropertiesCount.status.PROBATION_I / scholars.length) * 100).toFixed(0)
+  );
   const probationII = Number(
     ((scholarsPropertiesCount.status.PROBATION_II / scholars.length) * 100).toFixed(0)
   );

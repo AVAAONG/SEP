@@ -45,8 +45,7 @@ const formatScholarData = async (scholar: Scholar, attendanceMap: Map<string, Sc
     const attendance = attendanceMap.get(scholar.id);
     return {
         id: scholar.id,
-        first_names: scholar.first_names,
-        last_names: scholar.last_names,
+        name: scholar.first_names + ' ' + scholar.last_names,
         email: scholar.email,
         whatsAppNumber: scholar.whatsapp_number,
         attendance: attendance as ScholarAttendance,

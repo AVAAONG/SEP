@@ -89,13 +89,13 @@ const AdminCreationForm: React.FC<AdminCreationFormProps> = ({
                 label="Capitulo"
                 labelPlacement="outside"
               >
-                <SelectItem key="J4ZlF-eg2fTL9W7hnxRe3" value="CARACAS">
+                <SelectItem key="Rokk6_XCAJAg45heOEzYb" value="Rokk6_XCAJAg45heOEzYb">
                   Caracas
                 </SelectItem>
-                <SelectItem key="ZULIA" value="ZULIA">
+                <SelectItem key="H0rvqSucbop6uozNUpuC-" value="H0rvqSucbop6uozNUpuC-">
                   Zulia
                 </SelectItem>
-                <SelectItem key="CARABOBO" value="CARABOBO">
+                <SelectItem key="VYmgeeUPWwh_P_myJ1PCJ" value="VYmgeeUPWwh_P_myJ1PCJ">
                   Carabobo
                 </SelectItem>
               </Select>
@@ -112,14 +112,18 @@ const AdminCreationForm: React.FC<AdminCreationFormProps> = ({
         />
         <div className="flex flex-col md:flex-row gap-4 ">
           <div className="w-full">
-            <Select
-              isRequired={true}
-              {...register('allowedActions_id')}
-              label="Capacidades"
-              labelPlacement="outside"
-            >
-              <SelectItem key={'1qX5_TAyd-1hZBEVTrNnY'} value={'1qX5_TAyd-1hZBEVTrNnY'}>
+            <Select isRequired={true} {...register('role_id')} label="Rol" labelPlacement="outside">
+              <SelectItem key={'4ERMUKjj33LSXplU6dg5N'} value={'4ERMUKjj33LSXplU6dg5N'}>
+                Coordinador de Projectos
+              </SelectItem>
+              <SelectItem key={'CheUBJvQ5Bxl_BkWZRDv-'} value={'CheUBJvQ5Bxl_BkWZRDv-'}>
                 Super Administrador
+              </SelectItem>
+              <SelectItem key={'LMLe7Jiv9E2O2Qw3rdxjd'} value={'LMLe7Jiv9E2O2Qw3rdxjd-'}>
+                Administrador de capitulo
+              </SelectItem>
+              <SelectItem key={'W7x4qZmntsQLMOEwm4Z7q'} value={'W7x4qZmntsQLMOEwm4Z7q-'}>
+                Coordinador de Chats
               </SelectItem>
             </Select>
           </div>

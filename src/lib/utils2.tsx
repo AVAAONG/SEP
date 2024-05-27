@@ -168,6 +168,10 @@ export const parseVolunteerProject = (value: VolunteerProject | null | undefined
       return 'Chat clubs';
     case 'EXTERNAL':
       return 'Externo';
+    case 'SCHOLARS_COMMITTEE':
+      return 'Comité de becarios';
+    case 'OTHER':
+      return 'Otro';
     default:
       return value;
   }
@@ -178,6 +182,6 @@ export const getCalendarId = (
 ) => {
   if ('level' in activity) return CHAT_CALENDAR_ID;
   else if ('kind_of_volunteer' in activity) return VOLUNTEERS_CALENDAR_ID;
-  else if ('year' in activity) return WORKSHOP_CALENDAR_ID;
+  else if ('asociated_skill' in activity) return WORKSHOP_CALENDAR_ID;
   else return 'primary';
 };

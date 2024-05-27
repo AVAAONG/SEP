@@ -1,9 +1,9 @@
 import { ChatsWithAllData } from "@/components/table/columns/chatsColumns";
 import { parseChatLevelFromDatabase, parseModalityFromDatabase, parseWorkshopStatusFromDatabase } from "@/lib/utils2";
 import { KindOfSpeaker } from "@prisma/client";
-import AdminChatColumns from "./columns";
+import { IAdminChatColumns } from "./columns";
 
-const createAdminChatsObjectForTable = (chats: ChatsWithAllData[]): AdminChatColumns[] => {
+const createAdminChatsObjectForTable = (chats: ChatsWithAllData[]): IAdminChatColumns[] => {
 
     return chats.map((chat) => {
         const speakerNames: string[] = [];

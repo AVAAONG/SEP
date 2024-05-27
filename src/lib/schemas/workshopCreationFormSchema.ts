@@ -9,10 +9,7 @@ const workshopCreationFormSchema = z
       .object({
         date: z
           .string()
-          .min(1, { message: 'Debes especificar la fecha' })
-          .refine((date) => new Date(date) >= new Date(), {
-            message: 'La fecha no puede ser menor a la actual',
-          }),
+          .min(1, { message: 'Debes especificar la fecha' }),
         startHour: z.string().min(1, { message: 'Debes especificar la hora de inicio' }),
         endHour: z.string().min(1, { message: 'Debes especificar la hora de cierre' }),
       })
@@ -50,9 +47,16 @@ const workshopCreationFormSchema = z
       .min(1, { message: 'Debe tener al menos un cupo disponible' }),
     platformOnline: z.string().trim().optional(),
     platformInPerson: z.string().trim().optional(),
-    speakersId: z.string().min(1, { message: 'Debes elegir al menos un facilitador' }).trim(),
+    speakers: z.array(z.object({
+      value: z.string(),
+      label: z.string(),
+      email: z.string().nullable(),
+    })),
     year: z.nativeEnum(WorkshopYear).array().min(1, { message: 'Debes elegir al menos un año' }),
     description: z.string().trim().optional(),
+    meetingId: z.string().trim().nullable().optional(),
+    meetingLink: z.string().trim().nullable().optional(),
+    meetingPass: z.string().trim().nullable().optional(),
   })
   .refine((data) => {
     let isValid = true;

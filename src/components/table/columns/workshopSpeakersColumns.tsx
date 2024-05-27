@@ -9,7 +9,7 @@ import { CurriculumIcon } from '../../../../public/svgs/svgs';
 const workshopSpeakersColumns: Column<WorkshopSpeaker>[] = [
   {
     Header: 'Nombre',
-    accessor: (row: WorkshopSpeaker) => `${row.first_names} ${row.last_names} ${row.job_company}`,
+    accessor: 'name',
     Cell: ({ cell }: { cell: Cell<WorkshopSpeaker> }) => (
       <Link
         href={`facilitadores/${cell.row.original.id ? `${cell.row.original.id}` : ''}`}

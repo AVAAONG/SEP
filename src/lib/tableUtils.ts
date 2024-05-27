@@ -12,8 +12,7 @@ export const formatScholarDataForAttendanceTable = async (
     const kindOfActivity = 'chat_id' in attendance ? 'chat' : 'workshop';
     return {
       id: scholar.id,
-      first_names: scholar.first_names,
-      last_names: scholar.last_names,
+      name: scholar.first_names + ' ' + scholar.last_names,
       email: scholar.email,
       phone_number: scholar.cell_phone_Number,
       whatsAppNumber: scholar.whatsapp_number,

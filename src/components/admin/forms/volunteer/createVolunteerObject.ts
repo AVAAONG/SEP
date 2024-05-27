@@ -1,12 +1,12 @@
 
 
-import { formatDatesClient } from "@/lib/calendar/clientUtils";
+import { formatDates } from "@/lib/calendar/clientUtils";
 import volunteerSchema from "@/lib/schemas/volunteerSchema";
 import { Prisma, VolunteerStatus } from "@prisma/client";
 import { z } from "zod";
 
-const createVolunteerObject = (data: z.infer<typeof volunteerSchema>, status: VolunteerStatus) => {
-    const dates = formatDatesClient(data.dates); //client formating
+const createVolunteerObject = async (data: z.infer<typeof volunteerSchema>, status: VolunteerStatus) => {
+    const dates = await formatDates(data.dates); //client formating
     let volunteer: Prisma.VolunteerCreateArgs = {
         data: {
             title: data.title,

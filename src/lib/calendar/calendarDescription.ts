@@ -13,7 +13,7 @@ const createCalendarDescription = (
   meetingPassword?: string
 ) => {
   const { modality, platform, description, speakersData } = activity;
-  const speakersNames = speakersData.map((speaker) => speaker.speakerName);
+  const speakersNames = speakersData.map((speaker) => speaker.label);
 
   let calendarCommonDescription = `<b>Modalidad:</b> ${parseModalityFromDatabase(modality)}
 ${speakersData.length === 1

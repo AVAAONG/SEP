@@ -4,18 +4,20 @@ import ScholarColumnWidget from '../commons/ScholarWidget';
 
 export interface ScholarActivitiesInformationColumnsProps {
   id: string;
-  names: string;
+  name: string;
   profilePhoto: string | null;
   whatsAppNumber: string | null;
+  dni: string;
   email: string | null;
   doneWorkshops: number | undefined;
   doneChats: number | undefined;
   doneVolunteerHours: number | undefined;
+  scholarGrade: number | undefined;
 }
 const scholarActivitiesInformationColumns: Column<ScholarActivitiesInformationColumnsProps>[] = [
   {
     Header: 'Nombre',
-    accessor: 'names',
+    accessor: 'name',
     Cell: ({
       value,
       cell,
@@ -29,6 +31,10 @@ const scholarActivitiesInformationColumns: Column<ScholarActivitiesInformationCo
         scholarPhoto={cell.row.original.profilePhoto}
       />
     ),
+  },
+  {
+    Header: 'Cédula',
+    accessor: 'dni',
   },
   {
     Header: 'Numero WhatsApp',
@@ -49,6 +55,10 @@ const scholarActivitiesInformationColumns: Column<ScholarActivitiesInformationCo
   {
     Header: 'Horas de voluntariado',
     accessor: 'doneVolunteerHours',
+  },
+  {
+    Header: 'Nota académica',
+    accessor: 'scholarGrade',
   },
 ];
 

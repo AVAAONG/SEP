@@ -29,3 +29,57 @@ const volunteerAttendanceWithVolunteer = Prisma.validator<Prisma.VolunteerAttend
 });
 
 export type VolunteerAttendanceWithVolunteer = Prisma.VolunteerAttendanceGetPayload<typeof volunteerAttendanceWithVolunteer>;
+
+
+
+const volunteerAttendanceWithScholar = Prisma.validator<Prisma.VolunteerAttendanceDefaultArgs>()({
+  include: {
+    scholar: {
+      include: {
+        scholar: true,
+      }
+    },
+  },
+});
+
+export type VolunteerAttendanceWithScholar = Prisma.VolunteerAttendanceGetPayload<typeof volunteerAttendanceWithScholar>;
+
+
+const scholarWithAllData = Prisma.validator<Prisma.ScholarDefaultArgs>()({
+  include: {
+    program_information: {
+      include: {
+        attended_chats: true,
+        attended_workshops: true,
+        volunteerAttendance: true,
+      },
+    },
+    collage_information: {
+      include: {
+        collage_period: true,
+      },
+    },
+    cva_information: {
+      include: {
+        modules: true,
+      },
+    },
+  },
+});
+export type ScholarWithAllData = Prisma.ScholarGetPayload<typeof scholarWithAllData>;
+
+const schollarCollageInformationWithCollagePeriod = Prisma.validator<Prisma.ScholarCollageInformationDefaultArgs>()({
+  include: {
+    collage_period: true,
+  },
+});
+
+export type SchollarCollageInformationWithCollagePeriod = Prisma.ScholarCollageInformationGetPayload<typeof schollarCollageInformationWithCollagePeriod>;
+
+const schollarCvaInformationWithModules = Prisma.validator<Prisma.ScholarCVAInformationDefaultArgs>()({
+  include: {
+    modules: true,
+  },
+});
+
+export type SchollarCvaInformationWithModules = Prisma.ScholarCVAInformationGetPayload<typeof schollarCvaInformationWithModules>;

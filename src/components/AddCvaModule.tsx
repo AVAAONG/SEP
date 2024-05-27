@@ -1,9 +1,10 @@
 'use client';
-import { uploadBlob } from '@/lib/azure/azure';
+import { deleteBlob, deleteBlobFile, getBlobFile, uploadBlob } from '@/lib/azure/azure';
 import { MODALITY } from '@/lib/constants';
-import { createCvaModule } from '@/lib/db/utils/cva';
+import { createCvaModule, updateCVAModule } from '@/lib/db/utils/cva';
 import scholarCVAModuleSchema from '@/lib/schemas/scholar/scholarCVAModuleSchema';
 import { revalidateSpecificPath } from '@/lib/serverAction';
+import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@nextui-org/button';
 import {
@@ -17,11 +18,12 @@ import {
   SelectItem,
   useDisclosure,
 } from '@nextui-org/react';
-import { Prisma } from '@prisma/client';
-import { BaseSyntheticEvent, useState } from 'react';
+import { Prisma, ScholarCvaModule } from '@prisma/client';
+import { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
+import FileInput from './forms/common/FileInput';
 
 const readFileAsBase64 = (file: File | null): Promise<string> => {
   if (file) {
@@ -36,18 +38,37 @@ const readFileAsBase64 = (file: File | null): Promise<string> => {
   }
 };
 
-const AddCvaModule = ({ cvaInformationId }: { cvaInformationId: string | null }) => {
+const AddCvaModule: React.FC<{
+  cvaInformationId: string | null;
+  edit: boolean;
+  cvaModule: ScholarCvaModule | null;
+}> = ({ cvaInformationId, edit, cvaModule }) => {
   const [record, setRecord] = useState<File | null>(null);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting, isValid },
+    formState: { isSubmitting, isValid, isDirty },
     reset,
     setValue,
   } = useForm<z.infer<typeof scholarCVAModuleSchema>>({
     resolver: zodResolver(scholarCVAModuleSchema),
   });
+  const [href, setHref] = useState<string | undefined | null>(undefined);
+
+  useEffect(() => {
+    if (cvaModule?.record) {
+      getBlobFile(cvaModule.record).then(setHref);
+    }
+  }, [cvaModule, isDirty]);
+
+  if (edit && cvaModule) {
+    setValue('module', cvaModule.module);
+    cvaModule.modality && setValue('modality', cvaModule.modality);
+    cvaModule.schedule && setValue('schedule', cvaModule.schedule);
+    setValue('qualification', cvaModule.qualification);
+  }
+
   const saveData = async (
     data: z.infer<typeof scholarCVAModuleSchema>,
     event: BaseSyntheticEvent<object, any, any> | undefined
@@ -61,23 +82,32 @@ const AddCvaModule = ({ cvaInformationId }: { cvaInformationId: string | null })
       schedule: data.schedule,
     };
     if (record) {
+      if (edit) await deleteBlob(cvaModule?.record!);
       const recordBase64 = await readFileAsBase64(record);
       const recordForDb = await uploadBlob(recordBase64, 'application/pdf', 'files');
       scholarCvaModuleInfo.record = recordForDb!;
     }
-    await createCvaModule(scholarCvaModuleInfo, cvaInformationId);
+    if (edit && cvaModule) await updateCVAModule(cvaModule.id, scholarCvaModuleInfo);
+    else await createCvaModule(scholarCvaModuleInfo, cvaInformationId);
     await revalidateSpecificPath('becario/cva');
+    reset();
     onClose();
   };
   return (
     <>
-      <Button
-        isDisabled={cvaInformationId === null}
-        onPress={onOpen}
-        className="col-span-2 lg:col-span-1 text-white bg-green-600 hover:bg-green-500 hover:text-green-900 font-medium rounded-lg text-sm px-3 py-1.5 text-center"
-      >
-        Agregar registro
-      </Button>
+      {!edit ? (
+        <Button
+          isDisabled={cvaInformationId === null}
+          onPress={onOpen}
+          className="col-span-2 lg:col-span-1 text-white bg-green-600 hover:bg-green-500 hover:text-green-900 font-medium rounded-lg text-sm px-3 py-1.5 text-center"
+        >
+          Agregar registro
+        </Button>
+      ) : (
+        <Button isIconOnly variant="light" onPress={onOpen}>
+          <PencilSquareIcon className="w-4 h-4" />
+        </Button>
+      )}
       <Modal
         size="3xl"
         isOpen={isOpen}
@@ -175,37 +205,20 @@ const AddCvaModule = ({ cvaInformationId }: { cvaInformationId: string | null })
                       );
                     }}
                   />
-                  <Controller
-                    name="record"
+                  <FileInput
                     control={control}
-                    rules={{ required: true }}
-                    shouldUnregister={true}
-                    render={({ field, formState }) => {
-                      return (
-                        <div className="flex gap-2 text-sm flex-col col-span-2 md:col-span-1">
-                          <label htmlFor="recorInput">
-                            Comprobante del modulo (Solo documentos PDF)
-                          </label>
-                          <input
-                            id="recorInput"
-                            value={field.value?.toString()}
-                            onChange={async (e) => {
-                              setRecord((prev) => {
-                                prev = e?.target.files?.[0] || null;
-                                return prev;
-                              });
-                              field.onChange(e);
-                            }}
-                            type="file"
-                            accept=".pdf, .jpg, .jpeg, .png"
-                            className="flex items-center"
-                            placeholder="Constancia"
-                          />
-                        </div>
-                      );
+                    label="Comprobante del modulo"
+                    name="record"
+                    acceptedFileTypes={['.pdf']}
+                    onFileChange={async (file) => {
+                      if (cvaModule?.record) await deleteBlobFile(cvaModule?.record);
+                      setRecord((prev) => {
+                        prev = file?.target.files?.[0] || null;
+                        return prev;
+                      });
                     }}
+                    existingFileUrl={href}
                   />
-
                   <Controller
                     name="schedule"
                     control={control}

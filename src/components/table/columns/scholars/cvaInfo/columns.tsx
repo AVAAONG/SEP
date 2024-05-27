@@ -7,8 +7,7 @@ import ScholarColumnWidget from '../commons/ScholarWidget';
 
 export interface ScholarCvaInformationColumnsProps {
   id: string;
-  first_names: string;
-  last_names: string;
+  name: string;
   profilePhoto: string | null;
   dni: string;
   isInCva: string;
@@ -26,7 +25,7 @@ export interface ScholarCvaInformationColumnsProps {
 const scholarCvaInformationColumns: Column<ScholarCvaInformationColumnsProps>[] = [
   {
     Header: 'Nombre',
-    accessor: (row: ScholarCvaInformationColumnsProps) => `${row.first_names} ${row.last_names}`,
+    accessor: 'name',
     Cell: ({
       value,
       cell,

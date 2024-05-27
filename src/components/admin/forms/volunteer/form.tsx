@@ -1,28 +1,43 @@
 'use client';
 import DateInput from '@/components/commons/DateInput';
 import PlatformInput from '@/components/commons/PlatformInput';
+import createVolunteerInvitationMessage from '@/components/emailTemplateMessage/VolunteerInvitationMessage';
 import { MODALITY, VOLUNTEER_PROJECT } from '@/lib/constants';
 import { createVolunteer, updateVolunteer } from '@/lib/db/utils/volunteer';
 import volunteerSchema from '@/lib/schemas/volunteerSchema';
+import { sendActivitiesEmail } from '@/lib/sendEmails';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input, Textarea } from '@nextui-org/input';
 import { Select, SelectItem } from '@nextui-org/select';
-import { VolunteerStatus } from '@prisma/client';
+import { Volunteer, VolunteerStatus } from '@prisma/client';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 import FormButtonGroup, { ButtonGroupEventName } from '../commons/FormButtonGroup';
 import { default as createVolunteerObject } from './createVolunteerObject';
+import formatVolunteer from './formatVolunteerToEdit';
 
 type Schema = z.infer<typeof volunteerSchema>;
-type FormValues = Schema & { id: string };
 interface IVolunteerForm {
   kind: 'edit' | 'create';
-  valuesToUpdate?: FormValues;
+  valuesToUpdate?: Volunteer;
+  showEdit: boolean;
+  showSchedule: boolean;
+  showCreate: boolean;
+  showSend: boolean;
 }
 
-const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
+const VolunteerForm: React.FC<IVolunteerForm> = ({
+  kind,
+  valuesToUpdate,
+  showCreate,
+  showEdit,
+  showSend,
+  showSchedule,
+}) => {
+  const router = useRouter();
   const methods = useForm<Schema>({
     resolver: zodResolver(volunteerSchema),
   });
@@ -53,12 +68,12 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
 
   useEffect(() => {
     if (valuesToUpdate) {
-      for (const key in valuesToUpdate) {
-        if (key === 'id') continue; // Skip if the key is 'id'
-        if (key in valuesToUpdate) {
-          const value = valuesToUpdate[key as keyof FormValues];
+      const volunteer = formatVolunteer(valuesToUpdate);
+      for (const key in volunteer) {
+        if (key in volunteer) {
+          const value = volunteer[key as keyof Schema];
           if (value !== undefined && value !== null) {
-            setValue(key as keyof Omit<FormValues, 'id'>, value);
+            setValue(key as keyof Schema, value);
           }
         }
       }
@@ -80,12 +95,22 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
         status = 'SENT';
         break;
       case 'edit':
-        status = 'APPROVED';
+        status = valuesToUpdate?.status as VolunteerStatus; // if volunteer is already created, keep the status as it is
         break;
     }
-    const volunteer = createVolunteerObject(data, status);
+    const volunteer = await createVolunteerObject(data, status);
     if (kind === 'edit' && valuesToUpdate) await updateVolunteer(valuesToUpdate.id, volunteer);
-    if (kind === 'create') await createVolunteer(volunteer);
+    if (kind === 'create') {
+      if (buttonType === 'send') {
+        const volunteerInvitationMessage = createVolunteerInvitationMessage();
+        await sendActivitiesEmail(
+          volunteerInvitationMessage,
+          '¡Se han agregado actividades de voluntariado!'
+        );
+      }
+      const createdVolunteer = await createVolunteer(volunteer);
+      router.push(`/admin/voluntariado/${createdVolunteer.id}`);
+    }
     onReset();
   };
 
@@ -94,9 +119,9 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
       <form
         onSubmit={handleSubmit((data, event) =>
           toast.promise(handleFormSubmit(data, event), {
-            pending: 'Actualizando cambios...',
-            success: 'Cambios aplicados correctamente',
-            error: 'Error al aplicar los cambios',
+            pending: `${kind === 'edit' ? 'Editando' : 'Creando'} actividad...`,
+            success: `Actividad ${kind === 'edit' ? 'editada' : 'creada'} con éxito`,
+            error: `Ocurrió un error al ${kind === 'edit' ? 'editar' : 'crear'} la actividad`,
           })
         )}
         className="grid grid-cols-2 w-full items-center justify-center gap-4"
@@ -121,7 +146,7 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
             );
           }}
         />
-        <DateInput control={control} fieldArray={fieldArray} />
+        <DateInput control={control} fieldArray={fieldArray} haveClosedDate={true} />
         <Controller
           name="beneficiary"
           control={control}
@@ -266,15 +291,13 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
         <Controller
           name="description"
           control={control}
-          rules={{ required: true }}
           render={({ field, formState }) => {
             return (
               <Textarea
                 radius="sm"
-                value={field.value || undefined}
-                onChange={field.onChange}
-                isInvalid={!!formState.errors?.['description']?.message}
-                errorMessage={formState.errors?.['description']?.message?.toString()}
+                {...field}
+                isInvalid={!!formState.errors?.description?.message}
+                errorMessage={formState.errors?.description?.message?.toString()}
                 label="Descripción"
                 labelPlacement="outside"
                 classNames={{
@@ -288,7 +311,10 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({ kind, valuesToUpdate }) => {
         <div className="flex gap-4 col-span-2">
           <FormButtonGroup
             isDisabled={!isValid || isSubmitting}
-            onlyEdit={kind === 'create' ? false : true}
+            showCreate={showCreate}
+            showEdit={showEdit}
+            showSend={showSend}
+            showSchedule={showSchedule}
           />
         </div>
       </form>

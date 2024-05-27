@@ -1,11 +1,12 @@
 import TogleTab from '@/components/TogleTab';
 
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
-import { getSentActivitiesWhereScholarIsNotEnrroled } from '@/lib/db/utils/Workshops';
-import { prisma } from '@/lib/db/utils/prisma';
-import { formatActivitiesForEnrollement } from '@/lib/utils';
 
-import ClientComponent from '@/components/scholar/activitiesToEnrollView';
+import { prisma } from '@/lib/db/utils/prisma';
+
+import formatActivitiesForScholarEnrollementPage from '@/components/scholar/activities/enrollment/lib/format';
+import AcvititiesView from '@/components/scholar/activitiesToEnrollView';
+import { getSentActivitiesWhereScholarIsNotEnrolled } from '@/lib/db/utils/Workshops';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 /**
@@ -33,14 +34,24 @@ const page = async ({
       },
     },
   });
+  const scholarCondition = scholar?.program_information?.scholar_condition;
 
-  if (!sesion || scholar?.program_information?.scholar_condition === 'ALUMNI')
+  if (
+    !sesion ||
+    // scholarCondition === 'ALUMNI' ||
+    scholarCondition === 'RESIGNATION' ||
+    scholarCondition === 'WITHDRAWAL'
+  ) {
     redirect('/accessDenied');
-  else {
-    const [workshops, chats] = await getSentActivitiesWhereScholarIsNotEnrroled(sesion?.scholarId);
+  } else {
     const scholarNames = `${scholar?.first_names.split(' ')[0]}`;
-    const events = formatActivitiesForEnrollement([...workshops, ...chats]);
-
+    const activities = await getSentActivitiesWhereScholarIsNotEnrolled(sesion?.scholarId);
+    const {
+      activitiesForCalendar,
+      workshopFormatedActivities,
+      chatFormatedActivities,
+      volunteerFormatedActivities,
+    } = formatActivitiesForScholarEnrollementPage(activities);
     return (
       <div className="flex flex-col justify-center items-center w-full text-center gap-2 sm:gap-0">
         <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white mb-2">
@@ -64,9 +75,12 @@ const page = async ({
             ]}
           />
         </div>
-        <ClientComponent
+        <AcvititiesView
           selectedKey={selectedKey}
-          events={events}
+          calendarEvents={activitiesForCalendar}
+          chatsToEnroll={chatFormatedActivities}
+          volunteerToEnroll={volunteerFormatedActivities}
+          workshopsToEnroll={workshopFormatedActivities}
           scholar={{
             id: sesion?.scholarId!,
             name: scholarNames,

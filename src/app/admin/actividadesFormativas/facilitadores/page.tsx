@@ -84,7 +84,10 @@ const page = async () => {
         icon: <LinkedinIcon />,
       },
     ];
-    return { ...workshopSpeaker, socialNetworks };
+    return {
+      name: `${workshopSpeaker.first_names} ${workshopSpeaker.last_names}`
+      , ...workshopSpeaker, socialNetworks
+    };
   });
   const [workshopSpeakersWomanCount, workshopSpeakerMenCount] =
     await getWorkshopSpeakersCountByGender();

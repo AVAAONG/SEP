@@ -4,6 +4,7 @@ import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns'
 import { VolunteerWithAllData } from '@/lib/db/types';
 import generateAdminActivityWhatsappMessage from '@/lib/utils/generateAdminActivityWhatsappMessage';
 import { Button, useDisclosure } from '@nextui-org/react';
+import { WhatsAppIcon } from 'public/svgs/SocialNetworks';
 import BasicModal from '../../BasicModal';
 interface GenerateWhatsAppMessageButtonProps {
   activity: WorkshopWithAllData | ChatsWithAllData | VolunteerWithAllData;
@@ -16,8 +17,18 @@ const GenerateWhatsAppMessageButton: React.FC<GenerateWhatsAppMessageButtonProps
 
   return (
     <>
-      <Button className="w-full" onPress={attendanceCheckedModal.onOpen}>
-        Crear mensaje WhatsApp
+      <Button
+        startContent={
+          <div className="w-5 h-5">
+            {' '}
+            <WhatsAppIcon />
+          </div>
+        }
+        className="w-full"
+        radius="sm"
+        onPress={attendanceCheckedModal.onOpen}
+      >
+        <span className="hidden md:block w-full">Mensaje WhatsApp</span>
       </Button>
       <BasicModal
         scroll={true}
@@ -28,7 +39,13 @@ const GenerateWhatsAppMessageButton: React.FC<GenerateWhatsAppMessageButtonProps
         title="Mensaje para WhatsApp"
         Content={() => (
           <div className="flex flex-col">
-            <pre>{generateAdminActivityWhatsappMessage(activity)}</pre>
+            <pre
+              style={{
+                width: '80%',
+              }}
+            >
+              {generateAdminActivityWhatsappMessage(activity)}
+            </pre>
           </div>
         )}
         onConfirm={() => {

@@ -1,10 +1,11 @@
 'use client';
-import { deleteBlob, getBlobFile, uploadBlob } from '@/lib/azure/azure';
+import { deleteBlob, deleteBlobFile, getBlobFile, uploadBlob } from '@/lib/azure/azure';
 import { MODALITY } from '@/lib/constants';
 import { createAcademicPeriod, updateAcademicPeriod } from '@/lib/db/utils/collage';
 import scholarAcademicPeriodCreationSchema from '@/lib/schemas/scholar/scholarAcademicPeriodCreationSchema';
 import { revalidateSpecificPath } from '@/lib/serverAction';
-import { ClipboardIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
+import { formatDateToDisplayInInput, formatDateToStoreInDB } from '@/lib/utils/dates';
+import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@nextui-org/button';
 import {
@@ -19,12 +20,11 @@ import {
   useDisclosure,
 } from '@nextui-org/react';
 import { Prisma, ScholarCollagePeriod } from '@prisma/client';
-import moment from 'moment';
-import Link from 'next/link';
 import { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
+import FileInput from './forms/common/FileInput';
 const readFileAsBase64 = (file: File | null): Promise<string> => {
   if (file) {
     return new Promise((resolve, reject) => {
@@ -52,7 +52,7 @@ const AddCollageAcademicPeriod = ({
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting, isValid },
+    formState: { isSubmitting, isValid, isDirty },
     reset,
     setValue,
   } = useForm<z.infer<typeof scholarAcademicPeriodCreationSchema>>({
@@ -65,11 +65,11 @@ const AddCollageAcademicPeriod = ({
     if (collagePeriod?.record) {
       getBlobFile(collagePeriod.record).then(setHref);
     }
-  }, [collagePeriod]);
+  }, [collagePeriod, isDirty]);
 
   if (edit && collagePeriod) {
-    setValue('start_date', moment(collagePeriod.start_date).format('YYYY-MM-DD'));
-    setValue('end_date', moment(collagePeriod.end_date).format('YYYY-MM-DD'));
+    setValue('start_date', formatDateToDisplayInInput(collagePeriod.start_date));
+    setValue('end_date', formatDateToDisplayInInput(collagePeriod.end_date));
     setValue('current_academic_period', collagePeriod.current_academic_period);
     setValue('class_modality', collagePeriod.class_modality);
     setValue('grade', collagePeriod.grade);
@@ -85,8 +85,8 @@ const AddCollageAcademicPeriod = ({
       class_modality: data.class_modality,
       grade: data.grade,
       current_academic_period: data.current_academic_period,
-      start_date: new Date(data.start_date).toISOString(),
-      end_date: new Date(data.end_date).toISOString(),
+      start_date: formatDateToStoreInDB(data.start_date),
+      end_date: formatDateToStoreInDB(data.end_date),
     };
     if (record) {
       if (edit) await deleteBlob(collagePeriod?.record!);
@@ -254,40 +254,19 @@ const AddCollageAcademicPeriod = ({
                       );
                     }}
                   />
-                  <Controller
-                    name="record"
+                  <FileInput
                     control={control}
-                    rules={{ required: true }}
-                    shouldUnregister={true}
-                    render={({ field, formState }) => {
-                      return (
-                        <div className="flex gap-2 text-sm flex-col col-span-2 md:col-span-1">
-                          {href && (
-                            <Link href={href}>
-                              <ClipboardIcon className="w-4 h-4" />
-                            </Link>
-                          )}
-                          <label htmlFor="recorInput">
-                            Comprobante del modulo (Solo documentos PDF)
-                          </label>
-                          <input
-                            id="recorInput"
-                            value={field.value?.toString()}
-                            onChange={async (e) => {
-                              setRecord((prev) => {
-                                prev = e?.target.files?.[0] || null;
-                                return prev;
-                              });
-                              field.onChange(e);
-                            }}
-                            type="file"
-                            accept=".pdf, .jpg, .jpeg, .png"
-                            className="flex items-center"
-                            placeholder="Adjunta tus últimas notas y promedio obtenido"
-                          />
-                        </div>
-                      );
+                    label="Comprobante del periodo"
+                    name="record"
+                    acceptedFileTypes={['.pdf']}
+                    onFileChange={async (file) => {
+                      if (collagePeriod?.record) await deleteBlobFile(collagePeriod.record);
+                      setRecord((prev) => {
+                        prev = file?.target.files?.[0] || null;
+                        return prev;
+                      });
                     }}
+                    existingFileUrl={href}
                   />
                 </ModalBody>
                 <ModalFooter>

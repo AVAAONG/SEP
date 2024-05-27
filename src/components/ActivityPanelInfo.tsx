@@ -28,7 +28,7 @@ const ActivityPanelInfo: React.FC<ActivityPanelInfoProps> = ({ activity, childre
     platform,
   } = activity;
   return (
-    <section className="flex flex-col md:flex-row gap-4 rounded-lg bg-white dark:bg-gray-900 p-8 ">
+    <section className="flex flex-col lg:flex-row gap-4 rounded-lg bg-white dark:bg-gray-900 p-2 md:p-8 w-full">
       <div className="space-y-3 w-full lg:w-1/2 ">
         <div className="flex flex-col space-y-2 ">
           <div className="flex gap-2 items-center">
@@ -140,7 +140,7 @@ const ActivityPanelInfo: React.FC<ActivityPanelInfoProps> = ({ activity, childre
           </div>
         </div>
       </div>
-      <div className="w-full md:w-1/2 ">{children}</div>
+      <div className="w-full lg:w-1/2 ">{children}</div>
     </section>
   );
 };

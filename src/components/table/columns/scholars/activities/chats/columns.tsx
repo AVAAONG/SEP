@@ -9,7 +9,7 @@ import { KindOfSpeaker } from '@prisma/client';
 import Link from 'next/link';
 import { Column } from 'react-table';
 
-type AdminChatColumns = {
+export type IAdminChatColumns = {
   id: string;
   title: string;
   date: string;
@@ -27,13 +27,13 @@ type AdminChatColumns = {
   attendedScholars: number;
 };
 
-const AdminChatColumns: Column<AdminChatColumns>[] = [
+const AdminChatColumns: Column<IAdminChatColumns>[] = [
   {
     Header: 'Chat',
     accessor: 'title',
     Cell: ({ value, cell }) => {
       return (
-        <Link href={cell.row.original.id ? `/${cell.row.original.id}` : ''}>
+        <Link href={cell.row.original.id ? `chats/${cell.row.original.id}` : ''}>
           <div className="block w-80 overflow-x-scroll">{value}</div>
         </Link>
       );

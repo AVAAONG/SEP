@@ -12,12 +12,13 @@ import { CHAT_CALENDAR_ID, WORKSHOP_CALENDAR_ID } from '@/lib/constants';
 import createZoomMeeting, { updateZoomMeeting } from '@/lib/zoom';
 import { calendar_v3 } from '@googleapis/calendar';
 import { Calendar, setTokens } from '../googleAPI/auth';
+import { getCalendarId } from '../utils2';
 import createCalendarDescription from './calendarDescription';
 import createEventObject from './calendarEventObject';
 import { IChatCalendar, IWorkshopCalendar } from './d';
 import { getMeetEventLink, substractMonths } from './utils';
 
-interface MeetingDetails {
+export interface MeetingDetails {
   meetingLink: string | null | undefined;
   meetingId: string | null | undefined;
   meetingPassword?: string | null | undefined;
@@ -28,7 +29,7 @@ export const createCalendarEvent = async (
   values: IWorkshopCalendar | IChatCalendar
 ): Promise<[string[], MeetingDetails[]]> => {
   await setTokens();
-  const calendarId = 'asociated_skill' in values ? WORKSHOP_CALENDAR_ID : CHAT_CALENDAR_ID;
+  const calendarId = getCalendarId(values);
   let meetingDetails: MeetingDetails[] = [];
   const { platform } = values;
   const [eventDetails, zoomMeetDetails] = await createEventDetails(values);
@@ -81,8 +82,8 @@ const createEventDetails = async (
 
   const attendees = values.speakersData.map((speaker) => {
     return {
-      email: speaker.speakerEmail ? speaker.speakerEmail : 'avaatecnologia@gmail.com',
-      displayName: speaker.speakerName,
+      email: speaker.email ? speaker.email : 'avaatecnologia@gmail.com',
+      displayName: speaker.email,
       organizer: true,
       responseStatus: 'accepted',
     };
@@ -279,7 +280,7 @@ const updateEventDetails = async (
   let eventDetails: calendar_v3.Schema$Event;
 
   const attendees = values.speakersData.map((speaker) => {
-    return { email: speaker.speakerEmail ? speaker.speakerEmail : 'avaatecnologia@gmail.com', displayName: speaker.speakerName };
+    return { email: speaker.email ? speaker.email : 'avaatecnologia@gmail.com', displayName: speaker.label };
   });
 
   if (modality === 'IN_PERSON') {
@@ -336,3 +337,32 @@ const updateEventDetails = async (
   }
   return eventDetails;
 };
+
+export const createCalendar = async () => {
+  await setTokens();
+  const calendars: calendar_v3.Schema$Calendar[] = [
+    // {
+    //   summary: 'Actividades Formativas', // Replace with your Calendar Name
+    //   description: "Calendario de actividades formativas del Programa de Excelencia Académica (ProExcelencia) de AVAA",
+    //   timeZone: 'America/Caracas', // Replace with your Time Zone
+    // },
+    // {
+    //   summary: 'Chat clubs de inglés', // Replace with your Calendar Name
+    //   description: "Calendario de chat clubs de inglés del Programa de Excelencia Académica (ProExcelencia) de AVAA",
+    //   timeZone: 'America/Caracas' // Replace with your Time Zone
+    // },
+    // {
+    //   summary: 'Actividades de voluntariado', // Replace with your Calendar Name
+    //   description: "Calendario de actividades de voluntariado del Programa de Excelencia Académica (ProExcelencia) de AVAA",
+    //   timeZone: 'America/Caracas' // Replace with your Time Zone
+    // },
+  ]
+  calendars.map(async (calendar) => {
+    try {
+      const response = await Calendar.calendars.insert({ requestBody: calendar });
+      console.log('Calendar created successfully: ', response.data);
+    } catch (error) {
+      console.error('Error creating calendar: ', error);
+    }
+  })
+}

@@ -1,4 +1,5 @@
 'use client';
+import { changeScholarCondition } from '@/lib/db/lilb/scholar/utils';
 import { EllipsisHorizontalCircleIcon } from '@heroicons/react/24/outline';
 import { useDisclosure } from '@nextui-org/modal';
 import {
@@ -10,21 +11,12 @@ import {
   DropdownTrigger,
 } from '@nextui-org/react';
 import { useState } from 'react';
-import EditScholarForm from './EditScholarForm';
+import { toast } from 'react-toastify';
 import ProbationForm from './ProbationForm';
-
-type ModalsOpen = {
-  probation: boolean;
-  edit: boolean;
-};
-
 const ScholarDropdown = ({ scholar }) => {
-  const [probationKind, setProbationKind] = useState<'PROBATION_I' | 'PROBATION_II'>();
   const [dropdownIsOpen, setDropdownOpen] = useState(false);
-  const [editModalIsOpen, setEditModalOpen] = useState(false);
   const probation1 = useDisclosure();
   const probation2 = useDisclosure();
-  const edit = useDisclosure();
   return (
     <>
       <Dropdown isOpen={dropdownIsOpen} onOpenChange={(open) => setDropdownOpen(open)}>
@@ -35,22 +27,7 @@ const ScholarDropdown = ({ scholar }) => {
         </DropdownTrigger>
         <DropdownMenu
           aria-label="Dropdown menu with description"
-          onAction={(key) => {
-            setProbationKind(key as 'PROBATION_I' | 'PROBATION_II');
-          }}
         >
-          <DropdownSection title="Acciones" showDivider>
-            <DropdownItem
-              key="edit"
-              description="Edita los datos del becario"
-              onPress={() => {
-                setDropdownOpen(false);
-                setEditModalOpen(true);
-              }}
-            >
-              Editar información del becario
-            </DropdownItem>
-          </DropdownSection>
           <DropdownSection title="Cambiar estatus del becario" showDivider>
             <DropdownItem
               key="PROBATION_I"
@@ -68,13 +45,52 @@ const ScholarDropdown = ({ scholar }) => {
             >
               Pasar a Probatorio II
             </DropdownItem>
-            <DropdownItem key="NORMAL" description="Quitar estatus de probatorio" color="default">
+            <DropdownItem key="NORMAL" color="success" description="Quitar estatus de probatorio">
               Quitar estatus de probatorio
             </DropdownItem>
           </DropdownSection>
-          <DropdownSection title="Acciones especiales">
-            <DropdownItem key="condition" description="Renuncias, Retiros, Egreso">
-              Cambiar condición
+          <DropdownSection title="Cambiar condición del becario" showDivider>
+            <DropdownItem
+              key="WITHDRAWAL"
+              description="Retirar a becario del programa"
+              color="danger"
+              onPress={async () => {
+                toast.promise(changeScholarCondition(scholar.id, 'WITHDRAWAL'), {
+                  pending: 'Cambiando condición de becario',
+                  success: 'Exito al cambiar condición del becario',
+                  error: 'Error al cambiar condición del becario',
+                });
+              }}
+            >
+              Retiro
+            </DropdownItem>
+            <DropdownItem
+              key="RESIGNATION"
+              description="Renuncia por parte del becarioo"
+              color="danger"
+              onPress={async () => {
+                toast.promise(changeScholarCondition(scholar.id, 'RESIGNATION'), {
+                  pending: 'Cambiando condición de becario',
+                  success: 'Exito al cambiar condición del becario',
+                  error: 'Error al cambiar condición del becario',
+                });
+              }}
+            >
+              Renuncia
+            </DropdownItem>
+            <DropdownItem
+              key="ALUMNI"
+              description="Pasar becario a la red de egresados"
+              color="success"
+              onPress={async () => {
+                toast.promise(changeScholarCondition(scholar.id, 'ALUMNI'), {
+                  pending: 'Cambiando condición de becario',
+                  success: 'Exito al cambiar condición del becario',
+                  error: 'Error al cambiar condición del becario',
+                });
+              }}
+            >
+              Egresado
             </DropdownItem>
           </DropdownSection>
         </DropdownMenu>
@@ -84,16 +100,16 @@ const ScholarDropdown = ({ scholar }) => {
         isOpen={probation1.isOpen}
         onOpenChange={probation1.onOpenChange}
         probationKind="PROBATION_I"
-        onConfirm={() => {}}
+        onConfirm={() => { }}
       />
       <ProbationForm
         scholar={scholar}
         isOpen={probation2.isOpen}
         onOpenChange={probation2.onOpenChange}
         probationKind="PROBATION_II"
-        onConfirm={() => {}}
+        onConfirm={() => { }}
       />
-      <EditScholarForm modalIsOpen={editModalIsOpen} set={setEditModalOpen} scholar={scholar} />
+      {/* <EditScholarForm modalIsOpen={editModalIsOpen} set={setEditModalOpen} scholar={scholar} /> */}
     </>
   );
 };

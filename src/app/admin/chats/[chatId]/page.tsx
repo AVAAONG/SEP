@@ -5,6 +5,7 @@ import AdminActivityActions from '@/components/AdminActivityActions';
 import QuitScholarFromActivity from '@/components/QuitScholarFromActivity';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
+import { getScholarEmailsByAttendanceStatus } from '@/lib/activities/utils';
 import { ChatWithSpeaker } from '@/lib/db/types';
 import { getChat } from '@/lib/db/utils/chats';
 import { getNotEnrolledScholarsInChat } from '@/lib/db/utils/users';
@@ -17,8 +18,7 @@ import shortUUID from 'short-uuid';
 
 export interface IScholarForAttendanceTable {
   id: string;
-  first_names: string;
-  last_names: string;
+  name: string;
   email: string | null;
   kindOfActivity: 'workshop' | 'chat';
   phone_number: string | null;
@@ -50,48 +50,37 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
     .filter((scholar) => scholar.attendance === 'ENROLLED')
     .map((scholar) => {
       return {
-        names: scholar.first_names.split(' ')[0] + ' ' + scholar.last_names.split(' ')[0],
+        names: scholar.name,
         dni: scholar.dni,
       };
     });
-  const scholarEmails = scholar_attendance
-    ? scholar_attendance.map((attendance) => attendance.scholar.scholar.email)
-    : [];
+
+  const { attendedScholarEmails, enrolledScholarEmails } =
+    getScholarEmailsByAttendanceStatus(scholar_attendance);
+
+  const defaultForm = {
+    activity_organization: 0,
+    activity_number_of_participants: 0,
+    activity_lenght: 0,
+    activity_relevance_for_scholar: 0,
+    speaker_theory_practice_mix: 0,
+    speaker_knowledge_of_activity: 0,
+    speaker_foment_scholar_to_participate: 0,
+    speaker_knowledge_transmition: 0,
+    content_match_necesities: 0,
+    content_knowledge_adquisition: 0,
+    content_knowledge_expansion: 0,
+    content_personal_development: 0,
+    general_satisfaction: 0,
+  };
 
   const formResponses = scholar_attendance
     .filter((scholar) => scholar.attendance === 'ATTENDED')
     .map((attendance) => {
-      const form = attendance.satisfaction_form;
-      if (!form)
-        return {
-          activity_organization: 0,
-          activity_number_of_participants: 0,
-          activity_lenght: 0,
-          activity_relevance_for_scholar: 0,
-          speaker_theory_practice_mix: 0,
-          speaker_knowledge_of_activity: 0,
-          speaker_foment_scholar_to_participate: 0,
-          speaker_knowledge_transmition: 0,
-          content_match_necesities: 0,
-          content_knowledge_adquisition: 0,
-          content_knowledge_expansion: 0,
-          content_personal_development: 0,
-          general_satisfaction: 0,
-        };
+      const form = attendance.ChatSafisfactionForm;
       return {
-        activity_organization: form.activity_organization,
-        activity_number_of_participants: form.activity_number_of_participants,
-        activity_lenght: form.activity_lenght,
-        activity_relevance_for_scholar: form.activity_relevance_for_scholar,
-        speaker_theory_practice_mix: form.speaker_theory_practice_mix,
-        speaker_knowledge_of_activity: form.speaker_knowledge_of_activity,
-        speaker_foment_scholar_to_participate: form.speaker_foment_scholar_to_participate,
-        speaker_knowledge_transmition: form.speaker_knowledge_transmition,
-        content_match_necesities: form.content_match_necesities,
-        content_knowledge_adquisition: form.content_knowledge_adquisition,
-        content_knowledge_expansion: form.content_knowledge_expansion,
-        content_personal_development: form.content_personal_development,
-        general_satisfaction: form.general_satisfaction,
+        ...defaultForm,
+        ...form,
       };
     });
 
@@ -101,10 +90,8 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
         <div className="flex flex-col gap-4">
           <ActivityScholarStatusesCount scholarAttendance={scholar_attendance} />
           <AdminActivityActions
-            activityId={chatId}
-            kindOfActivity="chat"
             formResponses={formResponses}
-            scholarsEmails={scholarEmails}
+            scholarsEmails={[...attendedScholarEmails, ...enrolledScholarEmails]}
             activity={chat}
           />
         </div>

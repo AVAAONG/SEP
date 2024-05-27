@@ -9,11 +9,7 @@ import { Column } from 'react-table';
 const ChatsWithAllData = Prisma.validator<Prisma.ChatDefaultArgs>()({
   include: {
     speaker: true,
-    scholar_attendance: {
-      include: {
-        ChatSafisfactionForm: true,
-      },
-    },
+    scholar_attendance: true,
   },
 });
 export type ChatsWithAllData = Prisma.ChatGetPayload<typeof ChatsWithAllData>;

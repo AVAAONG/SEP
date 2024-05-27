@@ -1,24 +1,28 @@
-import WorkshopCreationForm from '@/components/admin/WorkshopCreationForm';
+import WorkshopForm from '@/components/admin/forms/workshop/form';
 import ScheduledCardsWrap from '@/components/scheduledActivitiesCard/ScheduledCardsWrap';
 import { getScheduledWorkshops } from '@/lib/db/utils/Workshops';
-import { getWorkshopSpeakersWithParams } from '@/lib/db/utils/speaker';
-import { Speaker } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 const Page = async ({ searchParams }: { searchParams: { activityToEdit: string | null } }) => {
+  const workshopToEditId = searchParams.activityToEdit;
   const scheduledWorkshops = await getScheduledWorkshops();
-  const speakers = await getWorkshopSpeakersWithParams({
-    id: true,
-    first_names: true,
-    last_names: true,
-    email: true,
-    image: true,
-  });
-
-  const workshop = scheduledWorkshops.find((chat) => chat.id === searchParams.activityToEdit);
+  const workshop = scheduledWorkshops.find((workshop) => workshop.id === workshopToEditId);
   return (
     <div className="min-h-screen flex flex-col md:flex-row gap-8 p-4">
       <div className=" w-full md:w-1/2">
-        <WorkshopCreationForm speakers={speakers as Speaker[]} workshopForEdit={workshop} />
+        <h1 className="col-span-2 text-center w-full font-semibold text-2xl text-primary-light uppercase tracking-widest">
+          Crear actividad formativa
+        </h1>
+        <div>
+          <WorkshopForm
+            key={workshop?.id} // Add this line
+            valuesToUpdate={workshop}
+            kind={workshop ? 'edit' : 'create'}
+            showCreate={workshop ? false : true}
+            showEdit={workshop ? true : false}
+            showSchedule={workshop ? false : true} // Add this line
+            showSend={workshop ? false : true}
+          />
+        </div>
       </div>
       <div className="w-full md:w-1/2 pt-0 flex flex-col items-center">
         <ScheduledCardsWrap activities={scheduledWorkshops} />

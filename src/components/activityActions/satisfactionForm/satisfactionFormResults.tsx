@@ -1,4 +1,5 @@
 'use client';
+import { ChartPieIcon } from '@heroicons/react/24/outline';
 import { Button, Tooltip, useDisclosure } from '@nextui-org/react';
 import BasicModal from '../../BasicModal';
 import { PieChartComponent } from '../../charts';
@@ -18,8 +19,10 @@ const SatisfactionFormResults: React.FC<SatisfactionFormResultsProps> = ({
   const attendanceCheckedModal = useDisclosure();
   return (
     <>
-      <Button className="w-full" onPress={attendanceCheckedModal.onOpen}>
-        Resultados de la encuesta
+      <Button startContent={<ChartPieIcon className='w-5 h-5' />} className="w-full" radius='sm' onPress={attendanceCheckedModal.onOpen}>
+        <span className='hidden md:block w-full'>
+          Resultados de la encuesta
+        </span>
       </Button>
       <BasicModal
         size="full"
@@ -32,15 +35,20 @@ const SatisfactionFormResults: React.FC<SatisfactionFormResultsProps> = ({
           <div className="flex flex-col">
             <div>
               <div className="flex flex-row gap-4 text-sm">
-                <h3>Leyenda</h3>
-                {Object.entries(COLORS_BASED_ON_RESPONSE).map(([label, color]) => (
-                  <div className="flex flex-row gap-2 items-center">
-                    <div className={`w-4 h-4 bg-[${color}] rounded-full`}></div>
-                    <p>{label}</p>
-                  </div>
-                ))}
+                <h3>Leyenda 👉</h3>
+                {Object.entries(COLORS_BASED_ON_RESPONSE).map(([label, color]) => {
+                  return (
+                    <div className="flex flex-row gap-2 items-center">
+                      <div
+                        style={{ backgroundColor: color }}
+                        className="w-4 h-4 rounded-full"
+                      ></div>
+                      <p>{label}</p>
+                    </div>
+                  );
+                })}
               </div>
-              <div className="grid grid-cols-4 gap-4 p-4 ">
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 ">
                 {satisfactionFormChartData.map((response, index) => {
                   const title = getSatisfactionFormTitleAndQuestion(response.name);
                   return (
@@ -58,7 +66,7 @@ const SatisfactionFormResults: React.FC<SatisfactionFormResultsProps> = ({
             </div>
           </div>
         )}
-        onConfirm={() => {}}
+        onConfirm={() => { }}
         confirmText="Cerrar"
       />
     </>

@@ -72,7 +72,7 @@ const AdminVolunteerActivityColumns: Column<IAdminVolunteerActivityColumns>[] = 
     disableSortBy: true,
   },
   {
-    Header: 'Promedio de horas',
+    Header: 'Horas hombre',
     accessor: 'hours',
   },
   {

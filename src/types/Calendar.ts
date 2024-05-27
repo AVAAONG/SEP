@@ -1,4 +1,7 @@
+import { ActivityKind } from "@/lib/activities/utils";
+
 export type BigCalendarEventType = {
+  id: string;
   title?: string;
   start?: Date;
   end?: Date;
@@ -9,4 +12,5 @@ export type BigCalendarEventType = {
   textColor?: string;
   isSuspended: boolean;
   url: string;
+  kindOfActivity: ActivityKind;
 };

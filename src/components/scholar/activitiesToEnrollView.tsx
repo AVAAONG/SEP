@@ -1,11 +1,22 @@
 'use client';
-import EnrrollActivitiCard from '@/components/EnrrollActivitiCard';
 import CalendarForEnrrolling from '@/components/calendar/CalendarForEnrolling';
+import { BigCalendarEventType } from '@/types/Calendar';
 import React, { useEffect, useState } from 'react';
+import ChatEnrollementCard from './activities/enrollment/ChatEnrollmentCard';
+import VolunteerEnrollmentCard from './activities/enrollment/VolunteerEnrollmentCard';
+import WorkshopEnrollementCard from './activities/enrollment/WorkshopEnrollmentCard';
+import {
+  ChatEnrollePage,
+  VolunteerEnrollePage,
+  WorkshopEnrollePage,
+} from './activities/enrollment/lib/formatActivities';
 
-interface ClientComponentProps {
+interface AcvititiesViewProps {
   selectedKey: string | null;
-  events: any[]; // Replace with actual type
+  calendarEvents: BigCalendarEventType[]; // Replace with actual type
+  chatsToEnroll: ChatEnrollePage[];
+  workshopsToEnroll: WorkshopEnrollePage[];
+  volunteerToEnroll: VolunteerEnrollePage[];
   scholar: {
     id: string;
     name: string;
@@ -13,19 +24,35 @@ interface ClientComponentProps {
   };
 }
 
-const ClientComponent: React.FC<ClientComponentProps> = ({ selectedKey, events, scholar }) => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+const AcvititiesView: React.FC<AcvititiesViewProps> = ({
+  selectedKey,
+  calendarEvents,
+  scholar,
+  chatsToEnroll,
+  workshopsToEnroll,
+  volunteerToEnroll,
+}) => {
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== 'undefined' ? window.innerWidth <= 768 : false
+  );
 
   useEffect(() => {
+    if (!selectedKey) return;
     if (selectedKey?.length > 3) return;
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
+      if (typeof window !== 'undefined') {
+        setIsMobile(window.innerWidth <= 768);
+      }
     };
-    window.addEventListener('resize', handleResize);
-    // Run the handler once to catch the initial size
-    handleResize();
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', handleResize);
+      // Run the handler once to catch the initial size
+      handleResize();
+    }
     return () => {
-      window.removeEventListener('resize', handleResize);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', handleResize);
+      }
     };
   }, []);
 
@@ -36,21 +63,31 @@ const ClientComponent: React.FC<ClientComponentProps> = ({ selectedKey, events, 
       {(view === 'calendar' || view === null) && (
         <div className="w-full">
           <div className="h-full min-h-[600px] text-gray-800 capitalize dark:text-gray-300 shadow-sm overflow-x-clip w-full bg-white border border-gray-200  shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 p-2">
-            <CalendarForEnrrolling events={events} scholar={scholar} />
+            <CalendarForEnrrolling
+              events={calendarEvents}
+              scholar={scholar}
+              chatsToEnroll={chatsToEnroll}
+              volunteerToEnroll={volunteerToEnroll}
+              workshopsToEnroll={workshopsToEnroll}
+            />
           </div>
         </div>
       )}
       {view === 'activities' && (
         <div className="flex gap-4 w-full flex-wrap items-center justify-center">
-          {events
-            .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime())
-            .map((event) => {
-              return <EnrrollActivitiCard activity={event} scholar={scholar} />;
-            })}
+          {chatsToEnroll.map((activity) => (
+            <ChatEnrollementCard key={activity.id} activity={activity} scholar={scholar} />
+          ))}
+          {workshopsToEnroll.map((activity: WorkshopEnrollePage) => (
+            <WorkshopEnrollementCard key={activity.id} activity={activity} scholar={scholar} />
+          ))}
+          {volunteerToEnroll.map((activity: VolunteerEnrollePage) => (
+            <VolunteerEnrollmentCard key={activity.id} activity={activity} scholar={scholar} />
+          ))}
         </div>
       )}
     </>
   );
 };
 
-export default ClientComponent;
+export default AcvititiesView;

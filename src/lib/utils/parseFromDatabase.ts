@@ -1,6 +1,6 @@
-import { Collages, CvaLocation, KindOfCollage, ScholarStatus, StudyArea, StudyRegime } from '@prisma/client';
+import { Collages, CvaLocation, EvaluationScale, KindOfCollage, ScholarStatus, StudyArea, StudyRegime } from '@prisma/client';
 
-export const parseStudyAreaFromDatabase = (studyArea: StudyArea) => {
+export const parseStudyAreaFromDatabase = (studyArea: StudyArea | null | undefined) => {
   switch (studyArea) {
     case 'ARCHITECTURE_URBANISM':
       return 'Arquitectura y urbanismo';
@@ -19,7 +19,7 @@ export const parseStudyAreaFromDatabase = (studyArea: StudyArea) => {
   }
 };
 
-export const getCollageName = (university: Collages) => {
+export const getCollageName = (university: Collages | null | undefined) => {
   switch (university) {
     case 'UCAB':
       return `Universidad Católica Andrés Bello (${university})`;
@@ -113,6 +113,19 @@ export const parseStudiRegimeFromDatabase = (regime: StudyRegime) => {
   }
 }
 
+export const parseEvaluationScaleFromDatabase = (evaluationScale: EvaluationScale | null) => {
+  switch (evaluationScale) {
+    case 'CERO_TO_FIVE':
+      return '0-5';
+    case 'CERO_TO_TEN':
+      return '0-10';
+    case 'CERO_TO_TWENTY':
+      return '0-20';
+    default:
+      return 'ERROR';
+  }
+
+}
 export const parseKindOfCollageFromDatabase = (kind: KindOfCollage) => {
   switch (kind) {
     case 'PUBLIC':

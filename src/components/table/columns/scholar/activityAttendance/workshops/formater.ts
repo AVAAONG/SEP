@@ -32,7 +32,8 @@ const createScholarWorkshopAttendanceForTable = (workshops: WorkshopWithAllData[
             speakerIds,
             speakerKind,
             speakerCompany,
-            attendance: parseScholarAttendanceFromDatabase(workshop.scholar_attendance[0].attendance)
+            attendance: parseScholarAttendanceFromDatabase(workshop.scholar_attendance[0].attendance),
+            satisfactionFormFilled: workshop.scholar_attendance[0].satisfaction_form_filled
         };
     });
 }

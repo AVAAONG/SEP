@@ -3,9 +3,10 @@ import exportDataToExcel from '@/lib/utils/exportFunctions/commonExport';
 import processRow from '@/lib/utils/exportFunctions/tableExportUtils';
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 import { Button } from '@nextui-org/react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Column,
+  SortingRule,
   useFilters,
   useGlobalFilter,
   usePagination,
@@ -33,6 +34,7 @@ function Table<T extends object>({
   const data = useMemo(() => tableData, [tableData]);
   const columns = useMemo(() => tableColumns, [tableColumns]);
   const [isExpanded, toggleExpanded] = useState(false);
+  const [sortingState, setSortingState] = useState<SortingRule<T>[]>([]);
 
   const {
     getTableProps,
@@ -49,7 +51,21 @@ function Table<T extends object>({
     canNextPage,
     canPreviousPage,
     pageOptions,
-  } = useTable({ columns, data }, useFilters, useGlobalFilter, useSortBy, usePagination);
+    state,
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState: {
+        // Add initialState
+        sortBy: sortingState, // Load the initial sort state
+      },
+    },
+    useFilters,
+    useGlobalFilter,
+    useSortBy,
+    usePagination
+  );
 
   const allowPagination = (allowPagination: boolean) => {
     const o = allowPagination ? rows : page;
@@ -61,6 +77,10 @@ function Table<T extends object>({
     ...column,
     isDate: column.Header?.toString().toLocaleLowerCase().startsWith('fecha'),
   }));
+
+  useEffect(() => {
+    setSortingState(state.sortBy);
+  }, [state.sortBy]);
 
   return (
     <div
@@ -87,7 +107,7 @@ function Table<T extends object>({
             startContent={<ArrowUpTrayIcon className="w-5 h-5 text-primary-1" />}
             className="w-auto flex gap-2 items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10  dark:focus:ring-gray-700 dark:bg-slate-950 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
           >
-            Exportar
+            <span className="hidden sm:inline">Exportar</span>
           </Button>
           <ExpandTableButton isExpanded={isExpanded} toggleExpanded={toggleExpanded} />
         </div>

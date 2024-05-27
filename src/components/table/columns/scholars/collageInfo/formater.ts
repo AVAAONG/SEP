@@ -1,7 +1,8 @@
-import { ScholarWithAllData } from "@/components/EditScholarForm";
+
 import { getBlobImage } from "@/lib/azure/azure";
 import { getCollageName, parseKindOfCollageFromDatabase, parseStudiRegimeFromDatabase, parseStudyAreaFromDatabase } from "@/lib/utils/parseFromDatabase";
 import { scholarCollageInformationColumnsProps } from "./columns";
+import { ScholarWithAllData } from "@/lib/db/types";
 
 export const formatScholarsToCollageinfoTable = async (scholars: ScholarWithAllData[]): Promise<scholarCollageInformationColumnsProps[]> => {
     const data = scholars.map(async (scholar) => {

@@ -30,11 +30,11 @@ export const getApprovedAndAttendedVolunteers = (volunteers: IVolunteer[]) => {
         totalVolunteerHours: number = 0;
     volunteers.forEach(volunteer => {
         const volunteerAttendance = volunteer.volunteer_attendance[0];
-        if (volunteer.status === 'APPROVED' && volunteerAttendance.attendance === 'ATTENDED') {
+        if (volunteer.status === 'APPROVED' && volunteerAttendance?.attendance === 'ATTENDED') {
             if (volunteer.kind_of_volunteer === 'INTERNAL') internalVolunteerHours += volunteerAttendance.asigned_hours;
             else {
-                if (externalVolunteerHours < 30) {
-                    const remainingHours = 30 - externalVolunteerHours;
+                if (externalVolunteerHours < 40) {
+                    const remainingHours = 40 - externalVolunteerHours;
                     externalVolunteerHours += Math.min(volunteerAttendance.asigned_hours, remainingHours);
                 }
             };
