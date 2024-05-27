@@ -1,6 +1,7 @@
 import { getSpeakersForInput } from '@/lib/db/utils/speaker';
 import chatCreationFormSchema from '@/lib/schemas/chatCreationFormSchema';
 import workshopCreationFormSchema from '@/lib/schemas/workshopCreationFormSchema';
+import { Input } from '@nextui-org/input';
 import React, { useEffect, useState } from 'react';
 import { Control, Controller } from 'react-hook-form';
 import { default as Combobox, StylesConfig } from 'react-select';
@@ -60,7 +61,8 @@ const SpeakerInput: React.FC<SpeakerInputProps> = ({ control, kind, defaultSpeak
     },
   };
 
-  if (isLoading) return <div>🔃 Cargando facilitadores...</div>;
+  if (isLoading)
+    return <Input isDisabled placeholder="🔃 Cargando facilitadores" className="animate-pulse" />;
 
   return (
     <div>
