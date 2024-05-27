@@ -11,7 +11,7 @@ const Page = async ({ searchParams }: { searchParams: { activityToEdit: string |
 
   const chat = scheduledChats.find((chat) => chat.id === searchParams.activityToEdit);
   return (
-    <div className="min-h-screen flex flex-col md:flex-row gap-8 p-4 bg-gray-100 rounded-lg">
+    <div className="min-h-screen flex flex-col md:flex-row gap-8 p-4 bg-gray-100 dark:bg-zinc-950 rounded-lg">
       <div className=" w-full md:w-1/2">
         <h1 className="col-span-2 text-center w-full font-semibold text-2xl text-primary-light uppercase tracking-widest">
           Crear actividad chat club

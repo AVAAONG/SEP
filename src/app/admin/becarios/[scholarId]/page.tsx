@@ -184,7 +184,7 @@ const page = async ({
             <React.Fragment key={index}>{PanelCard(card)}</React.Fragment>
           ))}
         </div>
-        <div className="mt-6 p-2 rounded-lg bg-white">
+        <div className="mt-6 p-2 rounded-lg bg-white dark:bg-zinc-700">
           <AreaChartComponent
             series={areaChartSeries}
             title="Actividades realizadas"
