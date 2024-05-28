@@ -1,4 +1,4 @@
-import { Collages, CvaLocation, EvaluationScale, KindOfCollage, ScholarStatus, StudyArea, StudyRegime } from '@prisma/client';
+import { Collages, CvaLocation, EvaluationScale, KindOfCollage, ScholarCondition, ScholarStatus, StudyArea, StudyRegime } from '@prisma/client';
 
 export const parseStudyAreaFromDatabase = (studyArea: StudyArea | null | undefined) => {
   switch (studyArea) {
@@ -93,6 +93,23 @@ export const parseProbationFromDatabase = (status: ScholarStatus) => {
       return 'Probatorio 1';
     case 'PROBATION_II':
       return 'Probatorio 2';
+    default:
+      return 'ERROR';
+  }
+}
+
+export const parseScholarCondition = (status: ScholarCondition) => {
+  switch (status) {
+    case 'ACTIVE':
+      return 'Activo';
+    case 'RESIGNATION':
+      return 'Renuncia';
+    case 'WITHDRAWAL':
+      return 'Rerito';
+    case 'TO_BE_ALUMNI':
+      return 'Proximo a egresar';
+    case 'ALUMNI':
+      return 'Egresado';
     default:
       return 'ERROR';
   }

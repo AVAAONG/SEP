@@ -3,7 +3,7 @@ import { formatCountsForChartsActivityExpe } from '@/lib/utils/activityFilters';
 import { filterActivitiesBySearchParamsPeriod } from '@/lib/utils/datePickerFilters';
 import { countScholarActivitiesProperties } from '@/lib/utils/scholarCounter';
 import { DonutChartComponent } from '../charts';
-import DatePickerByEvaluationPeriod from '../commons/datePicker/DatePickerByEvaluationPeriod';
+import DatePickerByEvaluationPeriod from '../commons/datePicker/DatePickerByEvaluationBlock';
 import FollowUpExportButton from '../exportButtons/FollowUpExportButton';
 import Table from '../table/Table';
 import scholarActivitiesInformationColumns from '../table/columns/scholars/activitiesInfo/columns';

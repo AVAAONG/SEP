@@ -36,9 +36,8 @@ export const SCHOLARS = [
     icon: userIcon,
     itemList: [
       { name: 'Activos', link: '/admin/becarios' },
-      // { name: 'Retirados', link: '/admin/becarios/retirados' },
-      // { name: 'Renuncias', link: '/admin/becarios/renuncias' },
-      // { name: 'Alumni', link: '/admin/becarios/alumni' },
+      { name: 'Renuncias y retiros', link: '/admin/becarios/renuncias-retiros' },
+      { name: 'Egresados', link: '/admin/becarios/egresados' },
     ],
     link: null,
   },
