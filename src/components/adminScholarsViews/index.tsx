@@ -1,7 +1,5 @@
 import { ScholarWithAllData } from '@/lib/db/types';
-import ActivitiesInfo from './ActivityView';
 import CollageInfo from './CollageInfo';
-import CvaInfo from './CvaInfo';
 import GeneralInfo from './GeneralInfo';
 
 interface indexProps {
@@ -16,10 +14,6 @@ const AdminScholarsView = async ({ scholars, view, searchs }: indexProps) => {
       return <GeneralInfo scholars={scholars} />;
     case 'collage':
       return <CollageInfo scholars={scholars} />;
-    case 'cva':
-      return <CvaInfo />;
-    case 'activities':
-      return <ActivitiesInfo searchParams={searchs} />;
     default:
       return <GeneralInfo scholars={scholars} />;
   }

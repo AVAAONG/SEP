@@ -179,6 +179,57 @@ export const getScholarsWithAllData = async () => {
 };
 
 
+export const getWithdrawerAndResignedScholars = async () => {
+  const scholar = await prisma.scholar.findMany({
+    where: {
+      program_information: {
+        OR: [
+          {
+            scholar_condition: {
+              equals: 'RESIGNATION',
+            }
+          },
+          {
+            scholar_condition: {
+              equals: 'WITHDRAWAL',
+            }
+          }
+        ],
+        chapter: {
+          id: {
+            equals: 'Rokk6_XCAJAg45heOEzYb',
+          },
+        },
+      },
+    },
+    include: {
+      collage_information: {
+        include: {
+          collage_period: true,
+        },
+      },
+      program_information: {
+        include: {
+          attended_chats: {
+            include: {
+              chat: true,
+            },
+          },
+          attended_workshops: {
+            include: {
+              workshop: true,
+            },
+          },
+          chapter: true,
+        },
+      },
+    },
+  });
+
+  return scholar;
+};
+
+
 
 
 export const getScholars = async () => {
