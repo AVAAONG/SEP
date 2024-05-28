@@ -38,6 +38,7 @@ export const SCHOLARS = [
       { name: 'Activos', link: '/admin/becarios' },
       { name: 'Renuncias y retiros', link: '/admin/becarios/renuncias-retiros' },
       { name: 'Egresados', link: '/admin/becarios/egresados' },
+      { name: 'Probatorio', link: '/admin/becarios/probatorio' },
     ],
     link: null,
   },

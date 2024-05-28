@@ -8,7 +8,7 @@ const probationScholarColumns: Column<any>[] = [
     Header: 'Nombre',
     accessor: (row: any) => `${row.first_names} ${row.last_names}`,
     Cell: ({ value, cell }: { value: CellValue; cell: Cell<any> }) => (
-      <Link href={`becarios/${cell.row.original.id}`} className="flex items-center">
+      <Link href={`${cell.row.original.id}`} className="flex items-center">
         <div className="flex-shrink-0 w-8 h-8">
           <Avatar
             className="w-full h-full rounded-full"
