@@ -66,7 +66,7 @@ const ScholarDropdown = ({ scholar }) => {
             </DropdownItem>
             <DropdownItem
               key="RESIGNATION"
-              description="Renuncia por parte del becarioo"
+              description="Renuncia por parte del becario"
               color="danger"
               onPress={async () => {
                 toast.promise(changeScholarCondition(scholar.id, 'RESIGNATION'), {
@@ -77,6 +77,19 @@ const ScholarDropdown = ({ scholar }) => {
               }}
             >
               Renuncia
+            </DropdownItem>
+            <DropdownItem
+              key="TO_BE_ALUMNI"
+              description="Becario con carga academica completa"
+              onPress={async () => {
+                toast.promise(changeScholarCondition(scholar.id, 'TO_BE_ALUMNI'), {
+                  pending: 'Cambiando condición de becario',
+                  success: 'Exito al cambiar condición del becario',
+                  error: 'Error al cambiar condición del becario',
+                });
+              }}
+            >
+              Proximo a egresar
             </DropdownItem>
             <DropdownItem
               key="ALUMNI"
