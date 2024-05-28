@@ -1,6 +1,6 @@
 'use client';
 import { addScholarToChat, addScholarToWorkshop } from '@/lib/db/utils/Workshops';
-import { addScholarToVolunteer } from '@/lib/db/utils/volunteer';
+import { addScholarToVolunteerAdmin } from '@/lib/db/utils/volunteer';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { Autocomplete, AutocompleteItem, Avatar, Button, useDisclosure } from '@nextui-org/react';
@@ -32,7 +32,7 @@ const AddScholarToActivity: React.FC<ActivityPanelInfoProps> = ({
         await addScholarToChat(activityId, selectedScholar.id);
         revalidateSpecificPath(`/admin/chats/${activityId}`);
       } else if (kindOfActivity === 'volunteer') {
-        await addScholarToVolunteer(activityId, selectedScholar.id);
+        await addScholarToVolunteerAdmin(activityId, selectedScholar.id);
         revalidateSpecificPath(`/admin/volunteer/${activityId}`);
       }
     }
@@ -48,9 +48,7 @@ const AddScholarToActivity: React.FC<ActivityPanelInfoProps> = ({
         startContent={<PlusIcon className="h-5 w-5" />}
         isDisabled={false}
       >
-        <span className='hidden md:block w-full'>
-          Agregar becario
-        </span>
+        <span className="hidden md:block w-full">Agregar becario</span>
       </Button>
       <BasicModal
         isOpen={isOpen}
@@ -71,8 +69,9 @@ const AddScholarToActivity: React.FC<ActivityPanelInfoProps> = ({
               {(scholar) => (
                 <AutocompleteItem
                   key={scholar.id}
-                  textValue={`${scholar.first_names.trim().split(' ')[0]} ${scholar.last_names.trim().split(' ')[0]
-                    }`}
+                  textValue={`${scholar.first_names.trim().split(' ')[0]} ${
+                    scholar.last_names.trim().split(' ')[0]
+                  }`}
                 >
                   <div className="flex gap-2 items-center">
                     <Avatar
@@ -82,8 +81,9 @@ const AddScholarToActivity: React.FC<ActivityPanelInfoProps> = ({
                       src={scholar.photo || ''}
                     />
                     <div className="flex flex-col">
-                      <span className="text-small">{`${scholar.first_names.trim().split(' ')[0]
-                        } ${scholar.last_names.trim().split(' ')[0]}`}</span>
+                      <span className="text-small">{`${
+                        scholar.first_names.trim().split(' ')[0]
+                      } ${scholar.last_names.trim().split(' ')[0]}`}</span>
                       <span className="text-tiny text-default-400">{scholar.email}</span>
                     </div>
                   </div>

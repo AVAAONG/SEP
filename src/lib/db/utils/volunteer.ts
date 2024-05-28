@@ -157,6 +157,55 @@ export const addScholarToVolunteer = async (
 	});
 }
 
+export const addScholarToVolunteerAdmin = async (
+	volunteerId: string,
+	scholarId: string,
+) => {
+	// Start a transaction
+	await prisma.$transaction(async (prisma) => {
+		// Check if the scholar is already enrolled in the workshop
+		const existingAttendance = await prisma.volunteerAttendance.findFirst({
+			where: {
+				volunteer: {
+					id: volunteerId,
+				},
+				scholar: {
+					scholarId,
+				},
+			},
+		});
+		// If the scholar is not already enrolled, add the attendance
+		if (!existingAttendance) {
+			const workshop = await prisma.volunteer.findUnique({
+				where: {
+					id: volunteerId,
+				},
+				include: {
+					volunteer_attendance: true,
+				}
+			});
+
+			await prisma.volunteerAttendance.create({
+				data: {
+					volunteer: {
+						connect: {
+							id: volunteerId,
+						},
+					},
+					scholar: {
+						connect: {
+							scholarId,
+						},
+					},
+					attendance: 'ENROLLED',
+					asigned_hours: 0
+				},
+			});
+		}
+
+	});
+}
+
 
 export const deleteScholarFromVolunteer = async (
 	chatId: string,
