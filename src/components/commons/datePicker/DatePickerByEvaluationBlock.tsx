@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { BLOCKS, MONTHS_FOR_BLOCKS, YEARS } from './constants';
 import { linkClass } from './helpers';
 
-const DatePickerByEvaluationBlock = () => {
+const DatePickerByEvaluationPeriod = () => {
   const [selected, setSelected] = useState<{
     year: string | null;
     quarter: string | null;
@@ -107,4 +107,4 @@ const DatePickerByEvaluationBlock = () => {
   );
 };
 
-export default DatePickerByEvaluationBlock;
+export default DatePickerByEvaluationPeriod;

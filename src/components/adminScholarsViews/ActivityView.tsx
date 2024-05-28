@@ -3,7 +3,7 @@ import { formatCountsForChartsActivityExpe } from '@/lib/utils/activityFilters';
 import { filterActivitiesBySearchParamsPeriod } from '@/lib/utils/datePickerFilters';
 import { countScholarActivitiesProperties } from '@/lib/utils/scholarCounter';
 import { DonutChartComponent } from '../charts';
-import DatePickerByEvaluationBlock from '../commons/datePicker/DatePickerByEvaluationBlock';
+import DatePickerByEvaluationPeriod from '../commons/datePicker/DatePickerByEvaluationPeriod';
 import FollowUpExportButton from '../exportButtons/FollowUpExportButton';
 import Table from '../table/Table';
 import scholarActivitiesInformationColumns from '../table/columns/scholars/activitiesInfo/columns';
@@ -59,7 +59,7 @@ const ActivitiesInfo = async ({
 
   return (
     <>
-      <DatePickerByEvaluationBlock />
+      <DatePickerByEvaluationPeriod />
       <div className="flex flex-col w-full h-full bg-white dark:bg-black rounded-lg py-4 justify-center shadow-md ">
         <div className="w-full grid md:grid-cols-5 justify-center items-center">
           {/* Necesary div to center the charts */} <div></div>

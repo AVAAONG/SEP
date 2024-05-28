@@ -36,9 +36,9 @@ const MONTHS_FOR_BLOCKS = [
 ];
 
 const BLOCKS = [
-  { name: '1er bloque', href: '1', current: false },
-  { name: '2do bloque', href: '2', current: false },
-  { name: '3er bloque', href: '3', current: false },
+  { name: '1er periodo', href: '1', current: false },
+  { name: '2do periodo', href: '2', current: false },
+  { name: '3er periodo', href: '3', current: false },
 ];
 
 const YEARS = getYearObjects();
