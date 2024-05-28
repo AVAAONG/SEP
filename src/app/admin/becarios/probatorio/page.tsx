@@ -5,6 +5,7 @@ import {
   ScholarsInProbationByYearReturnType,
   getScholarsInProbationByYear,
 } from '@/lib/db/utils/users';
+import { parseProbationFromDatabase } from '@/lib/utils/parseFromDatabase';
 
 import { userIcon } from 'public/svgs/svgs';
 
@@ -18,7 +19,7 @@ const formatScholarsProbationData = (scholars: ScholarsInProbationByYearReturnTy
       profileImage: scholar.photo,
       cell_phone_Number: scholar.cell_phone_Number,
       email: scholar.email,
-      prbationKind: scholar.program_information?.scholar_status,
+      prbationKind: parseProbationFromDatabase(scholar.program_information?.scholar_status),
       collage: scholar.collage_information[0].collage,
       career: scholar.collage_information[0].career,
       probation_average:
@@ -26,7 +27,6 @@ const formatScholarsProbationData = (scholars: ScholarsInProbationByYearReturnTy
       probation_starting_date: new Date(
         scholar.program_information?.probation[probationLength].starting_date || ''
       ).toLocaleDateString(),
-
       probation_external_volunteer:
         scholar.program_information?.probation[0].external_volunteering_hours,
       probation_internal_volunteer:
@@ -55,7 +55,6 @@ const page = async ({
     (scholar) => scholar.program_information?.scholar_status === 'PROBATION_II'
   ).length;
   const scholarsInProbationTableData = formatScholarsProbationData(scholarsInProbation);
-  console.log(scholarsInProbation[0].program_information?.probation);
   return (
     <div className="flex flex-col items-center w-full gap-6">
       <DateSelector />
