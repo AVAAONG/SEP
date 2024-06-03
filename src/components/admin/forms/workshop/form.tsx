@@ -229,7 +229,9 @@ const WorkshopForm: React.FC<WorkshopFormProps> = ({
             );
           }}
         />
-        <SpeakerInput control={control} kind="workshop" />
+        <div className="col-span-2 md:col-span-1">
+          <SpeakerInput control={control} kind="workshop" />
+        </div>
         <Controller
           name="avalible_spots"
           control={control}

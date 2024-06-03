@@ -214,7 +214,9 @@ const ChatForm: React.FC<ChatFormProps> = ({
             </Select>
           )}
         />
-        <SpeakerInput control={control} kind="chat" defaultSpeakerId={defaultSpeakerId} />
+        <div className="col-span-2 md:col-span-1">
+          <SpeakerInput control={control} kind="chat" defaultSpeakerId={defaultSpeakerId} />
+        </div>
         <Controller
           name="avalible_spots"
           control={control}

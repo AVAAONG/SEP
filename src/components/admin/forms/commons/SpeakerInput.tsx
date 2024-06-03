@@ -65,7 +65,7 @@ const SpeakerInput: React.FC<SpeakerInputProps> = ({ control, kind, defaultSpeak
     return <Input isDisabled placeholder="🔃 Cargando facilitadores" className="animate-pulse" />;
 
   return (
-    <div>
+    <>
       <span className="text-sm">Facilitador(es)</span>
       <Controller
         name="speakers"
@@ -111,7 +111,7 @@ const SpeakerInput: React.FC<SpeakerInputProps> = ({ control, kind, defaultSpeak
           );
         }}
       />
-    </div>
+    </>
   );
 };
 
