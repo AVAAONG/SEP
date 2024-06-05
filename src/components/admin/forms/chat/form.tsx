@@ -84,6 +84,7 @@ const ChatForm: React.FC<ChatFormProps> = ({
     reset({
       dates: [{ date: '', startHour: '', endHour: '' }],
       speakers: [],
+      description: '',
     });
   };
 
@@ -134,7 +135,12 @@ const ChatForm: React.FC<ChatFormProps> = ({
         valuesToUpdate.calendar_ids.map(
           async (id) => await deleteCalendarEvent(CHAT_CALENDAR_ID, id)
         );
-        const chat = await createChatObject(data, status, eventsIds, meetingCoordinates);
+        const chat = await createChatObject(
+          data,
+          valuesToUpdate.activity_status,
+          eventsIds,
+          meetingCoordinates
+        );
         await updateChat(valuesToUpdate?.id, chat);
         router.push('/admin/chats/crear');
       }

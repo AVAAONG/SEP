@@ -54,6 +54,7 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({
     // Reset the form state
     reset({
       dates: [{ date: '', startHour: '', endHour: '' }],
+      description: '',
     });
   };
 
@@ -109,7 +110,7 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({
         );
       }
       const createdVolunteer = await createVolunteer(volunteer);
-      router.push(`/admin/voluntariado/${createdVolunteer.id}`);
+      if (buttonType === 'create') router.push(`/admin/voluntariado/${createdVolunteer.id}`);
     }
     onReset();
   };

@@ -62,14 +62,6 @@ const WorkshopForm: React.FC<WorkshopFormProps> = ({
   });
   const router = useRouter();
 
-  const onReset = () => {
-    // Reset the form state
-    reset({
-      dates: [{ date: '', startHour: '', endHour: '' }],
-      speakers: [],
-    });
-  };
-
   useEffect(() => {
     if (!valuesToUpdate) return;
     const formatedWorkshop = formatWorkshop(valuesToUpdate);
@@ -93,6 +85,15 @@ const WorkshopForm: React.FC<WorkshopFormProps> = ({
     control,
     name: 'dates',
   });
+
+  const onReset = () => {
+    // Reset the form state
+    reset({
+      dates: [{ date: '', startHour: '', endHour: '' }],
+      speakers: [],
+      description: '',
+    });
+  };
 
   const handleFormSubmit = async (
     data: z.infer<typeof workshopCreationFormSchema>,
@@ -143,7 +144,12 @@ const WorkshopForm: React.FC<WorkshopFormProps> = ({
         valuesToUpdate.calendar_ids.map(
           async (id) => await deleteCalendarEvent(WORKSHOP_CALENDAR_ID, id)
         );
-        const workshop = await createWorkshopObject(data, status, eventsIds, meetingCoordinates);
+        const workshop = await createWorkshopObject(
+          data,
+          valuesToUpdate.activity_status,
+          eventsIds,
+          meetingCoordinates
+        );
         await updateWorkshop(valuesToUpdate?.id, workshop);
         router.push('/admin/actividadesFormativas/crear');
       }

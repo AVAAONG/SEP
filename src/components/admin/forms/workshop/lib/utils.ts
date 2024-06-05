@@ -5,11 +5,10 @@ export const determineStatus = (buttonType: string): ActivityStatus => {
         case 'create':
             return 'ATTENDANCE_CHECKED';
         case 'schedule':
-        case 'edit':
             return 'SCHEDULED';
         case 'send':
             return 'SENT';
         default:
-            return '' as ActivityStatus;
+            throw new Error('Invalid button type');
     }
 };
