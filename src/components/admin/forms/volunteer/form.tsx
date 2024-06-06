@@ -6,6 +6,7 @@ import { MODALITY, VOLUNTEER_PROJECT } from '@/lib/constants';
 import { createVolunteer, updateVolunteer } from '@/lib/db/utils/volunteer';
 import volunteerSchema from '@/lib/schemas/volunteerSchema';
 import { sendActivitiesEmail } from '@/lib/sendEmails';
+import { revalidateSpecificPath } from '@/lib/serverAction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input, Textarea } from '@nextui-org/input';
 import { Select, SelectItem } from '@nextui-org/select';
@@ -45,7 +46,7 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting, isValid },
+    formState: { isSubmitting, isValid, isDirty },
     setValue,
     reset,
   } = methods;
@@ -68,18 +69,15 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({
   });
 
   useEffect(() => {
-    if (valuesToUpdate) {
-      const volunteer = formatVolunteer(valuesToUpdate);
-      for (const key in volunteer) {
-        if (key in volunteer) {
-          const value = volunteer[key as keyof Schema];
-          if (value !== undefined && value !== null) {
-            setValue(key as keyof Schema, value);
-          }
-        }
+    if (!valuesToUpdate) return;
+    const formatedWorkshop = formatVolunteer(valuesToUpdate);
+    Object.entries(formatedWorkshop).forEach(([key, value]) => {
+      if (value !== undefined) {
+        setValue(key as keyof Schema, value);
       }
-    }
-  }, [valuesToUpdate, setValue]);
+      revalidateSpecificPath('/admin/actividadesFormativas/crear/**');
+    });
+  }, [valuesToUpdate, setValue, isDirty]);
 
   const handleFormSubmit = async (data: Schema, event: any) => {
     const buttonType = ((event?.nativeEvent as SubmitEvent)?.submitter as HTMLButtonElement)
@@ -100,7 +98,10 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({
         break;
     }
     const volunteer = await createVolunteerObject(data, status);
-    if (kind === 'edit' && valuesToUpdate) await updateVolunteer(valuesToUpdate.id, volunteer);
+    if (kind === 'edit' && valuesToUpdate) {
+      await updateVolunteer(valuesToUpdate.id, volunteer);
+      revalidateSpecificPath('/admin/voluntariado/valuesToUpdate.id');
+    }
     if (kind === 'create') {
       if (buttonType === 'send') {
         const volunteerInvitationMessage = createVolunteerInvitationMessage();
@@ -109,6 +110,7 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({
           '¡Se han agregado actividades de voluntariado!'
         );
       }
+      revalidateSpecificPath('/admin/voluntariado/crear/**');
       const createdVolunteer = await createVolunteer(volunteer);
       if (buttonType === 'create') router.push(`/admin/voluntariado/${createdVolunteer.id}`);
     }
