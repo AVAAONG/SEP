@@ -14,6 +14,7 @@ const formatVolunteer = (
                 date: moment(values?.start_dates[0]).format('YYYY-MM-DD'),
                 startHour: moment(values?.start_dates[0]).format('HH:mm'),
                 endHour: moment(values?.end_dates[0]).format('HH:mm'),
+                endDate: moment(values?.end_dates[0]).format('YYYY-MM-DD'),
             },
         ],
         modality: values?.modality!,

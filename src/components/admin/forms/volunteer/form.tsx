@@ -75,7 +75,7 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({
       if (value !== undefined) {
         setValue(key as keyof Schema, value);
       }
-      revalidateSpecificPath('/admin/actividadesFormativas/crear/**');
+      revalidateSpecificPath('/admin/voluntariado/crear/**');
     });
   }, [valuesToUpdate, setValue, isDirty]);
 
@@ -100,7 +100,8 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({
     const volunteer = await createVolunteerObject(data, status);
     if (kind === 'edit' && valuesToUpdate) {
       await updateVolunteer(valuesToUpdate.id, volunteer);
-      revalidateSpecificPath('/admin/voluntariado/valuesToUpdate.id');
+      revalidateSpecificPath(`/admin/voluntariado/${valuesToUpdate.id}`);
+      revalidateSpecificPath('/admin/voluntariado/crear/**');
     }
     if (kind === 'create') {
       if (buttonType === 'send') {
