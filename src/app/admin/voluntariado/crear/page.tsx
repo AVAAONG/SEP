@@ -21,6 +21,7 @@ const Page = async ({ searchParams }: { searchParams: { activityToEdit: string |
             showEdit={volunteer ? true : false}
             showSchedule={volunteer ? false : true} // Add this line
             showSend={volunteer ? false : true}
+            valuesToUpdate={volunteer}
           />
         </div>
       </div>
