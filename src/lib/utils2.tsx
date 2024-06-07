@@ -172,6 +172,8 @@ export const parseVolunteerProject = (value: VolunteerProject | null | undefined
       return 'Comité de becarios';
     case 'OTHER':
       return 'Otro';
+    case 'UVPL':
+      return 'UVPLV';
     default:
       return value;
   }
