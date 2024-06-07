@@ -1,7 +1,6 @@
 'use client';
 import { ChatWithSpeaker, WorkshopWithSpeaker } from '@/lib/db/types';
 import { revalidateSpecificPath } from '@/lib/serverAction';
-import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { useDisclosure } from '@nextui-org/modal';
 import { Button } from '@nextui-org/react';
 import { Volunteer } from '@prisma/client';
@@ -82,7 +81,7 @@ const ScheduledCard: React.FC<ScheduledCardI> = ({ activities }) => {
                 }}
                 confirmText="Eliminar"
               />
-              <Button
+              {/* <Button
                 variant="light"
                 color="success"
                 radius="full"
@@ -96,7 +95,7 @@ const ScheduledCard: React.FC<ScheduledCardI> = ({ activities }) => {
               >
                 <PencilSquareIcon className="w-5 h-5" />
                 <span className="sr-only">Editar actividad</span>
-              </Button>
+              </Button> */}
 
               <BasicModal
                 isButtonDisabled={buttonIsDisabled}
