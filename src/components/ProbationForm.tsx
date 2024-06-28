@@ -2,6 +2,7 @@
 import { ScholarWithAllData } from '@/lib/db/types';
 import { setProbationToScholar } from '@/lib/db/utils/users';
 import probationFormSchema from '@/lib/schemas/probationFormSchema';
+import { revalidateSpecificPath } from '@/lib/serverAction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Button,
@@ -52,6 +53,7 @@ const ProbationForm: React.FC<ProbationFormProps> = ({
     };
 
     await setProbationToScholar(scholar.id, probationData);
+    revalidateSpecificPath(`/admin/becarios/${scholar.id}`);
     reset();
   };
 
@@ -64,7 +66,12 @@ const ProbationForm: React.FC<ProbationFormProps> = ({
         onOpenChange={onOpenChange}
         className="bg-light"
       >
-        <form onSubmit={handleSubmit((data, event) => handleFormSubmit(data, event))}>
+        <form
+          onSubmit={handleSubmit(
+            (data, event) => handleFormSubmit(data, event),
+            (error) => console.log(error)
+          )}
+        >
           <ModalContent>
             {(onClose) => (
               <>
@@ -429,7 +436,7 @@ const ProbationForm: React.FC<ProbationFormProps> = ({
                   </Button>
                   <Button
                     type="submit"
-                    isDisabled={!isValid || isSubmitting}
+                    isDisabled={isSubmitting}
                     color={probationKind === 'PROBATION_II' ? 'danger' : 'warning'}
                     onPress={() => {
                       if (isValid || !isSubmitting) onClose();
