@@ -73,6 +73,9 @@ export const getExternalVolunteer = async () => {
 		},
 		orderBy: {
 			status: 'asc'
+		},
+		where: {
+			kind_of_volunteer: 'EXTERNAL'
 		}
 	})
 }
