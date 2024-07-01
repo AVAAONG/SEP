@@ -13,12 +13,13 @@ const page = async ({
   const volunteerData = await getExternalVolunteer();
 
   const volunteers = await filterActivitiesBySearchParams(volunteerData, searchParams);
+  console.log(volunteers)
   const v = volunteers.map((volunteer) => {
     return {
       scholarNames:
-        volunteer.volunteer_attendance[0].scholar.scholar.first_names.split(' ')[0] +
+        volunteer.volunteer_attendance?.[0]?.scholar.scholar.first_names.split(' ')[0] +
         ' ' +
-        volunteer.volunteer_attendance[0].scholar.scholar.last_names.split(' ')[0],
+        volunteer.volunteer_attendance?.[0]?.scholar.scholar.last_names.split(' ')[0],
       id: volunteer.id,
       title: volunteer.title,
       endDate: new Date(volunteer.end_dates[0]).toISOString(),
@@ -27,7 +28,7 @@ const page = async ({
       modality: parseModalityFromDatabase(volunteer.modality),
       platform: volunteer.platform,
       kindOfVolunteer: parseKindOfVolunteerFromDatabase(volunteer.kind_of_volunteer),
-      asignedHours: volunteer.volunteer_attendance[0].asigned_hours,
+      asignedHours: volunteer.volunteer_attendance?.[0]?.asigned_hours,
       proof: volunteer.proof,
     };
   });
