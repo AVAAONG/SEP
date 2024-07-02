@@ -23,14 +23,14 @@ const formatScholarsProbationData = (scholars: ScholarsInProbationByYearReturnTy
       collage: scholar.collage_information[0].collage,
       career: scholar.collage_information[0].career,
       probation_average:
-        scholar.program_information?.probation[probationLength].done_at_the_moment?.average,
+        scholar.program_information?.probation?.[probationLength]?.done_at_the_moment?.average,
       probation_starting_date: new Date(
-        scholar.program_information?.probation[probationLength].starting_date || ''
+        scholar.program_information?.probation?.[probationLength]?.starting_date || ''
       ).toLocaleDateString(),
       probation_external_volunteer:
-        scholar.program_information?.probation[0].external_volunteering_hours,
+        scholar.program_information?.probation?.[0]?.external_volunteering_hours,
       probation_internal_volunteer:
-        scholar.program_information?.probation[0].internal_volunteering_hours,
+        scholar.program_information?.probation?.[0]?.internal_volunteering_hours,
       // probation_internal_volunteer: scholar.program_information?.probation[0].starting_date,
       //   probation_starting_date: scholar.program_information?.probation[0].starting_date,
       //   probation_average: scholar.program_information?.probation[0].done_at_the_moment.average,
