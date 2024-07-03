@@ -1,4 +1,5 @@
 import SelectComponent from '@/components/Select';
+import HighSchoolForm from '@/components/admission/highSchool/HighSchoolForm';
 import PersonalInformation from '@/components/public/admision/form/PersonalInformation';
 import Aside from '@/components/public/signin/Aside';
 import { Button } from '@nextui-org/button';
@@ -76,9 +77,7 @@ const page = async ({
           Formulario de Postulación para el Programa Excelencia (ProExcelencia) AVAA
         </h1>
         <div action={handleSubmit}>
-          {searchParams?.paso === undefined && (
-            <PersonalInformation />
-          )}
+          {searchParams?.paso === undefined && <PersonalInformation />}
           {searchParams?.paso === 'contacto' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
               <Separator num={2} title="Información de contacto" />
@@ -255,61 +254,7 @@ const page = async ({
               </Button>
             </div>
           )}
-          {searchParams?.paso === 'secundaria' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
-              <Separator num={2} title="Información universitaria" />
-              <Input isRequired type="text" label="Nombre de la institución" />
-              <Input isRequired type="text" label="Nombre del director del plantel " />
-              <Input
-                type="text"
-                isRequired
-                label="Dirección de la institución"
-                className="md:col-span-2"
-              />
-              <Input isRequired type="number" label="Promedio de notas" min={1} max={20} />
-              <Input
-                isRequired
-                type="text"
-                description="Ejemplo: Bachiller en Ciencias / Técnico Medio Industrial"
-                label="Título obtenido al egresar de la institución"
-              />
-              <Input
-                isRequired
-                type="text"
-                label="Lugar donde realizó sus horas de labor social"
-                className="md:col-span-2"
-              />
-              <Textarea
-                isRequired
-                label="Aprendizaje de la labor social"
-                className="md:col-span-2"
-              />
-              <Textarea
-                isRequired
-                label="Actividades extracurriculares"
-                className="md:col-span-2"
-              />
-
-              <Button>
-                <Link
-                  className="w-full h-full flex items-center justify-center"
-                  replace={false}
-                  href="?paso=contacto"
-                >
-                  Anterior
-                </Link>
-              </Button>
-              <Button color="success">
-                <Link
-                  className="w-full h-full flex items-center justify-center"
-                  replace={false}
-                  href="?paso=universidad"
-                >
-                  Siguiente
-                </Link>
-              </Button>
-            </div>
-          )}
+          {searchParams?.paso === 'secundaria' && <HighSchoolForm />}
           {searchParams?.paso === 'universidad' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
               <Separator num={2} title="Información universitaria" />

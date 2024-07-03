@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 dependencies:
   '@azure/identity':
     specifier: ^4.0.1
@@ -44,6 +40,9 @@ dependencies:
   bcrypt:
     specifier: ^5.1.1
     version: 5.1.1(encoding@0.1.13)
+  clsx:
+    specifier: ^2.1.1
+    version: 2.1.1
   cookies-next:
     specifier: ^4.1.1
     version: 4.1.1
@@ -2909,7 +2908,7 @@ packages:
       '@react-aria/utils': 3.23.2(react@18.2.0)
       '@react-types/shared': 3.22.1(react@18.2.0)
       '@swc/helpers': 0.5.8
-      clsx: 2.1.0
+      clsx: 2.1.1
       react: 18.2.0
     dev: false
 
@@ -3259,7 +3258,7 @@ packages:
       '@react-stately/utils': 3.9.1(react@18.2.0)
       '@react-types/shared': 3.22.1(react@18.2.0)
       '@swc/helpers': 0.5.8
-      clsx: 2.1.0
+      clsx: 2.1.1
       react: 18.2.0
     dev: false
 
@@ -4751,8 +4750,8 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
-  /clsx@2.1.0:
-    resolution: {integrity: sha512-m3iNNWpd9rl3jvvcBnu70ylMdrXt8Vlq4HYadnU5fwcOtvkSQWPmj7amUcDT2qYI7risszBjI5AUIUox9D16pg==}
+  /clsx@2.1.1:
+    resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
     engines: {node: '>=6'}
     dev: false
 
@@ -8244,7 +8243,7 @@ packages:
       react: '>=18'
       react-dom: '>=18'
     dependencies:
-      clsx: 2.1.0
+      clsx: 2.1.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
@@ -9698,3 +9697,7 @@ packages:
   /zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
     dev: false
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
