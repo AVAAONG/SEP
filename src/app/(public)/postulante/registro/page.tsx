@@ -1,10 +1,12 @@
 import SelectComponent from '@/components/Select';
+import CollageForm from '@/components/admission/collage/collageAdmisionForm';
+import ContactInfoForm from '@/components/admission/contactInfo/ContactInfoForm';
 import HighSchoolForm from '@/components/admission/highSchool/HighSchoolForm';
+import LanguagesForm from '@/components/admission/languageKnowledge/LanguageKnowledgeForm';
 import PersonalInformation from '@/components/public/admision/form/PersonalInformation';
 import Aside from '@/components/public/signin/Aside';
 import { Button } from '@nextui-org/button';
 import { Input, Textarea } from '@nextui-org/input';
-import { StudyArea } from '@prisma/client';
 import Link from 'next/link';
 
 const VENEZUELA_STATES = [
@@ -33,16 +35,6 @@ const VENEZUELA_STATES = [
   { label: 'Zulia', value: 'ZULIA' },
   { label: 'Dependencias Federales', value: 'DEPENDENCIAS_FEDERALES' },
   { label: 'Distrito Capital', value: 'DISTRITO_CAPITAL' },
-];
-
-const STUDY_AREAS: { label: string; value: StudyArea }[] = [
-  { label: 'Arquitectura y urbanismo', value: 'ARCHITECTURE_URBANISM' },
-  { label: 'Ciencias de la salud', value: 'HEALTH_SCIENCES' },
-  { label: 'Humanidades y educacion', value: 'HUMANITIES_EDUCATION' },
-  { label: 'Ciencias juridicas y politicas', value: 'JURIDICAL_POLITICAL_SCIENCES' },
-  { label: 'Ciencias sociales', value: 'SOCIAL_SCIENCES' },
-  { label: 'STEM (Ciencias, Tecnología, Ingenierías, Matemáticas)', value: 'STEM' },
-  { label: 'Otra', value: 'OTHER' },
 ];
 
 const Separator = ({ num, title }: { num: Number; title: string }) => (
@@ -78,47 +70,7 @@ const page = async ({
         </h1>
         <div action={handleSubmit}>
           {searchParams?.paso === undefined && <PersonalInformation />}
-          {searchParams?.paso === 'contacto' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
-              <Separator num={2} title="Información de contacto" />
-
-              <Input type="number" isRequired label="Telefono local" />
-              <Input type="number" isRequired label="Telefono celular" />
-              <Input type="number" isRequired label="Número telefónico asociado a WhatsApp" />
-              <Input type="email" isRequired label="Correo electrónico" />
-              <Input
-                type="number"
-                isRequired
-                label="Teléfono de un familiar/pariente/amigo cercano"
-                description="En el caso de que no podamos contactarte, ¿con quién podemos comunicarnos?"
-              />
-              <Input
-                type="text"
-                isRequired
-                label="Nombre del familiar/pariente/amigo cercano"
-                description="Especifique el nombre del familiar/pariente/amigo cercano y su relacion con usted"
-              />
-
-              <Button>
-                <Link
-                  className="w-full h-full flex items-center justify-center"
-                  replace={false}
-                  href="?"
-                >
-                  Anterior
-                </Link>
-              </Button>
-              <Button color="success">
-                <Link
-                  className="w-full h-full flex items-center justify-center"
-                  replace={false}
-                  href="?paso=secundaria"
-                >
-                  Siguiente
-                </Link>
-              </Button>
-            </div>
-          )}
+          {searchParams?.paso === 'contacto' && <ContactInfoForm />}
           {searchParams?.paso === 'familia' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
               <Separator num={4} title="Redes sociales" />
@@ -255,153 +207,8 @@ const page = async ({
             </div>
           )}
           {searchParams?.paso === 'secundaria' && <HighSchoolForm />}
-          {searchParams?.paso === 'universidad' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
-              <Separator num={2} title="Información universitaria" />
-              <SelectComponent
-                label="Tipo de universidad"
-                items={[
-                  { label: 'Publica', value: 'PUBLIC' },
-                  { label: 'Privada', value: 'PRIVATE' },
-                ]}
-              />
-              <SelectComponent
-                label="Universidad"
-                items={[
-                  { label: 'Publica', value: 'PUBLIC' },
-                  { label: 'Privada', value: 'PRIVATE' },
-                ]}
-              />
-              <Input isRequired type="text" label="Carrera" />
-              <SelectComponent label="Área de estudio" items={STUDY_AREAS} />
-              <Input isRequired type="date" label="Fecha de inicio de estudios universitarios" />
-              <SelectComponent
-                label="Régimen de Estudio"
-                items={[
-                  {
-                    label: 'Semestral',
-                    value: 'SEMESTRAL',
-                  },
-                  {
-                    label: 'Trimestral',
-                    value: 'TRIMESTRAL',
-                  },
-                  {
-                    label: 'Cuatrimestral',
-                    value: 'CUATRIMESTRAL',
-                  },
-                  {
-                    label: 'Anual',
-                    value: 'ANUAL',
-                  },
-                ]}
-              />
-              <SelectComponent
-                label="Período académico (en curso)"
-                items={[
-                  {
-                    label: 'Semestral',
-                    value: 'SEMESTRAL',
-                  },
-                ]}
-              />
-              <Input
-                isRequired
-                type="number"
-                label="Promedio del último período académico culminado"
-              />
-              <SelectComponent
-                label="Modalidad de clases"
-                items={[
-                  {
-                    label: 'Prsencial',
-                    value: 'IN_PERSON',
-                  },
-                  {
-                    label: 'Virtual',
-                    value: 'ONLINE',
-                  },
-                  {
-                    label: 'Mixta',
-                    value: 'Hibrida',
-                  },
-                ]}
-              />
-              <SelectComponent
-                label="¿Posee beca?"
-                items={[
-                  {
-                    label: 'Sí',
-                    value: 'YES',
-                  },
-                  {
-                    label: 'No',
-                    value: 'NO',
-                  },
-                ]}
-              />
-              <Input isRequired type="number" label="Porcentaje de la beca" />
-
-              <Button>
-                <Link
-                  className="w-full h-full flex items-center justify-center"
-                  replace={false}
-                  href="?paso=secundaria"
-                >
-                  Anterior
-                </Link>
-              </Button>
-              <Button color="success">
-                <Link
-                  className="w-full h-full flex items-center justify-center"
-                  replace={false}
-                  href="?paso=ingles"
-                >
-                  Siguiente
-                </Link>
-              </Button>
-            </div>
-          )}
-          {searchParams?.paso === 'ingles' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
-              <Separator num={2} title="Información profesional" />
-              <SelectComponent
-                label="¿Habla otro idioma?"
-                items={[
-                  { label: 'Si', value: 'YES' },
-                  { label: 'No', value: 'NO' },
-                ]}
-              />
-              <Input type="text" label="Especifique" />
-
-              <SelectComponent
-                label="¿Cuál es su nivel de inglés?"
-                items={[
-                  { label: 'Básico', value: 'BASIC' },
-                  { label: 'Intermedio', value: 'INTERMEDIATE' },
-                  { label: 'Avanzado', value: 'ADVANCED' },
-                ]}
-              />
-              <Button>
-                <Link
-                  className="w-full h-full flex items-center justify-center"
-                  replace={false}
-                  href="?"
-                >
-                  Anterior
-                </Link>
-              </Button>
-              <Button color="success">
-                <Link
-                  className="w-full h-full flex items-center justify-center"
-                  replace={false}
-                  href="?paso=3"
-                >
-                  Siguiente
-                </Link>
-              </Button>
-            </div>
-          )}
+          {searchParams?.paso === 'universidad' && <CollageForm />}
+          {searchParams?.paso === 'ingles' && <LanguagesForm />}
           {searchParams?.paso === 'adicional' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
               <Separator num={3} title="Información adicional" />

@@ -156,7 +156,7 @@ export const COLLAGES = [
 export const STUDY_AREAS = [
   { value: 'ARCHITECTURE_URBANISM', label: 'Arquitectura y Urbanismo' },
   { value: 'HEALTH_SCIENCES', label: 'Ciencias de la Salud' },
-  { value: 'JURIDICAL_POLITICAL_SCIENCES', label: 'Jurídico-Políticas' },
+  { value: 'JURIDICAL_POLITICAL_SCIENCES', label: 'Ciencias Jurídico-Políticas' },
   { value: 'SOCIAL_SCIENCES', label: 'Ciencias Sociales' },
   { value: 'HUMANITIES_EDUCATION', label: 'Humanidades y Educación' },
   { value: 'STEM', label: 'STEM (Ciencias, Tecnología, Ingenierías, Matemáticas)' },

@@ -11,9 +11,18 @@ type HighSchoolFormSchemaType = z.infer<typeof highSchoolFormSchema>;
 const HighSchoolForm = () => {
   const methods = useForm<HighSchoolFormSchemaType>({
     resolver: zodResolver(highSchoolFormSchema),
+    mode: 'all',
   });
 
-  const onSubmit = (data: HighSchoolFormSchemaType) => console.log(data);
+  const onSubmit = (data: HighSchoolFormSchemaType) => {
+    console.log(data);
+    methods.reset(
+      {},
+      {
+        keepErrors: false,
+      }
+    );
+  };
   return (
     <FormProvider {...methods}>
       <form
@@ -24,6 +33,7 @@ const HighSchoolForm = () => {
           label="Nombre de la institución"
           type="text"
           name="institutionName"
+          autoFocus
           isRequired
         />
         <InputField

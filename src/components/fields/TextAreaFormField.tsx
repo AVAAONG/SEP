@@ -5,21 +5,23 @@ interface TextAreaFormFieldProps {
   name: string;
   label: string;
   props?: any;
+  [key: string]: unknown;
 }
 
-const TextAreaFormField: React.FC<TextAreaFormFieldProps> = ({ name, label, ...props }) => {
+const TextAreaFormField: React.FC<TextAreaFormFieldProps> = (props) => {
+  const { name, label, ...restProps } = props;
   const { control, formState } = useFormContext();
   return (
     <Controller
       name={name}
       control={control}
-      render={({ field, formState }) => (
+      render={({ field }) => (
         <Textarea
           {...field}
           label={label}
           isInvalid={!!formState.errors[name]}
           errorMessage={formState.errors[name]?.message?.toString()}
-          {...props}
+          {...restProps}
         />
       )}
     />
