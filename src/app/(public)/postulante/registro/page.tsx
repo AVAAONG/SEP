@@ -1,6 +1,7 @@
 import SelectComponent from '@/components/Select';
 import CollageForm from '@/components/admission/collage/collageAdmisionForm';
 import ContactInfoForm from '@/components/admission/contactInfo/ContactInfoForm';
+import FamilyInfoForm from '@/components/admission/familyInfo/FamilyInfoForm';
 import HighSchoolForm from '@/components/admission/highSchool/HighSchoolForm';
 import LanguagesForm from '@/components/admission/languageKnowledge/LanguageKnowledgeForm';
 import PersonalInformation from '@/components/public/admision/form/PersonalInformation';
@@ -71,68 +72,7 @@ const page = async ({
         <div action={handleSubmit}>
           {searchParams?.paso === undefined && <PersonalInformation />}
           {searchParams?.paso === 'contacto' && <ContactInfoForm />}
-          {searchParams?.paso === 'familia' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
-              <Separator num={4} title="Redes sociales" />
-              <Input type="number" label="Promedio de ingreso familiar" />
-              <SelectComponent
-                label="Con quien vives"
-                items={[
-                  { label: 'Padres', value: 'PUBLIC' },
-                  { label: 'Familiares', value: 'PRIVATE' },
-                  { label: 'Otros', value: 'PRIVATE' },
-                ]}
-              />
-              <SelectComponent
-                label="Tipo de vivienda"
-                items={[
-                  { label: 'Propia', value: 'PUBLIC' },
-                  { label: 'Alquilada', value: 'PRIVATE' },
-                  { label: 'Hipotecada', value: 'PRIVATE' },
-                ]}
-              />
-              <Input type="text" label="Composición del núcleo familiar" />
-              <Input type="text" label="Ocupacion del padre" />
-              <Input
-                type="text"
-                label="Nombre de la empresa u organización en donde trabaja el madre"
-              />
-              <Input type="number" label="Años de experiencia del padre" />
-              <SelectComponent
-                label="Grado de instruccion del padre"
-                items={[
-                  { label: 'Propia', value: 'PUBLIC' },
-                  { label: 'Alquilada', value: 'PRIVATE' },
-                  { label: 'Hipotecada', value: 'PRIVATE' },
-                ]}
-              />
-
-              <Input type="text" label="Ocupacion de la madre" />
-              <Input type="text" label="Nombre de la empresa u organización en donde trabaja " />
-              <Input type="number" label="Años de experiencia de la madre" />
-              <SelectComponent
-                label="Grado de instruccion de la madre"
-                items={[
-                  { label: 'Propia', value: 'PUBLIC' },
-                  { label: 'Alquilada', value: 'PRIVATE' },
-                  { label: 'Hipotecada', value: 'PRIVATE' },
-                ]}
-              />
-
-              <Button>
-                <Link
-                  className="w-full h-full flex items-center justify-center"
-                  replace={false}
-                  href="?paso=3"
-                >
-                  Anterior
-                </Link>
-              </Button>
-              <Button color="success" type="submit" className="text-white">
-                ¡Registrarse en el programa de mentoria AVAA!
-              </Button>
-            </div>
-          )}
+          {searchParams?.paso === 'familia' && <FamilyInfoForm />}
           {searchParams?.paso === 'trabajo' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
               <Separator num={4} title="Redes sociales" />

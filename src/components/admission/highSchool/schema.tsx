@@ -1,17 +1,16 @@
-import * as z from 'zod';
+import { z } from 'zod';
 
 const highSchoolFormSchema = z.object({
-  institutionName: z.string().min(1, 'El nombre de la institución es requerido'),
-  directorName: z.string().min(1, 'El nombre del director(a) es requerido'),
-  institutionAddress: z.string().min(1, 'La dirección de la institución es requerida'),
-  gpa: z.coerce
-    .number({ required_error: 'El promedio de notas es requerido' })
-    .min(1, 'El promedio mínimo es 1')
-    .max(20, 'El promedio máximo es 20'),
-  degree: z.string().min(1, 'El título obtenido es requerido'),
-  socialServiceLocation: z.string().min(1, 'El lugar de labor social es requerido'),
-  socialServiceLearnings: z.string().min(1, 'Los aprendizajes de labor social son requeridos'),
-  extracurricularActivities: z.string().optional(),
+  family_income: z.number().min(1), // Assuming family income is a positive number
+  living_arrangement: z.enum(['PARENTS', 'RELATIVES', 'OTHERS']), // Enum for living arrangement
+  housing_type: z.enum(['OWNED', 'RENTED', 'MORTGAGED']), // Enum for housing type
+  family_composition: z.string().min(1), // Assuming family composition is not empty
+  father_occupation: z.string().min(1), // Assuming father's occupation is not empty
+  father_workplace: z.string().min(1), // Assuming father's workplace is not empty
+  father_experience: z.number().min(1), // Assuming father's experience is a positive number
+  mother_occupation: z.string().min(1), // Assuming mother's occupation is not empty
+  mother_workplace: z.string().min(1), // Assuming mother's workplace is not empty
+  mother_experience: z.number().min(1), // Assuming mother's experience is a positive number
 });
 
 export default highSchoolFormSchema;
