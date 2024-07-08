@@ -1,38 +1,69 @@
-const ContactInfoForm = () => {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
-      <Input type="number" isRequired label="Telefono local" />
-      <Input type="number" isRequired label="Telefono celular" />
-      <Input type="number" isRequired label="Número telefónico asociado a WhatsApp" />
-      <Input type="email" isRequired label="Correo electrónico" />
-      <Input
-        type="number"
-        isRequired
-        label="Teléfono de un familiar/pariente/amigo cercano"
-        description="En el caso de que no podamos contactarte, ¿con quién podemos comunicarnos?"
-      />
-      <Input
-        type="text"
-        isRequired
-        label="Nombre del familiar/pariente/amigo cercano"
-        description="Especifique el nombre del familiar/pariente/amigo cercano y su relacion con usted"
-      />
+'use client';
+import InputField from '@/components/fields/InputFormField';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { FormProvider, useForm } from 'react-hook-form';
+import { z } from 'zod';
+import contactInfoFormSchema from './schema';
 
-      <Button>
-        <Link className="w-full h-full flex items-center justify-center" replace={false} href="?">
-          Anterior
-        </Link>
-      </Button>
-      <Button color="success">
-        <Link
-          className="w-full h-full flex items-center justify-center"
-          replace={false}
-          href="?paso=secundaria"
-        >
-          Siguiente
-        </Link>
-      </Button>
-    </div>
+type CollageFormSchemaType = z.infer<typeof contactInfoFormSchema>;
+
+const ContactInfoForm = () => {
+  const methods = useForm<CollageFormSchemaType>({
+    resolver: zodResolver(contactInfoFormSchema),
+    mode: 'all',
+  });
+  const onSubmit = (data: CollageFormSchemaType) => {
+    console.log(data);
+    methods.reset(
+      {},
+      {
+        keepErrors: false,
+      }
+    );
+  };
+
+  return (
+    <FormProvider {...methods}>
+      <form
+        onSubmit={methods.handleSubmit(onSubmit)}
+        className="grid grid-cols-1 md:grid-cols-2 gap-4 "
+      >
+        <InputField
+          isRequired
+          label="Número de teléfono local"
+          type="text"
+          name="local_phone_number"
+        />
+        <InputField
+          isRequired
+          label="Número de teléfono celular"
+          type="text"
+          name="cell_phone_Number"
+        />
+        <InputField
+          isRequired
+          label="Número telefónico asociado a WhatsApp"
+          type="text"
+          name="whatsapp_number"
+        />
+        <InputField isRequired label="Correo electrónico" type="email" name="email" />
+        <InputField
+          type="text"
+          name="parent_phone_number"
+          isRequired
+          label="Teléfono de un familiar/pariente/amigo cercano"
+          description="En el caso de que no podamos contactarte, ¿con quién podemos comunicarnos?"
+        />
+        <InputField
+          name="parental"
+          type="text"
+          isRequired
+          label="Nombre del familiar/pariente/amigo cercano"
+          description="Especifique el nombre del familiar/pariente/amigo cercano y su relacion con usted"
+        />
+        <button type="submit">Siguiente</button>
+      </form>
+    </FormProvider>
   );
 };
 

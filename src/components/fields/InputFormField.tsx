@@ -5,7 +5,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 
 interface InputFieldProps {
   name: string;
-  type: 'text' | 'number' | 'date';
+  type: 'text' | 'number' | 'date' | 'email';
   label: string;
   [key: string]: unknown;
 }
