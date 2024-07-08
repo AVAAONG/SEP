@@ -3,92 +3,12 @@ import InputField from '@/components/fields/InputFormField';
 import SelectFormField from '@/components/fields/SelectFormField';
 import { COLLAGE_LONG_AND_SHORT, MODALITY, STUDY_AREAS } from '@/lib/constants';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 import collageFormSchema from './schema';
+import { ACADEMIC_PERIODS_KIND, getAcademicPeriodBasedOnStudyRegime } from './utils';
 
 type CollageFormSchemaType = z.infer<typeof collageFormSchema>;
-
-const Semesters = [
-  {
-    value: '1',
-    label: '1er semestre',
-  },
-  {
-    value: '2',
-    label: '2do semestre',
-  },
-  {
-    value: '3',
-    label: '3er semestre',
-  },
-];
-
-const Trimestre = [
-  {
-    value: '1',
-    label: '1er trimestre',
-  },
-  {
-    value: '2',
-    label: '2do trimestre',
-  },
-  {
-    value: '3',
-    label: '3er trimestre',
-  },
-  {
-    value: '4',
-    label: '4to trimestre',
-  },
-];
-const anos = [
-  {
-    value: '1',
-    label: '1er año',
-  },
-  {
-    value: '2',
-    label: '2do año',
-  },
-  {
-    value: '3+',
-    label: '3er año o más',
-  },
-];
-
-const cuatrimestre = [
-  {
-    value: '1',
-    label: '1er año',
-  },
-  {
-    value: '2',
-    label: '2do año',
-  },
-  {
-    value: '3',
-    label: '3er año o mas',
-  },
-];
-const ACADEMIC_PERIODS_KIND = [
-  {
-    label: 'Semestral',
-    value: 'SEMESTRAL',
-  },
-  {
-    label: 'Trimestral',
-    value: 'TRIMESTRAL',
-  },
-  {
-    label: 'Cuatrimestral',
-    value: 'CUATRIMESTRAL',
-  },
-  {
-    label: 'Anual',
-    value: 'ANUAL',
-  },
-];
 
 const CollageForm = () => {
   const methods = useForm<CollageFormSchemaType>({
@@ -104,6 +24,22 @@ const CollageForm = () => {
       }
     );
   };
+
+  const studyRegime = useWatch({
+    control: methods.control,
+    name: 'study_regime',
+  });
+  const haveScholarship = useWatch({
+    control: methods.control,
+    name: 'have_schooolarship',
+  });
+  const kindOfCollage = useWatch({
+    control: methods.control,
+    name: 'kind_of_collage',
+  });
+
+  const academicPeriods = getAcademicPeriodBasedOnStudyRegime(studyRegime);
+
   return (
     <FormProvider {...methods}>
       <form
@@ -111,6 +47,7 @@ const CollageForm = () => {
         className="grid grid-cols-1 md:grid-cols-2 gap-4 "
       >
         <SelectFormField
+          isRequired
           label="Tipo de universidad"
           name="kind_of_collage"
           selectItems={[
@@ -118,47 +55,86 @@ const CollageForm = () => {
             { label: 'Privada', value: 'PRIVATE' },
           ]}
         />
-        <SelectFormField label="Universidad" name="collage" selectItems={COLLAGE_LONG_AND_SHORT} />
-        <InputField label="Carrera" type="text" name="career" />
-        <SelectFormField label="Universidad" name="collage" selectItems={STUDY_AREAS} />
+        <SelectFormField
+          isRequired
+          label="Universidad"
+          name="collage"
+          selectItems={COLLAGE_LONG_AND_SHORT}
+        />
+        <SelectFormField
+          isRequired
+          label="Área de estudio"
+          name="study_area"
+          selectItems={STUDY_AREAS}
+        />
+        <InputField
+          isRequired
+          label="Carrera"
+          type="text"
+          name="career"
+          placeholder="Estudios internacionales"
+        />
         <InputField
           isRequired
           type="date"
           label="Fecha de inicio de estudios universitarios"
-          name="career"
+          name="collage_start_date"
         />
         <SelectFormField
+          isRequired
           label="Régimen de Estudio"
-          name="collage"
+          name="study_regime"
           selectItems={ACADEMIC_PERIODS_KIND}
         />
         <SelectFormField
+          isDisabled={academicPeriods.length === 0}
+          isRequired={academicPeriods.length >= 1}
           label="Período académico (en curso)"
-          name="collage"
-          selectItems={ACADEMIC_PERIODS_KIND}
+          name="current_academic_period"
+          selectItems={academicPeriods}
         />
         <InputField
           isRequired
           type="number"
           label="Promedio del último período académico culminado"
-          name="career"
+          name="grade"
+          min={1}
+          max={20}
         />
-        <SelectFormField label="Modalidad de clases" name="collage" selectItems={MODALITY} />
         <SelectFormField
-          label="¿Posee beca?"
-          name="collage"
-          selectItems={[
-            {
-              label: 'Sí',
-              value: 'YES',
-            },
-            {
-              label: 'No',
-              value: 'NO',
-            },
-          ]}
+          isRequired
+          label="Modalidad de clases"
+          name="class_modality"
+          selectItems={MODALITY}
         />
-        <InputField isRequired type="number" label="Porcentaje de la beca" name="career" />
+        {kindOfCollage === 'PRIVATE' && (
+          <>
+            <SelectFormField
+              isRequired
+              label="¿Posee beca?"
+              name="have_schooolarship"
+              selectItems={[
+                {
+                  label: 'Sí',
+                  value: 'YES',
+                },
+                {
+                  label: 'No',
+                  value: 'NO',
+                },
+              ]}
+            />
+            {haveScholarship === 'YES' && (
+              <InputField
+                isRequired
+                type="number"
+                label="Porcentaje de la beca"
+                name="scholarship_percentage"
+              />
+            )}
+          </>
+        )}
+        <button type="submit">Siguiente</button>
       </form>
     </FormProvider>
   );
