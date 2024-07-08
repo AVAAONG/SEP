@@ -3,11 +3,11 @@ import CollageForm from '@/components/admission/collage/collageAdmisionForm';
 import ContactInfoForm from '@/components/admission/contactInfo/ContactInfoForm';
 import FamilyInfoForm from '@/components/admission/familyInfo/FamilyInfoForm';
 import HighSchoolForm from '@/components/admission/highSchool/HighSchoolForm';
+import JobInfoForm from '@/components/admission/jobInfo/JobInfoForm';
 import LanguagesForm from '@/components/admission/languageKnowledge/LanguageKnowledgeForm';
 import PersonalInformation from '@/components/public/admision/form/PersonalInformation';
-import Aside from '@/components/public/signin/Aside';
 import { Button } from '@nextui-org/button';
-import { Input, Textarea } from '@nextui-org/input';
+import { Textarea } from '@nextui-org/input';
 import Link from 'next/link';
 
 const VENEZUELA_STATES = [
@@ -64,8 +64,7 @@ const page = async ({
 
   return (
     <main className="bg-gray-100 w-full flex flex-col md:flex-row-reverse min-h-screen md:overflow-hidden ">
-      <Aside cookieValue="admin" />
-      <section className="p-4 md:p-24 justify-center flex md:w-5/6 flex-col gap-8">
+      <section className="p-4 md:p-24 justify-center flex flex-col gap-8">
         <h1 className="text-center text-3xl md:text-4xl font-bold text-primary-light">
           Formulario de Postulación para el Programa Excelencia (ProExcelencia) AVAA
         </h1>
@@ -73,79 +72,7 @@ const page = async ({
           {searchParams?.paso === undefined && <PersonalInformation />}
           {searchParams?.paso === 'contacto' && <ContactInfoForm />}
           {searchParams?.paso === 'familia' && <FamilyInfoForm />}
-          {searchParams?.paso === 'trabajo' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
-              <Separator num={4} title="Redes sociales" />
-              <SelectComponent
-                label="¿Actualmente trabaja?"
-                items={[
-                  { label: 'Si', value: 'YES' },
-                  { label: 'No', value: 'NO' },
-                ]}
-              />
-              <Input type="number" label="Nombre de la organización/empresa donde trabaja" />
-
-              <Input type="text" label="Cargo que desempeña" />
-              <SelectComponent
-                label="Modalidad de trabajo"
-                items={[
-                  {
-                    label: 'Prsencial',
-                    value: 'IN_PERSON',
-                  },
-                  {
-                    label: 'Virtual',
-                    value: 'ONLINE',
-                  },
-                  {
-                    label: 'Mixta',
-                    value: 'Hibrida',
-                  },
-                ]}
-              />
-              <SelectComponent
-                label="Horario de trabajo"
-                items={[
-                  {
-                    label: 'Tiempo completo',
-                    value: 'IN_PERSON',
-                  },
-                  {
-                    label: 'Tiempo parcial',
-                    value: 'ONLINE',
-                  },
-                  {
-                    label: 'Freelancer',
-                    value: 'Hibrida',
-                  },
-                  {
-                    label: 'Fines de semana',
-                    value: 'Hibrida',
-                  },
-                ]}
-              />
-              <SelectComponent
-                label="¿Contribuye con el ingreso familiar?"
-                items={[
-                  { label: 'Si', value: 'YES' },
-                  { label: 'No', value: 'NO' },
-                ]}
-              />
-
-              <Button>
-                <Link
-                  className="w-full h-full flex items-center justify-center"
-                  replace={false}
-                  href="?paso=3"
-                >
-                  Anterior
-                </Link>
-              </Button>
-              <Button color="success" type="submit" className="text-white">
-                ¡Registrarse en el programa de mentoria AVAA!
-              </Button>
-            </div>
-          )}
+          {searchParams?.paso === 'trabajo' && <JobInfoForm />}
           {searchParams?.paso === 'secundaria' && <HighSchoolForm />}
           {searchParams?.paso === 'universidad' && <CollageForm />}
           {searchParams?.paso === 'ingles' && <LanguagesForm />}

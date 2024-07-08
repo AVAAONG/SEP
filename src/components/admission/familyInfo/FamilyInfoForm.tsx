@@ -6,14 +6,14 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import familyFormSchema from './schema';
 
-type familyFormSchemaType = z.infer<typeof familyFormSchema>;
+type FamilyFormSchemaType = z.infer<typeof familyFormSchema>;
 
 const FamilyInfoForm = () => {
-  const methods = useForm<familyFormSchemaType>({
+  const methods = useForm<FamilyFormSchemaType>({
     resolver: zodResolver(familyFormSchema),
     mode: 'all',
   });
-  const onSubmit = (data: familyFormSchemaType) => {
+  const onSubmit = (data: FamilyFormSchemaType) => {
     console.log(data);
     methods.reset(
       {},
