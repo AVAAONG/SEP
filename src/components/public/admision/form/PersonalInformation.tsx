@@ -53,11 +53,9 @@ const PersonalInformation = () => {
 
   const handleFormSubmit = async (data: Schema) => {
     console.log(data);
-  }
+  };
   return (
-    <form
-      onSubmit={handleSubmit(handleFormSubmit)}
-      className="flex flex-col gap-8 w-full">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-8 w-full">
       <div className="w-full rounded-full flex items-center justify-center gap-4">
         <div className="flex-shrink-0 flex items-center justify-center w-28 h-28 object-contain rounded-full shadow-lg border-3 border-green-500 p-1 overflow-hidden">
           <Avatar
@@ -67,8 +65,7 @@ const PersonalInformation = () => {
             className="w-full h-full rounded-full"
           />
         </div>
-        <div className='flex flex-col justify-center gap-2 lg:w-full '>
-
+        <div className="flex flex-col justify-center gap-2 lg:w-full ">
           <input
             type="file"
             accept="image/*"
@@ -91,8 +88,7 @@ const PersonalInformation = () => {
           <div className="text-sm text-gray-500 dark:text-gray-400">Solo archivos JPG o PNG</div>
         </div>
       </div>
-      <div
-        className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
         <Controller
           name="first_names"
           control={control}
@@ -106,7 +102,8 @@ const PersonalInformation = () => {
               radius="sm"
               type="text"
               isRequired
-              label="Nombre(s)" />
+              label="Nombre(s)"
+            />
           )}
         />
         <Controller
@@ -121,7 +118,8 @@ const PersonalInformation = () => {
               radius="sm"
               type="text"
               isRequired
-              label="Apellido(s)" />
+              label="Apellido(s)"
+            />
           )}
         />
         <Controller
@@ -136,7 +134,8 @@ const PersonalInformation = () => {
               radius="sm"
               type="number"
               isRequired
-              label="Cédula de identidad" />
+              label="Cédula de identidad"
+            />
           )}
         />
 
@@ -181,7 +180,8 @@ const PersonalInformation = () => {
               type="date"
               isRequired
               placeholder="YYY/MM/DD"
-              label="Fecha de nacimiento" />
+              label="Fecha de nacimiento"
+            />
           )}
         />
         <Controller
@@ -225,13 +225,12 @@ const PersonalInformation = () => {
               type="text"
               isRequired
               classNames={{ base: 'col-span-1 md:col-span-2' }}
-
-              label="Dirección de residencia actual" />
+              label="Dirección de residencia actual"
+            />
           )}
         />
         <StepButton step="contacto" />
       </div>
-
     </form>
   );
 };
