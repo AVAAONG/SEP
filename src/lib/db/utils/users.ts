@@ -273,6 +273,24 @@ export const getAlumniScholars = async () => {
 
 
 
+export const getAlumni = async () => {
+  const alumniScholars = await prisma.scholar.findMany({
+    where: {
+      program_information: {
+        scholar_condition: {
+          equals: 'ALUMNI',
+        },
+      },
+    },
+    include: {
+      collage_information: true,
+      program_information: true,
+      job_information: true,
+    },
+  });
+  return alumniScholars;
+}
+
 
 export const getScholars = async () => {
   const scholars = await prisma.scholar.findMany({
@@ -286,6 +304,7 @@ export const getScholars = async () => {
     include: {
       collage_information: true,
       program_information: true,
+      job_information: true,
     },
   });
   return scholars;
