@@ -1,4 +1,3 @@
-import SelectComponent from '@/components/Select';
 import CollageForm from '@/components/admission/collage/collageAdmisionForm';
 import ContactInfoForm from '@/components/admission/contactInfo/ContactInfoForm';
 import FamilyInfoForm from '@/components/admission/familyInfo/FamilyInfoForm';
@@ -6,46 +5,56 @@ import HighSchoolForm from '@/components/admission/highSchool/HighSchoolForm';
 import JobInfoForm from '@/components/admission/jobInfo/JobInfoForm';
 import LanguagesForm from '@/components/admission/languageKnowledge/LanguageKnowledgeForm';
 import PersonalInformation from '@/components/public/admision/form/PersonalInformation';
+import { CheckBadgeIcon } from '@heroicons/react/24/outline';
 import { Button } from '@nextui-org/button';
-import { Textarea } from '@nextui-org/input';
-import Link from 'next/link';
 
-const VENEZUELA_STATES = [
-  { label: 'Amazonas', value: 'AMAZONAS' },
-  { label: 'Anzoátegui', value: 'ANZOATEGUI' },
-  { label: 'Apure', value: 'APURE' },
-  { label: 'Aragua', value: 'ARAGUA' },
-  { label: 'Barinas', value: 'BARINAS' },
-  { label: 'Bolívar', value: 'BOLIVAR' },
-  { label: 'Carabobo', value: 'CARABOBO' },
-  { label: 'Cojedes', value: 'COJEDES' },
-  { label: 'Delta Amacuro', value: 'DELTA_AMACURO' },
-  { label: 'Falcón', value: 'FALCON' },
-  { label: 'Guárico', value: 'GUARICO' },
-  { label: 'Lara', value: 'LARA' },
-  { label: 'Mérida', value: 'MERIDA' },
-  { label: 'Miranda', value: 'MIRANDA' },
-  { label: 'Monagas', value: 'MONAGAS' },
-  { label: 'Nueva Esparta', value: 'NUEVA_ESPARTA' },
-  { label: 'Portuguesa', value: 'PORTUGUESA' },
-  { label: 'Sucre', value: 'SUCRE' },
-  { label: 'Táchira', value: 'TACHIRA' },
-  { label: 'Trujillo', value: 'TRUJILLO' },
-  { label: 'Vargas', value: 'VARGAS' },
-  { label: 'Yaracuy', value: 'YARACUY' },
-  { label: 'Zulia', value: 'ZULIA' },
-  { label: 'Dependencias Federales', value: 'DEPENDENCIAS_FEDERALES' },
-  { label: 'Distrito Capital', value: 'DISTRITO_CAPITAL' },
+const buttonLabels = [
+  {
+    label: 'Datos personales',
+    state: 'done',
+    avalible: true,
+  },
+  {
+    label: 'Datos de contacto',
+    state: 'current',
+    avalible: true,
+  },
+  {
+    label: 'Datos familiares',
+    state: 'notDone',
+    avalible: false,
+  },
+  {
+    label: 'Situación laboral',
+    state: 'notDone',
+    avalible: false,
+  },
+  {
+    label: 'Conocimiento de idiomas',
+    state: 'notDone',
+    avalible: false,
+  },
+  {
+    label: 'Educación secundaria',
+    state: 'notDone',
+    avalible: false,
+  },
+  {
+    label: 'Educación universitaria',
+    state: 'notDone',
+    avalible: false,
+  },
+  {
+    label: 'Información adicional',
+    state: 'notDone',
+    avalible: false,
+  },
 ];
-
-const Separator = ({ num, title }: { num: Number; title: string }) => (
-  <div className="md:col-span-2 flex items-center gap-2 mb-4 w-full">
-    <div className="inline-flex items-center rounded-full border py-1 px-2  text-xs font-semibold transition-colors focus:outline-none  border-transparent hover:bg-primary/80 bg-green-500 text-white">
-      {num.toString()}
-    </div>
-    <p className="text-lg font-semibold dark:text-white">{title}</p>
-  </div>
-);
+const setVariantAccordingToState = (state: string) => {
+  if (state === 'current') return 'solid';
+  if (state === 'done') return 'flat';
+  if (state === 'notDone') return 'light';
+};
 
 const page = async ({
   params,
@@ -56,19 +65,34 @@ const page = async ({
     paso: 'contacto' | 'secundaria' | 'universidad' | 'familia' | 'ingles' | 'familia' | undefined;
   };
 }) => {
-  const handleSubmit = async (formData: FormData) => {
-    'use server';
-    const data = Object.fromEntries(formData);
-    console.log(data);
-  };
-
   return (
-    <main className="bg-gray-100 w-full flex flex-col md:flex-row-reverse min-h-screen md:overflow-hidden ">
-      <section className="p-4 md:p-24 justify-center flex flex-col gap-8">
-        <h1 className="text-center text-3xl md:text-4xl font-bold text-primary-light">
-          Formulario de Postulación para el Programa Excelencia (ProExcelencia) AVAA
-        </h1>
-        <div action={handleSubmit}>
+    <main className="bg-gray-100 p-10 min-h-screen flex flex-col space-y-28">
+      <h1 className="text-center text-3xl md:text-4xl font-bold text-primary-light">
+        Formulario de Postulación ProExcelencia
+      </h1>
+      <div className="grid grid-cols-6 space-y-5 ">
+        <div className="space-y-0.5 col-start-2 col-span-5 pl-12">
+          <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Datos Personales</h1>
+          <p className="text-muted-foreground">Completa cada uno de los campos</p>
+          <div className="w-full h-0.5 bg-primary-light opacity-40" />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          {buttonLabels.map(({ label, state, avalible }, index) => (
+            <Button
+              radius="sm"
+              startContent={state === 'done' ? <CheckBadgeIcon className="w-5 h-5" /> : <></>}
+              key={index}
+              color="success"
+              isDisabled={!avalible}
+              variant={setVariantAccordingToState(state)}
+              className="!justify-start"
+            >
+              {label}
+            </Button>
+          ))}
+        </div>
+        <div className=" pl-12 space-y-5 col-span-5">
           {searchParams?.paso === undefined && <PersonalInformation />}
           {searchParams?.paso === 'contacto' && <ContactInfoForm />}
           {searchParams?.paso === 'familia' && <FamilyInfoForm />}
@@ -76,98 +100,8 @@ const page = async ({
           {searchParams?.paso === 'secundaria' && <HighSchoolForm />}
           {searchParams?.paso === 'universidad' && <CollageForm />}
           {searchParams?.paso === 'ingles' && <LanguagesForm />}
-          {searchParams?.paso === 'adicional' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
-              <Separator num={3} title="Información adicional" />
-              <SelectComponent
-                label="¿Posee conexión a internet?"
-                items={[
-                  {
-                    label: 'Sí',
-                    value: 'YES',
-                  },
-                  {
-                    label: 'No',
-                    value: 'NO',
-                  },
-                ]}
-              />
-              <SelectComponent
-                label="¿Qué tan estable es tu conectividad? "
-                items={[
-                  {
-                    label: '1',
-                    value: '1',
-                  },
-                  {
-                    label: '2',
-                    value: '2',
-                  },
-                  {
-                    label: '3',
-                    value: '3',
-                  },
-                  {
-                    label: '4',
-                    value: '4',
-                  },
-                  {
-                    label: '5',
-                    value: '5',
-                  },
-                ]}
-              />
-
-              <Textarea isRequired label="¿Por qué solicita esta beca?" />
-              <SelectComponent
-                label="¿Eres referido por algún becario de AVAA?"
-                items={[
-                  {
-                    label: 'Sí',
-                    value: 'YES',
-                  },
-                  {
-                    label: 'No',
-                    value: 'NO',
-                  },
-                ]}
-              />
-              <SelectComponent
-                label="Seleccione el becario por el cual fue referido"
-                items={[
-                  {
-                    label: 'Sí',
-                    value: 'YES',
-                  },
-                  {
-                    label: 'No',
-                    value: 'NO',
-                  },
-                ]}
-              />
-
-              <Button>
-                <Link
-                  className="w-full h-full flex items-center justify-center"
-                  replace={false}
-                  href="?paso=2"
-                >
-                  Anterior
-                </Link>
-              </Button>
-              <Button color="success">
-                <Link
-                  className="w-full h-full flex items-center justify-center"
-                  replace={false}
-                  href="?paso=4"
-                >
-                  Siguiente
-                </Link>
-              </Button>
-            </div>
-          )}
         </div>
-      </section>
+      </div>
     </main>
   );
 };

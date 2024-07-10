@@ -21,6 +21,7 @@ const InputField: React.FC<InputFieldProps> = (props) => {
       control={control}
       render={({ field }) => (
         <Input
+          radius="sm"
           {...field}
           {...restProps}
           type={type}

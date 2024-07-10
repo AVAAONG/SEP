@@ -17,6 +17,7 @@ const SelectFormField: React.FC<SelectFormFieldProps> = (props) => {
       control={control}
       render={({ field }) => (
         <Select
+          radius="sm"
           {...field}
           {...restProps}
           isInvalid={!!formState.errors[name]?.message?.toString()}
