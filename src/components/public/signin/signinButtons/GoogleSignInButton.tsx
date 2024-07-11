@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 interface GoogleSignInButtonProps {
   providerId: string;
   callbackUrl: string;
-  cookieValue: 'admin' | 'SCHOLAR';
+  cookieValue: 'admin' | 'SCHOLAR' | 'APPLICANT';
 }
 
 /**

@@ -73,6 +73,7 @@ const page = async ({
     paso: string | undefined;
   };
 }) => {
+  const step = searchParams?.paso || '0';
   return (
     <main className="bg-gray-100 p-10 min-h-screen flex flex-col space-y-28">
       <h1 className="text-center text-3xl md:text-4xl font-bold text-primary-light">
@@ -89,16 +90,15 @@ const page = async ({
           <FormNavigation items={buttonLabels} />
         </div>
         <div className=" pl-12 space-y-5 col-span-5">
-          {searchParams?.paso === undefined ||
-            (searchParams?.paso === '0' && <PersonalInformation />)}
-          {searchParams?.paso === '1' && <ContactInfoForm />}
-          {searchParams?.paso === '2' && <FamilyInfoForm />}
-          {searchParams?.paso === '3' && <JobInfoForm />}
-          {searchParams?.paso === '4' && <HighSchoolForm />}
-          {searchParams?.paso === '5' && <CollageForm />}
-          {searchParams?.paso === '6' && <LanguagesForm />}
-          {searchParams?.paso === '7' && <AditionalInfoForm />}
-          {searchParams?.paso === '8' && <AttachedFilesForm />}
+          {step === '0' && <PersonalInformation />}
+          {step === '1' && <ContactInfoForm />}
+          {step === '2' && <FamilyInfoForm />}
+          {step === '3' && <JobInfoForm />}
+          {step === '4' && <HighSchoolForm />}
+          {step === '5' && <CollageForm />}
+          {step === '6' && <LanguagesForm />}
+          {step === '7' && <AditionalInfoForm />}
+          {step === '8' && <AttachedFilesForm />}
         </div>
       </div>
     </main>
