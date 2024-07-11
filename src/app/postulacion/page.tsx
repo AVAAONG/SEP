@@ -1,68 +1,76 @@
+import AditionalInfoForm from '@/components/admission/aditionalInfo/AditionalInfoForm';
+import AttachedFilesForm from '@/components/admission/aditionalInfo/attachedFiles/AttachedFilesForm';
 import CollageForm from '@/components/admission/collage/collageAdmisionForm';
+import FormNavigation from '@/components/admission/common/FormNavigation';
 import ContactInfoForm from '@/components/admission/contactInfo/ContactInfoForm';
 import FamilyInfoForm from '@/components/admission/familyInfo/FamilyInfoForm';
 import HighSchoolForm from '@/components/admission/highSchool/HighSchoolForm';
 import JobInfoForm from '@/components/admission/jobInfo/JobInfoForm';
 import LanguagesForm from '@/components/admission/languageKnowledge/LanguageKnowledgeForm';
 import PersonalInformation from '@/components/public/admision/form/PersonalInformation';
-import { CheckBadgeIcon } from '@heroicons/react/24/outline';
-import { Button } from '@nextui-org/button';
 
 const buttonLabels = [
   {
     label: 'Datos personales',
     state: 'done',
     avalible: true,
+    step: 0,
   },
   {
     label: 'Datos de contacto',
     state: 'current',
     avalible: true,
+    step: 1,
   },
   {
     label: 'Datos familiares',
     state: 'notDone',
-    avalible: false,
+    avalible: true,
+    step: 2,
   },
   {
     label: 'Situación laboral',
     state: 'notDone',
-    avalible: false,
+    avalible: true,
+    step: 3,
   },
   {
     label: 'Conocimiento de idiomas',
     state: 'notDone',
-    avalible: false,
+    avalible: true,
+    step: 4,
   },
   {
     label: 'Educación secundaria',
     state: 'notDone',
-    avalible: false,
+    avalible: true,
+    step: 5,
   },
   {
     label: 'Educación universitaria',
     state: 'notDone',
-    avalible: false,
+    avalible: true,
+    step: 6,
   },
   {
     label: 'Información adicional',
     state: 'notDone',
-    avalible: false,
+    avalible: true,
+    step: 7,
+  },
+  {
+    label: 'Anexos',
+    state: 'notDone',
+    avalible: true,
+    step: 8,
   },
 ];
-const setVariantAccordingToState = (state: string) => {
-  if (state === 'current') return 'solid';
-  if (state === 'done') return 'flat';
-  if (state === 'notDone') return 'light';
-};
 
 const page = async ({
-  params,
   searchParams,
 }: {
-  params: { slug: string };
   searchParams?: {
-    paso: 'contacto' | 'secundaria' | 'universidad' | 'familia' | 'ingles' | 'familia' | undefined;
+    paso: string | undefined;
   };
 }) => {
   return (
@@ -70,36 +78,27 @@ const page = async ({
       <h1 className="text-center text-3xl md:text-4xl font-bold text-primary-light">
         Formulario de Postulación ProExcelencia
       </h1>
-      <div className="grid grid-cols-6 space-y-5 ">
+      <div className="grid grid-cols-6 space-y-5">
         <div className="space-y-0.5 col-start-2 col-span-5 pl-12">
           <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Datos Personales</h1>
           <p className="text-muted-foreground">Completa cada uno de los campos</p>
           <div className="w-full h-0.5 bg-primary-light opacity-40" />
         </div>
 
-        <div className="flex flex-col gap-2">
-          {buttonLabels.map(({ label, state, avalible }, index) => (
-            <Button
-              radius="sm"
-              startContent={state === 'done' ? <CheckBadgeIcon className="w-5 h-5" /> : <></>}
-              key={index}
-              color="success"
-              isDisabled={!avalible}
-              variant={setVariantAccordingToState(state)}
-              className="!justify-start"
-            >
-              {label}
-            </Button>
-          ))}
+        <div className="flex col-span-6 lg:col-span-1 lg:flex-col gap-2">
+          <FormNavigation items={buttonLabels} />
         </div>
         <div className=" pl-12 space-y-5 col-span-5">
-          {searchParams?.paso === undefined && <PersonalInformation />}
-          {searchParams?.paso === 'contacto' && <ContactInfoForm />}
-          {searchParams?.paso === 'familia' && <FamilyInfoForm />}
-          {searchParams?.paso === 'trabajo' && <JobInfoForm />}
-          {searchParams?.paso === 'secundaria' && <HighSchoolForm />}
-          {searchParams?.paso === 'universidad' && <CollageForm />}
-          {searchParams?.paso === 'ingles' && <LanguagesForm />}
+          {searchParams?.paso === undefined ||
+            (searchParams?.paso === '0' && <PersonalInformation />)}
+          {searchParams?.paso === '1' && <ContactInfoForm />}
+          {searchParams?.paso === '2' && <FamilyInfoForm />}
+          {searchParams?.paso === '3' && <JobInfoForm />}
+          {searchParams?.paso === '4' && <HighSchoolForm />}
+          {searchParams?.paso === '5' && <CollageForm />}
+          {searchParams?.paso === '6' && <LanguagesForm />}
+          {searchParams?.paso === '7' && <AditionalInfoForm />}
+          {searchParams?.paso === '8' && <AttachedFilesForm />}
         </div>
       </div>
     </main>
