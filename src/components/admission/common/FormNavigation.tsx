@@ -12,7 +12,7 @@ const setVariantAccordingToState = (state: string) => {
 const FormNavigation = ({
   items,
 }: {
-  items: [{ label: string; state: string; avalible: boolean; step: number }];
+  items: { label: string; state: string; avalible: boolean; step: number }[];
 }) => {
   const router = useRouter();
   const pathname = usePathname();
