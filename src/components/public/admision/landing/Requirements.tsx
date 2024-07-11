@@ -28,12 +28,13 @@ const Requirements = () => {
         >
           <Checkbox value="1">Ser venezolano</Checkbox>
           <Checkbox value="2">
-            Ser estudiante universitario regular en una institución pública o privada, en Carreras
-            Largas, de acuerdo con la OPSU: programas de estudio con una duración entre cuatro (4) y
-            siete (7) años que conducen al título de Licenciado o su equivalente
+            Ser estudiante universitario regular en una institución pública o privada de la región
+            capital, en Carreras Largas, de acuerdo con la OPSU: programas de estudio con una
+            duración entre cuatro (4) y siete (7) años que conducen al título de Licenciado o su
+            equivalente, por ejemplo: Abogado, Economista, Médico Cirujano, Ingeniero, etc.
           </Checkbox>
           <Checkbox value="3">
-            NO haber avanzado más allá del segundo año en la carrera universitaria que está
+            NO haber avanzado más allá del primer año en la carrera universitaria que está
             estudiando.
           </Checkbox>
           <Checkbox value="4">
