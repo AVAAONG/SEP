@@ -28,7 +28,6 @@ const FamilyInfoForm = () => {
         onSubmit={methods.handleSubmit(onSubmit)}
         className="grid grid-cols-1 md:grid-cols-2 gap-4 "
       >
-        ¿Contribuye con el ingreso familiar?
         <InputField isRequired name="career" type="number" label="Promedio de ingreso familiar" />
         <SelectFormField
           isRequired
@@ -65,7 +64,7 @@ const FamilyInfoForm = () => {
           type="text"
           label="Nombre de la empresa u organización en donde trabaja el padre"
         />
-        <InputField isRequired name="career" type="number" label="Años de experiencia del padre" />
+        {/* <InputField isRequired name="career" type="number" label="Años de experiencia del padre" /> */}
         <InputField isRequired name="career" type="text" label="Ocupación del madre" />
         <InputField
           isRequired
@@ -73,7 +72,7 @@ const FamilyInfoForm = () => {
           type="text"
           label="Nombre de la empresa u organización en donde trabaja el madre"
         />
-        <InputField isRequired name="career" type="number" label="Años de experiencia del madre" />
+        {/* <InputField isRequired name="career" type="number" label="Años de experiencia del madre" /> */}
         <button type="submit">Siguiente</button>
       </form>
     </FormProvider>

@@ -35,12 +35,6 @@ const ContactInfoForm = () => {
           />
           <InputField
             isRequired
-            label="Número de teléfono celular"
-            type="text"
-            name="cell_phone_Number"
-          />
-          <InputField
-            isRequired
             label="Número telefónico asociado a WhatsApp"
             type="text"
             name="whatsapp_number"

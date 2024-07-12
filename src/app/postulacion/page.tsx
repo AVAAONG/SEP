@@ -94,9 +94,9 @@ const page = async ({
           {step === '1' && <ContactInfoForm />}
           {step === '2' && <FamilyInfoForm />}
           {step === '3' && <JobInfoForm />}
-          {step === '4' && <HighSchoolForm />}
-          {step === '5' && <CollageForm />}
-          {step === '6' && <LanguagesForm />}
+          {step === '4' && <LanguagesForm />}
+          {step === '5' && <HighSchoolForm />}
+          {step === '6' && <CollageForm />}
           {step === '7' && <AditionalInfoForm />}
           {step === '8' && <AttachedFilesForm />}
         </div>
