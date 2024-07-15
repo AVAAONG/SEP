@@ -37,13 +37,10 @@ const page = async ({
   const applicantCallback = (callbackUrl as string) || '/postulacion';
   //when error it redirects to admision page. because it deletes chapter from the url
 
-  if (!chapter) {
-    return redirect('/admision#aplicacion');
-  }
+  if (!chapter) return redirect('/admision#aplicacion');
   if (session) {
     if (session.kind_of_user === 'APPLICANT') redirect(applicantCallback);
   }
-
   if (chapter === 'caracas' || chapter === 'carabobo' || chapter === 'zulia') {
     return (
       <main className="flex flex-col md:flex-row-reverse min-h-screen md:h-screen bg-light dark:bg-dark overflow-hidden">

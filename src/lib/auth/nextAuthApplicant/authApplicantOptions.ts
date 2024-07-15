@@ -75,10 +75,14 @@ const applicantAuthOptions: NextAuthOptions = {
         },
         session: async ({ session, token }) => {
             return {
-                userId: token.userId,
                 ...session,
-                scholarId: token.scholarId,
-                kind_of_user: 'APPLICANT',
+                user: {
+                    ...session.user,
+                    id: token,
+                    randomKey: token.randomKey,
+                    kind_of_user: 'APPLICANT',
+                },
+                userId: token.userId,
             };
         },
         jwt: ({ token, user, account, profile }) => {
