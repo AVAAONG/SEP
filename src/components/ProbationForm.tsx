@@ -183,30 +183,7 @@ const ProbationForm: React.FC<ProbationFormProps> = ({
                               isInvalid={!!errorMessage}
                               errorMessage={errorMessage?.toString()}
                               type="number"
-                              label="Horas de voluntariado internas"
-                              radius="sm"
-                              classNames={{ base: 'h-fit' }}
-                            />
-                          );
-                        }}
-                      />
-                      <Controller
-                        name="done_at_the_moment.external_volunteering_hours"
-                        control={control}
-                        rules={{ required: true }}
-                        shouldUnregister={true}
-                        render={({ field, formState }) => {
-                          const errorMessage =
-                            formState.errors?.done_at_the_moment?.external_volunteering_hours
-                              ?.message;
-                          return (
-                            <Input
-                              value={field.value?.toString()}
-                              onChange={field.onChange}
-                              isInvalid={!!errorMessage}
-                              errorMessage={errorMessage?.toString()}
-                              type="number"
-                              label="Horas de voluntariado externas"
+                              label="Horas de voluntariado"
                               radius="sm"
                               classNames={{ base: 'h-fit' }}
                             />
@@ -315,29 +292,7 @@ const ProbationForm: React.FC<ProbationFormProps> = ({
                               isInvalid={!!errorMessage}
                               errorMessage={errorMessage?.toString()}
                               type="number"
-                              label="Horas de voluntariado internas"
-                              radius="sm"
-                              classNames={{ base: 'h-fit' }}
-                            />
-                          );
-                        }}
-                      />
-                      <Controller
-                        name="agreement.external_volunteering_hours"
-                        control={control}
-                        rules={{ required: true }}
-                        shouldUnregister={true}
-                        render={({ field, formState }) => {
-                          const errorMessage =
-                            formState.errors?.agreement?.external_volunteering_hours?.message;
-                          return (
-                            <Input
-                              value={field.value?.toString()}
-                              onChange={field.onChange}
-                              isInvalid={!!errorMessage}
-                              errorMessage={errorMessage?.toString()}
-                              type="number"
-                              label="Horas de voluntariado externas"
+                              label="Horas de voluntariado"
                               radius="sm"
                               classNames={{ base: 'h-fit' }}
                             />
@@ -390,25 +345,6 @@ const ProbationForm: React.FC<ProbationFormProps> = ({
                         }}
                       />
                     </div>
-                    <Controller
-                      name="probation_reason"
-                      control={control}
-                      rules={{ required: true }}
-                      shouldUnregister={true}
-                      render={({ field, formState }) => {
-                        const errorMessage = formState.errors?.probation_reason?.message;
-                        return (
-                          <Textarea
-                            value={field.value}
-                            onChange={field.onChange}
-                            isInvalid={!!errorMessage}
-                            errorMessage={errorMessage?.toString()}
-                            className="col-span-3"
-                            label="Motivos por los cuales entra en probatorio"
-                          />
-                        );
-                      }}
-                    />
                     <Controller
                       name="observations"
                       control={control}

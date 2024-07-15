@@ -55,13 +55,10 @@ const probationScholarColumns: Column<any>[] = [
     accessor: 'probation_starting_date',
   },
   {
-    Header: 'Voluntariado interno realizado',
+    Header: 'Voluntariado',
     accessor: 'd',
   },
-  {
-    Header: 'Voluntariado externo realizado',
-    accessor: 'f',
-  },
+
   {
     Header: 'Actividades formativas realizadas',
     accessor: 'atendedWorkshops',

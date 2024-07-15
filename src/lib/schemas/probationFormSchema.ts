@@ -21,14 +21,6 @@ const probationFormSchema = z.object({
         }
       },
     }),
-    external_volunteering_hours: z.coerce.number({
-      errorMap: (issue, _ctx) => {
-        switch (issue.code) {
-          default:
-            return { message: 'Debes especificar la cantidad de horas de voluntariado realizadas' };
-        }
-      },
-    }),
     internal_volunteering_hours: z.coerce.number({
       errorMap: (issue, _ctx) => {
         switch (issue.code) {
@@ -77,7 +69,6 @@ const probationFormSchema = z.object({
     }),
     cva: z.string().min(1, { message: 'Debes especificar el nivel de CVA a llegar' }),
   }),
-  probation_reason: z.string().min(1, { message: 'Debes especificar la razón' }),
   next_meeting: z.coerce.date().refine((date) => new Date(date) >= new Date(), {
     message: 'La fecha no puede ser menor a la actual',
   }),
