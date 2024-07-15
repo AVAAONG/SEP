@@ -12,6 +12,7 @@ import GoogleSignInButton from '@/components/public/signin/signinButtons/GoogleS
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { Link } from '@nextui-org/link';
 import { getServerSession } from 'next-auth';
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 /**
@@ -26,7 +27,7 @@ const page = async ({
   searchParams?: { [key: string]: string | string[] | undefined };
 }) => {
   const session = await getServerSession(authOptions);
-  const chapter = searchParams?.chapter as string;
+  const chapter = cookies().get('chapter')?.value.toLowerCase();
   const error = searchParams?.error as string;
   const callbackUrl = searchParams?.callbackUrl as string;
   /**
@@ -40,7 +41,7 @@ const page = async ({
     return redirect('/admision#aplicacion');
   }
   if (session) {
-    redirect(applicantCallback);
+    if (session.kind_of_user === 'APPLICANT') redirect(applicantCallback);
   }
 
   if (chapter === 'caracas' || chapter === 'carabobo' || chapter === 'zulia') {

@@ -25,7 +25,7 @@ const ArrowIcon = () => {
 const AdmisionLinkButtons = ({ chapterName }: { chapterName: string }) => {
   return (
     <Link
-      href="/signin/postulante?chapter=caracas"
+      href="/signin/postulante"
       className="w-full md:max-w-[35ch] h-min relative group rounded-lg p-2 sm:p-5 text-dark dark:text-light border-primary-light border transition-all dark:hover:bg-primary-light dark:focus:bg-primary-light hover:bg-primary-1 focus:bg-primary-1"
       rel="noopener noreferrer"
       onClick={() => fetch(`/api/admision?cookieValue=${chapterName}`)}
