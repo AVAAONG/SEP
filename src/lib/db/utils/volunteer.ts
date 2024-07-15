@@ -55,6 +55,9 @@ export const getVolunteersByScholar = async (scholarId: string): Promise<Volunte
 
 export const getExternalVolunteer = async () => {
 	return prisma.volunteer.findMany({
+		where: {
+			kind_of_volunteer: 'EXTERNAL'
+		},
 		include: {
 			volunteer_attendance: {
 				include: {

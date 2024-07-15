@@ -37,9 +37,9 @@ const ExternalVolunteerAdminColumns: Column<VolunteerTableDetails>[] = [
     accessor: 'title',
     Cell: ({ value, cell }) => {
       return (
-        // <Link href={cell.row.original.id ? `actividadesFormativas/${cell.row.original.id}` : ''}>
-        <div className="block w-72 overflow-x-scroll">{value}</div>
-        // </Link>
+        <Link href={cell.row.original.id ? cell.row.original.id : ''}>
+          <div className="block w-72 overflow-x-scroll">{value}</div>
+        </Link>
       );
     },
   },
