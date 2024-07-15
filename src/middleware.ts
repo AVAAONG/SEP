@@ -16,9 +16,12 @@ import { NextResponse } from 'next/server';
 export default async function wrapMiddlewareFunction(req: NextRequestWithAuth, res: Response) {
   let signinPath = '';
   if (req.nextUrl.pathname.startsWith('/becario')) {
+
     signinPath = 'becario';
   } else if (req.nextUrl.pathname.startsWith('/admin')) {
     signinPath = 'admin';
+  } else if (req.nextUrl.pathname.startsWith('/postulacion')) {
+    signinPath = 'postulante';
   }
 
   ///@ts-expect-error
@@ -30,6 +33,7 @@ export default async function wrapMiddlewareFunction(req: NextRequestWithAuth, r
 
       const isAdminRoute = pathname.startsWith('/admin');
       const isScholarRoute = pathname.startsWith('/becario');
+      const isApplicantRoute = pathname.startsWith('/postulacion');
 
       if (token?.kind_of_user === 'ADMIN' && isAdminRoute) {
         const response = await fetch(`https://${host}/admin/api/roles?adminId=${token.id}`);
@@ -57,6 +61,9 @@ export default async function wrapMiddlewareFunction(req: NextRequestWithAuth, r
       if (isScholarRoute && token?.kind_of_user !== 'SCHOLAR') {
         return NextResponse.rewrite(new URL('/accessDenied', request.url));
       }
+      if (isApplicantRoute && token?.kind_of_user !== 'APPLICANT') {
+        return NextResponse.rewrite(new URL('/accessDenied', request.url));
+      }
       if (isAdminRoute && token?.kind_of_user !== 'ADMIN') {
         return NextResponse.rewrite(new URL('/accessDenied', request.url));
       }
@@ -74,5 +81,5 @@ export default async function wrapMiddlewareFunction(req: NextRequestWithAuth, r
  * @see https://nextjs.org/docs/pages/building-your-application/routing/middleware for more information
  */
 export const config = {
-  matcher: ['/admin/:path*', '/becario/:path*'],
+  matcher: ['/admin/:path*', '/becario/:path*', '/postulacion/:path*'],
 };
