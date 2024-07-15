@@ -24,6 +24,7 @@ const page = async () => {
     ...volunteerMapped,
   ]
     .filter((activity) => activity.activity_status === 'SENT')
+
     .sort((a, b) => new Date(a.start_dates[0]).getTime() - new Date(b.start_dates[0]).getTime());
 
   const workshopDoneCount = workshops.filter(
@@ -85,11 +86,11 @@ const page = async () => {
       <div className="w-full flex flex-col md:flex-row gap-3 items-center">
         {cardContent.map((card) => PanelCard(card))}
       </div>
-      <div className="flex flex-col lg:flex-row gap-2 ">
-        <div className="h-full max-h-[680px] w-full overflow-x-clip rounded-md backdrop-filter backdrop-blur-3xl bg-white dark:bg-black shadow-md p-2">
+      <div className="grid grid-cols-12 gap-2 ">
+        <div className="col-span-12 lg:col-span-9  h-full max-h-[680px] w-full overflow-x-clip rounded-md backdrop-filter backdrop-blur-3xl bg-white dark:bg-black shadow-md p-2">
           <Calendar events={events} />
         </div>
-        <div className="w-full lg:w-1/4 p-4 bg-white rounded-lg shadow-md backdrop-filter backdrop-blur-3xl dark:bg-black max-h-[680px] overflow-y-scroll">
+        <div className="col-span-12 lg:col-span-3 w-full p-4 bg-white rounded-lg shadow-md backdrop-filter backdrop-blur-3xl dark:bg-black max-h-[680px] overflow-y-scroll">
           <NextEventsList activities={sentActivities as (Workshop | Chat)[]} />
         </div>
       </div>

@@ -25,6 +25,14 @@ const getBgColor = (colors: any, activity_status: string) => {
     }
     return bgColor;
 };
+
+const getDifference = (startDate: string, endDate: string) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const differenceInTime = end.getTime() - start.getTime();
+    const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+    return differenceInDays >= 5;
+}
 export const formatActivityForBigCalendar = (
     activity: WorkshopWithAllData | ChatsWithAllData | VolunteerWithAllData,
     kindOfUser: 'admin' | 'becario',
@@ -41,26 +49,31 @@ export const formatActivityForBigCalendar = (
 
     return start_dates.map((startDate, index) => {
         const endDate = end_dates[index];
+        if (getDifference(startDate, endDate)) {
+            return []
+        }
+        else {
+            return {
+                id: id,
+                kindOfActivity: kindOfActivity,
+                title: `(${eventModalityTitle}) ${title}`,
+                allDay: false,
+                start: new Date(startDate),
+                end: new Date(endDate),
+                description: description as string,
+                bgColor,
+                isSuspended: kindOfActivity === 'volunteer'
+                    ? (activity as Volunteer).status === 'REJECTED'
+                    : kindOfActivity === 'workshop'
+                        ? (activity as Workshop).activity_status === 'SUSPENDED'
+                        : (activity as Chat).activity_status === 'SUSPENDED',
+                url: eventUrl,
+            };
+        }
 
-        return {
-            id: id,
-            kindOfActivity: kindOfActivity,
-            title: `(${eventModalityTitle}) ${title}`,
-            allDay: false,
-            start: new Date(startDate),
-            end: new Date(endDate),
-            description: description as string,
-            bgColor,
-            isSuspended: kindOfActivity === 'volunteer'
-                ? (activity as Volunteer).status === 'REJECTED'
-                : kindOfActivity === 'workshop'
-                    ? (activity as Workshop).activity_status === 'SUSPENDED'
-                    : (activity as Chat).activity_status === 'SUSPENDED',
-            url: eventUrl,
-        };
+
     });
 }
-
 
 
 

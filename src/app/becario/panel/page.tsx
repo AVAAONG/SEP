@@ -64,11 +64,11 @@ const page = async () => {
             <React.Fragment key={index}>{PanelCard(card)}</React.Fragment>
           ))}
         </div>
-        <div className="flex flex-col lg:flex-row gap-4">
-          <div className="items-end flex flex-col gap-1 h-full max-h-[680px] text-gray-800 capitalize dark:text-gray-300 shadow-sm overflow-x-clip w-full bg-white border border-gray-200  shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 p-2">
+        <div className="grid grid-cols-12 gap-2 ">
+          <div className="col-span-12 lg:col-span-9 gap-1 h-full max-h-[680px] text-gray-800 capitalize dark:text-gray-300 shadow-sm overflow-x-clip w-full bg-white border border-gray-200  shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 p-2">
             <Calendar events={events} />
           </div>
-          <div className="w-full lg:w-1/4 p-4 bg-white border border-gray-200 rounded-lg shadow-sm shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950">
+          <div className="col-span-12 lg:col-span-3 p-4 bg-white border border-gray-200 rounded-lg shadow-sm shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950">
             <NextEventsList activities={enrolledActivities} />{' '}
           </div>
         </div>
