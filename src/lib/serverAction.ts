@@ -1,6 +1,7 @@
 'use server';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
+import formatDni from './db/utils/formatDni';
 import { getScholarByEmail } from './db/utils/users';
 import { getCollageName } from './utils/parseFromDatabase';
 
@@ -65,3 +66,32 @@ export const createCVACard = async (
   );
   if (result.status !== 200) throw new Error('Error');
 };
+
+export const createProbationAct = async (scholarInProbation, probationInfo, starDate) => {
+  const nes = probationInfo
+  delete nes.probation_reason
+  probationInfo.next_meeting = new Date(probationInfo.next_meeting).toLocaleDateString('es-ES', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  })
+  const result = await fetch(
+    'https://script.google.com/macros/s/AKfycbw6KsnrfzdfwcxpalQEUi6NOqygIzhM2w552dj1Gl84lavJxJEFp7CTJVb8XLWt4yFTHQ/exec',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        firstName: scholarInProbation.first_names,
+        surNames: scholarInProbation.last_names,
+        dni: `V-${formatDni(scholarInProbation.dni)}`,
+        kindOfProbation:
+          probationInfo.kind_of_probation === 'PROBATION_I' ? 'I' : 'II',
+        date: starDate,
+        ...probationInfo,
+      }),
+    }
+  );
+  if (result.status !== 200) throw new Error('Error');
+}

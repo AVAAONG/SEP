@@ -1,7 +1,10 @@
 'use client';
 import { ScholarWithAllData } from '@/lib/db/types';
+import { createProbationAct } from '@/lib/serverAction';
 import { CalendarDaysIcon } from '@heroicons/react/24/outline';
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
+import { Button } from '@nextui-org/react';
+import { toast } from 'react-toastify';
 
 interface ProbationAccordionProps {
   scholarInProbation: ScholarWithAllData;
@@ -152,6 +155,21 @@ const ProbationAccordion: React.FC<ProbationAccordionProps> = ({ scholarInProbat
                   Observaciones
                 </h3>
                 <p>{probationInfo.observations}</p>
+              </div>
+              <div className="flex justify-end">
+                <Button
+                  onPress={() =>
+                    toast.promise(createProbationAct(scholarInProbation, probationInfo, starDate), {
+                      pending: 'Creando acta...',
+                      success: 'Acta creada',
+                      error: 'Error al crear acta',
+                    })
+                  }
+                  color={probationInfo.kind_of_probation === 'PROBATION_I' ? 'warning' : 'danger'}
+                  variant="ghost"
+                >
+                  Crear acta
+                </Button>
               </div>
             </div>
           </AccordionItem>
