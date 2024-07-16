@@ -378,10 +378,10 @@ const ProbationForm: React.FC<ProbationFormProps> = ({
                   </Button>
                   <Button
                     type="submit"
-                    isDisabled={!isValid || isSubmitting}
+                    isDisabled={isSubmitting}
                     color={probationKind === 'PROBATION_II' ? 'danger' : 'warning'}
                     onPress={() => {
-                      if (!isSubmitting) onClose();
+                      // if (!isSubmitting) onClose();
                     }}
                   >
                     Pasar a {title}

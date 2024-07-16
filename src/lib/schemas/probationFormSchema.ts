@@ -11,8 +11,7 @@ const probationFormSchema = z.object({
               return { message: 'Debes especificar la cantidad de actividades realizadas' };
           }
         },
-      })
-      .min(1),
+      }),
     chats: z.coerce.number({
       errorMap: (issue, _ctx) => {
         switch (issue.code) {
@@ -41,8 +40,7 @@ const probationFormSchema = z.object({
               return { message: 'Debes especificar la cantidad de actividades a realizar' };
           }
         },
-      })
-      .min(1),
+      }),
     chats: z.coerce.number({
       errorMap: (issue, _ctx) => {
         switch (issue.code) {
