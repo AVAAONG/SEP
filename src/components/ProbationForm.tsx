@@ -55,7 +55,7 @@ const ProbationForm: React.FC<ProbationFormProps> = ({
     };
 
     await setProbationToScholar(scholar.id, probationData);
-    revalidateSpecificPath(`/admin/becarios/${scholar.id}`);
+    await revalidateSpecificPath(`/admin/becarios/${scholar.id}`);
     reset();
   };
 
