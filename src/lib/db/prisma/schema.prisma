@@ -338,6 +338,7 @@ model WorkshopSafisfactionForm {
 enum KinOfUser {
   ADMIN
   SCHOLAR
+  APPLICANT
 }
 
 model Account {
@@ -840,7 +841,7 @@ model Probation {
   starting_date      DateTime
   ending_date        DateTime?
   done_at_the_moment Json
-  probation_reason   String
+  probation_reason   String?
   agreement          Json
   next_meeting       DateTime
   observations       String?

@@ -17,6 +17,7 @@ import {
 import { ScholarStatus } from '@prisma/client';
 import React, { BaseSyntheticEvent } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
 interface ProbationFormProps {
   isOpen: boolean;
@@ -37,8 +38,9 @@ const ProbationForm: React.FC<ProbationFormProps> = ({
     control,
     handleSubmit,
     reset,
-    formState: { isSubmitting, isValid },
+    formState: { isSubmitting, isValid, isSubmitted },
   } = useForm<z.infer<typeof probationFormSchema>>({
+    mode: 'onBlur',
     resolver: zodResolver(probationFormSchema),
   });
   const handleFormSubmit = async (
@@ -68,7 +70,11 @@ const ProbationForm: React.FC<ProbationFormProps> = ({
       >
         <form
           onSubmit={handleSubmit(
-            (data, event) => handleFormSubmit(data, event),
+            async (data, event) => toast.promise(handleFormSubmit(data, event), {
+              pending: 'Guardando cambios...',
+              success: 'Cambios guardados',
+              error: 'Error al guardar cambios',
+            }),
             (error) => console.log(error)
           )}
         >
@@ -372,10 +378,10 @@ const ProbationForm: React.FC<ProbationFormProps> = ({
                   </Button>
                   <Button
                     type="submit"
-                    isDisabled={isSubmitting}
+                    isDisabled={!isValid || isSubmitting}
                     color={probationKind === 'PROBATION_II' ? 'danger' : 'warning'}
                     onPress={() => {
-                      if (isValid || !isSubmitting) onClose();
+                      if (!isSubmitting) onClose();
                     }}
                   >
                     Pasar a {title}

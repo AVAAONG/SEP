@@ -51,14 +51,6 @@ const probationFormSchema = z.object({
         }
       },
     }),
-    external_volunteering_hours: z.coerce.number({
-      errorMap: (issue, _ctx) => {
-        switch (issue.code) {
-          default:
-            return { message: 'Debes especificar la cantidad de horas de voluntariado a realizar' };
-        }
-      },
-    }),
     internal_volunteering_hours: z.coerce.number({
       errorMap: (issue, _ctx) => {
         switch (issue.code) {
