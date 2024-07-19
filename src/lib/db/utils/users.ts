@@ -627,6 +627,21 @@ export const setProbationToScholar = async (scholarId: string, data: Probation) 
     },
   });
 };
+export const setScholarToNormalStatus = async (scholarId: string) => {
+  await prisma.scholar.update({
+    where: {
+      id: scholarId,
+    },
+    data: {
+      program_information: {
+        update: {
+          scholar_status: 'NORMAL',
+        },
+      },
+    },
+  });
+}
+
 
 export const getScholarsInProbationByYear = async (year: string) => {
   const scholars = await prisma.scholar.findMany({
