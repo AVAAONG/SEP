@@ -1,5 +1,6 @@
 import { DonutChartComponent } from '@/components/charts';
 import DateSelector from '@/components/commons/datePicker';
+import DatePickerByEvaluationPeriod from '@/components/commons/datePicker/DatePickerByEvaluationBlock';
 import Stats from '@/components/scholar/ScholarStats';
 import Table from '@/components/table/Table';
 import { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
@@ -13,7 +14,7 @@ import {
   countChatProperties,
   formatCountsForCharts,
 } from '@/lib/utils/activityFilters';
-import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
+import { filterActivitiesBySearchParamsPeriod } from '@/lib/utils/datePickerFilters';
 import { getAttendedChats } from '@/lib/utils/getAttendedActivities';
 import { getServerSession } from 'next-auth';
 
@@ -25,7 +26,7 @@ const page = async ({
   const session = await getServerSession(authOptions);
   if (!session) return null;
   const chatDbList = await getChatsByScholar(session.scholarId);
-  const chats = (await filterActivitiesBySearchParams(
+  const chats = (await filterActivitiesBySearchParamsPeriod(
     chatDbList,
     searchParams
   )) as ChatsWithAllData[];
@@ -37,7 +38,7 @@ const page = async ({
 
   return (
     <div className="flex flex-col gap-1">
-      <DateSelector />
+      <DatePickerByEvaluationPeriod />
       <h1 className="text-xl font-medium sm:text-2xl mb-3 ">Registro de chat clubs de inglés</h1>
       <div className="h-full w-full flex flex-col gap-4">
         <Stats

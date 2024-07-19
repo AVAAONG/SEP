@@ -1,5 +1,5 @@
 import { DonutChartComponent } from '@/components/charts';
-import DateSelector from '@/components/commons/datePicker';
+import DatePickerByEvaluationPeriod from '@/components/commons/datePicker/DatePickerByEvaluationBlock';
 import Stats from '@/components/scholar/ScholarStats';
 import Table from '@/components/table/Table';
 import scholarWorkshopAttendanceColumns from '@/components/table/columns/scholar/activityAttendance/workshops/columns';
@@ -9,7 +9,7 @@ import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns'
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { getWorkhsopsByScholar } from '@/lib/db/utils/Workshops';
 import { countWorkshopProperties, formatCountsForCharts } from '@/lib/utils/activityFilters';
-import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
+import { filterActivitiesBySearchParamsPeriod } from '@/lib/utils/datePickerFilters';
 import { getAttendedWorkshops } from '@/lib/utils/getAttendedActivities';
 import { getServerSession } from 'next-auth';
 
@@ -21,7 +21,7 @@ const page = async ({
   const session = await getServerSession(authOptions);
   if (!session) return null;
   const workshopsDbList = await getWorkhsopsByScholar(session?.scholarId);
-  const workshops = (await filterActivitiesBySearchParams(
+  const workshops = (await filterActivitiesBySearchParamsPeriod(
     workshopsDbList,
     searchParams
   )) as WorkshopWithAllData[];
@@ -32,7 +32,7 @@ const page = async ({
 
   return (
     <div className="flex flex-col gap-1">
-      <DateSelector />
+      <DatePickerByEvaluationPeriod />
       <h1 className="text-xl ml-4 font-medium sm:text-2xl mb-3 ">
         Registro de actividades formativas
       </h1>

@@ -3,7 +3,7 @@ import ScholarStatus from '@/components/ScholarStatus';
 import AdminScholarDialogsButtons from '@/components/adminScholarDialogInformation/adminScholarDialogsButtons';
 import { AreaChartComponent } from '@/components/charts';
 import PanelCard, { PanelCardProps } from '@/components/commons/PanelCard';
-import DateSelector from '@/components/commons/datePicker';
+import DatePickerByEvaluationPeriod from '@/components/commons/datePicker/DatePickerByEvaluationBlock';
 import Table from '@/components/table/Table';
 import { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
 import scholarChatAttendaceColumns from '@/components/table/columns/scholar/activityAttendance/chats/columns';
@@ -23,7 +23,7 @@ import {
   getWorkhsopsByScholar,
 } from '@/lib/db/utils/Workshops';
 import { getScholarWithAllData } from '@/lib/db/utils/users';
-import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
+import { filterActivitiesBySearchParamsPeriod } from '@/lib/utils/datePickerFilters';
 import {
   getApprovedAndAttendedVolunteerActivities,
   getApprovedAndAttendedVolunteers,
@@ -59,12 +59,12 @@ const page = async ({
   const volunteersDb = await getVolunteersByScholar(scholarId);
 
   // Filter raw data based on search parameters
-  const chats = (await filterActivitiesBySearchParams(chatsDb, searchParams)) as ChatsWithAllData[];
-  const workshops = (await filterActivitiesBySearchParams(
+  const chats = (await filterActivitiesBySearchParamsPeriod(chatsDb, searchParams)) as ChatsWithAllData[];
+  const workshops = (await filterActivitiesBySearchParamsPeriod(
     workshopsDb,
     searchParams
   )) as WorkshopWithAllData[];
-  const volunteers = (await filterActivitiesBySearchParams(
+  const volunteers = (await filterActivitiesBySearchParamsPeriod(
     volunteersDb,
     searchParams
   )) as VolunteerWithAllData[];
@@ -178,7 +178,7 @@ const page = async ({
       </div>
 
       <div className="flex flex-col w-full">
-        <DateSelector />
+        <DatePickerByEvaluationPeriod />
         <div className="flex gap-2 justify-center h-full items-center mt-4">
           {cardContent.map((card, index) => (
             <React.Fragment key={index}>{PanelCard(card)}</React.Fragment>

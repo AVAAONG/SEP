@@ -1,5 +1,5 @@
 import { DonutChartComponent } from '@/components/charts';
-import DateSelector from '@/components/commons/datePicker';
+import DatePickerByEvaluationPeriod from '@/components/commons/datePicker/DatePickerByEvaluationBlock';
 import Stats from '@/components/scholar/ScholarStats';
 import Table from '@/components/table/Table';
 import scholarVolunteerAttendanceColumns from '@/components/table/columns/scholar/activityAttendance/volunteer/columns';
@@ -9,7 +9,7 @@ import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { VolunteerWithAllData } from '@/lib/db/types';
 import { getVolunteersByScholar } from '@/lib/db/utils/Workshops';
 import { countVolunteerProperties, formatCountsForCharts } from '@/lib/utils/activityFilters';
-import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
+import { filterActivitiesBySearchParamsPeriod } from '@/lib/utils/datePickerFilters';
 import { getApprovedAndAttendedVolunteers } from '@/lib/utils/getAttendedActivities';
 import { getServerSession } from 'next-auth';
 
@@ -22,7 +22,7 @@ const page = async ({
   const volunteerDbList = await getVolunteersByScholar(session?.scholarId!);
   const { externalVolunteerHours, internalVolunteerHours, totalVolunteerHours } =
     getApprovedAndAttendedVolunteers(volunteerDbList);
-  const volunteers = (await filterActivitiesBySearchParams(
+  const volunteers = (await filterActivitiesBySearchParamsPeriod(
     volunteerDbList,
     searchParams
   )) as VolunteerWithAllData[];
@@ -31,7 +31,7 @@ const page = async ({
   const volunteerDataForTable = createScholarVolunteerAttendanceForTable(volunteers);
   return (
     <div className="min-h-screen">
-      <DateSelector />
+      <DatePickerByEvaluationPeriod />
       <div className="flex flex-col px-2 pt-6 xl:gap-4">
         <div className="mb-4 col-span-full xl:mb-2">
           <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
