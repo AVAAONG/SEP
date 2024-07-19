@@ -1,14 +1,9 @@
 import { formatDateToStoreInDB } from "@/lib/utils/dates";
+import { createEnumErrorMap } from "@/lib/zod/utils";
 import { Collages, KindOfCollage, StudyArea, StudyRegime } from "@prisma/client";
 import { z } from "zod";
 
-function createEnumErrorMap(validItemName: string) {
-    return {
-        errorMap: (_issue: z.ZodIssueOptionalMessage, _ctx: z.ErrorMapCtx) => ({
-            message: `Debes seleccionar un(a) ${validItemName} valida`,
-        }),
-    };
-}
+
 const collageSchema = z.object({
     kind_of_collage: z.nativeEnum(KindOfCollage, createEnumErrorMap('tipo de universidad')),
     collage: z.nativeEnum(Collages, createEnumErrorMap('universidad')),

@@ -61,8 +61,8 @@ const LanguagesForm = () => {
             </Select>
           )}
         />
-
         <InputField label="Especifique el idioma" type="text" name="specifiedLanguage" />
+        duplicar estas pregantas
         <Controller
           name="englishLevel"
           control={methods.control}
@@ -73,7 +73,7 @@ const LanguagesForm = () => {
               isInvalid={!!formState.errors.englishLevel?.message}
               errorMessage={formState.errors.englishLevel?.message?.toString()}
               radius="sm"
-              label="¿Cuál es su nivel de inglés?"
+              label="Nivel de competencia"
               defaultSelectedKeys={[
                 field.value?.toString() as 'BASIC' | 'INTERMEDIATE' | 'ADVANCED',
               ]}

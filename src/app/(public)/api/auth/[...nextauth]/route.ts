@@ -1,4 +1,5 @@
 import authAdminOptions from '@/lib/auth/nextAuthAdminOptions/authAdminOptions';
+import applicantAuthOptions from '@/lib/auth/nextAuthApplicant/authApplicantOptions';
 import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextAuth from 'next-auth';
@@ -10,7 +11,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const cookieValue = cookieStore.get('fromWhereYouCome')?.value;
   if (cookieValue === 'SCHOLAR') return await NextAuth(req, res, authOptions);
   else if (cookieValue === 'admin') return await NextAuth(req, res, authAdminOptions);
+  else if (cookieValue === 'APPLICANT') return await NextAuth(req, res, applicantAuthOptions);
   else return NextResponse.json({ message: 'The cookie was not specified' });
 };
 
 export { handler as GET, handler as POST };
+

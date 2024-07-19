@@ -8,6 +8,7 @@ interface FileInputProps {
   name: string;
   control: any; // Replace with actual type from RHF
   label: string;
+  description?: string;
   acceptedFileTypes?: string | string[]; // Allow single or multiple types
   onFileChange?: (file: React.ChangeEvent<HTMLInputElement> | null) => void;
   existingFileUrl: string | undefined | null;
@@ -17,6 +18,7 @@ const FileInput: React.FC<FileInputProps> = ({
   name,
   control,
   label,
+  description,
   acceptedFileTypes = '.pdf, .jpg, .jpeg, .png',
   onFileChange,
   existingFileUrl,
@@ -107,6 +109,7 @@ const FileInput: React.FC<FileInputProps> = ({
               </Tooltip>
             ) : null}
           </div>
+          <p className="text-xs pl-2">{description}</p>
         </div>
       )}
     />

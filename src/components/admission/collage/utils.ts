@@ -11,12 +11,22 @@ const SEMESTERS = [
     },
     {
         value: '3',
-        label: '3er semestre',
+        label: '3er semestre o más',
     },
 
 ];
+const YEARS = [
+    {
+        value: '1',
+        label: '1er año',
+    },
+    {
+        value: '2',
+        label: '2do año o más',
+    },
+];
 
-const QUARTERS = [
+const QUARTER = [
     {
         value: '1',
         label: '1er trimestre',
@@ -31,36 +41,7 @@ const QUARTERS = [
     },
     {
         value: '4',
-        label: '4to trimestre',
-    },
-];
-const YEARS = [
-    {
-        value: '1',
-        label: '1er año',
-    },
-    {
-        value: '2',
-        label: '2do año',
-    },
-    {
-        value: '3+',
-        label: '3er año o más',
-    },
-];
-
-const QUARTIER = [
-    {
-        value: '1',
-        label: '1er año',
-    },
-    {
-        value: '2',
-        label: '2do año',
-    },
-    {
-        value: '3',
-        label: '3er año o mas',
+        label: '4to trimestre o más',
     },
 ];
 
@@ -74,10 +55,6 @@ export const ACADEMIC_PERIODS_KIND = [
         value: 'SEMESTER',
     },
     {
-        label: 'Cuatrimestral',
-        value: 'QUARTIER',
-    },
-    {
         label: 'Trimestral',
         value: 'QUARTER',
     },
@@ -87,12 +64,10 @@ export const getAcademicPeriodBasedOnStudyRegime = (studyRegime: StudyRegime) =>
     switch (studyRegime) {
         case 'SEMESTER':
             return SEMESTERS;
-        case 'QUARTER':
-            return QUARTERS;
         case 'ANNUAL':
             return YEARS;
-        case 'QUARTIER':
-            return QUARTIER;
+        case 'QUARTER':
+            return QUARTER;
         default:
             return [];
     }

@@ -1,27 +1,10 @@
+import { yesNoEnumBooleanTransform } from '@/lib/zod/utils';
 import { z, ZodIssueCode } from 'zod';
 
-const speaksOtherLanguageEnum = z.enum(['YES', 'NO'],
-    {
-        errorMap: (issue, _ctx) => {
-            switch (issue.code) {
-                case 'invalid_enum_value':
-                    return { message: 'Debes seleccionar una opción valida' };
-                default:
-                    return { message: 'Debes seleccionar' };
-            }
-        },
-    }
-);
-
 // Transforming 'YES'/'NO' to true/false
-const speaksOtherLanguage = speaksOtherLanguageEnum.transform(
-    (value) => {
-        if (value === 'YES') return true;
-        if (value === 'NO') return false
-    }
-);
+
 const languagesFormSchema = z.object({
-    speaksOtherLanguage,
+    speaksOtherLanguage: yesNoEnumBooleanTransform,
     specifiedLanguage: z.string().optional(),
     englishLevel: z.enum(['BASIC', 'INTERMEDIATE', 'ADVANCED']).optional(),
 }).superRefine((data, ctx) => {

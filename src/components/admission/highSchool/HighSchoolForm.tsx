@@ -1,5 +1,6 @@
 'use client';
 import InputField from '@/components/fields/InputFormField';
+import SelectFormField from '@/components/fields/SelectFormField';
 import TextAreaFormField from '@/components/fields/TextAreaFormField';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -36,19 +37,29 @@ const HighSchoolForm = () => {
           autoFocus
           isRequired
         />
-        <InputField
+        <SelectFormField
+          isRequired
+          label="Dependencia de la institución"
+          name="study_regime"
+          selectItems={[
+            { label: 'Pública', value: 'PUBLIC' },
+            { label: 'Privada', value: 'PRIVATE' },
+            { label: 'Subsidiada', value: 'SUBSIDY' },
+          ]}
+        />
+        {/* <InputField
           label="Nombre del director(a) de la institución"
           type="text"
           name="directorName"
           isRequired
-        />
-        <InputField
+        /> */}
+        {/* <InputField
           label="Dirección de la institución"
           type="text"
           name="institutionAddress"
           className="md:col-span-2" // Pass Tailwind class directly
           isRequired
-        />
+        /> */}
         <InputField
           label="Promedio de notas de bachillerato"
           type="number"
@@ -57,29 +68,38 @@ const HighSchoolForm = () => {
           max={20}
           isRequired
         />
+        <SelectFormField
+          isRequired
+          label="Título obtenido al egresar de la institución"
+          name="study_regime"
+          selectItems={[
+            { label: 'Bachiller en Ciencias', value: 'BACHELOR_IN_CIENCE' },
+            { label: 'Técnico medio', value: 'MEDIAN_TECNICIAN' },
+          ]}
+        />
         <InputField
           type="text"
-          description="Ejemplo: Bachiller en Ciencias / Técnico Medio Industrial"
-          label="Título obtenido al egresar de la institución"
+          description="Ejemplo: Industrial"
+          label="Mención"
           name="degree"
           isRequired
         />
-        <InputField
+        {/* <InputField
           type="text"
           label="Lugar donde realizó sus horas de labor social"
           name="socialServiceLocation"
           className="md:col-span-2"
           isRequired
-        />
-        <TextAreaFormField
+        /> */}
+        {/* <TextAreaFormField
           name="socialServiceLearnings"
           label="Aprendizajes obtenidos en la labor social"
           className="md:col-span-2"
           isRequired
-        />
+        /> */}
         <TextAreaFormField
           name="extracurricularActivities"
-          label="Actividades extracurriculares realizadas"
+          label="Actividades extracurriculares realizadas durante la educación secundaria"
           className="md:col-span-2"
         />
         <button type="submit">Siguiente</button>
