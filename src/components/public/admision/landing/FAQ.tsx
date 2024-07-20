@@ -1,3 +1,5 @@
+import FAQAccordion from "@/components/admission/landing/FAQAccordion";
+
 const FAQ = () => {
   return (
     <section className="min-h-screen w-full flex flex-col items-center gap-16 p-24" id="requisitos">
@@ -6,6 +8,7 @@ const FAQ = () => {
           Preguntas frecuentes
         </h2>
       </div>
+      <FAQAccordion />
     </section>
   );
 };
