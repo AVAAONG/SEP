@@ -1,4 +1,5 @@
 'use client';
+import { setCookie } from '@/lib/serverAction';
 import Link from 'next/link';
 const ArrowIcon = () => {
   return (
@@ -28,7 +29,7 @@ const AdmisionLinkButtons = ({ chapterName }: { chapterName: string }) => {
       href="/signin/postulante"
       className="w-full md:max-w-[35ch] h-min relative group rounded-lg p-2 sm:p-5 text-dark dark:text-light border-primary-light border transition-all dark:hover:bg-primary-light dark:focus:bg-primary-light hover:bg-primary-1 focus:bg-primary-1"
       rel="noopener noreferrer"
-      onClick={() => fetch(`/api/admision?cookieValue=${chapterName}`)}
+      onClick={async () => await setCookie('chapter', chapterName)}
     >
       <h2 className={`text-2xl font-medium`}>
         <span className="hidden md:inline-block">Capítulo {chapterName}</span>
@@ -39,7 +40,7 @@ const AdmisionLinkButtons = ({ chapterName }: { chapterName: string }) => {
       <p className={`hidden sm:block m-0 max-w-[30ch] text-xs lg:text-sm`}>
         Si el campus de tu universidad se encuentra en el estado de {chapterName}, ingresa aqui
       </p>
-    </Link>
+    </Link >
   );
 };
 

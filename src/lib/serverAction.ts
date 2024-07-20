@@ -65,3 +65,13 @@ export const createCVACard = async (
   );
   if (result.status !== 200) throw new Error('Error');
 };
+
+
+export async function setCookie(name: string, value: string) {
+  cookies().set(name, value, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 3600 // 1 hour
+  })
+}
