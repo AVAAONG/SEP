@@ -4,6 +4,7 @@ import { Scholar } from "users\scholar\scholar"
 enum KinOfUser {
     ADMIN
     SCHOLAR
+    APPLICANT
 }
 
 model Account {

@@ -6,12 +6,12 @@
 import { prisma } from '@/lib/db/utils/prisma';
 import type { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
-import { NEXT_SECRET, emailUserProviderConfig, googleUserProviderConfig } from '../nextAuthScholarOptions/authConfig';
 import CustomEmailProvider from '../nextAuthScholarOptions/EmailProvider';
-import { customPrismaAdapter } from '../nextAuthScholarOptions/PrismCustomAdapter';
+import { NEXT_SECRET, emailUserProviderConfig, googleUserProviderConfig } from '../nextAuthScholarOptions/authConfig';
 import { PAGES } from './authApplicantConfig';
+import customPrismaAdapterApplicant from './customPrismaAdapter';
 
-const adapter = customPrismaAdapter(prisma);
+const adapter = customPrismaAdapterApplicant(prisma);
 
 /**
  *
@@ -82,20 +82,16 @@ const applicantAuthOptions: NextAuthOptions = {
                     randomKey: token.randomKey,
                     kind_of_user: 'APPLICANT',
                 },
-                userId: token.userId,
             };
         },
-        jwt: ({ token, user, account, profile }) => {
+        jwt: ({ token, user }) => {
             if (user) {
                 const u = user as unknown as any;
                 const userId = u?.id;
-                const scholarId = u?.scholarId;
-                const kind_of_user = u?.kind_of_user;
                 return {
                     ...token,
                     userId,
-                    scholarId,
-                    kind_of_user,
+                    kind_of_user: 'APPLICANT',
                 };
             }
             return token;
