@@ -75,23 +75,23 @@ const applicantAuthOptions: NextAuthOptions = {
         },
         session: async ({ session, token }) => {
             return {
+                userId: token.userId,
                 ...session,
-                user: {
-                    ...session.user,
-                    id: token,
-                    randomKey: token.randomKey,
-                    kind_of_user: 'APPLICANT',
-                },
+                scholarId: token.scholarId,
+                kind_of_user: 'APPLICANT',
             };
         },
         jwt: ({ token, user }) => {
             if (user) {
                 const u = user as unknown as any;
                 const userId = u?.id;
+                const scholarId = u?.scholarId;
+                const kind_of_user = u?.kind_of_user;
                 return {
                     ...token,
                     userId,
-                    kind_of_user: 'APPLICANT',
+                    scholarId,
+                    kind_of_user,
                 };
             }
             return token;

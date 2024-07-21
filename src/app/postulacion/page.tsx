@@ -8,6 +8,8 @@ import HighSchoolForm from '@/components/admission/highSchool/HighSchoolForm';
 import JobInfoForm from '@/components/admission/jobInfo/JobInfoForm';
 import LanguagesForm from '@/components/admission/languageKnowledge/LanguageKnowledgeForm';
 import PersonalInformation from '@/components/public/admision/form/PersonalInformation';
+import applicantAuthOptions from '@/lib/auth/nextAuthApplicant/authApplicantOptions';
+import { getServerSession } from 'next-auth';
 
 const buttonLabels = [
   {
@@ -74,6 +76,8 @@ const page = async ({
   };
 }) => {
   const step = searchParams?.paso || '0';
+  const session = await getServerSession(applicantAuthOptions);
+  console.log(session)
   return (
     <main className="bg-gray-100 p-10 min-h-screen flex flex-col space-y-28">
       <h1 className="text-center text-3xl md:text-4xl font-bold text-primary-light">
