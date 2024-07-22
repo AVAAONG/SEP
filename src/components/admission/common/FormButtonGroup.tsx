@@ -10,6 +10,8 @@ const FormButtonGroup = () => {
   const currentStep = parseInt((searchParams.get('paso') as string) || '0', 10);
 
   const navigateToStep = (step: number) => {
+    if (step < 0) return;
+    if (step > 8) return router.replace(`${pathname}/dafdsjf`);
     const newSearchParams = new URLSearchParams();
     newSearchParams.set('paso', step.toString());
     router.replace(`${pathname}?${newSearchParams.toString()}`);
