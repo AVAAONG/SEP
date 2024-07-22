@@ -1,7 +1,8 @@
 'use client';
-import ScholarColumnWidget from '@/components/table/columns/scholars/commons/ScholarWidget';
 import formatDni from '@/lib/db/utils/formatDni';
+import { Avatar } from '@nextui-org/avatar';
 import { Gender } from '@prisma/client';
+import Link from 'next/link';
 import { Cell, CellValue, Column } from 'react-table';
 
 export interface ScholarGeneralInformationColumnProps {
@@ -19,6 +20,38 @@ export interface ScholarGeneralInformationColumnProps {
     step: number;
 }
 
+interface ScholarColumnWidgetProps {
+    scholarId: string;
+    scholarName: string;
+    scholarPhoto: string | null;
+}
+
+const ApplicantColumnWidget: React.FC<ScholarColumnWidgetProps> = ({
+    scholarId,
+    scholarName,
+    scholarPhoto,
+}) => {
+    return (
+        <Link href={scholarId ? `/admin/captacion/${scholarId}` : ''} className="w-67">
+            <div className="flex items-center  w-full">
+                <div className="flex-shrink-0 w-8 h-8">
+                    <Avatar
+                        className="w-full h-full rounded-full"
+                        src={scholarPhoto ? scholarPhoto : undefined}
+                        alt="Foto de perfil"
+                    />
+                </div>
+                <div className="ml-4 text-start w-full">
+                    <span className="text-sm font-medium text-gray-900 dark:text-slate-100">
+                        {scholarName}
+                    </span>
+                </div>
+            </div>
+        </Link>
+    );
+};
+
+
 const admisionColumn: Column<ScholarGeneralInformationColumnProps>[] = [
     {
         Header: 'Nombre',
@@ -30,7 +63,7 @@ const admisionColumn: Column<ScholarGeneralInformationColumnProps>[] = [
             value: CellValue;
             cell: Cell<ScholarGeneralInformationColumnProps>;
         }) => (
-            <ScholarColumnWidget
+            <ApplicantColumnWidget
                 scholarId={cell.row.original.id}
                 scholarName={value}
                 scholarPhoto={cell.row.original.profilePhoto}

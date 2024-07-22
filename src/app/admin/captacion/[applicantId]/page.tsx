@@ -81,9 +81,6 @@ const CardTem = ({ title, items }: { title: string, items: { question: string, a
                     </div>
                 ))
             }
-            <div className='col-span-2 flex justify-end'>
-                <Button color="success" variant="ghost" size="sm"> Editar</Button>
-            </div>
         </CardBody>
     </Card>
 )
@@ -91,9 +88,9 @@ const CardTem = ({ title, items }: { title: string, items: { question: string, a
 
 export default function Component() {
     return (
-        <div className="grid grid-cols-4 min-h-screen bg-gray-100">
+        <div className="grid grid-cols-4 min-h-screen ">
             <div className="col-span-1">
-                <aside className="fixed p-6 bg-white h-screen" style={{ width: "calc(25% - 1.5rem)", overflowY: "auto" }}>
+                <aside className="fixed p-6 bg-white rounded-lg" style={{ width: "calc(25% - 1.5rem)", overflowY: "auto" }}>
                     <div>
                         <div className="flex flex-col items-center gap-4">
                             <div className="flex flex-col items-center">
@@ -140,12 +137,13 @@ export default function Component() {
                                 ))}
                             </div>
                             <Divider />
+                            <Button variant="ghost">Crear planilla</Button>
                         </div>
                     </div>
                 </aside>
             </div>
-            <main className="flex flex-col col-span-3 flex-1 p-12 gap-4">
-                <Card className="w-full " radius="sm">
+            <main className="flex flex-col col-span-3 flex-1 px-12 gap-4">
+                <Card className="w-full" radius="sm">
                     <CardBody>
                         <div className="flex justify-around">
                             <div>
@@ -169,9 +167,6 @@ export default function Component() {
                         <div>
                             <label className="block text-sm font-medium">Nombre del familiar o pariente</label>
                             <p>Jonathan</p>
-                        </div>
-                        <div className='col-span-2 flex justify-end'>
-                            <Button color="success" variant="ghost" size="sm"> Editar</Button>
                         </div>
                     </CardBody>
                 </Card>
