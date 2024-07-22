@@ -23,7 +23,15 @@ const VolunteerStatusWidgetSpanish = ({ value }: { value: VolunteerStatusSpanish
         {value}
       </span>
     );
-  } else {
+  }
+  else if (value === 'Programado') {
+    return (
+      <span className="inline-flex items-center bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-blue-900 dark:text-blue-300">
+        Programado
+      </span>
+    );
+  }
+  else {
     return (
       <span className="inline-flex items-center bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-gray-900 dark:text-gray-300">
         Error

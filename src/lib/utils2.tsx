@@ -48,6 +48,10 @@ export const parseVolunteerStatusFromDatabase = (status: VolunteerStatus) => {
       return 'Aprobado';
     case 'PENDING':
       return 'Pendiente de aprobación';
+    case 'SENT':
+      return 'Programado';
+    case 'SCHEDULED':
+      return 'Programado';
     case 'REJECTED':
       return 'Rechazado';
   }
