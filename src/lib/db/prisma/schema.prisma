@@ -852,48 +852,12 @@ model Probation {
 }
 
 model RecruitmentInformation {
-  id                            String            @id @default(nanoid())
-  infomation_fill               DateTime
-  information_update            DateTime
-  recruitmentStatus             RecruitmentStatus
-  contribute_to_family_income   Boolean           @default(false)
-  average_family_income         String?
-  whit_who_do_you_live          String?
-  kind_of_house                 String?
-  family_members                String?
-  father_job                    String?
-  fathers_company_name          String?
-  fathers_yearsof_experience    String?
-  mother_job                    String?
-  mothers_company_name          String?
-  mothers_yearsof_experience    String?
-  parent_phone_number           String?
-  parent_name                   String?
-  high_school_name              String?
-  high_school_address           String?
-  high_school_title             String?
-  high_school_director_name     String?
-  high_school_average_grade     String?
-  high_school_grade_proof       String?
-  extracurricular_activities    String?
-  social_labour_place           String?
-  social_labour_learning        String?
-  speaked_other_languages       Boolean?
-  speaked_languages             String?
-  how_knows_program             String?
-  internet_connection           Boolean           @default(false)
-  internet_connection_stability String?
-  why_wants_to_be_scholar       String?
-  dni_scan                      String?
-  rif_scan                      String?
-  cnu_opsu_scan                 String?
-  esay                          String?
-  last_tax_declaration          String?
-  receipt_of_payment            String?
-  speaked_languages_level       Level?
-  referred_by                   String?
-  scholar_id                    String            @unique
-  scholar                       Scholar           @relation(fields: [scholar_id], references: [id])
+  id           String   @id @default(nanoid())
+  first_update DateTime @default(now())
+  last_update  DateTime @updatedAt
+  current_step Int      @default(0)
+  scholar_id   String   @unique
+  scholar      Scholar  @relation(fields: [scholar_id], references: [id])
 
   @@index([scholar_id])
 }

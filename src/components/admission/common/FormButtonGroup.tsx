@@ -7,7 +7,7 @@ const FormButtonGroup = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const currentStep = parseInt((searchParams.get('paso') as string) || '1', 10);
+  const currentStep = parseInt((searchParams.get('paso') as string) || '0', 10);
 
   const navigateToStep = (step: number) => {
     const newSearchParams = new URLSearchParams();
@@ -16,9 +16,14 @@ const FormButtonGroup = () => {
   };
   return (
     <div className="w-full grid grid-cols-2 gap-4">
-      <Button radius="sm" onClick={() => navigateToStep(currentStep - 1)}>
-        Anterior
-      </Button>
+      {/* If the current step is the first one, don't show the previous button */}
+      {currentStep === 0 ? (
+        <div />
+      ) : (
+        <Button radius="sm" onClick={() => navigateToStep(currentStep - 1)}>
+          Anterior
+        </Button>
+      )}
       <Button
         type="submit"
         onClick={(e) => {
