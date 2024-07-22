@@ -92,8 +92,8 @@ const ExternalVolunteerAdminColumns: Column<VolunteerTableDetails>[] = [
             });
           }}
         >
-          <option value="APPROVED">Aprovado</option>
-          <option value="REJECTED">No aprovado</option>
+          <option value="APPROVED">Aprobado</option>
+          <option value="REJECTED">No aprobado</option>
           <option value="PENDING">Pendiente por aprobar</option>
         </select>
       );
