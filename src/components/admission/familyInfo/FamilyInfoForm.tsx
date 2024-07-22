@@ -48,13 +48,21 @@ const FamilyInfoForm = () => {
               { label: 'Hipotecada', value: 'MORTGAGED' },
             ]}
           />
-          <InputField
+          <SelectFormField
             isRequired
-            name="career"
-            type="text"
             label="¿Contribuye con el ingreso familiar?"
+            name="study_regime"
+            selectItems={[
+              {
+                label: 'Sí',
+                value: 'YES',
+              },
+              {
+                label: 'No',
+                value: 'NO',
+              },
+            ]}
           />
-          <InputField isRequired name="career" type="text" label="Composición del núcleo familiar" />
           <InputField isRequired name="career" type="text" label="Composición del núcleo familiar" />
           <InputField isRequired name="career" type="text" label="Ocupación del padre" />
           <InputField
