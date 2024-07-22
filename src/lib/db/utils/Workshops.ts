@@ -220,9 +220,6 @@ export const getActivitiesByYear = async (
     prisma.workshop.findMany(),
     prisma.chat.findMany(),
     prisma.volunteer.findMany({
-      where: {
-        kind_of_volunteer: 'INTERNAL'
-      },
       include: {
         volunteer_attendance: true
       }
@@ -238,10 +235,18 @@ export const getActivitiesByYear = async (
   const chats = allChats.filter((chat) =>
     chat.start_dates.some((date) => date >= yearStart && date <= yearEnd)
   );
-  const volunteers = allVolunteers.filter((volunteer) =>
-    volunteer.start_dates.some((date) => date >= yearStart && date <= yearEnd)
-  );
+  const currentDate = new Date();
 
+  const volunteers = allVolunteers.filter((volunteer) =>
+    volunteer.kind_of_volunteer === 'EXTERNAL' ? volunteer.start_dates.some((date) => {
+      const startDate = new Date(date);
+      return startDate < currentDate;
+    }) :
+      volunteer.start_dates.some((date) => {
+        const startDate = new Date(date);
+        return startDate >= yearStart && startDate <= yearEnd;
+      })
+  );
   return [workshops, chats, volunteers];
 };
 
