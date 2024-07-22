@@ -34,6 +34,7 @@ interface WorkshopDetails {
   year: string;
   attendedScholars: number;
   enrrolledScholars: number;
+  spots: number;
 }
 
 const WorkshopAdminColumns: Column<WorkshopDetails>[] = [
@@ -118,6 +119,10 @@ const WorkshopAdminColumns: Column<WorkshopDetails>[] = [
   {
     Header: 'Asistentes',
     accessor: 'attendedScholars',
+  },
+  {
+    Header: 'Cupos',
+    accessor: 'spots',
   },
 ];
 

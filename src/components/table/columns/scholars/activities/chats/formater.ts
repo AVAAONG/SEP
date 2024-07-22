@@ -41,6 +41,7 @@ const createAdminChatsObjectForTable = (chats: ChatsWithAllData[]): IAdminChatCo
             speakerIds,
             speakerKind,
             speakerCompany,
+            spots: chat.avalible_spots,
         };
     });
 }

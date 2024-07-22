@@ -25,6 +25,7 @@ export type IAdminChatColumns = {
   modality: string; // Assuming parseModalityFromDatabase returns a string
   platform: string;
   attendedScholars: number;
+  spots: number;
 };
 
 const AdminChatColumns: Column<IAdminChatColumns>[] = [
@@ -93,6 +94,10 @@ const AdminChatColumns: Column<IAdminChatColumns>[] = [
   {
     Header: 'Asistentes',
     accessor: 'attendedScholars',
+  },
+  {
+    Header: 'Cupos',
+    accessor: 'spots',
   },
 ];
 

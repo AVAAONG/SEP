@@ -39,7 +39,8 @@ const createAdminWorkshopsObjectForTable = (workshops: WorkshopWithAllData[]) =>
             platform: workshop.platform,
             year: parseWorkshopYearFromDatabase(workshop.year),
             attendedScholars,
-            enrrolledScholars
+            enrrolledScholars,
+            spots: workshop.avalible_spots,
         };
     });
 }
