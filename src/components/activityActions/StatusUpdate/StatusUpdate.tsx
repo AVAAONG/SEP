@@ -3,9 +3,20 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { Button } from '@nextui-org/button';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/dropdown';
 import { useDisclosure } from '@nextui-org/modal';
+import { Select, SelectItem } from '@nextui-org/react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import BasicModal from '../../BasicModal';
 import changeActivityStatus from './utils';
+
+const SUSPENSION_REASON = [
+  'Falta de Quorum',
+  'Disponibilidad del facilitador',
+  'Falla de servicios',
+  'Condiciones climáticas',
+  'Reprogramación',
+  'Eventos inesperados',
+];
 
 const StatusUpdateButton = ({
   kindOfActivity,
@@ -18,16 +29,23 @@ const StatusUpdateButton = ({
 }) => {
   const suspendModal = useDisclosure();
   const attendanceCheckedModal = useDisclosure();
+  const [value, setValue] = useState<string>('');
 
+  const handleSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setValue(e.target.value);
+  };
   return (
     <>
       <Dropdown placement="bottom-end">
         <DropdownTrigger>
-          <Button radius='sm'
-            startContent={<ArrowPathIcon className='w-5 h-5' />}
-            className="w-full">        <span className='hidden md:block w-full'>
-              Cambiar estatus
-            </span></Button>
+          <Button
+            radius="sm"
+            startContent={<ArrowPathIcon className="w-5 h-5" />}
+            className="w-full"
+          >
+            {' '}
+            <span className="hidden md:block w-full">Cambiar estatus</span>
+          </Button>
         </DropdownTrigger>
         <DropdownMenu aria-label="Profile Actions" variant="flat">
           <DropdownItem
@@ -45,7 +63,7 @@ const StatusUpdateButton = ({
       <BasicModal
         isOpen={suspendModal.isOpen}
         onOpenChange={suspendModal.onOpenChange}
-        isButtonDisabled={false}
+        isButtonDisabled={value.length === 0}
         title="¿Estas seguro que deseas suspender la actividad?"
         Content={() => (
           <div className="flex flex-col gap-4">
@@ -53,6 +71,15 @@ const StatusUpdateButton = ({
               Si cancelas la actividad, los becarios inscritos seran notificados via correo
               electronico y se prohibira la inscripcion de nuevos becarios a la actividad.
             </p>
+            <Select
+              label="Selecciona la razon de la suspension"
+              onChange={handleSelectionChange}
+              selectedKeys={[value]}
+            >
+              {SUSPENSION_REASON.map((reason) => (
+                <SelectItem key={reason}>{reason}</SelectItem>
+              ))}
+            </Select>
           </div>
         )}
         onConfirm={async () => {
