@@ -220,9 +220,6 @@ export const getActivitiesByYear = async (
     prisma.workshop.findMany(),
     prisma.chat.findMany(),
     prisma.volunteer.findMany({
-      where: {
-        status: 'APPROVED'
-      },
       include: {
         volunteer_attendance: true
       }
