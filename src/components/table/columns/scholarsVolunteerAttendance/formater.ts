@@ -13,7 +13,7 @@ export const formatScholarDataForVolunteerAttendanceTable = async (
             (a) => a.scholar.scholar.id === scholar.id
         );
         return {
-            id: attendance?.id,
+            id: scholar?.id,
             names: scholar.first_names + ' ' + scholar.last_names,
             email: scholar.email,
             whatsAppNumber: scholar.whatsapp_number,
