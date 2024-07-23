@@ -8,6 +8,10 @@ const createAdminVolunteerActivitiesForTable = (volunteers: VolunteerWithAllData
         const averageVolunteerHours = volunteer.volunteer_attendance.reduce((acc, attendance) => {
             return acc + attendance.asigned_hours;
         }, 0);
+        const volunteerParticipants = volunteer.volunteer_attendance.filter((attendance) => {
+            return attendance.attendance === 'ATTENDED';
+        }).length;
+
         return {
             id: volunteer.id,
             title: volunteer.title,
@@ -20,6 +24,8 @@ const createAdminVolunteerActivitiesForTable = (volunteers: VolunteerWithAllData
             kindOfVolunteer: parseKindOfVolunteerFromDatabase(volunteer.kind_of_volunteer),
             hours: Number(averageVolunteerHours.toFixed(2)),
             volunteerProject: parseVolunteerProject(volunteer.VolunteerProject),
+            beneficiary: volunteer.beneficiary,
+            volunteerParticipants,
         };
     });
 }

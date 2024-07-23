@@ -18,6 +18,8 @@ export interface IAdminVolunteerActivityColumns {
   hours: number;
   platform: string;
   volunteerProject: string | null | undefined;
+  beneficiary: string;
+  volunteerParticipants: number;
 }
 
 const AdminVolunteerActivityColumns: Column<IAdminVolunteerActivityColumns>[] = [
@@ -72,6 +74,10 @@ const AdminVolunteerActivityColumns: Column<IAdminVolunteerActivityColumns>[] = 
     disableSortBy: true,
   },
   {
+    Header: 'Participantes',
+    accessor: 'volunteerParticipants',
+  },
+  {
     Header: 'Horas hombre',
     accessor: 'hours',
   },
@@ -91,6 +97,10 @@ const AdminVolunteerActivityColumns: Column<IAdminVolunteerActivityColumns>[] = 
         </Tooltip>
       );
     },
+  },
+  {
+    Header: 'Beneficiario',
+    accessor: 'beneficiary',
   },
 ];
 
