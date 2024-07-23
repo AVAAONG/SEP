@@ -9,7 +9,7 @@ type ScholarStatusProps = {
 const statusConfig = {
   NORMAL: {
     color: 'green',
-    text: 'Normal',
+    text: 'Regular',
   },
   PROBATION_I: {
     color: 'yellow',
