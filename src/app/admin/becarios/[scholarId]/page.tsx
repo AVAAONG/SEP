@@ -59,7 +59,10 @@ const page = async ({
   const volunteersDb = await getVolunteersByScholar(scholarId);
 
   // Filter raw data based on search parameters
-  const chats = (await filterActivitiesBySearchParamsPeriod(chatsDb, searchParams)) as ChatsWithAllData[];
+  const chats = (await filterActivitiesBySearchParamsPeriod(
+    chatsDb,
+    searchParams
+  )) as ChatsWithAllData[];
   const workshops = (await filterActivitiesBySearchParamsPeriod(
     workshopsDb,
     searchParams
@@ -144,7 +147,7 @@ const page = async ({
     <section className="flex flex-col gap-4 lg:p-6 pt-0">
       <div className="flex flex-col items-center lg:items-start lg:flex-row justify-center lg:justify-start gap-2 lg:gap-6 w-full">
         <div className="flex lg:hidden items-center justify-between w-full gap-4 px-6 lg:p-0">
-          <ScholarStatus scholar={scholar} />
+          <ScholarStatus scholar={scholar} isAdmin={true} />
           <ScholarDropdown scholar={scholar} />
         </div>
         <div className="flex-shrink-0 w-56 h-56 object-contain m-auto rounded-full shadow-lg border-3 border-green-500 p-1 overflow-hidden">
@@ -167,7 +170,7 @@ const page = async ({
               </Tooltip>
             </div>
             <div className="hidden lg:flex items-center gap-4">
-              <ScholarStatus scholar={scholar} />
+              <ScholarStatus scholar={scholar} isAdmin={true} />
               <ScholarDropdown scholar={scholar} />
             </div>
           </div>

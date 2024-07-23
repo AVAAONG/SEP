@@ -1,20 +1,19 @@
-import { ScholarWithAllData } from '@/lib/db/types';
-import { createProbationAct } from '@/lib/serverAction';
+import { getProbationInfoByScholar } from '@/lib/db/utils/probation';
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
-import { Button } from '@nextui-org/react';
 import React from 'react';
-import { toast } from 'react-toastify';
+import ProbationActionButtons from './ProbationActionButtons';
+import { formatDate, renderDateInfo, renderInfoSection } from './commonComponents';
 
 interface ProbationAccordionProps {
-  scholarInProbation: ScholarWithAllData;
+  scholarId: string;
   isAdmin: boolean;
 }
 
-const ProbationAccordion: React.FC<ProbationAccordionProps> = ({ scholarInProbation, isAdmin }) => {
-
+const ProbationAccordion: React.FC<ProbationAccordionProps> = async ({ scholarId, isAdmin }) => {
+  const probations = await getProbationInfoByScholar(scholarId);
   return (
     <Accordion variant="splitted">
-      {scholarInProbation.program_information.probation.map((probationInfo, index) => {
+      {probations.map((probationInfo, index) => {
         const isProbationI = probationInfo.kind_of_probation === 'PROBATION_I';
         const title = isProbationI ? 'Probatorio I' : 'Probatorio II';
         const bgColor = isProbationI
@@ -23,7 +22,6 @@ const ProbationAccordion: React.FC<ProbationAccordionProps> = ({ scholarInProbat
         const headerBgColor = isProbationI
           ? '!bg-yellow-500 !dark:bg-yellow-700'
           : '!bg-rose-500 !dark:bg-rose-700';
-
         return (
           <AccordionItem
             key={index}
@@ -69,36 +67,7 @@ const ProbationAccordion: React.FC<ProbationAccordionProps> = ({ scholarInProbat
 
               {isAdmin && (
                 <div className="flex gap-4 justify-end">
-                  <Button
-                    radius="sm"
-                    onPress={() =>
-                      toast.promise(
-                        createProbationAct(
-                          scholarInProbation,
-                          probationInfo,
-                          formatDate(probationInfo.starting_date)
-                        ),
-                        {
-                          pending: 'Creando acta...',
-                          success: 'Acta creada',
-                          error: 'Error al crear acta',
-                        }
-                      )
-                    }
-                    color={isProbationI ? 'warning' : 'danger'}
-                    variant="ghost"
-                  >
-                    Crear acta
-                  </Button>
-                  <Button radius="sm" variant="ghost">
-                    Borrar
-                  </Button>
-                  <Button radius="sm" variant="ghost">
-                    Editar
-                  </Button>
-                  <Button radius="sm" variant="ghost">
-                    Quitar estatus de probatorio
-                  </Button>
+                  <ProbationActionButtons />
                 </div>
               )}
             </div>

@@ -1,6 +1,6 @@
 'use client';
 import { ScholarWithAllData } from '@/lib/db/types';
-import { setProbationToScholar } from '@/lib/db/utils/users';
+import { createProbation } from '@/lib/db/utils/probation';
 import probationFormSchema from '@/lib/schemas/probationFormSchema';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -54,7 +54,7 @@ const ProbationForm: React.FC<ProbationFormProps> = ({
       starting_date: new Date(),
     };
 
-    await setProbationToScholar(scholar.id, probationData);
+    await createProbation(scholar.id, probationData);
     await revalidateSpecificPath(`/admin/becarios/${scholar.id}`);
     reset();
   };
@@ -67,14 +67,16 @@ const ProbationForm: React.FC<ProbationFormProps> = ({
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         className="bg-light"
+        isDismissable={false}
       >
         <form
           onSubmit={handleSubmit(
-            async (data, event) => toast.promise(handleFormSubmit(data, event), {
-              pending: 'Guardando cambios...',
-              success: 'Cambios guardados',
-              error: 'Error al guardar cambios',
-            }),
+            async (data, event) =>
+              toast.promise(handleFormSubmit(data, event), {
+                pending: 'Guardando cambios...',
+                success: 'Cambios guardados',
+                error: 'Error al guardar cambios',
+              }),
             (error) => console.log(error)
           )}
         >
