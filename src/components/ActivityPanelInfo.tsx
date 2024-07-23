@@ -132,7 +132,7 @@ const ActivityPanelInfo: React.FC<ActivityPanelInfoProps> = ({ activity, childre
                       {s.first_names} {s.last_names}
                     </h3>
                     <h4 className="text-xs uppercase">{s.job_company}</h4>
-                    <p className="text-sm">{s.description}</p>
+                    <p className="text-sm whitespace-pre-wrap">{s.description}</p>
                   </div>
                 </div>
               </div>

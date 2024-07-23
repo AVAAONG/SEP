@@ -131,7 +131,9 @@ const page = async ({ params }: { params: { volunteerId: shortUUID.SUUID } }) =>
               {description && (
                 <h2 className="text-xl  font-semibold text-primary-light">Descripción:</h2>
               )}{' '}
-              <p className="text-sm list-disc space-y-sm w-full">{description}</p>
+              <p className="text-sm list-disc space-y-sm w-full whitespace-pre-wrap">
+                {description}
+              </p>
             </div>
           </div>
           <div className="w-full space-y-3">
