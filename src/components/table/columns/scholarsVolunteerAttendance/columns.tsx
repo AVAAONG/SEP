@@ -18,6 +18,7 @@ export interface IScholarVolunteerAtendance {
   asignedHours: number | undefined;
   whatsAppNumber: string | null;
   attendance?: ScholarAttendance;
+  attendanceId: string
 }
 
 const ScholarVolunteerAttendance: Column<IScholarVolunteerAtendance>[] = [
@@ -74,7 +75,7 @@ const ScholarVolunteerAttendance: Column<IScholarVolunteerAtendance>[] = [
     Cell: ({ value, cell }) => {
       const [attendace, setAttendance] = useState(value);
       const handleAttendance = async (attendance: ScholarAttendance) => {
-        await changeScholarVolunteerAttendance(cell.row.original.id, attendance);
+        await changeScholarVolunteerAttendance(cell.row.original.attendanceId, attendance);
         await revalidateSpecificPath('/admin/voluntariado/[volunteerId]');
         return setAttendance(attendance);
       };
@@ -83,15 +84,14 @@ const ScholarVolunteerAttendance: Column<IScholarVolunteerAtendance>[] = [
       } else {
         return (
           <select
-            className={`border-0 cursor-pointer rounded-full font-medium w-24 text-xs  p-0 outline-transparent ${
-              attendace === 'ATTENDED'
-                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
-                : attendace === 'NOT_ATTENDED'
-                  ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
-                  : attendace === 'ENROLLED'
-                    ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
-                    : ''
-            }`}
+            className={`border-0 cursor-pointer rounded-full font-medium w-24 text-xs  p-0 outline-transparent ${attendace === 'ATTENDED'
+              ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
+              : attendace === 'NOT_ATTENDED'
+                ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+                : attendace === 'ENROLLED'
+                  ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
+                  : ''
+              }`}
             value={attendace}
             onChange={async (event) => {
               const attendance = event.target.value as ScholarAttendance;
