@@ -48,7 +48,7 @@ const ScholarVolunteerAttendance: Column<IScholarVolunteerAtendance>[] = [
     Cell: ({ value, cell }) => {
       const [asignedHous, setAsignedHours] = useState(value);
       const handle = async (hours: number) => {
-        await asignVolunteerHours(cell.row.original.id, hours);
+        await asignVolunteerHours(cell.row.original.attendanceId, hours);
       };
       return (
         <div className="w-24 m-auto">
