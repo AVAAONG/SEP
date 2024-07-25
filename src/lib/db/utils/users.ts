@@ -1022,6 +1022,11 @@ export const getScholarsDataForEdusa = async () => {
             scholar_condition: 'ALUMNI',
           },
         },
+        {
+          program_information: {
+            scholar_condition: 'TO_BE_ALUMNI',
+          },
+        },
       ]
     },
     select: {
@@ -1030,9 +1035,15 @@ export const getScholarsDataForEdusa = async () => {
       dni: true,
       email: true,
       cell_phone_Number: true,
+      dos_exchange_program_applications: true,
       program_information: {
         select: {
           scholar_condition: true,
+          chapter: {
+            select: {
+              name: true,
+            }
+          }
         }
       },
       collage_information: {
@@ -1050,9 +1061,11 @@ export const getScholarsDataForEdusa = async () => {
       dni: scholar.dni,
       email: scholar.email,
       phone: scholar.cell_phone_Number,
-      condition: scholar.program_information.scholar_condition,
-      carreer: scholar.collage_information[0].career,
-      collage: scholar.collage_information[0].collage
+      chapter: scholar.program_information?.chapter?.name,
+      condition: scholar.program_information?.scholar_condition,
+      carrer: scholar.collage_information[0].career,
+      collage: scholar.collage_information[0].collage,
+      dosPrograms: scholar.dos_exchange_program_applications
     }
   });
 }
