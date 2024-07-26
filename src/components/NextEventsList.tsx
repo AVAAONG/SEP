@@ -27,10 +27,13 @@ const NextEventsList = ({ activities }: { activities: (Workshop | Chat | Volunte
                 link = `actividadesFormativas/${activity.id}`;
               } else if ('level' in activity) {
                 link = `chats/${activity.id}`;
+              } else if ('kind_of_volunteer' in activity) {
+                link = `voluntariado/${activity.id}`;
               }
+
               return (
                 <li className="py-2.5 overflow-hidden" key={index}>
-                  <Link href={link} target='_self'>
+                  <Link href={link} target="_self">
                     <div className="flex items-center w-full">
                       <ActivityListIcon kindOfActivity={kindOfActivity(activity)} />
                       <div className="flex flex-col ml-2">
