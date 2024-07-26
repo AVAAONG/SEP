@@ -45,6 +45,9 @@ model ChatAttendance {
   justification                  String?
   satisfaction_form_filled       Boolean?
   ChatSafisfactionForm           ChatSafisfactionForm?
+
+  @@index([program_information_scholar_id])
+  @@index([chat_id])
 }
 
 model ChatSafisfactionForm {

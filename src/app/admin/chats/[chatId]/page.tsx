@@ -36,8 +36,9 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
   const chat = await getChat(chatId);
   if (!chatId) return notFound();
 
-  const { title, level, start_dates, modality, speaker, platform, scholar_attendance } = chat || {};
   const scholars = await getNotEnrolledScholarsInChat(chatId);
+
+  const { title, level, start_dates, modality, speaker, platform, scholar_attendance } = chat || {};
 
   const scholarAttendanceDataForTable = await formatScholarDataForAttendanceTable(
     scholar_attendance ? scholar_attendance.map((a) => a.scholar.scholar) : [],

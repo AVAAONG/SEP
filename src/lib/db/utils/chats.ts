@@ -243,6 +243,8 @@ export const getChatSpeakerWithParams = async (data: Prisma.SpeakerSelect) => {
   }
 };
 
+
+
 export const getChat = async (id: shortUUID.SUUID) => {
   const workshop = await prisma.chat.findUnique({
     where: { id },
@@ -253,11 +255,7 @@ export const getChat = async (id: shortUUID.SUUID) => {
           ChatSafisfactionForm: true,
           scholar: {
             include: {
-              scholar: {
-                include: {
-                  collage_information: true,
-                },
-              },
+              scholar: true,
             },
           },
         },

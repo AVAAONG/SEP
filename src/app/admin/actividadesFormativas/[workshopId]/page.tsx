@@ -34,6 +34,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
   const scholarsForQuit = scholar_attendance
     ? scholar_attendance.map((a) => a.scholar.scholar)
     : [];
+
   const scholarDataToExport = scholarAttendanceDataForTable
     .filter((scholar) => scholar.attendance === 'ENROLLED')
     .map((scholar) => {
