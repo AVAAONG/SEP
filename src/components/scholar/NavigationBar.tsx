@@ -21,15 +21,17 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import useSWR from 'swr';
 import BasicModal from '../BasicModal';
+import ScholarStatusIndicator from '../ScholarStatus';
 import ThemeToggleButton from './NavigationBar/ThemeToggleButton';
 interface NavigationBarProps {
   image: string | null | undefined;
   name: string | null | undefined;
   email: string | null | undefined;
+  scholarStatus: ScholarStatus
   scholarId: string | null | undefined;
 }
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
-const NavigationBar = ({ image, name, email, scholarId }: NavigationBarProps) => {
+const NavigationBar = ({ image, name, email, scholarId, scholarStatus }: NavigationBarProps) => {
   const [isSidebarOpen, setSidebarOpen] = useAtom(scholarSidebarAtom);
   const [programName, setProgramName] = useState('');
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
@@ -55,7 +57,15 @@ const NavigationBar = ({ image, name, email, scholarId }: NavigationBarProps) =>
           </button>
         </div>
         <div className="flex gap-4 md:gap-8 items-center justify-start">
-          <ScholarStatus scholar={scholar} isAdmin={false} />
+          <ScholarStatusIndicator scholarData={
+            {
+              dni: '',
+              firstName: '',
+              status: scholarStatus,
+              id: '',
+              surNames: ''
+            }
+          } isAdmin={false} />
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
               <Button variant="light" color="success">

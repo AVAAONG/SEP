@@ -22,7 +22,10 @@ export default async function RootLayout({
       program_information: {
         select: {
           is_chat_speaker: true,
+          scholar_status: true,
         },
+
+
       },
     },
   });
@@ -33,6 +36,7 @@ export default async function RootLayout({
           image={await getBlobImage(image?.photo)}
           name={session?.user?.name}
           email={session?.user?.email}
+          scholarStatus={image?.program_information?.scholar_status}
           scholarId={session?.scholarId}
         />
         <Sidebar isSpeaker={image?.program_information?.is_chat_speaker} />
