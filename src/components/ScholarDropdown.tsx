@@ -1,6 +1,5 @@
 'use client';
 import { changeScholarCondition } from '@/lib/db/lilb/scholar/utils';
-import { setScholarToNormalStatus } from '@/lib/db/utils/users';
 import { EllipsisHorizontalCircleIcon } from '@heroicons/react/24/outline';
 import { useDisclosure } from '@nextui-org/modal';
 import {
@@ -26,9 +25,7 @@ const ScholarDropdown = ({ scholar }) => {
             <EllipsisHorizontalCircleIcon className="rotate-90 w-full" />
           </Button>
         </DropdownTrigger>
-        <DropdownMenu
-          aria-label="Dropdown menu with description"
-        >
+        <DropdownMenu aria-label="Dropdown menu with description">
           <DropdownSection title="Cambiar estatus del becario" showDivider>
             <DropdownItem
               key="PROBATION_I"
@@ -45,18 +42,6 @@ const ScholarDropdown = ({ scholar }) => {
               onPress={probation2.onOpen}
             >
               Pasar a Probatorio II
-            </DropdownItem>
-            <DropdownItem key="NORMAL" color="success" description="Quitar estatus de probatorio" onPress={
-              async () => {
-                toast.promise(setScholarToNormalStatus(scholar.id), {
-                  pending: 'Cambiando condición de becario',
-                  success: 'Exito al cambiar condición del becario',
-                  error: 'Error al cambiar condición del becario',
-                });
-              }
-
-            }>
-              Quitar estatus de probatorio
             </DropdownItem>
           </DropdownSection>
           <DropdownSection title="Cambiar condición del becario" showDivider>
@@ -119,18 +104,14 @@ const ScholarDropdown = ({ scholar }) => {
         </DropdownMenu>
       </Dropdown>
       <ProbationForm
-        scholar={scholar}
-        isOpen={probation1.isOpen}
-        onOpenChange={probation1.onOpenChange}
+        scholarId={scholar.id}
+        formAction={probation1}
         probationKind="PROBATION_I"
-        onConfirm={() => { }}
       />
       <ProbationForm
-        scholar={scholar}
-        isOpen={probation2.isOpen}
-        onOpenChange={probation2.onOpenChange}
+        scholarId={scholar.id}
+        formAction={probation2}
         probationKind="PROBATION_II"
-        onConfirm={() => { }}
       />
       {/* <EditScholarForm modalIsOpen={editModalIsOpen} set={setEditModalOpen} scholar={scholar} /> */}
     </>

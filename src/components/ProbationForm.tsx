@@ -1,8 +1,8 @@
 'use client';
-import { ScholarWithAllData } from '@/lib/db/types';
-import { setProbationToScholar } from '@/lib/db/utils/users';
+import { createProbation, updateProbation } from '@/lib/db/utils/probation';
 import probationFormSchema from '@/lib/schemas/probationFormSchema';
 import { revalidateSpecificPath } from '@/lib/serverAction';
+import { formatDateTimeToDisplayInput } from '@/lib/utils/dates';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Button,
@@ -14,34 +14,45 @@ import {
   ModalHeader,
   Textarea,
 } from '@nextui-org/react';
-import { ScholarStatus } from '@prisma/client';
+import { Probation, ScholarStatus } from '@prisma/client';
 import React, { BaseSyntheticEvent } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 interface ProbationFormProps {
-  isOpen: boolean;
-  onOpenChange: () => void;
-  onConfirm: () => void;
+  formAction: {
+    isOpen: boolean;
+    onOpen: () => void;
+    onClose: () => void;
+    onOpenChange: () => void;
+    isControlled: boolean;
+    getButtonProps: (props?: any) => any;
+    getDisclosureProps: (props?: any) => any;
+  };
   probationKind: ScholarStatus;
-  scholar: ScholarWithAllData;
+  scholarId: string;
+  probation?: Probation
 }
 
 const ProbationForm: React.FC<ProbationFormProps> = ({
-  isOpen,
   probationKind,
-  onOpenChange,
-  scholar,
+  formAction,
+  probation,
+  scholarId,
 }) => {
   const title = probationKind === 'PROBATION_II' ? 'Probatorio II' : 'Probatorio I';
   const {
     control,
     handleSubmit,
     reset,
-    formState: { isSubmitting, isValid, isSubmitted },
+    formState: { isSubmitting },
   } = useForm<z.infer<typeof probationFormSchema>>({
     mode: 'onBlur',
     resolver: zodResolver(probationFormSchema),
+    defaultValues: {
+      ...probation,
+      next_meeting: probation?.next_meeting ? formatDateTimeToDisplayInput(probation?.next_meeting) : undefined
+    }
   });
   const handleFormSubmit = async (
     data: z.infer<typeof probationFormSchema>,
@@ -54,9 +65,15 @@ const ProbationForm: React.FC<ProbationFormProps> = ({
       starting_date: new Date(),
     };
 
-    await setProbationToScholar(scholar.id, probationData);
-    await revalidateSpecificPath(`/admin/becarios/${scholar.id}`);
+    if (probation) {
+      await updateProbation(probation.id, probationData)
+    }
+    else {
+      await createProbation(scholarId, probationData);
+    }
+    await revalidateSpecificPath(`/admin/becarios/${scholarId}`);
     reset();
+    formAction.onClose()
   };
 
   return (
@@ -64,17 +81,19 @@ const ProbationForm: React.FC<ProbationFormProps> = ({
       <Modal
         scrollBehavior="outside"
         size="5xl"
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
+        isOpen={formAction.isOpen}
+        onOpenChange={formAction.onOpenChange}
         className="bg-light"
+        isDismissable={false}
       >
         <form
           onSubmit={handleSubmit(
-            async (data, event) => toast.promise(handleFormSubmit(data, event), {
-              pending: 'Guardando cambios...',
-              success: 'Cambios guardados',
-              error: 'Error al guardar cambios',
-            }),
+            async (data, event) =>
+              toast.promise(handleFormSubmit(data, event), {
+                pending: 'Guardando cambios...',
+                success: 'Cambios guardados',
+                error: 'Error al guardar cambios',
+              }),
             (error) => console.log(error)
           )}
         >
@@ -380,11 +399,8 @@ const ProbationForm: React.FC<ProbationFormProps> = ({
                     type="submit"
                     isDisabled={isSubmitting}
                     color={probationKind === 'PROBATION_II' ? 'danger' : 'warning'}
-                    onPress={() => {
-                      // if (!isSubmitting) onClose();
-                    }}
                   >
-                    Pasar a {title}
+                    {probation ? `Actualizar ${title}` : `Pasar a ${title}`}
                   </Button>
                 </ModalFooter>
               </>

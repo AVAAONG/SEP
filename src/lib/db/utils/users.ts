@@ -5,7 +5,7 @@
  */
 
 import { getApprovedAndAttendedVolunteers } from '@/lib/utils/getAttendedActivities';
-import { Prisma, Probation, ScholarCondition, User, WorkshopAttendance } from '@prisma/client';
+import { Prisma, ScholarCondition, User, WorkshopAttendance } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import shortUUID from 'short-uuid';
 import { prisma } from './prisma';
@@ -341,7 +341,6 @@ export const getScholarWithAllData = async (scholar_id: string) => {
               },
             },
           },
-          probation: true,
           attended_workshops: {
             include: {
               workshop: {
@@ -600,47 +599,6 @@ export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) =>
   ]);
   return [...workshops, ...chats, ...volunteers];
 };
-
-export const setProbationToScholar = async (scholarId: string, data: Probation) => {
-  await prisma.scholar.update({
-    where: {
-      id: scholarId,
-    },
-    data: {
-      program_information: {
-        update: {
-          scholar_status: data.kind_of_probation,
-          probation: {
-            create: {
-              kind_of_probation: data.kind_of_probation,
-              starting_date: data.starting_date,
-              ending_date: data.ending_date,
-              done_at_the_moment: data.done_at_the_moment as Prisma.InputJsonValue,
-              agreement: data.agreement,
-              next_meeting: data.next_meeting,
-              probation_reason: data.probation_reason,
-              observations: data.observations,
-            },
-          },
-        },
-      },
-    },
-  });
-};
-export const setScholarToNormalStatus = async (scholarId: string) => {
-  await prisma.scholar.update({
-    where: {
-      id: scholarId,
-    },
-    data: {
-      program_information: {
-        update: {
-          scholar_status: 'NORMAL',
-        },
-      },
-    },
-  });
-}
 
 
 export const getScholarsInProbationByYear = async (year: string) => {

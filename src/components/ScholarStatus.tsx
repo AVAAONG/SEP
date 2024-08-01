@@ -1,10 +1,19 @@
 'use client';
-import { Button, useDisclosure } from '@nextui-org/react';
+import { Button } from '@nextui-org/button';
+import { useDisclosure } from '@nextui-org/modal';
+import { ScholarStatus } from '@prisma/client';
 import BasicModal from './BasicModal';
-import ProbationAccordion from './ProbationAccordion';
+import ProbationAccordion from './probation/ProbationAcordionInfo';
 
-type ScholarStatusProps = {
-  scholar: any;
+type ScholarStatusIndicatorProps = {
+  scholarData: {
+    id: string;
+    status: ScholarStatus;
+    firstName: string;
+    surNames: string;
+    dni: string;
+  }
+  isAdmin: boolean;
 };
 const statusConfig = {
   NORMAL: {
@@ -21,33 +30,33 @@ const statusConfig = {
   },
 };
 
-const ScholarStatus: React.FC<ScholarStatusProps> = ({ scholar }) => {
+const ScholarStatusIndicator: React.FC<ScholarStatusIndicatorProps> = ({ scholarData, isAdmin, }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const status = scholar.program_information.scholar_status;
-  const config = statusConfig[status];
-
+  const config = statusConfig[scholarData.status];
   if (!config) return null;
   return (
     <>
       <Button
+        size="sm"
+        radius="full"
+        startContent={<span className={`w-2 h-2 mr-1 bg-${config.color}-500 rounded-full`} />}
         onPress={onOpen}
-        className={`inline-flex items-center bg-${config.color}-100 text-${config.color}-800 text-base font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-${config.color}-900 dark:text-${config.color}-300 animate-pulse`}
+        className={` bg-${config.color}-100 text-${config.color}-800 text-base font-medium  dark:bg-${config.color}-900 dark:text-${config.color}-300 animate-pulse`}
       >
-        <span className={`w-2 h-2 mr-1 bg-${config.color}-500 rounded-full`}></span>
         {config.text}
       </Button>
       <BasicModal
         isOpen={isOpen}
         size="5xl"
         onOpenChange={onOpenChange}
-        title="Casos de probatorio"
-        Content={() => <ProbationAccordion scholarInProbation={scholar} />}
+        title="Historial de casos de probatorio"
+        Content={() => <ProbationAccordion isAdmin={isAdmin} scholarData={scholarData} />}
         isButtonDisabled={false}
-        onConfirm={async () => {}}
+        onConfirm={() => null}
         confirmText=""
       />
     </>
   );
 };
 
-export default ScholarStatus;
+export default ScholarStatusIndicator;

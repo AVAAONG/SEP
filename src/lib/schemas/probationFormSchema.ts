@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { formatDateToStoreInDB } from '../utils/dates';
 const probationFormSchema = z.object({
   done_at_the_moment: z.object({
     year_in_career: z.string().min(1, { message: 'Debes especificar el año de universidad' }),
@@ -59,9 +60,12 @@ const probationFormSchema = z.object({
     }),
     cva: z.string().min(1, { message: 'Debes especificar el nivel de CVA a llegar' }),
   }),
-  next_meeting: z.coerce.date().refine((date) => new Date(date) >= new Date(), {
-    message: 'La fecha no puede ser menor a la actual',
-  }),
+  next_meeting: z.string()
+    .min(1, { message: 'Debes especificar la fecha' })
+    .refine((collage_start_date) => new Date(collage_start_date) >= new Date(), {
+      message: 'La fecha no puede ser menor a la actual',
+    })
+    .transform((collage_start_date) => formatDateToStoreInDB(collage_start_date)),
   observations: z.string().optional(),
 });
 

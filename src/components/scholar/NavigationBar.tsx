@@ -13,6 +13,7 @@ import {
 import { useDisclosure } from '@nextui-org/modal';
 import { Input } from '@nextui-org/react';
 import { Tab, Tabs } from '@nextui-org/tabs';
+import { ScholarStatus } from '@prisma/client';
 import { useAtom } from 'jotai';
 import { signOut } from 'next-auth/react';
 import { MenuIcon } from 'public/svgs/svgs';
@@ -54,6 +55,7 @@ const NavigationBar = ({ image, name, email, scholarId }: NavigationBarProps) =>
           </button>
         </div>
         <div className="flex gap-4 md:gap-8 items-center justify-start">
+          <ScholarStatus scholar={scholar} isAdmin={false} />
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
               <Button variant="light" color="success">
