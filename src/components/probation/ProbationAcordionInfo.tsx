@@ -1,19 +1,48 @@
+'use client';
 import { getProbationInfoByScholar } from '@/lib/db/utils/probation';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
-import React from 'react';
-import ProbationActionButtons from './ProbationActionButtons';
+import { Probation, ScholarStatus } from '@prisma/client';
+import React, { useEffect, useState } from 'react';
 import { formatDate, renderDateInfo, renderInfoSection } from './commonComponents';
+import ProbationActionButtons from './ProbationActionButtons';
 
 interface ProbationAccordionProps {
-  scholarId: string;
+  scholarData: {
+    id: string;
+    status: ScholarStatus;
+    firstName: string;
+    surNames: string;
+    dni: string;
+  };
   isAdmin: boolean;
 }
 
-const ProbationAccordion: React.FC<ProbationAccordionProps> = async ({ scholarId, isAdmin }) => {
-  const probations = await getProbationInfoByScholar(scholarId);
+const ProbationAccordion: React.FC<ProbationAccordionProps> = ({ scholarData, isAdmin }) => {
+  const [loading, setLoading] = useState(true);
+  const [probation, setProbation] = useState<Probation[] | null>(null);
+  useEffect(() => {
+    const fetchProbation = async () => {
+      const probation = await getProbationInfoByScholar(scholarData.id)
+      if (!probation) {
+        setLoading(false);
+        return;
+      }
+      setProbation(probation);
+      setLoading(false)
+    };
+    fetchProbation();
+  }, [scholarData.id]);
+
+  if (loading) return (
+    <div className="w-full flex items-center justify-center">
+      <ArrowPathIcon className="h-1/4 w-1/4 animate-spin text-primary-light" />
+    </div>
+  )
+  if (!probation) return null
   return (
     <Accordion variant="splitted">
-      {probations.map((probationInfo, index) => {
+      {probation.map((probationInfo, index) => {
         const isProbationI = probationInfo.kind_of_probation === 'PROBATION_I';
         const title = isProbationI ? 'Probatorio I' : 'Probatorio II';
         const bgColor = isProbationI
@@ -67,7 +96,7 @@ const ProbationAccordion: React.FC<ProbationAccordionProps> = async ({ scholarId
 
               {isAdmin && (
                 <div className="flex gap-4 justify-end">
-                  <ProbationActionButtons />
+                  <ProbationActionButtons probation={probationInfo} scholarData={scholarData} />
                 </div>
               )}
             </div>

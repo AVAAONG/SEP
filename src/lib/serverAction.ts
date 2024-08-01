@@ -1,4 +1,6 @@
 'use server';
+import { formatDate } from '@/components/probation/commonComponents';
+import { Probation } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import formatDni from './db/utils/formatDni';
@@ -67,7 +69,7 @@ export const createCVACard = async (
   if (result.status !== 200) throw new Error('Error');
 };
 
-export const createProbationAct = async (scholarInProbation, probationInfo, starDate) => {
+export const createProbationAct = async (scholarInProbation, probationInfo: Probation) => {
   const nes = probationInfo
   delete nes.probation_reason
   probationInfo.next_meeting = new Date(probationInfo.next_meeting).toLocaleDateString('es-ES', {
@@ -88,7 +90,7 @@ export const createProbationAct = async (scholarInProbation, probationInfo, star
         dni: `V-${formatDni(scholarInProbation.dni)}`,
         kindOfProbation:
           probationInfo.kind_of_probation === 'PROBATION_I' ? 'I' : 'II',
-        date: starDate,
+        date: formatDate(probationInfo.starting_date),
         ...probationInfo,
       }),
     }

@@ -1,29 +1,41 @@
+'use server';
 import { Prisma } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 import { prisma } from "./prisma";
 
-export const deleteProbation = async (probationId: string, scholarId: string): Promise<void> => {
-    await prisma.$transaction(async (tx) => {
-        await tx.probation.delete({
-            where: {
-                id: probationId
-            }
-        });
-
-        await tx.scholar.update({
-            where: {
-                id: scholarId
-            },
-            data: {
-                program_information: {
-                    update: {
-                        scholar_status: 'NORMAL'
+export const deleteProbation = async (probationId: string, scholarId: string) => {
+    try {
+        await prisma.$transaction(async (tx) => {
+            const deletedProbation = await tx.probation.delete({
+                where: { id: probationId }
+            });
+            const scholar = await tx.scholar.findUnique({
+                where: { id: scholarId },
+                select: {
+                    program_information: {
+                        select: {
+                            scholar_status: true
+                        }
                     }
                 }
+            });
+            if (deletedProbation.kind_of_probation === scholar?.program_information?.scholar_status) {
+                await tx.scholar.update({
+                    where: { id: scholarId },
+                    data: {
+                        program_information: {
+                            update: { scholar_status: 'NORMAL' }
+                        }
+                    }
+                });
             }
-        });
-    });
-};
 
+        });
+        revalidatePath(`/admin/becarios/${scholarId}`)
+    } catch (error) {
+        console.error('Error deleting probation:', error);
+    }
+};
 
 export const endScholarProbation = async (probationId: string, scholarId: string): Promise<void> => {
     await prisma.$transaction(async (tx) => {
@@ -49,6 +61,8 @@ export const endScholarProbation = async (probationId: string, scholarId: string
             }
         });
     });
+    revalidatePath(`/admin/becarios/${scholarId}`)
+
 };
 
 export const updateProbation = async (probationId: string, probationInfoToUpdate: Prisma.ProbationUpdateInput) => {
@@ -56,8 +70,10 @@ export const updateProbation = async (probationId: string, probationInfoToUpdate
         where: {
             id: probationId
         },
-        data: probationInfoToUpdate
+        data: { ...probationInfoToUpdate }
     });
+    revalidatePath(`/admin/becarios/${scholarId}`)
+
 }
 
 export const createProbation = async (scholarId: string, data: Prisma.ProbationCreateWithoutScholarInput) => {
@@ -78,14 +94,19 @@ export const createProbation = async (scholarId: string, data: Prisma.ProbationC
             },
         },
     });
+    revalidatePath(`/admin/becarios/${scholarId}`)
+
 };
 
 export const getProbationInfoByScholar = async (scholarId: string) => {
     return await prisma.probation.findMany({
         where: {
             scholar: {
-                scholarId: scholarId
-            }
+                scholarId
+            },
+        },
+        orderBy: {
+            starting_date: "desc"
         }
     })
 }

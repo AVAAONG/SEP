@@ -1,10 +1,18 @@
 'use client';
-import { Button, useDisclosure } from '@nextui-org/react';
+import { Button } from '@nextui-org/button';
+import { useDisclosure } from '@nextui-org/modal';
+import { ScholarStatus } from '@prisma/client';
 import BasicModal from './BasicModal';
-import ProbationAccordion from './ProbationAccordion';
+import ProbationAccordion from './probation/ProbationAcordionInfo';
 
-type ScholarStatusProps = {
-  scholar: any;
+type ScholarStatusIndicatorProps = {
+  scholarData: {
+    id: string;
+    status: ScholarStatus;
+    firstName: string;
+    surNames: string;
+    dni: string;
+  }
   isAdmin: boolean;
 };
 const statusConfig = {
@@ -22,11 +30,9 @@ const statusConfig = {
   },
 };
 
-const ScholarStatus: React.FC<ScholarStatusProps> = ({ scholar, isAdmin }) => {
+const ScholarStatusIndicator: React.FC<ScholarStatusIndicatorProps> = ({ scholarData, isAdmin, }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const status = scholar.program_information.scholar_status;
-  const config = statusConfig[status];
-
+  const config = statusConfig[scholarData.status];
   if (!config) return null;
   return (
     <>
@@ -44,13 +50,13 @@ const ScholarStatus: React.FC<ScholarStatusProps> = ({ scholar, isAdmin }) => {
         size="5xl"
         onOpenChange={onOpenChange}
         title="Historial de casos de probatorio"
-        Content={() => <ProbationAccordion scholarInProbation={scholar} isAdmin={isAdmin} />}
+        Content={() => <ProbationAccordion isAdmin={isAdmin} scholarData={scholarData} />}
         isButtonDisabled={false}
-        onConfirm={async () => {}}
+        onConfirm={() => null}
         confirmText=""
       />
     </>
   );
 };
 
-export default ScholarStatus;
+export default ScholarStatusIndicator;

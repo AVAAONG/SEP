@@ -1,5 +1,5 @@
 import { CalendarDaysIcon } from '@heroicons/react/24/outline';
-import { JsonValue } from '@prisma/client/runtime/library';
+import { Prisma } from '@prisma/client';
 
 const PROBATION_KEYS_MAP: Record<string, string> = {
   cva: 'CVA',
@@ -27,7 +27,7 @@ export const formatDate = (date: string | Date): string => {
   });
 };
 
-export const renderInfoSection = (title: string, data: JsonValue) => (
+export const renderInfoSection = (title: string, data: Prisma.JsonValue) => (
   <div>
     <h3 className="text-base md:text-lg font-semibold leading-none tracking-tight">{title}</h3>
     <div className="flex flex-col md:flex-row gap-2 divide-x-4 divide-yellow-800 mt-2">

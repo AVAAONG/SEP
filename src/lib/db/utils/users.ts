@@ -341,7 +341,6 @@ export const getScholarWithAllData = async (scholar_id: string) => {
               },
             },
           },
-          probation: true,
           attended_workshops: {
             include: {
               workshop: {

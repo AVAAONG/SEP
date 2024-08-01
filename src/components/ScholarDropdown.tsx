@@ -104,18 +104,14 @@ const ScholarDropdown = ({ scholar }) => {
         </DropdownMenu>
       </Dropdown>
       <ProbationForm
-        scholar={scholar}
-        isOpen={probation1.isOpen}
-        onOpenChange={probation1.onOpenChange}
+        scholarId={scholar.id}
+        formAction={probation1}
         probationKind="PROBATION_I"
-        onConfirm={() => {}}
       />
       <ProbationForm
-        scholar={scholar}
-        isOpen={probation2.isOpen}
-        onOpenChange={probation2.onOpenChange}
+        scholarId={scholar.id}
+        formAction={probation2}
         probationKind="PROBATION_II"
-        onConfirm={() => {}}
       />
       {/* <EditScholarForm modalIsOpen={editModalIsOpen} set={setEditModalOpen} scholar={scholar} /> */}
     </>
