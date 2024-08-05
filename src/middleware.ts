@@ -13,12 +13,25 @@
 import { NextRequestWithAuth, withAuth } from 'next-auth/middleware';
 import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
+
+
+
 export default async function wrapMiddlewareFunction(req: NextRequestWithAuth, res: Response) {
   let signinPath = '';
   if (req.nextUrl.pathname.startsWith('/becario')) {
     signinPath = 'becario';
   } else if (req.nextUrl.pathname.startsWith('/admin')) {
     signinPath = 'admin';
+    const response = NextResponse.next();
+    const actualChapter = "H0rvqSucbop6uozNUpuC-"
+    // Set the cookie
+    response.cookies.set({
+      name: 'chapter',
+      value: actualChapter,
+      maxAge: 60 * 60 * 24 * 7, // 1 week
+      path: '/',
+    });
+    return response;
   }
 
   ///@ts-expect-error
@@ -32,7 +45,8 @@ export default async function wrapMiddlewareFunction(req: NextRequestWithAuth, r
       const isScholarRoute = pathname.startsWith('/becario');
 
       if (token?.kind_of_user === 'ADMIN' && isAdminRoute) {
-        const response = await fetch(`https://${host}/admin/api/roles?adminId=${token.id}`);
+
+        const response = await fetch(`http://${host}/admin/api/roles?adminId=${token.id}`);
         const { admin } = await response.json();
         const adminRoutes = new Map([
           ['/admin/actividadesFormativas', admin.role.permissions.workshops.read],

@@ -1,6 +1,7 @@
 'use server'
 import { Prisma, Scholar } from "@prisma/client";
 import { prisma } from "./prisma";
+import { getCookie } from "@/lib/serverAction";
 
 export const getScholarCvaInformation = async (scholarId: string) => {
     const cvaInformation = await prisma.scholarCVAInformation.findUnique({
@@ -78,7 +79,7 @@ export const getScholarsCvaInformation = async (): Promise<ScholarsCvaInformatio
                 },
                 chapter: {
                     id: {
-                        equals: 'Rokk6_XCAJAg45heOEzYb',
+                        equals: await getCookie('chapter'),
                     },
                 },
             },
