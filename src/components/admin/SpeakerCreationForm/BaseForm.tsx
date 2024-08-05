@@ -19,25 +19,23 @@ export const SpeakerCreationFormSchema = z.object({
     .email()
     .min(1, { message: 'Debes especificar el correo del facilitador' })
     .trim(),
-  birthdate: z.coerce
-    .date()
-    .refine((date) => new Date(date) <= new Date(), {
-      message: 'La fecha no puede ser mayor a la actual',
-    })
-    .optional().nullable(),
-  years_of_exp: z.coerce.number().optional(),
+  // birthdate: z.coerce
+  //   .date()
+  //   .refine((date) => new Date(date) <= new Date(), {
+  //     message: 'La fecha no puede ser mayor a la actual',
+  //   })
+  //   .optional()
+  //   .nullable(),
+  // years_of_exp: z.coerce.number().optional(),
   job_title: z.string().trim().optional(),
   job_company: z.string().trim().optional().nullable(),
-  actual_city: z.string().trim().optional().nullable(),
-  actual_country: z.string().trim().optional().nullable(),
   phone_number: z.string().trim().optional().nullable(),
-  image: z.string().trim().optional().nullable(),
+  // image: z.string().trim().optional().nullable(),
   description: z.string().trim().optional().nullable(),
   instagram_user: z.string().trim().optional().nullable(),
-  twitter_user: z.string().trim().optional().nullable(),
+  // twitter_user: z.string().trim().optional().nullable(),
   linkedin_user: z.string().trim().optional().nullable(),
-  facebook_user: z.string().trim().optional().nullable(),
-  curriculum: z.string().trim().optional().nullable(),
+  // curriculum: z.string().trim().optional().nullable(),
   gender: z.enum(['M', 'F', 'O'], {
     required_error: 'Debes seleccionar el género del facilitador',
   }),
@@ -69,18 +67,6 @@ const d = [
     required: false,
   },
   {
-    label: 'Fecha de Nacimiento',
-    name: 'birthdate',
-    kindOfInput: 'date',
-    required: false,
-  },
-  {
-    label: 'Años de Experiencia',
-    name: 'years_of_exp',
-    kindOfInput: 'number',
-    required: false,
-  },
-  {
     label: 'Título de Trabajo',
     name: 'job_title',
     kindOfInput: 'text',
@@ -93,38 +79,14 @@ const d = [
     required: false,
   },
   {
-    label: 'Ciudad Actual',
-    name: 'actual_city',
-    kindOfInput: 'text',
-    required: false,
-  },
-  {
-    label: 'País Actual',
-    name: 'actual_country',
-    kindOfInput: 'text',
-    required: false,
-  },
-  {
     label: 'Usuario de Instagram',
     name: 'instagram_user',
     kindOfInput: 'text',
     required: false,
   },
   {
-    label: 'Usuario de Twitter',
-    name: 'twitter_user',
-    kindOfInput: 'text',
-    required: false,
-  },
-  {
     label: 'Usuario de LinkedIn',
     name: 'linkedin_user',
-    kindOfInput: 'text',
-    required: false,
-  },
-  {
-    label: 'Usuario de Facebook',
-    name: 'facebook_user',
     kindOfInput: 'text',
     required: false,
   },
