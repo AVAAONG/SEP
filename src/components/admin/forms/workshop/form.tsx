@@ -3,16 +3,10 @@ import DateInput from '@/components/commons/DateInput';
 import PlatformCoordinatesInput from '@/components/commons/PlatformCoordinatesInputs';
 import PlatformInput from '@/components/commons/PlatformInput';
 import createWorkshopInvitationMessage from '@/components/emailTemplateMessage/WorkshopInvitationMessage';
-import { MeetingDetails, createCalendarEvent, deleteCalendarEvent } from '@/lib/calendar/calendar';
+import { MeetingDetails, createCalendarEvent } from '@/lib/calendar/calendar';
 import { formatDates } from '@/lib/calendar/clientUtils';
 import { IWorkshopCalendar } from '@/lib/calendar/d';
-import {
-  MODALITY,
-  PROGRAM_COMPONENTS,
-  WORKSHOP_CALENDAR_ID,
-  WORKSHOP_TYPES,
-  WORKSHOP_YEAR,
-} from '@/lib/constants';
+import { MODALITY, PROGRAM_COMPONENTS, WORKSHOP_TYPES, WORKSHOP_YEAR } from '@/lib/constants';
 import { WorkshopWithSpeaker } from '@/lib/db/types';
 import { createWorkshop, updateWorkshop } from '@/lib/db/utils/Workshops';
 import workshopCreationFormSchema from '@/lib/schemas/workshopCreationFormSchema';
@@ -100,7 +94,9 @@ const WorkshopForm: React.FC<WorkshopFormProps> = ({
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
     const buttonType = ((event?.nativeEvent as SubmitEvent)?.submitter as HTMLButtonElement)?.name;
-    const status = determineStatus(buttonType);
+    let status;
+    if (buttonType !== 'edit') status = determineStatus(buttonType);
+    else status = null;
     const calendarDates = await formatDates(data.dates); //server formating
     const { platformInPerson, platformOnline, speakers, ...restData } = data;
 
@@ -115,18 +111,14 @@ const WorkshopForm: React.FC<WorkshopFormProps> = ({
     let meetingDetails: MeetingDetails[] = [];
 
     //avoid create a calendar event when the workshop is in 'create mode'
-    if (
-      buttonType !== 'create' ||
-      valuesToUpdate?.activity_status === 'ATTENDANCE_CHECKED' ||
-      valuesToUpdate?.activity_status === 'SUSPENDED'
-    ) {
+    if (buttonType === 'schedule' || buttonType === 'send') {
       const [eventos, meet] = await createCalendarEvent(calendarWorkshop);
       eventsIds = eventos;
       meetingDetails = meet;
     }
 
     let meetingCoordinates = meetingDetails;
-    if (buttonType !== 'create' && data.platformOnline !== 'ZOOM') {
+    if ((buttonType === 'schedule' || buttonType === 'send') && data.platformOnline !== 'ZOOM') {
       meetingCoordinates.push({
         meetingId: data.meetingId,
         meetingLink: data.meetingLink,
@@ -135,24 +127,23 @@ const WorkshopForm: React.FC<WorkshopFormProps> = ({
     }
 
     if (buttonType === 'edit' && valuesToUpdate) {
-      if (
-        valuesToUpdate.calendar_ids.length < 1 ||
-        valuesToUpdate.activity_status === 'ATTENDANCE_CHECKED' ||
-        valuesToUpdate.activity_status === 'SUSPENDED'
-      ) {
-      } else {
-        valuesToUpdate.calendar_ids.map(
-          async (id) => await deleteCalendarEvent(WORKSHOP_CALENDAR_ID, id)
-        );
-        const workshop = await createWorkshopObject(
-          data,
-          valuesToUpdate.activity_status,
-          eventsIds,
-          meetingCoordinates
-        );
-        await updateWorkshop(valuesToUpdate?.id, workshop);
-        router.push('/admin/actividadesFormativas/crear');
-      }
+      // if (
+      //   valuesToUpdate.calendar_ids.length < 1 ||
+      //   valuesToUpdate.activity_status === 'ATTENDANCE_CHECKED' ||
+      //   valuesToUpdate.activity_status === 'SUSPENDED'
+      // ) {
+      // } else {
+      //   valuesToUpdate.calendar_ids.map(
+      //     async (id) => await deleteCalendarEvent(WORKSHOP_CALENDAR_ID, id)
+      //   );
+      const workshop = await createWorkshopObject(
+        data,
+        valuesToUpdate.activity_status,
+        eventsIds,
+        meetingCoordinates
+      );
+      await updateWorkshop(valuesToUpdate?.id, workshop);
+      // router.push('/admin/actividadesFormativas/crear');
     } else {
       const workshop = await createWorkshopObject(data, status, eventsIds, meetingDetails);
       const createdWorkshop = await createWorkshop(workshop);

@@ -3,10 +3,10 @@ import DateInput from '@/components/commons/DateInput';
 import PlatformCoordinatesInput from '@/components/commons/PlatformCoordinatesInputs';
 import PlatformInput from '@/components/commons/PlatformInput';
 import createChatInvitationMessage from '@/components/emailTemplateMessage/ChatInvitationMessage';
-import { MeetingDetails, createCalendarEvent, deleteCalendarEvent } from '@/lib/calendar/calendar';
+import { MeetingDetails, createCalendarEvent } from '@/lib/calendar/calendar';
 import { formatDates } from '@/lib/calendar/clientUtils';
 import { IChatCalendar } from '@/lib/calendar/d';
-import { CHAT_CALENDAR_ID, CHAT_LEVELS, MODALITY } from '@/lib/constants';
+import { CHAT_LEVELS, MODALITY } from '@/lib/constants';
 import { ChatWithSpeaker } from '@/lib/db/types';
 import { createChat, updateChat } from '@/lib/db/utils/chats';
 import chatCreationFormSchema from '@/lib/schemas/chatCreationFormSchema';
@@ -93,7 +93,9 @@ const ChatForm: React.FC<ChatFormProps> = ({
     event: BaseSyntheticEvent<object, any, any> | undefined
   ) => {
     const buttonType = ((event?.nativeEvent as SubmitEvent)?.submitter as HTMLButtonElement)?.name;
-    const status = determineStatus(buttonType);
+    let status;
+    if (buttonType !== 'edit') status = determineStatus(buttonType);
+    else status = null;
     const calendarDates = await formatDates(data.dates); //server formating
     const { platformInPerson, platformOnline, speakers, ...restData } = data;
     const calendarWorkshop: IChatCalendar = {
@@ -106,18 +108,14 @@ const ChatForm: React.FC<ChatFormProps> = ({
     let eventsIds: string[] = [];
     let meetingDetails: MeetingDetails[] = [];
 
-    if (
-      buttonType !== 'create' ||
-      valuesToUpdate?.activity_status === 'ATTENDANCE_CHECKED' ||
-      valuesToUpdate?.activity_status === 'SUSPENDED'
-    ) {
+    if (buttonType === 'schedule' || buttonType === 'send') {
       const [eventos, meet] = await createCalendarEvent(calendarWorkshop);
       eventsIds = eventos;
       meetingDetails = meet;
     }
 
     let meetingCoordinates = meetingDetails;
-    if (buttonType !== 'create' && data.platformOnline !== 'ZOOM') {
+    if ((buttonType === 'schedule' || buttonType === 'send') && data.platformOnline !== 'ZOOM') {
       meetingCoordinates.push({
         meetingId: data.meetingId,
         meetingLink: data.meetingLink,
@@ -126,24 +124,16 @@ const ChatForm: React.FC<ChatFormProps> = ({
     }
 
     if (buttonType === 'edit' && valuesToUpdate) {
-      if (
-        valuesToUpdate.calendar_ids.length < 1 ||
-        valuesToUpdate.activity_status === 'ATTENDANCE_CHECKED' ||
-        valuesToUpdate.activity_status === 'SUSPENDED'
-      ) {
-      } else {
-        valuesToUpdate.calendar_ids.map(
-          async (id) => await deleteCalendarEvent(CHAT_CALENDAR_ID, id)
-        );
-        const chat = await createChatObject(
-          data,
-          valuesToUpdate.activity_status,
-          eventsIds,
-          meetingCoordinates
-        );
-        await updateChat(valuesToUpdate?.id, chat);
-        router.push('/admin/chats/crear');
-      }
+      // valuesToUpdate.calendar_ids.map(
+      //   async (id) => await deleteCalendarEvent(CHAT_CALENDAR_ID, id)
+      // );
+      const chat = await createChatObject(
+        data,
+        valuesToUpdate.activity_status,
+        eventsIds,
+        meetingCoordinates
+      );
+      await updateChat(valuesToUpdate?.id, chat);
     } else {
       const chat = await createChatObject(data, status, eventsIds, meetingDetails);
       const createdChat = await createChat(chat);
