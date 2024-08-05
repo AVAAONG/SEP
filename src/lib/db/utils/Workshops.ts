@@ -981,3 +981,18 @@ export const changeWorkshopStatusInBulk = async (ids: string[], status: Activity
   });
   return workshops;
 }
+
+
+export const deleteWorkshop = async (workshopId: string) => {
+  await prisma.workshopAttendance.deleteMany({
+    where:
+    {
+      workshop_id: workshopId
+    }
+  })
+  await prisma.workshop.delete({
+    where: {
+      id: workshopId
+    },
+  })
+}

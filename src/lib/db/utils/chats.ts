@@ -385,3 +385,19 @@ export const updateChat = async (chatId: string, chat: Prisma.ChatCreateArgs) =>
   });
   return createdVolunteer;
 };
+
+
+
+export const deleteChat = async (chatId: string) => {
+  await prisma.chatAttendance.deleteMany({
+    where:
+    {
+      chat_id: chatId
+    }
+  })
+  await prisma.chat.delete({
+    where: {
+      id: chatId
+    },
+  })
+}

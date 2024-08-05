@@ -309,3 +309,19 @@ export const changeScholarVolunteerAttendance = async (
 		},
 	});
 };
+
+
+
+export const deleteVolunteer = async (volunteerId: string) => {
+	await prisma.volunteerAttendance.deleteMany({
+		where:
+		{
+			volunteerId: volunteerId
+		}
+	})
+	await prisma.volunteer.delete({
+		where: {
+			id: volunteerId
+		},
+	})
+}
