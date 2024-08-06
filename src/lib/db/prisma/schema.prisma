@@ -665,6 +665,8 @@ enum Collages {
   UNEARTE
   UJMV
   UMC
+  UNA // Universidad Nacional Abierta
+  IUTRBF // Instituto Universitario de Tecnología de Rufino Blanco Fombona  
   UPEL
   CUR
   UNEFA

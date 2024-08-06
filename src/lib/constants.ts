@@ -184,6 +184,14 @@ export const COLLAGE_LONG_AND_SHORT = [
     value: 'UNEXPO',
     label: 'Universidad Nacional Experimental Politécnica Antonio José de Sucre (UNEXPO)',
   },
+  {
+    value: 'UNA',
+    label: 'Universidad Nacional Abierta (UNA)',
+  },
+  {
+    value: 'IUTRBF',
+    label: 'Instituto Universitario de Tecnología de Rufino Blanco Fombona (IUTRBF)',
+  },
   { value: 'UMA', label: 'Universidad Monteávila (UMA)' },
   { value: 'UJMV', label: 'Universidad José María Vargas (UJMV)' },
   { value: 'UMC', label: 'Universidad Nacional Experimental Marítima del Caribe (UMC)' },
