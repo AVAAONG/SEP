@@ -629,6 +629,7 @@ export const enroleScholarInWorkshop = async (
   workshopId: string,
   scholarId: string,
 ) => {
+  let enrolled = false
   // Start a transaction
   await prisma.$transaction(async (prisma) => {
     // Check if the scholar is already enrolled in the workshop
@@ -671,8 +672,10 @@ export const enroleScholarInWorkshop = async (
           },
         });
       }
+      enrolled = true
     }
   });
+  return enrolled
 }
 
 export const addScholarToWorkshop = async (
@@ -826,6 +829,7 @@ export const enroleScholarInChat = async (
   chatId: string,
   scholarId: string,
 ) => {
+  let enrolled = false
   // Start a transaction
   await prisma.$transaction(async (prisma) => {
     // Check if the scholar is already enrolled in the workshop
@@ -869,8 +873,10 @@ export const enroleScholarInChat = async (
           },
         });
       }
+      enrolled = true
     }
   });
+  return enrolled;
 };
 
 export const createWorkshop = async (workshop: Prisma.WorkshopCreateArgs) => {

@@ -112,6 +112,7 @@ export const addScholarToVolunteer = async (
 	volunteerId: string,
 	scholarId: string,
 ) => {
+	let enrolled = false;
 	// Start a transaction
 	await prisma.$transaction(async (prisma) => {
 		// Check if the scholar is already enrolled in the workshop
@@ -155,9 +156,11 @@ export const addScholarToVolunteer = async (
 					},
 				});
 			}
+			enrolled = true;
 		}
 
 	});
+	return enrolled;
 }
 
 export const addScholarToVolunteerAdmin = async (

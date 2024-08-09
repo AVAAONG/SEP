@@ -23,41 +23,46 @@ export const handleEnrollment = async (
     activityTitle: string
 ) => {
     let spanishPath = ''
+    let enrolled: boolean = false;
     if (kindOfActivity === 'workshop') {
-        await enroleScholarInWorkshop(activityId, scholarId);
+        enrolled = await enroleScholarInWorkshop(activityId, scholarId);
         spanishPath = 'actividadesFormativas';
     }
     else if (kindOfActivity === 'chat') {
-        await enroleScholarInChat(activityId, scholarId);
+        enrolled = await enroleScholarInChat(activityId, scholarId);
         spanishPath = 'chats';
     }
     else if (kindOfActivity === 'volunteer') {
-        await addScholarToVolunteer(activityId, scholarId); spanishPath = 'voluntariado';
+        enrolled = await addScholarToVolunteer(activityId, scholarId);
+        spanishPath = 'voluntariado';
     }
 
     revalidatePath('/becario/oferta');
-    const result = await fetch(
-        'https://script.google.com/macros/s/AKfycbzSiMKnlwygmcPdvdGvmeLlvXc_bcdm4tcWcpZ2H7QBbz-g3dBqxgFfzd_G44YaEeKkZA/exec',
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                newAttende: email,
-                eventId,
-                calendarId: setCalendarId(kindOfActivity)
-            }),
-        }
-    );
-    if (result.status !== 200) throw new Error('Error al inscribirte en la actividad');
-    await sendGenericEmail(
-        createEnrollementConfirmationMessage(
-            scholarName,
-            `https://www.programaexcelencia.org/becario/${spanishPath}/${activityId}`,
-            activityTitle
-        ),
-        email,
-        'Confirmación de inscripción'
-    )
+    if (enrolled) {
+        const result = await fetch(
+            'https://script.google.com/macros/s/AKfycbzSiMKnlwygmcPdvdGvmeLlvXc_bcdm4tcWcpZ2H7QBbz-g3dBqxgFfzd_G44YaEeKkZA/exec',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    newAttende: email,
+                    eventId,
+                    calendarId: setCalendarId(kindOfActivity)
+                }),
+            }
+        );
+        if (result.status !== 200) throw new Error('Error al inscribirte en la actividad');
+        await sendGenericEmail(
+            createEnrollementConfirmationMessage(
+                scholarName,
+                `https://www.programaexcelencia.org/becario/${spanishPath}/${activityId}`,
+                activityTitle
+            ),
+            email,
+            'Confirmación de inscripción'
+        )
+    }
+
 };
