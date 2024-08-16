@@ -3,6 +3,7 @@ import DisplayDate from '@/components/DisplayDate';
 import DisplayTime from '@/components/DisplayTime';
 import QuitScholarFromActivity from '@/components/QuitScholarFromActivity';
 import VolunteerStatusWidget from '@/components/VolunteerStatus';
+import DeleteActivityButton from '@/components/activityActions/deleteActivity/DeleteActivityButton';
 import ActivityEditFormModal from '@/components/activityActions/editActivity/ActivityEditFormModal';
 import VolunteerStatusUpdate from '@/components/activityActions/volunteerStatusUpdate/VolunteerStatusUpdate';
 import Table from '@/components/table/Table';
@@ -183,6 +184,10 @@ const page = async ({ params }: { params: { volunteerId: shortUUID.SUUID } }) =>
           <div className="grid grid-cols-2 gap-4 ">
             <ActivityEditFormModal activity={volunteer} />
             <VolunteerStatusUpdate volunteerId={volunteerId} />
+            <DeleteActivityButton
+              kindOfActivity='volunteer'
+              activityId={volunteerId}
+            />
           </div>
         </div>
       </section>
