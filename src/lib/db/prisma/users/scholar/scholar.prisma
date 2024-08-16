@@ -15,6 +15,7 @@ import { VolunteerAttendance } from "..\..\activities\volunteer\volunteer"
 import { Modality } from "..\..\activities\type-activities"
 import { Level, Scholar } from "..\..\schema"
 import { JobSchedule, KindOfJob, RecruitmentStatus } from "types-scholar"
+import { MentorMentee } from "..\..\mentors"
 
 enum JobSector {
     PRIVATE
@@ -67,6 +68,7 @@ model ScholarProgramInformation {
     volunteerAttendance      VolunteerAttendance[]
     attended_workshops       WorkshopAttendance[]
     attended_chats           ChatAttendance[]
+    mentor_relation          MentorMentee[]
     scholar                  Scholar               @relation(fields: [scholarId], references: [id])
     chapter                  Chapter?              @relation(fields: [chapter_id], references: [id])
     chapter_id               String?
