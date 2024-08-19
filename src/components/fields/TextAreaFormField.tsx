@@ -1,6 +1,6 @@
 import { Textarea } from '@nextui-org/input';
+import clsx from 'clsx';
 import { Controller, useFormContext } from 'react-hook-form';
-
 interface TextAreaFormFieldProps {
   name: string;
   label: string;
@@ -11,6 +11,7 @@ interface TextAreaFormFieldProps {
 const TextAreaFormField: React.FC<TextAreaFormFieldProps> = (props) => {
   const { name, label, ...restProps } = props;
   const { control, formState } = useFormContext();
+  const classes = restProps.className ? clsx(restProps.className as string) : '';
   return (
     <Controller
       name={name}
@@ -22,6 +23,7 @@ const TextAreaFormField: React.FC<TextAreaFormFieldProps> = (props) => {
           isInvalid={!!formState.errors[name]}
           errorMessage={formState.errors[name]?.message?.toString()}
           {...restProps}
+          className={classes}
         />
       )}
     />

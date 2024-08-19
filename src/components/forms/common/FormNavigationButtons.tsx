@@ -36,7 +36,7 @@ const FormNavigationButtons = ({
         window.removeEventListener('resize', handleResize);
       }
     };
-  }, [window.innerWidth]);
+  }, []);
 
   if (isMobile) {
     return (

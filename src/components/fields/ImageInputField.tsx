@@ -1,7 +1,9 @@
+import { getBlobImage, uploadBlob } from '@/lib/azure/azure';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import { useController, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import { STORAGE_KEY } from '../forms/mentorship/MentorshipRecruitmentForm';
 
 interface ImageUploadProps {
   name: string;
@@ -9,30 +11,72 @@ interface ImageUploadProps {
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
   const {
-    control,
+    register,
+    setValue,
+    watch,
     formState: { errors },
+    getValues,
   } = useFormContext();
-  const { field } = useController({ name, control });
   const [preview, setPreview] = useState<string | null>(null);
 
+  const fileValue = watch(name);
   useEffect(() => {
-    if (field.value instanceof File) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result as string);
-      };
-      reader.readAsDataURL(field.value);
-    } else {
-      setPreview(null);
-    }
-  }, [field.value]);
+    const fetchData = async () => {
+      const storedData = localStorage.getItem(STORAGE_KEY);
+      if (storedData) {
+        const str = JSON.parse(storedData);
+        const photo = await getBlobImage(str.photo);
+        return photo;
+      }
+      if (fileValue instanceof File) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreview(reader.result as string);
+        };
+        reader.readAsDataURL(fileValue);
+      } else {
+        setPreview(null);
+      }
+    };
 
+    const fetchAndSetPreview = async () => {
+      const photo = await fetchData();
+      if (photo !== undefined) {
+        setPreview(photo);
+      }
+    };
+
+    fetchAndSetPreview();
+  }, [fileValue]);
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      field.onChange(file);
-      setPreview(URL.createObjectURL(file));
+      const reader = new FileReader();
+      let url: string = '';
+      reader.onloadend = async function () {
+        const base64String = reader.result;
+        try {
+          const response = await uploadBlob(base64String as string, 'picture');
+          const values = getValues();
+          values[name] = response;
+          console.log(values);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(values));
+          console.log('File uploaded to Azure Blob Storage');
+        } catch (error) {
+          console.error('Error uploading file: ', error);
+        }
+        try {
+        } catch (error) {
+          console.error('Error saving the image ', error);
+        }
+      };
+      reader.readAsDataURL(file);
+      setValue(name, file, { shouldValidate: true });
+      const objectUrl = URL.createObjectURL(file);
+      setPreview(objectUrl);
       toast.success('Image uploaded successfully');
+      // Revoke the object URL after the image is loaded to avoid memory leaks
+      return () => URL.revokeObjectURL(objectUrl);
     }
   };
 
@@ -64,6 +108,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
             Subir foto
           </span>
           <input
+            {...register(name)}
             id={name}
             type="file"
             accept="image/jpeg,image/png"
