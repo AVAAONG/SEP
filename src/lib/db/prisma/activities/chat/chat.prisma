@@ -8,6 +8,7 @@ import { ScholarAttendance } from "..\type-activities"
 import { Gender } from "..\type-activities"
 import { Scholar, ScholarProgramInformation, ScholarProgramInformation } from "..\..\users\scholar\scholar"
 import { Speaker } from "..\speaker"
+import { Chapter } from "..\..\organization\chapter"
 
 model Chat {
     id                 String           @id @default(nanoid())
@@ -28,6 +29,8 @@ model Chat {
     meeting_password   String[]
     whatsapp_link      String[]
     slides             String?
+    chapter            Chapter          @relation(fields: [chapterId], references: [id])
+    chapterId          String           @default("Rokk6_XCAJAg45heOEzYb")
 
     @@index([title, modality, activity_status, level])
 }

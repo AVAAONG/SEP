@@ -1,9 +1,15 @@
 import { ScholarProgramInformation } from "..\users\scholar\scholar"
-import { AdminProfile, Controller } from "..\users\admin"
+import { AdminProfile } from "..\users\admin"
+import { Volunteer } from "..\activities\volunteer\volunteer"
+import { Workshop } from "..\activities\workshop\workshop"
+import { Chat } from "..\activities\chat\chat"
 
 model Chapter {
     id                 String                      @id @default(nanoid())
     name               String
     asociated_scholars ScholarProgramInformation[]
     asociated_admins   AdminProfile[]
+    workshop           Workshop[]
+    chat               Chat[]
+    volunteer          Volunteer[]
 }

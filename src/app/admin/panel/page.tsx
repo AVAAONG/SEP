@@ -4,12 +4,14 @@ import formatActivitiesForCalendarPanel from '@/components/calendar/utils';
 import PanelCard, { PanelCardProps } from '@/components/commons/PanelCard';
 import { getActivitiesByYear } from '@/lib/db/utils/Workshops';
 import { getScholarsCountByCondition } from '@/lib/db/utils/users';
+import { getCookie } from '@/lib/serverAction';
 import { Chat, Volunteer, Workshop } from '@prisma/client';
 import { chatIcon, userIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs';
 
 const page = async () => {
   const actualYear = new Date().getFullYear();
-  const activeScholarsCount = await getScholarsCountByCondition('ACTIVE', 'Rokk6_XCAJAg45heOEzYb');
+  const chapter = await getCookie('chapter')
+  const activeScholarsCount = await getScholarsCountByCondition('ACTIVE', chapter);
   const [workshops, chats, volunteer] = await getActivitiesByYear(actualYear);
   const events = formatActivitiesForCalendarPanel([...workshops, ...chats, ...volunteer], 'admin');
   const volunteerMapped = volunteer.map((volunteer) => {

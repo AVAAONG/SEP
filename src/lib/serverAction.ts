@@ -69,6 +69,19 @@ export const createCVACard = async (
   if (result.status !== 200) throw new Error('Error');
 };
 
+export async function setCookie(name: string, value: string) {
+  cookies().set(name, value, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 3600 // 1 hour
+  })
+}
+
+export const getCookie = async (name: string) => {
+  return cookies().get(name)?.value;
+}
+
 export const createProbationAct = async (scholarInProbation, probationInfo: Probation) => {
   const nes = probationInfo
   delete nes.probation_reason

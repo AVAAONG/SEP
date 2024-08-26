@@ -459,7 +459,7 @@ export const getScholarsWithActivities = async () => {
   const scholars = await prisma.scholar.findMany({
     where: {
       AND: [
-        { program_information: { chapter_id: 'Rokk6_XCAJAg45heOEzYb' } },
+        { program_information: { chapter_id: await getCookie('chapter') } },
         { program_information: { scholar_condition: 'ACTIVE' } },
       ]
     },
