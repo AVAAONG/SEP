@@ -30,6 +30,8 @@ model Chat {
   meeting_password   String[]
   whatsapp_link      String[]
   slides             String?
+  chapter            Chapter          @relation(fields: [chapterId], references: [id])
+  chapterId          String           @default("Rokk6_XCAJAg45heOEzYb")
 
   @@index([title, modality, activity_status, level])
 }
@@ -226,6 +228,8 @@ model Volunteer {
   proof                String?
   supervisor           String?
   supervisor_email     String?
+  chapter              Chapter               @relation(fields: [chapterId], references: [id])
+  chapterId            String                @default("Rokk6_XCAJAg45heOEzYb")
 }
 
 model VolunteerAttendance {
@@ -295,6 +299,8 @@ model Workshop {
   meeting_link       String[]
   meeting_id         String[]
   meeting_password   String[]
+  chapter            Chapter              @relation(fields: [chapterId], references: [id])
+  chapterId          String               @default("Rokk6_XCAJAg45heOEzYb")
 
   @@index([title, modality, activity_status, asociated_skill])
 }
@@ -498,6 +504,9 @@ model Chapter {
   name               String
   asociated_scholars ScholarProgramInformation[]
   asociated_admins   AdminProfile[]
+  workshop           Workshop[]
+  chat               Chat[]
+  volunteer          Volunteer[]
 }
 
 //
