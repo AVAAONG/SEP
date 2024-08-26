@@ -204,4 +204,6 @@ export const COLLAGE_LONG_AND_SHORT = [
   },
   { value: 'UAH', label: 'Universidad Alejandro de Humboldt (UAH)' },
   { value: 'UBV', label: 'Universidad Bolivariana de Venezuela (UBV)' },
+  { value: 'UC', label: 'Universidad de Carabobo (UC)' },
+  { value: 'UNITEC', label: 'Universidad Tecnologica del Centro (UNITEC)' },
 ];
