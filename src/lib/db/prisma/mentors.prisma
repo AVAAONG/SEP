@@ -77,12 +77,11 @@ enum MentorMenteeStatus {
 }
 
 model MentorMentee {
-    id         String             @id @default(nanoid())
-    start_date DateTime           @default(now())
+    id         String                    @id @default(nanoid())
+    start_date DateTime                  @default(now())
     end_date   DateTime?
     status     MentorMenteeStatus
     obsevation String?
-
     mentor     Mentor                    @relation(fields: [mentor_id], references: [id])
     mentor_id  String
     scholar    ScholarProgramInformation @relation(fields: [scholar_id], references: [id])

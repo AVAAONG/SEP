@@ -13,12 +13,16 @@
 import { NextRequestWithAuth, withAuth } from 'next-auth/middleware';
 import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
+
+
+
 export default async function wrapMiddlewareFunction(req: NextRequestWithAuth, res: Response) {
   let signinPath = '';
   if (req.nextUrl.pathname.startsWith('/becario')) {
     signinPath = 'becario';
   } else if (req.nextUrl.pathname.startsWith('/admin')) {
     signinPath = 'admin';
+
   }
 
   ///@ts-expect-error
@@ -32,26 +36,20 @@ export default async function wrapMiddlewareFunction(req: NextRequestWithAuth, r
       const isScholarRoute = pathname.startsWith('/becario');
 
       if (token?.kind_of_user === 'ADMIN' && isAdminRoute) {
+
         const response = await fetch(`https://${host}/admin/api/roles?adminId=${token.id}`);
         const { admin } = await response.json();
-        const adminRoutes = new Map([
-          ['/admin/actividadesFormativas', admin.role.permissions.workshops.read],
-          ['/admin/chats', admin.role.permissions.chats.read],
-          ['/admin/voluntariado', admin.role.permissions.volunteers.read],
-          ['/admin/voluntariado/externo', admin.role.permissions.volunteers.external],
-          ['/admin/becarios', admin.role.permissions.scholars.read],
-          ['/admin/becarios/:path*', admin.role.permissions.scholars.individualRead],
-          ['/admin/captacion', admin.role.permissions.scholars.admission],
-          ['/admin/mentoria', admin.role.permissions.mentorship.read],
-          ['/admin/config', admin.role.permissions.admin.read],
-        ]);
+        const { chapter } = admin;
+        const rr = NextResponse.next();
 
-        for (const [route, permission] of adminRoutes) {
-          const regex = new RegExp(`^${route.replace(/:\w+\*/g, '.*').replace(/:\w+/g, '[^/]+')}$`);
-          if (regex.test(pathname) && !permission) {
-            return NextResponse.rewrite(new URL('/accessDenied', request.url));
-          }
-        }
+        rr.cookies.set({
+          name: 'chapter',
+          value: chapter.id,
+          maxAge: 60 * 60 * 24 * 7, // 1 week
+          path: '/',
+        });
+        return rr; // Return the response with the set cookie
+
       }
 
       if (isScholarRoute && token?.kind_of_user !== 'SCHOLAR') {

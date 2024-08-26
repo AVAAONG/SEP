@@ -9,6 +9,7 @@ import { Prisma, ScholarCondition, User, WorkshopAttendance } from '@prisma/clie
 import { revalidatePath } from 'next/cache';
 import shortUUID from 'short-uuid';
 import { prisma } from './prisma';
+import { getCookie } from '@/lib/serverAction';
 /**
  * @description Create a new user in the database
  * @param data User data
@@ -146,7 +147,7 @@ export const getScholarsWithAllData = async () => {
         },
         chapter: {
           id: {
-            equals: 'Rokk6_XCAJAg45heOEzYb',
+            equals: await getCookie('chapter'),
           },
         },
       },
@@ -197,7 +198,7 @@ export const getWithdrawerAndResignedScholars = async () => {
         ],
         chapter: {
           id: {
-            equals: 'Rokk6_XCAJAg45heOEzYb',
+            equals: await getCookie('chapter'),
           },
         },
       },
@@ -239,7 +240,7 @@ export const getAlumniScholars = async () => {
         },
         chapter: {
           id: {
-            equals: 'Rokk6_XCAJAg45heOEzYb',
+            equals: await getCookie('chapter'),
           },
         },
       },
@@ -310,6 +311,9 @@ export const getScholarsCountByCondition = async (
   });
   return scholars;
 };
+
+
+
 export const getScholarWithAllData = async (scholar_id: string) => {
   const scholar = await prisma.scholar.findUnique({
     where: {
@@ -811,7 +815,7 @@ export const getOnlyCaracasScholar = async () => {
         },
         chapter: {
           id: {
-            equals: 'Rokk6_XCAJAg45heOEzYb',
+            equals: await getCookie('chapter'),
           },
         },
       },

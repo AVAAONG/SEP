@@ -10,7 +10,7 @@ import useSWR from 'swr';
 import { MenuIcon } from '../../../../../public/svgs/svgs';
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const Navbar = () => {
+const Navbar = ({ children }) => {
   const [isOpen, setSidebar] = useAtom(sidebarAtom);
   const { data: session } = useSession();
   const setUpSidebar = () => (isOpen ? setSidebar(false) : setSidebar(true));
@@ -39,7 +39,7 @@ const Navbar = () => {
               <MenuIcon />
             </div>
           </button>
-          {/** <ChapterSelector /> */}
+          {children}
         </div>
 
         <div className="flex gap-4 ">

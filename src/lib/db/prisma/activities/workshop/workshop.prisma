@@ -3,12 +3,13 @@
 /// @author Kevin Bravo (kevinbravo.me)
 
 import { AvaaYear } from "..\..\types"
-import { ActivityStatus, Modality } from "..\type-activities"
+import { ActivityStatus, Modality }from "..\type-activities"
 import { ScholarAttendance } from "..\type-activities"
-import { Skill, WorkshopYear} from "types-workshop"
+import { Skill, WorkshopYear}from "types-workshop"
 import { Gender } from "..\type-activities"
-import { ScholarProgramInformation } from "..\..\users\scholar\scholar"
+import { ScholarProgramInformation }from "..\..\users\scholar\scholar"
 import { Speaker } from "..\speaker"
+import { Chapter } from "..\..\organization\chapter"
 
 // This model is used to store the data of the workshop
 model Workshop {
@@ -31,6 +32,8 @@ model Workshop {
     meeting_link       String[]
     meeting_id         String[]
     meeting_password   String[]
+    chapter            Chapter              @relation(fields: [chapterId], references: [id])
+    chapterId          String               @default("Rokk6_XCAJAg45heOEzYb")
 
     @@index([title, modality, activity_status, asociated_skill])
 }

@@ -55,6 +55,9 @@ enum Collages {
     URU
     LUZ
     PSM
+    //Caraboo
+    UC
+    UNITEC
 }
 
 enum KindOfCollage {

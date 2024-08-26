@@ -30,6 +30,8 @@ model Chat {
   meeting_password   String[]
   whatsapp_link      String[]
   slides             String?
+  chapter            Chapter          @relation(fields: [chapterId], references: [id])
+  chapterId          String           @default("Rokk6_XCAJAg45heOEzYb")
 
   @@index([title, modality, activity_status, level])
 }
@@ -226,6 +228,8 @@ model Volunteer {
   proof                String?
   supervisor           String?
   supervisor_email     String?
+  chapter              Chapter               @relation(fields: [chapterId], references: [id])
+  chapterId            String                @default("Rokk6_XCAJAg45heOEzYb")
 }
 
 model VolunteerAttendance {
@@ -295,6 +299,8 @@ model Workshop {
   meeting_link       String[]
   meeting_id         String[]
   meeting_password   String[]
+  chapter            Chapter              @relation(fields: [chapterId], references: [id])
+  chapterId          String               @default("Rokk6_XCAJAg45heOEzYb")
 
   @@index([title, modality, activity_status, asociated_skill])
 }
@@ -431,62 +437,91 @@ datasource db {
 // mentors.prisma
 //
 
-enum MentorProgramStatus {
-  PENDING
+enum MetorRecruitmentStatus {
   ACCEPTED
+  PENDING
   NOT_ACCEPTED
 }
 
-model Mentor {
-  id                String              @id @default(nanoid())
-  first_name        String
-  last_name         String
-  email             String              @unique
-  dni               String              @unique
-  cell_phone        String
-  created_at        DateTime            @default(now())
-  updated_at        DateTime            @updatedAt
-  birthdate         DateTime?
-  city_of_residence String?
-  profession        String?
-  gender            Gender?
-  company           String?
-  company_position  String?
-  other_activities  String?
-  image             String?
-  hobbies           String?
-  instagram_profile String?
-  linkedin_profile  String?
-  facebook_profile  String?
-  twitter_profile   String?
-  tiktok_profile    String?
-  areas_of_interest String?
-  how_know_avaa     String?
-  motivation        String?
-  curriculum        String?
-  status            MentorProgramStatus
-  mentor_mentee     Mentor_mentee[]
+// AVAILABLE: The mentor is available and ready to take on new mentees.
+// UNAVAILABLE: The mentor is currently unavailable to take on new mentees, possibly due to personal reasons or other commitments.
+// ASSIGNED:  The mentor is currently assigned to one or more mentees and may not be available for additional mentees.
+// RETIRED: The mentor has retired from the mentoring program and is no longer active.
+enum MentorStatus {
+  AVAILABLE
+  UNAVAILABLE
+  ASSIGNED
+  RETIRED
 }
 
-model Mentee_mentor_activities {
-  id              String        @id @default(nanoid())
-  mentee_mentor   Mentor_mentee @relation(fields: [mentor_menteeId], references: [id])
-  mentor_menteeId String
+model Mentor {
+  id                      String                 @id @default(nanoid())
+  photo                   String?
+  first_name              String
+  last_name               String
+  id_number               String                 @unique
+  birth_date              DateTime
+  residence               String
+  phone                   String
+  email                   String                 @unique
+  profession              String
+  employed                Boolean
+  company                 String?
+  position                String?
+  work_experience         String
+  related_experience      String?
+  other_activities        String?
+  cv                      String
+  speaks_other_lang       Boolean
+  other_lang              String?
+  lang_level              Level?
+  interests               String
+  hobbies                 String
+  mentor_reason           String
+  prev_mentor_exp         Boolean
+  prev_mentor_desc        String?
+  skills_strengths        String
+  trust_techniques        String
+  mentee_support          String
+  time_commitment         String
+  ideal_mentee            String
+  group_activities        Boolean
+  instagram               String?
+  linkedin                String?
+  referral_source         String
+  iesa_cert               Boolean
+  iesa_cert_date          DateTime
+  created_at              DateTime               @default(now())
+  updated_at              DateTime               @updatedAt
+  recruitment_status      MetorRecruitmentStatus @default(PENDING)
+  recruitment_observation String?
+  status                  MentorStatus           @default(AVAILABLE)
+  mentees                 MentorMentee[]
+
+  @@map("mentors")
 }
+
+// ACTIVE: The mentor-mentee relationship is currently active and ongoing. Both parties are engaged and participating in the mentoring process.
+// COMPLETED: The mentor-mentee relationship has been successfully completed. Both parties have achieved the goals set out at the beginning of the relationship.
+// INTERRUPTED:  The mentor-mentee relationship has been terminated. This could be due to a variety of reasons such as incompatibility, lack of progress, or mutual agreement to end the relationship.
 
 enum MentorMenteeStatus {
   ACTIVE
-  INACTIVE
+  COMPLETED
+  INTERRUPTED
 }
 
-model Mentor_mentee {
-  id                       String                     @id @default(nanoid())
-  mentor_mentee_activities Mentee_mentor_activities[]
-  Mentor                   Mentor?                    @relation(fields: [mentorId], references: [id])
-  startDate                DateTime                   @default(now())
-  endDate                  DateTime
-  mentorId                 String?
-  status                   MentorMenteeStatus
+model MentorMentee {
+  id         String             @id @default(nanoid())
+  start_date DateTime           @default(now())
+  end_date   DateTime?
+  status     MentorMenteeStatus
+  obsevation String?
+
+  mentor     Mentor                    @relation(fields: [mentor_id], references: [id])
+  mentor_id  String
+  scholar    ScholarProgramInformation @relation(fields: [scholar_id], references: [id])
+  scholar_id String
 }
 
 //
@@ -498,6 +533,9 @@ model Chapter {
   name               String
   asociated_scholars ScholarProgramInformation[]
   asociated_admins   AdminProfile[]
+  workshop           Workshop[]
+  chat               Chat[]
+  volunteer          Volunteer[]
 }
 
 //
@@ -681,6 +719,9 @@ enum Collages {
   URU
   LUZ
   PSM
+  //Caraboo
+  UC
+  UNITEC
 }
 
 enum KindOfCollage {
@@ -832,6 +873,7 @@ model ScholarProgramInformation {
   volunteerAttendance      VolunteerAttendance[]
   attended_workshops       WorkshopAttendance[]
   attended_chats           ChatAttendance[]
+  mentor_relation          MentorMentee[]
   scholar                  Scholar               @relation(fields: [scholarId], references: [id])
   chapter                  Chapter?              @relation(fields: [chapter_id], references: [id])
   chapter_id               String?
