@@ -67,13 +67,13 @@ const d = [
     required: false,
   },
   {
-    label: 'Título de Trabajo',
+    label: 'Cargo u ocupación',
     name: 'job_title',
     kindOfInput: 'text',
     required: false,
   },
   {
-    label: 'Compañía de Trabajo',
+    label: 'Empresa, institución u organización donde trabaja',
     name: 'job_company',
     kindOfInput: 'text',
     required: false,
