@@ -4,6 +4,7 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
+import { getCookie } from '@/lib/serverAction';
 import { ActivityStatus, Prisma } from '@prisma/client';
 import shortUUID from 'short-uuid';
 import { prisma } from './prisma';
@@ -205,6 +206,9 @@ export const getChatsCount = async (): Promise<number> => {
 
 export const getChats = async () => {
   const chats = await prisma.chat.findMany({
+    where: {
+      chapterId: await getCookie('chapter')
+    },
     include: {
       speaker: true,
       scholar_attendance: true,
