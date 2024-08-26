@@ -48,6 +48,8 @@ export default async function wrapMiddlewareFunction(req: NextRequestWithAuth, r
           maxAge: 60 * 60 * 24 * 7, // 1 week
           path: '/',
         });
+        return rr; // Return the response with the set cookie
+
       }
 
       if (isScholarRoute && token?.kind_of_user !== 'SCHOLAR') {
