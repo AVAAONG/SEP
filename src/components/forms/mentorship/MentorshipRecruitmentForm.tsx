@@ -30,7 +30,10 @@ const MentorshipRecruitmentForm = () => {
 
     if (storedData) {
       const formStoredData = JSON.parse(storedData);
-      reset(formStoredData);
+      reset({
+        ...formStoredData,
+        cv: ''
+      });
     }
 
     if (currentStep) {
