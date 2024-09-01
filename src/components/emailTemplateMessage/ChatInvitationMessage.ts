@@ -1,6 +1,6 @@
 
 const createChatInvitationMessage = () => {
-    return `
+  return `
 <div class="gmail_quote">
   <div class="gmail_attr" dir="ltr">
     <br>
@@ -166,8 +166,8 @@ const createChatInvitationMessage = () => {
                     </span>
                   </td>
                   <td style="padding: 0px; border: 0px; vertical-align: middle;">
-                    <h2 style="font-size: 18px; line-height: 1.38; margin: 0px; color: #000000;">Atenea&nbsp;Giménez</h2>
-                    <p style="font-size: 14px; line-height: 22px; margin: 0px; color: #000000;">Coordinadora General</p>
+                    <h2 style="font-size: 18px; line-height: 1.38; margin: 0px; color: #000000;">Jonathan Ferreira</h2>
+                    <p style="font-size: 14px; line-height: 22px; margin: 0px; color: #000000;">Coordinador General</p>
                     <p style="font-size: 14px; line-height: 22px; margin: 0px; color: #000000;">Compromisos 2.0&nbsp;|&nbsp;AVAA</p>
                   </td>
                   <td style="padding: 0px; border: 0px;" width="30">
@@ -213,7 +213,7 @@ const createChatInvitationMessage = () => {
                             </table>
                           </td>
                           <td style="padding: 0px; border: 0px;">
-                            <a href="mailto:ateneavalentina@gmail.com" color="#000000" style="background-color: rgba(0,0,0,0); color: #000000; font-size: 12px;" target="_blank" rel="noopener">ateneavalentina@gmail.com</a>
+                            <a href="mailto:joniferreiradiaz3d@gmail.com" color="#000000" style="background-color: rgba(0,0,0,0); color: #000000; font-size: 12px;" target="_blank" rel="noopener">joniferreiradiaz3d@gmail.com/a>
                           </td>
                         </tr>
                       </tbody>
