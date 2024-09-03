@@ -195,7 +195,7 @@ const createChatInvitationMessage = () => {
                             </table>
                           </td>
                           <td style="padding: 0px; border: 0px; color: #000000;">
-                            <a href="tel:04121955548" color="#000000" style="background-color: rgba(0,0,0,0); color: #000000; font-size: 12px;" target="_blank" rel="noopener">04121955548</a>
+                            <a href="tel:04123826392" color="#000000" style="background-color: rgba(0,0,0,0); color: #000000; font-size: 12px;" target="_blank" rel="noopener">04123826392</a>
                           </td>
                         </tr>
                         <tr style="margin: 0px; padding: 0px; border: 0px; vertical-align: middle;">
@@ -213,7 +213,7 @@ const createChatInvitationMessage = () => {
                             </table>
                           </td>
                           <td style="padding: 0px; border: 0px;">
-                            <a href="mailto:joniferreiradiaz3d@gmail.com" color="#000000" style="background-color: rgba(0,0,0,0); color: #000000; font-size: 12px;" target="_blank" rel="noopener">joniferreiradiaz3d@gmail.com/a>
+                            <a href="mailto:joniferreiradiaz3d@gmail.com" color="#000000" style="background-color: rgba(0,0,0,0); color: #000000; font-size: 12px;" target="_blank" rel="noopener">joniferreiradiaz3d@gmail.com</a>
                           </td>
                         </tr>
                       </tbody>
