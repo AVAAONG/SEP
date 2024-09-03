@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
-import { FormProvider, SubmitHandler, useForm, useWatch } from 'react-hook-form';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import FormNavigationButtons from '../common/FormNavigationButtons';
 import StepOne from './formSteps/step1';
 import StepFour from './formSteps/StepFour';
@@ -145,22 +145,18 @@ const MentorshipRecruitmentForm = () => {
     },
   ];
 
-  const employed = useWatch({
-    control: methods.control,
-    name: 'employed',
-  });
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-6 gap-8 w-full">
       <div className="w-full flex flex-col justify-center gap-8">
-        <FormNavigationButtons buttonInfo={buttonNavigationInfo} completedSteps={completedSteps} />
+        <FormNavigationButtons buttonInfo={buttonNavigationInfo} completedSteps={5} />
       </div>
       <div className="space-y-5 md:col-span-5">
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-5">
             {step === 1 && <StepOne />}
-            {step === 2 && <StepTwo employed={employed} formControl={control} />}
-            {step === 3 && <StepThree />}
+            {step === 2 && <StepTwo formControl={control} />}
+            {step === 3 && <StepThree formControl={control} />}
             {step === 4 && <StepFour />}
 
             <div className="w-full flex justify-end mt-6 gap-4">

@@ -65,6 +65,7 @@ const FormNavigationButtons = ({
       <>
         {buttonInfo.map(({ label, onClickFnc, step }, index) => (
           <Button
+          key={index}
             startContent={completedSteps > step ? <CheckBadgeIcon className="w-5 h-5" /> : <></>}
             className="!justify-start !text-white"
             color="success"

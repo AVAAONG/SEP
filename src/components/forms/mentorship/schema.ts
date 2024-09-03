@@ -1,6 +1,6 @@
 import { formatDateToStoreInDB } from '@/lib/utils/dates';
 import { Level } from '@prisma/client';
-import { z, ZodIssueCode } from 'zod';
+import { z } from 'zod';
 
 const MentorSchema = z.object({
     photo: z.object(
@@ -20,20 +20,21 @@ const MentorSchema = z.object({
     email: z.string().email(),
     profession: z.string(),
     employed: z.string().min(1, { message: 'Debes especificar tu situación laboral' }).transform((employed) => employed === 'true' ? true : false),
+
     company: z.string().nullable().optional(),
-    position: z.string().nullable(),
+    position: z.string().nullable().optional(),
     work_experience: z.string(),
     related_experience: z.string().nullable(),
     other_activities: z.string().nullable(),
     cv: z.string(),
     speaks_other_lang: z.string().min(1, { message: 'Debes especificar tu situación laboral' }).transform((employed) => employed === 'true' ? true : false),
-    other_lang: z.string().nullable(),
-    lang_level: z.nativeEnum(Level).nullable(),
+    other_lang: z.string().nullable().optional(),
+    lang_level: z.nativeEnum(Level).nullable().optional(),
     interests: z.string(),
     hobbies: z.string(),
     mentor_reason: z.string(),
     prev_mentor_exp: z.string().min(1, { message: 'Debes especificar' }).transform((employed) => employed === 'true' ? true : false),
-    prev_mentor_desc: z.string().nullable(),
+    prev_mentor_desc: z.string().nullable().optional(),
     skills_strengths: z.string(),
     trust_techniques: z.string(),
     mentee_support: z.string(),
@@ -43,17 +44,22 @@ const MentorSchema = z.object({
     instagram: z.string().nullable(),
     linkedin: z.string().nullable(),
     referral_source: z.string(),
-}).superRefine((data, ctx) => {
-    if (data.employed === true) {
+}).refine((data) => {
+    console.log('its being called');
+    if (data.employed === 'true') {
         if (!data.company || data.company.trim().length === 0) {
-            ctx.addIssue({
-                path: ['company'],
-                message: 'Debes especificar la compañía donde trabaja',
-                code: ZodIssueCode.custom,
-            })
+            return false;
+        }
+        if (!data.position || data.position.trim().length === 0) {
+            return false;
         }
     }
-})
+    return true;
+}, {
+    message: 'Debes especificar la compañía y la posición de trabajo si estás empleado',
+    path: ['company', 'position'], // This path will be used to show the error message
+});
+
 
 export type MentorSchemaType = z.infer<typeof MentorSchema>;
 

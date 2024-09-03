@@ -1,7 +1,13 @@
 import InputField from '@/components/fields/InputFormField';
 import SelectFormField from '@/components/fields/SelectFormField';
 import TextAreaFormField from '@/components/fields/TextAreaFormField';
-const StepThree = () => {
+import { useWatch } from 'react-hook-form';
+const StepThree = ({  formControl }: { formControl: any }) => {
+
+  const prevExperience = useWatch({
+    control: formControl,
+    name: 'prev_mentor_exp',
+  });
   return (
     <>
       <div className="space-y-0.5 col-start-2 col-span-5">
@@ -27,7 +33,7 @@ const StepThree = () => {
         />
         <SelectFormField
           isRequired
-          label="¿Estás dispuesto a participar en actividades grupales, eventos o talleres organizados por la AVAA?"
+          label="¿Estás dispuesto a participar en actividades, eventos o talleres organizados por la AVAA?"
           name="group_activities"
           selectItems={[
             { label: 'Sí', value: 'true' },
@@ -57,26 +63,32 @@ const StepThree = () => {
           ]}
         />
         <TextAreaFormField
+                  isDisabled={prevExperience === 'false'}
+                  isRequired={prevExperience === 'true'}
           className="!col-span-1 md:!col-span-2"
           label="Comenta brevemente tu experiencia como mentor"
           name="prev_mentor_desc"
         />
         <TextAreaFormField
+        isRequired
           className="!col-span-1 md:!col-span-2"
           label="¿Qué habilidades y fortalezas posees que te hacen un buen candidato para ser mentor?"
           name="skills_strengths"
         />
         <TextAreaFormField
+        isRequired
           className="!col-span-1 md:!col-span-2"
           label="¿Qué técnicas utilizas para construir relaciones de confianza y respeto con otras personas?"
           name="trust_techniques"
         />
         <TextAreaFormField
+        isRequired
           className="!col-span-1 md:!col-span-2"
           label="¿Qué tipo de apoyo u orientación esperas brindar a tu mentee?"
           name="mentee_support"
         />
         <TextAreaFormField
+        isRequired
           label="¿Cómo describirías a tu mentee ideal?"
           name="ideal_mentee"
           className="!col-span-1 md:!col-span-2"
