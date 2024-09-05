@@ -107,7 +107,7 @@ export const parseScholarCondition = (status: ScholarCondition) => {
     case 'WITHDRAWAL':
       return 'Retiro';
     case 'TO_BE_ALUMNI':
-      return 'Proximo a egresar';
+      return 'En espera de egreso';
     case 'ALUMNI':
       return 'Egresado';
     default:

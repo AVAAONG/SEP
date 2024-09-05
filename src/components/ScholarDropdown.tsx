@@ -3,12 +3,12 @@ import { changeScholarCondition } from '@/lib/db/lilb/scholar/utils';
 import { EllipsisHorizontalCircleIcon } from '@heroicons/react/24/outline';
 import { useDisclosure } from '@nextui-org/modal';
 import {
-  Button,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownSection,
-  DropdownTrigger,
+    Button,
+    Dropdown,
+    DropdownItem,
+    DropdownMenu,
+    DropdownSection,
+    DropdownTrigger,
 } from '@nextui-org/react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -84,7 +84,7 @@ const ScholarDropdown = ({ scholar }) => {
                 });
               }}
             >
-              Proximo a egresar
+              En espera de egreso
             </DropdownItem>
             <DropdownItem
               key="ALUMNI"

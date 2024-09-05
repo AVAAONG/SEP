@@ -4,12 +4,12 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
+import { getCookie } from '@/lib/serverAction';
 import { getApprovedAndAttendedVolunteers } from '@/lib/utils/getAttendedActivities';
 import { Prisma, ScholarCondition, User, WorkshopAttendance } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import shortUUID from 'short-uuid';
 import { prisma } from './prisma';
-import { getCookie } from '@/lib/serverAction';
 /**
  * @description Create a new user in the database
  * @param data User data
@@ -142,8 +142,9 @@ export const getScholarsWithAllData = async () => {
   const scholar = await prisma.scholar.findMany({
     where: {
       program_information: {
+
         scholar_condition: {
-          equals: 'ACTIVE',
+          in: ['ACTIVE', 'TO_BE_ALUMNI']
         },
         chapter: {
           id: {
@@ -237,6 +238,48 @@ export const getAlumniScholars = async () => {
       program_information: {
         scholar_condition: {
           equals: 'ALUMNI'
+        },
+        chapter: {
+          id: {
+            equals: await getCookie('chapter'),
+          },
+        },
+      },
+    },
+    include: {
+      collage_information: {
+        include: {
+          collage_period: true,
+        },
+      },
+      program_information: {
+        include: {
+          attended_chats: {
+            include: {
+              chat: true,
+            },
+          },
+          attended_workshops: {
+            include: {
+              workshop: true,
+            },
+          },
+          chapter: true,
+        },
+      },
+    },
+  });
+
+  return scholar;
+};
+
+
+export const getTobeAlumniScholars = async () => {
+  const scholar = await prisma.scholar.findMany({
+    where: {
+      program_information: {
+        scholar_condition: {
+          equals: 'TO_BE_ALUMNI'
         },
         chapter: {
           id: {

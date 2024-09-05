@@ -1,4 +1,4 @@
-import { ScholarStatus } from "@prisma/client";
+import { ScholarCondition, ScholarStatus } from "@prisma/client";
 import moment from "moment";
 import { parseModalityFromDatabase } from "../utils2";
 import { getApprovedAndAttendedVolunteers } from "./getAttendedActivities";
@@ -9,6 +9,7 @@ export const countScholarGeneralProperties = (scholars: any[]) => {
         avaaYear: {} as Record<"I" | "II" | "III" | "IV" | "V" | "+V", number>,
         gender: {} as Record<'Masculino' | 'Femenino', number>,
         status: {} as Record<ScholarStatus, number>,
+        condition: {} as Record<ScholarCondition, number>,
     };
     scholars.forEach(scholar => {
         const scholarAvaaYear = parseAvaaAdmisionYear(
@@ -16,11 +17,12 @@ export const countScholarGeneralProperties = (scholars: any[]) => {
         );
         const scholarGender = scholar.gender === 'M' ? 'Masculino' : 'Femenino';
         const scholarStatus = scholar.program_information?.scholar_status as ScholarStatus;
-        const scholarCondition = scholar.program_information?.scholar_condition;
+        const scholarCondition = scholar.program_information?.scholar_condition as ScholarCondition;
 
         counts.avaaYear[scholarAvaaYear] = (counts.avaaYear[scholarAvaaYear] || 0) + 1;
         counts.gender[scholarGender] = (counts.gender[scholarGender] || 0) + 1;
         counts.status[scholarStatus] = (counts.status[scholarStatus] || 0) + 1;
+        counts.condition[scholarCondition] = (counts.condition[scholarCondition] || 0) + 1;
     });
     return counts;
 }

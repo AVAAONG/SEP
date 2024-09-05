@@ -32,12 +32,21 @@ const page = async ({
   const scholars = await getScholarsWithAllData();
   const scholarsPropertiesCount = countScholarGeneralProperties(scholars);
 
+  const activateScholars = scholars.filter((scholar) => scholar.program_information?.scholar_condition === 'ACTIVE');
+  
+
+  const activeScholars = scholarsPropertiesCount.condition.ACTIVE
+
   const probationI = Number(
-    ((scholarsPropertiesCount.status.PROBATION_I / scholars.length) * 100).toFixed(0)
+    ((scholarsPropertiesCount.status.PROBATION_I /activeScholars) * 100).toFixed(0)
   );
   const probationII = Number(
-    ((scholarsPropertiesCount.status.PROBATION_II / scholars.length) * 100).toFixed(0)
+    ((scholarsPropertiesCount.status.PROBATION_II /activeScholars) * 100).toFixed(0)
   );
+  const toBeAlumniComparation = Number(
+    ((scholarsPropertiesCount.condition.TO_BE_ALUMNI /activeScholars) * 100).toFixed(0)
+  );
+
 
   return (
     <div className="flex flex-col w-full gap-4">
@@ -45,24 +54,24 @@ const page = async ({
         stats={[
           {
             name: `Becarios activos`,
-            stat: scholars.length || 0,
+            stat:activeScholars || 0,
             changeType: 'increase',
             comparationText: null,
             tooltipText: null,
           },
           {
-            name: `Becarios próximos a egresar`,
-            stat: 0,
+            name: `Becarios en espera de egreso`,
+            stat: scholarsPropertiesCount.condition.TO_BE_ALUMNI,
             changeType: 'increase',
-            comparationText: `De ${scholars.length || 0} becarios activos`,
-            comparation: 0,
+            comparationText: `De ${activeScholars || 0} becarios activos`,
+            comparation: toBeAlumniComparation,
             tooltipText: `0% de los becar ios se encuentran proximos a egresar`,
           },
           {
             name: `Becarios en probatorio I`,
             stat: scholarsPropertiesCount.status.PROBATION_I || 0,
             changeType: 'decrease',
-            comparationText: `De ${scholars.length || 0} becarios activos`,
+            comparationText: `De ${activeScholars || 0} becarios activos`,
             comparation: probationI,
             tooltipText: `${probationI}% de los becarios se encuentran en Probatorio 1`,
           },
@@ -70,7 +79,7 @@ const page = async ({
             name: `Becarios en probatorio II`,
             stat: scholarsPropertiesCount.status.PROBATION_II || 0,
             changeType: 'decrease',
-            comparationText: `De ${scholars.length || 0} becarios activos`,
+            comparationText: `De ${activeScholars || 0} becarios activos`,
             comparation: probationII,
             tooltipText: `${probationII}% de los becarios se encuentran en Probatorio 2`,
           },
@@ -80,7 +89,7 @@ const page = async ({
         <TogleTab options={TAB_OPTIONS} />
       </div>
       <h2 className="font-bold uppercase text-base tracking-wide px-4 mt-4">Resumen</h2>
-      <AdminScholarsView scholars={scholars} view={view} searchs={searchParams} />
+      <AdminScholarsView scholars={activateScholars} view={view} searchs={searchParams} />
     </div>
   );
 };
