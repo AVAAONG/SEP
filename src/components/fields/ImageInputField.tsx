@@ -105,7 +105,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
             bg-secondary-2 text-primary-light
             hover:bg-primary-light hover:text-secondary-2 transition-colors"
           >
-            Subir foto
+            Subir foto*
           </span>
           <input
             {...register(name)}

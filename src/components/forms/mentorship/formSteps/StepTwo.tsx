@@ -81,7 +81,7 @@ const StepTwo = ({  formControl }: { formControl: any }) => {
         <FileInput
         
           name="cv"
-          label="Resumen de CV"
+          label="Resumen de CV*"
           existingFileUrl={undefined}
           control={formControl}
         />
