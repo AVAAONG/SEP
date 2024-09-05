@@ -15,7 +15,7 @@ export const formatScholarsActivitiesForActivitiesTable = async (scholars: any[]
             whatsapp_number,
             program_information,
         } = scholar;
-        const { externalVolunteerHours, internalVolunteerHours } = getApprovedAndAttendedVolunteers(program_information?.volunteerAttendance)
+        const { externalVolunteerHours, internalVolunteerHours, internalHynrid, internalInPerson, internalOnline } = getApprovedAndAttendedVolunteers(program_information?.volunteerAttendance)
 
         const [inPersonWorkshops, virtualWorkshops] = program_information?.attended_workshops?.reduce((acc, workshop) => {
             if (workshop.modality === 'IN_PERSON') acc[0]++
@@ -43,6 +43,7 @@ export const formatScholarsActivitiesForActivitiesTable = async (scholars: any[]
             virtualChats,
             externalVolunteerHours,
             internalVolunteerHours,
+            internalHynrid, internalInPerson, internalOnline,
             scholarGrade: getCollageGradeBase20(scholar.collage_information?.[0]?.collage_period?.[0]?.grade, scholar.collage_information?.[0]?.evaluation_scale)
         };
     });

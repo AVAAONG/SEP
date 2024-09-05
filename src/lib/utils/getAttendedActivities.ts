@@ -27,11 +27,20 @@ type IVolunteer = Prisma.VolunteerGetPayload<{
 export const getApprovedAndAttendedVolunteers = (volunteers: IVolunteer[]) => {
     let externalVolunteerHours: number = 0,
         internalVolunteerHours: number = 0,
+        internalInPerson: number = 0,
+        internalOnline: number = 0,
+        internalHynrid: number = 0,
         totalVolunteerHours: number = 0;
     volunteers.forEach(volunteer => {
         const volunteerAttendance = volunteer.volunteer_attendance[0];
         if (volunteer.status === 'APPROVED' && volunteerAttendance?.attendance === 'ATTENDED') {
-            if (volunteer.kind_of_volunteer === 'INTERNAL') internalVolunteerHours += volunteerAttendance.asigned_hours;
+            if (volunteer.kind_of_volunteer === 'INTERNAL') {
+                internalVolunteerHours += volunteerAttendance.asigned_hours;
+                if (volunteer.modality === 'IN_PERSON') internalInPerson += volunteerAttendance.asigned_hours;
+                if (volunteer.modality === 'HYBRID') internalHynrid += volunteerAttendance.asigned_hours;
+                if (volunteer.modality === 'ONLINE') internalOnline += volunteerAttendance.asigned_hours;
+
+            }
             else {
                 if (externalVolunteerHours < 40) {
                     const remainingHours = 40 - externalVolunteerHours;
@@ -41,7 +50,7 @@ export const getApprovedAndAttendedVolunteers = (volunteers: IVolunteer[]) => {
         }
     })
     totalVolunteerHours += externalVolunteerHours + internalVolunteerHours;
-    return { externalVolunteerHours, internalVolunteerHours, totalVolunteerHours };
+    return { externalVolunteerHours, internalVolunteerHours, totalVolunteerHours, internalInPerson, internalOnline, internalHynrid };
 }
 
 

@@ -67,6 +67,18 @@ const scholarActivitiesInformationColumns: Column<ScholarActivitiesInformationCo
     accessor: 'internalVolunteerHours',
   },
   {
+    Header: 'Horas de voluntariado internas presenciales',
+    accessor: 'internalInPerson',
+  },
+  {
+    Header: 'Horas de voluntariado internas virtuales',
+    accessor: 'internalOnline',
+  },
+  {
+    Header: 'Horas de voluntariado internas hibridas',
+    accessor: 'internalHynrid',
+  },
+  {
     Header: 'Horas de voluntariado exteranas',
     accessor: 'externalVolunteerHours',
   },
