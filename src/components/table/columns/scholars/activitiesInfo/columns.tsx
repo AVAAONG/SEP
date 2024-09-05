@@ -44,17 +44,31 @@ const scholarActivitiesInformationColumns: Column<ScholarActivitiesInformationCo
     Header: 'Correo electronico',
     accessor: 'email',
   },
+  
   {
-    Header: 'Actividades formativas',
-    accessor: 'doneWorkshops',
+    Header: 'Actividades formativas presenciales',
+    accessor: 'inPersonWorkshops',
   },
   {
-    Header: 'Chats Clubs de ingles',
-    accessor: 'doneChats',
+    Header: 'Actividades formativas virtuales',
+    accessor: 'virtualWorkshops',
+  },
+
+  {
+    Header: 'Chats Clubs de ingles presenciales',
+    accessor: 'inPersonChats',
   },
   {
-    Header: 'Horas de voluntariado',
-    accessor: 'doneVolunteerHours',
+    Header: 'Chats Clubs de ingles virtuales',
+    accessor: 'virtualChats',
+  },
+  {
+    Header: 'Horas de voluntariado internas',
+    accessor: 'internalVolunteerHours',
+  },
+  {
+    Header: 'Horas de voluntariado exteranas',
+    accessor: 'externalVolunteerHours',
   },
   {
     Header: 'Nota académica',

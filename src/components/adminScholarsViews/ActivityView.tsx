@@ -84,7 +84,7 @@ const ActivitiesInfo = async ({
           tableData={data}
           tableHeadersForSearch={[]}
         >
-          <FollowUpExportButton datatoExport={datatoExport} />
+          {/* <FollowUpExportButton datatoExport={datatoExport} /> */}
         </Table>
       </div>
     </>
