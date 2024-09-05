@@ -149,7 +149,7 @@ const MentorshipRecruitmentForm = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-6 gap-8 w-full">
       <div className="w-full flex flex-col justify-center gap-8">
-        <FormNavigationButtons buttonInfo={buttonNavigationInfo} completedSteps={5} />
+        <FormNavigationButtons buttonInfo={buttonNavigationInfo} completedSteps={completedSteps} />
       </div>
       <div className="space-y-5 md:col-span-5">
         <FormProvider {...methods}>
@@ -162,16 +162,16 @@ const MentorshipRecruitmentForm = () => {
             <div className="w-full flex justify-end mt-6 gap-4">
               {step > 1 && (
                 <Button onClick={prevStep} radius="sm" type="button">
-                  Previous
+                  Anterior
                 </Button>
               )}
               {step < 4 ? (
                 <Button radius="sm" color="success" type="button" onClick={nextStep}>
-                  Next
+                  Siguiente
                 </Button>
               ) : (
                 <Button radius="sm" type="submit" color="success">
-                  Submit
+                  Registrarse
                 </Button>
               )}
             </div>

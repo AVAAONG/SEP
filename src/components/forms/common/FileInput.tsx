@@ -83,7 +83,7 @@ const FileInput: React.FC<FileInputProps> = ({
                     )}
                   </>
                 ) : (
-                  `Subir ${label.toLocaleLowerCase()}`
+                  `Subir ${label}`
                 )}
               </label>
               {existingFileUrl || field.value ? null : (

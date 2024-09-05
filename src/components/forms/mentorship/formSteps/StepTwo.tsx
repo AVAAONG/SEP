@@ -21,7 +21,7 @@ const StepTwo = ({  formControl }: { formControl: any }) => {
     <>
       <div className="space-y-0.5 col-start-2 col-span-5">
         <h2 className="text-2xl font-bold ">Experiencia y Formación</h2>
-        <p className="text-muted-foreground">Postulación al programa de mentoria AVAA</p>
+        <p className="text-muted-foreground">Por favor, completa todos los campos requeridos</p>
         <div className="w-full h-0.5 bg-primary-light opacity-40" />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -76,7 +76,7 @@ const StepTwo = ({  formControl }: { formControl: any }) => {
           className="!col-span-1 md:!col-span-2"
           label="Otras actividades u oficios"
           name="other_activities"
-          placeholder="Voluntariado, proyectos personales, etc."
+          placeholder="Voluntariado, proyectos personales, entre otros."
         />
         <FileInput
         
