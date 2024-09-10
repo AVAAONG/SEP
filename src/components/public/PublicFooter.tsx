@@ -181,7 +181,7 @@ const PublicFooter = () => {
       <div className="py-4">
         <div className="flex flex-wrap flex-col box-border relative justify-start items-center m-auto w-auto  gap-4">
           <div className="flex flex-wrap gap-2 md:gap-4">
-            <a href="https://avaa.org/terminos-y-condiciones/" className="pointer">
+            <a href="https://programaexcelencia.org/politicas" className="pointer">
               Términos y condiciones
             </a>
             <a href="https://avaa.org/faq/" className="pointer">
