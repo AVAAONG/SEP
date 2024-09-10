@@ -37,7 +37,7 @@ export default async function wrapMiddlewareFunction(req: NextRequestWithAuth, r
 
       if (token?.kind_of_user === 'ADMIN' && isAdminRoute) {
 
-        const response = await fetch(`http://${host}/admin/api/roles?adminId=${token.id}`);
+        const response = await fetch(`https://${host}/admin/api/roles?adminId=${token.id}`);
         const { admin } = await response.json();
         const { chapter } = admin;
         const rr = NextResponse.next();
