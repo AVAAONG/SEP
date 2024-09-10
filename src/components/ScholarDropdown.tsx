@@ -3,12 +3,12 @@ import { changeScholarCondition } from '@/lib/db/lilb/scholar/utils';
 import { EllipsisHorizontalCircleIcon } from '@heroicons/react/24/outline';
 import { useDisclosure } from '@nextui-org/modal';
 import {
-    Button,
-    Dropdown,
-    DropdownItem,
-    DropdownMenu,
-    DropdownSection,
-    DropdownTrigger,
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownSection,
+  DropdownTrigger,
 } from '@nextui-org/react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -58,6 +58,20 @@ const ScholarDropdown = ({ scholar }) => {
               }}
             >
               Retiro
+            </DropdownItem>
+            <DropdownItem
+              key="ACTIVE"
+              description="Cambiar estatus a activo"
+              color="success"
+              onPress={async () => {
+                toast.promise(changeScholarCondition(scholar.id, 'ACTIVE'), {
+                  pending: 'Cambiando condición de becario',
+                  success: 'Exito al cambiar condición del becario',
+                  error: 'Error al cambiar condición del becario',
+                });
+              }}
+            >
+              Activo
             </DropdownItem>
             <DropdownItem
               key="RESIGNATION"
