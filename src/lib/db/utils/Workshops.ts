@@ -688,8 +688,9 @@ export const enroleScholarInWorkshop = async (
             attendance: 'ENROLLED',
           },
         });
+        enrolled = true
+
       }
-      enrolled = true
     }
   });
   return enrolled
@@ -889,8 +890,8 @@ export const enroleScholarInChat = async (
             attendance: 'ENROLLED',
           },
         });
+        enrolled = true
       }
-      enrolled = true
     }
   });
   return enrolled;

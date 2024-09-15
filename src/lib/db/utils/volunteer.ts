@@ -157,8 +157,9 @@ export const addScholarToVolunteer = async (
 						asigned_hours: 0
 					},
 				});
+				enrolled = true;
+
 			}
-			enrolled = true;
 		}
 
 	});
