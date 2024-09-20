@@ -34,8 +34,8 @@ const filterActivityByPeriod = (
     const startMonth = new Date(activity.start_dates[0]).getMonth() + 1; // Months are 0-indexed
 
     if (period === 1) return startMonth >= 1 && startMonth <= 4;
-    if (period === 2) return startMonth >= 5 && startMonth <= 9;
-    if (period === 3) return startMonth >= 10 && startMonth <= 12;
+    if (period === 2) return startMonth >= 5 && startMonth <= 8;
+    if (period === 3) return startMonth >= 9 && startMonth <= 12;
 
     return false; // Default case (shouldn't happen with type enforcement)
   });
