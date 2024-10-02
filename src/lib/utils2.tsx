@@ -22,6 +22,8 @@ export const parseSkillFromDatabase = (skill: Skill) => {
       return 'Gerencia de sí mismo';
     case 'LEADERSHIP':
       return 'Liderazgo';
+          case 'TEAM_WORK':
+      return 'Trabajo en equipo';
     case 'ICT':
       return 'TIC';
     default:
