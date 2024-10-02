@@ -34,7 +34,8 @@ const AdmisionOptions = ({ title }: { title: string }) => {
           {title}
         </h1>
         <p className=" mt-auto text-lg w-full text-gray-500 text-center ">
-          Selecciona el Capítulo en base a donde se encuentre el campus de tu universidad
+          Seleccionar el capítulo de acuerdo a la localidad donde está ubicado el campus
+          universitario.
         </p>
       </div>
       <div className="flex flex-col md:flex-row gap-6 justify-center w-full">
