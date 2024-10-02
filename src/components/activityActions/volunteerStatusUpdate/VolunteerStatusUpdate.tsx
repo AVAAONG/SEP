@@ -29,7 +29,7 @@ const VolunteerStatusUpdate = ({ volunteerId }: { volunteerId: string }) => {
           onAction={async (key) => await handleStatusUpdate(key as VolunteerStatus)}
         >
           <DropdownItem key="APPROVED" color="success" onPress={suspendModal.onOpen}>
-            Realizado / Aprovado
+            Realizado / Aprobado
           </DropdownItem>
           <DropdownItem key="REJECTED" color="danger" onPress={suspendModal.onOpen}>
             Suspendido / Rechazado
