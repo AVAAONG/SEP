@@ -52,7 +52,7 @@ const ContactInfoForm = () => {
             type="text"
             isRequired
             label="Nombre del familiar/pariente/amigo cercano"
-            description="Especifique el nombre del familiar/pariente/amigo cercano y su relacion con usted"
+            description="Especifique el nombre del familiar/pariente/amigo cercano y la relación con usted"
           />
         </div>
         <FormButtonGroup />
