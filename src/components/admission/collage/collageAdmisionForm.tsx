@@ -81,7 +81,7 @@ const CollageForm = () => {
           />
           <SelectFormField
             isRequired
-            label="Régimen de Estudio"
+            label="Régimen de estudio"
             name="study_regime"
             selectItems={ACADEMIC_PERIODS_KIND}
           />
