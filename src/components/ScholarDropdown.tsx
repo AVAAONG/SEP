@@ -1,5 +1,8 @@
 'use client';
-import { changeScholarCondition } from '@/lib/db/lilb/scholar/utils';
+import {
+  changeScholarCondition,
+  changeScholarStatusProbationSimple,
+} from '@/lib/db/lilb/scholar/utils';
 import { EllipsisHorizontalCircleIcon } from '@heroicons/react/24/outline';
 import { useDisclosure } from '@nextui-org/modal';
 import {
@@ -31,7 +34,13 @@ const ScholarDropdown = ({ scholar }) => {
               key="PROBATION_I"
               description="Pasar becario al estatus de probatorio I"
               color="warning"
-              onPress={probation1.onOpen}
+              onPress={async () => {
+                toast.promise(changeScholarStatusProbationSimple(scholar.id, 'PROBATION_I'), {
+                  pending: 'Cambiando status de becario',
+                  success: 'Exito al cambiar status del becario',
+                  error: 'Error al cambiar status del becario',
+                });
+              }}
             >
               Pasar a Probatorio I
             </DropdownItem>
@@ -39,7 +48,13 @@ const ScholarDropdown = ({ scholar }) => {
               key="PROBATION_II"
               description="Pasar becario al estatus de probatorio II"
               color="danger"
-              onPress={probation2.onOpen}
+              onPress={async () => {
+                toast.promise(changeScholarStatusProbationSimple(scholar.id, 'PROBATION_II'), {
+                  pending: 'Cambiando status de becario',
+                  success: 'Exito al cambiar status del becario',
+                  error: 'Error al cambiar status del becario',
+                });
+              }}
             >
               Pasar a Probatorio II
             </DropdownItem>
@@ -117,16 +132,8 @@ const ScholarDropdown = ({ scholar }) => {
           </DropdownSection>
         </DropdownMenu>
       </Dropdown>
-      <ProbationForm
-        scholarId={scholar.id}
-        formAction={probation1}
-        probationKind="PROBATION_I"
-      />
-      <ProbationForm
-        scholarId={scholar.id}
-        formAction={probation2}
-        probationKind="PROBATION_II"
-      />
+      <ProbationForm scholarId={scholar.id} formAction={probation1} probationKind="PROBATION_I" />
+      <ProbationForm scholarId={scholar.id} formAction={probation2} probationKind="PROBATION_II" />
       {/* <EditScholarForm modalIsOpen={editModalIsOpen} set={setEditModalOpen} scholar={scholar} /> */}
     </>
   );
