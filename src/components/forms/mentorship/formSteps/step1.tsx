@@ -1,5 +1,6 @@
 import ImageUpload from '@/components/fields/ImageInputField';
 import InputField from '@/components/fields/InputFormField';
+import SelectFormField from '@/components/fields/SelectFormField';
 
 const StepOne = () => {
   return (
@@ -13,6 +14,16 @@ const StepOne = () => {
         <div className="w-full md:col-span-2">
           <ImageUpload name="photo" />
         </div>
+        <SelectFormField
+          isRequired
+          label="Selecciona el capítulo de la AVAA al cual deseas postularte"
+          name="employed"
+          selectItems={[
+            { label: 'Caracas', value: 'Rokk6_XCAJAg45heOEzYb-' },
+            { label: 'Zulia', value: 'H0rvqSucbop6uozNUpuC- ' },
+            { label: 'Carabobo', value: 'VYmgeeUPWwh_P_myJ1PCJ' },
+          ]}
+        />
         <InputField isRequired label="Nombres" type="text" name="first_name" placeholder="Juan" />
         <InputField isRequired label="Apellidos" type="text" name="last_name" placeholder="Pérez" />
         <InputField
