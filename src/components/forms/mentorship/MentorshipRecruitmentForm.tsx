@@ -32,7 +32,7 @@ const MentorshipRecruitmentForm = () => {
       const formStoredData = JSON.parse(storedData);
       reset({
         ...formStoredData,
-        cv: ''
+        cv: '',
       });
     }
 
@@ -87,6 +87,7 @@ const MentorshipRecruitmentForm = () => {
           'residence',
           'phone',
           'email',
+          'chapter',
         ];
       case 2:
         return [
@@ -144,7 +145,6 @@ const MentorshipRecruitmentForm = () => {
       step: 4,
     },
   ];
-
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-6 gap-8 w-full">

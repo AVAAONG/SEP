@@ -19,8 +19,8 @@ const MentorSchema = z.object({
     phone: z.string(),
     email: z.string().email(),
     profession: z.string(),
+    chapter: z.string().min(1, { message: 'Debes especificar el capítulo al que deseas postularte' }),
     employed: z.string().min(1, { message: 'Debes especificar tu situación laboral' }).transform((employed) => employed === 'true' ? true : false),
-
     company: z.string().nullable().optional(),
     position: z.string().nullable().optional(),
     work_experience: z.string(),

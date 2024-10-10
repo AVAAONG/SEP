@@ -17,7 +17,7 @@ const StepOne = () => {
         <SelectFormField
           isRequired
           label="Selecciona el capítulo de la AVAA al cual deseas postularte"
-          name="employed"
+          name="chapter"
           selectItems={[
             { label: 'Caracas', value: 'Rokk6_XCAJAg45heOEzYb-' },
             { label: 'Zulia', value: 'H0rvqSucbop6uozNUpuC- ' },
