@@ -3,13 +3,7 @@ import { Level } from '@prisma/client';
 import { z } from 'zod';
 
 const MentorSchema = z.object({
-    photo: z.object(
-        {
-            name: z.string(),
-            type: z.string(),
-            size: z.number(),
-        }
-    ),
+    photo: z.any(),
     first_name: z.string(),
     last_name: z.string(),
     id_number: z.string(),

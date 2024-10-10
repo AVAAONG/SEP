@@ -1,9 +1,11 @@
 'use client';
 
+import { createMentor } from '@/lib/db/utils/mentors';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import FormNavigationButtons from '../common/FormNavigationButtons';
 import StepOne from './formSteps/step1';
 import StepFour from './formSteps/StepFour';
@@ -42,9 +44,18 @@ const MentorshipRecruitmentForm = () => {
       setStep(stepNumber);
     }
   }, [reset]);
-  const onSubmit: SubmitHandler<MentorSchemaType> = (data) => {
-    localStorage.removeItem(STORAGE_KEY);
-    localStorage.removeItem(CURRENT_STEP_KEY);
+  const onSubmit: SubmitHandler<MentorSchemaType> = async (data) => {
+    const storedData = localStorage.getItem(STORAGE_KEY);
+    const formStoredData = JSON.parse(storedData);
+
+    // localStorage.removeItem(STORAGE_KEY);
+    // localStorage.removeItem(CURRENT_STEP_KEY);
+    console.log(data);
+
+    await createMentor({
+      ...data,
+      photo: formStoredData.photo,
+    });
     reset({}, { keepErrors: false });
     // Here you would typically send the data to your backend
   };
@@ -153,7 +164,19 @@ const MentorshipRecruitmentForm = () => {
       </div>
       <div className="space-y-5 md:col-span-5">
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-5">
+          <form
+            onSubmit={handleSubmit(
+              (data, event) =>
+                toast.promise(onSubmit(data, event), {
+                  pending: 'Creando registro...',
+                  success: 'Registro creado con éxito',
+                  error: 'Ocurrió un error al crear el registro',
+                }),
+              (errors) => console.log(errors)
+            )}
+            // onSubmit={handleSubmit(onSubmit)}
+            className="w-full space-y-5"
+          >
             {step === 1 && <StepOne />}
             {step === 2 && <StepTwo formControl={control} />}
             {step === 3 && <StepThree formControl={control} />}

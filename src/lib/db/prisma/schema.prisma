@@ -454,6 +454,30 @@ enum MentorStatus {
   RETIRED
 }
 
+// ACTIVE: The mentor-mentee relationship is currently active and ongoing. Both parties are engaged and participating in the mentoring process.
+// COMPLETED: The mentor-mentee relationship has been successfully completed. Both parties have achieved the goals set out at the beginning of the relationship.
+// INTERRUPTED:  The mentor-mentee relationship has been terminated. This could be due to a variety of reasons such as incompatibility, lack of progress, or mutual agreement to end the relationship.
+
+// enum MentorMenteeStatus {
+//     ACTIVE
+//     COMPLETED
+//     INTERRUPTED
+// }
+
+model MentorMentee {
+  id         String                    @id @default(nanoid())
+  start_date DateTime                  @default(now())
+  end_date   DateTime?
+  // status     MentorMenteeStatus
+  obsevation String?
+  // mentor     Mentor                    @relation(fields: [mentor_id], references: [id])
+  // mentor_id  String
+  scholar    ScholarProgramInformation @relation(fields: [scholar_id], references: [id])
+  scholar_id String
+
+  @@map("mentor_mentees")
+}
+
 model Mentor {
   id                      String                 @id @default(nanoid())
   photo                   String?
@@ -470,6 +494,7 @@ model Mentor {
   position                String?
   work_experience         String
   related_experience      String?
+  chapter                 String
   other_activities        String?
   cv                      String
   speaks_other_lang       Boolean
@@ -489,39 +514,16 @@ model Mentor {
   instagram               String?
   linkedin                String?
   referral_source         String
-  iesa_cert               Boolean
-  iesa_cert_date          DateTime
+  iesa_cert               Boolean?
+  iesa_cert_date          DateTime?
   created_at              DateTime               @default(now())
   updated_at              DateTime               @updatedAt
   recruitment_status      MetorRecruitmentStatus @default(PENDING)
   recruitment_observation String?
   status                  MentorStatus           @default(AVAILABLE)
-  mentees                 MentorMentee[]
+  // MentorMentee            MentorMentee[]
 
   @@map("mentors")
-}
-
-// ACTIVE: The mentor-mentee relationship is currently active and ongoing. Both parties are engaged and participating in the mentoring process.
-// COMPLETED: The mentor-mentee relationship has been successfully completed. Both parties have achieved the goals set out at the beginning of the relationship.
-// INTERRUPTED:  The mentor-mentee relationship has been terminated. This could be due to a variety of reasons such as incompatibility, lack of progress, or mutual agreement to end the relationship.
-
-enum MentorMenteeStatus {
-  ACTIVE
-  COMPLETED
-  INTERRUPTED
-}
-
-model MentorMentee {
-  id         String             @id @default(nanoid())
-  start_date DateTime           @default(now())
-  end_date   DateTime?
-  status     MentorMenteeStatus
-  obsevation String?
-
-  mentor     Mentor                    @relation(fields: [mentor_id], references: [id])
-  mentor_id  String
-  scholar    ScholarProgramInformation @relation(fields: [scholar_id], references: [id])
-  scholar_id String
 }
 
 //

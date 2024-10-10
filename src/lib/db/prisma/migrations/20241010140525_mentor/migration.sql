@@ -1,7 +1,6 @@
 /*
   Warnings:
 
-  - The values [INACTIVE] on the enum `MentorMenteeStatus` will be removed. If these variants are still used in the database, this will fail.
   - You are about to drop the `Mentee_mentor_activities` table. If the table is not empty, all the data it contains will be lost.
   - You are about to drop the `Mentor` table. If the table is not empty, all the data it contains will be lost.
   - You are about to drop the `Mentor_mentee` table. If the table is not empty, all the data it contains will be lost.
@@ -24,15 +23,6 @@ CREATE TYPE "MentorStatus" AS ENUM ('AVAILABLE', 'UNAVAILABLE', 'ASSIGNED', 'RET
 ALTER TYPE "Collages" ADD VALUE 'UC';
 ALTER TYPE "Collages" ADD VALUE 'UNITEC';
 
--- AlterEnum
-BEGIN;
-CREATE TYPE "MentorMenteeStatus_new" AS ENUM ('ACTIVE', 'COMPLETED', 'INTERRUPTED');
-ALTER TABLE "MentorMentee" ALTER COLUMN "status" TYPE "MentorMenteeStatus_new" USING ("status"::text::"MentorMenteeStatus_new");
-ALTER TYPE "MentorMenteeStatus" RENAME TO "MentorMenteeStatus_old";
-ALTER TYPE "MentorMenteeStatus_new" RENAME TO "MentorMenteeStatus";
-DROP TYPE "MentorMenteeStatus_old";
-COMMIT;
-
 -- DropForeignKey
 ALTER TABLE "Mentee_mentor_activities" DROP CONSTRAINT "Mentee_mentor_activities_mentor_menteeId_fkey";
 
@@ -49,7 +39,21 @@ DROP TABLE "Mentor";
 DROP TABLE "Mentor_mentee";
 
 -- DropEnum
+DROP TYPE "MentorMenteeStatus";
+
+-- DropEnum
 DROP TYPE "MentorProgramStatus";
+
+-- CreateTable
+CREATE TABLE "mentor_mentees" (
+    "id" TEXT NOT NULL,
+    "start_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "end_date" TIMESTAMP(3),
+    "obsevation" TEXT,
+    "scholar_id" TEXT NOT NULL,
+
+    CONSTRAINT "mentor_mentees_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "mentors" (
@@ -87,8 +91,8 @@ CREATE TABLE "mentors" (
     "instagram" TEXT,
     "linkedin" TEXT,
     "referral_source" TEXT NOT NULL,
-    "iesa_cert" BOOLEAN NOT NULL,
-    "iesa_cert_date" TIMESTAMP(3) NOT NULL,
+    "iesa_cert" BOOLEAN,
+    "iesa_cert_date" TIMESTAMP(3),
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "recruitment_status" "MetorRecruitmentStatus" NOT NULL DEFAULT 'PENDING',
@@ -98,19 +102,6 @@ CREATE TABLE "mentors" (
     CONSTRAINT "mentors_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
-CREATE TABLE "MentorMentee" (
-    "id" TEXT NOT NULL,
-    "start_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "end_date" TIMESTAMP(3),
-    "status" "MentorMenteeStatus" NOT NULL,
-    "obsevation" TEXT,
-    "mentor_id" TEXT NOT NULL,
-    "scholar_id" TEXT NOT NULL,
-
-    CONSTRAINT "MentorMentee_pkey" PRIMARY KEY ("id")
-);
-
 -- CreateIndex
 CREATE UNIQUE INDEX "mentors_id_number_key" ON "mentors"("id_number");
 
@@ -118,7 +109,4 @@ CREATE UNIQUE INDEX "mentors_id_number_key" ON "mentors"("id_number");
 CREATE UNIQUE INDEX "mentors_email_key" ON "mentors"("email");
 
 -- AddForeignKey
-ALTER TABLE "MentorMentee" ADD CONSTRAINT "MentorMentee_mentor_id_fkey" FOREIGN KEY ("mentor_id") REFERENCES "mentors"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "MentorMentee" ADD CONSTRAINT "MentorMentee_scholar_id_fkey" FOREIGN KEY ("scholar_id") REFERENCES "ScholarProgramInformation"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "mentor_mentees" ADD CONSTRAINT "mentor_mentees_scholar_id_fkey" FOREIGN KEY ("scholar_id") REFERENCES "ScholarProgramInformation"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

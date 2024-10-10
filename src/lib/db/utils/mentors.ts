@@ -1,4 +1,5 @@
-import { Mentor } from '@prisma/client';
+'use server';
+import { Mentor, Prisma } from '@prisma/client';
 import { prisma } from './prisma';
 
 export const getMentors = async (): Promise<Mentor | null> => {
@@ -19,3 +20,13 @@ export const getMentor = async (id: string) => {
   });
   return mentor;
 };
+
+
+
+
+export const createMentor = async (mentor: Prisma.MentorCreateInput) => {
+  const newMentor = await prisma.mentor.create({
+    data: mentor,
+  });
+  return newMentor;
+}
