@@ -13,11 +13,11 @@ const PublicFooter = () => {
         </div>
         <div className="w-full flex box-border flex-wrap justify-between items-center lg:items-start gap-8">
           <div className="max-w-sm m-auto flex flex-wrap justify-center lg:justify-start gap-4">
-            <p className="text-center lg:text-start">
-              Apoyamos la educación integral y formación de jóvenes venezolanos con valores sociales
-              y morales elevados para contribuir al desarrollo armónico del país en un ambiente de
-              convivencia y amistad internacional en alianza con personas y organizaciones
-              comprometidas con Venezuela
+            <p className="text-center lg:text-justify">
+              Apoyamos la educación integral y la formación de jóvenes venezolanos con valores
+              sociales y morales elevados, para contribuir al desarrollo armónico del país, en un
+              ambiente de convivencia y amistad internacional, en alianza con personas y
+              organizaciones comprometidas con Venezuela
             </p>
           </div>
           <div className="flex flex-col w-full lg:w-min justify-center lg:justify-start text-center lg:text-start gap-4">
@@ -184,9 +184,9 @@ const PublicFooter = () => {
             <a href="https://programaexcelencia.org/politicas" className="pointer">
               Términos y condiciones
             </a>
-            <a href="https://avaa.org/faq/" className="pointer">
+            {/* <a href="https://avaa.org/faq/" className="pointer">
               Preguntas frecuentes
-            </a>
+            </a> */}
           </div>
           <div className=""></div>
           <div className="text-xs">💚 De becarios para becarios 💚</div>
