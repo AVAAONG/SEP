@@ -171,7 +171,7 @@ const page = async ({ params }: { params: { mentorId: string } }) => {
               <p className="">{motivation}</p>
             </div>
             <div className="flex flex-col gap-1">
-              <h2 className="text-2xl font-bold text-green-700">Areas de interes</h2>
+              <h2 className="text-2xl font-bold text-green-700">Áreas de interés</h2>
               <p className="">{areas_of_interest}</p>
             </div>
             <div className="flex flex-col gap-1">
@@ -184,7 +184,7 @@ const page = async ({ params }: { params: { mentorId: string } }) => {
             </div>
             <div className="flex flex-col gap-1">
               <h2 className="text-2xl font-bold text-green-700">
-                Como se entero del componente de mentoria?
+                ¿Cómo se enteró sobre el componente de Mentoría AVAA?
               </h2>
               <p className="">{how_know_avaa}</p>
             </div>
