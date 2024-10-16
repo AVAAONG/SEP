@@ -150,7 +150,7 @@ const AddCvaModule: React.FC<{
                           autoFocus
                           className="col-span-2 md:col-span-1"
                           type="number"
-                          label="Numero del ultimo modulo cursado"
+                          label="Número del ultimo modulo cursado"
                           radius="sm"
                         />
                       );

@@ -51,7 +51,7 @@ const ScholarAttendanceInfoNoPriv: Column<IScholarAttendanceInfoNoPriv>[] = [
     },
   },
   {
-    Header: 'Numero de WhatsApp',
+    Header: 'Número de WhatsApp',
     accessor: 'whatsAppNumber',
   },
   {

@@ -200,7 +200,7 @@ const AddCollageAcademicPeriod = ({
                           ]?.message?.toString()}
                           className="col-span-2 md:col-span-1"
                           type="number"
-                          label="Numero del ultimo periodo cursado"
+                          label="Número del ultimo periodo cursado"
                           radius="sm"
                         />
                       );

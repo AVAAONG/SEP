@@ -17,9 +17,9 @@ const scholarInfoSchema = z
 			},
 		}),
 		birthdate: z.string().min(1, { message: 'Debes especificar la fecha de nacimiento' }),
-		local_phone_number: z.string().min(1, { message: 'Debes especificar el numero de telefono' }),
-		whatsapp_number: z.string().min(1, { message: 'Debes especificar el numero de whatsapp' }),
-		cell_phone_Number: z.string().min(1, { message: 'Debes especificar el numero de celular' }),
+		local_phone_number: z.string().min(1, { message: 'Debes especificar el número de telefono' }),
+		whatsapp_number: z.string().min(1, { message: 'Debes especificar el número de whatsapp' }),
+		cell_phone_Number: z.string().min(1, { message: 'Debes especificar el número de celular' }),
 		email: z.string().email({ message: 'Debes especificar un correo valido' }).trim(),
 	});
 

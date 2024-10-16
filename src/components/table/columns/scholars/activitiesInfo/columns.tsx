@@ -37,14 +37,14 @@ const scholarActivitiesInformationColumns: Column<ScholarActivitiesInformationCo
     accessor: 'dni',
   },
   {
-    Header: 'Numero WhatsApp',
+    Header: 'Número WhatsApp',
     accessor: 'whatsAppNumber',
   },
   {
     Header: 'Correo electronico',
     accessor: 'email',
   },
-  
+
   {
     Header: 'Actividades formativas presenciales',
     accessor: 'inPersonWorkshops',
