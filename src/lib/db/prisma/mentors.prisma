@@ -1,6 +1,6 @@
 import { ScholarProgramInformation,  } from "users\scholar\scholar"
 import { Gender } from "activities\type-activities"
-import { Level } from "schema"
+import { Gender, Level } from "schema"
 
 enum MetorRecruitmentStatus {
     ACCEPTED
@@ -50,6 +50,7 @@ model Mentor {
     last_name               String
     id_number               String                 @unique
     birth_date              DateTime
+    gender                  Gender?
     residence               String
     phone                   String
     email                   String                 @unique

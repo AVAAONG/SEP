@@ -49,7 +49,7 @@ const page = async () => {
     };
   });
   return (
-    <div className="flex flex-col items-center w-full gap-6 min-h-screen">
+    <div className="flex flex-col items-center w-full gap-6 ">
       <div className="flex flex-1 flex-col md:flex-row gap-4 w-full">
         <div className="relative bg-white py-5 px-4  sm:px-6 shadow rounded-lg overflow-hidden h-fit">
           <dt>
@@ -62,20 +62,8 @@ const page = async () => {
             <p className="text-2xl font-semibold text-gray-900">{mentors?.length}</p>
           </dd>
         </div>
-
-        {/* <div className="flex flex-col justify-center bg-white rounded-lg p-4 shadow-md">
-          <h2 className="text-sm font-semibold truncate">
-            Distribución de facilitadores según su género
-          </h2>
-          <PieChartComponent
-            data={[
-              { label: 'Mujeres', value: mentorsWomanCount },
-              { label: 'Hombres', value: workshopSpeakerMenCount },
-            ]}
-          />
-        </div> */}
       </div>
-      <div className="w-full h-fit">
+      <div className="w-full">
         <Table
           tableColumns={mentorColumns}
           tableData={mentorsWithSocialNetworks || []}

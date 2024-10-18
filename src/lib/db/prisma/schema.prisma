@@ -485,6 +485,7 @@ model Mentor {
   last_name               String
   id_number               String                 @unique
   birth_date              DateTime
+  gender                  Gender?
   residence               String
   phone                   String
   email                   String                 @unique
