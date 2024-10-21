@@ -3,6 +3,7 @@ import {
   changeScholarCondition,
   changeScholarStatusProbationSimple,
 } from '@/lib/db/lilb/scholar/utils';
+import { createProbationII } from '@/lib/db/utils/probation';
 import { EllipsisHorizontalCircleIcon } from '@heroicons/react/24/outline';
 import { useDisclosure } from '@nextui-org/modal';
 import {
@@ -49,7 +50,7 @@ const ScholarDropdown = ({ scholar }) => {
               description="Pasar becario al estatus de probatorio II"
               color="danger"
               onPress={async () => {
-                toast.promise(changeScholarStatusProbationSimple(scholar.id, 'PROBATION_II'), {
+                toast.promise(createProbationII(scholar.id), {
                   pending: 'Cambiando status de becario',
                   success: 'Exito al cambiar status del becario',
                   error: 'Error al cambiar status del becario',

@@ -98,6 +98,38 @@ export const createProbation = async (scholarId: string, data: Prisma.ProbationC
 
 };
 
+
+export const createProbationII = async (scholarId: string) => {
+    await prisma.scholar.update({
+        where: {
+            id: scholarId,
+        },
+        data: {
+            program_information: {
+                update: {
+                    scholar_status: 'PROBATION_II',
+                    probation: {
+                        create: {
+                            agreement: '',
+                            done_at_the_moment: '',
+                            ending_date: new Date().toISOString(),
+                            kind_of_probation: 'PROBATION_II',
+                            starting_date: new Date().toISOString(),
+                            next_meeting: new Date().toISOString(),
+                            observations: '',
+                            probation_reason: '',
+
+
+                        },
+                    },
+                },
+            },
+        },
+    });
+    revalidatePath(`/admin/becarios/${scholarId}`)
+
+};
+
 export const getProbationInfoByScholar = async (scholarId: string) => {
     return await prisma.probation.findMany({
         where: {
