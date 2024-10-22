@@ -8,9 +8,8 @@ const TAB_OPTIONS = [
   { key: 'general', title: 'General' },
   { key: 'collage', title: 'Universidad' },
   { key: 'cva', title: 'CVA' },
-  // { key: 'job', title: 'Trabajo' },
   { key: 'activities', title: 'Seguimiento' },
-  // { key: 'contact', title: 'Datos de contacto' },
+  { key: 'all', title: 'Todos los datos' },
 ];
 
 const page = async ({
@@ -25,6 +24,7 @@ const page = async ({
       | 'mentorship'
       | 'activities'
       | 'contact'
+      | 'all'
       | undefined;
   };
 }) => {

@@ -181,6 +181,43 @@ export const getScholarsWithAllData = async () => {
 };
 
 
+
+/**
+ * Gets all scholars with all associated data
+ *
+ * @returns An array of scholars with all associated data
+ */
+export const getScholarsWithAllAllData = async () => {
+  const scholar = await prisma.scholar.findMany({
+    where: {
+      program_information: {
+
+        scholar_condition: {
+          in: ['ACTIVE', 'TO_BE_ALUMNI']
+        },
+        chapter: {
+          id: {
+            equals: await getCookie('chapter'),
+          },
+        },
+      },
+    },
+    include: {
+      collage_information: {
+        include: {
+          collage_period: true,
+        },
+      },
+      program_information: true,
+    }
+  });
+
+  return scholar;
+};
+
+
+
+
 export const getWithdrawerAndResignedScholars = async () => {
   const scholar = await prisma.scholar.findMany({
     where: {
