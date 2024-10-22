@@ -10,7 +10,7 @@ import { chatIcon, userIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs
 
 const page = async () => {
   const actualYear = new Date().getFullYear();
-  const chapter = await getCookie('chapter')
+  const chapter = await getCookie('chapter');
   const activeScholarsCount = await getScholarsCountByCondition('ACTIVE', chapter);
   const [workshops, chats, volunteer] = await getActivitiesByYear(actualYear);
   const events = formatActivitiesForCalendarPanel([...workshops, ...chats, ...volunteer], 'admin');
@@ -69,7 +69,7 @@ const page = async () => {
     {
       title: 'Horas de voluntariado realizadas',
       subtitle: 'Ver todas las actividades',
-      data: volunteerHours,
+      data: Number(volunteerHours.toFixed(1)),
       link: 'voluntariado',
       icon: volunterIcon(),
       kind: 'volunteer',
