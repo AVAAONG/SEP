@@ -130,11 +130,14 @@ const ExternalVolunteerAdminColumns: Column<VolunteerTableDetails>[] = [
     accessor: 'proof',
     disableSortBy: true,
     Cell: ({ value }) => {
+      const link = value?.startsWith('https://drive.google.com/')
+        ? value
+        : `${value}?sp=r&st=2024-02-09T17:38:39Z&se=2034-02-10T01:38:39Z&spr=https&sv=2022-11-02&sr=c&sig=cwfLDK9U3eo507dSSvtwfGWdd8ZRWY9hx4J721oad%2Bk%3D`;
       return (
         <div className="m-auto w-6 ">
           <Link
             target="_blank"
-            href={value ? value : ''}
+            href={value ? link : ''}
             className="w-6 text-primary-light dark:text-primary-light"
           >
             <DocumentTextIcon className="w-6 h-6" />

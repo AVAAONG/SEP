@@ -1,11 +1,20 @@
 'use client';
 import DisplayDate from '@/components/DisplayDate';
-import VolunteerStatusWidgetSpanish, {
-  VolunteerStatusSpanish,
-} from '@/components/charts/common/widgets/VolunteerStatusWidgetSpanish';
+import { changeVolunteerStatus } from '@/lib/db/utils/volunteer';
+import { revalidateSpecificPath } from '@/lib/serverAction';
 import { Tooltip } from '@nextui-org/tooltip';
+import { VolunteerStatus } from '@prisma/client';
 import Link from 'next/link';
+import { useState } from 'react';
 import { CellProps, Column } from 'react-table';
+import { toast } from 'react-toastify';
+let timeout: NodeJS.Timeout;
+const debaunceTest = () => {
+  clearTimeout(timeout);
+  timeout = setTimeout(async () => {
+    await revalidateSpecificPath('admin/voluntariado/externo');
+  }, 1000);
+};
 
 export interface IAdminVolunteerActivityColumns {
   id: string;
@@ -13,7 +22,7 @@ export interface IAdminVolunteerActivityColumns {
   kindOfVolunteer: string;
   startDate: string;
   endDate: string;
-  status: VolunteerStatusSpanish;
+  status: VolunteerStatus;
   modality: string;
   hours: number;
   platform: string;
@@ -66,7 +75,40 @@ const AdminVolunteerActivityColumns: Column<IAdminVolunteerActivityColumns>[] = 
   {
     Header: 'Estatus',
     accessor: 'status',
-    Cell: ({ value }) => <VolunteerStatusWidgetSpanish value={value} />,
+    Cell: ({ value, cell }) => {
+      const [attendace, setAttendance] = useState(value);
+      const handleStatusChange = async (status: VolunteerStatus) => {
+        await changeVolunteerStatus(cell.row.original.id, status);
+        setAttendance(status);
+        await debaunceTest();
+      };
+      return (
+        <select
+          className={`border-0 cursor-pointer rounded-full font-medium w-24 text-xs  p-0 outline-transparent ${
+            attendace === 'APPROVED'
+              ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
+              : attendace === 'REJECTED'
+                ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+                : attendace === 'PENDING'
+                  ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
+                  : ''
+          }`}
+          value={attendace}
+          onChange={async (event) => {
+            const attendance = event.target.value as VolunteerStatus;
+            toast.promise(handleStatusChange(attendance), {
+              pending: 'Colocando asistencia...',
+              success: 'Asistencia colocada exitosamente',
+              error: 'Error al colocar asistencia',
+            });
+          }}
+        >
+          <option value="APPROVED">Aprobado</option>
+          <option value="REJECTED">No aprobado</option>
+          <option value="PENDING">Pendiente por aprobar</option>
+        </select>
+      );
+    },
   },
   {
     Header: 'Modalidad',

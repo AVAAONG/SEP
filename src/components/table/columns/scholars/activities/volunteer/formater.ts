@@ -1,5 +1,5 @@
 import { VolunteerWithAllData } from "@/lib/db/types";
-import { parseKindOfVolunteerFromDatabase, parseModalityFromDatabase, parseVolunteerProject, parseVolunteerStatusFromDatabase } from "@/lib/utils2";
+import { parseKindOfVolunteerFromDatabase, parseModalityFromDatabase, parseVolunteerProject } from "@/lib/utils2";
 import { IAdminVolunteerActivityColumns } from "./columns";
 
 
@@ -18,7 +18,7 @@ const createAdminVolunteerActivitiesForTable = (volunteers: VolunteerWithAllData
             endDate: new Date(volunteer.end_dates[0]).toISOString(),
             startDate: new Date(volunteer.start_dates[0]).toISOString(),
             endHour: volunteer.end_dates,
-            status: parseVolunteerStatusFromDatabase(volunteer.status),
+            status: volunteer.status,
             modality: parseModalityFromDatabase(volunteer.modality),
             platform: volunteer.platform,
             kindOfVolunteer: parseKindOfVolunteerFromDatabase(volunteer.kind_of_volunteer),
