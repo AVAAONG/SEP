@@ -1,53 +1,11 @@
 import Table from '@/components/table/Table';
-import mentorColumns from '@/components/table/columns/mentorsColumns';
-import { getMentors } from '@/lib/db/utils/mentors';
-import dynamic from 'next/dynamic';
+import ActiveMentorsColumns from '@/components/table/columns/mentors/activeMentorColumns';
+import { getActiveMentors } from '@/lib/db/utils/mentors';
 import { userIcon } from 'public/svgs/svgs';
-import {
-  FacebookIcon,
-  InstagramIcon,
-  LinkedinIcon,
-  TwitterIcon,
-} from '../../../../../public/svgs/SocialNetworks';
-
-/**
- * @see https://stackoverflow.com/questions/67784672/react-next-js-doesnt-seem-to-work-with-apexcharts for more info
- */
-const PieChartComponent = dynamic(() => import('@/components/charts/Pie'), { ssr: false });
 
 const page = async () => {
-  const mentors = await getMentors();
-  const mentorsWithSocialNetworks = mentors?.map((mentor) => {
-    const { twitter_user, facebook_user, instagram_user, linkedin_user } = mentor;
-    const socialNetworks = [
-      {
-        name: 'Twitter',
-        url: `https://twitter.com/${twitter_user}`,
-        icon: <TwitterIcon />,
-      },
-      {
-        name: 'Facebook',
-        url: `https://www.facebook.com/${facebook_user}`,
-        icon: <FacebookIcon />,
-      },
-      {
-        name: 'Instagram',
-        url: `https://www.instagram.com/${instagram_user}`,
-        icon: <InstagramIcon />,
-      },
-      {
-        name: 'Linkedin',
-        url: linkedin_user,
-        icon: <LinkedinIcon />,
-      },
-    ];
-    const age = new Date().getFullYear() - new Date(mentor.birthdate).getFullYear();
-    return {
-      ...mentor,
-      socialNetworks,
-      age,
-    };
-  });
+  const mentors = await getActiveMentors();
+
   return (
     <div className="flex flex-col items-center w-full gap-6 ">
       <div className="flex flex-1 flex-col md:flex-row gap-4 w-full">
@@ -64,11 +22,7 @@ const page = async () => {
         </div>
       </div>
       <div className="w-full">
-        <Table
-          tableColumns={mentorColumns}
-          tableData={mentorsWithSocialNetworks || []}
-          tableHeadersForSearch={[]}
-        />
+        <Table tableColumns={ActiveMentorsColumns} tableData={mentors} tableHeadersForSearch={[]} />
       </div>
     </div>
   );

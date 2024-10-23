@@ -1,10 +1,14 @@
 'use server';
-import { Mentor, MetorRecruitmentStatus, Prisma } from '@prisma/client';
+import { Mentor, MentorStatus, MetorRecruitmentStatus, Prisma } from '@prisma/client';
 import { prisma } from './prisma';
 
-export const getMentors = async (): Promise<Mentor | null> => {
+export const getActiveMentors = async (): Promise<Mentor | null> => {
   try {
-    const mentors = await prisma.mentor.findMany();
+    const mentors = await prisma.mentor.findMany({
+      where: {
+        recruitment_status: 'ACCEPTED'
+      }
+    });
     return mentors;
   } catch (error) {
     console.log(error);
@@ -42,6 +46,30 @@ export const changeMentorRecruitmentStatus = async (id: string, status: MetorRec
     },
     data: {
       recruitment_status: status,
+    },
+  });
+  return mentor;
+}
+
+export const changeMentorStatus = async (id: string, status: MentorStatus) => {
+  const mentor = await prisma.mentor.update({
+    where: {
+      id,
+    },
+    data: {
+      status: status,
+    },
+  });
+  return mentor;
+}
+
+export const changeMentorMenteeBol = async (id: string, newMentee: boolean) => {
+  const mentor = await prisma.mentor.update({
+    where: {
+      id,
+    },
+    data: {
+      newMentee: newMentee,
     },
   });
   return mentor;

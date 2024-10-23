@@ -67,6 +67,7 @@ model Mentor {
     other_lang              String?
     lang_level              Level?
     interests               String
+    newMentee               Boolean                @default(false)
     hobbies                 String
     mentor_reason           String
     prev_mentor_exp         Boolean
