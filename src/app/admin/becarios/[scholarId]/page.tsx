@@ -30,7 +30,8 @@ import {
   getAttendedChats,
   getAttendedWorkshops,
 } from '@/lib/utils/getAttendedActivities';
-import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
+import { ArrowTopRightOnSquareIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
+import { PhoneXMarkIcon } from '@heroicons/react/24/solid';
 import { Avatar, Tooltip } from '@nextui-org/react';
 import Link from 'next/link';
 import { chatIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs';
@@ -54,7 +55,6 @@ const page = async ({
   const scholar = await getScholarWithAllData(scholarId);
   if (!scholar) return null;
   const { first_names, last_names, photo, program_information } = scholar || {};
-
 
   // Get raw data from the database
   const chatsDb = await getChatsByScholar(scholarId);
@@ -150,13 +150,16 @@ const page = async ({
     <section className="flex flex-col gap-4 lg:p-6 pt-0">
       <div className="flex flex-col items-center lg:items-start lg:flex-row justify-center lg:justify-start gap-2 lg:gap-6 w-full">
         <div className="flex lg:hidden items-center justify-between w-full gap-4 px-6 lg:p-0">
-          <ScholarStatusIndicator isAdmin={true} scholarData={{
-            id: scholarId,
-            status: program_information?.scholar_status,
-            firstName: scholar.first_names,
-            surNames: scholar.last_names,
-            dni: scholar.dni
-          }} />
+          <ScholarStatusIndicator
+            isAdmin={true}
+            scholarData={{
+              id: scholarId,
+              status: program_information?.scholar_status,
+              firstName: scholar.first_names,
+              surNames: scholar.last_names,
+              dni: scholar.dni,
+            }}
+          />
           <ScholarDropdown scholar={scholar} />
         </div>
         <div className="flex-shrink-0 w-56 h-56 object-contain m-auto rounded-full shadow-lg border-3 border-green-500 p-1 overflow-hidden">
@@ -179,14 +182,37 @@ const page = async ({
               </Tooltip>
             </div>
             <div className="hidden lg:flex items-center gap-4">
-              <ScholarStatusIndicator isAdmin={true} scholarData={{
-                id: scholarId,
-                status: program_information?.scholar_status,
-                firstName: scholar.first_names,
-                surNames: scholar.last_names,
-                dni: scholar.dni
-              }} />
+              <ScholarStatusIndicator
+                isAdmin={true}
+                scholarData={{
+                  id: scholarId,
+                  status: program_information?.scholar_status,
+                  firstName: scholar.first_names,
+                  surNames: scholar.last_names,
+                  dni: scholar.dni,
+                }}
+              />
               <ScholarDropdown scholar={scholar} />
+            </div>
+          </div>
+          <div>
+            <div className="flex gap-2 items-center">
+              <div className="flex gap-1 font-medium">
+                <EnvelopeIcon className="w-4" /> Correo
+              </div>
+              <p>{scholar.email}</p>
+            </div>
+            <div className="flex gap-2 items-center">
+              <div className="flex gap-1 font-medium">
+                <PhoneXMarkIcon className="w-4" /> Teléfono celular
+              </div>
+              <p>{scholar.whatsapp_number}</p>
+            </div>
+            <div className="flex gap-2 items-center ">
+              <div className="flex gap-1 font-medium">
+                <PhoneXMarkIcon className="w-4" /> Teléfono local
+              </div>
+              <p>{scholar.local_phone_number}</p>
             </div>
           </div>
           <div className="w-full flex gap-3 justify-center md:justify-start">
