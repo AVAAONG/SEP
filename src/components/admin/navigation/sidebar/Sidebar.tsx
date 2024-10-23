@@ -88,6 +88,12 @@ const Sidebar = () => {
           link="/admin/mentoria/mentores"
         />
         <DropdownButton
+          buttonName="Captación"
+          Icon={userIcon()}
+          itemList={[]}
+          link="/admin/mentoria/captacion"
+        />
+        <DropdownButton
           buttonName="Formulario de postulación"
           Icon={linkIcon()}
           itemList={[]}
