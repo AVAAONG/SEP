@@ -9,86 +9,48 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {
   CellPhoneIcon,
-  FacebookIcon,
   InstagramIcon,
   LinkedinIcon,
-  TwitterIcon,
 } from '../../../../../../public/svgs/SocialNetworks';
 import { AddressIcon, CurriculumIcon, EmailIcon } from '../../../../../../public/svgs/svgs';
 
-const speakerSearchOptions = [
-  {
-    option: 'title',
-    label: 'Nombre',
-  },
-  {
-    option: 'asociated_skill',
-    label: 'Competencia asociada',
-  },
-  {
-    option: 'job_company',
-    label: 'Organización',
-  },
-];
 const page = async ({ params }: { params: { mentorId: string } }) => {
   const { mentorId } = params;
   const mentor = await getMentor(mentorId);
   const {
     first_name,
     last_name,
-    facebook_profile,
-    twitter_profile,
-    instagram_profile,
-    linkedin_profile,
-    image,
-    curriculum,
+    instagram,
+    linkedin,
+    photo,
+    cv,
     company,
-    cell_phone,
+    phone,
     email,
-    company_position,
-    profession,
-    motivation,
-    areas_of_interest,
-    city_of_residence,
-    hobbies,
-    how_know_avaa,
-    status,
-    tiktok_profile,
-    birthdate,
-    other_activities,
+    position,
+    residence,
+    birth_date,
   } = mentor as Mentor;
 
   const workshopSpeakerSocialNetwork = [
     {
-      name: 'Twitter',
-      url: `https://twitter.com/${twitter_profile}`,
-      icon: <TwitterIcon />,
-      username: twitter_profile,
-    },
-    {
-      name: 'Facebook',
-      url: `https://www.facebook.com/${facebook_profile}`,
-      icon: <FacebookIcon />,
-      username: facebook_profile,
-    },
-    {
       name: 'Instagram',
-      url: `https://www.instagram.com/${instagram_profile}`,
+      url: `https://www.instagram.com/${instagram}`,
       icon: <InstagramIcon />,
-      username: instagram_profile,
+      username: instagram,
     },
     {
       name: 'Linkedin',
-      url: `https://www.linkedin.com/in/${linkedin_profile}`,
+      url: `${linkedin}`,
       icon: <LinkedinIcon />,
-      username: linkedin_profile,
+      username: linkedin,
     },
   ];
 
   const scholarContactData = [
     {
       name: 'Celular',
-      value: cell_phone,
+      value: phone,
       icon: <CellPhoneIcon />,
     },
     {
@@ -104,7 +66,11 @@ const page = async ({ params }: { params: { mentorId: string } }) => {
         <div className="flex flex-col gap-4 justify-center items-center sm:flex-row lg:flex-col w-full">
           <div className="w-64 flex items-center justify-center rounded-full shadow-lg border-4 border-green-500 p-1">
             <Image
-              src={image ? image : defailProfilePic}
+              src={
+                photo
+                  ? `${photo}?sp=r&st=2024-02-08T16:10:32Z&se=2034-02-09T00:10:32Z&spr=https&sv=2022-11-02&sr=c&sig=m%2B0OpD98j6ZoUyhkBCX1Zotm%2BrwC5Pt2%2FO6bvDQfCJk%3D`
+                  : defailProfilePic
+              }
               alt="Imagen del facilitador"
               width={250}
               height={250}
@@ -117,14 +83,14 @@ const page = async ({ params }: { params: { mentorId: string } }) => {
               <h1 className="text-2xl w-full font-bold text-center flex items-center justify-center gap-2">
                 {first_name} {last_name}{' '}
               </h1>
-              {curriculum && (
-                <Link href={curriculum} target="_blank" className="w-6 block">
+              {cv && (
+                <Link href={cv} target="_blank" className="w-6 block">
                   <CurriculumIcon />
                 </Link>
               )}
             </div>
             <span className="text-gray-400 dark:text-gray-300 font-semibold uppercase text-center w-full ">
-              {company} | {company_position}
+              {company} | {position}
             </span>
           </div>
           <Tooltip content="Fecha de nacimiento">
@@ -132,13 +98,13 @@ const page = async ({ params }: { params: { mentorId: string } }) => {
               <div className="w-5 h-5  text-primary-dark">
                 <CalendarIcon />
               </div>
-              {birthdate?.toLocaleString('es-ES', {
+              {birth_date?.toLocaleString('es-ES', {
                 month: 'long',
                 day: 'numeric',
                 year: 'numeric',
               })}
               <span className="text-primary-light font-medium">
-                ({new Date().getFullYear() - birthdate?.getFullYear()!} años)
+                ({new Date().getFullYear() - birth_date?.getFullYear()!} años)
               </span>
             </div>
           </Tooltip>
@@ -148,7 +114,7 @@ const page = async ({ params }: { params: { mentorId: string } }) => {
               <div className="w-5 h-5">
                 <AddressIcon />
               </div>
-              {city_of_residence}
+              {residence}
             </div>
           </Tooltip>
 
@@ -160,50 +126,94 @@ const page = async ({ params }: { params: { mentorId: string } }) => {
         </div>
       </div>
       <div className="w-full lg:w-3/4 bg-white rounded-lg p-6 ">
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1">
-              <h2 className="text-2xl font-bold text-green-700">Profesión</h2>
-              <p>{profession}</p>
-            </div>
-            <div className="flex flex-col gap-1">
-              <h2 className="text-2xl font-bold text-green-700">Motivación para ser mentor</h2>
-              <p className="">{motivation}</p>
-            </div>
-            <div className="flex flex-col gap-1">
-              <h2 className="text-2xl font-bold text-green-700">Áreas de interés</h2>
-              <p className="">{areas_of_interest}</p>
-            </div>
-            <div className="flex flex-col gap-1">
-              <h2 className="text-2xl font-bold text-green-700">Hobbies</h2>
-              <p className="">{hobbies}</p>
-            </div>
-            <div className="flex flex-col gap-1">
-              <h2 className="text-2xl font-bold text-green-700">Otras actividades</h2>
-              <p className="">{other_activities}</p>
-            </div>
-            <div className="flex flex-col gap-1">
-              <h2 className="text-2xl font-bold text-green-700">
-                ¿Cómo se enteró sobre el componente de Mentoría AVAA?
-              </h2>
-              <p className="">{how_know_avaa}</p>
-            </div>
+        <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-8">
+          <ProfileField label="Cedula de identidad" value={mentor?.id_number} />
+          <ProfileField label="Genero" value={mentor?.gender || 'Not specified'} />
+          <ProfileField label="Profesion" value={mentor?.profession} />
+          <ProfileField label="Empleado" value={mentor?.employed ? 'Yes' : 'No'} />
+          <ProfileField label="Empresa" value={mentor?.company || 'N/A'} />
+          <ProfileField label="Posicion" value={mentor?.position || 'N/A'} />
+          <div className="md:col-span-3">
+            <ProfileField label="Experiencia laboral" value={mentor?.work_experience} />
           </div>
-          <div className="flex flex-col gap-4">
-            <h2 className="text-2xl font-bold text-green-700">Redes sociales</h2>
-            <div className="flex flex-row gap-4 text-black">
-              {workshopSpeakerSocialNetwork.map(({ url, icon, name, username }, index) => {
-                return (
-                  <Link
-                    target="_blank"
-                    href={url ? url : ''}
-                    className="w-9 text-primary-light dark:text-primary-light rounded-full bg-light dark:bg-slate-600 p-2"
-                  >
-                    {icon}
-                  </Link>
-                );
-              })}
-            </div>
+          <div className="md:col-span-3">
+            <ProfileField
+              label="Experiencia relacionada"
+              value={mentor?.related_experience || 'N/A'}
+            />
+          </div>
+          <div className="md:col-span-3">
+            <ProfileField label="Otras actividades" value={mentor?.other_activities || 'N/A'} />
+          </div>
+          <ProfileField
+            label="Habla otro idioma?"
+            value={mentor?.speaks_other_lang ? 'Yes' : 'No'}
+          />
+          <ProfileField label="Idioma" value={mentor?.other_lang || 'N/A'} />
+          <ProfileField label="Nivel" value={mentor?.lang_level || 'N/A'} />
+          <ProfileField label="Interests" value={mentor?.interests} />
+          <ProfileField label="Hobbies" value={mentor?.hobbies} />
+          <div className="md:col-span-3">
+            <ProfileField
+              label="Razones por las cuales quiere pertenecer al programa"
+              value={mentor?.mentor_reason}
+            />
+          </div>
+          <ProfileField
+            label="Experiencia previa como mentor"
+            value={mentor?.prev_mentor_exp ? 'Yes' : 'No'}
+          />
+          <div className="md:col-span-3">
+            <ProfileField
+              label="Descripcion de experiencia previa como mentor"
+              value={mentor?.prev_mentor_desc || 'N/A'}
+            />
+          </div>
+
+          <div className="md:col-span-3">
+            <ProfileField label="Habilidades y fortalezas" value={mentor?.skills_strengths} />
+          </div>
+          <div className="md:col-span-3">
+            <ProfileField label="Tecnicas de confianza" value={mentor?.trust_techniques} />
+          </div>
+          <div className="md:col-span-3">
+            <ProfileField label="Ayuda al mentee" value={mentor?.mentee_support} />
+          </div>
+          <ProfileField label="Compromiso de tiempo" value={mentor?.time_commitment} />
+          <div className="md:col-span-3">
+            <ProfileField label="Mentee ideal" value={mentor?.ideal_mentee} />
+          </div>
+          <ProfileField
+            label="Actividades grupales"
+            value={mentor?.group_activities ? 'Yes' : 'No'}
+          />
+          <ProfileField label="Como se entero del programa" value={mentor?.referral_source} />
+          <ProfileField
+            label="Completo la certificacion del IESA"
+            value={mentor?.iesa_cert ? 'Yes' : 'No'}
+          />
+          <ProfileField
+            label="Fecha de la certificacion del IESA"
+            value={mentor?.iesa_cert_date?.toDateString() || 'N/A'}
+          />
+          <ProfileField label="Estatus de captacion" value={mentor?.recruitment_status} />
+          <ProfileField label="Observaciones" value={mentor?.recruitment_observation || 'N/A'} />
+          <ProfileField label="Estatus" value={mentor?.status} />
+        </div>
+        <div className="flex flex-col gap-4">
+          <h2 className="text-2xl font-bold text-green-700">Redes sociales</h2>
+          <div className="flex flex-row gap-4 text-black">
+            {workshopSpeakerSocialNetwork.map(({ url, icon, name, username }, index) => {
+              return (
+                <Link
+                  target="_blank"
+                  href={url ? url : ''}
+                  className="w-9 text-primary-light dark:text-primary-light rounded-full bg-light dark:bg-slate-600 p-2"
+                >
+                  {icon}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -212,3 +222,11 @@ const page = async ({ params }: { params: { mentorId: string } }) => {
 };
 
 export default page;
+function ProfileField({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div>
+      <dt className="text-lg font-medium text-primary-light">{label}</dt>
+      <dd className="mt-1 text-sm text-gray-900">{value}</dd>
+    </div>
+  );
+}
