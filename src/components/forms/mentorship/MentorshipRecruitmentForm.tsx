@@ -3,6 +3,7 @@
 import { createMentor } from '@/lib/db/utils/mentors';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@nextui-org/react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -23,6 +24,8 @@ const MentorshipRecruitmentForm = () => {
     resolver: zodResolver(MentorSchema),
     mode: 'onChange',
   });
+
+  const router = useRouter();
 
   const { handleSubmit, trigger, getValues, reset, control } = methods;
 
@@ -57,6 +60,7 @@ const MentorshipRecruitmentForm = () => {
       photo: formStoredData.photo,
     });
     reset({}, { keepErrors: false });
+    router.push('/mentores/registro/exitoso');
     // Here you would typically send the data to your backend
   };
 
