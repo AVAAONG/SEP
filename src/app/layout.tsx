@@ -41,7 +41,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             {children}
             <ToastContainer
               position="bottom-right"
-              autoClose={3000}
+              autoClose={2000}
               closeOnClick
               newestOnTop={true}
               pauseOnHover
