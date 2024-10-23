@@ -1,11 +1,8 @@
-import defailProfilePic from '@/../public/defaultProfilePic.png';
-
 import IconWithInfo from '@/components/commons/IconInWithInformation';
 import { getMentor } from '@/lib/db/utils/mentors';
 import { CalendarIcon } from '@heroicons/react/24/outline';
-import { Tooltip } from '@nextui-org/react';
+import { Avatar, Tooltip } from '@nextui-org/react';
 import { Mentor } from '@prisma/client';
-import Image from 'next/image';
 import Link from 'next/link';
 import {
   CellPhoneIcon,
@@ -64,18 +61,15 @@ const page = async ({ params }: { params: { mentorId: string } }) => {
     <section className="flex flex-col lg:flex-row gap-6 min-h-screen">
       <div className="w-full lg:w-1/4 flex flex-col lg:justify-start items-center gap-4 ">
         <div className="flex flex-col gap-4 justify-center items-center sm:flex-row lg:flex-col w-full">
-          <div className="w-64 flex items-center justify-center rounded-full shadow-lg border-4 border-green-500 p-1">
-            <Image
+          <div className="flex-shrink-0 w-56 h-56 object-contain m-auto rounded-full shadow-lg border-3 border-green-500 p-1 overflow-hidden">
+            <Avatar
               src={
                 photo
                   ? `${photo}?sp=r&st=2024-02-08T16:10:32Z&se=2034-02-09T00:10:32Z&spr=https&sv=2022-11-02&sr=c&sig=m%2B0OpD98j6ZoUyhkBCX1Zotm%2BrwC5Pt2%2FO6bvDQfCJk%3D`
-                  : defailProfilePic
+                  : undefined
               }
-              alt="Imagen del facilitador"
-              width={250}
-              height={250}
-              priority
-              className="rounded-full "
+              alt="Imagen del mentor"
+              className="w-full h-full rounded-full"
             />
           </div>
           <div className="flex flex-col justify-center items-center gap-1 sm:gap-1 w-full px-1">
@@ -95,6 +89,7 @@ const page = async ({ params }: { params: { mentorId: string } }) => {
           </div>
           <Tooltip content="Fecha de nacimiento">
             <div className="text-sm flex gap-1 items-center ">
+              ``
               <div className="w-5 h-5  text-primary-dark">
                 <CalendarIcon />
               </div>
