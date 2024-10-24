@@ -123,11 +123,11 @@ const page = async ({ params }: { params: { mentorId: string } }) => {
       <div className="w-full lg:w-3/4 bg-white rounded-lg p-6 ">
         <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-8">
           <ProfileField label="Cedula de identidad" value={mentor?.id_number} />
-          <ProfileField label="Genero" value={mentor?.gender || 'Not specified'} />
-          <ProfileField label="Profesion" value={mentor?.profession} />
+          <ProfileField label="Género" value={mentor?.gender || 'Not specified'} />
+          <ProfileField label="Profesión" value={mentor?.profession} />
           <ProfileField label="Empleado" value={mentor?.employed ? 'Yes' : 'No'} />
           <ProfileField label="Empresa" value={mentor?.company || 'N/A'} />
-          <ProfileField label="Posicion" value={mentor?.position || 'N/A'} />
+          <ProfileField label="Posición" value={mentor?.position || 'N/A'} />
           <div className="md:col-span-3">
             <ProfileField label="Experiencia laboral" value={mentor?.work_experience} />
           </div>
@@ -141,12 +141,12 @@ const page = async ({ params }: { params: { mentorId: string } }) => {
             <ProfileField label="Otras actividades" value={mentor?.other_activities || 'N/A'} />
           </div>
           <ProfileField
-            label="Habla otro idioma?"
+            label="¿Habla otro idioma?"
             value={mentor?.speaks_other_lang ? 'Yes' : 'No'}
           />
           <ProfileField label="Idioma" value={mentor?.other_lang || 'N/A'} />
           <ProfileField label="Nivel" value={mentor?.lang_level || 'N/A'} />
-          <ProfileField label="Interests" value={mentor?.interests} />
+          <ProfileField label="Intereses" value={mentor?.interests} />
           <ProfileField label="Hobbies" value={mentor?.hobbies} />
           <div className="md:col-span-3">
             <ProfileField
@@ -169,7 +169,7 @@ const page = async ({ params }: { params: { mentorId: string } }) => {
             <ProfileField label="Habilidades y fortalezas" value={mentor?.skills_strengths} />
           </div>
           <div className="md:col-span-3">
-            <ProfileField label="Tecnicas de confianza" value={mentor?.trust_techniques} />
+            <ProfileField label="Técnicas de confianza" value={mentor?.trust_techniques} />
           </div>
           <div className="md:col-span-3">
             <ProfileField label="Ayuda al mentee" value={mentor?.mentee_support} />
@@ -182,16 +182,16 @@ const page = async ({ params }: { params: { mentorId: string } }) => {
             label="Actividades grupales"
             value={mentor?.group_activities ? 'Yes' : 'No'}
           />
-          <ProfileField label="Como se entero del programa" value={mentor?.referral_source} />
+          <ProfileField label="¿Cómo se enteró del programa?" value={mentor?.referral_source} />
           <ProfileField
-            label="Completo la certificacion del IESA"
+            label="¿Completó la certificación del IESA?"
             value={mentor?.iesa_cert ? 'Yes' : 'No'}
           />
           <ProfileField
-            label="Fecha de la certificacion del IESA"
+            label="Fecha de la certificación con el IESA"
             value={mentor?.iesa_cert_date?.toDateString() || 'N/A'}
           />
-          <ProfileField label="Estatus de captacion" value={mentor?.recruitment_status} />
+          <ProfileField label="Estatus de captación" value={mentor?.recruitment_status} />
           <ProfileField label="Observaciones" value={mentor?.recruitment_observation || 'N/A'} />
           <ProfileField label="Estatus" value={mentor?.status} />
         </div>
