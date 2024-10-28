@@ -32,7 +32,7 @@ const FileInput: React.FC<FileInputProps> = ({
       name={name}
       control={control}
       render={({ field }) => (
-        <div className="col-span-2 md:col-span-1 h-fit gap-1 text-sm w-full flex flex-col ">
+        <div className="md:col-span-2 h-fit gap-1 text-sm w-full flex flex-col ">
           <label htmlFor={inputIdentifier}>{label}</label>
           <div className="w-full flex col-span-2 md:col-span-1 h-fit">
             <Button

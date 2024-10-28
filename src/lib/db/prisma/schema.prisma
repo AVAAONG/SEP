@@ -493,7 +493,7 @@ model Mentor {
   employed                Boolean
   company                 String?
   position                String?
-  work_experience         String
+  work_experience         String?
   related_experience      String?
   chapter                 String
   other_activities        String?
@@ -508,11 +508,11 @@ model Mentor {
   prev_mentor_exp         Boolean
   prev_mentor_desc        String?
   skills_strengths        String
-  trust_techniques        String
-  mentee_support          String
+  trust_techniques        String?
+  mentee_support          String?
   time_commitment         String
   ideal_mentee            String
-  group_activities        Boolean
+  group_activities        Boolean?
   instagram               String?
   linkedin                String?
   referral_source         String

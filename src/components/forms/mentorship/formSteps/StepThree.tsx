@@ -2,8 +2,7 @@ import InputField from '@/components/fields/InputFormField';
 import SelectFormField from '@/components/fields/SelectFormField';
 import TextAreaFormField from '@/components/fields/TextAreaFormField';
 import { useWatch } from 'react-hook-form';
-const StepThree = ({  formControl }: { formControl: any }) => {
-
+const StepThree = ({ formControl }: { formControl: any }) => {
   const prevExperience = useWatch({
     control: formControl,
     name: 'prev_mentor_exp',
@@ -31,7 +30,7 @@ const StepThree = ({  formControl }: { formControl: any }) => {
           name="hobbies"
           placeholder="Lectura, Senderismo"
         />
-        <SelectFormField
+        {/* <SelectFormField
           isRequired
           label="¿Estás dispuesto a participar en actividades, eventos o talleres organizados por la AVAA?"
           name="group_activities"
@@ -39,19 +38,13 @@ const StepThree = ({  formControl }: { formControl: any }) => {
             { label: 'Sí', value: 'true' },
             { label: 'No', value: 'false' },
           ]}
-        />
+        /> */}
         <InputField
           isRequired
           label="¿Cuánto tiempo estimas dedicar al desarrollo del programa de mentoría?"
           type="text"
           name="time_commitment"
           placeholder="Ej: 2 horas semanales"
-        />
-        <TextAreaFormField
-          isRequired
-          className="!col-span-1 md:!col-span-2"
-          label="¿Por qué deseas ser Mentor en la AVAA?"
-          name="mentor_reason"
         />
         <SelectFormField
           isRequired
@@ -63,32 +56,39 @@ const StepThree = ({  formControl }: { formControl: any }) => {
           ]}
         />
         <TextAreaFormField
-                  isDisabled={prevExperience === 'false'}
-                  isRequired={prevExperience === 'true'}
+          isDisabled={prevExperience === 'false'}
+          isRequired={prevExperience === 'true'}
           className="!col-span-1 md:!col-span-2"
           label="Comenta brevemente tu experiencia como mentor"
           name="prev_mentor_desc"
         />
         <TextAreaFormField
-        isRequired
+          isRequired
+          className="!col-span-1 md:!col-span-2"
+          label="¿Por qué deseas ser Mentor en la AVAA?"
+          name="mentor_reason"
+        />
+
+        <TextAreaFormField
+          isRequired
           className="!col-span-1 md:!col-span-2"
           label="¿Qué habilidades y fortalezas posees que te hacen un buen candidato para ser mentor?"
           name="skills_strengths"
         />
-        <TextAreaFormField
-        isRequired
+        {/* <TextAreaFormField
+          isRequired
           className="!col-span-1 md:!col-span-2"
           label="¿Qué técnicas utilizas para construir relaciones de confianza y respeto con otras personas?"
           name="trust_techniques"
-        />
-        <TextAreaFormField
-        isRequired
+        /> */}
+        {/* <TextAreaFormField
+          isRequired
           className="!col-span-1 md:!col-span-2"
           label="¿Qué tipo de apoyo u orientación esperas brindar a tu mentee?"
           name="mentee_support"
-        />
+        /> */}
         <TextAreaFormField
-        isRequired
+          isRequired
           label="¿Cómo describirías a tu mentee ideal?"
           name="ideal_mentee"
           className="!col-span-1 md:!col-span-2"

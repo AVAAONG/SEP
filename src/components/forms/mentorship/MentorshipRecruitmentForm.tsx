@@ -110,13 +110,9 @@ const MentorshipRecruitmentForm = () => {
           'employed',
           'company',
           'position',
-          'work_experience',
-          'related_experience',
-          'other_activities',
           'cv',
           'speaks_other_lang',
           'other_lang',
-          'lang_level',
         ];
       case 3:
         return [
@@ -126,11 +122,8 @@ const MentorshipRecruitmentForm = () => {
           'prev_mentor_exp',
           'prev_mentor_desc',
           'skills_strengths',
-          'trust_techniques',
-          'mentee_support',
           'time_commitment',
           'ideal_mentee',
-          'group_activities',
         ];
       case 4:
         return ['instagram', 'linkedin', 'referral_source'];

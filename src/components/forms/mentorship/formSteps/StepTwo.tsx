@@ -1,17 +1,14 @@
 import InputField from '@/components/fields/InputFormField';
 import SelectFormField from '@/components/fields/SelectFormField';
-import TextAreaFormField from '@/components/fields/TextAreaFormField';
 import { useWatch } from 'react-hook-form';
 import FileInput from '../../common/FileInput';
 
-const StepTwo = ({  formControl }: { formControl: any }) => {
-
+const StepTwo = ({ formControl }: { formControl: any }) => {
   const employed = useWatch({
     control: formControl,
     name: 'employed',
   });
 
-  
   const speakOtherLang = useWatch({
     control: formControl,
     name: 'speaks_other_lang',
@@ -24,7 +21,7 @@ const StepTwo = ({  formControl }: { formControl: any }) => {
         <p className="text-muted-foreground">Por favor, completa todos los campos requeridos</p>
         <div className="w-full h-0.5 bg-primary-light opacity-40" />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-4">
         <InputField
           isRequired
           label="Profesión"
@@ -47,7 +44,6 @@ const StepTwo = ({  formControl }: { formControl: any }) => {
           name="company"
           isDisabled={employed === 'false'}
           isRequired={employed === 'true'}
-
           placeholder="Empresa XYZ"
         />
         <InputField
@@ -56,30 +52,9 @@ const StepTwo = ({  formControl }: { formControl: any }) => {
           name="position"
           isDisabled={employed === 'false'}
           isRequired={employed === 'true'}
-
           placeholder="Gerente de Proyectos"
         />
-        <TextAreaFormField
-        isRequired
-          className="!col-span-1 md:!col-span-2"
-          label="Experiencia laboral en tu área de ocupación"
-          name="work_experience"
-        />
-        <TextAreaFormField
-        isRequired
-          className="!col-span-1 md:!col-span-2"
-          label="Formación o experiencia en psicología, educación, liderazgo, comunicación o emprendimiento"
-          name="related_experience"
-        />
-        <TextAreaFormField
-        isRequired
-          className="!col-span-1 md:!col-span-2"
-          label="Otras actividades u oficios"
-          name="other_activities"
-          placeholder="Voluntariado, proyectos personales, entre otros."
-        />
         <FileInput
-        
           name="cv"
           label="Resumen de CV*"
           existingFileUrl={undefined}
@@ -101,19 +76,6 @@ const StepTwo = ({  formControl }: { formControl: any }) => {
           isDisabled={speakOtherLang === 'false'}
           name="other_lang"
           placeholder="Inglés"
-        />
-        <SelectFormField
-        // isRequired
-          label="Nivel de idioma"
-          name="lang_level"
-          isDisabled={speakOtherLang === 'false'}
-          isRequired={speakOtherLang === 'true'}
-
-          selectItems={[
-            { label: 'Básico', value: 'BASIC' },
-            { label: 'Intermedio', value: 'INTERMEDIATE' },
-            { label: 'Avanzado', value: 'ADVANCED' },
-          ]}
         />
       </div>
     </>
