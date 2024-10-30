@@ -53,8 +53,8 @@ const page = async ({
       <AdminStats
         stats={[
           {
-            name: `Becarios activos`,
-            stat: activeScholars || 0,
+            name: `Becarios`,
+            stat: activeScholars + scholarsPropertiesCount.condition.TO_BE_ALUMNI || 0,
             changeType: 'increase',
             comparationText: null,
             tooltipText: null,
@@ -71,7 +71,7 @@ const page = async ({
             name: `Becarios en probatorio I`,
             stat: scholarsPropertiesCount.status.PROBATION_I || 0,
             changeType: 'decrease',
-            comparationText: `De ${activeScholars || 0} becarios activos`,
+            comparationText: `De ${activeScholars + scholarsPropertiesCount.condition.TO_BE_ALUMNI || 0} becarios`,
             comparation: probationI,
             tooltipText: `${probationI}% de los becarios se encuentran en Probatorio 1`,
           },
@@ -79,7 +79,7 @@ const page = async ({
             name: `Becarios en probatorio II`,
             stat: scholarsPropertiesCount.status.PROBATION_II || 0,
             changeType: 'decrease',
-            comparationText: `De ${activeScholars || 0} becarios activos`,
+            comparationText: `De ${activeScholars + scholarsPropertiesCount.condition.TO_BE_ALUMNI || 0} becarios`,
             comparation: probationII,
             tooltipText: `${probationII}% de los becarios se encuentran en Probatorio 2`,
           },
