@@ -65,7 +65,7 @@ export const endScholarProbation = async (probationId: string, scholarId: string
 
 };
 
-export const updateProbation = async (probationId: string, probationInfoToUpdate: Prisma.ProbationUpdateInput) => {
+export const updateProbation = async (probationId: string, probationInfoToUpdate: Prisma.ProbationUpdateInput, scholarId: string) => {
     await prisma.probation.update({
         where: {
             id: probationId

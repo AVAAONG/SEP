@@ -31,7 +31,7 @@ interface ProbationFormProps {
   };
   probationKind: ScholarStatus;
   scholarId: string;
-  probation?: Probation
+  probation?: Probation;
 }
 
 const ProbationForm: React.FC<ProbationFormProps> = ({
@@ -51,8 +51,10 @@ const ProbationForm: React.FC<ProbationFormProps> = ({
     resolver: zodResolver(probationFormSchema),
     defaultValues: {
       ...probation,
-      next_meeting: probation?.next_meeting ? formatDateTimeToDisplayInput(probation?.next_meeting) : undefined
-    }
+      next_meeting: probation?.next_meeting
+        ? formatDateTimeToDisplayInput(probation?.next_meeting)
+        : undefined,
+    },
   });
   const handleFormSubmit = async (
     data: z.infer<typeof probationFormSchema>,
@@ -66,14 +68,13 @@ const ProbationForm: React.FC<ProbationFormProps> = ({
     };
 
     if (probation) {
-      await updateProbation(probation.id, probationData)
-    }
-    else {
+      await updateProbation(probation.id, probationData, scholarId);
+    } else {
       await createProbation(scholarId, probationData);
     }
     await revalidateSpecificPath(`/admin/becarios/${scholarId}`);
     reset();
-    formAction.onClose()
+    formAction.onClose();
   };
 
   return (
