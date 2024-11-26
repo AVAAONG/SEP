@@ -29,7 +29,7 @@ export const countScholarGeneralProperties = (scholars: any[]) => {
 
 export const countScholarCollageProperties = (scholars: any[]) => {
     const counts = {
-        studyArea: {} as Record<"Arquitectura y urbanismo" | "Ciencias de la salud" | "Humanidades y educación" | "Ciencias jurídicas y políticas" | "Ciencias sociales" | "Ciencias, tecnología, ingeniería y matemáticas" | "ERROR", number>,
+        studyArea: {} as Record<"Arquitectura y urbanismo" | "Ciencias de la salud" | "Humanidades y educación" | "Ciencias jurídicas y políticas" | "Ciencias sociales" | "Ciencias, tecnología, ingeniería y matemáticas" | "ERROR" | "STEM" | "Otra", number>,
         kindOfCollage: {} as Record<"Pública" | "Privada" | "ERROR", number>,
         studyRegimen: {} as Record<"Anual" | "Semestral" | "Trimestral" | "Cuatrimestral" | "ERROR", number>,
     };
@@ -38,7 +38,6 @@ export const countScholarCollageProperties = (scholars: any[]) => {
         const scholarStudyArea = parseStudyAreaFromDatabase(scholar.collage_information[0]?.study_area);
         const scholarKindOfCollage = parseKindOfCollageFromDatabase(scholar.collage_information[0]?.kind_of_collage!);
         const scholarStudyRegimen = parseStudiRegimeFromDatabase(scholar.collage_information[0]?.study_regime!);
-        console.log(scholar.collage_information[0]?.kind_of_collage!)
         counts.studyArea[scholarStudyArea] = (counts.studyArea[scholarStudyArea] || 0) + 1;
         counts.kindOfCollage[scholarKindOfCollage] = (counts.kindOfCollage[scholarKindOfCollage] || 0) + 1;
         counts.studyRegimen[scholarStudyRegimen] = (counts.studyRegimen[scholarStudyRegimen] || 0) + 1;

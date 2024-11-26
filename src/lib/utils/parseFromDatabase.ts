@@ -14,6 +14,8 @@ export const parseStudyAreaFromDatabase = (studyArea: StudyArea | null | undefin
       return 'Ciencias sociales';
     case 'STEM':
       return 'STEM'; // let the acronym in english as it is more common in AVAA
+    case 'OTHER':
+      return 'Otra'; // let the acronym in english as it is more common in AVAA
     default:
       return 'ERROR';
   }
