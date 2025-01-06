@@ -252,17 +252,9 @@ export const getActivitiesByYear = async (
   const chats = allChats.filter((chat) =>
     chat.start_dates.some((date) => date >= yearStart && date <= yearEnd)
   );
-  const currentDate = new Date();
 
   const volunteers = allVolunteers.filter((volunteer) =>
-    volunteer.kind_of_volunteer === 'EXTERNAL' ? volunteer.start_dates.some((date) => {
-      const startDate = new Date(date);
-      return startDate < currentDate;
-    }) :
-      volunteer.start_dates.some((date) => {
-        const startDate = new Date(date);
-        return startDate >= yearStart && startDate <= yearEnd;
-      })
+    volunteer.start_dates.some((date) => date >= yearStart && date <= yearEnd)
   );
   return [workshops, chats, volunteers];
 };
