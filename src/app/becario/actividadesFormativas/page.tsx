@@ -6,21 +6,19 @@ import scholarWorkshopAttendanceColumns from '@/components/table/columns/scholar
 import createScholarWorkshopAttendanceForTable from '@/components/table/columns/scholar/activityAttendance/workshops/formater';
 import scholarWorkshopAttendanceSearchOptions from '@/components/table/columns/scholar/activityAttendance/workshops/searchOptions';
 import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
-import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
+import { getServerSession } from '@/lib/auth/authOptions';
 import { getWorkhsopsByScholar } from '@/lib/db/utils/Workshops';
 import { countWorkshopProperties, formatCountsForCharts } from '@/lib/utils/activityFilters';
 import { filterActivitiesBySearchParamsPeriod } from '@/lib/utils/datePickerFilters';
 import { getAttendedWorkshops } from '@/lib/utils/getAttendedActivities';
-import { getServerSession } from 'next-auth';
-
 const page = async ({
   searchParams,
 }: {
   searchParams?: { year: string; month: string; quarter: string };
 }) => {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession();
   if (!session) return null;
-  const workshopsDbList = await getWorkhsopsByScholar(session?.scholarId);
+  const workshopsDbList = await getWorkhsopsByScholar(session?.id);
   const workshops = (await filterActivitiesBySearchParamsPeriod(
     workshopsDbList,
     searchParams

@@ -31,6 +31,20 @@ const nextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: '/signin/becario',
+  //       destination: 'signin',
+  //       permanent: true, // Use true for a 301 redirect (SEO friendly), false for 302
+  //     },
+  //     {
+  //       source: '/signin/admin',
+  //       destination: 'signin',
+  //       permanent: true, // Use true for a 301 redirect (SEO friendly), false for 302
+  //     },
+  //   ];
+  // }
 };
 
 module.exports = nextConfig;

@@ -1,13 +1,12 @@
 import ChatForm from '@/components/admin/forms/chat/form';
 import ScheduledCardsWrap from '@/components/scheduledActivitiesCard/ScheduledCardsWrap';
-import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
+import { getServerSession } from '@/lib/auth/authOptions';
 import { getScheduleChatsByScholar } from '@/lib/db/utils/chats';
-import { getServerSession } from 'next-auth';
 export const dynamic = 'force-dynamic';
 const Page = async ({ searchParams }: { searchParams: { activityToEdit: string | null } }) => {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession();
   if (!session) return;
-  const scheduledChats = await getScheduleChatsByScholar(session?.scholarId);
+  const scheduledChats = await getScheduleChatsByScholar(session?.id);
 
   const chat = scheduledChats.find((chat) => chat.id === searchParams.activityToEdit);
   return (
@@ -25,7 +24,7 @@ const Page = async ({ searchParams }: { searchParams: { activityToEdit: string |
             showSend={false}
             showEdit={chat ? true : false}
             showSchedule={chat ? false : true}
-            defaultSpeakerId={session?.scholarId}
+            defaultSpeakerId={session?.id}
           />
         </div>
       </div>

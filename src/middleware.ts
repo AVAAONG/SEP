@@ -1,76 +1,51 @@
-/**
- * @file Middleware function to check if user is authenticated or not for admin routes and scholar routes
- * @author Kevin Bravo (kevinbravo.me)
- *
- * @summary This file export a middleware function to allow access to admin routes and scholar routes only if the user is authenticated.
- * @remarks When a request is made to a route that starts with /admin or /scholar the middleware function is called
- * and it checks if the user is authenticated or not,
- * if the user is authenticated then the request is allowed to continue to the route handler,
- * if the user is not authenticated then the request is redirected to the login page
- * @remarks depending on the rute that was used to make the request the user is redirected to the corresponding login page
- */
+import { getToken } from 'next-auth/jwt';
+import { NextRequest, NextResponse } from 'next/server';
 
-import { NextRequestWithAuth, withAuth } from 'next-auth/middleware';
-import { headers } from 'next/headers';
-import { NextResponse } from 'next/server';
+interface Token {
+  role?: string;
+}
 
+const ACCESS_DENIED_PATH = '/accessDenied';
 
+export async function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET }) as Token | null;
+  // Redirect to /signin if no token is present
+  if (!token && pathname !== '/signin') {
+    return NextResponse.redirect(new URL('/signin', req.url));
+  }
+  if (pathname === '/') return NextResponse.redirect(new URL('/signin', req.url))
 
-export default async function wrapMiddlewareFunction(req: NextRequestWithAuth, res: Response) {
-  let signinPath = '';
-  if (req.nextUrl.pathname.startsWith('/becario')) {
-    signinPath = 'becario';
-  } else if (req.nextUrl.pathname.startsWith('/admin')) {
-    signinPath = 'admin';
-
+  // Protect routes
+  if (pathname.startsWith('/admin')) {
+    if (!token || token.role !== 'ADMIN') {
+      return NextResponse.redirect(new URL(ACCESS_DENIED_PATH, req.url));
+    }
   }
 
-  ///@ts-expect-error
-  return withAuth(
-    async (request: NextRequestWithAuth) => {
-      const { token } = request.nextauth;
-      const { pathname } = request.nextUrl;
-      const host = headers().get('host');
-
-      const isAdminRoute = pathname.startsWith('/admin');
-      const isScholarRoute = pathname.startsWith('/becario');
-
-      if (token?.kind_of_user === 'ADMIN' && isAdminRoute) {
-
-        const response = await fetch(`http://${host}/admin/api/roles?adminId=${token.id}`);
-        const { admin } = await response.json();
-        const { chapter } = admin;
-        const rr = NextResponse.next();
-
-        rr.cookies.set({
-          name: 'chapter',
-          value: chapter.id,
-          maxAge: 60 * 60 * 24 * 7, // 1 week
-          path: '/',
-        });
-        return rr; // Return the response with the set cookie
-
-      }
-
-      if (isScholarRoute && token?.kind_of_user !== 'SCHOLAR') {
-        return NextResponse.rewrite(new URL('/accessDenied', request.url));
-      }
-      if (isAdminRoute && token?.kind_of_user !== 'ADMIN') {
-        return NextResponse.rewrite(new URL('/accessDenied', request.url));
-      }
-      return NextResponse.next();
-    },
-    {
-      pages: {
-        signIn: `/signin/${signinPath}`,
-      },
+  if (pathname.startsWith('/becario')) {
+    if (!token || (token.role !== 'SCHOLAR')) {
+      return NextResponse.redirect(new URL(ACCESS_DENIED_PATH, req.url));
     }
-  )(req);
+  }
+
+  // Handle post-authentication redirects
+  if (pathname === '/signin') {
+    if (token) {
+      if (token.role === 'ADMIN') {
+        return NextResponse.redirect(new URL('/admin', req.url));
+      }
+      else if (token.role === 'SCHOLAR') {
+        return NextResponse.redirect(new URL('/becario/panel', req.url));
+      }
+      else {
+        return NextResponse.redirect(new URL(ACCESS_DENIED_PATH, req.url));
+      }
+    }
+  }
+  return NextResponse.next();
 }
-/**
- * @description it export the config object to be used by the middleware function
- * @see https://nextjs.org/docs/pages/building-your-application/routing/middleware for more information
- */
+
 export const config = {
-  matcher: ['/admin/:path*', '/becario/:path*'],
+  matcher: ['/admin/:path*', '/becario/:path*', '/signin', '/'],
 };

@@ -1,13 +1,11 @@
 import TogleTab from '@/components/TogleTab';
 
-import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
-
 import { prisma } from '@/lib/db/utils/prisma';
 
 import formatActivitiesForScholarEnrollementPage from '@/components/scholar/activities/enrollment/lib/format';
 import AcvititiesView from '@/components/scholar/activitiesToEnrollView';
+import { getServerSession } from '@/lib/auth/authOptions';
 import { getSentActivitiesWhereScholarIsNotEnrolled } from '@/lib/db/utils/Workshops';
-import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 /**
  * Renders a page component with the calendar of activities
@@ -19,10 +17,10 @@ const page = async ({
   searchParams?: { selectedKey: 'calendar' | 'activities' };
 }) => {
   const selectedKey = searchParams?.selectedKey || null;
-  const sesion = await getServerSession(authOptions);
+  const sesion = await getServerSession();
   const scholar = await prisma.scholar.findUnique({
     where: {
-      id: sesion?.scholarId!,
+      id: sesion?.id!,
     },
     select: {
       first_names: true,
@@ -38,14 +36,14 @@ const page = async ({
 
   if (
     !sesion ||
-    scholarCondition === 'ALUMNI' ||
+    // scholarCondition === 'ALUMNI' ||
     scholarCondition === 'RESIGNATION' ||
     scholarCondition === 'WITHDRAWAL'
   ) {
     redirect('/accessDenied');
   } else {
     const scholarNames = `${scholar?.first_names.split(' ')[0]}`;
-    const activities = await getSentActivitiesWhereScholarIsNotEnrolled(sesion?.scholarId);
+    const activities = await getSentActivitiesWhereScholarIsNotEnrolled(sesion?.id);
     const {
       activitiesForCalendar,
       workshopFormatedActivities,
@@ -82,9 +80,9 @@ const page = async ({
           volunteerToEnroll={volunteerFormatedActivities}
           workshopsToEnroll={workshopFormatedActivities}
           scholar={{
-            id: sesion?.scholarId!,
+            id: sesion?.id!,
             name: scholarNames,
-            email: sesion?.user?.email!,
+            email: sesion?.email!,
           }}
         />
       </div>

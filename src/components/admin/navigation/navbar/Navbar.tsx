@@ -6,15 +6,12 @@ import { sidebarAtom } from '@/lib/state/mainState';
 import { useAtom } from 'jotai';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
-import useSWR from 'swr';
 import { MenuIcon } from '../../../../../public/svgs/svgs';
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Navbar = ({ children }) => {
   const [isOpen, setSidebar] = useAtom(sidebarAtom);
   const { data: session } = useSession();
   const setUpSidebar = () => (isOpen ? setSidebar(false) : setSidebar(true));
-  useSWR(`/api/setAuthCookie?cookieValue=admin`, fetcher);
   const [image, setImage] = useState<string | null | undefined>(' ');
 
   useEffect(() => {

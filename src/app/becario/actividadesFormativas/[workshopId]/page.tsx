@@ -8,16 +8,14 @@ import {
   IWorkshopAttendance,
   formatScholarDataForScholarAttendanceInfoNoPrivTable,
 } from '@/components/table/columns/scholars/activityAttendanceWithNoPrivilege/formater';
-import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
+import { getServerSession } from '@/lib/auth/authOptions';
 import { WorkshopWithSpeaker } from '@/lib/db/types';
 import { getWorkshop } from '@/lib/db/utils/Workshops';
 import { getNotEnrolledScholarsInWorkshop } from '@/lib/db/utils/users';
-import { getServerSession } from 'next-auth';
 import { notFound } from 'next/navigation';
 import shortUUID from 'short-uuid';
-
 const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => {
-  const se = await getServerSession(authOptions);
+  const se = await getServerSession();
   const workshopId = params.workshopId || null;
 
   if (!workshopId) return null;
@@ -28,7 +26,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
   const scholarsAttendance = workshop?.scholar_attendance;
   const scholars = scholarsAttendance.map((a) => a.scholar.scholar);
   const attendance = scholarsAttendance.find(
-    (a) => a.scholar.scholar.id === se?.scholarId
+    (a) => a.scholar.scholar.id === se?.id
   ) as IWorkshopAttendance;
   const scholarAttendanceDataForTable = await formatScholarDataForScholarAttendanceInfoNoPrivTable(
     scholars,

@@ -1,14 +1,12 @@
 import ScholarCVAInformation from '@/components/forms/scholarCVAInfo';
 import CvaModulesTable from '@/components/table/columns/scholar/cva/ScholarCVAModulesTable';
-import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
+import { getServerSession } from '@/lib/auth/authOptions';
 import { getBlobFile } from '@/lib/azure/azure';
 import { getScholarCvaInformation } from '@/lib/db/utils/cva';
 import { parseCvaScheduleFromDatabase, parseModalityFromDatabase } from '@/lib/utils2';
-import { getServerSession } from 'next-auth';
-
 const page = async () => {
-  const session = await getServerSession(authOptions);
-  const cvaInformation = await getScholarCvaInformation(session?.scholarId!);
+  const session = await getServerSession();
+  const cvaInformation = await getScholarCvaInformation(session.id);
   const cvaCertificate = await getBlobFile(cvaInformation?.certificate);
   const cvaModules = await Promise.all(
     cvaInformation?.modules.map(async (module) => {
@@ -28,7 +26,7 @@ const page = async () => {
         <ScholarCVAInformation
           scholarCvaInformation={cvaInformation}
           certificateUrl={cvaCertificate}
-          scholarId={session?.scholarId!}
+          scholarId={session.id}
         />
       </div>
       <div className="w-full">
@@ -36,7 +34,6 @@ const page = async () => {
           cvaInformationId={cvaInformation?.id}
           cvaModulesForTable={cvaModules}
           cvaModuleForUpdate={cvaInformation?.modules}
-
         />
       </div>
     </div>

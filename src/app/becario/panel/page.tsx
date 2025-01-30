@@ -1,27 +1,23 @@
-import NextEventsList from '@/components/NextEventsList';
 import Calendar from '@/components/calendar/Calendar';
 import formatActivitiesForCalendarPanel from '@/components/calendar/utils';
 import PanelCard, { PanelCardProps } from '@/components/commons/PanelCard';
-import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
+import NextEventsList from '@/components/NextEventsList';
+import { getServerSession } from '@/lib/auth/authOptions';
 import {
   getActivitiesWhenScholarItsEnrolled,
   getScholarDoneActivitiesCount,
 } from '@/lib/db/utils/users';
-import { getServerSession } from 'next-auth';
-import { redirect } from 'next/navigation';
+import { chatIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs';
 import React from 'react';
-import { chatIcon, volunterIcon, workshopIcon } from '../../../../public/svgs/svgs';
 
 const page = async () => {
   const actualYear = new Date().getFullYear();
-  const session = await getServerSession(authOptions);
-  if (!session) return redirect('accessDenied');
-  const id = session?.scholarId;
+  const session = await getServerSession();
   const name = session?.user?.name?.split(' ')[0];
   const [doneWorkshopsCount, doneChatsCount, doneVolunteerCount] =
-    await getScholarDoneActivitiesCount(id, actualYear);
+    await getScholarDoneActivitiesCount(session.id, actualYear);
 
-  const enrolledActivities = await getActivitiesWhenScholarItsEnrolled(id);
+  const enrolledActivities = await getActivitiesWhenScholarItsEnrolled(session.id);
 
   const events = formatActivitiesForCalendarPanel(enrolledActivities);
   const cardContent: PanelCardProps[] = [

@@ -1,42 +1,13 @@
-/**
- * @file This file renders a button that allows user to sign in with Google.
- * @author Kevin Bravo (kevinbravo.me)
- */
-
 'use client';
-import handler from '@/lib/serverAction';
 import { Button } from '@nextui-org/react';
 import { signIn } from 'next-auth/react';
 import { toast } from 'react-toastify';
 
-interface GoogleSignInButtonProps {
-  providerId: string;
-  callbackUrl: string;
-  cookieValue: 'admin' | 'SCHOLAR';
-}
-
-/**
- *  Renders a button that allows user to sign in with Google.
- * @param param0 - The props of the component.
- * @param param0.providerId - The provider ID of the auth provider to use.
- * @param param0.callbackUrl - The URL to redirect to after a successful sign in or sign up.
- * @param param0.cookieValue - The value of the cookie to set.
- * @remarks This component can be used to sign in with Google in by any user.
- * Depending on the props, the user will be redirected to the callback URL with a cookie value.
- * The cookie value is used to determine the role of the user, depending on the role, the user will use a different oauth configuration,
- * and the callback URL is used to redirect the user to the correct page.
- * @returns A button that allows user to sign in with Google.
- */
-const GoogleSignInButton = ({ providerId, callbackUrl, cookieValue }: GoogleSignInButtonProps) => {
-  const handleSignIn = async () => {
-    await handler(cookieValue);
-    return signIn(providerId, { callbackUrl });
-  };
-
+const GoogleSignInButton = () => {
   return (
     <Button
       onClick={async () =>
-        toast.promise(handleSignIn(), {
+        toast.promise(signIn('userGoogle'), {
           pending: 'Realizando analisis de seguridad.',
           success: 'Analisis de seguridad completado.',
           error: 'Ocurrio un error',

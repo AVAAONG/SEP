@@ -1,5 +1,4 @@
 'use client';
-import useSWR from 'swr';
 
 /**
  * @file  This file renders the sign-in page for the admin role.
@@ -10,7 +9,6 @@ import useSWR from 'swr';
 
 import Image from 'next/image';
 import React from 'react';
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 interface AsideProps {
   cookieValue: 'admin' | 'SCHOLAR';
@@ -25,8 +23,6 @@ interface AsideProps {
  *
  */
 const Aside: React.FC<AsideProps> = ({ cookieValue }) => {
-  useSWR(`/api/setAuthCookie?cookieValue=${cookieValue}`, fetcher);
-
   return (
     <section className="flex items-center w-full px-4 mx-auto md:px-0 md:items-center md:w-1/3">
       <div className="flex flex-col items-center w-full max-w-sm py-4 mx-auto md:mx-0 my-auto min-w-min relative md:-left-2.5 pt-4 transform origin-left md:gap-44">

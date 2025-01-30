@@ -4,14 +4,12 @@ import GeneralInformation from '@/components/scholar/config/GeneralInformation';
 import JobInformationForm from '@/components/scholar/config/JobInformation';
 import ProfilePic from '@/components/scholar/config/ProfilePic';
 import SocialMedia from '@/components/scholar/config/SocialMedia';
-import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
+import { getServerSession } from '@/lib/auth/authOptions';
 import { getBlobImage } from '@/lib/azure/azure';
 import { getScholar } from '@/lib/db/utils/users';
-import { getServerSession } from 'next-auth';
-
 const page = async () => {
-  const session = await getServerSession(authOptions);
-  const scholarId = session?.scholarId!;
+  const session = await getServerSession();
+  const scholarId = session?.id!;
   const scholar = await getScholar(scholarId);
   const image = await getBlobImage(scholar?.photo);
   const classNames =

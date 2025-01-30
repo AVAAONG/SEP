@@ -5,21 +5,19 @@ import Table from '@/components/table/Table';
 import scholarVolunteerAttendanceColumns from '@/components/table/columns/scholar/activityAttendance/volunteer/columns';
 import createScholarVolunteerAttendanceForTable from '@/components/table/columns/scholar/activityAttendance/volunteer/formater';
 import scholarVolunteerAttendanceSearchOptions from '@/components/table/columns/scholar/activityAttendance/volunteer/searchOptions';
-import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
+import { getServerSession } from '@/lib/auth/authOptions';
 import { VolunteerWithAllData } from '@/lib/db/types';
 import { getVolunteersByScholar } from '@/lib/db/utils/Workshops';
 import { countVolunteerProperties, formatCountsForCharts } from '@/lib/utils/activityFilters';
 import { filterActivitiesBySearchParamsPeriod } from '@/lib/utils/datePickerFilters';
 import { getApprovedAndAttendedVolunteers } from '@/lib/utils/getAttendedActivities';
-import { getServerSession } from 'next-auth';
-
 const page = async ({
   searchParams,
 }: {
   searchParams?: { year: string; month: string; quarter: string };
 }) => {
-  const session = await getServerSession(authOptions);
-  const volunteerDbList = await getVolunteersByScholar(session?.scholarId!);
+  const session = await getServerSession();
+  const volunteerDbList = await getVolunteersByScholar(session?.id!);
   const { externalVolunteerHours, internalVolunteerHours, totalVolunteerHours } =
     getApprovedAndAttendedVolunteers(volunteerDbList);
   const volunteers = (await filterActivitiesBySearchParamsPeriod(

@@ -61,11 +61,17 @@ const page = () => {
       status: 'PENDING',
     };
     if (!sesion.data?.scholarId) throw new Error('No se encontro el id del becario');
-    const externalVolunteer = await createExternalVolunteer(volunteerData, sesion.data?.scholarId, data.asigned_hours);
+    const externalVolunteer = await createExternalVolunteer(
+      volunteerData,
+      sesion.data?.scholarId,
+      data.asigned_hours
+    );
     reset(undefined);
     setSelectedDocument(null);
     router.push(`/becario/voluntariado/${externalVolunteer.id}`);
   };
+  console.log(sesion);
+
   return (
     <section className="flex flex-col md:px-12 justify-start items-center w-full gap-4">
       <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white mb-4">

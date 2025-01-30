@@ -11,17 +11,15 @@ import {
   IChatAttendance,
   formatScholarDataForScholarAttendanceInfoNoPrivTable,
 } from '@/components/table/columns/scholars/activityAttendanceWithNoPrivilege/formater';
-import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
+import { getServerSession } from '@/lib/auth/authOptions';
 import { ChatWithSpeaker } from '@/lib/db/types';
 import { getChat } from '@/lib/db/utils/chats';
 import { getNotEnrolledScholarsInChat } from '@/lib/db/utils/users';
 import { formatScholarDataForAttendanceTable } from '@/lib/tableUtils';
-import { getServerSession } from 'next-auth';
 import { notFound } from 'next/navigation';
 import shortUUID from 'short-uuid';
-
 const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
-  const se = await getServerSession(authOptions);
+  const se = await getServerSession();
   const chatId = params.chatId || null;
   if (!chatId) return null;
   const chat = await getChat(chatId);
@@ -33,7 +31,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
   const scholars = scholarsAttendance.map((a) => a.scholar.scholar);
 
   const attendance = scholarsAttendance.find(
-    (a) => a.scholar.scholar.id === se?.scholarId
+    (a) => a.scholar.scholar.id === se?.id
   ) as IChatAttendance;
   const scholarAttendanceDataForTable = await formatScholarDataForScholarAttendanceInfoNoPrivTable(
     scholars,
@@ -44,8 +42,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
     chat?.scholar_attendance ? chat.scholar_attendance : []
   );
 
-  const isTheSpeaker =
-    chat?.speaker?.[0]?.id === se?.scholarId || chat.speaker?.[1]?.id === se?.scholarId;
+  const isTheSpeaker = chat?.speaker?.[0]?.id === se?.id || chat.speaker?.[1]?.id === se?.id;
 
   const scholarAttendance = isTheSpeaker
     ? 'SPEAKER'

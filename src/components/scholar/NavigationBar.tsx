@@ -19,7 +19,6 @@ import { signOut } from 'next-auth/react';
 import { MenuIcon } from 'public/svgs/svgs';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import useSWR from 'swr';
 import BasicModal from '../BasicModal';
 import ScholarStatusIndicator from '../ScholarStatus';
 import ThemeToggleButton from './NavigationBar/ThemeToggleButton';
@@ -27,10 +26,9 @@ interface NavigationBarProps {
   image: string | null | undefined;
   name: string | null | undefined;
   email: string | null | undefined;
-  scholarStatus: ScholarStatus
+  scholarStatus: ScholarStatus;
   scholarId: string | null | undefined;
 }
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const NavigationBar = ({ image, name, email, scholarId, scholarStatus }: NavigationBarProps) => {
   const [isSidebarOpen, setSidebarOpen] = useAtom(scholarSidebarAtom);
   const [programName, setProgramName] = useState('');
@@ -39,7 +37,6 @@ const NavigationBar = ({ image, name, email, scholarId, scholarStatus }: Navigat
   const cvaDesincorporationModal = useDisclosure();
   const programProof = useDisclosure();
   const [selected, setSelected] = useState<KindOfCard | undefined>();
-  useSWR(`/api/setAuthCookie?cookieValue=SCHOLAR`, fetcher);
   return (
     <nav className="bg-gray-50  px-4 py-2 dark:bg-black  left-0 right-0 top-0 z-30">
       <div
@@ -57,15 +54,16 @@ const NavigationBar = ({ image, name, email, scholarId, scholarStatus }: Navigat
           </button>
         </div>
         <div className="flex gap-4 md:gap-8 items-center justify-start">
-          <ScholarStatusIndicator scholarData={
-            {
+          <ScholarStatusIndicator
+            scholarData={{
               dni: '',
               firstName: '',
               status: scholarStatus,
               id: '',
-              surNames: ''
-            }
-          } isAdmin={false} />
+              surNames: '',
+            }}
+            isAdmin={false}
+          />
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
               <Button variant="light" color="success">

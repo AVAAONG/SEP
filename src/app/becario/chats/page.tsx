@@ -1,5 +1,4 @@
 import { DonutChartComponent } from '@/components/charts';
-import DateSelector from '@/components/commons/datePicker';
 import DatePickerByEvaluationPeriod from '@/components/commons/datePicker/DatePickerByEvaluationBlock';
 import Stats from '@/components/scholar/ScholarStats';
 import Table from '@/components/table/Table';
@@ -7,7 +6,7 @@ import { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
 import scholarChatAttendaceColumns from '@/components/table/columns/scholar/activityAttendance/chats/columns';
 import createScholarChatAttendanceForTable from '@/components/table/columns/scholar/activityAttendance/chats/formater';
 import scholarChatAttendanceSearchOptions from '@/components/table/columns/scholar/activityAttendance/chats/searchOptions';
-import authOptions from '@/lib/auth/nextAuthScholarOptions/authOptions';
+import { getServerSession } from '@/lib/auth/authOptions';
 import { getChatsByScholar } from '@/lib/db/utils/Workshops';
 import {
   countActivityByModality,
@@ -16,25 +15,23 @@ import {
 } from '@/lib/utils/activityFilters';
 import { filterActivitiesBySearchParamsPeriod } from '@/lib/utils/datePickerFilters';
 import { getAttendedChats } from '@/lib/utils/getAttendedActivities';
-import { getServerSession } from 'next-auth';
-
 const page = async ({
   searchParams,
 }: {
   searchParams?: { year: string; month: string; quarter: string };
 }) => {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession();
   if (!session) return null;
-  const chatDbList = await getChatsByScholar(session.scholarId);
+  const chatDbList = await getChatsByScholar(session?.id);
   const chats = (await filterActivitiesBySearchParamsPeriod(
     chatDbList,
     searchParams
   )) as ChatsWithAllData[];
-  const attendedChat = getAttendedChats(chats, session.scholarId);
+  const attendedChat = getAttendedChats(chats, session.id);
   const { inPersonActivities, onlineActivities } = await countActivityByModality(attendedChat);
   const { level, modality } = await countChatProperties(attendedChat);
   const objectsFormatedForCharts = await formatCountsForCharts({ level, modality });
-  const chatObjectForTable = createScholarChatAttendanceForTable(chats, session.scholarId);
+  const chatObjectForTable = createScholarChatAttendanceForTable(chats, session.id);
 
   return (
     <div className="flex flex-col gap-1">
