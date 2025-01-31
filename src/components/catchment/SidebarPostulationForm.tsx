@@ -1,7 +1,7 @@
 'use client';
 
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { Button, Divider, Select } from '@nextui-org/react';
+import { Button, Divider, Link, Select } from '@nextui-org/react';
 
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -45,6 +45,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
           radius="sm"
           size="md"
           color="success"
+          as={Link}
           key={item.href}
           href={item.href}
           startContent={item.icon}
