@@ -15,7 +15,6 @@ export async function middleware(req: NextRequest) {
 
   if (token?.role === 'undefined') {
     console.log('Scholar access denied. Role:', token?.role);
-
     return NextResponse.redirect(new URL('/signin', req.url));
   }
 
@@ -51,7 +50,7 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL('/becario/panel', req.url));
     }
     else {
-      return NextResponse.redirect(new URL(ACCESS_DENIED_PATH, req.url));
+      return NextResponse.redirect(new URL('/signin', req.url));
     }
   }
   return NextResponse.next();
