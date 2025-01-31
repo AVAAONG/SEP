@@ -36,7 +36,7 @@ const page = async ({
 
   if (
     !sesion ||
-    // scholarCondition === 'ALUMNI' ||
+    scholarCondition === 'ALUMNI' ||
     scholarCondition === 'RESIGNATION' ||
     scholarCondition === 'WITHDRAWAL'
   ) {
