@@ -1,28 +1,16 @@
 'use client';
 import ThemeToggleButton from '@/components/scholar/NavigationBar/ThemeToggleButton';
-import ProfileDropdown from '@/components/scholar/ProfileDropdown';
-import { getBlobImage } from '@/lib/azure/azure';
 import { sidebarAtom } from '@/lib/state/mainState';
+import { Avatar } from '@nextui-org/avatar';
 import { useAtom } from 'jotai';
-import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+import { signOut } from 'next-auth/react';
 import { MenuIcon } from '../../../../../public/svgs/svgs';
 
-const Navbar = ({ children }) => {
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/dropdown';
+
+const Navbar = ({ image, email }: { image: string; email: string }) => {
   const [isOpen, setSidebar] = useAtom(sidebarAtom);
-  const { data: session } = useSession();
   const setUpSidebar = () => (isOpen ? setSidebar(false) : setSidebar(true));
-  const [image, setImage] = useState<string | null | undefined>(' ');
-
-  useEffect(() => {
-    const fetchImage = async () => {
-      const blobImage = await getBlobImage(session?.user?.image);
-      setImage(blobImage || ' ');
-    };
-
-    fetchImage();
-  }, [session?.user?.image]);
-
   return (
     <nav className="block h-12 w-full left-0 right-0 top-0 mb-4">
       <div className="flex justify-between gap-4">
@@ -36,21 +24,30 @@ const Navbar = ({ children }) => {
               <MenuIcon />
             </div>
           </button>
-          {children}
         </div>
 
-        <div className="flex gap-4 ">
+        <div className="flex gap-4  items-center justify-start">
           <div className="inline-flex items-center p-2 text-sm rounded-lg">
             <ThemeToggleButton />
           </div>
-          <div className="flex items-center justify-start">
-            <ProfileDropdown
-              name={session?.user?.name || ' '}
-              email={session?.user?.email || ' '}
-              image={image}
-              type="admin"
-            />
-          </div>
+          <Dropdown placement="bottom-end">
+            <DropdownTrigger>
+              <Avatar
+                as="button"
+                className="transition-transform"
+                src={image as string | undefined}
+              />
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Profile Actions" variant="flat">
+              <DropdownItem key="profile" className="h-14 gap-2">
+                <p className="font-semibold">Registrad@ con</p>
+                <p className="font-semibold">{email}</p>
+              </DropdownItem>
+              <DropdownItem key="logout" color="danger" onClick={async () => signOut()}>
+                Cerrar sesión
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </div>
       </div>
     </nav>
