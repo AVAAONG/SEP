@@ -7,7 +7,6 @@
 
 import { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
 import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
-import { getCookie } from '@/lib/serverAction';
 import {
   ActivityStatus,
   Chat,
@@ -131,7 +130,7 @@ export const enrrrollScholarToWorkshop = async (workshopId: string, scholarId: s
 export const getWorkshops = async () => {
   const workshops = await prisma.workshop.findMany({
     where: {
-      chapterId: await getCookie('chapter')
+      chapterId: 'Rokk6_XCAJAg45heOEzYb'
     },
     include: {
       speaker: true,
@@ -223,19 +222,19 @@ export const getActivitiesByYear = async (
   const [allWorkshops, allChats, allVolunteers] = await prisma.$transaction([
     prisma.workshop.findMany({
       where: {
-        chapterId: await getCookie('chapter')
+        chapterId: 'Rokk6_XCAJAg45heOEzYb'
       }
     }),
     prisma.chat.findMany(
       {
         where: {
-          chapterId: await getCookie('chapter')
+          chapterId: 'Rokk6_XCAJAg45heOEzYb'
         }
       }
     ),
     prisma.volunteer.findMany({
       where: {
-        chapterId: await getCookie('chapter')
+        chapterId: 'Rokk6_XCAJAg45heOEzYb'
       },
       include: {
         volunteer_attendance: true
@@ -468,7 +467,7 @@ export const getScholarsWithActivities = async () => {
   const scholars = await prisma.scholar.findMany({
     where: {
       AND: [
-        { program_information: { chapter_id: await getCookie('chapter') } },
+        { program_information: { chapter_id: 'Rokk6_XCAJAg45heOEzYb' } },
         { program_information: { scholar_condition: 'ACTIVE' } },
       ]
     },

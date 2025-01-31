@@ -2,7 +2,6 @@
 
 import { formatDates } from "@/lib/calendar/clientUtils";
 import volunteerSchema from "@/lib/schemas/volunteerSchema";
-import { getCookie } from "@/lib/serverAction";
 import { Prisma, VolunteerStatus } from "@prisma/client";
 import { z } from "zod";
 
@@ -21,7 +20,7 @@ const createVolunteerObject = async (data: z.infer<typeof volunteerSchema>, stat
             kind_of_volunteer: data.kindOfVolunteer,
             supervisor: data.supervisor,
             ...dates,
-            chapterId: await getCookie('chapter'),
+            chapterId: 'Rokk6_XCAJAg45heOEzYb',
         },
     };
     return volunteer;

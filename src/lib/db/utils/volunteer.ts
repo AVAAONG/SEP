@@ -1,5 +1,4 @@
 'use server';
-import { getCookie } from "@/lib/serverAction";
 import { Prisma, ScholarAttendance, VolunteerAttendance, VolunteerStatus } from "@prisma/client";
 import { prisma } from "./prisma";
 
@@ -57,7 +56,7 @@ export const getVolunteersByScholar = async (scholarId: string): Promise<Volunte
 export const getExternalVolunteer = async () => {
 	return prisma.volunteer.findMany({
 		where: {
-			chapterId: await getCookie('chapter'),
+			chapterId: 'Rokk6_XCAJAg45heOEzYb',
 			kind_of_volunteer: 'EXTERNAL'
 		},
 		include: {

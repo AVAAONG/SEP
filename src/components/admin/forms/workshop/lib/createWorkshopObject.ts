@@ -1,6 +1,5 @@
 import { formatDates } from '@/lib/calendar/clientUtils';
 import workshopCreationFormSchema from '@/lib/schemas/workshopCreationFormSchema';
-import { getCookie } from '@/lib/serverAction';
 import { ActivityStatus, Prisma, WorkshopYear } from '@prisma/client';
 import { z } from 'zod';
 
@@ -47,7 +46,7 @@ const createWorkshopObject = async (
       meeting_id,
       meeting_link,
       meeting_password,
-      chapterId: await getCookie('chapter'),
+      chapterId: 'Rokk6_XCAJAg45heOEzYb',
     },
   };
   return workshop;

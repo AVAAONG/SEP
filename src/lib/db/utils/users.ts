@@ -4,7 +4,6 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
-import { getCookie } from '@/lib/serverAction';
 import { getApprovedAndAttendedVolunteers } from '@/lib/utils/getAttendedActivities';
 import { Prisma, ScholarCondition, User, WorkshopAttendance } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
@@ -148,7 +147,7 @@ export const getScholarsWithAllData = async () => {
         },
         chapter: {
           id: {
-            equals: await getCookie('chapter'),
+            equals: 'Rokk6_XCAJAg45heOEzYb',
           },
         },
       },
@@ -197,7 +196,7 @@ export const getScholarsWithAllAllData = async () => {
         },
         chapter: {
           id: {
-            equals: await getCookie('chapter'),
+            equals: 'Rokk6_XCAJAg45heOEzYb',
           },
         },
       },
@@ -236,7 +235,7 @@ export const getWithdrawerAndResignedScholars = async () => {
         ],
         chapter: {
           id: {
-            equals: await getCookie('chapter'),
+            equals: 'Rokk6_XCAJAg45heOEzYb',
           },
         },
       },
@@ -278,7 +277,7 @@ export const getAlumniScholars = async () => {
         },
         chapter: {
           id: {
-            equals: await getCookie('chapter'),
+            equals: 'Rokk6_XCAJAg45heOEzYb',
           },
         },
       },
@@ -320,7 +319,7 @@ export const getTobeAlumniScholars = async () => {
         },
         chapter: {
           id: {
-            equals: await getCookie('chapter'),
+            equals: 'Rokk6_XCAJAg45heOEzYb',
           },
         },
       },
@@ -895,7 +894,7 @@ export const getOnlyCaracasScholar = async () => {
         },
         chapter: {
           id: {
-            equals: await getCookie('chapter'),
+            equals: 'Rokk6_XCAJAg45heOEzYb',
           },
         },
       },
