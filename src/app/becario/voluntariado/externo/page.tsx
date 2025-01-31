@@ -60,17 +60,16 @@ const page = () => {
       kind_of_volunteer: 'EXTERNAL',
       status: 'PENDING',
     };
-    if (!sesion.data?.scholarId) throw new Error('No se encontro el id del becario');
+    if (!sesion.data?.id) throw new Error('No se encontro el id del becario');
     const externalVolunteer = await createExternalVolunteer(
       volunteerData,
-      sesion.data?.scholarId,
+      sesion.data?.id,
       data.asigned_hours
     );
     reset(undefined);
     setSelectedDocument(null);
     router.push(`/becario/voluntariado/${externalVolunteer.id}`);
   };
-  console.log(sesion);
 
   return (
     <section className="flex flex-col md:px-12 justify-start items-center w-full gap-4">
