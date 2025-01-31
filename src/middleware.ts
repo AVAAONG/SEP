@@ -18,6 +18,12 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/signin', req.url));
   }
 
+  if (!token || (token.role === 'undefined')) {
+    console.log('Scholar access denied. Role:', token?.role);
+
+    return NextResponse.redirect(new URL('/signin', req.url));
+  }
+
   // Protect routes
   if (pathname.startsWith('/admin')) {
     if (!token || token.role !== 'ADMIN') {
@@ -26,7 +32,6 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL(ACCESS_DENIED_PATH, req.url));
     }
   }
-
   if (pathname.startsWith('/becario')) {
     if (!token || (token.role !== 'SCHOLAR')) {
       console.log('Scholar access denied. Role:', token?.role);
