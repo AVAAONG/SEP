@@ -5,25 +5,32 @@ import { Controller, useFormContext } from 'react-hook-form';
 
 interface InputFieldProps {
   name: string;
-  type: 'text' | 'number' | 'date' | 'email' | 'tel';
   label: string;
+  description?: string;
+  placeholder?: string;
+  type: 'text' | 'number' | 'date' | 'email' | 'tel';
+  required?: boolean;
   [key: string]: unknown;
 }
 
 const InputField: React.FC<InputFieldProps> = (props) => {
-  const { name, type, label, ...restProps } = props;
+  const { name, description, placeholder, label, type, required, ...restProps } = props;
   const { control, formState } = useFormContext();
   const classes = restProps.className ? clsx(restProps.className as string) : '';
 
   return (
     <Controller
       name={name}
+      rules={{ required: required }}
       control={control}
       render={({ field }) => (
         <Input
+          labelPlacement="outside"
           radius="sm"
           {...field}
           {...restProps}
+          description={description}
+          placeholder={placeholder}
           type={type}
           label={label}
           isInvalid={!!formState.errors[name]?.message?.toString()}

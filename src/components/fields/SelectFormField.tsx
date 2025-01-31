@@ -18,13 +18,14 @@ const SelectFormField: React.FC<SelectFormFieldProps> = (props) => {
       render={({ field }) => (
         <Select
           radius="sm"
+          labelPlacement="outside"
           {...field}
           {...restProps}
           isInvalid={!!formState.errors[name]?.message?.toString()}
           errorMessage={formState.errors[name]?.message?.toString()}
           label={label}
-          defaultSelectedKeys={[field.value?.toString()]}
-          selectedKeys={[field.value?.toString()]}
+          defaultSelectedKeys={field.value ? [field.value.toString()] : undefined}
+          selectedKeys={field.value ? [field.value.toString()] : undefined}
         >
           {selectItems.map((item) => (
             <SelectItem key={item.value} value={item.value}>
