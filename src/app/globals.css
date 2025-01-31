@@ -16,6 +16,10 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 .copied-text {
   position: absolute;
   top: -10px;
