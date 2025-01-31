@@ -13,16 +13,18 @@ export async function middleware(req: NextRequest) {
 
   console.log('Debug:', { pathname, tokenExists: !!token, role: token?.role });
 
+  if (token?.role === 'undefined') {
+    console.log('Scholar access denied. Role:', token?.role);
+
+    return NextResponse.redirect(new URL('/signin', req.url));
+  }
+
   // Redirect to /signin if no token is present
   if (!token && pathname !== '/signin') {
     return NextResponse.redirect(new URL('/signin', req.url));
   }
 
-  if (!token || (token.role === 'undefined')) {
-    console.log('Scholar access denied. Role:', token?.role);
 
-    return NextResponse.redirect(new URL('/signin', req.url));
-  }
 
   // Protect routes
   if (pathname.startsWith('/admin')) {
