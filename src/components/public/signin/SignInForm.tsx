@@ -1,5 +1,5 @@
 'use client';
-import InputField from '@/components/forms/common/InputField';
+import InputField from '@/components/fields/InputFormField';
 import scholarSignInSchema from '@/lib/schemas/scholarSignInSchema';
 import { Button } from '@nextui-org/react';
 import { signIn } from 'next-auth/react';
@@ -36,7 +36,7 @@ const SigninForm = () => {
           <InputField
             name="email"
             label="Correo electrónico"
-            inputType="email"
+            type="email"
             required={true}
             placeholder="becario@gmail.com"
           />
