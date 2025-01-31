@@ -24,6 +24,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
     return (
       <div className="w-full">
         <Select
+          radius="sm"
           className="!w-full"
           defaultValue={pathname}
           onChange={handleChange}
@@ -41,6 +42,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
     <nav className={'flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1'} {...props}>
       {items.map((item) => (
         <Button
+          radius="sm"
           size="md"
           color="success"
           key={item.href}
