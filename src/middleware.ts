@@ -23,8 +23,6 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/signin', req.url));
   }
 
-
-
   // Protect routes
   if (pathname.startsWith('/admin')) {
     if (!token || token.role !== 'ADMIN') {
@@ -57,5 +55,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/becario/:path*', '/signin'],
+  matcher: ['/admin/:path*', '/becario/:path*'],
 };
