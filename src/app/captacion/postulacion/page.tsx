@@ -3,9 +3,10 @@ import { Divider } from '@nextui-org/react';
 
 const page = () => {
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       <h1 className="font-bold text-lg">Información personal</h1>
       <Divider />
+      <div className="py-2"></div>
       <PersonalInfo />
     </div>
   );
