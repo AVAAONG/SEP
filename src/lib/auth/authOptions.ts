@@ -1,4 +1,5 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { ScholarStatus } from '@prisma/client';
 import type {
   GetServerSidePropsContext,
   NextApiRequest,
@@ -63,7 +64,7 @@ export const authOptions = {
         id: token.id as string,
         kindOfUser: token.role as string,
         chapterId: token.chapterId as string,
-        scholarStatus: token.scholarStatus as string,
+        scholarStatus: token.scholarStatus as ScholarStatus,
         isSpeaker: token.isSpeaker as boolean,
         expires: session.expires,
       };
@@ -73,12 +74,12 @@ export const authOptions = {
 
 
 
-export const getServerSession = (
+export const getServerSession = async (
   ...args:
     | [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
     | [NextApiRequest, NextApiResponse]
     | []
 ) => {
-  return getServerSessionAuth(...args, authOptions)
+  return await getServerSessionAuth(...args, authOptions)
 }
 export default authOptions;
