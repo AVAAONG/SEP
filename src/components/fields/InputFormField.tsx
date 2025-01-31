@@ -9,19 +9,19 @@ interface InputFieldProps {
   description?: string;
   placeholder?: string;
   type: 'text' | 'number' | 'date' | 'email' | 'tel';
-  required?: boolean;
+  isRequired?: boolean;
   [key: string]: unknown;
 }
 
 const InputField: React.FC<InputFieldProps> = (props) => {
-  const { name, description, placeholder, label, type, required, ...restProps } = props;
+  const { name, description, placeholder, label, type, isRequired, ...restProps } = props;
   const { control, formState } = useFormContext();
   const classes = restProps.className ? clsx(restProps.className as string) : '';
 
   return (
     <Controller
       name={name}
-      rules={{ required: required }}
+      rules={{ required: isRequired }}
       control={control}
       render={({ field }) => (
         <Input
@@ -29,6 +29,7 @@ const InputField: React.FC<InputFieldProps> = (props) => {
           radius="sm"
           {...field}
           {...restProps}
+          isRequired={isRequired}
           description={description}
           placeholder={placeholder}
           type={type}
