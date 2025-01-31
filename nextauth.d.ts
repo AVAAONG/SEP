@@ -1,3 +1,4 @@
+import { ScholarStatus } from "@prisma/client";
 import "next-auth";
 
 /// @see https://reacthustle.com/blog/extend-user-session-nextauth-typescript?expand_article=1
@@ -8,7 +9,7 @@ declare module "next-auth" {
     interface Session extends DefaultSession {
         kindOfUser: 'SCHOLAR' | 'ADMIN';
         chapterId: string;
-        scholarStatus?: string;
+        scholarStatus?: ScholarStatus;
         isSpeaker?: boolean;
     }
 }
