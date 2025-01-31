@@ -91,7 +91,7 @@ export function SidebarNav({ currentStep }: { currentStep: number }) {
           disabledKeys={disabledSteps}
           renderValue={(items) => {
             return items.map((item) => (
-              <div className="flex items-center space-x-2">
+              <div key={item.data?.href} className="flex items-center space-x-2">
                 {item.data?.icon} <p>{item.data?.title}</p>
               </div>
             ));
