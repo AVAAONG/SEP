@@ -15,7 +15,7 @@ interface SettingsLayoutProps {
 
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
   return (
-    <main className="p-10 min-h-screen flex flex-col space-y-4 bg-gray-100">
+    <main className="p-10 min-h-screen flex flex-col space-y-4 bg-gray-100 dark:bg-black">
       <h1 className="text-3xl md:text-4xl font-bold text-primary-light">
         Formulario de postulación ProExcelencia
       </h1>
