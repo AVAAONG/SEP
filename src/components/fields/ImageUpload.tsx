@@ -1,80 +1,80 @@
-import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
-import { useController, useFormContext } from 'react-hook-form';
+import { uploadBlob } from '@/lib/azure/azure';
+import { Avatar } from '@nextui-org/react';
+import { useFormContext } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 interface ImageUploadProps {
   name: string;
+  image: string | undefined;
+  updateFunction: (blobUrl: string) => Promise<void>;
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({ name, image, updateFunction }) => {
   const {
-    control,
+    register,
+    setValue,
     formState: { errors },
   } = useFormContext();
-  const { field } = useController({ name, control });
-  const [preview, setPreview] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (field.value instanceof File) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result as string);
-      };
-      reader.readAsDataURL(field.value);
-    } else {
-      setPreview(null);
-    }
-  }, [field.value]);
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    updateFunction: (blobUrl: string) => Promise<void>
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
-      field.onChange(file);
-      setPreview(URL.createObjectURL(file));
+      const reader = new FileReader();
+      reader.onloadend = async function () {
+        const base64String = reader.result;
+        try {
+          const response = await uploadBlob(base64String as string, 'picture');
+          setValue(name, response, { shouldValidate: true });
+          if (response) updateFunction(response);
+        } catch (error) {
+          console.error('Error uploading file: ', error);
+        }
+        try {
+        } catch (error) {
+          console.error('Error saving the image ', error);
+        }
+      };
+      reader.readAsDataURL(file);
       toast.success('Image uploaded successfully');
     }
   };
 
   return (
-    <div className="w-full rounded-full flex items-center justify-center gap-4">
-      <div className="flex-shrink-0 flex items-center justify-center w-28 h-28 object-contain rounded-full shadow-lg border-3 border-green-500 p-1 overflow-hidden">
-        {preview ? (
-          <Image
-            src={preview}
-            alt="Preview"
-            width={112}
-            height={112}
-            className="w-full h-full rounded-full object-cover"
-          />
-        ) : (
-          <div className="w-full h-full rounded-full bg-gray-200 flex items-center justify-center text-gray-400">
-            Sin Foto
-          </div>
-        )}
-      </div>
+    <div className="w-full rounded-full flex items-end justify-center gap-4">
+      <Avatar
+        color="primary"
+        src={image}
+        isBordered
+        alt="Preview"
+        radius="md"
+        className="w-28 md:w-32 h-28 "
+      />
       <div className="flex flex-col justify-center gap-2 lg:w-full">
-        <label htmlFor={name} className="cursor-pointer">
-          <span
-            className="text-center shadow-none bg-transparent block w-fit text-sm text-slate-500
-            py-2 px-4 rounded-full border-1 border-primary-light font-semibold
-            bg-secondary-2 text-primary-light
-            hover:bg-primary-light hover:text-secondary-2 transition-colors"
-          >
+        <label htmlFor={name} className="cursor-pointer max-w-fit">
+          <span className="text-center shadow-none bg-transparent block w-fit text-sm text-slate-500 py-2 px-4 rounded-lg border-1 border-blue-500 font-semibold bg-blue-50 hover:bg-blue-500 hover:text-blue-50 transition-colors">
             Subir foto
           </span>
           <input
+            {...register(name)}
             id={name}
             type="file"
             accept="image/jpeg,image/png"
-            onChange={handleFileChange}
+            onChange={(event) => handleFileChange(event, updateFunction)}
             className="hidden"
           />
         </label>
         {errors[name] && (
           <p className="text-red-500 text-sm mt-1">{errors[name]?.message as string}</p>
         )}
-        <div className="text-sm text-gray-500 dark:text-gray-400">Solo archivos JPG or PNG </div>
+        <div>
+          <p className="text-xs text-gray-500 dark:text-gray-400">Solo archivos JPG or PNG </p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            La foto debe de ser cuadrada (1:1)
+          </p>
+        </div>
       </div>
     </div>
   );

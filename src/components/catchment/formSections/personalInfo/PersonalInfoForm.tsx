@@ -55,20 +55,20 @@ const PersonalInfo = (props) => {
 
   const {
     handleSubmit,
-    formState: { isSubmitting, isValid },
+    formState: { isSubmitting },
   } = methods;
 
   const handleFormSubmit = async (data: TPersonalInfo) => {
     console.log(data);
-    // await updatePersonalInfo(id, data)
   };
 
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-8 w-full">
-        <ImageUpload name="photo" />
+        <ImageUpload name="photo" image={undefined} updateFunction={async () => {}} />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <SelectFormField
+            autoFocus
             isRequired
             label="Sede seleccionada"
             name="chapterId"
@@ -78,11 +78,11 @@ const PersonalInfo = (props) => {
               { label: 'Zulia', value: 'H0rvqSucbop6uozNUpuC' },
             ]}
           />
-          <InputField isRequired autoFocus label="Nombre(s)" type="text" name="first_names" />
-          <InputField isRequired label="Apellido(s)" type="text" name="last_names" />
-          <InputField isRequired label="Cédula de identidad" type="number" name="dni" />
+          <InputField isRequired={true} label="Nombre(s)" type="text" name="first_names" />
+          <InputField isRequired={true} label="Apellido(s)" type="text" name="last_names" />
+          <InputField isRequired={true} label="Cédula de identidad" type="number" name="dni" />
           <SelectFormField
-            isRequired
+            isRequired={true}
             label="Género"
             name="gender"
             selectItems={[
@@ -91,14 +91,14 @@ const PersonalInfo = (props) => {
             ]}
           />
           <InputField
-            isRequired
+            isRequired={true}
             placeholder="YYY/MM/DD"
             label="Fecha de nacimiento"
             name="birthdate"
             type="date"
           />
           <SelectFormField
-            isRequired
+            isRequired={true}
             label="Estado de procedencia"
             name="state"
             selectItems={VENEZUELA_STATES.map((state) => ({
@@ -107,13 +107,15 @@ const PersonalInfo = (props) => {
             }))}
           />
           <InputField
-            isRequired
+            isRequired={true}
             label="Dirección de residencia actual"
             name="address"
             type="text"
           />
 
-          <Button radius="sm">Siguiente</Button>
+          <Button isLoading={isSubmitting} radius="sm" type="submit">
+            Siguiente
+          </Button>
         </div>
       </form>
     </FormProvider>
