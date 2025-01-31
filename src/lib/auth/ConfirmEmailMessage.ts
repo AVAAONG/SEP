@@ -382,7 +382,7 @@ const createConfirmMessage = (signin_url: string, email: string, base_url: strin
                     <td class="content-cell">
                       <div class="f-fallback">
                         <p>
-                        ¡Bienvenido! Usa este enlace para iniciar sesión de manera segura en tu cuenta del SEP:<br />
+                        ¡Bienvenido! Haz clic en este enlace para iniciar sesión de manera segura en tu cuenta del SEP:<br />
                         <span class="f-fallback sub"> Por tu seguridad, el enlace expirará en 10 min.</span> 
                         </p>
                         <!-- Action -->
@@ -420,17 +420,16 @@ const createConfirmMessage = (signin_url: string, email: string, base_url: strin
                           </tr>
                         </table>
                         <p>
-                        Si confirma esta solicitud, iniciará sesión de forma segura utilizando
+                        Al confirmar esta solicitud, accederás de forma segura al SEP usando el correo:
                           ${email}.
                         </p>
-                        <p>Best,<br />El equipo de ProExcelencia</p>
+                        <p>Atentamente,<br />El equipo de ProExcelencia</p>
                         <!-- Sub copy -->
                         <table class="body-sub" role="presentation">
                           <tr>
                             <td>
                               <p class="f-fallback sub">
-                              Si tienes problemas con el botón de arriba,
-                              copia y pega la siguiente link en tu navegador:
+                      Si el botón anterior no funciona, copia y pega este enlace en tu navegador:
                               </p>
                               <p class="f-fallback sub">${signin_url}</p>
                             </td>
