@@ -13,11 +13,6 @@ export async function middleware(req: NextRequest) {
 
   console.log('Debug:', { pathname, tokenExists: !!token, role: token?.role });
 
-  if (token?.role === 'undefined') {
-    console.log('Scholar access denied. Role:', token?.role);
-    return NextResponse.redirect(new URL('/signin', req.url));
-  }
-
   // Redirect to /signin if no token is present
   if (!token && pathname !== '/signin') {
     return NextResponse.redirect(new URL('/signin', req.url));
@@ -38,7 +33,6 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL(ACCESS_DENIED_PATH, req.url));
     }
   }
-
   // Handle post-authentication redirects
   if (pathname === '/signin' && token) {
     if (token.role === 'ADMIN') {
@@ -48,12 +42,12 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL('/becario/panel', req.url));
     }
     else {
-      return NextResponse.redirect(new URL('/signin', req.url));
+      return NextResponse.redirect(new URL(ACCESS_DENIED_PATH, req.url));
     }
   }
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/becario/:path*'],
+  matcher: ['/admin/:path*', '/becario/:path*', '/signin'],
 };
