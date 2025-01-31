@@ -160,7 +160,7 @@ export const STUDY_AREAS = [
   { value: 'SOCIAL_SCIENCES', label: 'Ciencias Sociales' },
   { value: 'HUMANITIES_EDUCATION', label: 'Humanidades y Educación' },
   { value: 'STEM', label: 'STEM (Ciencias, Tecnología, Ingenierías, Matemáticas)' },
-  { value: 'OTHER', label: 'Other' },
+  { value: 'OTHER', label: 'Otros' },
 ];
 
 export const EVALUATION_SCALES = [
