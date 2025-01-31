@@ -1,101 +1,77 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { randomUUID } from "crypto";
 import type {
   GetServerSidePropsContext,
   NextApiRequest,
   NextApiResponse,
 } from "next";
 import type { NextAuthOptions } from 'next-auth';
-import { getServerSession as getServerSessionAuth, Session, User } from "next-auth";
-import { JWT } from "next-auth/jwt";
+import { getServerSession as getServerSessionAuth } from "next-auth";
 import GoogleProvider from 'next-auth/providers/google';
 import { prisma } from "../db/utils/prisma";
-import CustomEmailProvider, { EmailUserConfig } from "./EmailProvider";
-
-
-/**
- * @description Google USER Client ID
- * @summary Client ID for using the google user resources trough the Google API
- * @see https://developers.google.com/identity/oauth2/web/guides/get-google-api-clientid to get the client id
- */
-export const GOOGLE_USER_API_CLIENT_ID = process.env.GOOGLE_USER_API_CLIENT_ID!;
-/**
- * @description Google USER Client Secret
- * @summary Client Secret for using the google user resources trough the Google API
- * @see https://developers.google.com/identity/protocols/oauth2/web-server#creatingcred to get the client secret
- */
-export const GOOGLE_USER_API_CLIENT_SECRET = process.env.GOOGLE_USER_API_CLIENT_SECRET!;
-
-
-export const NEXT_SECRET = process.env.NEXTAUTH_SECRET || randomUUID();
-
-
-interface ExtendedUser extends User {
-  role?: string;
-}
-
-interface ExtendedSession extends Session {
-  id: string;
-  name: string;
-  email: string;
-  image: string;
-}
-
-export const emailUserProviderConfig: EmailUserConfig = {
-  type: 'email',
-  id: 'email',
-  server: {
-    host: process.env.EMAIL_SERVER_HOST,
-    port: Number(process.env.EMAIL_SERVER_PORT),
-    auth: {
-      user: process.env.EMAIL_SERVER_USER,
-      pass: process.env.EMAIL_SERVER_PASSWORD,
-    },
-  },
-  from: process.env.EMAIL_FROM,
-};
-
+import { GOOGLE_PROVIDER_CONFIG, NEXT_SECRET, PAGES } from './authConfig';
+import CustomEmailProvider from "./EmailProvider";
+import { getAdminInitialInfo, getScholarInitialInfo } from './helpers';
 
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
-  providers: [
-    GoogleProvider({
-      id: 'userGoogle',
-      clientId: GOOGLE_USER_API_CLIENT_ID,
-      clientSecret: GOOGLE_USER_API_CLIENT_SECRET,
-      /// @see https://github.com/nextauthjs/next-auth/issues/519#issuecomment-1500498874 for more information
-      allowDangerousEmailAccountLinking: true,
-    }),
-    CustomEmailProvider(emailUserProviderConfig),
-  ],
-  session: {
-    strategy: 'jwt',
-  },
+  session: { strategy: 'jwt' },
   secret: NEXT_SECRET,
+  pages: PAGES,
+
+  providers: [
+    GoogleProvider(GOOGLE_PROVIDER_CONFIG),
+    CustomEmailProvider(),
+  ],
+
   callbacks: {
-    async jwt({ token, user, }: { token: JWT; user?: ExtendedUser }): Promise<JWT> {
+    async jwt({ token, user }) {
+      /** 
+       * check for the existence of parameters (apart from token). If they exist, this means that the callback is being invoked for the first time (i.e. the user is being signed in).
+       * Subsequent invocations will only contain the token parameter.
+       * @see https://next-auth.js.org/configuration/callbacks#jwt-callback
+       * **/
       if (user) {
-        token.role = user.kind_of_user;
-        token.id = user.id;
+        if (user.kind_of_user === 'ADMIN') {
+          const admin = await getAdminInitialInfo(user.id)
+          token.name = admin.name,
+            token.image = admin.image,
+            token.email = admin.email,
+            token.id = user.id,
+            token.role = user.kind_of_user,
+            token.chapterId = admin.chapterId
+        }
+        if (user.kind_of_user === 'SCHOLAR') {
+          const scholar = await getScholarInitialInfo(user.id)
+          token.name = scholar.name,
+            token.image = scholar.image,
+            token.email = scholar.email,
+            token.id = user.id,
+            token.role = user.kind_of_user,
+            token.chapterId = scholar.chapterId,
+            token.scholarStatus = scholar.scholarStatus,
+            token.isSpeaker = scholar.isSpeaker
+        }
       }
+
       return token;
     },
-    async session({ session, token }: { session: Session; token: JWT }): Promise<ExtendedSession> {
+    async session({ token, session }) {
       return {
-        name: "Pablo Peroz",
-        image: "asdfasdfsadfsadfs",
+        name: token.name,
+        image: token.image,
+        email: token.email,
         id: token.id as string,
         kindOfUser: token.role as string,
-      } as ExtendedSession;
+        chapterId: token.chapterId as string,
+        scholarStatus: token.scholarStatus as string,
+        isSpeaker: token.isSpeaker as boolean,
+        expires: session.expires,
+      };
     },
   },
-  pages: {
-    signIn: '/signin',
-    error: '/signin', // Add this line to handle sign-in errors
-    verifyRequest: '/signin/checkEmail',
-    signOut: '/signin',
-  },
 } satisfies NextAuthOptions;
+
+
 
 export const getServerSession = (
   ...args:

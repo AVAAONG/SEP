@@ -1,10 +1,32 @@
-import { createTransport } from 'nodemailer';
-
 import type { Awaitable } from 'next-auth/src';
 import type { Theme } from 'next-auth/src/core/types';
 import type { CommonProviderOptions } from 'next-auth/src/providers';
-import type { Options as SMTPTransportOptions } from 'nodemailer/lib/smtp-transport';
+import { Transport, TransportOptions, createTransport } from 'nodemailer';
+import * as JSONTransport from 'nodemailer/lib/json-transport/index.js';
+import * as SendmailTransport from 'nodemailer/lib/sendmail-transport/index.js';
+import * as SESTransport from 'nodemailer/lib/ses-transport/index.js';
+import * as SMTPPool from 'nodemailer/lib/smtp-pool/index.js';
+import * as SMTPTransport from 'nodemailer/lib/smtp-transport/index.js';
+import * as StreamTransport from 'nodemailer/lib/stream-transport/index.js';
 import createConfirmMessage from './ConfirmEmailMessage';
+
+type AllTransportOptions =
+  | string
+  | SMTPTransport
+  | SMTPTransport.Options
+  | SMTPPool
+  | SMTPPool.Options
+  | SendmailTransport
+  | SendmailTransport.Options
+  | StreamTransport
+  | StreamTransport.Options
+  | JSONTransport
+  | JSONTransport.Options
+  | SESTransport
+  | SESTransport.Options
+  | Transport<any>
+  | TransportOptions;
+
 export interface SendVerificationRequestParams {
   identifier: string;
   url: string;
@@ -14,10 +36,9 @@ export interface SendVerificationRequestParams {
   theme: Theme;
 }
 
-export interface EmailConfig extends CommonProviderOptions {
-  type: 'email';
-  // TODO: Make use of https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html
-  server: string | SMTPTransportOptions;
+export interface EmailUserConfig {
+  server?: AllTransportOptions;
+  type?: 'email';
   /** @default "NextAuth <no-reply@example.com>" */
   from?: string;
   /**
@@ -27,7 +48,7 @@ export interface EmailConfig extends CommonProviderOptions {
    */
   maxAge?: number;
   /** [Documentation](https://next-auth.js.org/providers/email#customizing-emails) */
-  sendVerificationRequest: (params: SendVerificationRequestParams) => Awaitable<void>;
+  sendVerificationRequest?: (params: SendVerificationRequestParams) => Awaitable<void>;
   /**
    * By default, we are generating a random verification token.
    * You can make it predictable or modify it as you like with this method.
@@ -59,22 +80,49 @@ export interface EmailConfig extends CommonProviderOptions {
    * [Documentation](https://next-auth.js.org/providers/email#normalizing-the-e-mail-address) | [RFC 2821](https://tools.ietf.org/html/rfc2821) | [Email syntax](https://en.wikipedia.org/wiki/Email_address#Syntax)
    */
   normalizeIdentifier?: (identifier: string) => string;
-  options: EmailUserConfig;
 }
 
-export type EmailProviderType = 'Email';
+export interface EmailConfig extends CommonProviderOptions {
+  // defaults
+  id: 'email';
+  type: 'email';
+  name: 'Email';
+  server: AllTransportOptions;
+  from: string;
+  maxAge: number;
+  sendVerificationRequest: (params: SendVerificationRequestParams) => Awaitable<void>;
 
-export type EmailUserConfig = Partial<Omit<EmailConfig, 'options'>>;
+  /**
+   * This is copied into EmailConfig in parseProviders() don't use elsewhere
+   */
+  options: EmailUserConfig;
+
+  // user options
+  // TODO figure out a better way than copying from EmailUserConfig
+  secret?: string;
+  generateVerificationToken?: () => Awaitable<string>;
+  normalizeIdentifier?: (identifier: string) => string;
+}
 
 export type EmailProvider = (options: EmailUserConfig) => EmailConfig;
 
-export default function CustomEmailProvider(options: EmailUserConfig): EmailConfig {
+export type EmailProviderType = 'Email';
+
+export default function CustomEmailProvider(): EmailConfig {
   return {
     id: 'email',
     type: 'email',
     name: 'Email',
     // Server can be an SMTP connection string or a nodemailer config object
-    server: { host: 'localhost', port: 25, auth: { user: '', pass: '' } },
+    server: {
+      host: process.env.EMAIL_SERVER_HOST,
+      port: Number(process.env.EMAIL_SERVER_PORT),
+      auth: {
+        user: process.env.EMAIL_SERVER_USER,
+        pass: process.env.EMAIL_SERVER_PASSWORD,
+      },
+    },
+    // from: process.env.EMAIL_FROM,
     from: 'ProExcelencia <avaatecnologia@gmail.com>',
     maxAge: 24 * 60 * 60,
     async sendVerificationRequest(params) {
@@ -84,7 +132,7 @@ export default function CustomEmailProvider(options: EmailUserConfig): EmailConf
         service: 'gmail',
         auth: {
           user: 'avaatecnologia@gmail.com',
-          pass: 'cfkrwmcaslabwukf',
+          pass: process.env.EMAIL_PASSWORD,
         },
         tls: {
           rejectUnauthorized: false,
@@ -102,7 +150,18 @@ export default function CustomEmailProvider(options: EmailUserConfig): EmailConf
         throw new Error(`Email (${failed.join(', ')}) could not be sent`);
       }
     },
-    options,
+    options: {
+      type: 'email',
+      server: {
+        host: process.env.EMAIL_SERVER_HOST,
+        port: Number(process.env.EMAIL_SERVER_PORT),
+        auth: {
+          user: process.env.EMAIL_SERVER_USER,
+          pass: process.env.EMAIL_SERVER_PASSWORD,
+        },
+      },
+      from: process.env.EMAIL_FROM,
+    },
   };
 }
 

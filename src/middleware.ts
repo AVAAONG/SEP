@@ -14,6 +14,7 @@ export async function middleware(req: NextRequest) {
   if (!token && pathname !== '/signin') {
     return NextResponse.redirect(new URL('/signin', req.url));
   }
+
   if (pathname === '/') return NextResponse.redirect(new URL('/signin', req.url))
 
   // Protect routes
