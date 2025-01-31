@@ -1,6 +1,5 @@
 import { formatDates } from '@/lib/calendar/clientUtils';
 import chatCreationFormSchema from '@/lib/schemas/chatCreationFormSchema';
-import { getCookie } from '@/lib/serverAction';
 import { ActivityStatus, Prisma } from '@prisma/client';
 import { z } from 'zod';
 
@@ -45,7 +44,7 @@ const createChatObject = async (
             meeting_id,
             meeting_link,
             meeting_password,
-            chapterId: await getCookie('chapter'),
+            chapterId: 'Rokk6_XCAJAg45heOEzYb',
         },
     };
     return workshop;
