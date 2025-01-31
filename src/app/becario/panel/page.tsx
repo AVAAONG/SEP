@@ -1,6 +1,7 @@
 import Calendar from '@/components/calendar/Calendar';
 import formatActivitiesForCalendarPanel from '@/components/calendar/utils';
 import PanelCard, { PanelCardProps } from '@/components/commons/PanelCard';
+import Greeting from '@/components/Greeting';
 import NextEventsList from '@/components/NextEventsList';
 import { getServerSession } from '@/lib/auth/authOptions';
 import {
@@ -13,7 +14,7 @@ import React from 'react';
 const page = async () => {
   const actualYear = new Date().getFullYear();
   const session = await getServerSession();
-  const name = session?.user?.name?.split(' ')[0];
+  const name = session?.name?.split(' ')[0];
   const [doneWorkshopsCount, doneChatsCount, doneVolunteerCount] =
     await getScholarDoneActivitiesCount(session.id, actualYear);
 
@@ -51,9 +52,7 @@ const page = async () => {
     <div>
       <div className="flex flex-col px-2 gap-4">
         <div className="flex gap-2 items-center">
-          <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
-            {name ? `¡Hola, ${name}! 💚` : `¡Hola! 💚`}
-          </h1>
+          <Greeting name={name} />
         </div>
         <div className="w-full flex flex-col md:flex-row gap-3 items-center">
           {cardContent.map((card, index) => (
