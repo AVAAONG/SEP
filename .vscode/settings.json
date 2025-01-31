@@ -17,5 +17,17 @@
   "[javascript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
-  "cSpell.words": ["Carabobo", "Zulia"]
+  "cSpell.words": [
+    "Amacuro",
+    "Anzoátegui",
+    "Aragua",
+    "Barinas",
+    "Carabobo",
+    "Cojedes",
+    "Guárico",
+    "Monagas",
+    "Táchira",
+    "Yaracuy",
+    "Zulia"
+  ]
 }
