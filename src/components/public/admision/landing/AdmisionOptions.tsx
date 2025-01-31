@@ -53,7 +53,7 @@ const AdmisionOptions = ({ title }: { title: string }) => {
         <h1 className="text-3xl font-bold tracking-tighter text-primary-light sm:text-4xl md:text-5xl lg:text-6xl">
           {title}
         </h1>
-        <p className=" mt-auto text-lg w-full text-gray-500 text-center text-sm md:text-base ">
+        <p className=" mt-auto  w-full text-gray-500 text-center text-sm md:text-lg ">
           Selecciona la sede de AVAA que corresponda según la ubicación de tu universidad.
         </p>
       </div>
