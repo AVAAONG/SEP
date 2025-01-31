@@ -34,7 +34,7 @@ export async function middleware(req: NextRequest) {
   if (pathname === '/signin') {
     if (token) {
       if (token.role === 'ADMIN') {
-        return NextResponse.redirect(new URL('/admin', req.url));
+        return NextResponse.redirect(new URL('/admin/panel', req.url));
       }
       else if (token.role === 'SCHOLAR') {
         return NextResponse.redirect(new URL('/becario/panel', req.url));
