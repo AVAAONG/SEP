@@ -46,7 +46,7 @@ model ContactInfo {
 
 model FamilyInfo {
   id                       String           @id @default(uuid()) @map("id")
-  averageFamilyIncome      Int              @map("average_family_income")
+  averageFamilyIncome      Float            @map("average_family_income")
   whitWhoDoYouLive         WhitWhoDoYouLive @map("whit_who_do_you_live")
   kindOfHouse              KindOfHouse      @map("kind_of_house")
   contributeToFamilyIncome Boolean          @map("contribute_to_family_income")
