@@ -40,12 +40,42 @@ const page = () => (
 
     <div className="mb-32 grid grid-cols-2 text-center sm:text-left gap-6 px-8">
       <Link
-        href="/signin/becario"
+        href="/captacion"
         className="relative group rounded-lg p-2 sm:p-5 text-dark dark:text-light border-primary-light border transition-all dark:hover:bg-primary-light dark:focus:bg-primary-light hover:bg-primary-1 focus:bg-primary-1"
         rel="noopener noreferrer"
       >
         <h2 className={`text-2xl font-medium`}>
-          Becarios{' '}
+          <span className="inline-block">Postulate</span>
+          <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              width="50"
+              height="20"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+              ></path>
+            </svg>
+          </span>
+        </h2>
+        <p className={` hidden sm:block m-0 max-w-[30ch] text-xs lg:text-sm `}>
+          Postulate al Programa Excelencia AVAA{' '}
+        </p>
+      </Link>
+      <Link
+        href="/signin/"
+        className="relative group rounded-lg p-2 sm:p-5 text-dark dark:text-light border-primary-light border transition-all dark:hover:bg-primary-light dark:focus:bg-primary-light hover:bg-primary-1 focus:bg-primary-1"
+        rel="noopener noreferrer"
+      >
+        <h2 className={`text-2xl font-medium`}>
+          Ingresa en el SEP
           <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none ">
             <svg
               fill="none"
@@ -66,38 +96,8 @@ const page = () => (
           </span>
         </h2>
         <p className={`hidden sm:block m-0 max-w-[30ch] text-xs lg:text-sm`}>
-          Ingresa para ver tu progreso en el programa.
+          Ingresa para administrar o ver tu progreso en el programa.
         </p>
-      </Link>
-
-      <Link
-        href="/signin/admin"
-        className="relative group rounded-lg p-2 sm:p-5 text-dark dark:text-light border-primary-light border transition-all dark:hover:bg-primary-light dark:focus:bg-primary-light hover:bg-primary-1 focus:bg-primary-1"
-        rel="noopener noreferrer"
-      >
-        <h2 className={`text-2xl font-medium`}>
-          <span className="hidden md:inline-block">Administradores </span>
-          <span className="inline-block md:hidden">Admins </span>
-          <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-            <svg
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              width="50"
-              height="20"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-              ></path>
-            </svg>
-          </span>
-        </h2>
-        <p className={` hidden sm:block m-0 max-w-[30ch] text-xs lg:text-sm `}>Administra el SEP</p>
       </Link>
     </div>
   </main>

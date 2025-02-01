@@ -242,8 +242,8 @@ const createSEPOnboardingMessage = (gender: Gender, name: string) => {
           
     <!--[if mso]><style>.v-button {background: transparent !important;}</style><![endif]-->
   <div class="v-text-align" align="center">
-    <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://www.programaexcelencia.org/signin/admin" style="height:37px; v-text-anchor:middle; width:330px;" arcsize="135%"  stroke="f" fillcolor="#458d0c"><w:anchorlock/><center style="color:#FFFFFF;"><![endif]-->
-      <a href="https://www.programaexcelencia.org/signin/admin" target="_blank" class="v-button v-border-radius v-font-size" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #458d0c; border-radius: 50px;-webkit-border-radius: 50px; -moz-border-radius: 50px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
+    <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://www.programaexcelencia.org/signin" style="height:37px; v-text-anchor:middle; width:330px;" arcsize="135%"  stroke="f" fillcolor="#458d0c"><w:anchorlock/><center style="color:#FFFFFF;"><![endif]-->
+      <a href="https://www.programaexcelencia.org/signin" target="_blank" class="v-button v-border-radius v-font-size" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #458d0c; border-radius: 50px;-webkit-border-radius: 50px; -moz-border-radius: 50px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
         <span class="v-line-height" style="display:block;padding:10px 100px;line-height:120%;">🌟 Inicia sesión 🌟</span>
       </a>
       <!--[if mso]></center></v:roundrect><![endif]-->
