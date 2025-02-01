@@ -52,6 +52,10 @@ export const authOptions = {
             token.scholarStatus = scholar.scholarStatus,
             token.isSpeaker = scholar.isSpeaker
         }
+        if (user.kind_of_user === 'APPLICANT') {
+          token.id = user.id
+          token.role = user.kind_of_user
+        }
       }
 
       return token;
@@ -71,8 +75,6 @@ export const authOptions = {
     },
   },
 } satisfies NextAuthOptions;
-
-
 
 export const getServerSession = async (
   ...args:

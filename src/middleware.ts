@@ -15,8 +15,6 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/signin', req.url));
   }
 
-  if (pathname === '/') return NextResponse.redirect(new URL('/signin', req.url))
-
   // Protect routes
   if (pathname.startsWith('/admin')) {
     if (!token || token.role !== 'ADMIN') {
@@ -26,6 +24,11 @@ export async function middleware(req: NextRequest) {
 
   if (pathname.startsWith('/becario')) {
     if (!token || (token.role !== 'SCHOLAR')) {
+      return NextResponse.redirect(new URL(ACCESS_DENIED_PATH, req.url));
+    }
+  }
+  if (pathname.startsWith('/captacion/postulacion')) {
+    if (!token || (token.role !== 'APPLICANT')) {
       return NextResponse.redirect(new URL(ACCESS_DENIED_PATH, req.url));
     }
   }
@@ -39,6 +42,9 @@ export async function middleware(req: NextRequest) {
       else if (token.role === 'SCHOLAR') {
         return NextResponse.redirect(new URL('/becario/panel', req.url));
       }
+      else if (token.role === 'APPLICANT') {
+        return NextResponse.redirect(new URL('/captacion/postulacion', req.url));
+      }
       else {
         return NextResponse.redirect(new URL(ACCESS_DENIED_PATH, req.url));
       }
@@ -48,5 +54,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/becario/:path*', '/signin', '/'],
+  matcher: ['/admin/:path*', '/becario/:path*', '/signin', '/captacion/postulacion/:path*'],
 };
