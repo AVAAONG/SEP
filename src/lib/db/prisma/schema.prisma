@@ -639,6 +639,33 @@ model ContactInfo {
   @@map("contact_info")
 }
 
+model FamilyInfo {
+  id                       String           @id @default(uuid()) @map("id")
+  averageFamilyIncome      Int              @map("average_family_income")
+  whitWhoDoYouLive         WhitWhoDoYouLive @map("whit_who_do_you_live")
+  kindOfHouse              KindOfHouse      @map("kind_of_house")
+  contributeToFamilyIncome Boolean          @map("contribute_to_family_income")
+  familyMembers            String           @map("family_members")
+  fatherJob                String           @map("father_job")
+  fathersCompanyName       String           @map("fathers_company_name")
+  motherJob                String           @map("mother_job")
+  mothersCompanyName       String           @map("mothers_company_name")
+
+  @@map("family_info")
+}
+
+enum WhitWhoDoYouLive {
+  PARENTS
+  RELATIVES
+  OTHERS
+}
+
+enum KindOfHouse {
+  OWNED
+  RENTED
+  MORTGAGED
+}
+
 //
 // project.prisma
 //
