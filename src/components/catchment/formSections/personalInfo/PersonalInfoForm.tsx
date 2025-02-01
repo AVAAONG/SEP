@@ -51,7 +51,7 @@ const PersonalInfo = ({
 
   const methods = useForm<TPersonalInfo>({
     resolver: zodResolver(personalInfoSchema),
-    mode: 'onTouched',
+    mode: 'onBlur',
     defaultValues: {
       ...personalInfo,
       birthdate: formatDateToMatchInput(personalInfo?.birthdate),
