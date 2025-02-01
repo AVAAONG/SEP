@@ -387,11 +387,13 @@ model User {
   sessions      Session[]
   created_at    DateTime      @default(now())
   last_login    DateTime?     @default(now())
-  kind_of_user  KinOfUser
+  kind_of_user  KinOfUser     @default(APPLICANT)
   admin         AdminProfile? @relation(fields: [adminId], references: [id])
   adminId       String?       @unique
   scholar       Scholar?      @relation(fields: [scholarId], references: [id])
   scholarId     String?       @unique
+  applicant     Applicant?    @relation(fields: [applicantId], references: [id])
+  applicantId   String?       @unique
 }
 
 model VerificationToken {
@@ -590,6 +592,52 @@ model Role {
   name        String         @unique
   admin       AdminProfile[]
   permissions Json?
+}
+
+//
+// applicant.prisma
+//
+
+model Applicant {
+  id          String            @id @default(cuid())
+  user        User?
+  step        Int               @default(1) //the sections in the form max 9
+  chapterId   String
+  personal    PersonalInfo?
+  status      RecruitmentStatus @default(PHASE_I)
+  startTime   DateTime          @default(now())
+  endTime     DateTime?
+  ContactInfo ContactInfo?
+}
+
+model PersonalInfo {
+  id          String    @id @default(uuid())
+  photo       String
+  chapterId   String
+  firstNames  String    @map("first_names")
+  lastNames   String    @map("last_names")
+  dni         String    @unique
+  gender      Gender
+  birthdate   DateTime
+  state       String
+  address     String
+  Applicant   Applicant @relation(fields: [applicantId], references: [id])
+  applicantId String    @unique
+
+  @@map("personal_info")
+}
+
+model ContactInfo {
+  id                  String    @id @default(uuid())
+  localPhoneNumber    String    @map("local_phone_number")
+  whatsAppPhoneNumber String    @map("whatsApp_phone_number")
+  email               String    @unique
+  parentalPhoneNumber String    @map("parental_phone_number")
+  parental            String
+  Applicant           Applicant @relation(fields: [applicantId], references: [id])
+  applicantId         String    @unique
+
+  @@map("contact_info")
 }
 
 //
@@ -858,7 +906,6 @@ model Scholar {
   collage_information               ScholarCollageInformation[]
   cva_information                   ScholarCVAInformation?
   job_information                   JobInformation[]
-  recruitment_information           RecruitmentInformation?
   entrepenourshipInformation        EntrepenourshipInformation?
   dos_exchange_program_applications DOSExchangeProgram[]
 }
@@ -898,53 +945,6 @@ model Probation {
   observations       String?
   scholar            ScholarProgramInformation @relation(fields: [scholar_id], references: [id])
   scholar_id         String
-
-  @@index([scholar_id])
-}
-
-model RecruitmentInformation {
-  id                            String            @id @default(nanoid())
-  infomation_fill               DateTime
-  information_update            DateTime
-  recruitmentStatus             RecruitmentStatus
-  contribute_to_family_income   Boolean           @default(false)
-  average_family_income         String?
-  whit_who_do_you_live          String?
-  kind_of_house                 String?
-  family_members                String?
-  father_job                    String?
-  fathers_company_name          String?
-  fathers_yearsof_experience    String?
-  mother_job                    String?
-  mothers_company_name          String?
-  mothers_yearsof_experience    String?
-  parent_phone_number           String?
-  parent_name                   String?
-  high_school_name              String?
-  high_school_address           String?
-  high_school_title             String?
-  high_school_director_name     String?
-  high_school_average_grade     String?
-  high_school_grade_proof       String?
-  extracurricular_activities    String?
-  social_labour_place           String?
-  social_labour_learning        String?
-  speaked_other_languages       Boolean?
-  speaked_languages             String?
-  how_knows_program             String?
-  internet_connection           Boolean           @default(false)
-  internet_connection_stability String?
-  why_wants_to_be_scholar       String?
-  dni_scan                      String?
-  rif_scan                      String?
-  cnu_opsu_scan                 String?
-  esay                          String?
-  last_tax_declaration          String?
-  receipt_of_payment            String?
-  speaked_languages_level       Level?
-  referred_by                   String?
-  scholar_id                    String            @unique
-  scholar                       Scholar           @relation(fields: [scholar_id], references: [id])
 
   @@index([scholar_id])
 }
@@ -1061,16 +1061,11 @@ enum ScholarCondition {
 }
 
 enum RecruitmentStatus {
-  PHASE_1_PENDING
-  PHASE_1_APPROVED
-  PHASE_1_REJECTED
-  PHASE_2_PENDING
-  PHASE_2_APPROVED
-  PHASE_2_REJECTED
-  PHASE_3_PENDING
-  PHASE_3_APPROVED
-  PHASE_3_REJECTED
-  PHASE_4_PENDING
-  PHASE_4_APPROVED
-  PHASE_4_REJECTED
+  PHASE_I
+  PHASE_II_PENDING
+  PHASE_II_APPROVED
+  PHASE_II_REJECTED
+  PHASE_III_PENDING
+  PHASE_III_APPROVED
+  PHASE_III_REJECTED
 }

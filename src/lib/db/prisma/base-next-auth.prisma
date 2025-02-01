@@ -1,5 +1,6 @@
 import { AdminProfile } from "users\admin"
 import { Scholar } from "users\scholar\scholar"
+import { Applicant } from "users\applicant"
 
 enum KinOfUser {
     ADMIN
@@ -44,11 +45,13 @@ model User {
     sessions      Session[]
     created_at    DateTime      @default(now())
     last_login    DateTime?     @default(now())
-    kind_of_user  KinOfUser
+    kind_of_user  KinOfUser     @default(APPLICANT)
     admin         AdminProfile? @relation(fields: [adminId], references: [id])
     adminId       String?       @unique
     scholar       Scholar?      @relation(fields: [scholarId], references: [id])
     scholarId     String?       @unique
+    applicant     Applicant?    @relation(fields: [applicantId], references: [id])
+    applicantId   String?       @unique
 }
 
 model VerificationToken {

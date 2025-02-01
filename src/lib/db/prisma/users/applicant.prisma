@@ -1,0 +1,45 @@
+import { User } from "..\base-next-auth"
+import { Gender } from "..\activities\type-activities"
+import { RecruitmentStatus } from "scholar\types-scholar"
+
+model Applicant {
+  id          String            @id @default(cuid())
+  user        User?
+  step        Int               @default(1) //the sections in the form max 9
+  chapterId   String
+  personal    PersonalInfo?
+  status      RecruitmentStatus @default(PHASE_I)
+  startTime   DateTime          @default(now())
+  endTime     DateTime?
+  ContactInfo ContactInfo?
+}
+
+model PersonalInfo {
+  id          String    @id @default(uuid())
+  photo       String
+  chapterId   String
+  firstNames  String    @map("first_names")
+  lastNames   String    @map("last_names")
+  dni         String    @unique
+  gender      Gender
+  birthdate   DateTime
+  state       String
+  address     String
+  Applicant   Applicant @relation(fields: [applicantId], references: [id])
+  applicantId String    @unique
+
+  @@map("personal_info")
+}
+
+model ContactInfo {
+  id                  String    @id @default(uuid())
+  localPhoneNumber    String    @map("local_phone_number")
+  whatsAppPhoneNumber String    @map("whatsApp_phone_number")
+  email               String    @unique
+  parentalPhoneNumber String    @map("parental_phone_number")
+  parental            String
+  Applicant           Applicant @relation(fields: [applicantId], references: [id])
+  applicantId         String    @unique
+
+  @@map("contact_info")
+}
