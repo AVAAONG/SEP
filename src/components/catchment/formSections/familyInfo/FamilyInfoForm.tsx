@@ -1,42 +1,65 @@
 'use client';
 import InputField from '@/components/fields/InputFormField';
 import SelectFormField from '@/components/fields/SelectFormField';
+import { createOrUpdateFamilyInfo } from '@/lib/db/utils/applicant';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Link } from '@nextui-org/react';
+import { FamilyInfo } from '@prisma/client';
+import { useRouter } from 'next/navigation';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import familyFormSchema from './FamilyInfoSchema';
 
 type FamilyFormSchemaType = z.infer<typeof familyFormSchema>;
 
-const FamilyInfoForm = () => {
+const FamilyInfoForm = ({
+  applicantId,
+  applicantFamilyInfo,
+}: {
+  applicantId: string;
+  applicantFamilyInfo?: FamilyInfo;
+}) => {
+  const router = useRouter();
+
   const methods = useForm<FamilyFormSchemaType>({
     resolver: zodResolver(familyFormSchema),
-    mode: 'all',
+    defaultValues: familyFormSchema.parse({
+      ...applicantFamilyInfo,
+      contributeToFamilyIncome: applicantFamilyInfo?.contributeToFamilyIncome ? 'YES' : 'NO',
+      mothersCompanyName: applicantFamilyInfo?.mothersCompanyName ?? undefined,
+      fatherJob: applicantFamilyInfo?.fatherJob ?? undefined,
+      fathersCompanyName: applicantFamilyInfo?.fathersCompanyName ?? undefined,
+      motherJob: applicantFamilyInfo?.motherJob ?? undefined,
+    }),
+    mode: 'onBlur',
   });
-  const onSubmit = (data: FamilyFormSchemaType) => {
-    console.log(data);
-    methods.reset(
-      {},
-      {
-        keepErrors: false,
-      }
-    );
+  const { handleSubmit, formState } = methods;
+
+  console.log(methods.formState.defaultValues);
+
+  const onSubmit = async (data: FamilyFormSchemaType) => {
+    const contribute = data.contributeToFamilyIncome === 'YES' ? true : false;
+    await createOrUpdateFamilyInfo(applicantId, {
+      ...data,
+      contributeToFamilyIncome: contribute,
+    });
+    router.push('/captacion/postulacion/laboral');
   };
+
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full space-y-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-5">
           <InputField
-            isRequired
-            name="average_family_income"
+            isRequired={true}
+            name="averageFamilyIncome"
             type="number"
             label="Promedio de ingreso familiar (En dolares)"
           />
           <SelectFormField
-            isRequired
+            isRequired={true}
             label="¿Con quién vives?"
-            name="whit_who_do_you_live"
+            name="whitWhoDoYouLive"
             selectItems={[
               { label: 'Padres', value: 'PARENTS' },
               { label: 'Familiares', value: 'RELATIVES' },
@@ -44,9 +67,9 @@ const FamilyInfoForm = () => {
             ]}
           />
           <SelectFormField
-            isRequired
+            isRequired={true}
             label="Tipo de vivienda"
-            name="kind_of_house"
+            name="kindOfHouse"
             selectItems={[
               { label: 'Propia', value: 'OWNED' },
               { label: 'Alquilada', value: 'RENTED' },
@@ -54,9 +77,9 @@ const FamilyInfoForm = () => {
             ]}
           />
           <SelectFormField
-            isRequired
+            isRequired={true}
             label="¿Contribuye con el ingreso familiar?"
-            name="contribute_to_family_income"
+            name="contributeToFamilyIncome"
             selectItems={[
               {
                 label: 'Sí',
@@ -64,29 +87,27 @@ const FamilyInfoForm = () => {
               },
               {
                 label: 'No',
-                value: 'NO',
+                value: 'NO', // we parse this when saving to the database to be false
               },
             ]}
           />
           <InputField
-            isRequired
-            name="family_members"
+            isRequired={true}
+            name="familyMembers"
             type="text"
             label="Composición del núcleo familiar"
           />
-          <InputField isRequired name="father_job" type="text" label="Ocupación del padre" />
+          <InputField name="fatherJob" type="text" label="Ocupación del padre" />
           <InputField
-            isRequired
-            name="fathers_company_name"
+            name="fathersCompanyName"
             type="text"
             label="Nombre de la empresa u organización en donde trabaja el padre"
           />
-          <InputField isRequired name="mother_job" type="text" label="Ocupación del madre" />
+          <InputField name="motherJob" type="text" label="Ocupación de la madre" />
           <InputField
-            isRequired
-            name="mothers_company_name"
+            name="mothersCompanyName"
             type="text"
-            label="Nombre de la empresa u organización en donde trabaja el madre"
+            label="Nombre de la empresa u organización en donde trabaja la madre"
           />
         </div>
         <div className="col-span-2 flex gap-4">
@@ -99,7 +120,7 @@ const FamilyInfoForm = () => {
           >
             Anterior
           </Button>
-          <Button radius="sm" type="submit" className="w-full">
+          <Button radius="sm" type="submit" className="w-full" isLoading={formState.isSubmitting}>
             Siguiente
           </Button>
         </div>

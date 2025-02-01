@@ -91,3 +91,42 @@ export const getApplicantContactInfo = async (applicantId: string) => {
 
   return applicant?.ContactInfo ? applicant?.ContactInfo : undefined
 }
+
+
+export const getApplicantFamilyInfo = async (applicantId: string) => {
+  const applicant = await prisma.applicant.findUnique({
+    where: {
+      id: applicantId,
+    },
+    select: {
+      familyInfo: true,
+    },
+  });
+
+  return applicant?.familyInfo ? applicant?.familyInfo : undefined;
+}
+
+export const createOrUpdateFamilyInfo = async (applicantId: string, applicantFamilyInfo: Prisma.FamilyInfoCreateInput | Prisma.FamilyInfoUpdateInput) => {
+  await prisma.$transaction(async (prisma) => {
+    const applicant = await prisma.applicant.findUniqueOrThrow({
+      where: { id: applicantId },
+      select: { step: true },
+    });
+
+    const updateData: any = {
+      familyInfo: {
+        upsert: {
+          create: applicantFamilyInfo as Prisma.FamilyInfoCreateInput,
+          update: applicantFamilyInfo as Prisma.FamilyInfoUpdateInput,
+        },
+      },
+    };
+
+    if (applicant.step < 4) updateData.step = 4;
+
+    await prisma.applicant.update({
+      where: { id: applicantId },
+      data: updateData,
+    });
+  });
+}
