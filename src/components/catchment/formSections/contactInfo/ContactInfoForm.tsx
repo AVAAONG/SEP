@@ -37,12 +37,12 @@ const ContactInfoForm = () => {
             isRequired
             label="Número telefónico asociado a WhatsApp"
             type="number"
-            name="whatsapp_number"
+            name="whatsApp_phone_number"
           />
           <InputField isRequired label="Correo electrónico" type="email" name="email" />
           <InputField
             type="text"
-            name="parent_phone_number"
+            name="parental_phone_number"
             isRequired
             label="Teléfono de un familiar/pariente/amigo cercano"
             description="En el caso de que no podamos contactarte, ¿con quién podemos comunicarnos?"
