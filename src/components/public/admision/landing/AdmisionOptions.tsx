@@ -1,6 +1,6 @@
 'use client';
-import { setCookie } from '@/lib/serverAction';
 import Link from 'next/link';
+import React from 'react';
 
 const ArrowIcon = () => {
   return (
@@ -28,15 +28,12 @@ const ArrowIcon = () => {
 const AdmisionLinkButtons = ({ chapterName }: { chapterName: string }) => {
   return (
     <Link
-      href="/signin/postulante"
+      href="/signin"
       className="w-full md:max-w-[25ch] h-min relative group rounded-lg p-2 sm:p-5 text-dark dark:text-light border-primary-light border transition-all dark:hover:bg-primary-light dark:focus:bg-primary-light hover:bg-primary-1 focus:bg-primary-1"
       rel="noopener noreferrer"
-      onClick={async () => await setCookie('chapter', chapterName)}
     >
       <h2 className={`text-2xl font-medium`}>
-        <span className="hidden md:inline-block">{chapterName}</span>
-        <span className="inline-block md:hidden">{chapterName}</span>
-
+        <span className="inline-block">{chapterName}</span>
         <ArrowIcon />
       </h2>
     </Link>
@@ -59,7 +56,9 @@ const AdmisionOptions = ({ title }: { title: string }) => {
       </div>
       <div className="flex flex-col md:flex-row gap-6 justify-center w-full">
         {['Caracas', 'Carabobo', 'Zulia'].map((chapter) => (
-          <AdmisionLinkButtons chapterName={chapter} />
+          <React.Fragment key={chapter}>
+            <AdmisionLinkButtons chapterName={chapter} />
+          </React.Fragment>
         ))}
       </div>
     </section>

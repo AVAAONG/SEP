@@ -38,7 +38,7 @@ const SigninForm = () => {
             label="Correo electrónico"
             type="email"
             required={true}
-            placeholder="becario@gmail.com"
+            placeholder="nombre@gmail.com"
           />
         </div>
         <Button
