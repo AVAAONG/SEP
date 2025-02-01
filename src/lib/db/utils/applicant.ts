@@ -53,3 +53,41 @@ export const createOrUpdatePersonalInfo = async (applicantId: string, chapterId:
     }
   });
 }
+
+export const createOrUpdateContactInfo = async (applicantId: string, applicantContactInfo: Prisma.ContactInfoCreateInput | Prisma.ContactInfoUpdateInput) => {
+  await prisma.$transaction(async (prisma) => {
+    const applicant = await prisma.applicant.findUniqueOrThrow({
+      where: { id: applicantId },
+      select: { step: true },
+    });
+
+    const updateData: any = {
+      ContactInfo: {
+        upsert: {
+          create: applicantContactInfo as Prisma.ContactInfoCreateInput,
+          update: applicantContactInfo as Prisma.ContactInfoUpdateInput,
+        },
+      },
+    };
+
+    if (applicant.step < 3) updateData.step = 3;
+
+    await prisma.applicant.update({
+      where: { id: applicantId },
+      data: updateData,
+    });
+  });
+};
+
+export const getApplicantContactInfo = async (applicantId: string) => {
+  const applicant = await prisma.applicant.findUnique({
+    where: {
+      id: applicantId,
+    },
+    include: {
+      ContactInfo: true,
+    },
+  });
+
+  return applicant?.ContactInfo ? applicant?.ContactInfo : undefined
+}
