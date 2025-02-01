@@ -2,8 +2,12 @@
 import ImageUpload from '@/components/fields/ImageUpload';
 import InputField from '@/components/fields/InputFormField';
 import SelectFormField from '@/components/fields/SelectFormField';
+import { formatDateToMatchInput } from '@/lib/dates';
+import { createOrUpdatePersonalInfo } from '@/lib/db/utils/applicant';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@nextui-org/react';
+import { PersonalInfo as PersonalInfoPrisma } from '@prisma/client';
+import { useRouter } from 'next/navigation';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import personalInfoSchema from './PersonalInfoSchema';
@@ -36,20 +40,21 @@ const VENEZUELA_STATES: string[] = [
 
 type TPersonalInfo = z.infer<typeof personalInfoSchema>;
 
-const PersonalInfo = (props) => {
-  const { id, photo, first_names, last_names, dni, gender, state, address, birthdate } = props;
+const PersonalInfo = ({
+  personalInfo,
+  applicantId,
+}: {
+  personalInfo?: (PersonalInfoPrisma & { chapterId: string }) | null;
+  applicantId: string;
+}) => {
+  const router = useRouter();
 
   const methods = useForm<TPersonalInfo>({
     resolver: zodResolver(personalInfoSchema),
     mode: 'onChange',
     defaultValues: {
-      first_names,
-      last_names,
-      dni,
-      gender,
-      state,
-      address,
-      birthdate,
+      ...personalInfo,
+      birthdate: formatDateToMatchInput(personalInfo?.birthdate),
     },
   });
 
@@ -59,13 +64,18 @@ const PersonalInfo = (props) => {
   } = methods;
 
   const handleFormSubmit = async (data: TPersonalInfo) => {
-    console.log(data);
+    const { chapterId, ...personalInfoData } = data;
+    await createOrUpdatePersonalInfo(applicantId, chapterId, personalInfoData);
+    router.push('/captacion/postulacion/contacto');
   };
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-8 w-full">
-        <ImageUpload name="photo" image={undefined} updateFunction={async () => {}} />
+      <form
+        onSubmit={handleSubmit(async (data) => await handleFormSubmit(data))}
+        className="flex flex-col gap-8 w-full"
+      >
+        <ImageUpload name="photo" />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <SelectFormField
             autoFocus
@@ -78,8 +88,8 @@ const PersonalInfo = (props) => {
               { label: 'Zulia', value: 'H0rvqSucbop6uozNUpuC' },
             ]}
           />
-          <InputField isRequired={true} label="Nombre(s)" type="text" name="first_names" />
-          <InputField isRequired={true} label="Apellido(s)" type="text" name="last_names" />
+          <InputField isRequired={true} label="Nombre(s)" type="text" name="firstNames" />
+          <InputField isRequired={true} label="Apellido(s)" type="text" name="lastNames" />
           <InputField isRequired={true} label="Cédula de identidad" type="number" name="dni" />
           <SelectFormField
             isRequired={true}

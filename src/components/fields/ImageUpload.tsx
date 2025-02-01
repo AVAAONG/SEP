@@ -1,24 +1,37 @@
-import { uploadBlob } from '@/lib/azure/azure';
+import { getBlobImage, uploadBlob } from '@/lib/azure/azure';
 import { Avatar } from '@nextui-org/react';
+import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 interface ImageUploadProps {
-  name: string;
-  image: string | undefined;
-  updateFunction: (blobUrl: string) => Promise<void>;
+  name: string; // updateFunction: (blobUrl: string) => Promise<void>;
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ name, image, updateFunction }) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
   const {
     register,
     setValue,
+    watch,
+
     formState: { errors },
   } = useFormContext();
+  const [image, setImage] = useState<string | undefined>();
+  const watcherImage = watch(name);
+  console.log(watcherImage);
+
+  useEffect(() => {
+    const getImage = async () => {
+      const blobImage = (await getBlobImage(watcherImage)) || undefined;
+      setImage(blobImage);
+    };
+
+    getImage();
+  }, [watcherImage]);
 
   const handleFileChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    updateFunction: (blobUrl: string) => Promise<void>
+    event: React.ChangeEvent<HTMLInputElement>
+    // updateFunction: (blobUrl: string) => Promise<void>
   ) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -28,7 +41,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ name, image, updateFunction }
         try {
           const response = await uploadBlob(base64String as string, 'picture');
           setValue(name, response, { shouldValidate: true });
-          if (response) updateFunction(response);
         } catch (error) {
           console.error('Error uploading file: ', error);
         }
@@ -62,7 +74,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ name, image, updateFunction }
             id={name}
             type="file"
             accept="image/jpeg,image/png"
-            onChange={(event) => handleFileChange(event, updateFunction)}
+            onChange={(event) => handleFileChange(event)}
             className="hidden"
           />
         </label>

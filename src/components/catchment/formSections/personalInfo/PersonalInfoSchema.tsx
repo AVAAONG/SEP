@@ -1,4 +1,4 @@
-import { formatDateToStoreInDB } from '@/lib/utils/dates';
+'use client';
 import { z } from 'zod';
 const VENEZUELA_STATES: string[] = [
   'Amazonas',
@@ -32,13 +32,12 @@ const personalInfoSchema = z.object({
   chapterId: z.string({
     required_error: 'Debes seleccionar una sede',
   }),
-
-  first_names: z
+  firstNames: z
     .string()
     .min(2, 'El nombre debe tener al menos 2 caracteres')
     .regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, 'El nombre solo puede contener letras'),
 
-  last_names: z
+  lastNames: z
     .string()
     .min(2, 'El apellido debe tener al menos 2 caracteres')
     .regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, 'El apellido solo puede contener letras'),
@@ -49,7 +48,7 @@ const personalInfoSchema = z.object({
     .max(15, 'La cédula no puede tener más de 15 dígitos')
     .regex(/^\d+$/, 'La cédula solo puede contener números'),
 
-  gender: z.enum(['M', 'F'], {
+  gender: z.enum(['M', 'F', 'O'], {
     required_error: 'Debes seleccionar un género',
     invalid_type_error: 'Género inválido',
   }),
@@ -72,7 +71,8 @@ const personalInfoSchema = z.object({
       },
       { message: 'Debes tener entre 16 y 23 años' }
     )
-    .transform((date) => formatDateToStoreInDB(date)),
+    .transform((value) => new Date(value).toISOString()),
+
   state: z.enum([...VENEZUELA_STATES] as [string, ...string[]], {
     required_error: 'Debes seleccionar un estado',
     invalid_type_error: 'Estado inválido',
