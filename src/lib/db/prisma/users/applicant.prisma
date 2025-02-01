@@ -17,7 +17,6 @@ model Applicant {
 model PersonalInfo {
   id          String    @id @default(uuid())
   photo       String
-  chapterId   String
   firstNames  String    @map("first_names")
   lastNames   String    @map("last_names")
   dni         String    @unique
