@@ -4,6 +4,8 @@ import { RecruitmentStatus } from "scholar\types-scholar"
 import { Modality } from "..\activities\type-activities"
 import { JobSchedule } from "scholar\types-scholar"
 import { Level } from "..\activities\chat\types-chat"
+import { KindOfCollage, StudyArea, StudyRegime } from "scholar\collage"
+import { Modality } from "..\activities\type-activities"
 
 model Applicant {
   id                String             @id @default(cuid())
@@ -20,6 +22,7 @@ model Applicant {
   languageKnowledge LanguageKnowledge?
   highSchool        HighSchool?
   additionalInfo    AdditionalInfo?
+  collageInfo       CollageInfo?
 }
 
 model PersonalInfo {
@@ -160,4 +163,21 @@ enum InternetConnectionStability {
   UNSTABLE
   VERY_UNSTABLE
   NONE
+}
+
+model CollageInfo {
+  id                      String        @id @default(uuid())
+  kind_of_collage         KindOfCollage @map("kindOfCollage")
+  collage                 String
+  study_area              StudyArea     @map("studyArea")
+  study_regime            StudyRegime   @map("studyRegime")
+  career                  String
+  collage_start_date      DateTime      @map("collageStartDate")
+  current_academic_period String        @map("currentAcademicPeriod")
+  grade                   Float
+  class_modality          Modality      @map("classModality")
+  have_scholarship        Boolean       @map("haveScholarship")
+  scholarship_percentage  Float?        @map("scholarshipPercentage")
+  applicant               Applicant     @relation(fields: [applicantId], references: [id])
+  applicantId             String        @unique @map("applicant_id")
 }
