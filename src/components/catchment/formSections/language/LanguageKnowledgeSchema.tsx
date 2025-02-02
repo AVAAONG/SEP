@@ -1,16 +1,30 @@
-import { yesNoEnumBooleanTransform } from '@/lib/zod/utils';
 import { z, ZodIssueCode } from 'zod';
 
 // Transforming 'YES'/'NO' to true/false
 
 const languagesFormSchema = z
   .object({
-    speaksOtherLanguage: yesNoEnumBooleanTransform,
-    specifiedLanguage: z.string().optional(),
-    englishLevel: z.enum(['BASIC', 'INTERMEDIATE', 'ADVANCED']).optional(),
+    speaksOtherLanguage: z
+      .enum(['YES', 'NO'], {
+        required_error: 'Debes seleccionar una opción',
+        invalid_type_error: 'Opción inválida',
+      })
+      .transform((val) => (val === null ? undefined : val)),
+    specifiedLanguage: z
+      .string()
+      .nullable()
+      .optional()
+
+      .transform((val) => (val === null ? undefined : val)),
+    languageLevel: z
+      .string()
+      .nullable()
+      .optional()
+
+      .transform((val) => (val === null ? undefined : val)),
   })
   .superRefine((data, ctx) => {
-    if (data.speaksOtherLanguage) {
+    if (data.speaksOtherLanguage === 'YES') {
       if (!data.specifiedLanguage || data.specifiedLanguage.trim().length === 0) {
         ctx.addIssue({
           path: ['specifiedLanguage'],
@@ -18,7 +32,7 @@ const languagesFormSchema = z
           code: ZodIssueCode.custom, // Added the required 'code' property
         });
       }
-      if (!data.englishLevel) {
+      if (!data.languageLevel) {
         ctx.addIssue({
           path: ['englishLevel'],
           message: 'Se requiere nivel de inglés cuando se habla otro idioma es "Sí"',

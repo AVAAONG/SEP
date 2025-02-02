@@ -1,37 +1,77 @@
 'use client';
 import InputField from '@/components/fields/InputFormField';
 import SelectFormField from '@/components/fields/SelectFormField';
+import { createOrUpdateLangInfo } from '@/lib/db/utils/applicant';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@nextui-org/react';
+import { LanguageKnowledge, Level, Prisma } from '@prisma/client';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 import languagesFormSchema from './LanguageKnowledgeSchema';
 
 type LanguageFormSchemaType = z.infer<typeof languagesFormSchema>;
 
-const LanguagesForm = () => {
+const LanguagesForm = ({
+  applicantId,
+  applicantLangKnowledge,
+}: {
+  applicantId: string;
+  applicantLangKnowledge?: LanguageKnowledge;
+}) => {
+  const router = useRouter();
+
   const methods = useForm<LanguageFormSchemaType>({
     resolver: zodResolver(languagesFormSchema),
-    mode: 'all',
+    defaultValues: languagesFormSchema.parse({
+      ...applicantLangKnowledge,
+      speaksOtherLanguage: applicantLangKnowledge?.speaksOtherLanguage === true ? 'YES' : 'NO',
+    }),
+    mode: 'onSubmit',
   });
-  const speaksOtherLang = useWatch({
+
+  const { handleSubmit, formState } = methods;
+
+  const speaksOtherLangWatch = useWatch({
     control: methods.control,
     name: 'speaksOtherLanguage',
   });
 
-  const onSubmit = (data: LanguageFormSchemaType) => {
-    console.log(data);
-    methods.reset(
-      {},
-      {
-        keepErrors: false,
-      }
-    );
+  const speaksOtherLang = speaksOtherLangWatch === 'YES';
+
+  useEffect(() => {
+    if (!speaksOtherLang) {
+      methods.reset(
+        {
+          speaksOtherLanguage: 'NO',
+          specifiedLanguage: '',
+          languageLevel: '',
+        },
+        {
+          keepErrors: false,
+        }
+      );
+    }
+  }, [speaksOtherLang]);
+
+  const onSubmit = async (data: LanguageFormSchemaType) => {
+    const dataToSubmit: Prisma.LanguageKnowledgeUpdateInput = {
+      ...data,
+      speaksOtherLanguage: data.speaksOtherLanguage === 'YES',
+      languageLevel: data.languageLevel as Level,
+    };
+    if (data.speaksOtherLanguage === 'NO') {
+      dataToSubmit.specifiedLanguage = null;
+      dataToSubmit.languageLevel = null;
+    }
+    await createOrUpdateLangInfo(applicantId, dataToSubmit);
+    router.push('/captacion/postulacion/secundaria');
   };
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full space-y-5">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-5">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
           <SelectFormField
             isRequired
@@ -55,7 +95,7 @@ const LanguagesForm = () => {
             isRequired={speaksOtherLang}
             isDisabled={!speaksOtherLang}
             label="Nivel de competencia"
-            name="englishLevel"
+            name="languageLevel"
             selectItems={[
               { label: 'Básico', value: 'BASIC' },
               { label: 'Intermedio', value: 'INTERMEDIATE' },
@@ -73,7 +113,7 @@ const LanguagesForm = () => {
           >
             Anterior
           </Button>
-          <Button radius="sm" type="submit" className="w-full">
+          <Button radius="sm" type="submit" className="w-full" isLoading={formState.isSubmitting}>
             Siguiente
           </Button>
         </div>
