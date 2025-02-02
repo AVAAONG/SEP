@@ -753,7 +753,6 @@ enum InternetConnectionStability {
   STABLE
   UNSTABLE
   VERY_UNSTABLE
-  NONE
 }
 
 model CollageInfo {
