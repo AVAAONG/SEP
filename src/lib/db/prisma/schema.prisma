@@ -599,17 +599,18 @@ model Role {
 //
 
 model Applicant {
-  id          String            @id @default(cuid())
-  user        User?
-  step        Int               @default(1) //the sections in the form max 9
-  chapterId   String
-  personal    PersonalInfo?
-  status      RecruitmentStatus @default(PHASE_I)
-  startTime   DateTime          @default(now())
-  endTime     DateTime?
-  ContactInfo ContactInfo?
-  familyInfo  FamilyInfo?
-  jobInfo     JobInfo?
+  id                String             @id @default(cuid())
+  user              User?
+  step              Int                @default(1) //the sections in the form max 9
+  chapterId         String
+  personal          PersonalInfo?
+  status            RecruitmentStatus  @default(PHASE_I)
+  startTime         DateTime           @default(now())
+  endTime           DateTime?
+  ContactInfo       ContactInfo?
+  familyInfo        FamilyInfo?
+  jobInfo           JobInfo?
+  languageKnowledge LanguageKnowledge?
 }
 
 model PersonalInfo {
@@ -681,6 +682,17 @@ model JobInfo {
   applicantId      String       @unique
 
   @@map("job_info")
+}
+
+model LanguageKnowledge {
+  id                  String    @id @default(uuid())
+  speaksOtherLanguage Boolean   @map("speaks_other_language")
+  specifiedLanguage   String?   @map("specified_language")
+  languageLevel       Level?    @map("language_level")
+  applicant           Applicant @relation(fields: [applicantId], references: [id])
+  applicantId         String    @unique
+
+  @@map("language_knowledge")
 }
 
 //
