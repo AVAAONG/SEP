@@ -2,8 +2,11 @@
 import InputField from '@/components/fields/InputFormField';
 import SelectFormField from '@/components/fields/SelectFormField';
 import TextAreaFormField from '@/components/fields/TextAreaFormField';
+import { createOrUpdateHighSchoolInfo } from '@/lib/db/utils/applicant';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Link } from '@nextui-org/react';
+import { HighSchool } from '@prisma/client';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
@@ -11,29 +14,40 @@ import highSchoolFormSchema from './HighSchoolSchema';
 
 type HighSchoolFormSchemaType = z.infer<typeof highSchoolFormSchema>;
 
-const HighSchoolForm = () => {
+const HighSchoolForm = ({
+  applicantId,
+  applicantHighSchoolInfo,
+}: {
+  applicantId: string;
+  applicantHighSchoolInfo?: HighSchool;
+}) => {
+  const router = useRouter();
+
   const methods = useForm<HighSchoolFormSchemaType>({
     resolver: zodResolver(highSchoolFormSchema),
-    mode: 'all',
+    defaultValues: applicantHighSchoolInfo,
+    mode: 'onSubmit',
   });
+  const { handleSubmit, formState } = methods;
 
   const graduationTitle = useWatch({
     control: methods.control,
-    name: 'graduation_title',
+    name: 'graduationTitle',
   });
 
   useEffect(() => {
     if (graduationTitle !== 'MEDIAN_TECHNICIAN') {
       methods.setValue('mention', '');
     }
-  }, [graduationTitle, methods.setValue]);
+  }, [graduationTitle]);
 
-  const onSubmit = (data: HighSchoolFormSchemaType) => {
-    console.log(data);
+  const onSubmit = async (data: HighSchoolFormSchemaType) => {
+    await createOrUpdateHighSchoolInfo(applicantId, data);
+    router.push('/captacion/postulacion/universidad');
   };
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full space-y-5">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-5">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
           <InputField
             label="Nombre de la institución"
@@ -56,30 +70,25 @@ const HighSchoolForm = () => {
             label="Promedio de notas de bachillerato"
             type="number"
             name="gpa"
-            min={1}
-            max={20}
             isRequired
           />
           <SelectFormField
             isRequired
             label="Título obtenido al egresar de la institución"
-            name="graduation_title"
+            name="graduationTitle"
             selectItems={[
               { label: 'Bachiller en Ciencias', value: 'BACHELOR_IN_SCIENCE' },
               { label: 'Técnico medio', value: 'MEDIAN_TECHNICIAN' },
             ]}
           />
-          {graduationTitle === 'MEDIAN_TECHNICIAN' && (
-            <InputField
-              isRequired={graduationTitle === 'MEDIAN_TECHNICIAN'}
-              isDisabled={graduationTitle !== 'MEDIAN_TECHNICIAN'}
-              type="text"
-              description="Ejemplo: Industrial"
-              label="Mención"
-              name="mention"
-            />
-          )}
-
+          <InputField
+            isRequired={graduationTitle === 'MEDIAN_TECHNICIAN'}
+            isDisabled={graduationTitle !== 'MEDIAN_TECHNICIAN'}
+            type="text"
+            description="Ejemplo: Industrial"
+            label="Mención"
+            name="mention"
+          />
           <TextAreaFormField
             name="extracurricularActivities"
             label="Actividades extracurriculares realizadas durante la educación secundaria"
@@ -96,7 +105,7 @@ const HighSchoolForm = () => {
           >
             Anterior
           </Button>
-          <Button radius="sm" type="submit" className="w-full">
+          <Button radius="sm" type="submit" className="w-full" isLoading={formState.isSubmitting}>
             Siguiente
           </Button>
         </div>

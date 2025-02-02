@@ -1,14 +1,30 @@
-import { z } from 'zod';
+import { z, ZodIssueCode } from 'zod';
 
 const highSchoolFormSchema = z.object({
-  institutionName: z.string().min(2, "Nombre de la institución es requerido"),
+  institutionName: z.string().min(5, 'El nombre de la institución es requerido'),
   institutionDependency: z.enum(['PUBLIC', 'PRIVATE', 'SUBSIDY'], {
-    description: "Dependencia de la institución es requerida",
+    required_error: 'Debes seleccionar una dependencia de la institución',
+    invalid_type_error: 'Opción inválida',
   }),
-  gpa: z.preprocess((val) => Number(val), z.number().min(1, "El promedio debe ser al menos 1").max(20, "El promedio no puede ser mayor a 20")),
-  graduation_title: z.enum(['BACHELOR_IN_SCIENCE', 'MEDIAN_TECHNICIAN'], { description: "Título obtenido es requerido" }),
-  mention: z.string().optional().nullable(),
-  extracurricularActivities: z.string().optional(),
+  gpa: z
+    .coerce
+    .number()
+    .nonnegative()
+    .min(1, { message: 'El promedio de ingreso familiar es requerido' }).max(20, 'El promedio no puede ser mayor a 20'),
+  graduationTitle: z.enum(['BACHELOR_IN_SCIENCE', 'MEDIAN_TECHNICIAN'], {
+    required_error: 'Debes seleccionar un título de graduación',
+    invalid_type_error: 'Opción inválida',
+  }),
+  mention: z.preprocess((val) => val === null ? undefined : val, z.string().nullish()),
+  extracurricularActivities: z.preprocess((val) => val === null ? undefined : val, z.string().nullish()),
+}).superRefine((data, ctx) => {
+  if (data.graduationTitle === 'MEDIAN_TECHNICIAN' && (!data.mention || data.mention.trim().length === 0)) {
+    ctx.addIssue({
+      path: ['mention'],
+      message: 'Debes especificar la mención si el título es Técnico medio',
+      code: ZodIssueCode.custom,
+    });
+  }
 });
 
 export default highSchoolFormSchema;
