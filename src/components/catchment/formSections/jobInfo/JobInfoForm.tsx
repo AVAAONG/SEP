@@ -26,7 +26,7 @@ const JobInfoForm = ({
     resolver: zodResolver(jobInfoSchema),
     defaultValues: jobInfoSchema.parse({
       ...applicantJobInfo,
-      currentlyWorking: applicantJobInfo?.currentlyWorking ? 'YES' : 'NO',
+      currentlyWorking: applicantJobInfo?.currentlyWorking === true ? 'YES' : 'NO',
     }),
     mode: 'onSubmit',
   });
@@ -36,12 +36,13 @@ const JobInfoForm = ({
     name: 'currentlyWorking',
   });
 
-  const itsWorkingBoolean = (itsWorking as unknown as string) === 'YES';
+  const itsWorkingBoolean = itsWorking === 'YES';
 
   useEffect(() => {
     if (!itsWorkingBoolean) {
       methods.reset(
         {
+          currentlyWorking: 'NO',
           jobCompany: '',
           jobTitle: '',
           jobModality: '',

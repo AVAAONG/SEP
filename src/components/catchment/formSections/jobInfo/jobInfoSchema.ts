@@ -9,18 +9,20 @@ const jobInfoSchema = z.object({
     .transform((val) => (val === null ? undefined : val)),
   jobCompany: z
     .string()
+    .nullable()
     .optional()
     .transform((val) => (val === null ? undefined : val)),
   jobTitle: z.string()
+    .nullable()
     .optional()
     .transform((val) => (val === null ? undefined : val)),
   jobModality: z.enum(['IN_PERSON', 'ONLINE', 'HYBRID', ''])
-    .optional()
     .nullable()
+    .optional()
     .transform((val) => (val === null ? undefined : val)),
   jobSchedule: z.enum(['FULL_TIME', 'PART_TIME', 'WEEKENDS', ''])
-    .optional()
     .nullable()
+    .optional()
     .transform((val) => (val === null ? undefined : val)),
 })
   .superRefine((data, ctx) => {
