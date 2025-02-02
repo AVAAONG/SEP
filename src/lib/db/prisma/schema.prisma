@@ -609,6 +609,7 @@ model Applicant {
   endTime     DateTime?
   ContactInfo ContactInfo?
   familyInfo  FamilyInfo?
+  jobInfo     JobInfo?
 }
 
 model PersonalInfo {
@@ -667,6 +668,19 @@ enum KindOfHouse {
   OWNED
   RENTED
   MORTGAGED
+}
+
+model JobInfo {
+  id               String       @id @default(uuid())
+  currentlyWorking Boolean      @map("currently_working")
+  jobCompany       String?      @map("job_company")
+  jobTitle         String?      @map("job_title")
+  jobModality      Modality?    @map("job_modality")
+  jobSchedule      JobSchedule? @map("job_schedule")
+  applicant        Applicant    @relation(fields: [applicantId], references: [id])
+  applicantId      String       @unique
+
+  @@map("job_info")
 }
 
 //
