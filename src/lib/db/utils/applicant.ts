@@ -1,5 +1,5 @@
 'use server';
-import { AdditionalInfo, CollageInfo, HighSchool, JobInfo, LanguageKnowledge, Prisma } from "@prisma/client";
+import { AdditionalInfo, Annexes, CollageInfo, HighSchool, JobInfo, LanguageKnowledge, Prisma } from "@prisma/client";
 import { prisma } from "./prisma";
 
 export const getApplicantPersonalInfo = async (applicantId: string) => {
@@ -325,4 +325,64 @@ export const createOrUpdateAdditionalInfo = async (applicantId: string, applican
       data: updateData,
     });
   });
+}
+
+export const getApplicantAnnexes = async (applicantId: string): Promise<[Annexes | undefined, number | undefined]> => {
+  const applicant = await prisma.applicant.findUnique({
+    where: {
+      id: applicantId,
+    },
+    select: {
+      step: true,
+      annexes: true,
+    },
+  });
+
+  return [applicant?.annexes ? applicant?.annexes : undefined, applicant?.step];
+}
+
+
+export const createOrUploadAnnexes = async (applicantId: string, applicantAnnexes: Prisma.AnnexesCreateInput | Prisma.AnnexesUpdateInput) => {
+  console.log('Creating or updating annexes: ', applicantAnnexes);
+  await prisma.applicant.update({
+    where: { id: applicantId },
+    data: {
+      annexes: {
+        upsert: {
+          create: applicantAnnexes as Prisma.AnnexesCreateInput,
+          update: applicantAnnexes as Prisma.AnnexesUpdateInput,
+        },
+      },
+    },
+  });
+}
+
+export const finishApplication = async (applicantId: string, endTime: string) => {
+  await prisma.applicant.update({
+    where: { id: applicantId },
+    data: {
+      endTime: endTime,
+      status: 'PHASE_II_PENDING',
+    },
+  });
+}
+
+
+export const getApplicantsWithAllInfo = async () => {
+  const applicants = await prisma.applicant.findMany({
+    include: {
+      personal: true,
+      ContactInfo: true,
+      familyInfo: true,
+      jobInfo: true,
+      languageKnowledge: true,
+      highSchool: true,
+      collageInfo: true,
+      additionalInfo: true,
+      annexes: true,
+    }
+  });
+
+  return applicants;
+
 }

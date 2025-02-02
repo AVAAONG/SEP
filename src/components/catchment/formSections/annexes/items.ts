@@ -1,41 +1,42 @@
-const documentFields = [
+const APPLICANT_ANNEXES_DOCUMENTS = [
   {
-    label: "Cédula de Identidad",
-    name: "identityCardCopy",
+    label: "La Cédula de Identidad",
+    name: "dniCard",
   },
   {
-    label: "RIF",
-    name: "updatedRif",
+    label: "El RIF",
+    name: "rif",
   },
   {
-    label: "Calificaciones de bachillerato",
+    label: "Las Calificaciones de bachillerato",
     name: "highSchoolGrades",
   },
   {
-    label: "Calificaciones de de la universidad",
+    label: "Las Calificaciones de la universidad",
     name: "universityGrades",
   },
   {
-    label: "Constancia de estudios universitarios",
+    label: "La Constancia de estudios universitarios",
     name: "studyProof",
   },
   {
-    label: "Carta de referencia de un profesor 1",
-    name: "professorReferenceLetter1",
+    label: "La Carta de referencia de un profesor 1",
+    name: "professorReferenceLetterI",
   },
   {
-    label: "Carta de referencia de un profesor 2",
-    name: "professorReferenceLetter2",
+    label: "La Carta de referencia de un profesor 2",
+    name: "professorReferenceLetterII",
   },
   {
-    label: "Recibo de algún servicio",
+    label: "El Recibo de algún servicio",
     name: "utilityBillVerification",
     description: "(agua, luz, etc) para verificar la dirección del postulante"
   },
   {
-    label: "Ensayo de 500 palabras",
+    label: "El Ensayo de 500 palabras",
     name: "personalEssay",
     description: "Explique por qué sus características personales, intereses, objetivos y motivaciones hacen de usted un buen candidato para ser aceptado en este programa",
   },
 ];
-export default documentFields;
+
+export default APPLICANT_ANNEXES_DOCUMENTS;
