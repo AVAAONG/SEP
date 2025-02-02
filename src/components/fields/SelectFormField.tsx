@@ -1,34 +1,41 @@
-import { Select, SelectItem } from '@nextui-org/react';
+import { Select, SelectItem, SelectProps } from '@nextui-org/react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-interface SelectFormFieldProps {
+interface SelectFormFieldProps extends Omit<SelectProps, 'children' | 'name' | 'label'> {
   name: string;
   label: string;
   selectItems: { label: string; value: string }[];
-  [key: string]: unknown;
 }
 
-const SelectFormField: React.FC<SelectFormFieldProps> = (props) => {
-  const { name, label, selectItems, ...restProps } = props;
-  const { control, formState } = useFormContext();
+const SelectFormField: React.FC<SelectFormFieldProps> = ({
+  name,
+  label,
+  selectItems,
+  ...restProps
+}) => {
+  const { control } = useFormContext();
+
   return (
     <Controller
       name={name}
       control={control}
-      render={({ field }) => (
+      render={({ field, fieldState }) => (
         <Select
           radius="sm"
           labelPlacement="outside"
-          {...field}
           {...restProps}
-          isInvalid={!!formState.errors[name]?.message?.toString()}
-          errorMessage={formState.errors[name]?.message?.toString()}
+          isInvalid={!!fieldState.error}
+          errorMessage={fieldState.error?.message}
           label={label}
-          defaultSelectedKeys={field.value ? [field.value.toString()] : undefined}
-          selectedKeys={field.value ? [field.value.toString()] : undefined}
+          selectedKeys={field.value ? [String(field.value)] : []}
+          onSelectionChange={(keys) => {
+            const value = Array.from(keys)[0] || '';
+            field.onChange(value);
+          }}
+          onBlur={field.onBlur}
         >
           {selectItems.map((item) => (
-            <SelectItem key={item.value} value={item.value}>
+            <SelectItem key={item.value} value={item.value === '' ? undefined : item.value}>
               {item.label}
             </SelectItem>
           ))}
