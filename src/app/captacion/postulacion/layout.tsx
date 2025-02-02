@@ -22,7 +22,7 @@ export default async function SettingsLayout({ children }: SettingsLayoutProps) 
   const currentStep = (await getApplicantCurrentStep(session.id)) ?? 1;
   return (
     <main className="p-10 min-h-screen flex flex-col space-y-4 bg-gray-100 dark:bg-black">
-      <h1 className="text-3xl md:text-4xl font-bold text-primary-light">
+      <h1 className="text-3xl md:text-4xl font-bold text-[#0069B0]">
         Formulario de postulación ProExcelencia
       </h1>
       <Divider />
