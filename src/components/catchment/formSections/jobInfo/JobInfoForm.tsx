@@ -4,7 +4,7 @@ import SelectFormField from '@/components/fields/SelectFormField';
 import { createOrUpdateJobInfo } from '@/lib/db/utils/applicant';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Link } from '@nextui-org/react';
-import { JobInfo } from '@prisma/client';
+import { JobInfo, JobSchedule, Modality, Prisma } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
@@ -42,10 +42,10 @@ const JobInfoForm = ({
     if (!itsWorkingBoolean) {
       methods.reset(
         {
-          jobCompany: undefined,
-          jobTitle: undefined,
-          jobModality: undefined,
-          jobSchedule: undefined,
+          jobCompany: '',
+          jobTitle: '',
+          jobModality: '',
+          jobSchedule: '',
         },
         {
           keepErrors: false,
@@ -57,10 +57,19 @@ const JobInfoForm = ({
   const { handleSubmit, formState } = methods;
 
   const onSubmit = async (data: JobFormSchemaType) => {
-    await createOrUpdateJobInfo(applicantId, {
+    const dataToSubmit: Prisma.JobInfoUpdateInput = {
       ...data,
       currentlyWorking: data.currentlyWorking === 'YES',
-    });
+      jobSchedule: data.jobSchedule as JobSchedule,
+      jobModality: data.jobModality as Modality,
+    };
+    if (data.currentlyWorking === 'NO') {
+      dataToSubmit.jobCompany = null;
+      dataToSubmit.jobTitle = null;
+      dataToSubmit.jobModality = null;
+      dataToSubmit.jobSchedule = null;
+    }
+    await createOrUpdateJobInfo(applicantId, dataToSubmit);
     router.push('/captacion/postulacion/idiomas');
   };
 

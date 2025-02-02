@@ -14,11 +14,13 @@ const jobInfoSchema = z.object({
   jobTitle: z.string()
     .optional()
     .transform((val) => (val === null ? undefined : val)),
-  jobModality: z.enum(['IN_PERSON', 'ONLINE', 'HYBRID'])
+  jobModality: z.enum(['IN_PERSON', 'ONLINE', 'HYBRID', ''])
     .optional()
+    .nullable()
     .transform((val) => (val === null ? undefined : val)),
-  jobSchedule: z.enum(['FULL_TIME', 'PART_TIME', 'WEEKENDS'])
+  jobSchedule: z.enum(['FULL_TIME', 'PART_TIME', 'WEEKENDS', ''])
     .optional()
+    .nullable()
     .transform((val) => (val === null ? undefined : val)),
 })
   .superRefine((data, ctx) => {
