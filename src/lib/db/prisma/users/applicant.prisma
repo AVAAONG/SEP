@@ -23,6 +23,7 @@ model Applicant {
   highSchool        HighSchool?
   additionalInfo    AdditionalInfo?
   collageInfo       CollageInfo?
+  annexes           Annexes?
 }
 
 model PersonalInfo {
@@ -179,4 +180,21 @@ model CollageInfo {
   scholarshipPercentage Float?        @map("scholarship_percentage")
   applicant             Applicant     @relation(fields: [applicantId], references: [id])
   applicantId           String        @unique @map("applicant_id")
+}
+
+model Annexes {
+  id                         String    @id @default(uuid())
+  dniCard                    String?   @map("dni_card")
+  rif                        String?   @map("rif")
+  highSchoolGrades           String?   @map("high_school_grades")
+  universityGrades           String?   @map("university_grades")
+  studyProof                 String?   @map("study_proof")
+  professorReferenceLetterI  String?   @map("professor_reference_letter_i")
+  professorReferenceLetterII String?   @map("professor_reference_letter_ii")
+  utilityBillVerification    String?   @map("utility_bill_verification")
+  personalEssay              String?   @map("personal_essay")
+  applicant                  Applicant @relation(fields: [applicantId], references: [id])
+  applicantId                String    @unique @map("applicant_id")
+
+  @@map("annexes")
 }
