@@ -723,15 +723,15 @@ enum GraduationTitle {
 }
 
 model AdditionalInfo {
-  id                             String                       @id @default(uuid())
-  has_internet_connection        Boolean                      @map("hasInternetConnection")
-  internet_connection_stability  InternetConnectionStability? @map("internetConnectionStability")
-  program_discovery_source       ProgramDiscoverySource       @map("programDiscoverySource")
-  is_referred_by_scholar         Boolean                      @map("isReferredByScholar")
-  referred_scholar_name          String?                      @map("referredScholarName")
-  scholarship_application_reason String                       @map("scholarshipApplicationReason")
-  applicant                      Applicant                    @relation(fields: [applicantId], references: [id])
-  applicantId                    String                       @unique
+  id                           String                       @id @default(uuid())
+  hasInternetConnection        Boolean                      @map("has_internet_connection")
+  internetConnectionStability  InternetConnectionStability? @map("internet_connection_stability")
+  programDiscoverySource       ProgramDiscoverySource       @map("program_discovery_source")
+  isReferredByScholar          Boolean                      @map("is_referred_by_scholar")
+  referredScholarName          String?                      @map("referred_scholar_name")
+  scholarshipApplicationReason String                       @map("scholarship_application_reason")
+  applicant                    Applicant                    @relation(fields: [applicantId], references: [id])
+  applicantId                  String                       @unique @map("applicant_id")
 
   @@map("additional_info")
 }
