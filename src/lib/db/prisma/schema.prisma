@@ -757,20 +757,20 @@ enum InternetConnectionStability {
 }
 
 model CollageInfo {
-  id                      String        @id @default(uuid())
-  kind_of_collage         KindOfCollage @map("kindOfCollage")
-  collage                 String
-  study_area              StudyArea     @map("studyArea")
-  study_regime            StudyRegime   @map("studyRegime")
-  career                  String
-  collage_start_date      DateTime      @map("collageStartDate")
-  current_academic_period String        @map("currentAcademicPeriod")
-  grade                   Float
-  class_modality          Modality      @map("classModality")
-  have_scholarship        Boolean       @map("haveScholarship")
-  scholarship_percentage  Float?        @map("scholarshipPercentage")
-  applicant               Applicant     @relation(fields: [applicantId], references: [id])
-  applicantId             String        @unique @map("applicant_id")
+  id                    String        @id @default(uuid())
+  kindOfCollage         KindOfCollage @map("kind_of_collage")
+  collage               String
+  studyArea             StudyArea     @map("study_area")
+  studyRegime           StudyRegime   @map("study_regime")
+  career                String
+  collageStartDate      DateTime      @map("collage_start_date")
+  currentAcademicPeriod String        @map("current_academic_period")
+  grade                 Float
+  classModality         Modality      @map("class_modality")
+  haveScholarship       Boolean       @map("have_scholarship")
+  scholarshipPercentage Float?        @map("scholarship_percentage")
+  applicant             Applicant     @relation(fields: [applicantId], references: [id])
+  applicantId           String        @unique @map("applicant_id")
 }
 
 //
