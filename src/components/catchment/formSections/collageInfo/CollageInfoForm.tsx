@@ -1,96 +1,130 @@
 'use client';
 import InputField from '@/components/fields/InputFormField';
 import SelectFormField from '@/components/fields/SelectFormField';
-import { COLLAGE_LONG_AND_SHORT, MODALITY, STUDY_AREAS } from '@/lib/constants';
+import {
+  MODALITY,
+  STUDY_AREAS,
+  UNIVERSITIES_FOR_DISPLAY_IN_INPUT,
+  UNIVERSITIES_FOR_INPUT,
+} from '@/lib/constants';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 
-import scholarCollageInformationSchema from '@/lib/schemas/scholar/collageInformationSchema';
+import AutocompleteFormField from '@/components/fields/AutocompleteFormField';
+import { formatDateToMatchInput } from '@/lib/dates';
+import { createOrUpdateCollageInfo } from '@/lib/db/utils/applicant';
 import { Button, Link } from '@nextui-org/react';
+import { CollageInfo, Prisma } from '@prisma/client';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import collageSchema from './CollageInfoSchema';
 import { ACADEMIC_PERIODS_KIND, getAcademicPeriodBasedOnStudyRegime } from './utils';
 
-type CollageFormSchemaType = z.infer<typeof scholarCollageInformationSchema>;
+const getValueBetweenParentheses = (str: string): string => {
+  const match = str.match(/\(([^)]+)\)/);
+  return match ? match[1] : str;
+};
 
-const CollageForm = () => {
+type CollageFormSchemaType = z.infer<typeof collageSchema>;
+
+const CollageForm = ({
+  applicantId,
+  applicantCollageInfo,
+}: {
+  applicantId: string;
+  applicantCollageInfo?: CollageInfo;
+}) => {
+  console.log(applicantCollageInfo);
+  const router = useRouter();
   const methods = useForm<CollageFormSchemaType>({
-    resolver: zodResolver(scholarCollageInformationSchema),
-    mode: 'all',
+    resolver: zodResolver(collageSchema),
+    defaultValues: {
+      ...applicantCollageInfo,
+      scholarshipPercentage: applicantCollageInfo?.scholarshipPercentage ?? undefined,
+      collageStartDate: formatDateToMatchInput(applicantCollageInfo?.collageStartDate),
+      haveScholarship: applicantCollageInfo?.haveScholarship ? 'YES' : 'NO',
+      collage:
+        UNIVERSITIES_FOR_DISPLAY_IN_INPUT.find((u) => u.initials === applicantCollageInfo?.collage)
+          ?.name ?? undefined,
+    },
+    mode: 'onSubmit',
   });
-  const onSubmit = (data: CollageFormSchemaType) => {
-    console.log(data);
-    methods.reset(
-      {},
-      {
-        keepErrors: false,
-      }
-    );
-  };
+
+  const { handleSubmit, formState } = methods;
 
   const studyRegime = useWatch({
     control: methods.control,
-    name: 'study_regime',
+    name: 'studyRegime',
   });
-  const haveScholarship = useWatch({
+  const haveScholarshipWatch = useWatch({
     control: methods.control,
-    name: 'have_schooolarship',
+    name: 'haveScholarship',
   });
-  const kindOfCollage = useWatch({
-    control: methods.control,
-    name: 'kind_of_collage',
-  });
+  const haveScholarship = haveScholarshipWatch === 'YES';
+
+  useEffect(() => {
+    if (!haveScholarship) {
+      //@ts-ignore
+      methods.setValue('scholarshipPercentage', '', { shouldDirty: false });
+    }
+  }, [haveScholarship]);
 
   const academicPeriods = getAcademicPeriodBasedOnStudyRegime(studyRegime);
 
+  const onSubmit = async (data: CollageFormSchemaType) => {
+    const dataToSubmit: Prisma.CollageInfoUpdateInput = {
+      ...data,
+      collage: getValueBetweenParentheses(data.collage),
+      haveScholarship: data.haveScholarship === 'YES',
+    };
+    if (data.haveScholarship === 'NO') dataToSubmit.scholarshipPercentage = null;
+    await createOrUpdateCollageInfo(applicantId, dataToSubmit);
+    router.push('/captacion/postulacion/adicional');
+  };
+
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full space-y-5">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-5">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
           <SelectFormField
             isRequired
             label="Tipo de universidad"
-            name="kind_of_collage"
+            name="kindOfCollage"
             selectItems={[
               { label: 'Pública', value: 'PUBLIC' },
               { label: 'Privada', value: 'PRIVATE' },
             ]}
           />
-          <SelectFormField
+          <AutocompleteFormField
             isRequired
             label="Universidad"
             name="collage"
-            selectItems={COLLAGE_LONG_AND_SHORT}
+            selectItems={UNIVERSITIES_FOR_INPUT}
           />
           <SelectFormField
             isRequired
             label="Área de estudio"
-            name="study_area"
+            name="studyArea"
             selectItems={STUDY_AREAS}
           />
-          <InputField
-            isRequired
-            label="Carrera"
-            type="text"
-            name="career"
-            placeholder="Estudios internacionales"
-          />
+          <InputField isRequired label="Carrera" type="text" name="career" />
           <InputField
             isRequired
             type="date"
             label="Fecha de inicio de estudios universitarios"
-            name="collage_start_date"
+            name="collageStartDate"
           />
           <SelectFormField
             isRequired
             label="Régimen de estudio"
-            name="study_regime"
+            name="studyRegime"
             selectItems={ACADEMIC_PERIODS_KIND}
           />
           <SelectFormField
-            isDisabled={academicPeriods.length === 0}
-            isRequired={academicPeriods.length >= 1}
+            isRequired
             label="Período académico (en curso)"
-            name="current_academic_period"
+            name="currentAcademicPeriod"
             selectItems={academicPeriods}
           />
           <InputField
@@ -98,42 +132,37 @@ const CollageForm = () => {
             type="number"
             label="Promedio del último período académico culminado"
             name="grade"
-            min={1}
-            max={20}
           />
           <SelectFormField
             isRequired
             label="Modalidad de clases"
-            name="class_modality"
+            name="classModality"
             selectItems={MODALITY}
           />
-          {kindOfCollage === 'PRIVATE' && (
-            <>
-              <SelectFormField
-                isRequired
-                label="¿Posee beca?"
-                name="have_schooolarship"
-                selectItems={[
-                  {
-                    label: 'Sí',
-                    value: 'YES',
-                  },
-                  {
-                    label: 'No',
-                    value: 'NO',
-                  },
-                ]}
-              />
-              {haveScholarship === 'YES' && (
-                <InputField
-                  isRequired
-                  type="number"
-                  label="Porcentaje de la beca"
-                  name="scholarship_percentage"
-                />
-              )}
-            </>
-          )}
+          <>
+            <SelectFormField
+              isRequired
+              label="¿Posee beca?"
+              name="haveScholarship"
+              selectItems={[
+                {
+                  label: 'Sí',
+                  value: 'YES',
+                },
+                {
+                  label: 'No',
+                  value: 'NO',
+                },
+              ]}
+            />
+            <InputField
+              isRequired={haveScholarship}
+              isDisabled={!haveScholarship}
+              type="number"
+              label="Porcentaje de la beca"
+              name="scholarshipPercentage"
+            />
+          </>
         </div>
         <div className="col-span-2 flex gap-4">
           <Button
@@ -145,7 +174,7 @@ const CollageForm = () => {
           >
             Anterior
           </Button>
-          <Button radius="sm" type="submit" className="w-full">
+          <Button radius="sm" type="submit" className="w-full" isLoading={formState.isSubmitting}>
             Siguiente
           </Button>
         </div>

@@ -207,3 +207,80 @@ export const COLLAGE_LONG_AND_SHORT = [
   { value: 'UC', label: 'Universidad de Carabobo (UC)' },
   { value: 'UNITEC', label: 'Universidad Tecnologica del Centro (UNITEC)' },
 ];
+
+
+export const CARACAS_UNIVERSITIES = [
+  { name: 'Universidad Nacional Experimental de las Artes', initials: 'UNEARTE' },
+  { name: 'Universidad Nacional Experimental de la Gran Caracas', initials: 'UNEXCA' },
+  { name: 'Universidad Nacional Experimental del Magisterio "Samuel Robinson"', initials: 'UNEM' },
+  { name: 'Universidad Nacional Experimental de las Telecomunicaciones e Informática', initials: 'UNETI' },
+  { name: 'Universidad Politécnica Territorial de Caracas "Mariscal Sucre"', initials: 'UPTECMS' },
+  { name: 'Universidad Nacional Experimental Politécnica Antonio José de Sucre', initials: 'UNEXPO' },
+  { name: 'Universidad Nacional Experimental Simón Rodríguez', initials: 'UNESR' },
+  { name: 'Universidad Pedagógica Experimental Libertador', initials: 'UPEL' },
+  { name: 'Universidad Militar Bolivariana de Venezuela', initials: 'UMBV' },
+  { name: 'Colegio Universitario de Rehabilitación "May Hamilton"', initials: 'CURMH' },
+  { name: 'Universidad Nacional Experimental del Transporte', initials: 'UNET' },
+  { name: 'Universidad Nacional Abierta', initials: 'UNA' },
+  { name: 'Universidad Nacional Experimental Politécnica de la Fuerza Armada Nacional', initials: 'UNEFA' },
+  { name: 'Colegio Universitario de Enfermería de la Alcaldía Metropolitana de Caracas', initials: 'CUEMAC' },
+  { name: 'Universidad Central de Venezuela', initials: 'UCV' },
+  { name: 'Universidad Bolivariana de Venezuela', initials: 'UBV' },
+  { name: 'Universidad de las Ciencias de la Salud "Hugo Chávez Frías"', initials: 'UCS' },
+  { name: 'Universidad Nacional Experimental de la Seguridad', initials: 'UNES' }
+];
+
+
+export const ZULIA_UNIVERSITIES = [
+  { name: 'Universidad Nacional Experimental Rafael María Baralt', initials: 'UNERMB' },
+  { name: 'Universidad de las Ciencias de la Salud "Hugo Chávez Frías"', initials: 'UCS' },
+  { name: 'Universidad Nacional Experimental Marítima del Caribe', initials: 'UNEMCA' },
+  { name: 'Universidad Politécnica Territorial de Barlovento "Argelia Laya"', initials: 'UPTBAL' },
+  { name: 'Universidad Politécnica Territorial del Zulia', initials: 'UPTZ' },
+  { name: 'Universidad del Zulia', initials: 'LUZ' },
+  { name: 'Universidad Nacional Abierta', initials: 'UNA' },
+  { name: 'Universidad Bolivariana de Venezuela', initials: 'UBV' },
+  { name: 'Instituto Universitario de Aeronáutica Civil Mayor (Av) Miguel Rodríguez', initials: 'IUAC' },
+  { name: 'Universidad Politécnica Territorial de Maracaibo', initials: 'UPTM' },
+  { name: 'Universidad Nacional Experimental Politécnica de la Fuerza Armada Nacional', initials: 'UNEFA' },
+  { name: 'Universidad Nacional Experimental Sur del Lago Jesús María Semprum', initials: 'UNESUR' }
+];
+
+export const CARABOBO_UNIVERSITIES = [
+  { name: 'UNIVERSIDAD DE LAS CIENCIAS DE LA SALUD "HUGO CHÁVEZ FRÍAS"', initials: 'UCS-HCF' },
+  { name: 'UNIVERSIDAD BOLIVARIANA DE VENEZUELA', initials: 'UBV' },
+  { name: 'UNIVERSIDAD NACIONAL EXPERIMENTAL SIMÓN RODRÍGUEZ', initials: 'UNESR' },
+  { name: 'UNIVERSIDAD NACIONAL EXPERIMENTAL POLITÉCNICA DE LA FUERZA ARMADA NACIONAL', initials: 'UNEFA' },
+  { name: 'UNIVERSIDAD NACIONAL EXPERIMENTAL DEL MAGISTERIO "SAMUEL ROBINSON"', initials: 'UNEMSR' },
+  { name: 'UNIVERSIDAD NACIONAL EXPERIMENTAL FRANCISCO DE MIRANDA', initials: 'UNEFM' },
+  { name: 'UNIVERSIDAD POLITÉCNICA TERRITORIAL DE PUERTO CABELLO', initials: 'UPTPC' },
+  { name: 'UNIVERSIDAD DE CARABOBO', initials: 'UC' },
+  { name: 'UNIVERSIDAD NACIONAL ABIERTA', initials: 'UNA' },
+  { name: 'UNIVERSIDAD POLITÉCNICA TERRITORIAL DE VALENCIA', initials: 'UPTV' },
+];
+
+export const UNIVERSITIES_FOR_INPUT = [
+  ...CARABOBO_UNIVERSITIES,
+  ...CARACAS_UNIVERSITIES,
+  ...ZULIA_UNIVERSITIES
+].map(university => ({
+  label: `${university.name} (${university.initials})`,
+  value: `${university.name} (${university.initials})`
+})).filter((university, index, self) =>
+  index === self.findIndex((u) => (
+    u.value === university.value
+  ))
+);
+
+export const UNIVERSITIES_FOR_DISPLAY_IN_INPUT = [
+  ...CARABOBO_UNIVERSITIES,
+  ...CARACAS_UNIVERSITIES,
+  ...ZULIA_UNIVERSITIES
+].map(university => ({
+  name: `${university.name} (${university.initials})`,
+  initials: `${university.initials}`
+})).filter((university, index, self) =>
+  index === self.findIndex((u) => (
+    u.initials === university.initials
+  ))
+);

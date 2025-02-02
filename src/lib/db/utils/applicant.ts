@@ -1,5 +1,5 @@
 'use server';
-import { AdditionalInfo, HighSchool, JobInfo, LanguageKnowledge, Prisma } from "@prisma/client";
+import { AdditionalInfo, CollageInfo, HighSchool, JobInfo, LanguageKnowledge, Prisma } from "@prisma/client";
 import { prisma } from "./prisma";
 
 export const getApplicantPersonalInfo = async (applicantId: string) => {
@@ -241,6 +241,45 @@ export const createOrUpdateHighSchoolInfo = async (applicantId: string, applican
     };
 
     if (applicant.step < 7) updateData.step = 7;
+
+    await prisma.applicant.update({
+      where: { id: applicantId },
+      data: updateData,
+    });
+  });
+}
+
+export const getApplicantCollageInfo = async (applicantId: string): Promise<[CollageInfo | undefined, number | undefined]> => {
+  const applicant = await prisma.applicant.findUnique({
+    where: {
+      id: applicantId,
+    },
+    select: {
+      step: true,
+      collageInfo: true,
+    },
+  });
+
+  return [applicant?.collageInfo ? applicant?.collageInfo : undefined, applicant?.step]
+}
+
+export const createOrUpdateCollageInfo = async (applicantId: string, applicantCollageInfo: Prisma.CollageInfoCreateInput | Prisma.CollageInfoUpdateInput) => {
+  await prisma.$transaction(async (prisma) => {
+    const applicant = await prisma.applicant.findUniqueOrThrow({
+      where: { id: applicantId },
+      select: { step: true },
+    });
+
+    const updateData: any = {
+      collageInfo: {
+        upsert: {
+          create: applicantCollageInfo as Prisma.CollageInfoCreateInput,
+          update: applicantCollageInfo as Prisma.CollageInfoUpdateInput,
+        },
+      },
+    };
+
+    if (applicant.step < 8) updateData.step = 8;
 
     await prisma.applicant.update({
       where: { id: applicantId },

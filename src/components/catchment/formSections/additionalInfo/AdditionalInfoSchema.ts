@@ -25,6 +25,7 @@ const additionalInfoFormSchema = z.object({
     invalid_type_error: 'Valor inválido para la referencia por un becario',
   }),
   referredScholarName: z.string().nullish(),
+  scholarshipApplicationReason: z.string().min(100, 'La razón de la solicitud de beca debe tener al menos 100 caracteres'),
 }).superRefine((data, ctx) => {
   if (data.hasInternetConnection === 'YES' && (!data.internetConnectionStability || data.internetConnectionStability.trim().length === 0)) {
     ctx.addIssue({

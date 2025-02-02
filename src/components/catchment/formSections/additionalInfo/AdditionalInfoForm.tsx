@@ -30,13 +30,15 @@ const AdditionalInfoForm = ({
 
   const methods = useForm<AdditionalInfoFormSchemaType>({
     resolver: zodResolver(additionalInfoFormSchema),
-    defaultValues: additionalInfoFormSchema.parse({
+    defaultValues: {
       ...applicantAdditionalInfo,
       hasInternetConnection: applicantAdditionalInfo?.hasInternetConnection === true ? 'YES' : 'NO',
       isReferredByScholar: applicantAdditionalInfo?.isReferredByScholar === true ? 'YES' : 'NO',
-    }),
+    },
     mode: 'onSubmit',
   });
+
+  const { handleSubmit, formState } = methods;
 
   const hasInternetConnectionWatch = useWatch({
     control: methods.control,
@@ -49,7 +51,7 @@ const AdditionalInfoForm = ({
   });
 
   useEffect(() => {
-    if (hasInternetConnectionWatch === 'NO') methods.setValue('internetConnectionStability', '');
+    if (hasInternetConnectionWatch === 'NO') methods.setValue('internetConnectionStability', null);
     if (referredByScholarWatch === 'NO') methods.setValue('referredScholarName', '');
   }, [hasInternetConnectionWatch, referredByScholarWatch]);
 
@@ -64,13 +66,16 @@ const AdditionalInfoForm = ({
       hasInternetConnection: data.hasInternetConnection === 'YES',
       isReferredByScholar: data.isReferredByScholar === 'YES',
     };
+    if (data.isReferredByScholar === 'NO') dataToSubmit.referredScholarName = null;
+    if (data.hasInternetConnection === 'NO') dataToSubmit.internetConnectionStability = null;
+
     await createOrUpdateAdditionalInfo(applicantId, dataToSubmit);
     router.push(`/captacion/postulacion/anexos`);
   };
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full space-y-5">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-5">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
           <SelectFormField
             isRequired
@@ -179,7 +184,7 @@ const AdditionalInfoForm = ({
           >
             Anterior
           </Button>
-          <Button radius="sm" type="submit" className="w-full">
+          <Button radius="sm" type="submit" className="w-full" isLoading={formState.isSubmitting}>
             Siguiente
           </Button>
         </div>
