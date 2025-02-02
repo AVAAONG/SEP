@@ -1,5 +1,5 @@
 'use server';
-import { Prisma } from "@prisma/client";
+import { JobInfo, Prisma } from "@prisma/client";
 import { prisma } from "./prisma";
 
 export const getApplicantPersonalInfo = async (applicantId: string) => {
@@ -123,6 +123,45 @@ export const createOrUpdateFamilyInfo = async (applicantId: string, applicantFam
     };
 
     if (applicant.step < 4) updateData.step = 4;
+
+    await prisma.applicant.update({
+      where: { id: applicantId },
+      data: updateData,
+    });
+  });
+}
+
+export const getApplicantJobInfo = async (applicantId: string): Promise<[JobInfo | undefined, number | undefined]> => {
+  const applicant = await prisma.applicant.findUnique({
+    where: {
+      id: applicantId,
+    },
+    select: {
+      step: true,
+      jobInfo: true,
+    },
+  });
+
+  return [applicant?.jobInfo ? applicant?.jobInfo : undefined, applicant?.step];
+}
+
+export const createOrUpdateJobInfo = async (applicantId: string, applicantJobInfo: Prisma.JobInfoCreateInput | Prisma.JobInfoUpdateInput) => {
+  await prisma.$transaction(async (prisma) => {
+    const applicant = await prisma.applicant.findUniqueOrThrow({
+      where: { id: applicantId },
+      select: { step: true },
+    });
+
+    const updateData: any = {
+      jobInfo: {
+        upsert: {
+          create: applicantJobInfo as Prisma.JobInfoCreateInput,
+          update: applicantJobInfo as Prisma.JobInfoUpdateInput,
+        },
+      },
+    };
+
+    if (applicant.step < 5) updateData.step = 5;
 
     await prisma.applicant.update({
       where: { id: applicantId },
