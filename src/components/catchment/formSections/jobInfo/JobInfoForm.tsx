@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Link } from '@nextui-org/react';
 import { JobInfo } from '@prisma/client';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 import jobInfoSchema from './jobInfoSchema';
@@ -27,8 +28,31 @@ const JobInfoForm = ({
       ...applicantJobInfo,
       currentlyWorking: applicantJobInfo?.currentlyWorking ? 'YES' : 'NO',
     }),
-    mode: 'onBlur',
+    mode: 'onSubmit',
   });
+
+  const itsWorking = useWatch({
+    control: methods.control,
+    name: 'currentlyWorking',
+  });
+
+  const itsWorkingBoolean = (itsWorking as unknown as string) === 'YES';
+
+  useEffect(() => {
+    if (!itsWorkingBoolean) {
+      methods.reset(
+        {
+          jobCompany: undefined,
+          jobTitle: undefined,
+          jobModality: undefined,
+          jobSchedule: undefined,
+        },
+        {
+          keepErrors: false,
+        }
+      );
+    }
+  }, [itsWorkingBoolean]);
 
   const { handleSubmit, formState } = methods;
 
@@ -40,12 +64,6 @@ const JobInfoForm = ({
     router.push('/captacion/postulacion/idiomas');
   };
 
-  const itsWorking = useWatch({
-    control: methods.control,
-    name: 'currentlyWorking',
-  });
-
-  const itsWorkingBoolean = (itsWorking as unknown as string) === 'YES';
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-5">
