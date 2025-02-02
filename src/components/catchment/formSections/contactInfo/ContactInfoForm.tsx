@@ -63,21 +63,21 @@ const ContactInfoForm = ({
             label="Nombre del familiar/pariente/amigo cercano"
             description="Especifique el nombre del familiar/pariente/amigo cercano y la relación con usted"
           />
+        </div>
 
-          <div className="col-span-2 flex gap-4 mt-6">
-            <Button
-              radius="sm"
-              as={Link}
-              href="/captacion/postulacion"
-              className="w-full"
-              variant="bordered"
-            >
-              Anterior
-            </Button>
-            <Button isLoading={formState.isSubmitting} radius="sm" type="submit" className="w-full">
-              Siguiente
-            </Button>
-          </div>
+        <div className="col-span-2 flex gap-4 mt-6">
+          <Button
+            radius="sm"
+            as={Link}
+            href="/captacion/postulacion"
+            className="w-full"
+            variant="bordered"
+          >
+            Anterior
+          </Button>
+          <Button isLoading={formState.isSubmitting} radius="sm" type="submit" className="w-full">
+            Siguiente
+          </Button>
         </div>
       </form>
     </FormProvider>

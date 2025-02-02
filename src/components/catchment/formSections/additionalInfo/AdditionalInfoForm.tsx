@@ -168,7 +168,7 @@ const AdditionalInfoForm = ({
           />
           <TextAreaFormField
             isRequired
-            className="col-span-2"
+            className="md:col-span-2"
             isResizable
             label="¿Por qué solicita esta beca?"
             name="scholarshipApplicationReason"
