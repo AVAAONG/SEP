@@ -10,7 +10,7 @@ const highSchoolFormSchema = z.object({
     .coerce
     .number()
     .nonnegative()
-    .min(1, { message: 'El promedio de ingreso familiar es requerido' }).max(20, 'El promedio no puede ser mayor a 20'),
+    .min(1, { message: 'El promedio académico es requerido' }).max(20, 'El promedio no puede ser mayor a 20'),
   graduationTitle: z.enum(['BACHELOR_IN_SCIENCE', 'MEDIAN_TECHNICIAN'], {
     required_error: 'Debes seleccionar un título de graduación',
     invalid_type_error: 'Opción inválida',
