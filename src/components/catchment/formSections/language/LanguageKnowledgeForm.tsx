@@ -107,7 +107,7 @@ const LanguagesForm = ({
           <Button
             radius="sm"
             as={Link}
-            href="/captacion/laboral"
+            href="/captacion/postulacion/laboral"
             className="w-full"
             variant="bordered"
           >

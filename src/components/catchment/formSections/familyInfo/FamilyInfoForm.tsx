@@ -114,7 +114,7 @@ const FamilyInfoForm = ({
           <Button
             radius="sm"
             as={Link}
-            href="/captacion/contacto"
+            href="/captacion/postulacion/contacto"
             className="w-full"
             variant="bordered"
           >

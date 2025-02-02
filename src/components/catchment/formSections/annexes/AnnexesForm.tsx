@@ -54,7 +54,7 @@ const AttachedFilesForm = () => {
           <Button
             radius="sm"
             as={Link}
-            href="/captacion/adicional"
+            href="/captacion/postulacion/adicional"
             className="w-full"
             variant="bordered"
           >

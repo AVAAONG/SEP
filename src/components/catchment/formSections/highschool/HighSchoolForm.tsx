@@ -99,7 +99,7 @@ const HighSchoolForm = ({
           <Button
             radius="sm"
             as={Link}
-            href="/captacion/familia"
+            href="/captacion/postulacion/idiomas"
             className="w-full"
             variant="bordered"
           >

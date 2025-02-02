@@ -146,7 +146,7 @@ const JobInfoForm = ({
           <Button
             radius="sm"
             as={Link}
-            href="/captacion/familia"
+            href="/captacion/postulacion/familia"
             className="w-full"
             variant="bordered"
           >

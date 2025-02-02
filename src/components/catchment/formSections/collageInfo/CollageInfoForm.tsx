@@ -139,7 +139,7 @@ const CollageForm = () => {
           <Button
             radius="sm"
             as={Link}
-            href="/captacion/secundaria"
+            href="/captacion/postulacion/secundaria"
             className="w-full"
             variant="bordered"
           >

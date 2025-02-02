@@ -144,7 +144,7 @@ const AdditionalInfoForm = () => {
           <Button
             radius="sm"
             as={Link}
-            href="/captacion/collage"
+            href="/captacion/postulacion/universidad"
             className="w-full"
             variant="bordered"
           >
