@@ -39,7 +39,7 @@ const Contact = () => {
       className="min-h-screen w-full flex flex-col items-center justify-center gap-16"
       id="requisitos"
     >
-      <h2 className="text-primary-light text-3xl font-bold tracking-tighter text-center sm:text-4xl md:text-5xl ">
+      <h2 className="text-[#0069B0] text-3xl font-bold tracking-tighter text-center sm:text-4xl md:text-5xl ">
         Contáctanos
       </h2>
       <div className="grid md:grid-cols-2 items-center gap-4 md:gap-12">

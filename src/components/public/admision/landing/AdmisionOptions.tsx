@@ -29,7 +29,7 @@ const AdmisionLinkButtons = ({ chapterName }: { chapterName: string }) => {
   return (
     <Link
       href="/signin"
-      className="w-full md:max-w-[25ch] h-min relative group rounded-lg p-2 sm:p-5 text-dark dark:text-light border-primary-light border transition-all dark:hover:bg-primary-light dark:focus:bg-primary-light hover:bg-primary-1 focus:bg-primary-1"
+      className="w-full md:max-w-[25ch] h-min relative group rounded-lg p-2 sm:p-5 text-[#0069B0] dark:text-light border-[#0069B0] border transition-all dark:hover:bg-[#0069B0] dark:focus:bg-[#0069B0] hover:bg-[#0069B0] focus:bg-[#0069B0]"
       rel="noopener noreferrer"
     >
       <h2 className={`text-2xl font-medium`}>
@@ -47,7 +47,7 @@ const AdmisionOptions = ({ title }: { title: string }) => {
       id="aplicacion"
     >
       <div className="w-full flex flex-col items-center justify-center gap-3">
-        <h1 className="text-3xl font-bold tracking-tighter text-primary-light sm:text-4xl md:text-5xl lg:text-6xl">
+        <h1 className="text-3xl font-bold tracking-tighter text-[#0069B0] sm:text-4xl md:text-5xl lg:text-6xl">
           {title}
         </h1>
         <p className=" mt-auto  w-full text-gray-500 text-center text-sm md:text-lg ">

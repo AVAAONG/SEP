@@ -8,7 +8,7 @@ const Requirements = () => {
       id="requisitos"
     >
       <div className="flex flex-col gap-4 w-full lg:w-1/2 ">
-        <h2 className="text-xl text-center lg:text-start lg:text-3xl font-bold tracking-tighter text-primary-light sm:text-4xl md:text-5xl ">
+        <h2 className="text-xl text-center lg:text-start lg:text-3xl font-bold tracking-tighter text-[#0069B0] sm:text-4xl md:text-5xl ">
           ¿Qué necesitas para ser parte de ProExcelencia?
         </h2>
       </div>
@@ -46,7 +46,7 @@ const Requirements = () => {
         </ul>
         <Button
           href="#aplicacion"
-          className="font-bold hover:!text-white"
+          className="font-bold hover:!text-white border-[#0069B0] hover:!bg-[#0069B0] text-[#0069B0]"
           radius="sm"
           as={Link}
           color="success"

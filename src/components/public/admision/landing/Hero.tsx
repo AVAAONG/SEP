@@ -20,32 +20,32 @@ const Hero = () => {
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center space-y-4 text-center">
           <div className="space-y-4">
-            <h1 className="text-3xl font-bold tracking-wide text-primary-light sm:text-4xl md:text-5xl lg:text-6xl">
+            <h1 className="text-3xl font-bold tracking-wide text-[#0069B0] sm:text-4xl md:text-5xl lg:text-6xl">
               ¡Bienvenido al Programa Excelencia AVAA!
             </h1>
             <p className="mx-auto lg:text-lg max-w-[900px] text-gray-500  dark:text-gray-400">
               El Programa Excelencia AVAA{' '}
-              <span className="text-primary-light font-bold">(ProExcelencia)</span> es un programa
-              de formación integral dirigido a jóvenes bachilleres venezolanos, con edades
-              comprendidas entre 17 y 21 años, estudiantes de universidades nacionales, públicas o
-              privadas, de alto desempeño y excelente rendimiento académico, potencial de liderazgo
-              y compromiso social.
+              <span className="text-[#0069B0] font-bold">(ProExcelencia)</span> es un programa de
+              formación integral dirigido a jóvenes bachilleres venezolanos, con edades comprendidas
+              entre 17 y 21 años, estudiantes de universidades nacionales, públicas o privadas, de
+              alto desempeño y excelente rendimiento académico, potencial de liderazgo y compromiso
+              social.
             </p>
           </div>
           <div className="space-x-4  w-full">
             <Button
               href="#aplicacion"
-              className="font-bold hover:!text-white"
+              className="font-bold text-white !bg-[#0069B0]"
               radius="sm"
               as={Link}
               color="success"
-              variant="ghost"
+              // variant="ghost"
             >
               Aplicar
             </Button>
             <Button
               href="#requisitos"
-              className="font-bold text-white"
+              className="font-bold text-white !bg-[#0069B0]"
               as={Link}
               color="success"
               radius="sm"
