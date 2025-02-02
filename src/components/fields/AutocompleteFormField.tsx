@@ -12,7 +12,6 @@ interface AutocompleteFormFieldProps
 const AutocompleteFormField: React.FC<AutocompleteFormFieldProps> = ({
   name,
   label,
-  isForUniversities = false,
   selectItems,
   ...restProps
 }) => {
@@ -32,15 +31,8 @@ const AutocompleteFormField: React.FC<AutocompleteFormFieldProps> = ({
           label={label}
           selectedKey={field.value ? String(field.value) : ''}
           onSelectionChange={(key) => {
-            if (isForUniversities) {
-              const value = key || '';
-              const match = value.toString().match(/\(([^)]+)\)/);
-              const valueInParentheses = match ? match[1] : null;
-              field.onChange(valueInParentheses);
-            } else {
-              const value = key || '';
-              field.onChange(value);
-            }
+            const value = key || '';
+            field.onChange(value);
           }}
           onBlur={field.onBlur}
         >
