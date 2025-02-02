@@ -343,7 +343,6 @@ export const getApplicantAnnexes = async (applicantId: string): Promise<[Annexes
 
 
 export const createOrUploadAnnexes = async (applicantId: string, applicantAnnexes: Prisma.AnnexesCreateInput | Prisma.AnnexesUpdateInput) => {
-  console.log('Creating or updating annexes: ', applicantAnnexes);
   await prisma.applicant.update({
     where: { id: applicantId },
     data: {
