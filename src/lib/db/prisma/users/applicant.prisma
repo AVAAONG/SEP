@@ -18,6 +18,7 @@ model Applicant {
   familyInfo        FamilyInfo?
   jobInfo           JobInfo?
   languageKnowledge LanguageKnowledge?
+  highSchool        HighSchool?
 }
 
 model PersonalInfo {
@@ -100,4 +101,29 @@ model LanguageKnowledge {
   applicantId         String    @unique
 
   @@map("language_knowledge")
+}
+
+model HighSchool {
+  id                        String                @id @default(uuid())
+  institutionName           String                @map("institution_name")
+  institutionDependency     InstitutionDependency @map("institution_dependency")
+  gpa                       Float
+  graduationTitle           GraduationTitle       @map("graduation_title")
+  mention                   String?
+  extracurricularActivities String?               @map("extracurricular_activities")
+  applicant                 Applicant             @relation(fields: [applicantId], references: [id])
+  applicantId               String                @unique
+
+  @@map("high_school")
+}
+
+enum InstitutionDependency {
+  PUBLIC
+  PRIVATE
+  SUBSIDY
+}
+
+enum GraduationTitle {
+  BACHELOR_IN_SCIENCE
+  MEDIAN_TECHNICIAN
 }
