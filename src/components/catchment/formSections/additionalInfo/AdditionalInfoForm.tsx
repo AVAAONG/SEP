@@ -2,39 +2,71 @@
 import InputField from '@/components/fields/InputFormField';
 import SelectFormField from '@/components/fields/SelectFormField';
 import TextAreaFormField from '@/components/fields/TextAreaFormField';
+import { createOrUpdateAdditionalInfo } from '@/lib/db/utils/applicant';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Link } from '@nextui-org/react';
+import {
+  AdditionalInfo,
+  InternetConnectionStability,
+  Prisma,
+  ProgramDiscoverySource,
+} from '@prisma/client';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 import additionalInfoFormSchema from './AdditionalInfoSchema';
 
 type AdditionalInfoFormSchemaType = z.infer<typeof additionalInfoFormSchema>;
 
-const AdditionalInfoForm = () => {
+const AdditionalInfoForm = ({
+  applicantId,
+  applicantAdditionalInfo,
+}: {
+  applicantId: string;
+  applicantAdditionalInfo?: AdditionalInfo;
+}) => {
+  const router = useRouter();
+
   const methods = useForm<AdditionalInfoFormSchemaType>({
     resolver: zodResolver(additionalInfoFormSchema),
-    mode: 'onChange',
+    defaultValues: additionalInfoFormSchema.parse({
+      ...applicantAdditionalInfo,
+      hasInternetConnection: applicantAdditionalInfo?.hasInternetConnection === true ? 'YES' : 'NO',
+      isReferredByScholar: applicantAdditionalInfo?.isReferredByScholar === true ? 'YES' : 'NO',
+    }),
+    mode: 'onSubmit',
   });
 
-  const onSubmit = (data: AdditionalInfoFormSchemaType) => {
-    console.log(data);
-    methods.reset(
-      {},
-      {
-        keepErrors: false,
-      }
-    );
+  const hasInternetConnectionWatch = useWatch({
+    control: methods.control,
+    name: 'hasInternetConnection',
+  });
+
+  const referredByScholarWatch = useWatch({
+    control: methods.control,
+    name: 'isReferredByScholar',
+  });
+
+  useEffect(() => {
+    if (hasInternetConnectionWatch === 'NO') methods.setValue('internetConnectionStability', '');
+    if (referredByScholarWatch === 'NO') methods.setValue('referredScholarName', '');
+  }, [hasInternetConnectionWatch, referredByScholarWatch]);
+
+  const referredByScholar = referredByScholarWatch === 'YES';
+  const hasInternetConnection = hasInternetConnectionWatch === 'YES';
+
+  const onSubmit = async (data: AdditionalInfoFormSchemaType) => {
+    const dataToSubmit: Prisma.AdditionalInfoUpdateInput = {
+      ...data,
+      programDiscoverySource: data.programDiscoverySource as ProgramDiscoverySource,
+      internetConnectionStability: data.internetConnectionStability as InternetConnectionStability,
+      hasInternetConnection: data.hasInternetConnection === 'YES',
+      isReferredByScholar: data.isReferredByScholar === 'YES',
+    };
+    await createOrUpdateAdditionalInfo(applicantId, dataToSubmit);
+    router.push(`/captacion/postulacion/anexos`);
   };
-
-  const hasInternetConnection = useWatch({
-    control: methods.control,
-    name: 'has_internet_connection',
-  });
-
-  const referredByScholar = useWatch({
-    control: methods.control,
-    name: 'is_referred_by_scholar',
-  });
 
   return (
     <FormProvider {...methods}>
@@ -43,7 +75,7 @@ const AdditionalInfoForm = () => {
           <SelectFormField
             isRequired
             label="¿Posee conexión a internet?"
-            name="has_internet_connection"
+            name="hasInternetConnection"
             selectItems={[
               { label: 'Si', value: 'YES' },
               { label: 'No', value: 'NO' },
@@ -53,7 +85,7 @@ const AdditionalInfoForm = () => {
             isDisabled={!hasInternetConnection}
             isRequired={hasInternetConnection}
             label="¿Qué tan estable es tu conectividad? "
-            name="internet_connection_stability"
+            name="internetConnectionStability"
             selectItems={[
               {
                 label: 'Muy estable',
@@ -73,10 +105,27 @@ const AdditionalInfoForm = () => {
               },
             ]}
           />
+
+          <SelectFormField
+            isRequired
+            label="¿Eres referido por algún becario de AVAA?"
+            name="isReferredByScholar"
+            selectItems={[
+              { label: 'Si', value: 'YES' },
+              { label: 'No', value: 'NO' },
+            ]}
+          />
+          <InputField
+            isRequired={referredByScholar}
+            isDisabled={!referredByScholar}
+            type="text"
+            label="Nombre del Becario por quien vienes referido"
+            name="referredScholarName"
+          />
           <SelectFormField
             isRequired
             label="¿Cómo se enteró del Programa Excelencia?"
-            name="program_discovery_source"
+            name="programDiscoverySource"
             selectItems={[
               {
                 label: 'Amigo/Pariente',
@@ -103,7 +152,7 @@ const AdditionalInfoForm = () => {
                 value: 'TWITTER',
               },
               {
-                label: 'Youtube',
+                label: 'YouTube',
                 value: 'YOUTUBE',
               },
               {
@@ -112,32 +161,12 @@ const AdditionalInfoForm = () => {
               },
             ]}
           />
-          <SelectFormField
-            isRequired
-            label="¿Eres referido por algún becario de AVAA?"
-            name="is_referred_by_scholar"
-            selectItems={[
-              { label: 'Si', value: 'YES' },
-              { label: 'No', value: 'NO' },
-            ]}
-          />
-
-          {referredByScholar && (
-            <InputField
-              isRequired={referredByScholar}
-              isDisabled={!referredByScholar}
-              type="text"
-              label="Nombre del Becario por quien vienes referido"
-              name="referring_scholar_Name"
-            />
-          )}
-
           <TextAreaFormField
-            className="col-span-2"
             isRequired
-            isResazable
+            className="col-span-2"
+            isResizable
             label="¿Por qué solicita esta beca?"
-            name="scholarship_application_reason"
+            name="scholarshipApplicationReason"
           />
         </div>
         <div className="col-span-2 flex gap-4">

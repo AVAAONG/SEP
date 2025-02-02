@@ -1,5 +1,5 @@
 'use server';
-import { HighSchool, JobInfo, LanguageKnowledge, Prisma } from "@prisma/client";
+import { AdditionalInfo, HighSchool, JobInfo, LanguageKnowledge, Prisma } from "@prisma/client";
 import { prisma } from "./prisma";
 
 export const getApplicantPersonalInfo = async (applicantId: string) => {
@@ -241,6 +241,45 @@ export const createOrUpdateHighSchoolInfo = async (applicantId: string, applican
     };
 
     if (applicant.step < 7) updateData.step = 7;
+
+    await prisma.applicant.update({
+      where: { id: applicantId },
+      data: updateData,
+    });
+  });
+}
+
+export const getApplicantAdditionalInfo = async (applicantId: string): Promise<[AdditionalInfo | undefined, number | undefined]> => {
+  const applicant = await prisma.applicant.findUnique({
+    where: {
+      id: applicantId,
+    },
+    select: {
+      step: true,
+      additionalInfo: true,
+    },
+  });
+
+  return [applicant?.additionalInfo ? applicant?.additionalInfo : undefined, applicant?.step];
+}
+
+export const createOrUpdateAdditionalInfo = async (applicantId: string, applicantAdditionalInfo: Prisma.AdditionalInfoCreateInput | Prisma.AdditionalInfoUpdateInput) => {
+  await prisma.$transaction(async (prisma) => {
+    const applicant = await prisma.applicant.findUniqueOrThrow({
+      where: { id: applicantId },
+      select: { step: true },
+    });
+
+    const updateData: any = {
+      additionalInfo: {
+        upsert: {
+          create: applicantAdditionalInfo as Prisma.AdditionalInfoCreateInput,
+          update: applicantAdditionalInfo as Prisma.AdditionalInfoUpdateInput,
+        },
+      },
+    };
+
+    if (applicant.step < 9) updateData.step = 9;
 
     await prisma.applicant.update({
       where: { id: applicantId },
