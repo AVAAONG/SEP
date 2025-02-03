@@ -1,4 +1,5 @@
 'use server';
+import { getServerSession } from "@/lib/auth/authOptions";
 import { AdditionalInfo, Annexes, CollageInfo, HighSchool, JobInfo, LanguageKnowledge, Prisma } from "@prisma/client";
 import { prisma } from "./prisma";
 
@@ -32,6 +33,7 @@ export const getApplicantCurrentStep = async (applicantId: string) => {
 export const createOrUpdatePersonalInfo = async (applicantId: string, chapterId: string, applicantPersonalInfo: Prisma.PersonalInfoCreateInput | Prisma.PersonalInfoUpdateInput) => {
   await prisma.user.update({
     where: { id: applicantId }, data: {
+      image: applicantPersonalInfo.photo,
       applicant: {
         upsert: {
           create: {
@@ -76,6 +78,10 @@ export const createOrUpdateContactInfo = async (applicantId: string, applicantCo
       where: { id: applicantId },
       data: updateData,
     });
+    await prisma.user.update({
+      where: { id: applicantId },
+      data: { email: applicantContactInfo.email }
+    });
   });
 };
 
@@ -90,6 +96,24 @@ export const getApplicantContactInfo = async (applicantId: string) => {
   });
 
   return applicant?.ContactInfo ? applicant?.ContactInfo : undefined
+}
+
+
+export const checkIfEmailExist = async (email: string) => {
+  const session = await getServerSession();
+  if (!session) {
+    throw new Error('No active session found');
+  }
+
+  const user = await prisma.user.findFirst({
+    where: {
+      email: email,
+    },
+  });
+
+  if (!user) return false;
+  if (user.id === session.id) return false;
+  return true;
 }
 
 

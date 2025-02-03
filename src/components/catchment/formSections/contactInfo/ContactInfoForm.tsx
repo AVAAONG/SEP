@@ -1,10 +1,13 @@
 'use client';
 import InputField from '@/components/fields/InputFormField';
 import { createOrUpdateContactInfo } from '@/lib/db/utils/applicant';
+import { revalidateSpecificPath } from '@/lib/serverAction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Link } from '@nextui-org/react';
 import { ContactInfo } from '@prisma/client';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import contactInfoFormSchema from './contactInfoSchema';
@@ -19,23 +22,33 @@ const ContactInfoForm = ({
   applicantContactInfo: ContactInfo | undefined;
 }) => {
   const router = useRouter();
+  const { update, data: session } = useSession();
 
   const methods = useForm<CollageFormSchemaType>({
     resolver: zodResolver(contactInfoFormSchema),
     mode: 'onBlur',
     defaultValues: applicantContactInfo,
   });
+
+  useEffect(() => {
+    if (!applicantContactInfo && session) {
+      methods.setValue('email', session.email);
+    }
+  }, [session]);
+
   const { handleSubmit, formState } = methods;
 
   const onSubmit = async (data: CollageFormSchemaType) => {
     await createOrUpdateContactInfo(applicantId, data);
+    update();
+    await revalidateSpecificPath(`/captacion/postulacion/`);
     router.push('/captacion/postulacion/familia');
   };
 
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-5">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <InputField
             isRequired
             label="Número de teléfono local"
