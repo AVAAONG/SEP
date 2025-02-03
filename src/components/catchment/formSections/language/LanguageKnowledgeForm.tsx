@@ -25,10 +25,11 @@ const LanguagesForm = ({
 
   const methods = useForm<LanguageFormSchemaType>({
     resolver: zodResolver(languagesFormSchema),
-    defaultValues: languagesFormSchema.parse({
-      ...applicantLangKnowledge,
+    defaultValues: {
       speaksOtherLanguage: applicantLangKnowledge?.speaksOtherLanguage === true ? 'YES' : 'NO',
-    }),
+      languageLevel: applicantLangKnowledge?.languageLevel ?? undefined,
+      specifiedLanguage: applicantLangKnowledge?.specifiedLanguage ?? undefined,
+    },
     mode: 'onSubmit',
   });
 
