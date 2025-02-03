@@ -29,7 +29,7 @@ const AdmisionLinkButtons = ({ chapterName }: { chapterName: string }) => {
   return (
     <Link
       href="/signin"
-      className="w-full md:max-w-[25ch] h-min relative group rounded-lg p-2 sm:p-5 text-[#0069B0] dark:text-light border-[#0069B0] border transition-all dark:hover:bg-[#0069B0] dark:focus:bg-[#0069B0] hover:bg-[#0069B0] focus:bg-[#0069B0]"
+      className="w-full md:max-w-[25ch] h-min relative group rounded-lg p-2 sm:p-5 text-[#0069B0] hover:text-white dark:hover:text-black border-[#0069B0] border transition-all dark:hover:bg-[#0069B0] dark:focus:bg-[#0069B0] hover:bg-[#0069B0] focus:bg-[#0069B0]"
       rel="noopener noreferrer"
     >
       <h2 className={`text-2xl font-medium`}>
