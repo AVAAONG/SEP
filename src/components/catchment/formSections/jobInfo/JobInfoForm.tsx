@@ -24,10 +24,14 @@ const JobInfoForm = ({
 
   const methods = useForm<JobFormSchemaType>({
     resolver: zodResolver(jobInfoSchema),
-    defaultValues: jobInfoSchema.parse({
+    defaultValues: {
       ...applicantJobInfo,
       currentlyWorking: applicantJobInfo?.currentlyWorking === true ? 'YES' : 'NO',
-    }),
+      jobModality: applicantJobInfo?.jobModality ?? undefined,
+      jobTitle: applicantJobInfo?.jobTitle ?? undefined,
+      jobSchedule: applicantJobInfo?.jobSchedule ?? undefined,
+      jobCompany: applicantJobInfo?.jobCompany ?? undefined,
+    },
     mode: 'onSubmit',
   });
 
