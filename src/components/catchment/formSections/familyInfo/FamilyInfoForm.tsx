@@ -23,14 +23,10 @@ const FamilyInfoForm = ({
 
   const methods = useForm<FamilyFormSchemaType>({
     resolver: zodResolver(familyFormSchema),
-    defaultValues: familyFormSchema.parse({
+    defaultValues: {
       ...applicantFamilyInfo,
       contributeToFamilyIncome: applicantFamilyInfo?.contributeToFamilyIncome ? 'YES' : 'NO',
-      mothersCompanyName: applicantFamilyInfo?.mothersCompanyName ?? undefined,
-      fatherJob: applicantFamilyInfo?.fatherJob ?? undefined,
-      fathersCompanyName: applicantFamilyInfo?.fathersCompanyName ?? undefined,
-      motherJob: applicantFamilyInfo?.motherJob ?? undefined,
-    }),
+    },
     mode: 'onBlur',
   });
   const { handleSubmit, formState } = methods;
