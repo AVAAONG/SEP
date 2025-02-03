@@ -25,7 +25,6 @@ const JobInfoForm = ({
   const methods = useForm<JobFormSchemaType>({
     resolver: zodResolver(jobInfoSchema),
     defaultValues: {
-      ...applicantJobInfo,
       currentlyWorking: applicantJobInfo?.currentlyWorking === true ? 'YES' : 'NO',
       jobModality: applicantJobInfo?.jobModality ?? undefined,
       jobTitle: applicantJobInfo?.jobTitle ?? undefined,
