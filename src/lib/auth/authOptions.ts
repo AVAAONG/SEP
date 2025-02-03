@@ -11,7 +11,7 @@ import GoogleProvider from 'next-auth/providers/google';
 import { prisma } from "../db/utils/prisma";
 import { GOOGLE_PROVIDER_CONFIG, NEXT_SECRET, PAGES } from './authConfig';
 import CustomEmailProvider from "./EmailProvider";
-import { getAdminInitialInfo, getScholarInitialInfo } from './helpers';
+import { getAdminInitialInfo, getApplicantInitialInfo, getScholarInitialInfo } from './helpers';
 
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
@@ -25,7 +25,19 @@ export const authOptions = {
   ],
 
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
+
+      if (trigger === 'update') {
+        if (!token.sub) return token
+        const applicant = await getApplicantInitialInfo(token.sub)
+        if (!applicant) return token
+        token.name = applicant.name
+        token.image = applicant.image
+        token.email = applicant.email ? applicant.email : token.email
+        token.chapterId = applicant.chapterId
+        token.id = applicant.id
+        token.role = 'APPLICANT'
+      }
       /** 
        * check for the existence of parameters (apart from token). If they exist, this means that the callback is being invoked for the first time (i.e. the user is being signed in).
        * Subsequent invocations will only contain the token parameter.
@@ -53,8 +65,18 @@ export const authOptions = {
             token.isSpeaker = scholar.isSpeaker
         }
         if (user.kind_of_user === 'APPLICANT') {
+          const applicant = await getApplicantInitialInfo(user.id)
+          if (applicant) {
+            token.name = applicant.name
+            token.image = applicant.image
+            token.email = applicant.email
+            token.chapterId = applicant.chapterId
+            token.id = user.id
+            token.role = user.kind_of_user
+          }
           token.id = user.id
           token.role = user.kind_of_user
+          token.email = user.email
         }
       }
 
@@ -62,9 +84,9 @@ export const authOptions = {
     },
     async session({ token, session }) {
       return {
-        name: token.name,
-        image: token.image,
-        email: token.email,
+        name: token.name as string,
+        image: token.image as string,
+        email: token.email as string,
         id: token.id as string,
         kindOfUser: token.role as string,
         chapterId: token.chapterId as string,

@@ -6,7 +6,7 @@ import Navbar from '@/components/public/admision/Navbar';
 
 const page = () => (
   <>
-    <Navbar />
+    <Navbar showProfileDropdown={false} email="" />
     <main className="p-2 md:p-16 lg:p-24">
       <Hero />
       <AdmisionOptions title="Selecciona el Capítulo" />

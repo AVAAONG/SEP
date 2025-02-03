@@ -65,3 +65,35 @@ export const getAdminInitialInfo = async (id: string) => {
     chapterId: admin.chapter_id,
   }
 }
+
+export const getApplicantInitialInfo = async (id: string) => {
+  const applicant = await prisma.applicant.findFirst({
+    where: {
+      id,
+    },
+    select: {
+      chapterId: true,
+      personal: {
+        select: {
+          firstNames: true,
+          lastNames: true,
+          photo: true,
+        },
+      },
+      ContactInfo: {
+        select: {
+          email: true,
+        }
+      }
+    },
+  })
+  if (!applicant) return null
+  const image = await getBlobImage(applicant.personal?.photo)
+  return {
+    id,
+    name: `${applicant.personal?.firstNames} ${applicant.personal?.lastNames}`,
+    email: applicant.ContactInfo?.email,
+    image,
+    chapterId: applicant.chapterId,
+  }
+}
