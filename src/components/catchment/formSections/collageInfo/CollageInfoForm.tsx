@@ -35,7 +35,6 @@ const CollageForm = ({
   applicantId: string;
   applicantCollageInfo?: CollageInfo;
 }) => {
-  console.log(applicantCollageInfo);
   const router = useRouter();
   const methods = useForm<CollageFormSchemaType>({
     resolver: zodResolver(collageSchema),
