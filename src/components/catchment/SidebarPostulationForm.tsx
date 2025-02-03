@@ -117,7 +117,7 @@ export function SidebarNav({ currentStep }: { currentStep: number }) {
         <Button
           radius="sm"
           size="md"
-          color="success"
+          color="default"
           as={Link}
           isDisabled={item.step > currentStep}
           key={item.href}
