@@ -4,9 +4,11 @@ import InputField from '@/components/fields/InputFormField';
 import SelectFormField from '@/components/fields/SelectFormField';
 import { formatDateToMatchInput } from '@/lib/dates';
 import { createOrUpdatePersonalInfo } from '@/lib/db/utils/applicant';
+import { revalidateSpecificPath } from '@/lib/serverAction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@nextui-org/react';
 import { PersonalInfo as PersonalInfoPrisma } from '@prisma/client';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -48,6 +50,7 @@ const PersonalInfo = ({
   applicantId: string;
 }) => {
   const router = useRouter();
+  const { update } = useSession();
 
   const methods = useForm<TPersonalInfo>({
     resolver: zodResolver(personalInfoSchema),
@@ -66,6 +69,8 @@ const PersonalInfo = ({
   const handleFormSubmit = async (data: TPersonalInfo) => {
     const { chapterId, ...personalInfoData } = data;
     await createOrUpdatePersonalInfo(applicantId, chapterId, personalInfoData);
+    update();
+    await revalidateSpecificPath(`/captacion/postulacion/`);
     router.push('/captacion/postulacion/contacto');
   };
 
