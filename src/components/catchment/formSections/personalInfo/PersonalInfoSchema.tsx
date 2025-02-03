@@ -1,4 +1,5 @@
 'use client';
+import { createEnumErrorMap } from '@/lib/zod/utils';
 import { z } from 'zod';
 const VENEZUELA_STATES: string[] = [
   'Amazonas',
@@ -27,7 +28,12 @@ const VENEZUELA_STATES: string[] = [
 ];
 
 const personalInfoSchema = z.object({
-  photo: z.string().min(6, 'Debes subir una foto'),
+  photo: z
+    .string({
+      invalid_type_error: 'La foto es requerida',
+      required_error: 'La foto es requerida',
+    })
+    .min(6, { message: 'La foto es requerida' }),
 
   chapterId: z.string({
     required_error: 'Debes seleccionar una sede',
@@ -48,10 +54,7 @@ const personalInfoSchema = z.object({
     .max(15, 'La cédula no puede tener más de 15 dígitos')
     .regex(/^\d+$/, 'La cédula solo puede contener números'),
 
-  gender: z.enum(['M', 'F', 'O'], {
-    required_error: 'Debes seleccionar un género',
-    invalid_type_error: 'Género inválido',
-  }),
+  gender: z.enum(['M', 'F', 'O'], createEnumErrorMap('género')),
 
   birthdate: z.coerce
     .date({
@@ -73,10 +76,10 @@ const personalInfoSchema = z.object({
     )
     .transform((value) => new Date(value).toISOString()),
 
-  state: z.enum([...VENEZUELA_STATES] as [string, ...string[]], {
-    required_error: 'Debes seleccionar un estado',
-    invalid_type_error: 'Estado inválido',
-  }),
+  state: z.enum(
+    [...(VENEZUELA_STATES as [string, ...string[]])],
+    createEnumErrorMap('estado de procedencia')
+  ),
 
   address: z
     .string()
