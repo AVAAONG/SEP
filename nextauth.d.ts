@@ -8,6 +8,7 @@ declare module "next-auth" {
     }
     interface Session extends DefaultSession {
         kindOfUser: 'SCHOLAR' | 'ADMIN';
+        email: string;
         chapterId: string;
         scholarStatus?: ScholarStatus;
         isSpeaker?: boolean;
