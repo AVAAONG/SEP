@@ -11,8 +11,6 @@ export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET }) as Token | null;
 
-  console.log('Debug:', { pathname, tokenExists: !!token, role: token?.role });
-
   // Redirect to /signin if no token is present
   if (!token && pathname !== '/signin') {
     return NextResponse.redirect(new URL('/signin', req.url));
@@ -46,9 +44,6 @@ export async function middleware(req: NextRequest) {
       }
       else if (token.role === 'APPLICANT') {
         return NextResponse.redirect(new URL('/captacion/postulacion', req.url));
-      }
-      else {
-        return NextResponse.redirect(new URL('/signin', req.url));
       }
     }
   }
