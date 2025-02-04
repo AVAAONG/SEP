@@ -227,7 +227,8 @@ export const CARACAS_UNIVERSITIES = [
   { name: 'Universidad Central de Venezuela', initials: 'UCV' },
   { name: 'Universidad Bolivariana de Venezuela', initials: 'UBV' },
   { name: 'Universidad de las Ciencias de la Salud "Hugo Chávez Frías"', initials: 'UCS' },
-  { name: 'Universidad Nacional Experimental de la Seguridad', initials: 'UNES' }
+  { name: 'Universidad Nacional Experimental de la Seguridad', initials: 'UNES' },
+  { name: 'Universidad Metropolitana', initials: 'UNIMET' }
 ];
 
 
@@ -247,16 +248,16 @@ export const ZULIA_UNIVERSITIES = [
 ];
 
 export const CARABOBO_UNIVERSITIES = [
-  { name: 'UNIVERSIDAD DE LAS CIENCIAS DE LA SALUD "HUGO CHÁVEZ FRÍAS"', initials: 'UCS-HCF' },
-  { name: 'UNIVERSIDAD BOLIVARIANA DE VENEZUELA', initials: 'UBV' },
-  { name: 'UNIVERSIDAD NACIONAL EXPERIMENTAL SIMÓN RODRÍGUEZ', initials: 'UNESR' },
-  { name: 'UNIVERSIDAD NACIONAL EXPERIMENTAL POLITÉCNICA DE LA FUERZA ARMADA NACIONAL', initials: 'UNEFA' },
-  { name: 'UNIVERSIDAD NACIONAL EXPERIMENTAL DEL MAGISTERIO "SAMUEL ROBINSON"', initials: 'UNEMSR' },
-  { name: 'UNIVERSIDAD NACIONAL EXPERIMENTAL FRANCISCO DE MIRANDA', initials: 'UNEFM' },
-  { name: 'UNIVERSIDAD POLITÉCNICA TERRITORIAL DE PUERTO CABELLO', initials: 'UPTPC' },
-  { name: 'UNIVERSIDAD DE CARABOBO', initials: 'UC' },
-  { name: 'UNIVERSIDAD NACIONAL ABIERTA', initials: 'UNA' },
-  { name: 'UNIVERSIDAD POLITÉCNICA TERRITORIAL DE VALENCIA', initials: 'UPTV' },
+  { name: 'Universidad de las Ciencias de la Salud "Hugo Chávez Frías"', initials: 'UCS-HCF' },
+  { name: 'Universidad Bolivariana de Venezuela', initials: 'UBV' },
+  { name: 'Universidad Nacional Experimental Simón Rodríguez', initials: 'UNESR' },
+  { name: 'Universidad Nacional Experimental Politécnica de la Fuerza Armada Nacional', initials: 'UNEFA' },
+  { name: 'Universidad Nacional Experimental del Magisterio "Samuel Robinson"', initials: 'UNEMSR' },
+  { name: 'Universidad Nacional Experimental Francisco de Miranda', initials: 'UNEFM' },
+  { name: 'Universidad Politécnica Territorial de Puerto Cabello', initials: 'UPTPC' },
+  { name: 'Universidad de Carabobo', initials: 'UC' },
+  { name: 'Universidad Nacional Abierta', initials: 'UNA' },
+  { name: 'Universidad Politécnica Territorial de Valencia', initials: 'UPTV' },
 ];
 
 export const UNIVERSITIES_FOR_INPUT = [
