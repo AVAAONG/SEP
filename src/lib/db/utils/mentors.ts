@@ -1,12 +1,18 @@
 'use server';
+import { getServerSession } from '@/lib/auth/authOptions';
 import { Mentor, MentorStatus, MetorRecruitmentStatus, Prisma } from '@prisma/client';
 import { prisma } from './prisma';
 
+
+
 export const getActiveMentors = async (): Promise<Mentor | null> => {
+  const session = await getServerSession();
+  const chapterId = session?.chapterId;
   try {
     const mentors = await prisma.mentor.findMany({
       where: {
-        recruitment_status: 'ACCEPTED'
+        recruitment_status: 'ACCEPTED',
+        chapter: chapterId,
       }
     });
     return mentors;
@@ -18,9 +24,12 @@ export const getActiveMentors = async (): Promise<Mentor | null> => {
 
 
 export const getNewMentors = async (): Promise<Mentor | null> => {
+  const session = await getServerSession();
+  const chapterId = session?.chapterId;
   try {
     const mentors = await prisma.mentor.findMany({
       where: {
+        chapter: chapterId,
         OR: [
           {
             recruitment_status: 'PENDING'

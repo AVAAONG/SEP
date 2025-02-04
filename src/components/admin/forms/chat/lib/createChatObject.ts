@@ -1,6 +1,9 @@
+'use server';
+import { getServerSession } from '@/lib/auth/authOptions';
 import { formatDates } from '@/lib/calendar/clientUtils';
 import chatCreationFormSchema from '@/lib/schemas/chatCreationFormSchema';
 import { ActivityStatus, Prisma } from '@prisma/client';
+import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 interface MeetingDetail {
@@ -16,6 +19,11 @@ const createChatObject = async (
     calendarIds: string[],
     meetingDetails: MeetingDetails
 ) => {
+
+    const session = await getServerSession();
+    if (!session) redirect('/signin')
+    const chapterId = session.chapterId;
+
     let meeting_id: string[] = [];
     let meeting_link: string[] = [];
     let meeting_password: string[] = [];
@@ -44,7 +52,7 @@ const createChatObject = async (
             meeting_id,
             meeting_link,
             meeting_password,
-            chapterId: 'Rokk6_XCAJAg45heOEzYb',
+            chapterId: chapterId,
         },
     };
     return workshop;

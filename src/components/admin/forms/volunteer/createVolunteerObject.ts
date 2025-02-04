@@ -1,5 +1,6 @@
 
-
+'use server'
+import { getServerSession } from "@/lib/auth/authOptions";
 import { formatDates } from "@/lib/calendar/clientUtils";
 import volunteerSchema from "@/lib/schemas/volunteerSchema";
 import { Prisma, VolunteerStatus } from "@prisma/client";
@@ -7,6 +8,9 @@ import { z } from "zod";
 
 const createVolunteerObject = async (data: z.infer<typeof volunteerSchema>, status: VolunteerStatus) => {
     const dates = await formatDates(data.dates); //client formating
+    const session = await getServerSession();
+    if (!session) return;
+
     let volunteer: Prisma.VolunteerCreateArgs = {
         data: {
             title: data.title,
@@ -20,7 +24,7 @@ const createVolunteerObject = async (data: z.infer<typeof volunteerSchema>, stat
             kind_of_volunteer: data.kindOfVolunteer,
             supervisor: data.supervisor,
             ...dates,
-            chapterId: 'Rokk6_XCAJAg45heOEzYb',
+            chapterId: session.chapterId,
         },
     };
     return volunteer;

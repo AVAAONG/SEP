@@ -7,6 +7,7 @@
 
 import { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
 import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
+import { getServerSession } from '@/lib/auth/authOptions';
 import {
   ActivityStatus,
   Chat,
@@ -18,6 +19,7 @@ import {
 import shortUUID from 'short-uuid';
 import { VolunteerWithAllData } from '../types';
 import { prisma } from './prisma';
+
 
 export const getWorkshopsByScholar = async (scholarId: string) => {
   const workshops = await prisma.scholar.findUniqueOrThrow({
@@ -128,9 +130,12 @@ export const enrrrollScholarToWorkshop = async (workshopId: string, scholarId: s
 };
 
 export const getWorkshops = async () => {
+  const session = await getServerSession();
+
+  const chapterId = session?.chapterId;
   const workshops = await prisma.workshop.findMany({
     where: {
-      chapterId: 'Rokk6_XCAJAg45heOEzYb'
+      chapterId: chapterId
     },
     include: {
       speaker: true,
@@ -219,22 +224,25 @@ export const getSentActivitiesWhereScholarIsNotEnrolled = async (
 export const getActivitiesByYear = async (
   year: number
 ): Promise<[Workshop[], Chat[], VolunteerWithAllData[]]> => {
+  const session = await getServerSession();
+
+  const chapterId = session?.chapterId;
   const [allWorkshops, allChats, allVolunteers] = await prisma.$transaction([
     prisma.workshop.findMany({
       where: {
-        chapterId: 'Rokk6_XCAJAg45heOEzYb'
+        chapterId: chapterId
       }
     }),
     prisma.chat.findMany(
       {
         where: {
-          chapterId: 'Rokk6_XCAJAg45heOEzYb'
+          chapterId: chapterId
         }
       }
     ),
     prisma.volunteer.findMany({
       where: {
-        chapterId: 'Rokk6_XCAJAg45heOEzYb'
+        chapterId: chapterId
       },
       include: {
         volunteer_attendance: true
@@ -464,10 +472,13 @@ export const getVolunteersByScholar = async (scholarId: string) => {
 
 
 export const getScholarsWithActivities = async () => {
+  const session = await getServerSession();
+
+  const chapterId = session?.chapterId;
   const scholars = await prisma.scholar.findMany({
     where: {
       AND: [
-        { program_information: { chapter_id: 'Rokk6_XCAJAg45heOEzYb' } },
+        { program_information: { chapter_id: chapterId } },
         { program_information: { scholar_condition: 'ACTIVE' } },
       ]
     },

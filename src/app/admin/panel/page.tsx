@@ -2,14 +2,18 @@ import NextEventsList from '@/components/NextEventsList';
 import Calendar from '@/components/calendar/Calendar';
 import formatActivitiesForCalendarPanel from '@/components/calendar/utils';
 import PanelCard, { PanelCardProps } from '@/components/commons/PanelCard';
+import { getServerSession } from '@/lib/auth/authOptions';
 import { getActivitiesByYear } from '@/lib/db/utils/Workshops';
 import { getScholarsCountByCondition } from '@/lib/db/utils/users';
 import { Chat, Volunteer, Workshop } from '@prisma/client';
+import { redirect } from 'next/navigation';
 import { chatIcon, userIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs';
 
 const page = async () => {
   const actualYear = new Date().getFullYear();
-  const chapter = 'Rokk6_XCAJAg45heOEzYb';
+  const session = await getServerSession();
+  if (!session) return redirect('/signin');
+  const chapter = session?.chapterId;
   const activeScholarsCount = await getScholarsCountByCondition('ACTIVE', chapter);
   const [workshops, chats, volunteer] = await getActivitiesByYear(actualYear);
   const events = formatActivitiesForCalendarPanel([...workshops, ...chats, ...volunteer], 'admin');

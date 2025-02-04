@@ -54,7 +54,7 @@ const page = async ({
         stats={[
           {
             name: `Becarios`,
-            stat: activeScholars + scholarsPropertiesCount.condition.TO_BE_ALUMNI || 0,
+            stat: activeScholars + (scholarsPropertiesCount.condition.TO_BE_ALUMNI ?? 0),
             changeType: 'increase',
             comparationText: null,
             tooltipText: null,

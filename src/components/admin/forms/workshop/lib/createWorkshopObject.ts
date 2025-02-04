@@ -1,6 +1,9 @@
+'use server'
+import { getServerSession } from '@/lib/auth/authOptions';
 import { formatDates } from '@/lib/calendar/clientUtils';
 import workshopCreationFormSchema from '@/lib/schemas/workshopCreationFormSchema';
 import { ActivityStatus, Prisma, WorkshopYear } from '@prisma/client';
+import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 interface MeetingDetail {
@@ -16,6 +19,10 @@ const createWorkshopObject = async (
   calendarIds: string[],
   meetingDetails: MeetingDetails
 ) => {
+  const session = await getServerSession();
+  if (!session) redirect('/signin')
+
+  const chapterId = session.chapterId;
   let meeting_id: string[] = [];
   let meeting_link: string[] = [];
   let meeting_password: string[] = [];
@@ -46,7 +53,7 @@ const createWorkshopObject = async (
       meeting_id,
       meeting_link,
       meeting_password,
-      chapterId: 'Rokk6_XCAJAg45heOEzYb',
+      chapterId: chapterId,
     },
   };
   return workshop;

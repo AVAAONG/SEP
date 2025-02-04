@@ -4,11 +4,13 @@
  * @author Kevin Bravo (kevinbravo.me)
  */
 
+import { getServerSession } from '@/lib/auth/authOptions';
 import { getApprovedAndAttendedVolunteers } from '@/lib/utils/getAttendedActivities';
 import { Prisma, ScholarCondition, User, WorkshopAttendance } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import shortUUID from 'short-uuid';
 import { prisma } from './prisma';
+
 /**
  * @description Create a new user in the database
  * @param data User data
@@ -138,6 +140,10 @@ export const getUsers = async (): Promise<User[]> => {
  * @returns An array of scholars with all associated data
  */
 export const getScholarsWithAllData = async () => {
+  const session = await getServerSession();
+
+  const chapterId = session?.chapterId;
+
   const scholar = await prisma.scholar.findMany({
     where: {
       program_information: {
@@ -147,7 +153,7 @@ export const getScholarsWithAllData = async () => {
         },
         chapter: {
           id: {
-            equals: 'Rokk6_XCAJAg45heOEzYb',
+            equals: chapterId,
           },
         },
       },
@@ -187,6 +193,9 @@ export const getScholarsWithAllData = async () => {
  * @returns An array of scholars with all associated data
  */
 export const getScholarsWithAllAllData = async () => {
+  const session = await getServerSession();
+
+  const chapterId = session?.chapterId;
   const scholar = await prisma.scholar.findMany({
     where: {
       program_information: {
@@ -196,7 +205,7 @@ export const getScholarsWithAllAllData = async () => {
         },
         chapter: {
           id: {
-            equals: 'Rokk6_XCAJAg45heOEzYb',
+            equals: chapterId,
           },
         },
       },
@@ -218,6 +227,9 @@ export const getScholarsWithAllAllData = async () => {
 
 
 export const getWithdrawerAndResignedScholars = async () => {
+  const session = await getServerSession();
+
+  const chapterId = session?.chapterId;
   const scholar = await prisma.scholar.findMany({
     where: {
       program_information: {
@@ -233,11 +245,7 @@ export const getWithdrawerAndResignedScholars = async () => {
             }
           }
         ],
-        chapter: {
-          id: {
-            equals: 'Rokk6_XCAJAg45heOEzYb',
-          },
-        },
+        chapter_id: chapterId,
       },
     },
     include: {
@@ -269,6 +277,9 @@ export const getWithdrawerAndResignedScholars = async () => {
 
 
 export const getAlumniScholars = async () => {
+  const session = await getServerSession();
+
+  const chapterId = session?.chapterId;
   const scholar = await prisma.scholar.findMany({
     where: {
       program_information: {
@@ -277,7 +288,7 @@ export const getAlumniScholars = async () => {
         },
         chapter: {
           id: {
-            equals: 'Rokk6_XCAJAg45heOEzYb',
+            equals: chapterId,
           },
         },
       },
@@ -311,6 +322,9 @@ export const getAlumniScholars = async () => {
 
 
 export const getTobeAlumniScholars = async () => {
+  const session = await getServerSession();
+
+  const chapterId = session?.chapterId;
   const scholar = await prisma.scholar.findMany({
     where: {
       program_information: {
@@ -319,7 +333,7 @@ export const getTobeAlumniScholars = async () => {
         },
         chapter: {
           id: {
-            equals: 'Rokk6_XCAJAg45heOEzYb',
+            equals: chapterId,
           },
         },
       },
@@ -685,9 +699,13 @@ export const getActivitiesWhenScholarItsEnrolled = async (scholar_id: string) =>
 
 
 export const getScholarsInProbationByYear = async (year: string) => {
+  const session = await getServerSession();
+
+  const chapterId = session?.chapterId;
   const scholars = await prisma.scholar.findMany({
     where: {
       program_information: {
+        chapter_id: chapterId,
         OR: [
           {
             scholar_status: 'PROBATION_I',
@@ -886,6 +904,9 @@ export const getNotEnrolledScholarsInChat = async (workshopId: string) => {
 }
 
 export const getOnlyCaracasScholar = async () => {
+  const session = await getServerSession();
+
+  const chapterId = session?.chapterId;
   const scholars = await prisma.scholar.findMany({
     where: {
       program_information: {
@@ -894,7 +915,7 @@ export const getOnlyCaracasScholar = async () => {
         },
         chapter: {
           id: {
-            equals: 'Rokk6_XCAJAg45heOEzYb',
+            equals: chapterId,
           },
         },
       },

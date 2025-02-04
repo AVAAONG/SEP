@@ -3,18 +3,27 @@
  * @file This file contains all the necesary logic to interact with the database for the users collection.
  * @author Kevin Bravo (kevinbravo.me)
  */
+import { getServerSession } from '@/lib/auth/authOptions';
 import { Chat, Prisma, Speaker } from '@prisma/client';
+import { redirect } from 'next/navigation';
 import { prisma } from './prisma';
+
 /**
  * Get speakers with parameters
  * @param data - The data to select from the workshopSpeaker table
  * @returns The selected speakers
  */
 export const getWorkshopSpeakersWithParams = async (data: Prisma.SpeakerSelect) => {
+
+  const session = await getServerSession();
+  if (!session) redirect('/signin')
+
+  const chapterId = session.chapterId;
   try {
     const speakers = await prisma.speaker.findMany({
       select: data,
       where: {
+        chapter_id: chapterId,
         OR: [
           { speaker_kind: 'CHATS_AND_WORKSHOPS' },
           { speaker_kind: 'WORKSHOPS' }
@@ -32,10 +41,17 @@ export const getWorkshopSpeakersWithParams = async (data: Prisma.SpeakerSelect) 
 };
 
 export const getChatSpeakersWithParams = async (data: Prisma.SpeakerSelect) => {
+
+  const session = await getServerSession();
+  if (!session) redirect('/signin')
+
+  const chapterId = session.chapterId;
   try {
     const speakers = await prisma.speaker.findMany({
       select: data,
+
       where: {
+        chapter_id: chapterId,
         OR: [
           { speaker_kind: 'CHATS_AND_WORKSHOPS' },
           { speaker_kind: 'CHATS' }
@@ -87,39 +103,31 @@ export const getChatSpeaker = async (speakerId: string) => {
  * console.log(workshopSpeakersWomanCount, workshopSpeakerMenCount); // 2(women speakers) 3(male speakers)
  */
 export const getWorkshopSpeakersCountByGender = async () => {
+
+  const session = await getServerSession();
+  if (!session) redirect('/signin')
+
+  const chapterId = session.chapterId;
   const [workshopSpeakersWomanCount, workshopSpeakerMenCount] = await prisma.$transaction([
-    prisma.speaker.count({ where: { gender: 'F', speaker_kind: 'WORKSHOPS' } }),
-    prisma.speaker.count({ where: { gender: 'M', speaker_kind: 'WORKSHOPS' } }),
+    prisma.speaker.count({ where: { gender: 'F', speaker_kind: 'WORKSHOPS', chapter_id: chapterId } }),
+    prisma.speaker.count({ where: { gender: 'M', speaker_kind: 'WORKSHOPS', chapter_id: chapterId } }),
   ]);
   return [workshopSpeakersWomanCount, workshopSpeakerMenCount];
 };
 
 export const getChatSpeakersCountByGender = async () => {
+
+  const session = await getServerSession();
+  if (!session) redirect('/signin')
+
+  const chapterId = session.chapterId;
   const [workshopSpeakersWomanCount, workshopSpeakerMenCount] = await prisma.$transaction([
-    prisma.speaker.count({ where: { gender: 'F', speaker_kind: 'CHATS' } }),
-    prisma.speaker.count({ where: { gender: 'M', speaker_kind: 'CHATS' } }),
+    prisma.speaker.count({ where: { gender: 'F', speaker_kind: 'CHATS', chapter_id: chapterId } }),
+    prisma.speaker.count({ where: { gender: 'M', speaker_kind: 'CHATS', chapter_id: chapterId } }),
   ]);
   return [workshopSpeakersWomanCount, workshopSpeakerMenCount];
 };
 
-export const getWorkshopSpeakerWithWorkshops = async (speakerId: string) => {
-  const [speaker, workshops] = await prisma.$transaction([
-    prisma.speaker.findUnique({
-      where: { id: speakerId },
-    }),
-    prisma.workshop.findMany({
-      where: {
-        speaker: {
-          some: { id: speakerId },
-        },
-      },
-      include: {
-        scholar_attendance: true,
-      },
-    }),
-  ]);
-  return [speaker, workshops];
-};
 
 export const getChatSpeakersWithChats = async (
   speakerId: string
@@ -142,9 +150,17 @@ export const getChatSpeakersWithChats = async (
   return [speaker, chat];
 };
 export const createSpeaker = async (data: Prisma.SpeakerCreateInput) => {
+
+  const session = await getServerSession();
+  if (!session) redirect('/signin')
+
+  const chapterId = session.chapterId;
   try {
     const speaker = await prisma.speaker.create({
-      data,
+      data: {
+        ...data,
+        chapter_id: chapterId
+      },
     });
     return speaker;
   } catch (e) {
@@ -193,6 +209,11 @@ export const getChatSpeakerForStats = async () => {
 }
 
 export const getSpeakersForInput = async (kind: 'workshop' | 'chat') => {
+
+  const session = await getServerSession();
+  if (!session) redirect('/signin')
+
+  const chapterId = session.chapterId;
   const fieldsNeeded = {
     id: true,
     first_names: true,
@@ -204,6 +225,7 @@ export const getSpeakersForInput = async (kind: 'workshop' | 'chat') => {
     const speakers = await prisma.speaker.findMany({
       select: fieldsNeeded,
       where: {
+        chapter_id: chapterId,
         OR: [
           { speaker_kind: 'CHATS_AND_WORKSHOPS' },
           { speaker_kind: speakerKind }

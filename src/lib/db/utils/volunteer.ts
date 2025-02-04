@@ -1,11 +1,14 @@
 'use server';
+import { getServerSession } from "@/lib/auth/authOptions";
 import { Prisma, ScholarAttendance, VolunteerAttendance, VolunteerStatus } from "@prisma/client";
 import { prisma } from "./prisma";
+
 
 export const createExternalVolunteer = async (volunteer: Prisma.VolunteerCreateInput,
 	scholarId: string,
 	asignedHours: number
 ) => {
+
 	return await prisma.volunteer.create({
 		data: {
 			kind_of_volunteer: 'EXTERNAL',
@@ -54,9 +57,12 @@ export const getVolunteersByScholar = async (scholarId: string): Promise<Volunte
 }
 
 export const getExternalVolunteer = async () => {
+	const session = await getServerSession();
+
+	const chapterId = session?.chapterId;
 	return prisma.volunteer.findMany({
 		where: {
-			chapterId: 'Rokk6_XCAJAg45heOEzYb',
+			chapterId: chapterId,
 			kind_of_volunteer: 'EXTERNAL'
 		},
 		include: {
@@ -269,9 +275,13 @@ export const deleteVolunteerFromDatabase = async (volunteerId: string) => {
 }
 
 export const getScheduledVolunteers = async () => {
+	const session = await getServerSession();
+
+	const chapterId = session?.chapterId;
 	const volunteers = await prisma.volunteer.findMany({
 		where: {
-			status: 'SCHEDULED'
+			status: 'SCHEDULED',
+			chapterId: chapterId
 		},
 	})
 	return volunteers
@@ -293,7 +303,13 @@ export const changeVolunteerStatusInBulk = async (ids: string[], status: Volunte
 }
 
 export const getVolunteers = async () => {
+	const session = await getServerSession();
+
+	const chapterId = session?.chapterId;
 	const volunteers = await prisma.volunteer.findMany({
+		where: {
+			chapterId: chapterId
+		},
 		include: {
 			volunteer_attendance: true,
 		},
