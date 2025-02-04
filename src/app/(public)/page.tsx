@@ -38,7 +38,7 @@ const page = () => (
       />
     </div>
 
-    <div className="mb-32 grid  text-center sm:text-left gap-6 px-8">
+    <div className="mb-32 grid md:grid-cols-2 text-center sm:text-left gap-6 px-8">
       <Link
         href="/captacion"
         className="relative group rounded-lg p-2 sm:p-5 text-dark dark:text-light border-primary-light border transition-all dark:hover:bg-primary-light dark:focus:bg-primary-light hover:bg-primary-1 focus:bg-primary-1"

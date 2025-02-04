@@ -342,7 +342,8 @@ export const CARABOBO_UNIVERSITIES = [
 export const UNIVERSITIES_FOR_INPUT = [
   ...CARABOBO_UNIVERSITIES,
   ...CARACAS_UNIVERSITIES,
-  ...ZULIA_UNIVERSITIES
+  ...ZULIA_UNIVERSITIES,
+  ...MIRANDA_UNIVERSITIES
 ].map(university => ({
   label: `${university.name} (${university.initials})`,
   value: `${university.name} (${university.initials})`
@@ -355,7 +356,8 @@ export const UNIVERSITIES_FOR_INPUT = [
 export const UNIVERSITIES_FOR_DISPLAY_IN_INPUT = [
   ...CARABOBO_UNIVERSITIES,
   ...CARACAS_UNIVERSITIES,
-  ...ZULIA_UNIVERSITIES
+  ...ZULIA_UNIVERSITIES,
+  ...MIRANDA_UNIVERSITIES
 ].map(university => ({
   name: `${university.name} (${university.initials})`,
   initials: `${university.initials}`
