@@ -228,8 +228,64 @@ export const CARACAS_UNIVERSITIES = [
   { name: 'Universidad Bolivariana de Venezuela', initials: 'UBV' },
   { name: 'Universidad de las Ciencias de la Salud "Hugo Chávez Frías"', initials: 'UCS' },
   { name: 'Universidad Nacional Experimental de la Seguridad', initials: 'UNES' },
-  { name: 'Universidad Metropolitana', initials: 'UNIMET' }
+  { name: 'Colegio Universitario de Administración y Mercadeo', initials: 'CUAM' },
+  { name: 'Instituto Universitario de Tecnología Industrial', initials: 'IUT INDUSTRIAL' },
+  { name: 'Instituto Universitario de Tecnología Juan Pablo Pérez Alfonzo', initials: 'IUTEPAL' },
+  { name: 'Instituto Universitario de Tecnología Venezuela', initials: 'IUT VENEZUELA' },
+  { name: 'Colegio Universitario de Enfermería de la Cruz Roja de Venezuela', initials: 'CUECMCRV' },
+  { name: 'Instituto Universitario YMCA Lope Mendoza', initials: 'IUYMCA' },
+  { name: 'Instituto Universitario de Tecnología Industrial Rodolfo Loero Arismendi', initials: 'IUTIRLA' },
+  { name: 'Instituto Universitario de Mercadotecnia', initials: 'IUDEM' },
+  { name: 'Instituto Universitario de Tecnología Alberto Adriani', initials: 'IUTAA' },
+  { name: 'Universidad Católica Santa Rosa', initials: 'UCSAR' },
+  { name: 'Instituto Universitario de Relaciones Públicas', initials: 'IURP' },
+  { name: 'Instituto Universitario Jesús Obrero', initials: 'IUJO' },
 ];
+
+export const MIRANDA_UNIVERSITIES =
+  [
+    { name: 'Instituto Universitario de Tecnología Industrial Rodolfo Loero Arismendi', initials: 'IUTIRLA' },
+    { name: 'Colegio Universitario Jean Piaget', initials: 'CUJP' },
+    { name: 'Instituto Universitario Avepane', initials: 'IUAVEPANE' },
+    { name: 'Colegio Universitario Monseñor de Talavera', initials: 'CUMT' },
+    { name: 'Instituto Universitario de Diseño Las Mercedes', initials: 'IUDLM' },
+    { name: 'Instituto Universitario de Tecnología José María Carreño', initials: 'IUTJMC' },
+    { name: 'Universidad Privada Nueva Esparta', initials: 'UNE' },
+    { name: 'Instituto Universitario de Tecnología Antonio José de Sucre', initials: 'IUTAJS' },
+    { name: 'Instituto Universitario de Tecnología Elías Calixto Pompa', initials: 'IUTECP' },
+    { name: 'Instituto Universitario de Tecnología Rufino Blanco Fombona', initials: 'IUTRBF' },
+    { name: 'Universidad José María Vargas', initials: 'UJMV' },
+    { name: 'Instituto Universitario de Nuevas Profesiones', initials: 'IUNP' },
+    { name: 'Instituto Universitario de Tecnología Américo Vespucio', initials: 'IUTAV' },
+    { name: 'Instituto Universitario de la Audición y el Lenguaje', initials: 'IUAL' },
+    { name: 'Universidad Privada Monteávila', initials: 'UMA' },
+    { name: 'Universidad Católica Andrés Bello', initials: 'UCAB' },
+    { name: 'Instituto Universitario Salesiano Padre Ojeda', initials: 'IUSPO' },
+    { name: 'Instituto Universitario de Tecnología Tomás Lander', initials: 'IUTTL' },
+    { name: 'Universidad Santa María', initials: 'USM' },
+    { name: 'Universidad Privada Alejandro de Humboldt', initials: 'UPAH' },
+    { name: 'Universidad Metropolitana', initials: 'UNIMET' },
+    { name: 'Instituto Universitario Politécnico Santiago Mariño', initials: 'IUPSM' },
+    { name: 'Universidad Bicentenaria de Aragua', initials: 'UBA' },
+    { name: 'Universidad Nacional Experimental de las Artes', initials: 'UNEARTE' },
+    { name: 'Universidad de las Ciencias de la Salud "Hugo Chávez Frías"', initials: 'UCSHCF' },
+    { name: 'Universidad Politécnica Territorial de Barlovento "Argelia Laya"', initials: 'UPTBAL' },
+    { name: 'Universidad Nacional Experimental Simón Bolívar', initials: 'UNESB' },
+    { name: 'Universidad Nacional Experimental Politécnica de la Fuerza Armada Nacional', initials: 'UNEFA' },
+    { name: 'Universidad Nacional Abierta', initials: 'UNA' },
+    { name: 'Universidad Nacional Experimental de la Gran Caracas', initials: 'UNEXCA' },
+    { name: 'Universidad Nacional del Turismo', initials: 'UNATUR' },
+    { name: 'Universidad Politécnica Territorial de los Valles del Tuy', initials: 'UPTVT' },
+    { name: 'Universidad Nacional Experimental Politécnica Antonio José de Sucre', initials: 'UNEXPO AJS' },
+    { name: 'Universidad Politécnica Territorial de Caracas “Mariscal Sucre”', initials: 'UPTCMS' },
+    { name: 'Universidad Nacional Experimental Simón Rodríguez', initials: 'UNESR' },
+    { name: 'Universidad Nacional Experimental del Magisterio "Samuel Robinson"', initials: 'UNEMSR' },
+    { name: 'Instituto Universitario de Tecnología Escuela Nacional de Administración y Hacienda Pública', initials: 'IUTENAH' },
+    { name: 'Universidad Pedagógica Experimental Libertador', initials: 'UPEL' },
+    { name: 'Universidad Politécnica Territorial de los Altos Mirandinos "Cecilio Acosta"', initials: 'UPTMCA' },
+    { name: 'Universidad Nacional Experimental Marítima del Caribe', initials: 'UNEMC' },
+    { name: 'Universidad Bolivariana de Venezuela', initials: 'UBV' }
+  ]
 
 
 export const ZULIA_UNIVERSITIES = [
@@ -244,7 +300,16 @@ export const ZULIA_UNIVERSITIES = [
   { name: 'Instituto Universitario de Aeronáutica Civil Mayor (Av) Miguel Rodríguez', initials: 'IUAC' },
   { name: 'Universidad Politécnica Territorial de Maracaibo', initials: 'UPTM' },
   { name: 'Universidad Nacional Experimental Politécnica de la Fuerza Armada Nacional', initials: 'UNEFA' },
-  { name: 'Universidad Nacional Experimental Sur del Lago Jesús María Semprum', initials: 'UNESUR' }
+  { name: 'Universidad Nacional Experimental Sur del Lago Jesús María Semprum', initials: 'UNESUR' },
+  { name: 'Universidad Privada Alonso de Ojeda', initials: 'UNIOJEDA' },
+  { name: 'Instituto Universitario de Tecnología Juan Pablo Pérez Alfonzo', initials: 'IUTJPA' },
+  { name: 'Instituto Universitario de Tecnología Readic', initials: 'IUT READIC' },
+  { name: 'Colegio Universitario Monseñor de Talavera', initials: 'CUMT' },
+  { name: 'Instituto Universitario San Francisco', initials: 'IUSF' },
+  { name: 'Instituto Universitario Pedagógico Monseñor Rafael Arias Blanco', initials: 'IUPMRAB' },
+  { name: 'Instituto Universitario de Tecnología Pedro Emilio Coll', initials: 'IUTPEC' },
+  { name: 'Universidad Privada Dr. José Gregorio Hernández', initials: 'UPJGH' },
+  { name: 'Universidad Privada Dr. Rafael Belloso Chacín', initials: 'URBE' }
 ];
 
 export const CARABOBO_UNIVERSITIES = [
@@ -258,6 +323,20 @@ export const CARABOBO_UNIVERSITIES = [
   { name: 'Universidad de Carabobo', initials: 'UC' },
   { name: 'Universidad Nacional Abierta', initials: 'UNA' },
   { name: 'Universidad Politécnica Territorial de Valencia', initials: 'UPTV' },
+
+  { name: 'Instituto Universitario de Tecnología de Administración Industrial', initials: 'IUTA INDUSTRIAL' },
+  { name: 'Instituto Universitario de Tecnología Juan Pablo Pérez Alfonzo', initials: 'IUT JPEREZ ALFONZO' },
+  { name: 'Colegio Universitario de Administración y Mercadeo', initials: 'CUAM' },
+  { name: 'Universidad Panamericana del Puerto', initials: 'UNIPAP' },
+  { name: 'Instituto Universitario Carlos Soublette', initials: 'IUT CARLOS SOUBLETTE' },
+  { name: 'Colegio Universitario Padre Isaías Ojeda', initials: 'CUPIO' },
+  { name: 'Instituto Universitario Politécnico Santiago Mariño', initials: 'IUTPSM' },
+  { name: 'Colegio Universitario de Psicopedagogía', initials: 'CUPP' },
+  { name: 'Instituto Universitario de Nuevas Profesiones', initials: 'IUNP' },
+  { name: 'Instituto Universitario de Tecnología para la Informática', initials: 'IUTI' },
+  { name: 'Universidad Privada Arturo Michelena', initials: 'UPAM' },
+  { name: 'Universidad Privada José Antonio Páez', initials: 'UJAP' },
+  { name: 'Universidad Tecnológica del Centro', initials: 'UTEC' }
 ];
 
 export const UNIVERSITIES_FOR_INPUT = [
