@@ -31,7 +31,7 @@ model PersonalInfo {
   photo       String
   firstNames  String    @map("first_names")
   lastNames   String    @map("last_names")
-  dni         String    @unique
+  dni         String
   gender      Gender
   birthdate   DateTime
   state       String

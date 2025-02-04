@@ -32,6 +32,7 @@ model Speaker {
     speaker_kind   KindOfSpeaker
     workshops      Workshop[]
     chats          Chat[]
+    chapter_id     String        @default("Rokk6_XCAJAg45heOEzYb")
 }
 
 // <div className="col-span-2 h-fit flex gap-4">

@@ -119,6 +119,7 @@ model Speaker {
   speaker_kind   KindOfSpeaker
   workshops      Workshop[]
   chats          Chat[]
+  chapter_id     String        @default("Rokk6_XCAJAg45heOEzYb")
 }
 
 // <div className="col-span-2 h-fit flex gap-4">
@@ -622,7 +623,7 @@ model PersonalInfo {
   photo       String
   firstNames  String    @map("first_names")
   lastNames   String    @map("last_names")
-  dni         String    @unique
+  dni         String
   gender      Gender
   birthdate   DateTime
   state       String
