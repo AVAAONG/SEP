@@ -169,10 +169,11 @@ export const getAllActivities = async (): Promise<[Workshop[], Chat[], Volunteer
 export const getSentActivitiesWhereScholarIsNotEnrolled = async (
   scholarId: string
 ): Promise<(WorkshopWithAllData | ChatsWithAllData | VolunteerWithAllData)[]> => {
-
+  const session = await getServerSession();
   // Common Filter for Workshops and Chats
   const commonWhere: Prisma.WorkshopWhereInput & Prisma.ChatWhereInput = {
     activity_status: 'SENT',
+    chapterId: session?.chapterId,
     scholar_attendance: {
       none: {
         scholar: {
@@ -205,6 +206,7 @@ export const getSentActivitiesWhereScholarIsNotEnrolled = async (
     }),
     prisma.volunteer.findMany({
       where: {
+        chapterId: session?.chapterId,
         status: 'SENT',
         volunteer_attendance: {
           none: {

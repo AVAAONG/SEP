@@ -392,7 +392,11 @@ export const finishApplication = async (applicantId: string, endTime: string) =>
 
 
 export const getApplicantsWithAllInfo = async () => {
+  const session = await getServerSession();
   const applicants = await prisma.applicant.findMany({
+    where: {
+      chapterId: session?.chapterId
+    },
     include: {
       personal: true,
       ContactInfo: true,
