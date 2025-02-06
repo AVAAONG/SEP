@@ -6,6 +6,7 @@ import QuitScholarFromActivity from '@/components/QuitScholarFromActivity';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
 import { getScholarEmailsByAttendanceStatus } from '@/lib/activities/utils';
+import { getBlobImage } from '@/lib/azure/azure';
 import { ChatWithSpeaker } from '@/lib/db/types';
 import { getChat } from '@/lib/db/utils/chats';
 import { getNotEnrolledScholarsInChat } from '@/lib/db/utils/users';
@@ -39,6 +40,11 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
   const scholars = await getNotEnrolledScholarsInChat(chatId);
 
   const { title, level, start_dates, modality, speaker, platform, scholar_attendance } = chat || {};
+
+  speaker?.map(async (s, i) => {
+    const ii = await getBlobImage(s.image);
+    speaker[i].image = ii;
+  });
 
   const scholarAttendanceDataForTable = await formatScholarDataForAttendanceTable(
     scholar_attendance ? scholar_attendance.map((a) => a.scholar.scholar) : [],
