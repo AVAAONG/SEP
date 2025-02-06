@@ -43,6 +43,11 @@ const nextConfig = {
         destination: '/signin',
         permanent: true, // Use true for a 301 redirect (SEO friendly), false for 302
       },
+      {
+        source: '/singin', // an error
+        destination: '/signin',
+        permanent: true, // Use true for a 301 redirect (SEO friendly), false for 302
+      },
     ];
   }
 };

@@ -9,7 +9,7 @@ const page = () => (
     <Navbar showProfileDropdown={false} email="" />
     <main className="p-2 md:p-16 lg:p-24">
       <Hero />
-      <AdmisionOptions title="Selecciona el Capítulo" />
+      <AdmisionOptions title="¡Aplica al Programa!" />
       <Requirements />
       <div className="py-12 md:py-0"></div>
       <Contact />
