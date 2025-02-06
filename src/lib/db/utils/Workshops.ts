@@ -173,7 +173,7 @@ export const getSentActivitiesWhereScholarIsNotEnrolled = async (
   // Common Filter for Workshops and Chats
   const commonWhere: Prisma.WorkshopWhereInput & Prisma.ChatWhereInput = {
     activity_status: 'SENT',
-    chapterId: session?.chapterId,
+    // chapterId: session?.chapterId,
     scholar_attendance: {
       none: {
         scholar: {
