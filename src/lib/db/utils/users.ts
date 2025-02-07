@@ -951,7 +951,14 @@ export const updateScholar = async (id: string, data: Prisma.ScholarUpdateInput)
     where: {
       id,
     },
-    data,
+    data: {
+      ...data,
+      user: {
+        update: {
+          email: data.email
+        }
+      }
+    }
   });
   return scholar;
 }
