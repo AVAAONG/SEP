@@ -67,13 +67,17 @@ const handleValue = (value: any, isDate: boolean) => {
  */
 export const processRow = <T extends Record<string, unknown>>(row: T, columns: Column<T>[]) => {
     return columns.reduce((rowData: any, column: any) => {
-        const value = (row as Record<string, unknown>)[column.accessor];
+        let value;
+        if (typeof column.accessor === 'function') {
+            value = column.accessor(row);
+        } else {
+            value = (row as Record<string, unknown>)[column.accessor];
+        }
         rowData[column.Header] = Array.isArray(value)
             ? handleArrayValue(value)
             : handleValue(value, column.isDate);
         return rowData;
     }, {});
 };
-
 
 export default processRow;

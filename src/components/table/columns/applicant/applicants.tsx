@@ -31,7 +31,7 @@ const parseStepIntoName = (step: number) => {
 const CombinedColumns: Column<any>[] = [
   {
     Header: 'Postulante',
-    accessor: 'id',
+    accessor: (row: any) => `${row.firstNames} ${row.lastNames}`,
     Cell: ({ value, row }) => {
       return (
         // <Link href={scholarId ? `/admin/becarios/${scholarId}` : ''} className="w-67">
@@ -73,7 +73,7 @@ const CombinedColumns: Column<any>[] = [
     },
   },
   {
-    Header: 'Estado',
+    Header: 'Estado de aplicación',
     accessor: 'status',
     Cell: ({ value }) => {
       if (value === 'PHASE_I') {

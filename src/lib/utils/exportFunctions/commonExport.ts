@@ -10,17 +10,20 @@ const exportDataToExcel = async (data: any, fileName: string) => {
 
     // Write column headers
     const headers = Object.keys(data[0]);
+    const headerRow = worksheet.getRow(1);
     headers.forEach((header: string, index: number) => {
-        const cellAddress = `${String.fromCharCode(65 + index)}1`;
-        worksheet.getCell(cellAddress).value = header;
+        headerRow.getCell(index + 1).value = header ?? 'N/A';
     });
+    headerRow.commit();
 
     // Write data
     data.forEach((item: Record<string, string>, rowIndex: number) => {
+        const row = worksheet.getRow(rowIndex + 2);
         headers.forEach((header: string, colIndex: number) => {
-            const cellAddress = `${String.fromCharCode(65 + colIndex)}${rowIndex + 2}`;
-            worksheet.getCell(cellAddress).value = item[header];
+            console.log(header, item[header]);
+            row.getCell(colIndex + 1).value = item[header];
         });
+        row.commit();
     });
 
     // Save the workbook and download it
