@@ -32,7 +32,7 @@ import {
 } from '@/lib/utils/getAttendedActivities';
 import { ArrowTopRightOnSquareIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
 import { PhoneXMarkIcon } from '@heroicons/react/24/solid';
-import { Avatar, Tooltip } from '@nextui-org/react';
+import { Avatar, Tooltip } from "@heroui/react";
 import Link from 'next/link';
 import { chatIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs';
 import React from 'react';

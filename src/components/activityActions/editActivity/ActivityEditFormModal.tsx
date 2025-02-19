@@ -7,8 +7,8 @@ import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns'
 import { ActivityKind } from '@/lib/activities/utils';
 import { VolunteerWithAllData } from '@/lib/db/types';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
-import { Button } from '@nextui-org/button';
-import { Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from '@nextui-org/react';
+import { Button } from "@heroui/button";
+import { Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from "@heroui/react";
 import { Chat, Volunteer, Workshop } from '@prisma/client';
 import React from 'react';
 

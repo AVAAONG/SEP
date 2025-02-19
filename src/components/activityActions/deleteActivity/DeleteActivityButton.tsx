@@ -3,7 +3,7 @@ import { deleteChat } from '@/lib/db/utils/chats';
 import { deleteVolunteer } from '@/lib/db/utils/volunteer';
 import { deleteWorkshop } from '@/lib/db/utils/Workshops';
 import { useConfirmation } from '@/lib/hooks/useConfirmation';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 

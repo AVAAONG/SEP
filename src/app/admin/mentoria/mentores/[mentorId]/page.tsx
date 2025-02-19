@@ -1,7 +1,7 @@
 import IconWithInfo from '@/components/commons/IconInWithInformation';
 import { getMentor } from '@/lib/db/utils/mentors';
 import { CalendarIcon } from '@heroicons/react/24/outline';
-import { Avatar, Tooltip } from '@nextui-org/react';
+import { Avatar, Tooltip } from "@heroui/react";
 import { Mentor } from '@prisma/client';
 import Link from 'next/link';
 import {

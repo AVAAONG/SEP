@@ -8,7 +8,7 @@ import {
   DropdownMenu,
   DropdownSection,
   DropdownTrigger,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { signOut } from 'next-auth/react';
 
 export function UserNavbarDropdown() {

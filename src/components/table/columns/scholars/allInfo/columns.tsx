@@ -1,6 +1,6 @@
 'use client';
 import formatDni from '@/lib/db/utils/formatDni';
-import { Tooltip } from '@nextui-org/react';
+import { Tooltip } from "@heroui/react";
 import { Gender } from '@prisma/client';
 import { Cell, CellValue, Column } from 'react-table';
 import ScholarColumnWidget from '../commons/ScholarWidget';

@@ -1,8 +1,8 @@
 'use client';
 import BasicModal from '@/components/BasicModal';
 import { ActivityKind } from '@/lib/activities/utils';
-import { Button } from '@nextui-org/button';
-import { useDisclosure } from '@nextui-org/modal';
+import { Button } from "@heroui/button";
+import { useDisclosure } from "@heroui/modal";
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { handleEnrollment } from '../lib/handleScholarActivityEnrollment';

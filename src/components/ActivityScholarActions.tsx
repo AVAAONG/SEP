@@ -1,7 +1,7 @@
 'use client';
 import createTransferSpotMessage from '@/lib/htmls/transferSpotMessage';
 import { sendGenericEmail } from '@/lib/sendEmails';
-import { Autocomplete, AutocompleteItem, Avatar, Button, useDisclosure } from '@nextui-org/react';
+import { Autocomplete, AutocompleteItem, Avatar, Button, useDisclosure } from "@heroui/react";
 import { Scholar } from '@prisma/client';
 import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -76,7 +76,7 @@ const ActivityScholarActions: React.FC<ActivityPanelInfoProps> = ({
 
   return (
     ///TODO set isDisable option
-    <div className="flex items-center justify-end gap-4">
+    (<div className="flex items-center justify-end gap-4">
       <>
         <Button
           onPress={onOpen}
@@ -150,7 +150,7 @@ const ActivityScholarActions: React.FC<ActivityPanelInfoProps> = ({
           confirmText="Cancelar y ceder cupo"
         />
       </>
-    </div>
+    </div>)
   );
 };
 

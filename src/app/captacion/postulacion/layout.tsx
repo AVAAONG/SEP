@@ -3,7 +3,7 @@ import { getServerSession } from '@/lib/auth/authOptions';
 import { getApplicantCurrentStep } from '@/lib/db/utils/applicant';
 import { redirect } from 'next/navigation';
 
-import { Divider } from '@nextui-org/react';
+import { Divider } from "@heroui/react";
 
 import Navbar from '@/components/public/admision/Navbar';
 import { Metadata } from 'next';

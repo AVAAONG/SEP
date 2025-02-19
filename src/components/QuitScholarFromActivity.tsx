@@ -3,7 +3,7 @@ import { deleteScholarFromChat, deleteScholarFromWorkshop } from '@/lib/db/utils
 import { deleteScholarFromVolunteer } from '@/lib/db/utils/volunteer';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { Autocomplete, AutocompleteItem, Avatar, Button, useDisclosure } from '@nextui-org/react';
+import { Autocomplete, AutocompleteItem, Avatar, Button, useDisclosure } from "@heroui/react";
 import { Scholar } from '@prisma/client';
 import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';

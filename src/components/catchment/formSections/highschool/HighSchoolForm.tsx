@@ -4,7 +4,7 @@ import SelectFormField from '@/components/fields/SelectFormField';
 import TextAreaFormField from '@/components/fields/TextAreaFormField';
 import { createOrUpdateHighSchoolInfo } from '@/lib/db/utils/applicant';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Link } from '@nextui-org/react';
+import { Button, Link } from "@heroui/react";
 import { HighSchool } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';

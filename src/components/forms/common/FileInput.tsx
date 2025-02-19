@@ -1,6 +1,6 @@
 import { ArrowUpTrayIcon, CheckBadgeIcon } from '@heroicons/react/24/outline';
-import { Button } from '@nextui-org/button';
-import { Tooltip } from '@nextui-org/tooltip';
+import { Button } from "@heroui/button";
+import { Tooltip } from "@heroui/tooltip";
 import Link from 'next/link';
 import { Controller } from 'react-hook-form';
 

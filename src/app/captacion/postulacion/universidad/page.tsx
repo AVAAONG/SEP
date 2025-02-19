@@ -1,7 +1,7 @@
 import CollageForm from '@/components/catchment/formSections/collageInfo/CollageInfoForm';
 import { getServerSession } from '@/lib/auth/authOptions';
 import { getApplicantCollageInfo } from '@/lib/db/utils/applicant';
-import { Divider } from '@nextui-org/react';
+import { Divider } from "@heroui/react";
 import { redirect } from 'next/navigation';
 
 const page = async () => {

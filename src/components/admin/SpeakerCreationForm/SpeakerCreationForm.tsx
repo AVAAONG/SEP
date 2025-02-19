@@ -10,7 +10,7 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { Prisma } from '@prisma/client';
 import { BaseSyntheticEvent } from 'react';
 import { useForm } from 'react-hook-form';

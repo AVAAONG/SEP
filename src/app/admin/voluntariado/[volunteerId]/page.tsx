@@ -14,7 +14,7 @@ import { getVolunteer } from '@/lib/db/utils/Workshops';
 import { getNotEnrolledScholarsInVolunteer } from '@/lib/db/utils/users';
 import { parsePlatformFromDatabase } from '@/lib/utils2';
 import { DocumentIcon } from '@heroicons/react/24/outline';
-import { Avatar } from '@nextui-org/react';
+import { Avatar } from "@heroui/react";
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import shortUUID from 'short-uuid';

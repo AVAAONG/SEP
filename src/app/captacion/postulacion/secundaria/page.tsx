@@ -1,7 +1,7 @@
 import HighSchoolForm from '@/components/catchment/formSections/highschool/HighSchoolForm';
 import { getServerSession } from '@/lib/auth/authOptions';
 import { getApplicantHighSchoolInfo } from '@/lib/db/utils/applicant';
-import { Divider } from '@nextui-org/react';
+import { Divider } from "@heroui/react";
 import { redirect } from 'next/navigation';
 
 const page = async () => {

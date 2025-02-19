@@ -1,5 +1,6 @@
 'use client';
-import { NextUIProvider } from '@nextui-org/react';
+import { SidebarProvider } from '@/hooks/use-sidebar';
+import { HeroUIProvider } from '@heroui/react';
 import { SessionProvider } from 'next-auth/react';
 type Props = {
   children?: React.ReactNode;
@@ -7,7 +8,9 @@ type Props = {
 const Providers = ({ children }: Props) => {
   return (
     <SessionProvider>
-      <NextUIProvider>{children}</NextUIProvider>
+      <SidebarProvider>
+        <HeroUIProvider>{children}</HeroUIProvider>
+      </SidebarProvider>
     </SessionProvider>
   );
 };

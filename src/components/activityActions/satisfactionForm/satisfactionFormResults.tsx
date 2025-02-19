@@ -1,6 +1,6 @@
 'use client';
 import { ChartPieIcon } from '@heroicons/react/24/outline';
-import { Button, Tooltip, useDisclosure } from '@nextui-org/react';
+import { Button, Tooltip, useDisclosure } from "@heroui/react";
 import BasicModal from '../../BasicModal';
 import { PieChartComponent } from '../../charts';
 import {

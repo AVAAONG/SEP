@@ -13,7 +13,7 @@ import {
   ModalFooter,
   ModalHeader,
   Textarea,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { Probation, ScholarStatus } from '@prisma/client';
 import React, { BaseSyntheticEvent } from 'react';
 import { Controller, useForm } from 'react-hook-form';

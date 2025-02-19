@@ -1,7 +1,7 @@
 'use client';
 import { addAttendaceToScholar } from '@/lib/db/utils/Workshops';
-import { Avatar } from '@nextui-org/avatar';
-import { Button } from '@nextui-org/button';
+import { Avatar } from "@heroui/avatar";
+import { Button } from "@heroui/button";
 import {
   Modal,
   ModalBody,
@@ -9,8 +9,8 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from '@nextui-org/modal';
-import { Chip, Listbox, ListboxItem, ScrollShadow, Selection } from '@nextui-org/react';
+} from "@heroui/modal";
+import { Chip, Listbox, ListboxItem, ScrollShadow, Selection } from "@heroui/react";
 
 import { ActivityStatus, Scholar } from '@prisma/client';
 import { useMemo, useState } from 'react';

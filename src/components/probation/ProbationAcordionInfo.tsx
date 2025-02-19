@@ -1,7 +1,7 @@
 'use client';
 import { getProbationInfoByScholar } from '@/lib/db/utils/probation';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
-import { Accordion, AccordionItem } from '@nextui-org/accordion';
+import { Accordion, AccordionItem } from "@heroui/accordion";
 import { Probation, ScholarStatus } from '@prisma/client';
 import React, { useEffect, useState } from 'react';
 import { formatDate, renderDateInfo, renderInfoSection } from './commonComponents';

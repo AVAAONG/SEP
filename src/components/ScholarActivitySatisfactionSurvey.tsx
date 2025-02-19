@@ -6,7 +6,7 @@ import {
 import activitySatisfactionFormSchema from '@/lib/schemas/acivitySatisFactionFormSchema';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import {
   Modal,
   ModalBody,
@@ -14,8 +14,8 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from '@nextui-org/modal';
-import { Select, SelectItem } from '@nextui-org/react';
+} from "@heroui/modal";
+import { Select, SelectItem } from "@heroui/react";
 import { ActivityStatus } from '@prisma/client';
 import { BaseSyntheticEvent } from 'react';
 import { Controller, useForm } from 'react-hook-form';

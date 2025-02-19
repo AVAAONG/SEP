@@ -1,6 +1,6 @@
 'use client';
-import { Modal as NextUIModal, useDisclosure } from '@nextui-org/modal';
-import { Button } from '@nextui-org/react';
+import { Modal as NextUIModal, useDisclosure } from "@heroui/modal";
+import { Button } from "@heroui/react";
 
 export type ModalProps = {
   children?: React.ReactNode;

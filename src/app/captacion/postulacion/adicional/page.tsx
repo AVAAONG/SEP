@@ -1,7 +1,7 @@
 import AdditionalInfoForm from '@/components/catchment/formSections/additionalInfo/AdditionalInfoForm';
 import { getServerSession } from '@/lib/auth/authOptions';
 import { getApplicantAdditionalInfo } from '@/lib/db/utils/applicant';
-import { Divider } from '@nextui-org/react';
+import { Divider } from "@heroui/react";
 import { redirect } from 'next/navigation';
 
 const page = async () => {

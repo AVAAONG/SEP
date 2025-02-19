@@ -3,7 +3,7 @@ import Table from '@/components/table/Table';
 import chatSpeakerColumns from '@/components/table/columns/chatSpeakerColumns';
 import { prisma } from '@/lib/db/utils/prisma';
 import { getChatSpeakersCountByGender, getChatSpeakersWithParams } from '@/lib/db/utils/speaker';
-import { Button, Link } from '@nextui-org/react';
+import { Button, Link } from "@heroui/react";
 import { Prisma } from '@prisma/client';
 import { userIcon } from 'public/svgs/svgs';
 import {

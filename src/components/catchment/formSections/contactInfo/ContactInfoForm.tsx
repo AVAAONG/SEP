@@ -3,7 +3,7 @@ import InputField from '@/components/fields/InputFormField';
 import { createOrUpdateContactInfo } from '@/lib/db/utils/applicant';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Link } from '@nextui-org/react';
+import { Button, Link } from "@heroui/react";
 import { ContactInfo } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';

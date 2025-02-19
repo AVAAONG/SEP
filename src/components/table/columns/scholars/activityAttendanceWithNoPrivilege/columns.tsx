@@ -1,6 +1,6 @@
 'use client';
 import ScholarAttendanceWidget from '@/components/ScholarAttendanceWidget';
-import { Avatar } from '@nextui-org/react';
+import { Avatar } from "@heroui/react";
 import { ScholarAttendance } from '@prisma/client';
 import { Cell, CellValue, Column } from 'react-table';
 

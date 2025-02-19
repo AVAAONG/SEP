@@ -2,7 +2,7 @@
 import { ChatWithSpeaker, WorkshopWithSpeaker } from '@/lib/db/types';
 import { parsePlatformFromDatabase } from '@/lib/utils2';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
-import { Avatar } from '@nextui-org/react';
+import { Avatar } from "@heroui/react";
 import Link from 'next/link';
 import DisplayDate from './DisplayDate';
 import DisplayTime from './DisplayTime';

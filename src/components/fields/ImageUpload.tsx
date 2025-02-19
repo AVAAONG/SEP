@@ -1,5 +1,5 @@
 import { getBlobImage, uploadBlob } from '@/lib/azure/azure';
-import { Avatar } from '@nextui-org/react';
+import { Avatar } from "@heroui/react";
 import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { toast } from 'react-toastify';

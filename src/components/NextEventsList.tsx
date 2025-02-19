@@ -1,4 +1,4 @@
-import { Tooltip } from '@nextui-org/tooltip';
+import { Tooltip } from "@heroui/tooltip";
 import { Chat, Volunteer, Workshop } from '@prisma/client';
 import Link from 'next/link';
 import DisplayDate from './DisplayDate';

@@ -1,5 +1,5 @@
 'use client';
-import { Avatar } from '@nextui-org/avatar';
+import { Avatar } from "@heroui/avatar";
 import Link from 'next/link';
 import { Cell, CellValue, Column } from 'react-table';
 

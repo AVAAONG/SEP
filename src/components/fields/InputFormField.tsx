@@ -1,4 +1,4 @@
-import { Input } from '@nextui-org/input';
+import { Input } from "@heroui/input";
 import clsx from 'clsx';
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';

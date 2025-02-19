@@ -1,12 +1,12 @@
 'use client';
 import ThemeToggleButton from '@/components/scholar/NavigationBar/ThemeToggleButton';
 import { sidebarAtom } from '@/lib/state/mainState';
-import { Avatar } from '@nextui-org/avatar';
+import { Avatar } from "@heroui/avatar";
 import { useAtom } from 'jotai';
 import { signOut } from 'next-auth/react';
 import { MenuIcon } from '../../../../../public/svgs/svgs';
 
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/dropdown';
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/dropdown";
 
 const Navbar = ({ image, email }: { image: string; email: string }) => {
   const [isOpen, setSidebar] = useAtom(sidebarAtom);

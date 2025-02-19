@@ -10,10 +10,10 @@ import {
   MapPinIcon,
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
-import { Avatar } from '@nextui-org/avatar';
-import { Button } from '@nextui-org/button';
-import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
-import { Tooltip, useDisclosure } from '@nextui-org/react';
+import { Avatar } from "@heroui/avatar";
+import { Button } from "@heroui/button";
+import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
+import { Tooltip, useDisclosure } from "@heroui/react";
 import Link from 'next/link';
 import { chatIcon, workshopIcon } from 'public/svgs/svgs';
 import React, { useState } from 'react';

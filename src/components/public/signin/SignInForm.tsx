@@ -1,7 +1,7 @@
 'use client';
 import InputField from '@/components/fields/InputFormField';
 import scholarSignInSchema from '@/lib/schemas/scholarSignInSchema';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import { signIn } from 'next-auth/react';
 import { BaseSyntheticEvent } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';

@@ -6,7 +6,7 @@ import { deleteBlob } from '@/lib/azure/azure';
 import { deleteCvaModule } from '@/lib/db/utils/cva';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { DocumentTextIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import { ScholarCvaModule } from '@prisma/client';
 import Link from 'next/link';
 import { Column } from 'react-table';

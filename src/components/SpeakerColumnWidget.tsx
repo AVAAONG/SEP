@@ -1,4 +1,4 @@
-import { Avatar, AvatarGroup, Tooltip } from '@nextui-org/react';
+import { Avatar, AvatarGroup, Tooltip } from "@heroui/react";
 import { KindOfSpeaker } from '@prisma/client';
 import Link from 'next/link';
 import { SpeakerColumnWidgetCard } from './SpeakerWidgetImage';

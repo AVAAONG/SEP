@@ -2,7 +2,7 @@
 import { ScholarWithCollageAndJob, updateScholar } from '@/lib/db/utils/users';
 import scholarScialMediaInformation from '@/lib/schemas/scholar/scholarSocialMediaInformation';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Input } from '@nextui-org/react';
+import { Button, Input } from "@heroui/react";
 import {
   FacebookIcon,
   InstagramIcon,

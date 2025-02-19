@@ -1,5 +1,5 @@
 import { ONLINE_PLATFORMS } from '@/lib/constants';
-import { Input, Select, SelectItem } from '@nextui-org/react';
+import { Input, Select, SelectItem } from "@heroui/react";
 import { Control, Controller } from 'react-hook-form';
 
 interface PlatformInputProps {

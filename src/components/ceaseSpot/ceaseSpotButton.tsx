@@ -1,7 +1,7 @@
 'use client';
 import createTransferSpotMessage from '@/lib/htmls/transferSpotMessage';
 import { sendGenericEmail } from '@/lib/sendEmails';
-import { Autocomplete, AutocompleteItem, Avatar, Button, useDisclosure } from '@nextui-org/react';
+import { Autocomplete, AutocompleteItem, Avatar, Button, useDisclosure } from "@heroui/react";
 import { Scholar } from '@prisma/client';
 import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';

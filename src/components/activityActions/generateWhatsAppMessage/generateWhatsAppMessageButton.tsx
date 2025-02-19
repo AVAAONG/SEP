@@ -3,7 +3,7 @@ import { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
 import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns';
 import { VolunteerWithAllData } from '@/lib/db/types';
 import generateAdminActivityWhatsappMessage from '@/lib/utils/generateAdminActivityWhatsappMessage';
-import { Button, useDisclosure } from '@nextui-org/react';
+import { Button, useDisclosure } from "@heroui/react";
 import { WhatsAppIcon } from 'public/svgs/SocialNetworks';
 import BasicModal from '../../BasicModal';
 interface GenerateWhatsAppMessageButtonProps {

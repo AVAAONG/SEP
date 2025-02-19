@@ -2,7 +2,7 @@
 import { uploadBlob } from '@/lib/azure/azure';
 import { Dropzone, ExtFile } from '@files-ui/react';
 import { DocumentIcon } from '@heroicons/react/24/outline';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import React, { useCallback } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { toast } from 'react-toastify';

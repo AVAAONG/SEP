@@ -1,6 +1,6 @@
 'use client';
 import { DocumentIcon } from '@heroicons/react/24/outline';
-import { Avatar, Button, Tooltip } from '@nextui-org/react';
+import { Avatar, Button, Tooltip } from "@heroui/react";
 import { Column } from 'react-table';
 
 const parseStepIntoName = (step: number) => {
@@ -35,7 +35,8 @@ const CombinedColumns: Column<any>[] = [
     Cell: ({ value, row }) => {
       return (
         // <Link href={scholarId ? `/admin/becarios/${scholarId}` : ''} className="w-67">
-        <div className="flex items-center  w-full w-67">
+        // </Link>
+        (<div className="flex items-center  w-full w-67">
           <div className="flex-shrink-0 w-8 h-8">
             <Avatar
               className="w-full h-full rounded-full"
@@ -48,8 +49,7 @@ const CombinedColumns: Column<any>[] = [
               {row.original.firstNames} {row.original.lastNames}
             </span>
           </div>
-        </div>
-        // </Link>
+        </div>)
       );
     },
   },

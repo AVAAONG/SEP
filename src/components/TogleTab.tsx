@@ -1,5 +1,5 @@
 'use client';
-import { Tab, Tabs } from '@nextui-org/react';
+import { Tab, Tabs } from "@heroui/react";
 import { useSearchParams } from 'next/navigation';
 import React from 'react';
 

@@ -1,9 +1,9 @@
 'use client';
 import { changeVolunteerStatus } from '@/lib/db/utils/volunteer';
 import { revalidateSpecificPath } from '@/lib/serverAction';
-import { Button } from '@nextui-org/button';
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/dropdown';
-import { useDisclosure } from '@nextui-org/modal';
+import { Button } from "@heroui/button";
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/dropdown";
+import { useDisclosure } from "@heroui/modal";
 import { VolunteerStatus } from '@prisma/client';
 import { toast } from 'react-toastify';
 const VolunteerStatusUpdate = ({ volunteerId }: { volunteerId: string }) => {

@@ -3,7 +3,7 @@ import { IScholarForAttendanceTable } from '@/app/admin/chats/[chatId]/page';
 import { changeScholarAttendance, changeScholarAttendanceChat } from '@/lib/db/utils/Workshops';
 import formatDni from '@/lib/db/utils/formatDni';
 import { revalidateSpecificPath } from '@/lib/serverAction';
-import { Avatar, Chip } from '@nextui-org/react';
+import { Avatar, Chip } from "@heroui/react";
 import { ScholarAttendance } from '@prisma/client';
 import Link from 'next/link';
 import { useState } from 'react';

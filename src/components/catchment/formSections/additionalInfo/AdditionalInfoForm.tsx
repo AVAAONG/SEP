@@ -4,7 +4,7 @@ import SelectFormField from '@/components/fields/SelectFormField';
 import TextAreaFormField from '@/components/fields/TextAreaFormField';
 import { createOrUpdateAdditionalInfo } from '@/lib/db/utils/applicant';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Link } from '@nextui-org/react';
+import { Button, Link } from "@heroui/react";
 import {
   AdditionalInfo,
   InternetConnectionStability,

@@ -1,4 +1,4 @@
-import { Autocomplete, AutocompleteItem, AutocompleteProps } from '@nextui-org/react';
+import { Autocomplete, AutocompleteItem, AutocompleteProps } from "@heroui/react";
 import { Controller, useFormContext } from 'react-hook-form';
 
 interface AutocompleteFormFieldProps

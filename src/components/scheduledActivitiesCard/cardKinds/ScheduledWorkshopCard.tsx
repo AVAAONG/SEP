@@ -4,7 +4,7 @@ import {
   parsePlatformFromDatabase,
   parseSkillFromDatabase,
 } from '@/lib/utils2';
-import { Button, Checkbox, Tooltip, cn } from '@nextui-org/react';
+import { Button, Checkbox, Tooltip, cn } from "@heroui/react";
 import moment from 'moment-timezone';
 import 'moment/locale/es';
 interface ScheduledWorkshopCardI {

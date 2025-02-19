@@ -1,6 +1,6 @@
 'use client';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import { ChangeEvent, useState } from 'react';
 
 interface TableSearhButtonProps {

@@ -1,13 +1,20 @@
 'use client';
 
-import { ChevronDownIcon, DotIcon } from '@heroicons/react/24/outline';
+import { ChevronDownIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { useState } from 'react';
 
-import { Button } from '@nextui-org/react';
-import { Collapse, CollapseItem } from '@nextui-org/react';
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@nextui-org/react';
+import {
+  Accordion,
+  AccordionItem,
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownSection,
+  DropdownTrigger,
+  Tooltip,
+} from '@heroui/react';
 import { usePathname } from 'next/navigation';
 
 type Submenu = {
@@ -38,15 +45,13 @@ export function CollapseMenuButton({
   const [isCollapsed, setIsCollapsed] = useState<boolean>(isSubmenuActive);
 
   return isOpen ? (
-    <Collapse
-      expanded={isCollapsed}
-      onChange={() => setIsCollapsed(!isCollapsed)}
-      className="w-full"
-    >
-      <CollapseItem
-        title={
+    <Accordion onChange={() => setIsCollapsed(!isCollapsed)} className="w-full">
+      <AccordionItem
+        key="1"
+        aria-label="Accordion 1"
+        subtitle={
           <Button
-            variant={isSubmenuActive ? 'secondary' : 'ghost'}
+            variant={isSubmenuActive ? 'solid' : 'light'}
             className="w-full justify-start h-10"
           >
             <div className="w-full items-center flex justify-between">
@@ -66,64 +71,60 @@ export function CollapseMenuButton({
         {submenus.map(({ href, label, active }, index) => (
           <Button
             key={index}
-            variant={(active === undefined && pathname === href) || active ? 'secondary' : 'ghost'}
+            href={href}
+            as={Link}
+            variant={(active === undefined && pathname === href) || active ? 'solid' : 'light'}
             className="w-full justify-start h-10 mb-1"
-            asChild
           >
-            <Link href={href}>
-              <span className="mr-4 ml-2">
-                <DotIcon className="w-5 h-5" />
-              </span>
-              <p className="max-w-[170px] truncate">{label}</p>
-            </Link>
+            <span className="mr-4 ml-2">
+              <EllipsisHorizontalIcon className="w-5 h-5" />
+            </span>
+            <p className="max-w-[170px] truncate">{label}</p>
           </Button>
         ))}
-      </CollapseItem>
-    </Collapse>
+      </AccordionItem>
+    </Accordion>
   ) : (
     <Dropdown>
-      <TooltipProvider>
-        <Tooltip delayDuration={100}>
-          <TooltipTrigger asChild>
-            <DropdownTrigger>
-              <Button
-                variant={isSubmenuActive ? 'secondary' : 'ghost'}
-                className="w-full justify-start h-10 mb-1"
-              >
-                <div className="w-full items-center flex justify-between">
-                  <div className="flex items-center">
-                    <span className={isOpen === false ? '' : 'mr-4'}>
-                      <Icon className="w-5 h-5" />
-                    </span>
-                    <p
-                      className={`max-w-[200px] truncate ${isOpen === false ? 'opacity-0' : 'opacity-100'}`}
-                    >
-                      {label}
-                    </p>
-                  </div>
+      <Tooltip content={label}>
+        <DropdownTrigger>
+          <Button
+            variant={isSubmenuActive ? 'solid' : 'light'}
+            className="w-full justify-start h-10 mb-1"
+          >
+            <div className="w-full items-center flex justify-between">
+              <div className="flex items-center">
+                <div className={isOpen === false ? '' : 'mr-4'}>
+                  <Icon className="w-5 h-5" />
                 </div>
-              </Button>
-            </DropdownTrigger>
-          </TooltipTrigger>
-          <TooltipContent side="right" align="start" alignOffset={2}>
-            {label}
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+                <p
+                  className={`max-w-[200px] truncate ${isOpen === false ? 'opacity-0' : 'opacity-100'}`}
+                >
+                  {label}
+                </p>
+              </div>
+            </div>
+          </Button>
+        </DropdownTrigger>
+      </Tooltip>
+
       <DropdownMenu>
-        <DropdownItem key="label" className="max-w-[190px] truncate">
-          {label}
-        </DropdownItem>
-        {submenus.map(({ href, label, active }, index) => (
-          <DropdownItem key={index} asChild>
-            <Link
-              className={`cursor-pointer ${((active === undefined && pathname === href) || active) && 'bg-secondary'}`}
+        <DropdownSection showDivider aria-label="Profile & Actions">
+          <DropdownItem key="label" className="max-w-[190px] truncate">
+            {label}
+          </DropdownItem>
+        </DropdownSection>
+        <DropdownSection showDivider aria-label="Profile & Actions">
+          {submenus.map(({ href, label, active }, index) => (
+            <DropdownItem
+              key={index}
               href={href}
+              className={`cursor-pointer ${((active === undefined && pathname === href) || active) && 'bg-secondary'}`}
             >
               <p className="max-w-[180px] truncate">{label}</p>
-            </Link>
-          </DropdownItem>
-        ))}
+            </DropdownItem>
+          ))}
+        </DropdownSection>
       </DropdownMenu>
     </Dropdown>
   );

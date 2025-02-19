@@ -1,7 +1,7 @@
 'use client';
 import { CheckBadgeIcon } from '@heroicons/react/24/outline';
-import { Button } from '@nextui-org/button';
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/dropdown';
+import { Button } from "@heroui/button";
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/dropdown";
 import { useEffect, useState } from 'react';
 
 const FormNavigationButtons = ({

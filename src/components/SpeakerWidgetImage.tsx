@@ -1,4 +1,4 @@
-import { Avatar, Card, CardHeader } from '@nextui-org/react';
+import { Avatar, Card, CardHeader } from "@heroui/react";
 import React from 'react';
 
 interface ISpeakerColumnWidgetCardProps {

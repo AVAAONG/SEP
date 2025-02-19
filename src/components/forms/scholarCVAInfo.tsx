@@ -5,7 +5,7 @@ import scholarCVAInformationSchema from '@/lib/schemas/scholar/scholarCVAInforma
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { formatDateToDisplayInInput, formatDateToStoreInDB } from '@/lib/utils/dates';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
+import { Button, Input, Select, SelectItem, Textarea } from "@heroui/react";
 import {
   CvaLocation,
   ScholarCVAInformation as IScholarCVAInformation,

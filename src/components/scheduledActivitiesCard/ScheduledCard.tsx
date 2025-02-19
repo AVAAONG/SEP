@@ -1,8 +1,8 @@
 'use client';
 import { ChatWithSpeaker, WorkshopWithSpeaker } from '@/lib/db/types';
 import { revalidateSpecificPath } from '@/lib/serverAction';
-import { useDisclosure } from '@nextui-org/modal';
-import { Button } from '@nextui-org/react';
+import { useDisclosure } from "@heroui/modal";
+import { Button } from "@heroui/react";
 import { Volunteer } from '@prisma/client';
 import 'moment/locale/es';
 import { useRouter } from 'next/navigation';

@@ -3,7 +3,7 @@ import FileInputField from '@/components/fields/FileInputField';
 import { createOrUploadAnnexes, finishApplication } from '@/lib/db/utils/applicant';
 import { formatDateToStoreInDB } from '@/lib/utils/dates';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Link } from '@nextui-org/react';
+import { Button, Link } from "@heroui/react";
 import { Annexes } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { FormProvider, useForm } from 'react-hook-form';

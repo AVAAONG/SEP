@@ -13,9 +13,9 @@ import workshopCreationFormSchema from '@/lib/schemas/workshopCreationFormSchema
 import { sendActivitiesEmail } from '@/lib/sendEmails';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Checkbox, CheckboxGroup } from '@nextui-org/checkbox';
-import { Input, Textarea } from '@nextui-org/input';
-import { Select, SelectItem } from '@nextui-org/select';
+import { Checkbox, CheckboxGroup } from "@heroui/checkbox";
+import { Input, Textarea } from "@heroui/input";
+import { Select, SelectItem } from "@heroui/select";
 import { useRouter } from 'next/navigation';
 import { BaseSyntheticEvent, useEffect } from 'react';
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';

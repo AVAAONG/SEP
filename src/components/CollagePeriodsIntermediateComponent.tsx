@@ -7,7 +7,7 @@ import { deleteBlob } from '@/lib/azure/azure';
 import { deleteAcademicPeriod } from '@/lib/db/utils/collage';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { DocumentTextIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import { ScholarCollagePeriod } from '@prisma/client';
 import Link from 'next/link';
 import { Column } from 'react-table';

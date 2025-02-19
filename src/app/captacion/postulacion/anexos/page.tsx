@@ -2,7 +2,7 @@ import AttachedFilesForm from '@/components/catchment/formSections/annexes/Annex
 import { getServerSession } from '@/lib/auth/authOptions';
 import { getBlobFile } from '@/lib/azure/azure';
 import { getApplicantAnnexes } from '@/lib/db/utils/applicant';
-import { Divider } from '@nextui-org/react';
+import { Divider } from "@heroui/react";
 import { redirect } from 'next/navigation';
 
 const page = async () => {

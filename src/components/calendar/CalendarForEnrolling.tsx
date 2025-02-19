@@ -4,7 +4,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './calendar.css';
 
 import { BigCalendarEventType } from '@/types/Calendar';
-import { Modal, ModalBody, ModalContent, useDisclosure } from '@nextui-org/modal';
+import { Modal, ModalBody, ModalContent, useDisclosure } from "@heroui/modal";
 import moment from 'moment';
 import 'moment/locale/es';
 import { useMemo, useState } from 'react';

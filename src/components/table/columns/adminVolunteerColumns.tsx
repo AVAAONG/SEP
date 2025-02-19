@@ -3,7 +3,7 @@ import DisplayDate from '@/components/DisplayDate';
 import { changeVolunteerStatus } from '@/lib/db/utils/volunteer';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
-import { Tooltip } from '@nextui-org/react';
+import { Tooltip } from "@heroui/react";
 import { VolunteerStatus } from '@prisma/client';
 import Link from 'next/link';
 import { useState } from 'react';

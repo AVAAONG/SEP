@@ -2,7 +2,7 @@
 import { ScholarWithCollageAndJob, updateScholar } from '@/lib/db/utils/users';
 import scholarAddressInformationSchema from '@/lib/schemas/scholar/scholarAddressInformationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Input } from '@nextui-org/react';
+import { Button, Input } from "@heroui/react";
 import { BaseSyntheticEvent } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';

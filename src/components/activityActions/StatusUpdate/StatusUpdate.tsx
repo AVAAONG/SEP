@@ -1,9 +1,9 @@
 'use client';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
-import { Button } from '@nextui-org/button';
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/dropdown';
-import { useDisclosure } from '@nextui-org/modal';
-import { Select, SelectItem } from '@nextui-org/react';
+import { Button } from "@heroui/button";
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/dropdown";
+import { useDisclosure } from "@heroui/modal";
+import { Select, SelectItem } from "@heroui/react";
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import BasicModal from '../../BasicModal';

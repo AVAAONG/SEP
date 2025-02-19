@@ -1,5 +1,5 @@
 import { getScholars } from '@/lib/db/utils/users';
-import { Avatar, Button, Card, CardBody, CardFooter, CardHeader } from '@nextui-org/react';
+import { Avatar, Button, Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
 
 const page = async () => {
   const scholars = await getScholars();

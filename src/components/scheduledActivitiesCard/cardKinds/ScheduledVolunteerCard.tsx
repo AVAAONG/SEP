@@ -3,7 +3,7 @@ import {
   parsePlatformFromDatabase,
   parseVolunteerProject,
 } from '@/lib/utils2';
-import { Button, Checkbox, Tooltip, cn } from '@nextui-org/react';
+import { Button, Checkbox, Tooltip, cn } from "@heroui/react";
 import { Volunteer } from '@prisma/client';
 import moment from 'moment-timezone';
 import 'moment/locale/es';

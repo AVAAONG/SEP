@@ -2,8 +2,8 @@
 import { deleteProbation, endScholarProbation } from '@/lib/db/utils/probation';
 import { useConfirmation } from '@/lib/hooks/useConfirmation';
 import { createProbationAct } from '@/lib/serverAction';
-import { Button } from '@nextui-org/button';
-import { useDisclosure } from '@nextui-org/react';
+import { Button } from "@heroui/button";
+import { useDisclosure } from "@heroui/react";
 import { Probation, ScholarStatus } from '@prisma/client';
 import { toast } from 'react-toastify';
 import ProbationForm from '../ProbationForm';

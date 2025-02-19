@@ -15,7 +15,7 @@ import {
   Tab,
   Tabs,
   useDisclosure,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { Scholar } from '@prisma/client';
 import moment from 'moment';
 import React, { BaseSyntheticEvent, useEffect, useState } from 'react';

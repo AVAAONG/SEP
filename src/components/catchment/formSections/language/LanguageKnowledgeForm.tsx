@@ -3,7 +3,7 @@ import InputField from '@/components/fields/InputFormField';
 import SelectFormField from '@/components/fields/SelectFormField';
 import { createOrUpdateLangInfo } from '@/lib/db/utils/applicant';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import { LanguageKnowledge, Level, Prisma } from '@prisma/client';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

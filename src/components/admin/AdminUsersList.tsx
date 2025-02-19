@@ -1,5 +1,5 @@
 import defailProfilePic from '@/../public/defaultProfilePic.png';
-import { ScrollShadow } from '@nextui-org/react';
+import { ScrollShadow } from "@heroui/react";
 import { AdminProfile } from '@prisma/client';
 import Image from 'next/image';
 import { EditIcon, XIcon } from 'public/svgs/svgs';

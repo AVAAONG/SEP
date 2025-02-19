@@ -1,7 +1,7 @@
 'use client';
 import { asignVolunteerHours, changeScholarVolunteerAttendance } from '@/lib/db/utils/volunteer';
 import { revalidateSpecificPath } from '@/lib/serverAction';
-import { Chip, Input } from '@nextui-org/react';
+import { Chip, Input } from "@heroui/react";
 import { ScholarAttendance } from '@prisma/client';
 import { useState } from 'react';
 import { Cell, CellValue, Column } from 'react-table';

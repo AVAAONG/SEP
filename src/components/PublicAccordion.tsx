@@ -1,6 +1,6 @@
 'use client';
 import { parseChatLevelFromDatabase, parseSkillFromDatabase } from '@/lib/utils2';
-import { Accordion, AccordionItem } from '@nextui-org/react';
+import { Accordion, AccordionItem } from "@heroui/react";
 import { Skill } from '@prisma/client';
 import Link from 'next/link';
 import { chatIcon } from 'public/svgs/svgs';

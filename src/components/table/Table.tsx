@@ -2,7 +2,7 @@
 import exportDataToExcel from '@/lib/utils/exportFunctions/commonExport';
 import processRow from '@/lib/utils/exportFunctions/tableExportUtils';
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import { useEffect, useMemo, useState } from 'react';
 import {
   Column,

@@ -1,7 +1,7 @@
 'use client';
 import exportFollowUpData from '@/lib/utils/exportFunctions/scholarFollowUpExport';
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 
 const FollowUpExportButton = ({ datatoExport }: { datatoExport: {}[] }) => {
   return (

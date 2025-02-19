@@ -8,7 +8,7 @@ import { getBlobFile } from '@/lib/azure/azure';
 import { getVolunteer } from '@/lib/db/utils/Workshops';
 import { parsePlatformFromDatabase } from '@/lib/utils2';
 import { DocumentIcon } from '@heroicons/react/24/outline';
-import { Avatar } from '@nextui-org/react';
+import { Avatar } from "@heroui/react";
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import shortUUID from 'short-uuid';

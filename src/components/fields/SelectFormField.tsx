@@ -1,4 +1,4 @@
-import { Select, SelectItem, SelectProps } from '@nextui-org/react';
+import { Select, SelectItem, SelectProps } from "@heroui/react";
 import { Controller, useFormContext } from 'react-hook-form';
 
 interface SelectFormFieldProps extends Omit<SelectProps, 'children' | 'name' | 'label'> {

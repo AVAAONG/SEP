@@ -1,6 +1,6 @@
 'use client';
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/dropdown';
-import { Avatar } from '@nextui-org/react';
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/dropdown";
+import { Avatar } from "@heroui/react";
 import { signOut } from 'next-auth/react';
 
 const NavbarProfileDropdown = ({ image, email }: { image?: string; email: string }) => {

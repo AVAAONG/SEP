@@ -3,7 +3,7 @@ import { deleteBlob, uploadBlob } from '@/lib/azure/azure';
 import { updateProfilePicture } from '@/lib/db/utils/users';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
-import { Avatar, Button } from '@nextui-org/react';
+import { Avatar, Button } from "@heroui/react";
 import { ChangeEvent } from 'react';
 import { toast } from 'react-toastify';
 

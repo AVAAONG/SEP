@@ -7,7 +7,7 @@ import { revalidateSpecificPath } from '@/lib/serverAction';
 import { formatDateToDisplayInInput, formatDateToStoreInDB } from '@/lib/utils/dates';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import {
   Input,
   Modal,
@@ -19,7 +19,7 @@ import {
   SelectItem,
   Textarea,
   useDisclosure,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { DOSExchangeProgram, Prisma } from '@prisma/client';
 import { BaseSyntheticEvent } from 'react';
 import { Controller, useForm } from 'react-hook-form';

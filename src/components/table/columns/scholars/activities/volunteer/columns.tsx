@@ -2,7 +2,7 @@
 import DisplayDate from '@/components/DisplayDate';
 import { changeVolunteerStatus } from '@/lib/db/utils/volunteer';
 import { revalidateSpecificPath } from '@/lib/serverAction';
-import { Tooltip } from '@nextui-org/tooltip';
+import { Tooltip } from "@heroui/tooltip";
 import { VolunteerStatus } from '@prisma/client';
 import Link from 'next/link';
 import { useState } from 'react';

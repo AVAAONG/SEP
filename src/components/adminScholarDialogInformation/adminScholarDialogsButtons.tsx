@@ -1,5 +1,5 @@
 'use client';
-import { Button, useDisclosure } from '@nextui-org/react';
+import { Button, useDisclosure } from "@heroui/react";
 import { useEffect, useState } from 'react';
 import BasicModal from '../BasicModal';
 import CollageInformation from './collage/CollageInformation';

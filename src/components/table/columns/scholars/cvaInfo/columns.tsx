@@ -1,7 +1,7 @@
 'use client';
 import DisplayDate from '@/components/DisplayDate';
 import formatDni from '@/lib/db/utils/formatDni';
-import { Tooltip } from '@nextui-org/react';
+import { Tooltip } from "@heroui/react";
 import { Cell, CellValue, Column } from 'react-table';
 import ScholarColumnWidget from '../commons/ScholarWidget';
 

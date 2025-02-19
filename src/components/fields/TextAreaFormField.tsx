@@ -1,4 +1,4 @@
-import { Textarea } from '@nextui-org/input';
+import { Textarea } from "@heroui/input";
 import clsx from 'clsx';
 import { Controller, useFormContext } from 'react-hook-form';
 interface TextAreaFormFieldProps {

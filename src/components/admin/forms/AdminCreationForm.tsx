@@ -1,5 +1,5 @@
 'use client';
-import { Button, Input, Select, SelectItem, Spinner } from '@nextui-org/react';
+import { Button, Input, Select, SelectItem, Spinner } from "@heroui/react";
 import { AdminProfile } from '@prisma/client';
 import Image from 'next/image';
 import { BaseSyntheticEvent } from 'react';

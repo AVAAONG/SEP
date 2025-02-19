@@ -5,7 +5,7 @@ import { COLLAGE_LONG_AND_SHORT, EVALUATION_SCALES, STUDY_AREAS } from '@/lib/co
 import { updateScholarCollageInformation } from '@/lib/db/utils/users';
 import scholarCollageInformationSchema from '@/lib/schemas/scholar/collageInformationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Input, Select, SelectItem } from '@nextui-org/react';
+import { Button, Input, Select, SelectItem } from "@heroui/react";
 import { Prisma, ScholarCollageInformation } from '@prisma/client';
 import moment from 'moment';
 import { BaseSyntheticEvent, useEffect, useState } from 'react';

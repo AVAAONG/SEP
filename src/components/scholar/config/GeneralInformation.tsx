@@ -3,7 +3,7 @@ import GENERAL_INFORMATION_INPUT_DATA from '@/components/scholar/forms/data/gene
 import { ScholarWithCollageAndJob, updateScholar } from '@/lib/db/utils/users';
 import scholarInfoSchema from '@/lib/schemas/scholar/scholarGeneralInformationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Input, Select, SelectItem } from '@nextui-org/react';
+import { Button, Input, Select, SelectItem } from "@heroui/react";
 import moment from 'moment';
 import { BaseSyntheticEvent } from 'react';
 import { Controller, useForm } from 'react-hook-form';

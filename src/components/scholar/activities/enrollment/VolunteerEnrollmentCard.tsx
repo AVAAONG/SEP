@@ -8,9 +8,9 @@ import {
   MapPinIcon,
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
-import { Avatar } from '@nextui-org/avatar';
-import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
-import { Tooltip } from '@nextui-org/react';
+import { Avatar } from "@heroui/avatar";
+import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
+import { Tooltip } from "@heroui/react";
 import Link from 'next/link';
 import { volunterIcon } from 'public/svgs/svgs';
 import React from 'react';

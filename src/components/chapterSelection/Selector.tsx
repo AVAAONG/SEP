@@ -1,6 +1,6 @@
 'use client';
 import { revalidateSpecificPath, setCookie } from '@/lib/serverAction';
-import { Select, SelectItem, Selection } from '@nextui-org/react';
+import { Select, SelectItem, Selection } from "@heroui/react";
 import { useState } from 'react';
 
 export default function Selector({ chapters, currentAdminChapter }) {

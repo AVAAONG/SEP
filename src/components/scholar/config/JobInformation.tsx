@@ -3,7 +3,7 @@ import { MODALITY } from '@/lib/constants';
 import { updateScholarJobInformation } from '@/lib/db/utils/users';
 import JobInformationSchema from '@/lib/schemas/scholar/scholarJobInformationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
+import { Button, Input, Select, SelectItem, Textarea } from "@heroui/react";
 import { JobInformation } from '@prisma/client';
 import moment from 'moment';
 import { BaseSyntheticEvent } from 'react';

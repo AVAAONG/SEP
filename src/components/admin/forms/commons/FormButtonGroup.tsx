@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 
 export type ButtonGroupEventName = 'create' | 'send' | 'schedule' | 'edit';
 /**

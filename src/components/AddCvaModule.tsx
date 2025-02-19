@@ -6,7 +6,7 @@ import scholarCVAModuleSchema from '@/lib/schemas/scholar/scholarCVAModuleSchema
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import {
   Input,
   Modal,
@@ -17,7 +17,7 @@ import {
   Select,
   SelectItem,
   useDisclosure,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { Prisma, ScholarCvaModule } from '@prisma/client';
 import { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';

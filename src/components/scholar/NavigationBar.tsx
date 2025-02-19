@@ -1,18 +1,18 @@
 'use client';
 import { KindOfCard, createCVACard } from '@/lib/serverAction';
 import { scholarSidebarAtom } from '@/lib/state/mainState';
-import { Avatar } from '@nextui-org/avatar';
-import { Button } from '@nextui-org/button';
+import { Avatar } from "@heroui/avatar";
+import { Button } from "@heroui/button";
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownSection,
   DropdownTrigger,
-} from '@nextui-org/dropdown';
-import { useDisclosure } from '@nextui-org/modal';
-import { Input } from '@nextui-org/react';
-import { Tab, Tabs } from '@nextui-org/tabs';
+} from "@heroui/dropdown";
+import { useDisclosure } from "@heroui/modal";
+import { Input } from "@heroui/react";
+import { Tab, Tabs } from "@heroui/tabs";
 import { ScholarStatus } from '@prisma/client';
 import { useAtom } from 'jotai';
 import { signOut } from 'next-auth/react';

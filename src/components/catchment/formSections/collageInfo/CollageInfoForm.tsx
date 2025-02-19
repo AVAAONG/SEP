@@ -14,7 +14,7 @@ import { z } from 'zod';
 import AutocompleteFormField from '@/components/fields/AutocompleteFormField';
 import { formatDateToMatchInput } from '@/lib/dates';
 import { createOrUpdateCollageInfo } from '@/lib/db/utils/applicant';
-import { Button, Link } from '@nextui-org/react';
+import { Button, Link } from "@heroui/react";
 import { CollageInfo, Prisma } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';

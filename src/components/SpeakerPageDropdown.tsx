@@ -2,8 +2,8 @@
 import { updateSpeaker } from '@/lib/db/utils/speaker';
 import { EllipsisHorizontalCircleIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@nextui-org/button';
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/dropdown';
+import { Button } from "@heroui/button";
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/dropdown";
 import {
   Modal,
   ModalBody,
@@ -11,7 +11,7 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from '@nextui-org/modal';
+} from "@heroui/modal";
 import { Prisma, Speaker } from '@prisma/client';
 import moment from 'moment';
 import { BaseSyntheticEvent } from 'react';

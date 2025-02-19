@@ -5,7 +5,7 @@ import { createExternalVolunteer } from '@/lib/db/utils/volunteer';
 import externalVolunteerSubmisionSchema from '@/lib/schemas/scholar/externalVolunteerSubmisionSchema';
 import { formatDateToStoreInDB } from '@/lib/utils/dates';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
+import { Button, Input, Select, SelectItem, Textarea } from "@heroui/react";
 import { Prisma } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';

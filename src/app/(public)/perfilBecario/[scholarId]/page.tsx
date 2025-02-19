@@ -12,7 +12,7 @@ import generateQRCode from '@/lib/utils/createQrCode';
 import { getCollageName } from '@/lib/utils/parseFromDatabase';
 import { parseChatLevelFromDatabase } from '@/lib/utils2';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
-import { Avatar } from '@nextui-org/react';
+import { Avatar } from "@heroui/react";
 import moment from 'moment';
 import { headers } from 'next/headers';
 import Link from 'next/link';

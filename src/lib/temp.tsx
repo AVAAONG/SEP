@@ -1,6 +1,6 @@
 'use client';
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import * as ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 

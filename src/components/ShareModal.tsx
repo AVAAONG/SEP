@@ -8,7 +8,7 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import Image from 'next/image';
 import CopyToClipboard from 'react-copy-to-clipboard';
 

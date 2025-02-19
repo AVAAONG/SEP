@@ -3,7 +3,7 @@ import InputField from '@/components/fields/InputFormField';
 import SelectFormField from '@/components/fields/SelectFormField';
 import { createOrUpdateFamilyInfo } from '@/lib/db/utils/applicant';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Link } from '@nextui-org/react';
+import { Button, Link } from "@heroui/react";
 import { FamilyInfo } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { FormProvider, useForm } from 'react-hook-form';

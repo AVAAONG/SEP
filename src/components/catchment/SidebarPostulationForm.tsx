@@ -12,7 +12,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { Button, Link, Select, SelectItem } from '@nextui-org/react';
+import { Button, Link, Select, SelectItem } from "@heroui/react";
 
 import { usePathname, useRouter } from 'next/navigation';
 

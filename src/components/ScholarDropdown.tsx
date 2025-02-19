@@ -5,7 +5,7 @@ import {
 } from '@/lib/db/lilb/scholar/utils';
 import { createProbationII } from '@/lib/db/utils/probation';
 import { EllipsisHorizontalCircleIcon } from '@heroicons/react/24/outline';
-import { useDisclosure } from '@nextui-org/modal';
+import { useDisclosure } from "@heroui/modal";
 import {
   Button,
   Dropdown,
@@ -13,7 +13,7 @@ import {
   DropdownMenu,
   DropdownSection,
   DropdownTrigger,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import ProbationForm from './ProbationForm';
