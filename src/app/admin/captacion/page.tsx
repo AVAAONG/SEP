@@ -1,6 +1,6 @@
 import CombinedColumns from '@/components/table/columns/applicant/applicants';
 import Table from '@/components/table/Table';
-import { getBlobFile, getBlobImage } from '@/lib/azure/azure';
+import { getBlobImage } from '@/lib/azure/azure';
 import { getApplicantsWithAllInfo } from '@/lib/db/utils/applicant';
 const flattenApplicantData = (applicant) => {
   return {
@@ -23,21 +23,17 @@ const page = async () => {
   await Promise.all(
     flattenedApplicants.map(async (applicant: any) => {
       applicant.photo = await getBlobImage(applicant.photo);
-      applicant.annexes.dniCard = await getBlobFile(applicant.annexes.dniCard);
-      applicant.annexes.rif = await getBlobFile(applicant.annexes.rif);
-      applicant.annexes.highSchoolGrades = await getBlobFile(applicant.annexes.highSchoolGrades);
-      applicant.annexes.universityGrades = await getBlobFile(applicant.annexes.universityGrades);
-      applicant.annexes.studyProof = await getBlobFile(applicant.annexes.studyProof);
-      applicant.annexes.professorReferenceLetterI = await getBlobFile(
-        applicant.annexes.professorReferenceLetterI
+      applicant.dniCard = await getBlobImage(applicant?.dniCard);
+      applicant.rif = await getBlobImage(applicant?.rif);
+      applicant.highSchoolGrades = await getBlobImage(applicant?.highSchoolGrades);
+      applicant.universityGrades = await getBlobImage(applicant?.universityGrades);
+      applicant.studyProof = await getBlobImage(applicant?.studyProof);
+      applicant.professorReferenceLetterI = await getBlobImage(applicant.professorReferenceLetterI);
+      applicant.professorReferenceLetterII = await getBlobImage(
+        applicant.professorReferenceLetterII
       );
-      applicant.annexes.professorReferenceLetterII = await getBlobFile(
-        applicant.annexes.professorReferenceLetterII
-      );
-      applicant.annexes.utilityBillVerification = await getBlobFile(
-        applicant.annexes.utilityBillVerification
-      );
-      applicant.annexes.personalEssay = await getBlobFile(applicant.annexes.personalEssay);
+      applicant.utilityBillVerification = await getBlobImage(applicant.utilityBillVerification);
+      applicant.personalEssay = await getBlobImage(applicant?.personalEssay);
     })
   );
 
