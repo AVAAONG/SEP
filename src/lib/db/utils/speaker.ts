@@ -40,6 +40,25 @@ export const getWorkshopSpeakersWithParams = async (data: Prisma.SpeakerSelect) 
   }
 };
 
+export const getWorkshopSpeakerWithWorkshops = async (speakerId: string) => {
+  const [speaker, workshops] = await prisma.$transaction([
+    prisma.speaker.findUnique({
+      where: { id: speakerId },
+    }),
+    prisma.workshop.findMany({
+      where: {
+        speaker: {
+          some: { id: speakerId },
+        },
+      },
+      include: {
+        scholar_attendance: true,
+      },
+    }),
+  ]);
+  return [speaker, workshops];
+};
+
 export const getChatSpeakersWithParams = async (data: Prisma.SpeakerSelect) => {
 
   const session = await getServerSession();
