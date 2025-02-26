@@ -11,7 +11,6 @@ export const getActiveMentors = async (): Promise<Mentor | null> => {
   try {
     const mentors = await prisma.mentor.findMany({
       where: {
-        recruitment_status: 'ACCEPTED',
         chapter: chapterId,
       }
     });
