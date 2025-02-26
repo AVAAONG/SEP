@@ -1132,8 +1132,8 @@ export const getScholarsDataForEdusa = async () => {
       phone: scholar.cell_phone_Number,
       chapter: scholar.program_information?.chapter?.name,
       condition: scholar.program_information?.scholar_condition,
-      carrer: scholar.collage_information[0].career,
-      collage: scholar.collage_information[0].collage,
+      carrer: scholar.collage_information?.[0]?.career,
+      collage: scholar.collage_information?.[0]?.collage,
       dosPrograms: scholar.dos_exchange_program_applications
     }
   });
