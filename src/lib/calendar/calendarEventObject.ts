@@ -129,7 +129,7 @@ const createEventObject = (
       event = defaultEvent;
     }
   } else {
-    throw new Error('No se especificó un tipo de modalidad válido');
+    event = defaultEvent;
   }
   return event;
 };
