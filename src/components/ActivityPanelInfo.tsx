@@ -85,7 +85,7 @@ const ActivityPanelInfo: React.FC<ActivityPanelInfoProps> = ({ activity, childre
             <p className="text-base font-semibold capitalize">
               {parsePlatformFromDatabase(platform)}
             </p>
-            {meeting_id?.[0]?.length > 0 &&
+            {meeting_link?.[0]?.length > 0 &&
               meeting_id?.map((id, index) => (
                 <div>
                   <div className="flex gap-3">
