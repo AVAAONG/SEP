@@ -1,29 +1,18 @@
-import '@/app/globals.css';
-//@ts-ignore
-import favicon from '@/../public/logo-proexcelencia-cap.png';
+import '@/app/admin/admin.css';
 import Navbar from '@/components/admin/navigation/navbar/Navbar';
 import Providers from '@/components/commons/Providerz';
 
 import Sidebar from '@/components/admin/navigation/sidebar/Sidebar';
-import { getServerSession } from '@/lib/auth/authOptions';
 export const metadata = {
-  title: 'Proexcelencia',
-  description: 'Sistema de Evaluacion del Becario',
-  icons: favicon.src,
+  title: 'Administración | Panel general',
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const session = await getServerSession();
-  if (!session) return null;
-  const { image, email } = session;
-
   return (
-    <main className="bg-primary-light dark:bg-secondary-dark antialiased flex transition-all max-w-screen box-border md:pe-2 md:py-2">
+    <main className="bg-[#137832] dark:bg-[#083A17] antialiased flex md:p-2 max-w-screen box-border ">
       <Sidebar />
-      <section className=" min-w-0 flex flex-col z-10 md:rounded-lg bg-light dark:bg-dark p-2 transition-all w-full min-h-screen">
-        <Navbar email={email} image={image}>
-          {/* <ChapterSelector /> */}
-        </Navbar>
+      <section className="min-w-0 min-h-screen md:rounded-md bg-[#f4fbf7] dark:bg-[#040b07]  p-2">
+        <Navbar />
         <Providers>{children}</Providers>
       </section>
     </main>
