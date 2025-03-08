@@ -9,7 +9,7 @@ export const metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="bg-[#137832] dark:bg-[#083A17] antialiased flex md:p-2 max-w-screen box-border ">
+    <main className="bg-[#137832] dark:bg-[#083A17] antialiased flex md:p-2 md:pl-0 max-w-screen box-border ">
       <Sidebar />
       <section className="min-w-0 min-h-screen md:rounded-md bg-[#f4fbf7] dark:bg-[#040b07]  p-2">
         <Navbar />
