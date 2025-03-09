@@ -51,7 +51,7 @@ const getChapterInfo = (id: string) => {
   );
 };
 
-const ChapterSelector = memo(() => {
+const ChapterToggle = memo(() => {
   const { data, update, status } = useSession();
   const { isOpen } = useSidebarContext();
   const router = useRouter();
@@ -134,6 +134,6 @@ const ChapterSelector = memo(() => {
   );
 });
 
-ChapterSelector.displayName = 'ChapterSelector';
+ChapterToggle.displayName = 'ChapterToggle';
 
-export default ChapterSelector;
+export default ChapterToggle;
