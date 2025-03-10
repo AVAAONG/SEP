@@ -39,7 +39,7 @@ const Sidebar = () => {
                 'transition-transform ease-in-out duration-300 ',
                 !isOpen ? 'translate-x-1' : 'translate-x-0'
               )}
-              href="/admin"
+              href="/panel/admin"
             >
               <Image src="/logo-proexcelencia-cap-white.png" width={40} />
               <Image
