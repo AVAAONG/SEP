@@ -53,7 +53,6 @@ const getChapterInfo = (id: string) => {
 
 const ChapterToggle = memo(() => {
   const { data, update, status } = useSession();
-  console.log(data);
   const { isOpen } = useSidebarContext();
   const { isMobile, isMiddle, isDesktop } = useMobile();
   // When on mobile, always show full details regardless of sidebar open state.
@@ -64,6 +63,7 @@ const ChapterToggle = memo(() => {
     async (key: React.Key) => {
       await update({ chapterId: key as string });
       router.refresh();
+      window.location.reload(); // Force reload the page
     },
     [update, router]
   );
