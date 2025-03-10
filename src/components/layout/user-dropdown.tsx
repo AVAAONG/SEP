@@ -12,7 +12,9 @@ import { signOut, useSession } from 'next-auth/react';
 
 export const UserDropdown: React.FC = () => {
   const { data, status } = useSession();
-  let image: string | undefined, email: string | undefined, name: string;
+  let image: string | undefined,
+    email: string | undefined,
+    name: string = '';
   if (status === 'loading') {
     image = undefined;
     email = undefined;
