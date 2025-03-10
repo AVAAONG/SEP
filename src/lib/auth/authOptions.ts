@@ -25,9 +25,15 @@ export const authOptions = {
   ],
 
   callbacks: {
-    async jwt({ token, user, trigger }) {
+    async jwt({ token, user, trigger, session }) {
 
       if (trigger === 'update') {
+
+        if (token.role === 'ADMIN') {
+          token.chapterId = session.chapterId
+          return token;
+        }
+
         if (!token.sub) return token
         const applicant = await getApplicantInitialInfo(token.sub)
         if (!applicant) return token
