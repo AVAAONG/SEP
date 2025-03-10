@@ -40,6 +40,7 @@ const GeneralInformation: React.FC<GeneralInformationProps> = ({ scholar }) => {
   ) => {
     event?.preventDefault();
     data.birthdate = moment(data.birthdate).toISOString(true);
+    data.email = data.email?.toLowerCase().trim();
     if (data.email === scholar?.email) delete data.email;
 
     if (!scholar?.id) return;
