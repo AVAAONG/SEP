@@ -130,13 +130,13 @@ const Sidebar = ({ isSpeaker }: { isSpeaker: boolean | undefined }) => {
             link={`/${SCHOLAR_PREFIX}/panel`}
           />
         </ul>
-        <SidebarSeparator text="Actividades" />
+        <SidebarSeparator label="Actividades" />
         <ul className="space-y-2">
           {SCHOLAR_SIDEBAR_ITEMS.map((item, index) => (
             <ScholarDropdownButton {...item} key={index} />
           ))}
         </ul>
-        <SidebarSeparator text="Otros componentes" />
+        <SidebarSeparator label="Otros componentes" />
         <ul className="space-y-2">
           <ScholarDropdownButton
             Icon={<DocumentTextIcon />}
