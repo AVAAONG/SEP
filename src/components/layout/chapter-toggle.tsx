@@ -1,6 +1,7 @@
 'use client';
 
 import { useSidebarContext } from '@/hooks/sidebar-context';
+import useMobile from '@/hooks/use-mobile';
 import { Avatar } from '@nextui-org/avatar';
 import {
   Dropdown,
@@ -22,7 +23,6 @@ const CHAPTERS = {
 
 type ChapterId = (typeof CHAPTERS)[keyof typeof CHAPTERS];
 
-// Chapter data mapping
 const CHAPTER_DATA = {
   [CHAPTERS.CARACAS]: {
     shortName: 'CCS',
@@ -53,10 +53,13 @@ const getChapterInfo = (id: string) => {
 
 const ChapterToggle = memo(() => {
   const { data, update, status } = useSession();
+  console.log(data);
   const { isOpen } = useSidebarContext();
+  const { isMobile, isMiddle, isDesktop } = useMobile();
+  // When on mobile, always show full details regardless of sidebar open state.
+  const displayFull = isMobile || isMiddle ? true : isOpen;
   const router = useRouter();
 
-  // Memoize the handler to prevent recreating on every render
   const handleChapterChange = useCallback(
     async (key: React.Key) => {
       await update({ chapterId: key as string });
@@ -65,7 +68,6 @@ const ChapterToggle = memo(() => {
     [update, router]
   );
 
-  // Don't render anything during loading or when data is null
   if (status === 'loading' || data === null) return null;
 
   const currentChapterId = data.chapterId;
@@ -98,39 +100,66 @@ const ChapterToggle = memo(() => {
       </DropdownItem>
     </DropdownMenu>
   );
-
-  // Conditional rendering based on sidebar state
+  if (data.email === 'erikacampos.avaa@gmail.com' || data.email === 'avaatecnologia@gmail.com') {
+    return (
+      <Dropdown size="sm" radius="sm">
+        <DropdownTrigger>
+          {displayFull ? (
+            <User
+              as="button"
+              avatarProps={{
+                color: chapterInfo.color,
+                radius: 'sm',
+                size: 'sm',
+                isBordered: true,
+                fallback: chapterInfo.shortName,
+              }}
+              className="transition-transform"
+              description="Capítulo actual"
+              name={chapterInfo.fullName}
+            />
+          ) : (
+            <Avatar
+              isBordered
+              radius="sm"
+              color={chapterInfo.color}
+              as="button"
+              size="sm"
+              fallback={chapterInfo.shortName}
+              className="transition-transform"
+            />
+          )}
+        </DropdownTrigger>
+        {dropdownMenu}
+      </Dropdown>
+    );
+  }
   return (
-    <Dropdown placement="right-end" size="sm" radius="sm">
-      <DropdownTrigger>
-        {isOpen ? (
-          <User
-            as="button"
-            avatarProps={{
-              color: chapterInfo.color,
-              radius: 'sm',
-              size: 'sm',
-              isBordered: true,
-              fallback: chapterInfo.shortName,
-            }}
-            className="transition-transform"
-            description="Capítulo actual"
-            name={chapterInfo.fullName}
-          />
-        ) : (
-          <Avatar
-            isBordered
-            radius="sm"
-            color={chapterInfo.color}
-            as="button"
-            size="sm"
-            fallback={chapterInfo.shortName}
-            className="transition-transform"
-          />
-        )}
-      </DropdownTrigger>
-      {dropdownMenu}
-    </Dropdown>
+    <>
+      {displayFull ? (
+        <User
+          avatarProps={{
+            color: chapterInfo.color,
+            radius: 'sm',
+            size: 'sm',
+            isBordered: true,
+            fallback: chapterInfo.shortName,
+          }}
+          className="transition-transform"
+          description="Capítulo actual"
+          name={chapterInfo.fullName}
+        />
+      ) : (
+        <Avatar
+          isBordered
+          radius="sm"
+          color={chapterInfo.color}
+          size="sm"
+          fallback={chapterInfo.shortName}
+          className="transition-transform"
+        />
+      )}
+    </>
   );
 });
 
