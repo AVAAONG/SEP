@@ -1,5 +1,6 @@
 'use client';
 import { useSidebarContext } from '@/hooks/sidebar-context';
+import useMobile from '@/hooks/use-mobile';
 import { Button } from '@nextui-org/button';
 import { Link } from '@nextui-org/link';
 import {
@@ -12,7 +13,7 @@ import {
   Tooltip,
 } from '@nextui-org/react';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ChevronIcon } from '../../../public/svgs/svgs';
 
 export type DropdownButtonProps = {
@@ -27,59 +28,69 @@ const DropdownButton = (props: DropdownButtonProps) => {
   const { buttonName, itemList, Icon, link } = props;
 
   const pathname = usePathname();
-
   const [isDropdownOpen, setDropdown] = useState(false);
   const toggleDropdown = () => setDropdown(!isDropdownOpen);
-  useEffect(() => {
-    // Function to handle route changes
-    if (window.innerWidth <= 768) {
-      setDropdown(false);
-    }
-  }, [pathname]);
+
+  // On mobile, always treat the sidebar as open.
+  const { isMobile, isMiddle } = useMobile();
+  const displayFull = isMobile || isMiddle ? true : isOpen;
+
+  const isActive = pathname === link || itemList.some((item) => item.link === pathname);
+  const buttonState:
+    | 'light'
+    | 'shadow'
+    | 'flat'
+    | 'solid'
+    | 'bordered'
+    | 'faded'
+    | 'ghost'
+    | undefined = isActive ? 'flat' : 'light';
 
   if (itemList.length === 0) {
     return (
       <ul>
         <li>
           <Tooltip
-            isDisabled={isOpen}
+            isDisabled={displayFull}
             radius="sm"
-            content={isOpen === false ? buttonName : null}
+            content={!displayFull ? buttonName : null}
             placement="right-end"
           >
             <Button
-              isIconOnly={!isOpen}
+              isIconOnly={!displayFull}
               href={link ? link : ''}
               as={Link}
               startContent={<div className="w-6 h-6">{Icon}</div>}
               className={cn(
-                ' text-white dark:text-gray-300 flex items-center font-medium',
-                isOpen && 'w-full'
+                'text-white dark:text-gray-300 flex items-center font-medium',
+                displayFull && 'w-full'
               )}
               radius="sm"
-              variant="light"
+              variant={buttonState}
             >
-              {isOpen && <span className="flex-1 text-left whitespace-nowrap">{buttonName}</span>}{' '}
+              {displayFull && (
+                <span className="flex-1 text-left whitespace-nowrap">{buttonName}</span>
+              )}
             </Button>
           </Tooltip>
         </li>
       </ul>
     );
   } else {
-    return isOpen ? (
+    return displayFull ? (
       <ul>
         <li>
           <Button
-            isIconOnly={!isOpen}
+            isIconOnly={!displayFull}
             type="button"
-            className={cn('text-white dark:text-gray-300 font-medium', isOpen && 'w-full')}
+            className={cn('text-white dark:text-gray-300 font-medium', displayFull && 'w-full')}
             radius="sm"
             startContent={<div className="w-6 h-6">{Icon}</div>}
-            variant="light"
+            variant={buttonState}
             endContent={
-              isOpen && (
+              displayFull && (
                 <div
-                  className={`${isDropdownOpen ? 'rotate-180 transition-transform  ' : ''} w-6 h-6`}
+                  className={`${isDropdownOpen ? 'rotate-180 transition-transform' : ''} w-6 h-6`}
                 >
                   <ChevronIcon />
                 </div>
@@ -87,30 +98,32 @@ const DropdownButton = (props: DropdownButtonProps) => {
             }
             onClick={toggleDropdown}
           >
-            {isOpen && <span className="flex-1 text-left whitespace-nowrap">{buttonName}</span>}
+            {displayFull && (
+              <span className="flex-1 text-left whitespace-nowrap">{buttonName}</span>
+            )}
           </Button>
           <ul
             id="dropdown-pages"
             className={`${
               isDropdownOpen ? 'flex flex-col' : 'hidden'
-            } py-2 space-y-1 transition-transform  duration-75`}
+            } py-2 space-y-1 transition-transform duration-75`}
           >
             {itemList.map((item, index) => (
               <li className="flex gap-2 justify-center items-center pl-8" key={index}>
                 <Button
-                  href={link ? link : ''}
+                  href={item.link}
                   as={Link}
                   className={cn(
                     'text-white dark:text-gray-300 flex items-center font-medium',
-                    isOpen && 'w-full'
+                    displayFull && 'w-full'
                   )}
                   radius="sm"
                   startContent={
                     <div className="rounded-full bg-gray-200 hover:bg-white w-1 h-1"></div>
                   }
-                  variant="light"
+                  variant={pathname === item.link ? 'flat' : 'light'}
                 >
-                  <span className="flex-1 ml-2 text-left whitespace-nowrap"> {item.name}</span>
+                  <span className="flex-1 ml-2 text-left whitespace-nowrap">{item.name}</span>
                 </Button>
               </li>
             ))}
@@ -120,21 +133,20 @@ const DropdownButton = (props: DropdownButtonProps) => {
     ) : (
       <Dropdown placement="right-end" size="sm" radius="sm">
         <Tooltip content={buttonName} placement="right-end" radius="sm">
-          <DropdownTrigger>
+          <DropdownTrigger className="flex items-center">
             <Button
-              variant="light"
+              variant={buttonState}
               radius="sm"
               size="sm"
               isIconOnly
               startContent={<div className="w-6 h-6">{Icon}</div>}
-              // variant={isSubmenuActive ? 'solid' : 'light'}
-              className="w-full  h-10 mb-1 text-white dark:text-gray-300 font-medium"
-            >
-              {isOpen && <span className="flex-1 text-left whitespace-nowrap">{buttonName}</span>}
-            </Button>
+              className={cn(
+                'text-white dark:text-gray-300 flex items-center font-medium',
+                displayFull && 'w-full'
+              )}
+            />
           </DropdownTrigger>
         </Tooltip>
-
         <DropdownMenu disabledKeys={['label']}>
           <DropdownSection showDivider aria-label="Profile & Actions">
             <DropdownItem key="label" className="max-w-[190px] truncate">
@@ -143,11 +155,7 @@ const DropdownButton = (props: DropdownButtonProps) => {
           </DropdownSection>
           <DropdownSection aria-label="Profile & Actions">
             {itemList.map(({ link, name }, index) => (
-              <DropdownItem
-                key={index}
-                href={link}
-                // className={`cursor-pointer ${((active === undefined && pathname === href) || active) && 'bg-secondary'}`}
-              >
+              <DropdownItem key={index} href={link}>
                 <p className="max-w-[180px] truncate">{name}</p>
               </DropdownItem>
             ))}
