@@ -1,18 +1,19 @@
 'use client';
 
-import { sidebarAtom } from '@/lib/state/mainState';
-import { useAtom } from 'jotai';
-
+import AppDrawer from '@/components/layout/app-drawer';
+import ChapterToggle from '@/components/layout/chapter-toggle';
 import { ThemeToggleButton } from '@/components/layout/theme-toggle';
 import { UserDropdown } from '@/components/layout/user-dropdown';
 
 const Navbar = () => {
-  const [isOpen, setSidebar] = useAtom(sidebarAtom);
-  const setUpSidebar = () => (isOpen ? setSidebar(false) : setSidebar(true));
   return (
-    <nav className="block h-10 w-full left-0 right-0 top-0 mb-4">
-      <div className="flex justify-end gap-4">
+    <nav className="block h-10 w-full left-0 right-0 top-0 my-2 lg:mb-4">
+      <div className="flex justify-between lg:!justify-end gap-4">
+        <AppDrawer />
         <div className="flex gap-4  items-center justify-start">
+          <div className="lg:hidden">
+            <ChapterToggle />
+          </div>
           <ThemeToggleButton />
           <UserDropdown />
         </div>
