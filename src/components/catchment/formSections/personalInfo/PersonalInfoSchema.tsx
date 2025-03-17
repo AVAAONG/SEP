@@ -23,7 +23,8 @@ const VENEZUELA_STATES: string[] = [
   'Táchira',
   'Trujillo',
   'Yaracuy',
-  'Dependencias Federales',
+  'La Guaira',
+  'Zulia',
   'Distrito Capital (Caracas)',
 ];
 
