@@ -1,6 +1,6 @@
 import { createEnumErrorMap } from "@/lib/zod/utils";
 import { KindOfCollage, Modality, StudyArea, StudyRegime } from "@prisma/client";
-import { z, ZodIssueCode } from "zod";
+import { z } from "zod";
 
 const collageSchema =
   z.object({
@@ -42,19 +42,18 @@ const collageSchema =
       .transform((val) => (val === null ? undefined : val)),
 
     scholarshipPercentage: z.coerce
-      .number({ required_error: 'El porcentaje de beca es requerido' }).nullish()
-
-  }).superRefine((data, ctx) => {
-    if (data.haveScholarship === 'YES') {
-      if (!data.scholarshipPercentage || data.scholarshipPercentage >= 0) {
-        ctx.addIssue({
-          path: ['specifiedLanguage'],
-          message: 'Es requerido especificar el porcentaje de la beca',
-          code: ZodIssueCode.custom, // Added the required 'code' property
-        });
-      }
-
-    }
-  });
+      .number().nullish()
+  })
+// .superRefine((data, ctx) => {
+//   if (data.haveScholarship === 'YES') {
+//     if (!data.scholarshipPercentage || data.scholarshipPercentage >= 0) {
+//       ctx.addIssue({
+//         path: ['scholarshipPercentage'],
+//         message: 'Es requerido especificar el porcentaje de la beca',
+//         code: ZodIssueCode.custom, // Added the required 'code' property
+//       });
+//     }
+//   }
+// });
 
 export default collageSchema;
