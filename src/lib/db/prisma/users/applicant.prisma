@@ -8,24 +8,24 @@ import { KindOfCollage, StudyArea, StudyRegime } from "scholar\collage"
 import { Modality } from "..\activities\type-activities"
 
 model Applicant {
-    id                String             @id @default(cuid())
-    user              User?
-    step              Int                @default(1) //the sections in the form max 9
-    chapterId         String
-    personal          PersonalInfo?
-    status            RecruitmentStatus  @default(PHASE_I)
-    startTime         DateTime           @default(now())
-    endTime           DateTime?
-    ContactInfo       ContactInfo?
-    familyInfo        FamilyInfo?
-    jobInfo           JobInfo?
-    languageKnowledge LanguageKnowledge?
-    highSchool        HighSchool?
-    additionalInfo    AdditionalInfo?
-    collageInfo       CollageInfo?
-    annexes           Annexes?
+  id                String             @id @default(cuid())
+  user              User?
+  step              Int                @default(1) //the sections in the form max 9
+  chapterId         String
+  personal          PersonalInfo?
+  status            RecruitmentStatus  @default(PHASE_I)
+  startTime         DateTime           @default(now())
+  endTime           DateTime?
+  ContactInfo       ContactInfo?
+  familyInfo        FamilyInfo?
+  jobInfo           JobInfo?
+  languageKnowledge LanguageKnowledge?
+  highSchool        HighSchool?
+  additionalInfo    AdditionalInfo?
+  collageInfo       CollageInfo?
+  annexes           Annexes?
+  comment           String?            @map("comment")
 }
-
 
 model PersonalInfo {
   id          String    @id @default(uuid())
