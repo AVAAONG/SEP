@@ -1,4 +1,5 @@
 import ApplicantStatusButton from '@/components/catchment/applicant-status-button';
+import { formatDate } from '@/components/probation/commonComponents';
 import { getBlobImage } from '@/lib/azure/azure';
 import { getApplicantById } from '@/lib/db/utils/applicant';
 import formatDni from '@/lib/db/utils/formatDni';
@@ -15,7 +16,6 @@ import {
   PhoneIcon,
 } from '@heroicons/react/24/outline';
 import { Avatar, Card, CardBody, CardHeader, Chip } from '@nextui-org/react';
-import { format } from 'date-fns';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
@@ -68,12 +68,6 @@ async function ApplicantProfilePage({ params }: { params: { id: string } }) {
         : gender === 'O'
           ? 'Otro'
           : gender;
-  };
-
-  // Format date for display
-  const formatDate = (date: Date | null | undefined) => {
-    if (!date) return 'No disponible';
-    return format(date, 'dd/MM/yyyy');
   };
 
   // Format housing enum values
