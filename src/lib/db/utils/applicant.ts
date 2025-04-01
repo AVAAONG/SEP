@@ -384,6 +384,7 @@ export const finishApplication = async (applicantId: string, endTime: string) =>
   await prisma.applicant.update({
     where: { id: applicantId },
     data: {
+      step: 10,
       endTime: endTime,
       status: 'PHASE_II_PENDING',
     },
