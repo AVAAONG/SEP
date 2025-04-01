@@ -117,7 +117,7 @@ export const parseScholarCondition = (status: ScholarCondition) => {
   }
 }
 
-export const parseStudiRegimeFromDatabase = (regime: StudyRegime) => {
+export const parseStudiRegimeFromDatabase = (regime: StudyRegime | undefined) => {
   switch (regime) {
     case 'SEMESTER':
       return 'Semestral';
@@ -128,7 +128,7 @@ export const parseStudiRegimeFromDatabase = (regime: StudyRegime) => {
     case 'ANNUAL':
       return 'Anual';
     default:
-      return 'ERROR';
+      return 'Sin datos';
   }
 }
 
@@ -145,14 +145,14 @@ export const parseEvaluationScaleFromDatabase = (evaluationScale: EvaluationScal
   }
 
 }
-export const parseKindOfCollageFromDatabase = (kind: KindOfCollage) => {
+export const parseKindOfCollageFromDatabase = (kind: KindOfCollage | undefined) => {
   switch (kind) {
     case 'PUBLIC':
       return 'Pública';
     case 'PRIVATE':
       return 'Privada';
     default:
-      return 'ERROR';
+      return 'No disponible';
   }
 
 }

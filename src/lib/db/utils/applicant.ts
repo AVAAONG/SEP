@@ -1,6 +1,6 @@
 'use server';
 import { getServerSession } from "@/lib/auth/authOptions";
-import { AdditionalInfo, Annexes, CollageInfo, HighSchool, JobInfo, LanguageKnowledge, Prisma } from "@prisma/client";
+import { AdditionalInfo, Annexes, CollageInfo, HighSchool, JobInfo, LanguageKnowledge, Prisma, RecruitmentStatus } from "@prisma/client";
 import { prisma } from "./prisma";
 
 export const getApplicantPersonalInfo = async (applicantId: string) => {
@@ -412,4 +412,129 @@ export const getApplicantsWithAllInfo = async () => {
 
   return applicants;
 
+}
+
+export const getApplicantById = async (applicantId: string) => {
+  const applicant = await prisma.applicant.findUnique({
+    where: {
+      id: applicantId
+    },
+    include: {
+      personal: true,
+      ContactInfo: true,
+      familyInfo: true,
+      jobInfo: true,
+      languageKnowledge: true,
+      highSchool: true,
+      collageInfo: true,
+      additionalInfo: true,
+      annexes: true,
+      user: true
+    }
+  });
+
+  return applicant;
+}
+
+
+export const addApplicantComment = async (applicantId: string, comment: string, status: RecruitmentStatus) => {
+  await prisma.applicant.update({
+    where: { id: applicantId },
+    data: {
+      status: status,
+      comment: comment,
+    },
+  });
+}
+
+
+export async function getApplicationStatusMetrics() {
+
+  const session = await getServerSession()
+  const chapterId = session?.chapterId
+
+
+  const result = await prisma.$transaction(async (prisma) => {
+
+    const totalApplicants = await prisma.applicant.count(
+      {
+        where: {
+          chapterId
+        }
+      }
+    );
+
+    const statusCounts = await prisma.applicant.groupBy({
+      by: ['status'],
+      _count: {
+        id: true
+      },
+      where: {
+        chapterId
+      }
+    });
+
+    const completionCounts = await prisma.applicant.groupBy({
+      by: ['step'],
+      _count: {
+        id: true
+      },
+      where: {
+        chapterId
+      }
+    });
+
+    const completedApplications = await prisma.applicant.count({
+      where: {
+        chapterId,
+        endTime: {
+          not: null
+        }
+      }
+    });
+
+    const avgCompletionTimeResult = await prisma.applicant.findMany({
+      where: {
+        chapterId,
+        endTime: {
+          not: null
+        }
+      },
+      select: {
+        startTime: true,
+        endTime: true
+      }
+    })
+    return {
+      totalApplicants,
+      statusCounts,
+      completionCounts,
+      completedApplications,
+      avgCompletionTimeResult
+    }
+  })
+
+  const { totalApplicants, statusCounts, completionCounts, completedApplications, avgCompletionTimeResult } = result
+
+  // give me this information in days
+  const avgCompletionTimeInMinutes = avgCompletionTimeResult.reduce((acc, item) => acc + (item.endTime!.getTime() - item.startTime!.getTime()) / 60000, 0) / avgCompletionTimeResult.length;
+  // Convert to hours if needed
+  const avgCompletionTimeInHours = avgCompletionTimeInMinutes / 60;
+  const avgCompletionTimeInDays = avgCompletionTimeInHours / 24;
+
+
+  return {
+    totalApplicants,
+    statusCounts: statusCounts.map(item => ({
+      status: item.status,
+      count: item._count.id
+    })),
+    completionCounts: completionCounts.map(item => ({
+      step: item.step,
+      count: item._count.id
+    })),
+    completedApplications,
+    incompletedApplications: totalApplicants - completedApplications,
+    avgCompletionTimeInHours: avgCompletionTimeInDays.toFixed(0)
+  };
 }

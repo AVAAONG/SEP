@@ -1,7 +1,10 @@
 'use client';
 import { DocumentIcon } from '@heroicons/react/24/outline';
-import { Avatar, Button, Tooltip } from '@nextui-org/react';
+import { Button, Tooltip } from '@nextui-org/react';
+import Link from 'next/link';
 import { Column } from 'react-table';
+import { GenderShip } from '../widgets/gender-ship';
+import { UserColumn } from '../widgets/userColumn';
 
 const parseStepIntoName = (step: number) => {
   switch (step) {
@@ -23,6 +26,8 @@ const parseStepIntoName = (step: number) => {
       return 'Información Adicional';
     case 9:
       return 'Anexos';
+    case 10:
+      return 'Finalizado';
     default:
       return '';
   }
@@ -32,31 +37,18 @@ const CombinedColumns: Column<any>[] = [
   {
     Header: 'Postulante',
     accessor: (row: any) => `${row.firstNames} ${row.lastNames}`,
-    Cell: ({ value, row }) => {
-      return (
-        // <Link href={scholarId ? `/admin/becarios/${scholarId}` : ''} className="w-67">
-        <div className="flex items-center  w-full w-67">
-          <div className="flex-shrink-0 w-8 h-8">
-            <Avatar
-              className="w-full h-full rounded-full"
-              src={row.original.photo ? row.original.photo : undefined}
-              alt="Foto de perfil"
-            />
-          </div>
-          <div className="ml-4 text-start w-full">
-            <span className="text-sm font-medium text-gray-900 dark:text-slate-100">
-              {row.original.firstNames} {row.original.lastNames}
-            </span>
-          </div>
-        </div>
-        // </Link>
-      );
-    },
+    Cell: ({ value, row }) => (
+      <UserColumn
+        name={`${row.original.firstNames} ${row.original.lastNames}`}
+        link={`/admin/captacion/${row.original.applicantId}`}
+        photo={row.original.photo}
+      />
+    ),
   },
   {
-    Header: 'Tiempo que ha tardado postulándose',
+    Header: 'Tiempo de postulación',
     accessor: 'startTime',
-    Cell: ({ value, row }) => {
+    Cell: ({ row }) => {
       const startDate = new Date(row.original.startTime);
       const endDate = new Date(row.original.endTime ?? new Date().toISOString());
       const difference = endDate.getTime() - startDate.getTime();
@@ -66,7 +58,7 @@ const CombinedColumns: Column<any>[] = [
     },
   },
   {
-    Header: 'Paso Actual',
+    Header: 'Paso actual',
     accessor: 'step',
     Cell: ({ value }) => {
       return <p>{parseStepIntoName(value)}</p>;
@@ -100,21 +92,7 @@ const CombinedColumns: Column<any>[] = [
   {
     Header: 'Género',
     accessor: 'gender',
-    Cell: ({ value }) => {
-      if (value === 'M') {
-        return (
-          <span className="inline-flex items-center bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
-            Masculino
-          </span>
-        );
-      } else {
-        return (
-          <span className="inline-flex items-center bg-rose-100 text-rose-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-rose-900 dark:text-rose-300">
-            Femenino
-          </span>
-        );
-      }
-    },
+    Cell: ({ value }) => <GenderShip gender={value} />,
     disableSortBy: true,
   },
   {
@@ -124,6 +102,18 @@ const CombinedColumns: Column<any>[] = [
   {
     Header: 'Dirección',
     accessor: 'address',
+    Cell: ({ value }) => {
+      return (
+        <Tooltip
+          content={value}
+          classNames={{
+            content: 'bg-light dark:bg-dark text-dark dark:text-light',
+          }}
+        >
+          <div className="block w-72 overflow-x-scroll">{value}</div>
+        </Tooltip>
+      );
+    },
   },
   // ContactInfo Columns
   {
@@ -167,6 +157,18 @@ const CombinedColumns: Column<any>[] = [
   {
     Header: 'Miembros de la Familia',
     accessor: 'familyMembers',
+    Cell: ({ value }) => {
+      return (
+        <Tooltip
+          content={value}
+          classNames={{
+            content: 'bg-light dark:bg-dark text-dark dark:text-light',
+          }}
+        >
+          <div className="block w-72 overflow-x-scroll">{value}</div>
+        </Tooltip>
+      );
+    },
   },
   {
     Header: 'Trabajo del Padre',
@@ -344,11 +346,19 @@ const CombinedColumns: Column<any>[] = [
   },
   // Annexes Columns
   {
-    Header: 'Cédula de Identidad',
+    Header: 'Cédula',
     accessor: 'dniCard',
     Cell: ({ cell: { value } }) => (
-      <Button radius="sm" isIconOnly variant="ghost" onClick={() => window.open(value, '_blank')}>
-        <DocumentIcon className="w-8 h-8 text-blue-400" />
+      <Button
+        isDisabled={!value}
+        as={Link}
+        radius="sm"
+        size="sm"
+        isIconOnly
+        variant="ghost"
+        href={value ?? ''}
+      >
+        <DocumentIcon className="w-5 h-5 text-blue-400" />
       </Button>
     ),
   },
@@ -356,8 +366,16 @@ const CombinedColumns: Column<any>[] = [
     Header: 'RIF',
     accessor: 'rif',
     Cell: ({ cell: { value } }) => (
-      <Button radius="sm" isIconOnly variant="ghost" onClick={() => window.open(value, '_blank')}>
-        <DocumentIcon className="w-8 h-8 text-blue-400" />
+      <Button
+        isDisabled={!value}
+        as={Link}
+        radius="sm"
+        size="sm"
+        isIconOnly
+        variant="ghost"
+        href={value ?? ''}
+      >
+        <DocumentIcon className="w-5 h-5 text-blue-400" />
       </Button>
     ),
   },
@@ -365,8 +383,16 @@ const CombinedColumns: Column<any>[] = [
     Header: 'Calificaciones de Bachillerato',
     accessor: 'highSchoolGrades',
     Cell: ({ cell: { value } }) => (
-      <Button radius="sm" isIconOnly variant="ghost" onClick={() => window.open(value, '_blank')}>
-        <DocumentIcon className="w-8 h-8 text-blue-400" />
+      <Button
+        isDisabled={!value}
+        as={Link}
+        radius="sm"
+        size="sm"
+        isIconOnly
+        variant="ghost"
+        href={value ?? ''}
+      >
+        <DocumentIcon className="w-5 h-5 text-blue-400" />
       </Button>
     ),
   },
@@ -374,8 +400,16 @@ const CombinedColumns: Column<any>[] = [
     Header: 'Calificaciones de la Universidad',
     accessor: 'universityGrades',
     Cell: ({ cell: { value } }) => (
-      <Button radius="sm" isIconOnly variant="ghost" onClick={() => window.open(value, '_blank')}>
-        <DocumentIcon className="w-8 h-8 text-blue-400" />
+      <Button
+        isDisabled={!value}
+        as={Link}
+        radius="sm"
+        size="sm"
+        isIconOnly
+        variant="ghost"
+        href={value ?? ''}
+      >
+        <DocumentIcon className="w-5 h-5 text-blue-400" />
       </Button>
     ),
   },
@@ -383,44 +417,84 @@ const CombinedColumns: Column<any>[] = [
     Header: 'Constancia de Estudios Universitarios',
     accessor: 'studyProof',
     Cell: ({ cell: { value } }) => (
-      <Button radius="sm" isIconOnly variant="ghost" onClick={() => window.open(value, '_blank')}>
-        <DocumentIcon className="w-8 h-8 text-blue-400" />
+      <Button
+        isDisabled={!value}
+        as={Link}
+        radius="sm"
+        size="sm"
+        isIconOnly
+        variant="ghost"
+        href={value ?? ''}
+      >
+        <DocumentIcon className="w-5 h-5 text-blue-400" />
       </Button>
     ),
   },
   {
-    Header: 'Carta de Referencia de un Profesor 1',
+    Header: 'Carta Profesor',
     accessor: 'professorReferenceLetterI',
     Cell: ({ cell: { value } }) => (
-      <Button radius="sm" isIconOnly variant="ghost" onClick={() => window.open(value, '_blank')}>
-        <DocumentIcon className="w-8 h-8 text-blue-400" />
+      <Button
+        isDisabled={!value}
+        as={Link}
+        radius="sm"
+        size="sm"
+        isIconOnly
+        variant="ghost"
+        href={value ?? ''}
+      >
+        <DocumentIcon className="w-5 h-5 text-blue-400" />
       </Button>
     ),
   },
   {
-    Header: 'Carta de Referencia de un Profesor 2',
+    Header: 'Carta de Profesor',
     accessor: 'professorReferenceLetterII',
     Cell: ({ cell: { value } }) => (
-      <Button radius="sm" isIconOnly variant="ghost" onClick={() => window.open(value, '_blank')}>
-        <DocumentIcon className="w-8 h-8 text-blue-400" />
+      <Button
+        isDisabled={!value}
+        as={Link}
+        radius="sm"
+        size="sm"
+        isIconOnly
+        variant="ghost"
+        href={value ?? ''}
+      >
+        <DocumentIcon className="w-5 h-5 text-blue-400" />
       </Button>
     ),
   },
   {
-    Header: 'Recibo de Algún Servicio',
+    Header: 'Recibo',
     accessor: 'utilityBillVerification',
     Cell: ({ cell: { value } }) => (
-      <Button radius="sm" isIconOnly variant="ghost" onClick={() => window.open(value, '_blank')}>
-        <DocumentIcon className="w-8 h-8 text-blue-400" />
+      <Button
+        isDisabled={!value}
+        as={Link}
+        radius="sm"
+        size="sm"
+        isIconOnly
+        variant="ghost"
+        href={value ?? ''}
+      >
+        <DocumentIcon className="w-5 h-5 text-blue-400" />
       </Button>
     ),
   },
   {
-    Header: 'Ensayo de 500 Palabras',
+    Header: 'Ensayo',
     accessor: 'personalEssay',
     Cell: ({ cell: { value } }) => (
-      <Button radius="sm" isIconOnly variant="ghost" onClick={() => window.open(value, '_blank')}>
-        <DocumentIcon className="w-8 h-8 text-blue-400" />
+      <Button
+        isDisabled={!value}
+        as={Link}
+        radius="sm"
+        size="sm"
+        isIconOnly
+        variant="ghost"
+        href={value ?? ''}
+      >
+        <DocumentIcon className="w-5 h-5 text-blue-400" />
       </Button>
     ),
   },

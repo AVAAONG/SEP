@@ -616,6 +616,7 @@ model Applicant {
   additionalInfo    AdditionalInfo?
   collageInfo       CollageInfo?
   annexes           Annexes?
+  comment           String?            @map("comment")
 }
 
 model PersonalInfo {
@@ -1215,6 +1216,7 @@ enum RecruitmentStatus {
   PHASE_I
   PHASE_II_PENDING
   PHASE_II_APPROVED
+  PHASE_II_WITH_RESERVE
   PHASE_II_REJECTED
   PHASE_III_PENDING
   PHASE_III_APPROVED
