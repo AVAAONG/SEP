@@ -14,8 +14,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <Sidebar />
       <section
         className={cn(
-          ' min-h-screen md:rounded-md bg-[#f4fbf7] dark:bg-[#040b07] p-2 w-full',
-          isOpen ? 'lg:!min-w-0' : 'w-full'
+          'min-h-screen md:rounded-md bg-[#f4fbf7] dark:bg-[#040b07] p-2 w-full',
+          isOpen ? 'lg:!min-w-0' : 'lg:!min-w-[calc(100vw-6rem)]'
         )}
       >
         <Navbar />
