@@ -8,23 +8,24 @@ import { KindOfCollage, StudyArea, StudyRegime } from "scholar\collage"
 import { Modality } from "..\activities\type-activities"
 
 model Applicant {
-  id                String             @id @default(cuid())
-  user              User?
-  step              Int                @default(1) //the sections in the form max 9
-  chapterId         String
-  personal          PersonalInfo?
-  status            RecruitmentStatus  @default(PHASE_I)
-  startTime         DateTime           @default(now())
-  endTime           DateTime?
-  ContactInfo       ContactInfo?
-  familyInfo        FamilyInfo?
-  jobInfo           JobInfo?
-  languageKnowledge LanguageKnowledge?
-  highSchool        HighSchool?
-  additionalInfo    AdditionalInfo?
-  collageInfo       CollageInfo?
-  annexes           Annexes?
+    id                String             @id @default(cuid())
+    user              User?
+    step              Int                @default(1) //the sections in the form max 9
+    chapterId         String
+    personal          PersonalInfo?
+    status            RecruitmentStatus  @default(PHASE_I)
+    startTime         DateTime           @default(now())
+    endTime           DateTime?
+    ContactInfo       ContactInfo?
+    familyInfo        FamilyInfo?
+    jobInfo           JobInfo?
+    languageKnowledge LanguageKnowledge?
+    highSchool        HighSchool?
+    additionalInfo    AdditionalInfo?
+    collageInfo       CollageInfo?
+    annexes           Annexes?
 }
+
 
 model PersonalInfo {
   id          String    @id @default(uuid())
@@ -36,7 +37,7 @@ model PersonalInfo {
   birthdate   DateTime
   state       String
   address     String
-  Applicant   Applicant @relation(fields: [applicantId], references: [id])
+  Applicant   Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
   applicantId String    @unique
 
   @@map("personal_info")
@@ -49,7 +50,7 @@ model ContactInfo {
   email               String    @unique
   parentalPhoneNumber String    @map("parental_phone_number")
   parental            String
-  Applicant           Applicant @relation(fields: [applicantId], references: [id])
+  Applicant           Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
   applicantId         String    @unique
 
   @@map("contact_info")
@@ -66,7 +67,7 @@ model FamilyInfo {
   fathersCompanyName       String?          @map("fathers_company_name")
   motherJob                String?          @map("mother_job")
   mothersCompanyName       String?          @map("mothers_company_name")
-  applicant                Applicant        @relation(fields: [applicantId], references: [id])
+  applicant                Applicant        @relation(fields: [applicantId], references: [id], onDelete: Cascade)
   applicantId              String           @unique
 
   @@map("family_info")
@@ -91,7 +92,7 @@ model JobInfo {
   jobTitle         String?      @map("job_title")
   jobModality      Modality?    @map("job_modality")
   jobSchedule      JobSchedule? @map("job_schedule")
-  applicant        Applicant    @relation(fields: [applicantId], references: [id])
+  applicant        Applicant    @relation(fields: [applicantId], references: [id], onDelete: Cascade)
   applicantId      String       @unique
 
   @@map("job_info")
@@ -102,7 +103,7 @@ model LanguageKnowledge {
   speaksOtherLanguage Boolean   @map("speaks_other_language")
   specifiedLanguage   String?   @map("specified_language")
   languageLevel       Level?    @map("language_level")
-  applicant           Applicant @relation(fields: [applicantId], references: [id])
+  applicant           Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
   applicantId         String    @unique
 
   @@map("language_knowledge")
@@ -116,7 +117,7 @@ model HighSchool {
   graduationTitle           GraduationTitle       @map("graduation_title")
   mention                   String?
   extracurricularActivities String?               @map("extracurricular_activities")
-  applicant                 Applicant             @relation(fields: [applicantId], references: [id])
+  applicant                 Applicant             @relation(fields: [applicantId], references: [id], onDelete: Cascade)
   applicantId               String                @unique
 
   @@map("high_school")
@@ -141,7 +142,7 @@ model AdditionalInfo {
   isReferredByScholar          Boolean                      @map("is_referred_by_scholar")
   referredScholarName          String?                      @map("referred_scholar_name")
   scholarshipApplicationReason String                       @map("scholarship_application_reason")
-  applicant                    Applicant                    @relation(fields: [applicantId], references: [id])
+  applicant                    Applicant                    @relation(fields: [applicantId], references: [id], onDelete: Cascade)
   applicantId                  String                       @unique @map("applicant_id")
 
   @@map("additional_info")
@@ -178,7 +179,7 @@ model CollageInfo {
   classModality         Modality      @map("class_modality")
   haveScholarship       Boolean       @map("have_scholarship")
   scholarshipPercentage Float?        @map("scholarship_percentage")
-  applicant             Applicant     @relation(fields: [applicantId], references: [id])
+  applicant             Applicant     @relation(fields: [applicantId], references: [id], onDelete: Cascade)
   applicantId           String        @unique @map("applicant_id")
 }
 
@@ -193,7 +194,7 @@ model Annexes {
   professorReferenceLetterII String?   @map("professor_reference_letter_ii")
   utilityBillVerification    String?   @map("utility_bill_verification")
   personalEssay              String?   @map("personal_essay")
-  applicant                  Applicant @relation(fields: [applicantId], references: [id])
+  applicant                  Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
   applicantId                String    @unique @map("applicant_id")
 
   @@map("annexes")

@@ -50,7 +50,7 @@ model User {
     adminId       String?       @unique
     scholar       Scholar?      @relation(fields: [scholarId], references: [id])
     scholarId     String?       @unique
-    applicant     Applicant?    @relation(fields: [applicantId], references: [id])
+    applicant     Applicant?    @relation(fields: [applicantId], references: [id], onDelete: Cascade)
     applicantId   String?       @unique
 }
 
