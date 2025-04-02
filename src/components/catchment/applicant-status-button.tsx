@@ -59,6 +59,10 @@ export default function ApplicantStatusButton({
     toast.success('Estado actualizado correctamente');
     await revalidateSpecificPath('/admin/captacion/**');
   };
+
+  const handleMinimalCancel = async () => {
+    setIsModalOpen(false);
+  };
   return (
     <div className="flex w-full max-w-xs flex-col gap-2">
       <Select
@@ -78,7 +82,7 @@ export default function ApplicantStatusButton({
         ))}
       </Select>
 
-      <Modal isOpen={isModalOpen} onClose={handleCancel}>
+      <Modal isOpen={isModalOpen} onClose={handleMinimalCancel}>
         <ModalContent>
           {(onClose) => (
             <>
