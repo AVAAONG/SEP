@@ -3,6 +3,7 @@ import ChapterToggle from '@/components/layout/chapter-toggle';
 import { useSidebarContext } from '@/hooks/sidebar-context';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 import { Button, cn, Image } from '@nextui-org/react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { dashboardComponent, linkIcon, userIcon } from '../../../../../public/svgs/svgs';
 import DropdownButton from '../../../scholar/DropdownButton';
@@ -11,6 +12,20 @@ import SidebarSeparator from './SidebarSeparator';
 
 const Sidebar = () => {
   const { isOpen, toggle } = useSidebarContext();
+  const session = useSession();
+  let shouldShow = false;
+
+  if (
+    session?.data?.email === 'angelrnievesp@gmail.com' ||
+    session?.data?.email === 'soniagarcial@hotmail.com' ||
+    session?.data?.email === 'mujicavicky26@gmail.com' ||
+    session?.data?.email === 'msolazzo25@gmail.com'
+  ) {
+    shouldShow = false;
+  } else {
+    shouldShow = true;
+  }
+
   return (
     <aside
       className={cn(
@@ -53,82 +68,103 @@ const Sidebar = () => {
               />
             </Link>
           </div>
-          <div
-            className={cn('w-full flex flex-col gap-2 justify-between', !isOpen && 'items-center')}
-          >
-            <DropdownButton
-              buttonName="Panel general"
-              Icon={dashboardComponent()}
-              itemList={[]}
-              link="/admin/panel"
-            />
-          </div>
-          <SidebarSeparator label="Componentes" />
-          <div
-            className={cn('w-full flex flex-col gap-2 justify-between', !isOpen && 'items-center')}
-          >
-            {PROGRAM_COMPONENTS.map(({ buttonName, icon, itemList }) => {
-              return (
+
+          {shouldShow && (
+            <>
+              <div
+                className={cn(
+                  'w-full flex flex-col gap-2 justify-between',
+                  !isOpen && 'items-center'
+                )}
+              >
                 <DropdownButton
-                  key={buttonName}
-                  buttonName={buttonName}
-                  Icon={icon()}
-                  itemList={itemList}
-                  link={null}
+                  buttonName="Panel general"
+                  Icon={dashboardComponent()}
+                  itemList={[]}
+                  link="/admin/panel"
                 />
-              );
-            })}
-          </div>
-          <SidebarSeparator label="Participantes" />
-          <div
-            className={cn('w-full flex flex-col gap-2 justify-between', !isOpen && 'items-center')}
-          >
-            {SCHOLARS.map(({ buttonName, icon, itemList, link }) => {
-              return (
+              </div>
+              <SidebarSeparator label="Componentes" />
+              <div
+                className={cn(
+                  'w-full flex flex-col gap-2 justify-between',
+                  !isOpen && 'items-center'
+                )}
+              >
+                {PROGRAM_COMPONENTS.map(({ buttonName, icon, itemList }) => {
+                  return (
+                    <DropdownButton
+                      key={buttonName}
+                      buttonName={buttonName}
+                      Icon={icon()}
+                      itemList={itemList}
+                      link={null}
+                    />
+                  );
+                })}
+              </div>
+              <SidebarSeparator label="Participantes" />
+              <div
+                className={cn(
+                  'w-full flex flex-col gap-2 justify-between',
+                  !isOpen && 'items-center'
+                )}
+              >
+                {SCHOLARS.map(({ buttonName, icon, itemList, link }) => {
+                  return (
+                    <DropdownButton
+                      key={buttonName}
+                      buttonName={buttonName}
+                      Icon={icon()}
+                      itemList={itemList}
+                      link={link}
+                    />
+                  );
+                })}
+              </div>
+              <SidebarSeparator label="Mentoria" />
+              <div
+                className={cn(
+                  'w-full flex flex-col gap-2 justify-between',
+                  !isOpen && 'items-center'
+                )}
+              >
                 <DropdownButton
-                  key={buttonName}
-                  buttonName={buttonName}
-                  Icon={icon()}
-                  itemList={itemList}
-                  link={link}
+                  buttonName="Mentores"
+                  Icon={userIcon()}
+                  itemList={[]}
+                  link="/admin/mentoria/mentores"
                 />
-              );
-            })}
-          </div>
-          <SidebarSeparator label="Mentoria" />
-          <div
-            className={cn('w-full flex flex-col gap-2 justify-between', !isOpen && 'items-center')}
-          >
-            <DropdownButton
-              buttonName="Mentores"
-              Icon={userIcon()}
-              itemList={[]}
-              link="/admin/mentoria/mentores"
-            />
-            <DropdownButton
-              buttonName="Captación"
-              Icon={userIcon()}
-              itemList={[]}
-              link="/admin/mentoria/captacion"
-            />
-            <DropdownButton
-              buttonName="Formulario de postulación"
-              Icon={linkIcon()}
-              itemList={[]}
-              link="/mentores/registro"
-            />
-          </div>
-          <SidebarSeparator label="Captacion" />
-          <div
-            className={cn('w-full flex flex-col gap-2 justify-between', !isOpen && 'items-center')}
-          >
-            <DropdownButton
-              buttonName="Formulario de postulación"
-              Icon={linkIcon()}
-              itemList={[]}
-              link="/captacion/"
-            />
-          </div>
+                <DropdownButton
+                  buttonName="Captación"
+                  Icon={userIcon()}
+                  itemList={[]}
+                  link="/admin/mentoria/captacion"
+                />
+                <DropdownButton
+                  buttonName="Formulario de postulación"
+                  Icon={linkIcon()}
+                  itemList={[]}
+                  link="/mentores/registro"
+                />
+              </div>
+              <SidebarSeparator label="Captacion" />
+              <div
+                className={cn(
+                  'w-full flex flex-col gap-2 justify-between',
+                  !isOpen && 'items-center'
+                )}
+              >
+                <DropdownButton
+                  buttonName="Formulario de postulación"
+                  Icon={linkIcon()}
+                  itemList={[]}
+                  link="/captacion/"
+                />
+              </div>
+            </>
+          )}
+
           <div className={cn('w-full mt-28 ml-6', !isOpen && '!ml-3')}>
             <ChapterToggle />
           </div>
