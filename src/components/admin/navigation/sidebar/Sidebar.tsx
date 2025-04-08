@@ -19,6 +19,8 @@ const Sidebar = () => {
     session?.data?.email === 'angelrnievesp@gmail.com' ||
     session?.data?.email === 'soniagarcial@hotmail.com' ||
     session?.data?.email === 'mujicavicky26@gmail.com' ||
+    session?.data?.email === 'rjlozadam@gmail.com' ||
+    session?.data?.email === 'caneloneskarhil@gmail.com' ||
     session?.data?.email === 'msolazzo25@gmail.com'
   ) {
     shouldShow = false;
