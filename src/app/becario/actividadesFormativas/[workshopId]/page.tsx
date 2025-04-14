@@ -1,7 +1,7 @@
 import ActivityPanelInfo from '@/components/ActivityPanelInfo';
-import ScholarActivitySatisfactionSurvey from '@/components/ScholarActivitySatisfactionSurvey';
 import ScholarAttendanceWidget from '@/components/ScholarAttendanceWidget';
 import CeaseSpotButtonProps from '@/components/ceaseSpot/ceaseSpotButton';
+import ScholarActivitySatisfactionForm from '@/components/scholar/activitySatisfactionForm/ScholarActivitySatisfactionForm';
 import Table from '@/components/table/Table';
 import ScholarAttendanceInfoNoPriv from '@/components/table/columns/scholars/activityAttendanceWithNoPrivilege/columns';
 import {
@@ -55,7 +55,7 @@ const page = async ({ params }: { params: { workshopId: shortUUID.SUUID } }) => 
               />
             )}
             {scholarAttendance === 'ATTENDED' && (
-              <ScholarActivitySatisfactionSurvey
+              <ScholarActivitySatisfactionForm
                 attendanceId={attendance?.id}
                 satisfactionFormFilled={attendance?.satisfaction_form_filled}
                 workshopStatus={workshop.activity_status}

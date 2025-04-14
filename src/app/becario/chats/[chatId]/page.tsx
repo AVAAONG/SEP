@@ -1,9 +1,9 @@
 import ActivityPanelInfo from '@/components/ActivityPanelInfo';
 import ActivityScholarStatusesCount from '@/components/ActivityScholarStatusesCount';
-import ScholarActivitySatisfactionSurvey from '@/components/ScholarActivitySatisfactionSurvey';
 import ScholarAttendanceWidget from '@/components/ScholarAttendanceWidget';
 import StatusUpdateButton from '@/components/activityActions/StatusUpdate/StatusUpdate';
 import CeaseSpotButtonProps from '@/components/ceaseSpot/ceaseSpotButton';
+import ScholarActivitySatisfactionForm from '@/components/scholar/activitySatisfactionForm/ScholarActivitySatisfactionForm';
 import Table from '@/components/table/Table';
 import ScholarActivityAttendance from '@/components/table/columns/scholarActivityAttendace';
 import ScholarAttendanceInfoNoPriv from '@/components/table/columns/scholars/activityAttendanceWithNoPrivilege/columns';
@@ -86,7 +86,7 @@ const page = async ({ params }: { params: { chatId: shortUUID.SUUID } }) => {
                 />
               )}
               {scholarAttendance === 'ATTENDED' && (
-                <ScholarActivitySatisfactionSurvey
+                <ScholarActivitySatisfactionForm
                   attendanceId={attendance?.id}
                   satisfactionFormFilled={attendance?.satisfaction_form_filled}
                   workshopStatus={chat.activity_status}
