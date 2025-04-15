@@ -94,7 +94,7 @@ const createChatInvitationMessage = () => {
                                                 <tbody>
                                                   <tr>
                                                     <td style="border-radius: 26px; width: 137px;" align="center" bgcolor="#75b6c9">
-                                                      <a href="https://programaexcelencia.org/becario/oferta" style="font-size: 16px; font-family: 'Open Sans', Helvetica, Arial, sans-serif; color: #ffffff; border-radius: 26px; padding: 14px 26px; border: 1px solid #75b6c9; display: block;" rel="noopener" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://sites.google.com/view/compromisos-a-nov/inicio?authuser%3D1&amp;source=gmail&amp;ust=1646278185539000&amp;usg=AOvVaw0RwRsk0ebG2AJ6G2mWgrmn">ir al form →</a>
+                                                      <a href="https://programaexcelencia.org/becario/oferta" style="font-size: 16px; font-family: 'Open Sans', Helvetica, Arial, sans-serif; color: #ffffff; border-radius: 26px; padding: 14px 26px; border: 1px solid #75b6c9; display: block;" rel="noopener" target="_blank">ir al form →</a>
                                                     </td>
                                                   </tr>
                                                 </tbody>
