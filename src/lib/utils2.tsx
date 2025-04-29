@@ -14,33 +14,33 @@ import { CHAT_CALENDAR_ID, VOLUNTEERS_CALENDAR_ID, WORKSHOP_CALENDAR_ID } from '
 
 export const parseSkillFromDatabase = (skill: Skill) => {
   switch (skill) {
-    case 'CITIZEN_EXERCISE':
-      return 'Ejercicio ciudadano';
-    case 'ENTREPRENEURSHIP':
-      return 'Emprendimiento';
-    case 'SELF_MANAGEMENT':
-      return 'Gerencia de sí mismo';
-    case 'LEADERSHIP':
+    case Skill.CITIZEN_EXERCISE:
+      return 'Ejercicio Ciudadano';
+    case Skill.LEADERSHIP:
       return 'Liderazgo';
-          case 'TEAM_WORK':
-      return 'Trabajo en equipo';
-    case 'ICT':
+    case Skill.SELF_MANAGEMENT:
+      return 'Gerencia de sí mismo';
+    case Skill.ICT:
       return 'TIC';
+    case Skill.ENTREPRENEURSHIP:
+      return 'Emprendimiento';
+    case Skill.TEAM_WORK:
+      return 'Trabajo en equipo';
     default:
-      return 'Ejercicio ciudadano';
+      return skill;
   }
 };
 
 export const parseModalityFromDatabase = (modality: Modality | null | undefined) => {
   switch (modality) {
-    case 'IN_PERSON':
-      return 'Presencial';
-    case 'ONLINE':
+    case Modality.ONLINE:
       return 'Virtual';
-    case 'HYBRID':
-      return 'Hibrida';
+    case Modality.IN_PERSON:
+      return 'Presencial';
+    case Modality.HYBRID:
+      return 'Híbrido';
     default:
-      return 'Sin datos';
+      return 'Desconocido';
   }
 };
 
@@ -84,29 +84,33 @@ export const parseKindOfVolunteerFromDatabase = (kindOfVolunteer: string) => {
 };
 export const parseWorkshopStatusFromDatabase = (status: ActivityStatus) => {
   switch (status) {
-    case 'ATTENDANCE_CHECKED':
-      return 'Realizado';
-    case 'SCHEDULED':
+    case ActivityStatus.SCHEDULED:
       return 'Programado';
-    case 'SENT':
-      return 'Enviado';
-    case 'SUSPENDED':
+    case ActivityStatus.SENT:
+      return 'Programado';
+    case ActivityStatus.ATTENDANCE_CHECKED:
+      return 'Realizado';
+    case ActivityStatus.SUSPENDED:
       return 'Suspendido';
   }
 };
 
-export const parseScholarAttendanceFromDatabase = (attendance: ScholarAttendance) => {
-  switch (attendance) {
-    case 'ATTENDED':
-      return 'Asistió';
-    case 'CANCELLED':
-      return 'Cancelo';
-    case 'ENROLLED':
+export const parseScholarAttendanceFromDatabase = (status: ScholarAttendance | 'SPEAKER') => {
+  switch (status) {
+    case ScholarAttendance.ENROLLED:
       return 'Inscrito';
-    case 'JUSTIFY':
-      return 'Justifico';
-    case 'NOT_ATTENDED':
-      return 'No asistió';
+    case ScholarAttendance.ATTENDED:
+      return 'Asistió';
+    case ScholarAttendance.NOT_ATTENDED:
+      return 'No Asistió';
+    case ScholarAttendance.JUSTIFY:
+      return 'Justificado';
+    case ScholarAttendance.CANCELLED:
+      return 'Cancelado';
+    case 'SPEAKER':
+      return 'Facilitador';
+    default:
+      return status;
   }
 };
 

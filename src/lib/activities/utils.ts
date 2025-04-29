@@ -1,5 +1,5 @@
 'use server';
-import { Chat, ChatAttendance, Volunteer, Workshop, WorkshopAttendance } from "@prisma/client";
+import { Chat, ChatAttendance, ScholarAttendance, Speaker, Volunteer, Workshop, WorkshopAttendance } from "@prisma/client";
 import { headers } from 'next/headers';
 
 export type ActivityKind = 'workshop' | 'chat' | 'volunteer' | null
@@ -40,6 +40,26 @@ export const getActivityStatusBasedOnItsType = (activity: Workshop | Chat | Volu
     }
 }
 
+
+export const getEnrolledScholarsCount = (
+    activity: (Workshop & {
+        scholar_attendance: WorkshopAttendance[],
+        speaker?: Speaker[]
+    } |
+        Chat & {
+            scholar_attendance: ChatAttendance[],
+            speaker?: Speaker[]
+        })
+) => {
+    return activity.scholar_attendance.filter(
+        (a) =>
+            a.attendance === ScholarAttendance.ENROLLED ||
+            a.attendance === ScholarAttendance.ATTENDED ||
+            a.attendance === ScholarAttendance.NOT_ATTENDED ||
+            a.attendance === ScholarAttendance.JUSTIFY
+    ).length
+
+}
 export const getScholarEmailsByAttendanceStatus = (scholarAttendance: ChatAttendance[] | WorkshopAttendance[]) => {
 
     const attendedScholarEmails: string[] = []
