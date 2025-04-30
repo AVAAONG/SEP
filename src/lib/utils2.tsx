@@ -102,7 +102,7 @@ export const parseScholarAttendanceFromDatabase = (status: ScholarAttendance | '
     case ScholarAttendance.ATTENDED:
       return 'Asistió';
     case ScholarAttendance.NOT_ATTENDED:
-      return 'No Asistió';
+      return 'No asistió';
     case ScholarAttendance.JUSTIFY:
       return 'Justificado';
     case ScholarAttendance.CANCELLED:
