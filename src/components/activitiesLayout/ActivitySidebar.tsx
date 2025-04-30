@@ -4,7 +4,7 @@ import {
   getNotEnrolledScholarsInChat,
   getNotEnrolledScholarsInWorkshop,
 } from '@/lib/db/utils/users';
-import { Progress } from '@nextui-org/react';
+import { Card, CardBody, Progress } from '@nextui-org/react';
 import { Prisma } from '@prisma/client';
 import CeaseSpotButtonProps from '../ceaseSpot/ceaseSpotButton';
 import ScholarActivitySatisfactionForm from '../scholar/activitySatisfactionForm/ScholarActivitySatisfactionForm';
@@ -63,22 +63,27 @@ export const ActivitySidebar = async ({ activity }: { activity: ActivityType }) 
       )}
 
       {/* Attendance */}
+
       <div className="space-y-4">
         <h2 className="text-xl font-semibold text-emerald-600">Asistencia</h2>
-        <div className="p-4 bg-slate-50 rounded-lg space-y-3">
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-muted-foreground">Capacidad</span>
-            <span className="font-medium">
-              {getEnrolledScholarsCount(activity)} / {activity.avalible_spots}
-            </span>
-          </div>
-          <Progress
-            className="max-w-md"
-            size="md"
-            color="success"
-            value={(getEnrolledScholarsCount(activity) / activity.avalible_spots) * 100}
-          />
-        </div>
+        <Card radius="sm">
+          <CardBody>
+            <div className="p-4 rounded-lg space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-muted-foreground">Capacidad</span>
+                <span className="font-medium">
+                  {getEnrolledScholarsCount(activity)} / {activity.avalible_spots}
+                </span>
+              </div>
+              <Progress
+                className="max-w-md"
+                size="md"
+                color="success"
+                value={(getEnrolledScholarsCount(activity) / activity.avalible_spots) * 100}
+              />
+            </div>
+          </CardBody>
+        </Card>
       </div>
 
       {session?.kindOfUser === 'SCHOLAR' && currentScholarAttendance && (
