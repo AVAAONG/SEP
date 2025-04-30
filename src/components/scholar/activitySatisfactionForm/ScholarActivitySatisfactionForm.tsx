@@ -1,5 +1,6 @@
 'use client';
 import RadioInputField from '@/components/fields/RadioInputField';
+import useMobile from '@/hooks/use-mobile';
 import {
   updateWorkshopAttendanceSatisfactionForm,
   updatechatAttendanceSatisfactionForm,
@@ -34,6 +35,8 @@ const ScholarActivitySatisfactionForm = ({
   satisfactionFormFilled: boolean | undefined | null;
   kindOfActivity: 'workshop' | 'chat';
 }) => {
+  const { isMobile } = useMobile();
+
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const methods = useForm<z.infer<typeof activitySatisfactionFormSchema>>({
     resolver: zodResolver(activitySatisfactionFormSchema),
@@ -98,18 +101,19 @@ const ScholarActivitySatisfactionForm = ({
                     {QUESTIONS_BY_SECTION.map((section) => (
                       <div key={section.title} className="flex flex-col gap-4">
                         <h2 className="font-medium truncate text-primary-light">{section.title}</h2>
-                        <div className='space-y-6'>
+                        <div className="space-y-6">
                           {section.questions.map((q) => (
                             <RadioInputField
                               key={q.name}
-                              isVertical={false}
+                              isVertical={isMobile}
                               name={q.name}
-                              label={typeof q.label === 'function' ? q.label(kindOfActivity) : q.label}
+                              label={
+                                typeof q.label === 'function' ? q.label(kindOfActivity) : q.label
+                              }
                               radioItems={VALORIZATION}
                             />
                           ))}
                         </div>
-
                       </div>
                     ))}
                   </ModalBody>
@@ -129,7 +133,7 @@ const ScholarActivitySatisfactionForm = ({
                     <Button
                       type="submit"
                       radius="sm"
-                      color='success'
+                      color="success"
                       isLoading={isSubmitting} // Show loading state on submit button
                       isDisabled={isSubmitting} // Disable submit button while submitting
                     >

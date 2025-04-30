@@ -31,6 +31,9 @@ const RadioInputField: React.FC<RadioInputFieldProps> = ({
           isInvalid={!!fieldState.error}
           errorMessage={fieldState.error?.message}
           label={label}
+          classNames={{
+            label: 'mb-0.5',
+          }}
         >
           {radioItems.map(({ label, value }) => (
             <Radio key={value} value={value}>
