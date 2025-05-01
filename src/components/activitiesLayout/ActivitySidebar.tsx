@@ -6,6 +6,7 @@ import {
 } from '@/lib/db/utils/users';
 import { Card, CardBody, Progress } from '@nextui-org/react';
 import { Prisma } from '@prisma/client';
+import React from 'react';
 import CeaseSpotButtonProps from '../ceaseSpot/ceaseSpotButton';
 import ScholarActivitySatisfactionForm from '../scholar/activitySatisfactionForm/ScholarActivitySatisfactionForm';
 import { SpeakerCard } from './SpeakerCard';
@@ -33,7 +34,13 @@ type ChatWithDetails = Prisma.ChatGetPayload<{
 
 type ActivityType = WorkshopWithDetails | ChatWithDetails;
 
-export const ActivitySidebar = async ({ activity }: { activity: ActivityType }) => {
+export const ActivitySidebar = async ({
+  activity,
+  children,
+}: {
+  activity: ActivityType;
+  children?: React.ReactNode;
+}) => {
   const session = await getServerSession();
   const currentScholarAttendance = activity.scholar_attendance.find(
     (a) => a.scholar.scholar.id === session?.id
@@ -56,7 +63,7 @@ export const ActivitySidebar = async ({ activity }: { activity: ActivityType }) 
               ? 'Facilitadores'
               : 'Facilitador'}
           </h2>
-          <div className="space-y-3">
+          <div className="grid gridcols-2 sm:grid-cols-3 md:grid-cols-2 gap-4">
             <SpeakerCard speakers={activity.speaker} />
           </div>
         </div>
@@ -85,6 +92,7 @@ export const ActivitySidebar = async ({ activity }: { activity: ActivityType }) 
           </CardBody>
         </Card>
       </div>
+      {children}
 
       {session?.kindOfUser === 'SCHOLAR' && currentScholarAttendance && (
         <div className="space-y-4">
