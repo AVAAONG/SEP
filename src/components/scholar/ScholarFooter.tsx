@@ -149,14 +149,11 @@ const ScholarFooter = () => {
             href="https://www.youtube.com/channel/UCTKH3B9mQCVSX395l0UUKbw"
             className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-green-500"
           >
-            <div className='w-7 h-7'>
-            {YoutubeIcon()}
-
-            </div>
+            <div className="w-7 h-7">{YoutubeIcon()}</div>
           </Link>
         </div>
       </footer>
-      <p className="my-10 text-sm text-center dark:text-green-500 text-green-700 ">
+      <p className="mb-4 text-sm text-center dark:text-green-500 text-green-700 ">
         💚 De becarios para becarios 💚
       </p>
     </>
