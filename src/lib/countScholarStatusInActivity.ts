@@ -22,6 +22,7 @@ export const countScholarStatusesInActivity = (scholarActivityAtendance: Worksho
                 default:
                     break;
             }
+            counts.total++;
             return counts;
         },
         {
@@ -30,6 +31,7 @@ export const countScholarStatusesInActivity = (scholarActivityAtendance: Worksho
             cancelledScholarsCount: 0,
             enroledScholars: 0,
             justifiedScolars: 0,
+            total: 0,
         }
     );
     return attendanceCounts;
