@@ -42,9 +42,9 @@ export const ActivityDetails = ({ activity }: { activity: ActivityType }) => {
       <div className="space-y-4">
         <h2 className="text-xl font-semibold text-emerald-600">
           {activity.modality === Modality.ONLINE
-            ? 'Información de Conexión'
+            ? 'Información de conexión'
             : activity.modality === Modality.HYBRID
-              ? 'Ubicación e Información de Conexión'
+              ? 'Ubicación e información de conexión'
               : 'Ubicación'}
         </h2>
 
