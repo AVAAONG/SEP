@@ -25,20 +25,18 @@ const getStatusColor = (status: string) => {
     case ActivityStatus.SCHEDULED:
     case ActivityStatus.SENT:
     case ScholarAttendance.ENROLLED:
-      return 'bg-emerald-50 text-emerald-700';
+      return 'bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300';
     case ScholarAttendance.ATTENDED:
-      return 'bg-green-50 text-green-700';
     case ActivityStatus.ATTENDANCE_CHECKED:
-      return 'bg-green-50 text-green-700';
+      return 'bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300';
     case ActivityStatus.SUSPENDED:
     case ScholarAttendance.CANCELLED:
-      return 'bg-red-50 text-red-700';
     case ScholarAttendance.NOT_ATTENDED:
-      return 'bg-red-50 text-red-700';
+      return 'bg-red-50 text-red-700 dark:bg-red-900 dark:text-red-300';
     case ScholarAttendance.JUSTIFY:
-      return 'bg-orange-50 text-orange-700';
+      return 'bg-orange-50 text-orange-700 dark:bg-orange-900 dark:text-orange-300';
     default:
-      return 'bg-slate-50 text-slate-700';
+      return 'bg-slate-50 text-slate-700 dark:bg-slate-800 dark:text-slate-300';
   }
 };
 
@@ -100,7 +98,6 @@ export const ActivityBaseLayoutHeader = async ({ activity }: { activity: Activit
               <Tooltip content="Estatus de la actividad" radius="sm" size="sm">
                 <Chip
                   size="sm"
-                  radius="sm"
                   className={`rounded-full font-medium ${getStatusColor(activity.activity_status)}`}
                 >
                   {parseWorkshopStatusFromDatabase(activity.activity_status)}

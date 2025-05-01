@@ -24,7 +24,7 @@ export const DateCards = ({ startDates, endDates }: { startDates: Date[]; endDat
         <Card radius="sm" key={index}>
           <CardBody className="flex flex-row items-center justify-between">
             <div className="flex items-center ">
-              <div className="bg-emerald-100 text-emerald-700 rounded-full w-8 h-8 flex items-center justify-center mr-3">
+              <div className="bg-emerald-50 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300 rounded-full w-8 h-8 flex items-center justify-center mr-3">
                 <span className="font-medium text-xs md:text-base ">{index + 1}</span>
               </div>
               <span className="font-medium capitalize text-xs md:text-base ">
