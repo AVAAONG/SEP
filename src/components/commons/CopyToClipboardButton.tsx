@@ -13,7 +13,8 @@ const CopyToClipboardButton = ({ textToCopy }: { textToCopy: string }) => {
     <Button
       variant="ghost"
       size="sm"
-      className="h-8 px-2"
+      isIconOnly
+      radius="sm"
       onClick={copyToClipboard}
       startContent={<ClipboardIcon className="h-4 w-4" />}
     ></Button>
