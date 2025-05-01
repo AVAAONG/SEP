@@ -63,7 +63,13 @@ export const ActivitySidebar = async ({
               ? 'Facilitadores'
               : 'Facilitador'}
           </h2>
-          <div className="grid gridcols-2 sm:grid-cols-3 md:grid-cols-2 gap-4">
+          <div
+            className={
+              activity.speaker.length >= 2
+                ? 'grid gridcols-2 sm:grid-cols-3 md:grid-cols-2 gap-4'
+                : 'grid grid-cols-1 gap-4'
+            }
+          >
             <SpeakerCard speakers={activity.speaker} />
           </div>
         </div>
