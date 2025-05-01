@@ -4,7 +4,7 @@ import { Speaker } from '@prisma/client';
 export const SpeakerCard = ({ speakers }: { speakers: Speaker[] }) => (
   <>
     {speakers.map((speaker) => (
-      <Card radius="sm">
+      <Card radius="sm" key={speaker.id}>
         <CardBody>
           <div className="flex items-center">
             <Avatar
