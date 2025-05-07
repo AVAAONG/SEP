@@ -117,7 +117,7 @@ export const ActivitySidebar = async ({
                 attendanceId={currentScholarAttendance?.id}
                 satisfactionFormFilled={currentScholarAttendance?.satisfaction_form_filled}
                 workshopStatus={activity.activity_status}
-                kindOfActivity="workshop"
+                kindOfActivity={kindOfActivity}
               />
             )}
           </div>
