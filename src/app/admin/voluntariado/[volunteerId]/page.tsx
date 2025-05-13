@@ -60,7 +60,7 @@ const page = async ({ params }: { params: { volunteerId: shortUUID.SUUID } }) =>
         <div className="space-y-3 w-full lg:w-1/2 ">
           <div className="flex flex-col space-y-2 ">
             <div className="flex gap-2 items-center">
-              <div className="w-fit font-medium px-2">Acvtividad de Voluntariado</div>
+              <div className="w-fit font-medium px-2">Actividad de Voluntariado</div>
               <div>
                 <VolunteerStatusWidget value={volunteer.status} />
               </div>
@@ -184,10 +184,7 @@ const page = async ({ params }: { params: { volunteerId: shortUUID.SUUID } }) =>
           <div className="grid grid-cols-2 gap-4 ">
             <ActivityEditFormModal activity={volunteer} />
             <VolunteerStatusUpdate volunteerId={volunteerId} />
-            <DeleteActivityButton
-              kindOfActivity='volunteer'
-              activityId={volunteerId}
-            />
+            <DeleteActivityButton kindOfActivity="volunteer" activityId={volunteerId} />
           </div>
         </div>
       </section>
