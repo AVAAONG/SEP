@@ -1,3 +1,4 @@
+import { parsePlatformFromDatabase } from '@/lib/utils2';
 import {
   ArrowDownOnSquareIcon,
   CalendarDaysIcon,
@@ -25,6 +26,7 @@ type ActivityType = (Workshop | Chat) & {
 };
 
 export const ActivityDetails = ({ activity }: { activity: ActivityType }) => {
+  console.log('ActivityDetails', activity.meeting_link.length);
   return (
     <div className="md:col-span-2 space-y-10">
       {/* Dates */}
@@ -54,7 +56,9 @@ export const ActivityDetails = ({ activity }: { activity: ActivityType }) => {
               <div className="flex items-start">
                 <MapPinIcon className="h-5 w-5 mr-3 text-emerald-600 mt-0.5" />
                 <div>
-                  <p className="text-muted-foreground">{activity.platform}</p>
+                  <p className="text-muted-foreground">
+                    {parsePlatformFromDatabase(activity.platform)}
+                  </p>
                 </div>
               </div>
             </CardBody>
@@ -63,61 +67,70 @@ export const ActivityDetails = ({ activity }: { activity: ActivityType }) => {
 
         {(activity.modality === Modality.ONLINE || activity.modality === Modality.HYBRID) && (
           <div className="space-y-4">
-            {activity.meeting_link.map((link, index) => (
-              <>
-                <div className="flex items-start">
-                  <VideoCameraIcon className="h-5 w-5 mr-3 text-emerald-600 mt-0.5" />
-                  <div>
-                    <h3 className="font-medium mb-1">Plataforma</h3>
-                    <p className="text-muted-foreground">{activity.platform}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <LinkIcon className="h-5 w-5 mr-3 text-emerald-600 mt-0.5" />
-                  <div className="flex-1">
-                    <h3 className="font-medium mb-1">Enlace de Reunión</h3>
-                    <div className="flex items-center justify-between">
-                      <Link
-                        href={link}
-                        className="text-muted-foreground truncate max-w-[250px] sm:max-w-md"
-                      >
-                        {link}
-                      </Link>
-                      <CopyToClipboardButton textToCopy={link} />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {activity.meeting_link[0].length > 2 &&
+              activity.meeting_link.map((link, index) => (
+                <>
                   <div className="flex items-start">
-                    <div className="mr-3 w-5 flex justify-center">
-                      <span className="font-medium text-emerald-600">#</span>
+                    <VideoCameraIcon className="h-5 w-5 mr-3 text-emerald-600 mt-0.5" />
+                    <div>
+                      <h3 className="font-medium mb-1">Plataforma</h3>
+                      <p className="text-muted-foreground">{activity.platform}</p>
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-medium mb-1">ID de Reunión</h3>
-                      <div className="flex items-center justify-between">
-                        <p className="text-muted-foreground">{activity.meeting_id[index]}</p>
-                        <CopyToClipboardButton textToCopy={activity.meeting_id[index]} />
+                  </div>
+
+                  {link && (
+                    <div className="flex items-start">
+                      <LinkIcon className="h-5 w-5 mr-3 text-emerald-600 mt-0.5" />
+                      <div className="flex-1">
+                        <h3 className="font-medium mb-1">Enlace de Reunión</h3>
+                        <div className="flex items-center justify-between">
+                          <Link
+                            href={link}
+                            className="text-muted-foreground truncate max-w-[250px] sm:max-w-md"
+                          >
+                            {link}
+                          </Link>
+                          <CopyToClipboardButton textToCopy={link} />
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
 
-                  <div className="flex items-start">
-                    <div className="mr-3 w-5 flex justify-center">
-                      <span className="font-medium text-emerald-600">*</span>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-medium mb-1">Contraseña</h3>
-                      <div className="flex items-center justify-between">
-                        <p className="text-muted-foreground">{activity.meeting_password[index]}</p>
-                        <CopyToClipboardButton textToCopy={activity.meeting_password[index]} />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {activity.meeting_id && activity.meeting_id[index] && (
+                      <div className="flex items-start">
+                        <div className="mr-3 w-5 flex justify-center">
+                          <span className="font-medium text-emerald-600">#</span>
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-medium mb-1">ID de Reunión</h3>
+                          <div className="flex items-center justify-between">
+                            <p className="text-muted-foreground">{activity.meeting_id[index]}</p>
+                            <CopyToClipboardButton textToCopy={activity.meeting_id[index]} />
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    )}
+
+                    {activity.meeting_password && activity.meeting_password[index] && (
+                      <div className="flex items-start">
+                        <div className="mr-3 w-5 flex justify-center">
+                          <span className="font-medium text-emerald-600">*</span>
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-medium mb-1">Contraseña</h3>
+                          <div className="flex items-center justify-between">
+                            <p className="text-muted-foreground">
+                              {activity.meeting_password[index]}
+                            </p>
+                            <CopyToClipboardButton textToCopy={activity.meeting_password[index]} />
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </div>
-              </>
-            ))}
+                </>
+              ))}
           </div>
         )}
       </div>
