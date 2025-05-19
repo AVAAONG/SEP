@@ -67,7 +67,7 @@ export const ActivityDetails = ({ activity }: { activity: ActivityType }) => {
 
         {(activity.modality === Modality.ONLINE || activity.modality === Modality.HYBRID) && (
           <div className="space-y-4">
-            {activity.meeting_link[0].length > 2 &&
+            {activity.meeting_link[0]?.length > 2 &&
               activity.meeting_link.map((link, index) => (
                 <>
                   <div className="flex items-start">
