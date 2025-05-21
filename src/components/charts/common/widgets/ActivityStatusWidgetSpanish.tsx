@@ -3,10 +3,17 @@ export type ActivityStatusSpanish =
   | 'Programado'
   | 'Realizado'
   | 'Suspendido'
-  | 'Enviado';
+  | 'Enviado'
+  | 'Cancelado';
 
 const ActivityStatusWidgetSpanish = ({ value }: { value: ActivityStatusSpanish }) => {
   if (value === 'Suspendido') {
+    return (
+      <span className="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+        {value}
+      </span>
+    );
+  } else if (value === 'Cancelado') {
     return (
       <span className="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
         {value}
