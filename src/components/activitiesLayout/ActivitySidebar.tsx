@@ -107,7 +107,7 @@ export const ActivitySidebar = async ({
             {currentScholarAttendance.attendance === 'ENROLLED' && (
               <CeaseSpotButtonProps
                 scholarWhoCeaseAttendance={currentScholarAttendance}
-                kindOfActivity="workshop"
+                kindOfActivity={kindOfActivity}
                 activity={activity}
                 scholarsToCeaseSpot={notEnrolledScholars}
               />
