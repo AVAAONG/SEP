@@ -2,8 +2,9 @@ import { getServerSession } from '@/lib/auth/authOptions';
 import { getApplicantCurrentStep } from '@/lib/db/utils/applicant';
 import { redirect } from 'next/navigation';
 
-
+import { SidebarNav } from '@/components/catchment/SidebarPostulationForm';
 import Navbar from '@/components/public/admision/Navbar';
+import { Divider } from '@nextui-org/react';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -22,7 +23,7 @@ export default async function SettingsLayout({ children }: SettingsLayoutProps) 
   return (
     <>
       <Navbar image={session.image} email={session.email} showProfileDropdown={!!session} />
-      {/* <main className="p-10 min-h-screen flex flex-col space-y-4 bg-gray-100 dark:bg-black">
+      <main className="p-10 min-h-screen flex flex-col space-y-4 bg-gray-100 dark:bg-black">
         <h1 className="text-3xl md:text-4xl font-bold text-[#0069B0]">
           Formulario de postulación ProExcelencia
         </h1>
@@ -33,9 +34,9 @@ export default async function SettingsLayout({ children }: SettingsLayoutProps) 
           </aside>
           <div className="flex-1 lg:w-full">{children}</div>
         </div>
-      </main> */}
+      </main>
 
-<main className="flex min-h-[calc(100vh-64px)] items-center justify-center bg-gradient-to-b from-green-50 to-white p-6 text-center dark:from-gray-900 dark:to-gray-800">
+      {/* <main className="flex min-h-[calc(100vh-64px)] items-center justify-center bg-gradient-to-b from-green-50 to-white p-6 text-center dark:from-gray-900 dark:to-gray-800">
   <div className="max-w-xl rounded-xl bg-white p-10 shadow-2xl transition-all duration-300 hover:shadow-blue-100 dark:bg-gray-800 dark:hover:shadow-gray-700">
     <div className="mx-auto mb-6 h-16 w-16 rounded-full bg-blue-100 p-4 text-blue-600 dark:bg-blue-900 dark:text-blue-300">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -72,7 +73,7 @@ export default async function SettingsLayout({ children }: SettingsLayoutProps) 
       </a>
     </div>
   </div>
-</main>
+</main> */}
     </>
   );
 }
