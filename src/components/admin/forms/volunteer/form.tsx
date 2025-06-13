@@ -2,18 +2,19 @@
 import DateInput from '@/components/commons/DateInput';
 import PlatformInput from '@/components/commons/PlatformInput';
 import createVolunteerInvitationMessage from '@/components/emailTemplateMessage/VolunteerInvitationMessage';
+import InputField from '@/components/fields/InputFormField';
+import SelectFormField from '@/components/fields/SelectFormField';
+import TextAreaFormField from '@/components/fields/TextAreaFormField';
 import { MODALITY, VOLUNTEER_PROJECT } from '@/lib/constants';
 import { createVolunteer, updateVolunteer } from '@/lib/db/utils/volunteer';
 import volunteerSchema from '@/lib/schemas/volunteerSchema';
 import { sendActivitiesEmail } from '@/lib/sendEmails';
 import { revalidateSpecificPath } from '@/lib/serverAction';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Input, Textarea } from '@nextui-org/input';
-import { Select, SelectItem } from '@nextui-org/select';
 import { Volunteer, VolunteerStatus } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';
+import { FormProvider, useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 import FormButtonGroup, { ButtonGroupEventName } from '../commons/FormButtonGroup';
@@ -119,7 +120,7 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({
   };
 
   return (
-    <>
+    <FormProvider {...methods}>
       <form
         onSubmit={handleSubmit((data, event) =>
           toast.promise(handleFormSubmit(data, event), {
@@ -130,187 +131,40 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({
         )}
         className="grid grid-cols-2 w-full items-center justify-center gap-4"
       >
-        <Controller
+        <InputField
+          isRequired
+          type="text"
+          label="Título"
           name="title"
-          control={control}
-          rules={{ required: true }}
-          render={({ field, formState }) => {
-            return (
-              <Input
-                {...field}
-                isInvalid={!!formState.errors.title?.message}
-                errorMessage={formState.errors.title?.message?.toString()}
-                autoFocus
-                type="text"
-                label="Título"
-                radius="sm"
-                classNames={{ base: 'col-span-2 h-fit' }}
-                labelPlacement="outside"
-              />
-            );
-          }}
+          autoFocus
+          className="col-span-2 "
         />
         <DateInput control={control} fieldArray={fieldArray} haveClosedDate={true} />
-        <Controller
-          name="beneficiary"
-          control={control}
-          rules={{ required: true }}
-          render={({ field, formState }) => {
-            return (
-              <Input
-                {...field}
-                isInvalid={!!formState.errors?.['beneficiary']?.message}
-                errorMessage={formState.errors?.['beneficiary']?.message?.toString()}
-                type="text"
-                label="Beneficiario"
-                radius="sm"
-                classNames={{ base: 'col-span-2 md:col-span-1' }}
-                labelPlacement="outside"
-              />
-            );
-          }}
-        />
-        <Controller
-          name="supervisor"
-          control={control}
-          rules={{ required: true }}
-          render={({ field, formState }) => {
-            return (
-              <Input
-                {...field}
-                isInvalid={!!formState.errors?.['supervisor']?.message}
-                errorMessage={formState.errors?.['supervisor']?.message?.toString()}
-                type="text"
-                label="Supervisor"
-                radius="sm"
-                classNames={{ base: 'col-span-2 md:col-span-1' }}
-                labelPlacement="outside"
-              />
-            );
-          }}
-        />
-        <Controller
+        <InputField isRequired type="text" label="Beneficiario" name="benefici`ary" />
+        <InputField isRequired type="text" label="Supervisor" name="supervisor" />
+        <SelectFormField
+          isRequired
+          label="Tipo de voluntariado"
           name="kindOfVolunteer"
-          control={control}
-          rules={{ required: true }}
-          render={({ field, formState }) => (
-            <Select
-              value={field.value}
-              onChange={field.onChange}
-              isInvalid={!!formState.errors.kindOfVolunteer?.message}
-              errorMessage={formState.errors.kindOfVolunteer?.message?.toString()}
-              classNames={{ base: 'col-span-2 md:col-span-1' }}
-              radius="sm"
-              label="Tipo de voluntariado"
-              labelPlacement="outside"
-              defaultSelectedKeys={[field.value]}
-              selectedKeys={[field.value]}
-            >
-              {[
-                { label: 'Externo', value: 'EXTERNAL' },
-                { label: 'Interno', value: 'INTERNAL' },
-              ].map((chatLevel) => (
-                <SelectItem key={chatLevel.value} value={chatLevel.value}>
-                  {chatLevel.label}
-                </SelectItem>
-              ))}
-            </Select>
-          )}
+          selectItems={[
+            { label: 'Externo', value: 'EXTERNAL' },
+            { label: 'Interno', value: 'INTERNAL' },
+          ]}
         />
-        <Controller
-          name="avalible_spots"
-          control={control}
-          rules={{ required: true }}
-          render={({ field, formState }) => {
-            return (
-              <Input
-                value={field.value?.toString()}
-                onChange={field.onChange}
-                isInvalid={!!formState.errors?.avalible_spots?.message}
-                errorMessage={formState.errors?.avalible_spots?.message?.toString()}
-                type="number"
-                label="Cupos disponibles"
-                radius="sm"
-                classNames={{ base: 'col-span-2 md:col-span-1' }}
-                labelPlacement="outside"
-              />
-            );
-          }}
-        />
-        <Controller
-          name="modality"
-          control={control}
-          rules={{ required: true }}
-          render={({ field, formState }) => {
-            return (
-              <Select
-                value={field.value}
-                onChange={field.onChange}
-                isInvalid={!!formState.errors?.['modality']?.message}
-                errorMessage={formState.errors?.['modality']?.message?.toString()}
-                classNames={{ base: 'col-span-2 md:col-span-1' }}
-                radius="sm"
-                label="Modalidad"
-                labelPlacement="outside"
-                defaultSelectedKeys={[field.value]}
-                selectedKeys={[field.value]}
-              >
-                {MODALITY.map((modality) => (
-                  <SelectItem key={modality.value} value={modality.value}>
-                    {modality.label}
-                  </SelectItem>
-                ))}
-              </Select>
-            );
-          }}
-        />
-        <Controller
+        <InputField isRequired type="number" label="Cupos disponibles" name="avalible_spots" />
+        <SelectFormField isRequired label="Modalidad" name="modality" selectItems={MODALITY} />
+        <SelectFormField
+          isRequired
+          label="Proyecto de voluntariado"
           name="volunteerProject"
-          control={control}
-          rules={{ required: true }}
-          render={({ field, formState }) => {
-            return (
-              <Select
-                value={field.value}
-                onChange={field.onChange}
-                isInvalid={!!formState.errors?.['volunteerProject']?.message}
-                errorMessage={formState.errors?.['volunteerProject']?.message?.toString()}
-                classNames={{ base: 'col-span-2 md:col-span-1' }}
-                radius="sm"
-                label="Proyecto de voluntariado"
-                labelPlacement="outside"
-                defaultSelectedKeys={[field.value]}
-                selectedKeys={[field.value]}
-              >
-                {VOLUNTEER_PROJECT.map((modality) => (
-                  <SelectItem key={modality.value} value={modality.value}>
-                    {modality.label}
-                  </SelectItem>
-                ))}
-              </Select>
-            );
-          }}
+          selectItems={VOLUNTEER_PROJECT}
         />
         <PlatformInput modality={modality} control={control} />
-        <Controller
+        <TextAreaFormField
+          label="Descripción"
           name="description"
-          control={control}
-          render={({ field, formState }) => {
-            return (
-              <Textarea
-                radius="sm"
-                {...field}
-                isInvalid={!!formState.errors?.description?.message}
-                errorMessage={formState.errors?.description?.message?.toString()}
-                label="Descripción"
-                labelPlacement="outside"
-                classNames={{
-                  base: 'col-span-2 h-fit w-full',
-                }}
-                placeholder="(Opcional) Coloca la descripcion de la actividad"
-              />
-            );
-          }}
+          placeholder="(Opcional) Coloca la descripcion de la actividad"
+          className="col-span-2 "
         />
         <div className="flex gap-4 col-span-2">
           <FormButtonGroup
@@ -322,7 +176,7 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({
           />
         </div>
       </form>
-    </>
+    </FormProvider>
   );
 };
 
