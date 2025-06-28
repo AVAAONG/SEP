@@ -14,6 +14,8 @@ import { getChat } from '@/lib/db/utils/chats';
 import { formatScholarDataForAttendanceTable } from '@/lib/tableUtils';
 import { notFound } from 'next/navigation';
 import shortUUID from 'short-uuid';
+import { getNotEnrolledScholarsInChat } from '@/lib/db/utils/users';
+
 const page = async ({ params }: { params: { id: shortUUID.SUUID } }) => {
   const se = await getServerSession();
   const chatId = params.id || null;
@@ -37,7 +39,7 @@ const page = async ({ params }: { params: { id: shortUUID.SUUID } }) => {
   );
 
   const isTheSpeaker = chat?.speaker?.[0]?.id === se?.id || chat.speaker?.[1]?.id === se?.id;
-
+  const notEnrolledScholars = await getNotEnrolledScholarsInChat(chatId);
   const scholarEmails = scholarsAttendance
     ? scholarsAttendance.map((attendance) => attendance.scholar.scholar.email)
     : [];
@@ -72,7 +74,7 @@ const page = async ({ params }: { params: { id: shortUUID.SUUID } }) => {
               tableData={scholarAttendanceDataForTableAdmin}
               tableHeadersForSearch={[]}
             >
-              <AddScholarToActivity scholars={scholars} activityId={chatId} kindOfActivity="chat" />
+              <AddScholarToActivity scholars={notEnrolledScholars} activityId={chatId} kindOfActivity="chat" />
               <QuitScholarFromActivity
                 scholars={scholarsEnrrolled}
                 activityId={chatId}
