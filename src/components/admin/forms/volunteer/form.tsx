@@ -140,7 +140,7 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({
           className="col-span-2 "
         />
         <DateInput control={control} fieldArray={fieldArray} haveClosedDate={true} />
-        <InputField isRequired type="text" label="Beneficiario" name="benefici`ary" />
+        <InputField isRequired type="text" label="Beneficiario" name="beneficiary" />
         <InputField isRequired type="text" label="Supervisor" name="supervisor" />
         <SelectFormField
           isRequired
