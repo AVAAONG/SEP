@@ -21,7 +21,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import BasicModal from '../BasicModal';
 import ScholarStatusIndicator from '../ScholarStatus';
-import ThemeToggleButton from './NavigationBar/ThemeToggleButton';
+import { ThemeToggleButton } from '../layout/theme-toggle';
 interface NavigationBarProps {
   image: string | null | undefined;
   name: string | null | undefined;
