@@ -1,6 +1,7 @@
 'use client';
 import { KindOfCard, createCVACard } from '@/lib/serverAction';
 import { scholarSidebarAtom } from '@/lib/state/mainState';
+import { Bars3Icon } from '@heroicons/react/24/outline';
 import { Avatar } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
 import {
@@ -16,7 +17,6 @@ import { Tab, Tabs } from '@nextui-org/tabs';
 import { ScholarStatus } from '@prisma/client';
 import { useAtom } from 'jotai';
 import { signOut } from 'next-auth/react';
-import { MenuIcon } from 'public/svgs/svgs';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import BasicModal from '../BasicModal';
@@ -43,15 +43,13 @@ const NavigationBar = ({ image, name, email, scholarId, scholarStatus }: Navigat
         className={`${isSidebarOpen ? 'md:ml-72' : ''} flex items-center justify-between gap-4 `}
       >
         <div className="flex justify-start items-center">
-          <button
-            onClick={toggleSidebar}
-            className="p-2 mr-2 text-green-600 rounded-lg cursor-pointer  hover:text-green-900 dark:text-green-700  dark:hover:text-emerald-950 focus:bg-transparent hover:bg-green-100 dark:hover:bg-emerald-900 focus:outline-none focus:ring-1 focus:ring-green-200 hover:bg-transparent"
-          >
-            <div className="w-6 h-6">
-              <MenuIcon />
-            </div>
-            <span className="sr-only">Toggle sidebar</span>
-          </button>
+          <Button
+            isIconOnly
+            variant="light"
+            size="sm"
+            startContent={<Bars3Icon className="w-6 h-6" />}
+            onPress={toggleSidebar}
+          />
         </div>
         <div className="flex gap-4 md:gap-8 items-center justify-start">
           <ScholarStatusIndicator
