@@ -26,11 +26,7 @@ const SpeakersColumnWidget: React.FC<SpeakersColumnWidgetProps> = ({
         className="flex items-center"
       >
         <div className="flex-shrink-0 w-8 h-8">
-          <Avatar
-            src={speakerImages[0]}
-            className="w-8 h-8"
-            classNames={{ base: 'text-white dark:text-secondary-dark' }}
-          />
+          <Avatar size="sm" src={speakerImages[0]} />
         </div>
         <div className="ml-2 text-start">
           <span className="text-sm font-medium text-gray-900 dark:text-slate-100">
