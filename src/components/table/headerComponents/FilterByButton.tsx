@@ -11,7 +11,6 @@ export type FilterDefinition = {
   id: string;
   label: string;
   options: FilterOption[];
-  placeholder?: string;
 };
 
 interface FilterByButtonProps {
@@ -110,7 +109,7 @@ function FilterByButton({ filters, setFilter }: FilterByButtonProps) {
                           ? filter.options.find(
                               (opt) => String(opt.value) === selectedFilters[filter.id]
                             )?.label
-                          : filter.placeholder || `Seleccionar ${filter.label.toLowerCase()}`}
+                          : filter.label}
                       </Button>
                     </DropdownTrigger>
                     <DropdownMenu
