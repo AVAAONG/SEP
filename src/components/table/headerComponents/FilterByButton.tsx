@@ -1,12 +1,18 @@
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { FunnelIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Button } from '@nextui-org/button';
+import { Chip } from '@nextui-org/chip';
+import { Divider } from '@nextui-org/divider';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/dropdown';
 import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/popover';
 import { useMemo, useState } from 'react';
 
-// Define filter option and filter definition types
 export type FilterOption = { value: any; label: string };
-export type FilterDefinition = { id: string; label: string; options: FilterOption[] };
+export type FilterDefinition = {
+  id: string;
+  label: string;
+  options: FilterOption[];
+  placeholder?: string;
+};
 
 interface FilterByButtonProps {
   filters: FilterDefinition[];
@@ -14,71 +20,149 @@ interface FilterByButtonProps {
 }
 
 function FilterByButton({ filters, setFilter }: FilterByButtonProps) {
-  // Initialize selected option per filter (default first option)
-  const initialSelected = useMemo(() => {
-    const rec: Record<string, string> = {};
-    filters.forEach((f) => {
-      rec[f.id] = String(f.options[0]?.value ?? '');
-    });
-    return rec;
-  }, [filters]);
-  const [selected, setSelected] = useState<Record<string, string>>(initialSelected);
+  // Track selected filters (empty string means no filter applied)
+  const [selectedFilters, setSelectedFilters] = useState<Record<string, string>>({});
 
-  // Clear all filters to show all rows
-  const clearAll = () => {
-    // reset selected state and clear filters
-    setSelected(filters.reduce((acc, f) => ({ ...acc, [f.id]: '' }), {} as Record<string, string>));
-    filters.forEach((f) => setFilter(f.id, undefined));
+  // Count active filters
+  const activeFiltersCount = useMemo(() => {
+    return Object.values(selectedFilters).filter((value) => value && value !== '').length;
+  }, [selectedFilters]);
+
+  // Get active filter labels for display
+  const activeFilterLabels = useMemo(() => {
+    return Object.entries(selectedFilters)
+      .filter(([_, value]) => value && value !== '')
+      .map(([filterId, value]) => {
+        const filter = filters.find((f) => f.id === filterId);
+        const option = filter?.options.find((opt) => String(opt.value) === value);
+        return {
+          id: filterId,
+          filterLabel: filter?.label || '',
+          optionLabel: option?.label || '',
+          value,
+        };
+      });
+  }, [selectedFilters, filters]);
+
+  // Apply filter
+  const handleFilterChange = (filterId: string, value: string) => {
+    const newValue = value === '' ? undefined : value;
+    setSelectedFilters((prev) => ({ ...prev, [filterId]: value }));
+    setFilter(filterId, newValue);
   };
+
+  // Remove specific filter
+  const removeFilter = (filterId: string) => {
+    handleFilterChange(filterId, '');
+  };
+
+  // Clear all filters
+  const clearAll = () => {
+    setSelectedFilters({});
+    filters.forEach((filter) => setFilter(filter.id, undefined));
+  };
+
   return (
-    <Popover placement="right-end" size="sm">
-      <PopoverTrigger>
-        <Button variant="flat" size="sm">
-          Filtrar por
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent>
-        <div className="flex justify-end pb-2">
-          <Button size="sm" variant="flat" isIconOnly onPress={clearAll}>
-            <XMarkIcon className="w-4 h-4" />
+    <div className="flex items-center gap-2">
+      <Popover placement="bottom-start" size="sm">
+        <PopoverTrigger>
+          {/* <Badge
+            content={activeFiltersCount}
+            isInvisible={activeFiltersCount === 0}
+            color="primary"
+          > */}
+          <Button variant="flat" size="sm" startContent={<FunnelIcon className="w-4 h-4" />}>
+            Filtros
           </Button>
-        </div>
-        {filters.map((filter) => (
-          <Dropdown key={filter.id} placement="right-end" size="sm">
-            <DropdownTrigger>
-              <Button fullWidth variant="light" size="sm">
-                {filter.label}
+          {/* </Badge> */}
+        </PopoverTrigger>
+        <PopoverContent className="!rounded-md">
+          <div className="p-2">
+            <div className="flex items-center justify-between gap-4 mb-3">
+              <h4 className="text-sm font-medium">Filtros</h4>
+              <Button
+                size="sm"
+                variant="light"
+                onPress={clearAll}
+                isDisabled={activeFiltersCount === 0}
+              >
+                Limpiar todo
               </Button>
-            </DropdownTrigger>
-            <DropdownMenu
-              aria-label={filter.label}
-              closeOnSelect={false}
-              selectionMode="single"
-              selectedKeys={new Set([selected[filter.id]])}
-              onSelectionChange={(keys) => {
-                // pick the first key
-                const key =
-                  typeof keys === 'string'
-                    ? keys
-                    : Array.isArray(keys)
-                      ? String(keys[0])
-                      : String(Array.from(keys as Set<unknown>)[0]);
-                // update state and filter
-                setSelected((prev) => ({ ...prev, [filter.id]: key }));
-                setFilter(filter.id, key);
-              }}
-              items={filter.options.map((o) => ({ key: String(o.value), name: o.label }))}
-            >
-              {(item) => (
-                <DropdownItem key={item.key} value={item.key}>
-                  {item.name}
-                </DropdownItem>
-              )}
-            </DropdownMenu>
-          </Dropdown>
-        ))}
-      </PopoverContent>
-    </Popover>
+            </div>
+
+            <div className="space-y-2">
+              {filters.map((filter) => (
+                <div key={filter.id} className="flex flex-col gap-1">
+                  <label className="text-xs font-medium text-gray-600">{filter.label}</label>
+                  <Dropdown size="sm">
+                    <DropdownTrigger>
+                      <Button
+                        variant="bordered"
+                        size="sm"
+                        className="justify-start"
+                        endContent={
+                          selectedFilters[filter.id] && selectedFilters[filter.id] !== '' ? (
+                            <XMarkIcon
+                              className="w-3 h-3 opacity-50 hover:opacity-100 cursor-pointer"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                removeFilter(filter.id);
+                              }}
+                            />
+                          ) : undefined
+                        }
+                      >
+                        {selectedFilters[filter.id] && selectedFilters[filter.id] !== ''
+                          ? filter.options.find(
+                              (opt) => String(opt.value) === selectedFilters[filter.id]
+                            )?.label
+                          : filter.placeholder || `Seleccionar ${filter.label.toLowerCase()}`}
+                      </Button>
+                    </DropdownTrigger>
+                    <DropdownMenu
+                      aria-label={filter.label}
+                      selectionMode="single"
+                      selectedKeys={
+                        selectedFilters[filter.id]
+                          ? new Set([selectedFilters[filter.id]])
+                          : new Set()
+                      }
+                      items={filter.options}
+                      onSelectionChange={(keys) => {
+                        const key = Array.from(keys as Set<string>)[0] || '';
+                        console.log(filter.id, key);
+                        handleFilterChange(filter.id, key);
+                      }}
+                    >
+                      {(item) => <DropdownItem key={item.value}>{item.label}</DropdownItem>}
+                    </DropdownMenu>
+                  </Dropdown>
+                </div>
+              ))}
+            </div>
+          </div>
+        </PopoverContent>
+      </Popover>
+
+      {/* Active filters chips */}
+      {activeFilterLabels.length > 0 && (
+        <>
+          <Divider orientation="vertical" className="h-6" />
+          <div className="flex flex-wrap gap-1">
+            {activeFilterLabels.map((filter) => (
+              <Chip
+                key={filter.id}
+                size="sm"
+                variant="flat"
+                onClose={() => removeFilter(filter.id)}
+              >
+                {filter.filterLabel}: {filter.optionLabel}
+              </Chip>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
   );
 }
 
