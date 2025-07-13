@@ -213,7 +213,7 @@ function Table<T extends Record<string, unknown>>({
                               : ''
                           }`}
                         >
-                          <div className="flex items-center justify-center min-h-[1rem]">
+                          <div className="flex items-center justify-center min-h-[1rem] max-w-sm">
                             {cell.render('Cell')}
                           </div>
                         </td>
