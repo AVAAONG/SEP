@@ -1,23 +1,18 @@
 'use client';
 import { scholarSidebarAtom } from '@/lib/state/mainState';
 import { Bars3Icon } from '@heroicons/react/24/outline';
-import { Avatar } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/dropdown';
 import { ScholarStatus } from '@prisma/client';
 import { useAtom } from 'jotai';
-import { signOut } from 'next-auth/react';
 import ScholarStatusIndicator from '../ScholarStatus';
+import { ScholarUserDropdown } from '../layout/ScholarUserDropdown';
 import { ThemeToggleButton } from '../layout/theme-toggle';
 import LetterRequests from './LetterRequests';
 interface NavigationBarProps {
-  image: string | null | undefined;
-  name: string | null | undefined;
   email: string | null | undefined;
   scholarStatus: ScholarStatus;
-  scholarId: string | null | undefined;
 }
-const NavigationBar = ({ image, name, email, scholarId, scholarStatus }: NavigationBarProps) => {
+const NavigationBar = ({ email, scholarStatus }: NavigationBarProps) => {
   const [isSidebarOpen, setSidebarOpen] = useAtom(scholarSidebarAtom);
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
@@ -48,30 +43,7 @@ const NavigationBar = ({ image, name, email, scholarId, scholarStatus }: Navigat
           />
           <LetterRequests email={email} />
           <ThemeToggleButton />
-          <Dropdown placement="bottom-end">
-            <DropdownTrigger>
-              <Avatar
-                as="button"
-                className="transition-transform"
-                src={image as string | undefined}
-              />
-            </DropdownTrigger>
-            <DropdownMenu aria-label="Profile Actions" variant="flat">
-              <DropdownItem key="profile" className="h-14 gap-2">
-                <p className="font-semibold">Registrad@ con</p>
-                <p className="font-semibold">{email}</p>
-              </DropdownItem>
-              <DropdownItem key="publicProfile" href={`/perfilBecario/${scholarId}`}>
-                Ver perfil público
-              </DropdownItem>
-              <DropdownItem key="configurations" href="/becario/configuracion">
-                Configuracion
-              </DropdownItem>
-              <DropdownItem key="logout" color="danger" onClick={async () => signOut()}>
-                Cerrar sesión
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          <ScholarUserDropdown />
         </div>
       </div>
     </nav>

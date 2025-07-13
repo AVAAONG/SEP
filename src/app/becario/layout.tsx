@@ -11,17 +11,11 @@ export default async function RootLayout({
 }) {
   const session = await getServerSession();
   if (!session) return null;
-  const { image, name, email, scholarStatus, id, isSpeaker } = session;
+  const { email, scholarStatus, isSpeaker } = session;
   return (
     <>
       <div className="antialiased bg-white dark:bg-black">
-        <NavigationBar
-          image={image}
-          name={name}
-          email={email}
-          scholarStatus={scholarStatus}
-          scholarId={id}
-        />
+        <NavigationBar email={email} scholarStatus={scholarStatus} />
         <Sidebar isSpeaker={isSpeaker} />
         <MainLayout>{children}</MainLayout>
       </div>
