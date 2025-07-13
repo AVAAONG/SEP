@@ -40,12 +40,13 @@ const SpeakersColumnWidget: React.FC<SpeakersColumnWidgetProps> = ({
     );
   else {
     return (
-      <AvatarGroup max={2}>
+      <AvatarGroup max={2} size="sm">
         {speakerNames?.map((speakerName: string, index: number) => {
           return (
             <Tooltip
               key={index}
               showArrow
+              size="sm"
               content={
                 <SpeakerColumnWidgetCard
                   speakerCompany={speakersCompany?.[index]}
@@ -54,15 +55,11 @@ const SpeakersColumnWidget: React.FC<SpeakersColumnWidgetProps> = ({
                 />
               }
             >
-              <AvatarGroup max={2}>
+              <AvatarGroup size="sm" max={2}>
                 <Link
                   href={speakerIds[index] ? `${baseLink}/facilitadores/${speakerIds[index]}` : ''}
                 >
-                  <Avatar
-                    classNames={{ base: 'text-white dark:text-secondary-dark' }}
-                    className="w-8 h-8"
-                    src={speakerImages[index]}
-                  ></Avatar>
+                  <Avatar size="sm" src={speakerImages[index]}></Avatar>
                 </Link>
               </AvatarGroup>
             </Tooltip>
