@@ -109,8 +109,8 @@ function Table<T extends Record<string, unknown>>({
         className={`${
           isExpanded
             ? 'fixed inset-8 z-50 bg-white shadow-2xl rounded-lg max-h-[calc(100vh-4rem)] transition-all duration-300 ease-in-out transform border border-stone-200 dark:border-zinc-800 flex flex-col'
-            : 'relative overflow-hidden min-h-max shadow-lg dark:bg-zinc-900 rounded-md w-full border border-stone-200 dark:border-zinc-800'
-        } bg-white dark:bg-zinc-900`}
+            : 'relative overflow-hidden shadow-lg dark:bg-zinc-900 rounded-md w-full border border-stone-200 dark:border-zinc-800 flex flex-col'
+        } bg-white dark:bg-zinc-900 ${isExpanded ? 'min-h-[calc(100vh-4rem)]' : 'min-h-[600px]'}`}
       >
         {/* Fixed Header Section */}
         <div
@@ -118,7 +118,7 @@ function Table<T extends Record<string, unknown>>({
             isExpanded ? 'sticky top-0 z-30' : ''
           } flex flex-col px-6 py-4 gap-4 md:flex-row md:items-center md:justify-between md:space-y-0 bg-stone-50 dark:bg-zinc-800 border-b border-stone-200 dark:border-zinc-700 ${
             isExpanded ? 'rounded-t-lg' : ''
-          }`}
+          } flex-shrink-0`}
         >
           <TableSearchButton
             optionsForFilter={tableHeadersForSearch}
@@ -144,102 +144,121 @@ function Table<T extends Record<string, unknown>>({
         </div>
 
         {/* Scrollable Table Container */}
-        <div
-          className={`${isExpanded ? 'flex-1 overflow-auto' : 'flow-root w-full overflow-x-auto'}`}
-        >
-          <table {...getTableProps()} className="w-full text-sm text-left">
-            <thead
-              className={`${
-                isExpanded ? 'sticky top-0 z-20' : 'sticky top-0 z-10'
-              } bg-stone-50 dark:bg-zinc-800 shadow-sm`}
-            >
-              {headerGroups.map((headerGroup) => {
-                const { key, ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps();
-                return (
-                  <tr
-                    key={key}
-                    {...restHeaderGroupProps}
-                    className="border-b border-stone-200 dark:border-zinc-700"
-                  >
-                    {headerGroup.headers.map((column, i) => {
-                      const { getHeaderProps, getSortByToggleProps } = column;
-                      const { key, ...restColumn } = getHeaderProps(getSortByToggleProps());
-                      return (
-                        <th
-                          key={key}
-                          {...restColumn}
-                          scope="col"
-                          className={`px-3 py-1.5 font-semibold text-xs text-stone-700 dark:text-zinc-300 uppercase tracking-wider select-none cursor-pointer transition-colors duration-200 hover:bg-stone-100 dark:hover:bg-zinc-700 ${
-                            i === 0
-                              ? `sticky left-0 bg-stone-50 dark:bg-zinc-800 ${isExpanded ? 'z-30' : 'z-20'} shadow-sm`
-                              : ''
-                          }`}
-                        >
-                          <div className="flex text-center justify-center items-center gap-1.5 min-h-[1.25rem]">
-                            <span className="font-medium">{column.render('Header')}</span>
-                            {column.disableSortBy ? null : (
-                              <div className="flex items-center justify-center w-4 h-4 opacity-70 hover:opacity-100 transition-opacity">
-                                {column.isSorted ? (
-                                  column.isSortedDesc ? (
-                                    <ChevronUpIcon className="w-4 h-4 text-green-600 dark:text-green-400" />
+        <div className={`${isExpanded ? 'flex-1 overflow-auto' : 'flex-1 overflow-x-auto'}`}>
+          <div className="min-h-full flex flex-col">
+            <table {...getTableProps()} className="w-full text-sm text-left">
+              <thead
+                className={`${
+                  isExpanded ? 'sticky top-0 z-20' : 'sticky top-0 z-10'
+                } bg-stone-50 dark:bg-zinc-800 shadow-sm`}
+              >
+                {headerGroups.map((headerGroup) => {
+                  const { key, ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps();
+                  return (
+                    <tr
+                      key={key}
+                      {...restHeaderGroupProps}
+                      className="border-b border-stone-200 dark:border-zinc-700"
+                    >
+                      {headerGroup.headers.map((column, i) => {
+                        const { getHeaderProps, getSortByToggleProps } = column;
+                        const { key, ...restColumn } = getHeaderProps(getSortByToggleProps());
+                        return (
+                          <th
+                            key={key}
+                            {...restColumn}
+                            scope="col"
+                            className={`px-3 py-1.5 font-semibold text-xs text-stone-700 dark:text-zinc-300 uppercase tracking-wider select-none cursor-pointer transition-colors duration-200 hover:bg-stone-100 dark:hover:bg-zinc-700 ${
+                              i === 0
+                                ? `sticky left-0 bg-stone-50 dark:bg-zinc-800 ${isExpanded ? 'z-30' : 'z-20'} shadow-sm`
+                                : ''
+                            }`}
+                          >
+                            <div className="flex text-center justify-center items-center gap-1.5 min-h-[1.25rem]">
+                              <span className="font-medium">{column.render('Header')}</span>
+                              {column.disableSortBy ? null : (
+                                <div className="flex items-center justify-center w-4 h-4 opacity-70 hover:opacity-100 transition-opacity">
+                                  {column.isSorted ? (
+                                    column.isSortedDesc ? (
+                                      <ChevronUpIcon className="w-4 h-4 text-green-600 dark:text-green-400" />
+                                    ) : (
+                                      <ChevronDownIcon className="w-4 h-4 text-green-600 dark:text-green-400" />
+                                    )
                                   ) : (
-                                    <ChevronDownIcon className="w-4 h-4 text-green-600 dark:text-green-400" />
-                                  )
-                                ) : (
-                                  <ChevronUpDownIcon className="w-4 h-4 text-stone-400 dark:text-zinc-500" />
-                                )}
+                                    <ChevronUpDownIcon className="w-4 h-4 text-stone-400 dark:text-zinc-500" />
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          </th>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              </thead>
+              <tbody
+                {...getTableBodyProps()}
+                className="bg-white dark:bg-zinc-900 divide-y divide-stone-200 dark:divide-zinc-700"
+              >
+                {allowPagination(isExpanded).length > 0 ? (
+                  allowPagination(isExpanded).map((row, rowIndex) => {
+                    prepareRow(row);
+                    const { key, ...restRowProps } = row.getRowProps();
+                    return (
+                      <tr
+                        key={key}
+                        {...restRowProps}
+                        className={`text-sm text-center transition-all duration-200 ease-in-out hover:bg-stone-50 dark:hover:bg-zinc-800 ${
+                          rowIndex % 2 === 0
+                            ? 'bg-white dark:bg-zinc-900'
+                            : 'bg-stone-50/50 dark:bg-zinc-800/50'
+                        }`}
+                      >
+                        {row.cells.map((cell, i) => {
+                          const { key, ...restCellProps } = cell.getCellProps();
+                          return (
+                            <td
+                              key={key}
+                              {...restCellProps}
+                              className={`px-3 py-1.5 whitespace-nowrap text-stone-900 dark:text-zinc-200  ${
+                                i === 0
+                                  ? 'sticky left-0 bg-inherit z-10 shadow-sm border-r border-stone-200 dark:border-zinc-700'
+                                  : ''
+                              }`}
+                            >
+                              <div className="flex items-center justify-center min-h-[1rem] max-w-sm">
+                                {cell.render('Cell')}
                               </div>
-                            )}
-                          </div>
-                        </th>
-                      );
-                    })}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr className="text-sm text-center bg-white dark:bg-zinc-900">
+                    <td
+                      colSpan={columns.length}
+                      className="px-3 py-8 text-stone-500 dark:text-zinc-400 italic"
+                    >
+                      No hay datos para mostrar
+                    </td>
                   </tr>
-                );
-              })}
-            </thead>
-            <tbody
-              {...getTableBodyProps()}
-              className="bg-white dark:bg-zinc-900 divide-y divide-stone-200 dark:divide-zinc-700"
-            >
-              {allowPagination(isExpanded).map((row, rowIndex) => {
-                prepareRow(row);
-                const { key, ...restRowProps } = row.getRowProps();
-                return (
-                  <tr
-                    key={key}
-                    {...restRowProps}
-                    className={`text-sm text-center transition-all duration-200 ease-in-out hover:bg-stone-50 dark:hover:bg-zinc-800 ${
-                      rowIndex % 2 === 0
-                        ? 'bg-white dark:bg-zinc-900'
-                        : 'bg-stone-50/50 dark:bg-zinc-800/50'
-                    }`}
-                  >
-                    {row.cells.map((cell, i) => {
-                      const { key, ...restCellProps } = cell.getCellProps();
-                      return (
-                        <td
-                          key={key}
-                          {...restCellProps}
-                          className={`px-3 py-1.5 whitespace-nowrap text-stone-900 dark:text-zinc-200  ${
-                            i === 0
-                              ? 'sticky left-0 bg-inherit z-10 shadow-sm border-r border-stone-200 dark:border-zinc-700'
-                              : ''
-                          }`}
-                        >
-                          <div className="flex items-center justify-center min-h-[1rem] max-w-sm">
-                            {cell.render('Cell')}
-                          </div>
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
+            {/* Spacer to fill remaining space */}
+            <div className="flex-1 bg-white dark:bg-zinc-900"></div>
+          </div>
         </div>
-        {isExpanded ? null : <TableFooter table={table} />}
+
+        {/* Footer - only show when not expanded */}
+        {!isExpanded && (
+          <div className="flex-shrink-0">
+            <TableFooter table={table} />
+          </div>
+        )}
       </div>
     </>
   );
