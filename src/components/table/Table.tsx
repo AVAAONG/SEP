@@ -170,7 +170,7 @@ function Table<T extends Record<string, unknown>>({
                             scope="col"
                             className={`px-3 py-1.5 font-semibold text-xs text-stone-700 dark:text-zinc-300 uppercase tracking-wider select-none cursor-pointer transition-colors duration-200 hover:bg-stone-100 dark:hover:bg-zinc-700 ${
                               i === 0
-                                ? `sticky left-0 bg-stone-50 dark:bg-zinc-800 ${isExpanded ? 'z-30' : 'z-20'} shadow-sm`
+                                ? ` bg-stone-50 dark:bg-zinc-800 ${isExpanded ? 'z-30' : 'z-20'} shadow-sm`
                                 : ''
                             }`}
                           >
@@ -223,7 +223,7 @@ function Table<T extends Record<string, unknown>>({
                               {...restCellProps}
                               className={`px-3 py-1.5 whitespace-nowrap text-stone-900 dark:text-zinc-200  ${
                                 i === 0
-                                  ? 'sticky left-0 bg-inherit z-10 shadow-sm border-r border-stone-200 dark:border-zinc-700'
+                                  ? ' z-10 shadow-sm border-r border-stone-200 dark:border-zinc-700'
                                   : ''
                               }`}
                             >

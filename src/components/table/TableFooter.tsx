@@ -12,19 +12,42 @@ interface TableFooterProps<T extends object> {
 }
 
 function TableFooter<T extends object>({ table }: TableFooterProps<T>) {
-  const { previousPage, canPreviousPage, nextPage, canNextPage, pageOptions, gotoPage, state } =
-    table;
-  const pageIndex = state.pageIndex;
+  const {
+    previousPage,
+    canPreviousPage,
+    nextPage,
+    canNextPage,
+    pageOptions,
+    gotoPage,
+    state,
+    rows,
+    page,
+  } = table;
+  const { pageIndex, pageSize } = state;
+  const total = rows.length;
+  const start = total > 0 ? pageIndex * pageSize + 1 : 0;
+  const end = total > 0 ? pageIndex * pageSize + page.length : 0;
   return (
     <nav
       className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 p-4"
       aria-label="Table navigation"
     >
-      {/* Page summary */}
-      <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-        Página <span className="font-semibold text-gray-900 dark:text-white">{pageIndex + 1}</span>{' '}
-        de <span className="font-semibold text-gray-900 dark:text-white">{pageOptions.length}</span>
-      </span>
+      {/* Item summary */}
+      <div className="flex items-center space-x-2">
+        <span className="text-sm text-gray-500 dark:text-gray-400">Mostrando</span>
+        <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-sm font-medium text-gray-900 dark:text-white rounded">
+          {start}
+        </span>
+        <span className="text-sm text-gray-500 dark:text-gray-400">-</span>
+        <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-sm font-medium text-gray-900 dark:text-white rounded">
+          {end}
+        </span>
+        <span className="text-sm text-gray-500 dark:text-gray-400">de</span>
+        <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-sm font-medium text-gray-900 dark:text-white rounded">
+          {total}
+        </span>
+        <span className="text-sm text-gray-500 dark:text-gray-400">elementos</span>
+      </div>
 
       {/* Controls: First, Prev, Page Numbers, Next, Last */}
       <div className="flex items-center space-x-1">
