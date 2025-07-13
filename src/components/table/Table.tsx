@@ -173,11 +173,7 @@ function Table<T extends Record<string, unknown>>({
                   {row.cells.map((cell) => {
                     const { key, ...restCellProps } = cell.getCellProps();
                     return (
-                      <td
-                        key={key}
-                        {...restCellProps}
-                        className="px-4 py-1 whitespace-nowrap lowecase"
-                      >
+                      <td key={key} {...restCellProps} className="px-4 py-1 whitespace-nowrap">
                         {cell.render('Cell')}
                       </td>
                     );
