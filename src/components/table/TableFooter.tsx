@@ -28,14 +28,10 @@ function TableFooter<T extends object>({ table }: TableFooterProps<T>) {
   const start = total > 0 ? pageIndex * pageSize + 1 : 0;
   const end = total > 0 ? pageIndex * pageSize + page.length : 0;
   return (
-    <nav
-      className="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0 p-4"
-      aria-label="Table navigation"
-    >
+    <nav className="flex  justify-between items-center  p-2  md:p-4" aria-label="Table navigation">
       {/* Item summary */}
       <div className="w-full md:w-auto flex justify-center md:justify-start">
         <div className="flex items-center space-x-2 text-center md:text-left">
-          <span className="text-sm text-gray-500 dark:text-gray-400">Mostrando</span>
           <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-sm font-medium text-gray-900 dark:text-white rounded">
             {start}
           </span>
