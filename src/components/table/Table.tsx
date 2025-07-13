@@ -108,11 +108,18 @@ function Table<T extends Record<string, unknown>>({
       <div
         className={`${
           isExpanded
-            ? 'fixed inset-8 z-50 bg-white shadow-2xl rounded-lg overflow-auto max-h-[calc(100vh-4rem)] transition-all duration-300 ease-in-out transform border border-stone-200 dark:border-zinc-800'
+            ? 'fixed inset-8 z-50 bg-white shadow-2xl rounded-lg max-h-[calc(100vh-4rem)] transition-all duration-300 ease-in-out transform border border-stone-200 dark:border-zinc-800 flex flex-col'
             : 'relative overflow-hidden min-h-max shadow-lg dark:bg-zinc-900 rounded-md w-full border border-stone-200 dark:border-zinc-800'
         } bg-white dark:bg-zinc-900`}
       >
-        <div className="flex flex-col px-6 py-4 gap-4 md:flex-row md:items-center md:justify-between md:space-y-0 bg-stone-50 dark:bg-zinc-800 border-b border-stone-200 dark:border-zinc-700">
+        {/* Fixed Header Section */}
+        <div
+          className={`${
+            isExpanded ? 'sticky top-0 z-30' : ''
+          } flex flex-col px-6 py-4 gap-4 md:flex-row md:items-center md:justify-between md:space-y-0 bg-stone-50 dark:bg-zinc-800 border-b border-stone-200 dark:border-zinc-700 ${
+            isExpanded ? 'rounded-t-lg' : ''
+          }`}
+        >
           <TableSearchButton
             optionsForFilter={tableHeadersForSearch}
             setFilter={setFilter}
@@ -136,9 +143,16 @@ function Table<T extends Record<string, unknown>>({
           </div>
         </div>
 
-        <div className="flow-root w-full overflow-x-auto">
+        {/* Scrollable Table Container */}
+        <div
+          className={`${isExpanded ? 'flex-1 overflow-auto' : 'flow-root w-full overflow-x-auto'}`}
+        >
           <table {...getTableProps()} className="w-full text-sm text-left">
-            <thead className="sticky top-0 z-10 bg-stone-50 dark:bg-zinc-800 shadow-sm">
+            <thead
+              className={`${
+                isExpanded ? 'sticky top-0 z-20' : 'sticky top-0 z-10'
+              } bg-stone-50 dark:bg-zinc-800 shadow-sm`}
+            >
               {headerGroups.map((headerGroup) => {
                 const { key, ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps();
                 return (
@@ -157,7 +171,7 @@ function Table<T extends Record<string, unknown>>({
                           scope="col"
                           className={`px-3 py-1.5 font-semibold text-xs text-stone-700 dark:text-zinc-300 uppercase tracking-wider select-none cursor-pointer transition-colors duration-200 hover:bg-stone-100 dark:hover:bg-zinc-700 ${
                             i === 0
-                              ? 'sticky left-0 bg-stone-50 dark:bg-zinc-800 z-20 shadow-sm'
+                              ? `sticky left-0 bg-stone-50 dark:bg-zinc-800 ${isExpanded ? 'z-30' : 'z-20'} shadow-sm`
                               : ''
                           }`}
                         >
