@@ -140,7 +140,7 @@ function Table<T extends Record<string, unknown>>({
                 const exportData = data.map((row) => processRow(row, preprocessedColumns));
                 await exportDataToExcel(exportData, 'Reporte');
               }}
-              startContent={<ArrowUpTrayIcon className="w-4 h-4 text-primary-1" />}
+              startContent={<ArrowUpTrayIcon className="w-4 h-4" />}
             >
               <span className="hidden sm:inline">Exportar</span>
             </Button>
