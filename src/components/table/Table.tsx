@@ -223,13 +223,12 @@ function Table<T extends Record<string, unknown>>({
                         {row.cells.map((cell, i) => {
                           const { key, ...restCellProps } = cell.getCellProps();
                           return (
+                            // this is for frozen the first column, but dont look well on mobile
                             <td
                               key={key}
                               {...restCellProps}
                               className={`px-3 py-1.5 whitespace-nowrap text-stone-900 dark:text-zinc-200  ${
-                                i === 0
-                                  ? ' z-10 shadow-sm border-r border-stone-200 dark:border-zinc-700'
-                                  : ''
+                                i === 0 ? '' : ''
                               }`}
                             >
                               <div className="flex items-center justify-center min-h-[1rem] max-w-sm">
