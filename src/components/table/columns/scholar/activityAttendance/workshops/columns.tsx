@@ -93,6 +93,7 @@ const scholarWorkshopAttendanceColumns: Column<IScholarWorkshopAttendanceColumns
     Header: 'Competencia',
     accessor: 'skill',
     disableSortBy: true,
+    filter: 'equals',
   },
   {
     Header: 'Año',
@@ -103,6 +104,7 @@ const scholarWorkshopAttendanceColumns: Column<IScholarWorkshopAttendanceColumns
     Header: 'Modalidad',
     accessor: 'modality',
     disableSortBy: true,
+    filter: 'equals',
   },
   {
     Header: 'Plataforma',

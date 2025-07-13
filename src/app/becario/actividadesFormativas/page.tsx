@@ -28,6 +28,30 @@ const page = async ({
   const objectsFormatedForCharts = await formatCountsForCharts({ skills, years, kinds });
   const workshopObjectForTable = createScholarWorkshopAttendanceForTable(workshops);
 
+  // Prepare filter definitions using distinct property keys
+  const filters = [
+    {
+      id: 'skill',
+      label: 'Competencia',
+      options: [
+        { value: 'Liderazgo', label: 'Liderazgo' },
+        { value: 'Gerencia de sí mismo', label: ' Gerencia de sí mismo' },
+      ],
+
+      placeholder: 'Seleccionar competencia',
+    },
+    {
+      id: 'modality',
+      label: 'Modalidad',
+      options: [
+        { value: 'Presencial', label: 'Presencial' },
+        { value: 'Virtual', label: 'Virtual' },
+        { value: 'Híbrido', label: 'Híbrido' },
+      ],
+      placeholder: 'Seleccionar modalidad',
+    },
+  ];
+
   return (
     <div className="flex flex-col gap-1">
       <DatePickerByEvaluationPeriod />
@@ -60,6 +84,7 @@ const page = async ({
           </div>
         )}
         <Table
+          filters={filters}
           tableColumns={scholarWorkshopAttendanceColumns}
           tableData={workshopObjectForTable}
           tableHeadersForSearch={scholarWorkshopAttendanceSearchOptions}

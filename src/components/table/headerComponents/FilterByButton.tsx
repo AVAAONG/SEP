@@ -66,15 +66,9 @@ function FilterByButton({ filters, setFilter }: FilterByButtonProps) {
     <div className="flex items-center gap-2">
       <Popover placement="bottom-start" size="sm">
         <PopoverTrigger>
-          {/* <Badge
-            content={activeFiltersCount}
-            isInvisible={activeFiltersCount === 0}
-            color="primary"
-          > */}
           <Button variant="flat" size="sm" startContent={<FunnelIcon className="w-4 h-4" />}>
             Filtros
           </Button>
-          {/* </Badge> */}
         </PopoverTrigger>
         <PopoverContent className="!rounded-md">
           <div className="p-2">
