@@ -173,7 +173,7 @@ function Table<T extends Record<string, unknown>>({
                             key={key}
                             {...restColumn}
                             scope="col"
-                            className={`px-3 py-1.5 font-semibold text-xs text-stone-700 dark:text-zinc-300 uppercase tracking-wider select-none cursor-pointer transition-colors duration-200 hover:bg-stone-100 dark:hover:bg-zinc-700 ${
+                            className={`px-3 py-2 font-semibold text-xs text-stone-700 dark:text-zinc-300 uppercase tracking-wider select-none cursor-pointer transition-colors duration-200 hover:bg-stone-100 dark:hover:bg-zinc-700 ${
                               i === 0
                                 ? ` bg-stone-50 dark:bg-zinc-800 ${isExpanded ? 'z-30' : 'z-20'} shadow-sm`
                                 : ''
