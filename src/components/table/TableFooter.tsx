@@ -1,95 +1,120 @@
-interface TableFooterProps {
-  previousPage: () => void;
-  canPreviousPage: boolean;
-  nextPage: () => void;
-  canNextPage: boolean;
-  pageIndex: number;
-  pageOptions: number[];
+import {
+  ChevronDoubleRightIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from '@heroicons/react/24/outline';
+import { ChevronDoubleLeftIcon } from '@heroicons/react/24/solid';
+import { Button } from '@nextui-org/button';
+import { TableInstance } from 'react-table';
+
+interface TableFooterProps<T extends object> {
+  table: TableInstance<T>;
 }
-/**
- * Table footer component
- * @remarks Its mean to be used with React Table V7
- * @param param0 {previousPage, canPreviousPage, nextPage, canNextPage, pageIndex, pageOptions}
- * @param param0.previousPage  React Table native function to go to the previous page
- * @param param0.canPreviousPage React Table native boolean to let the user know if they can go to previous page
- * @param param0.nextPage React Table native function to go to the next page
- * @param param0.canNextPage React Table native boolean to let the user know if they can go the the next page
- * @param param0.pageIndex  React Table native
- * @param param0.pageOptions React Table native
- * @returns
- */
-const TableFooter = ({
-  previousPage,
-  canPreviousPage,
-  nextPage,
-  canNextPage,
-  pageIndex,
-  pageOptions,
-}: TableFooterProps) => {
+
+function TableFooter<T extends object>({ table }: TableFooterProps<T>) {
+  const { previousPage, canPreviousPage, nextPage, canNextPage, pageOptions, gotoPage, state } =
+    table;
+  const pageIndex = state.pageIndex;
   return (
     <nav
-      className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
+      className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 p-4"
       aria-label="Table navigation"
     >
+      {/* Page summary */}
       <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-        Pagina <span className="font-semibold text-gray-900 dark:text-white">{pageIndex + 1} </span>
-        de{' '}
-        <span className="font-semibold text-gray-900 dark:text-white">{pageOptions.length} </span>
+        Página <span className="font-semibold text-gray-900 dark:text-white">{pageIndex + 1}</span>{' '}
+        de <span className="font-semibold text-gray-900 dark:text-white">{pageOptions.length}</span>
       </span>
-      <ul className="inline-flex items-center -space-x-px">
-        <li>
-          <button
-            onClick={() => previousPage()}
-            disabled={!canPreviousPage}
-            className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            <span className="sr-only">Anterior</span>
-            <svg
-              className="w-5 h-5"
-              aria-hidden="true"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
+
+      {/* Controls: First, Prev, Page Numbers, Next, Last */}
+      <div className="flex items-center space-x-1">
+        {/* Page number buttons */}
+        {pageOptions.length <= 7 ? (
+          pageOptions.map((page) => (
+            <Button
+              key={page}
+              size="sm"
+              isIconOnly
+              onPress={() => gotoPage(page)}
+              variant={page === pageIndex ? 'ghost' : 'flat'}
             >
-              <path
-                fillRule="evenodd"
-                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-          </button>
-        </li>
-        {/* <li>
-                    <input type='number' defaultValue={pageIndex + 1} onChange={e =>{
-                        const pageNumber = e.target.value ? Number(e.target.value) - 1 : 0
-                        gotoPage(pageNumber)
-                    }} className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">100</a>
-                </li> */}
-        <li>
-          <button
-            onClick={() => nextPage()}
-            disabled={!canNextPage}
-            className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            <span className="sr-only">Siguiente</span>
-            <svg
-              className="w-5 h-5"
-              aria-hidden="true"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
+              {page + 1}
+            </Button>
+          ))
+        ) : (
+          <>
+            <Button
+              size="sm"
+              onPress={() => gotoPage(0)}
+              isIconOnly
+              variant={pageIndex === 0 ? 'ghost' : 'flat'}
             >
-              <path
-                fillRule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-          </button>
-        </li>
-      </ul>
+              1
+            </Button>
+            {pageIndex > 3 && <span className="px-1">...</span>}
+            {pageOptions
+              .slice(Math.max(1, pageIndex - 2), Math.min(pageIndex + 3, pageOptions.length - 1))
+              .map((page) => (
+                <Button
+                  isIconOnly
+                  key={page}
+                  size="sm"
+                  onPress={() => gotoPage(page)}
+                  variant={page === pageIndex ? 'ghost' : 'flat'}
+                >
+                  {page + 1}
+                </Button>
+              ))}
+            {pageIndex < pageOptions.length - 4 && <span className="px-1">...</span>}
+            <Button
+              isIconOnly
+              size="sm"
+              onPress={() => gotoPage(pageOptions.length - 1)}
+              variant={pageIndex === pageOptions.length - 1 ? 'ghost' : 'flat'}
+            >
+              {pageOptions.length}
+            </Button>
+          </>
+        )}
+      </div>
+
+      {/* Go to page input and page size selector */}
+      <div className="flex items-center space-x-2">
+        <Button
+          size="sm"
+          isIconOnly
+          variant="flat"
+          startContent={<ChevronDoubleLeftIcon className="w-4 h-4" />}
+          onPress={() => gotoPage(0)}
+          isDisabled={!canPreviousPage}
+        />
+        <Button
+          size="sm"
+          variant="flat"
+          startContent={<ChevronLeftIcon className="h-4 w-4" />}
+          onPress={() => previousPage()}
+          isIconOnly
+          isDisabled={!canPreviousPage}
+        />
+        <Button
+          size="sm"
+          variant="flat"
+          isIconOnly
+          startContent={<ChevronRightIcon className="h-4 w-4" />}
+          onPress={() => nextPage()}
+          isDisabled={!canNextPage}
+        />
+        <Button
+          size="sm"
+          variant="flat"
+          onPress={() => gotoPage(pageOptions.length - 1)}
+          isDisabled={!canNextPage}
+          isIconOnly
+          startContent={<ChevronDoubleRightIcon className="w-4 h-4" />}
+        />
+      </div>
     </nav>
   );
-};
+}
 
 export default TableFooter;

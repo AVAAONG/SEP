@@ -36,23 +36,7 @@ function Table<T extends object>({
   const [isExpanded, toggleExpanded] = useState(false);
   const [sortingState, setSortingState] = useState<SortingRule<T>[]>([]);
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    prepareRow,
-    state: { globalFilter, pageIndex },
-    setGlobalFilter,
-    setFilter,
-    page,
-    rows,
-    nextPage,
-    previousPage,
-    canNextPage,
-    canPreviousPage,
-    pageOptions,
-    state,
-  } = useTable(
+  const table = useTable(
     {
       columns,
       data,
@@ -66,6 +50,24 @@ function Table<T extends object>({
     useSortBy,
     usePagination
   );
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    prepareRow,
+    state: { globalFilter, pageIndex },
+    setGlobalFilter,
+    setFilter,
+    page,
+    rows,
+    gotoPage,
+    nextPage,
+    previousPage,
+    canNextPage,
+    canPreviousPage,
+    pageOptions,
+    state,
+  } = table;
 
   const allowPagination = (allowPagination: boolean) => {
     const o = allowPagination ? rows : page;
@@ -100,12 +102,12 @@ function Table<T extends object>({
         <div className="flex gap-3">
           {children && children}
           <Button
+            size="sm"
             onPress={async () => {
               const exportData = data.map((row) => processRow(row, preprocessedColumns));
               await exportDataToExcel(exportData, 'Reporte');
             }}
-            startContent={<ArrowUpTrayIcon className="w-5 h-5 text-primary-1" />}
-            className="w-auto flex gap-2 items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10  dark:focus:ring-gray-700 dark:bg-slate-950 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+            startContent={<ArrowUpTrayIcon className="w-4 h-4 text-primary-1" />}
           >
             <span className="hidden sm:inline">Exportar</span>
           </Button>
@@ -176,16 +178,7 @@ function Table<T extends object>({
           </tbody>
         </table>
       </div>
-      {isExpanded ? null : (
-        <TableFooter
-          canNextPage={canNextPage}
-          canPreviousPage={canPreviousPage}
-          nextPage={nextPage}
-          pageIndex={pageIndex}
-          pageOptions={pageOptions}
-          previousPage={previousPage}
-        />
-      )}
+      {isExpanded ? null : <TableFooter table={table} />}
     </div>
   );
 }
