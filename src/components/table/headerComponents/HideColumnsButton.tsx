@@ -1,3 +1,6 @@
+'use client';
+import useMobile from '@/hooks/use-mobile';
+import { Bars3Icon } from '@heroicons/react/24/outline';
 import { Button } from '@nextui-org/button';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/dropdown';
 import React from 'react';
@@ -8,6 +11,7 @@ interface HideColumnsButtonProps<T extends object> {
 }
 
 function HideColumnsButton<T extends object>({ columns }: HideColumnsButtonProps<T>) {
+  const { isMobile } = useMobile();
   const initialVisibleIds = React.useMemo(
     () => new Set<string>(columns.filter((col) => col.isVisible).map((col) => String(col.id))),
     [columns]
@@ -19,8 +23,13 @@ function HideColumnsButton<T extends object>({ columns }: HideColumnsButtonProps
   return (
     <Dropdown size="sm" placement="bottom-end">
       <DropdownTrigger>
-        <Button size="sm" variant="flat">
-          Columnas
+        <Button
+          isIconOnly={isMobile}
+          size="sm"
+          startContent={<Bars3Icon className="w-4 h-4" />}
+          variant="flat"
+        >
+          <span className="hidden md:inline">Columnas</span>
         </Button>
       </DropdownTrigger>
       <DropdownMenu

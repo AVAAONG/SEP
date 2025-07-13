@@ -1,4 +1,5 @@
 'use client';
+import useMobile from '@/hooks/use-mobile';
 import exportDataToExcel from '@/lib/utils/exportFunctions/commonExport';
 import processRow from '@/lib/utils/exportFunctions/tableExportUtils';
 import {
@@ -76,6 +77,7 @@ function Table<T extends Record<string, unknown>>({
   } = table;
 
   const { globalFilter, pageIndex, pageSize } = state;
+  const { isMobile } = useMobile();
 
   // Keep internal pagination state in sync
   useEffect(() => {
@@ -116,7 +118,7 @@ function Table<T extends Record<string, unknown>>({
         <div
           className={`${
             isExpanded ? 'sticky top-0 z-30' : ''
-          } flex flex-col px-6 py-4 gap-4 md:flex-row md:items-center md:justify-between md:space-y-0 bg-stone-50 dark:bg-zinc-800 border-b border-stone-200 dark:border-zinc-700 ${
+          } flex  px-6 py-4 gap-4 md:flex-row md:items-center justify-between md:space-y-0 bg-stone-50 dark:bg-zinc-800 border-b border-stone-200 dark:border-zinc-700 ${
             isExpanded ? 'rounded-t-lg' : ''
           } flex-shrink-0`}
         >
@@ -131,6 +133,7 @@ function Table<T extends Record<string, unknown>>({
             <Button
               variant="flat"
               size="sm"
+              isIconOnly={isMobile}
               onPress={async () => {
                 const exportData = data.map((row) => processRow(row, preprocessedColumns));
                 await exportDataToExcel(exportData, 'Reporte');
