@@ -18,19 +18,21 @@ import TableFooter from './TableFooter';
 import ExpandTableButton from './headerComponents/ExpandTableButton';
 import TableSearhButton from './headerComponents/TableSearhButton';
 
-interface TableProps<T extends object> {
+interface TableProps<T extends Record<string, unknown>> {
   tableData: T[];
   tableColumns: Column<T>[];
   tableHeadersForSearch: { option: string; label: string }[];
   children?: React.ReactNode;
 }
 
-function Table<T extends object>({
+function Table<T extends Record<string, unknown>>({
   tableData,
   tableColumns,
   tableHeadersForSearch,
   children,
 }: TableProps<T>) {
+  // Pagination state
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
   const data = useMemo(() => tableData, [tableData]);
   const columns = useMemo(() => tableColumns, [tableColumns]);
   const [isExpanded, toggleExpanded] = useState(false);
@@ -41,8 +43,9 @@ function Table<T extends object>({
       columns,
       data,
       initialState: {
-        // Add initialState
-        sortBy: sortingState, // Load the initial sort state
+        sortBy: sortingState,
+        pageIndex: pagination.pageIndex,
+        pageSize: pagination.pageSize,
       },
     },
     useFilters,
@@ -50,24 +53,26 @@ function Table<T extends object>({
     useSortBy,
     usePagination
   );
+
+  // Extract table API and state
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     prepareRow,
-    state: { globalFilter, pageIndex },
     setGlobalFilter,
     setFilter,
     page,
     rows,
-    gotoPage,
-    nextPage,
-    previousPage,
-    canNextPage,
-    canPreviousPage,
-    pageOptions,
     state,
   } = table;
+
+  const { globalFilter, pageIndex, pageSize } = state;
+
+  // Keep internal pagination state in sync
+  useEffect(() => {
+    setPagination({ pageIndex, pageSize });
+  }, [pageIndex, pageSize]);
 
   const allowPagination = (allowPagination: boolean) => {
     const o = allowPagination ? rows : page;
