@@ -12,6 +12,9 @@ import { Button } from '@nextui-org/react';
 import { useEffect, useMemo, useState } from 'react';
 import {
   Column,
+  FilterTypes,
+  IdType,
+  Row,
   SortingRule,
   useFilters,
   useGlobalFilter,
@@ -47,6 +50,29 @@ function Table<T extends Record<string, unknown>>({
   const [isExpanded, toggleExpanded] = useState(false);
   const [sortingState, setSortingState] = useState<SortingRule<T>[]>([]);
 
+  // helper to normalize string input: remove accents, punctuation, lowercase, trim
+  const normalizeSearch = (value: string) =>
+    value
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9\s]/g, '')
+      .toLowerCase()
+      .trim();
+
+  // custom filter types for accent-insensitive comparison
+  const filterTypes: FilterTypes<T> = useMemo(
+    () => ({
+      accentInsensitive: (rows: Row<T>[], columnIds: IdType<T>[], filterValue: string) =>
+        rows.filter((row) => {
+          const id = columnIds[0] as IdType<T>;
+          const rowValue = row.values[id];
+          return normalizeSearch(String(rowValue ?? '')).includes(filterValue);
+        }),
+    }),
+    []
+  );
+
+  // useTable with custom filterTypes and defaultColumn filter
   const table = useTable(
     {
       columns,
@@ -56,6 +82,8 @@ function Table<T extends Record<string, unknown>>({
         pageIndex: pagination.pageIndex,
         pageSize: pagination.pageSize,
       },
+      defaultColumn: { filter: 'accentInsensitive' },
+      filterTypes,
     },
     useFilters,
     useGlobalFilter,
@@ -124,6 +152,7 @@ function Table<T extends Record<string, unknown>>({
         >
           <div className="w-1/2">
             <TableSearchButton
+              columns={allColumns}
               optionsForFilter={tableHeadersForSearch}
               setFilter={setFilter}
               filterValue={globalFilter}

@@ -4,19 +4,33 @@ import { Button } from '@nextui-org/button';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/dropdown';
 import { Input } from '@nextui-org/react';
 import { useEffect, useRef, useState } from 'react';
+import { Column } from 'react-table';
 
 interface TableSearchButtonProps {
   optionsForFilter: { option: string; label: string }[];
   filterValue: string;
   setFilter: (columnId: string, updater: any) => void;
+  columns: Column<any>[];
 }
 
 const TableSearchButton = ({
   optionsForFilter,
   setFilter,
   filterValue,
+  columns = [],
 }: TableSearchButtonProps) => {
-  const [selectedFilter, setSelectedFilter] = useState(optionsForFilter[0]?.option);
+  // Derive IDs from columns or fallback to filter options
+  {
+    /*  TODO: The reason for this search is because there are some columns that have a `#` number  as their first column, we should remove that*/
+  }
+  const ids =
+    columns.length > 0
+      ? columns.map((col) => String(col.id))
+      : optionsForFilter.map((opt) => opt.option);
+
+  const defaultFilter = ids.length >= 2 ? (ids[0].length > 3 ? ids[0] : ids[1]) : ids[0] || '';
+
+  const [selectedFilter, setSelectedFilter] = useState<string>(defaultFilter);
   // Local input value for debounce
   const [inputValue, setInputValue] = useState(filterValue);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
@@ -44,7 +58,7 @@ const TableSearchButton = ({
           setInputValue(val);
           if (debounceRef.current) clearTimeout(debounceRef.current);
           debounceRef.current = setTimeout(() => {
-            setFilter(selectedFilter, val);
+            setFilter(selectedFilter, val.toLowerCase().trim());
           }, 300);
         }}
         placeholder="Buscar..."
