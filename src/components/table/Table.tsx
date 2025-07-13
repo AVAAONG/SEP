@@ -16,14 +16,16 @@ import {
 import { SortIcon, SortIconDown, SortIconReverse } from '../../../public/svgs/svgs';
 import TableFooter from './TableFooter';
 import ExpandTableButton from './headerComponents/ExpandTableButton';
+import { FilterDefinition } from './headerComponents/FilterByButton';
 import HideColumnsButton from './headerComponents/HideColumnsButton';
-import TableSearhButton from './headerComponents/TableSearhButton';
+import TableSearchButton from './headerComponents/TableSearhButton';
 
 interface TableProps<T extends Record<string, unknown>> {
   tableData: T[];
   tableColumns: Column<T>[];
   tableHeadersForSearch: { option: string; label: string }[];
   children?: React.ReactNode;
+  filters?: FilterDefinition[];
 }
 
 function Table<T extends Record<string, unknown>>({
@@ -31,6 +33,7 @@ function Table<T extends Record<string, unknown>>({
   tableColumns,
   tableHeadersForSearch,
   children,
+  filters,
 }: TableProps<T>) {
   // Pagination state
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
@@ -61,7 +64,6 @@ function Table<T extends Record<string, unknown>>({
     getTableBodyProps,
     headerGroups,
     prepareRow,
-    setGlobalFilter,
     setFilter,
     page,
     rows,
@@ -95,21 +97,21 @@ function Table<T extends Record<string, unknown>>({
     <div
       className={`${
         isExpanded
-          ? 'absolute top-0 left-0 right-0 z-50 min-h-screen '
+          ? 'absolute top-0 left-0 right-0 z-50 min-h-screen'
           : 'relative overflow-hidden min-h-max shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full'
       }  bg-white shadow-md `}
     >
       <div className="flex flex-col px-4 py-3 gap-3 md:flex-row md:items-center md:justify-between md:space-y-0 ">
-        <TableSearhButton
+        <TableSearchButton
           optionsForFilter={tableHeadersForSearch}
           setFilter={setFilter}
-          setGlobalFilter={setGlobalFilter}
           filterValue={globalFilter}
         />
         <div className="flex gap-3">
           {children && children}
           <HideColumnsButton columns={allColumns} />
           <Button
+            variant="flat"
             size="sm"
             onPress={async () => {
               const exportData = data.map((row) => processRow(row, preprocessedColumns));
@@ -123,7 +125,7 @@ function Table<T extends Record<string, unknown>>({
         </div>
       </div>
 
-      <div className="flow-root w-full overflow-x-scroll mt-2">
+      <div className="flow-root w-full overflow-x-scroll">
         <table {...getTableProps()} className="w-full  text-sm text-left text-gray-300 ">
           <thead className="text-xs text-primary-light  text-center border-b-[1px] border-primary-light text-ellipsis  dark:bg-slate-950">
             {headerGroups.map((headerGroup) => {
