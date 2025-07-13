@@ -16,6 +16,7 @@ import {
 import { SortIcon, SortIconDown, SortIconReverse } from '../../../public/svgs/svgs';
 import TableFooter from './TableFooter';
 import ExpandTableButton from './headerComponents/ExpandTableButton';
+import HideColumnsButton from './headerComponents/HideColumnsButton';
 import TableSearhButton from './headerComponents/TableSearhButton';
 
 interface TableProps<T extends Record<string, unknown>> {
@@ -54,7 +55,7 @@ function Table<T extends Record<string, unknown>>({
     usePagination
   );
 
-  // Extract table API and state
+  // Extract table API and state (including allColumns for visibility toggles)
   const {
     getTableProps,
     getTableBodyProps,
@@ -65,6 +66,7 @@ function Table<T extends Record<string, unknown>>({
     page,
     rows,
     state,
+    allColumns,
   } = table;
 
   const { globalFilter, pageIndex, pageSize } = state;
@@ -106,6 +108,7 @@ function Table<T extends Record<string, unknown>>({
         />
         <div className="flex gap-3">
           {children && children}
+          <HideColumnsButton columns={allColumns} />
           <Button
             size="sm"
             onPress={async () => {
