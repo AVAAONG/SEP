@@ -1,7 +1,12 @@
 'use client';
 import exportDataToExcel from '@/lib/utils/exportFunctions/commonExport';
 import processRow from '@/lib/utils/exportFunctions/tableExportUtils';
-import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowUpTrayIcon,
+  ChevronDownIcon,
+  ChevronUpDownIcon,
+  ChevronUpIcon,
+} from '@heroicons/react/24/outline';
 import { Button } from '@nextui-org/react';
 import { useEffect, useMemo, useState } from 'react';
 import {
@@ -13,7 +18,6 @@ import {
   useSortBy,
   useTable,
 } from 'react-table';
-import { SortIcon, SortIconDown, SortIconReverse } from '../../../public/svgs/svgs';
 import TableFooter from './TableFooter';
 import ExpandTableButton from './headerComponents/ExpandTableButton';
 import { FilterDefinition } from './headerComponents/FilterByButton';
@@ -104,11 +108,11 @@ function Table<T extends Record<string, unknown>>({
       <div
         className={`${
           isExpanded
-            ? 'fixed inset-8 z-50 bg-white shadow-lg rounded-lg overflow-auto max-h-[calc(100vh-4rem)] transition-all duration-300 ease-in-out transform'
-            : 'relative overflow-hidden min-h-max shadow-emerald-600 dark:bg-slate-900 sm:rounded-lg w-full'
-        } bg-white shadow-md`}
+            ? 'fixed inset-8 z-50 bg-white shadow-2xl rounded-lg overflow-auto max-h-[calc(100vh-4rem)] transition-all duration-300 ease-in-out transform border border-stone-200 dark:border-zinc-800'
+            : 'relative overflow-hidden min-h-max shadow-lg dark:bg-zinc-900 rounded-md w-full border border-stone-200 dark:border-zinc-800'
+        } bg-white dark:bg-zinc-900`}
       >
-        <div className="flex flex-col px-4 py-3 gap-3 md:flex-row md:items-center md:justify-between md:space-y-0 ">
+        <div className="flex flex-col px-6 py-4 gap-4 md:flex-row md:items-center md:justify-between md:space-y-0 bg-stone-50 dark:bg-zinc-800 border-b border-stone-200 dark:border-zinc-700">
           <TableSearchButton
             optionsForFilter={tableHeadersForSearch}
             setFilter={setFilter}
@@ -132,16 +136,16 @@ function Table<T extends Record<string, unknown>>({
           </div>
         </div>
 
-        <div className="flow-root w-full overflow-x-scroll">
-          <table {...getTableProps()} className="w-full  text-sm text-left text-gray-300 ">
-            <thead className="sticky top-0 z-10 text-xs text-primary-light text-center border-b-[1px] border-primary-light text-ellipsis dark:bg-slate-950">
+        <div className="flow-root w-full overflow-x-auto">
+          <table {...getTableProps()} className="w-full text-sm text-left">
+            <thead className="sticky top-0 z-10 bg-stone-50 dark:bg-zinc-800 shadow-sm">
               {headerGroups.map((headerGroup) => {
                 const { key, ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps();
                 return (
                   <tr
                     key={key}
                     {...restHeaderGroupProps}
-                    className="text-xs text-primary-light dark:text-primary-dark uppercase tracking-wide font-light"
+                    className="border-b border-stone-200 dark:border-zinc-700"
                   >
                     {headerGroup.headers.map((column, i) => {
                       const { getHeaderProps, getSortByToggleProps } = column;
@@ -151,20 +155,26 @@ function Table<T extends Record<string, unknown>>({
                           key={key}
                           {...restColumn}
                           scope="col"
-                          className={`px-2 ${
-                            i === 0 ? 'sticky left-0 bg-white dark:bg-slate-950 z-20' : ''
+                          className={`px-3 py-1.5 font-semibold text-xs text-stone-700 dark:text-zinc-300 uppercase tracking-wider select-none cursor-pointer transition-colors duration-200 hover:bg-stone-100 dark:hover:bg-zinc-700 ${
+                            i === 0
+                              ? 'sticky left-0 bg-stone-50 dark:bg-zinc-800 z-20 shadow-sm'
+                              : ''
                           }`}
                         >
-                          <div className="flex text-center py-1.5 gap-1.5 justify-center items-center">
-                            {column.render('Header')}
-                            {column.disableSortBy ? null : column.isSorted ? (
-                              column.isSortedDesc ? (
-                                <SortIconReverse />
-                              ) : (
-                                <SortIconDown />
-                              )
-                            ) : (
-                              <SortIcon />
+                          <div className="flex text-center justify-center items-center gap-1.5 min-h-[1.25rem]">
+                            <span className="font-medium">{column.render('Header')}</span>
+                            {column.disableSortBy ? null : (
+                              <div className="flex items-center justify-center w-4 h-4 opacity-70 hover:opacity-100 transition-opacity">
+                                {column.isSorted ? (
+                                  column.isSortedDesc ? (
+                                    <ChevronUpIcon className="w-4 h-4 text-green-600 dark:text-green-400" />
+                                  ) : (
+                                    <ChevronDownIcon className="w-4 h-4 text-green-600 dark:text-green-400" />
+                                  )
+                                ) : (
+                                  <ChevronUpDownIcon className="w-4 h-4 text-stone-400 dark:text-zinc-500" />
+                                )}
+                              </div>
                             )}
                           </div>
                         </th>
@@ -176,16 +186,20 @@ function Table<T extends Record<string, unknown>>({
             </thead>
             <tbody
               {...getTableBodyProps()}
-              className="divide-y divide-gray-300 dark:divide-gray-800"
+              className="bg-white dark:bg-zinc-900 divide-y divide-stone-200 dark:divide-zinc-700"
             >
-              {allowPagination(isExpanded).map((row) => {
+              {allowPagination(isExpanded).map((row, rowIndex) => {
                 prepareRow(row);
                 const { key, ...restRowProps } = row.getRowProps();
                 return (
                   <tr
                     key={key}
                     {...restRowProps}
-                    className="text-sm hover:bg-secondary-2 dark:hover:bg-secondary-dark dark:hover:text-white text-center text-gray-800 dark:text-gray-300"
+                    className={`text-sm text-center transition-all duration-200 ease-in-out hover:bg-stone-50 dark:hover:bg-zinc-800 ${
+                      rowIndex % 2 === 0
+                        ? 'bg-white dark:bg-zinc-900'
+                        : 'bg-stone-50/50 dark:bg-zinc-800/50'
+                    }`}
                   >
                     {row.cells.map((cell, i) => {
                       const { key, ...restCellProps } = cell.getCellProps();
@@ -193,11 +207,15 @@ function Table<T extends Record<string, unknown>>({
                         <td
                           key={key}
                           {...restCellProps}
-                          className={`px-4 py-1 whitespace-nowrap ${
-                            i === 0 ? 'sticky left-0 bg-white dark:bg-slate-900 z-10' : ''
+                          className={`px-3 py-1.5 whitespace-nowrap text-stone-900 dark:text-zinc-200  ${
+                            i === 0
+                              ? 'sticky left-0 bg-inherit z-10 shadow-sm border-r border-stone-200 dark:border-zinc-700'
+                              : ''
                           }`}
                         >
-                          {cell.render('Cell')}
+                          <div className="flex items-center justify-center min-h-[1rem]">
+                            {cell.render('Cell')}
+                          </div>
                         </td>
                       );
                     })}
