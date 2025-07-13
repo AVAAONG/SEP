@@ -33,7 +33,7 @@ const TableSearchButton = ({
     };
   }, []);
   return (
-    <div className="flex w-1/3">
+    <div className="flex w-1/2">
       <Input
         size="sm"
         variant="bordered"

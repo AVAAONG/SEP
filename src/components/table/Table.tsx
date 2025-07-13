@@ -118,16 +118,18 @@ function Table<T extends Record<string, unknown>>({
         <div
           className={`${
             isExpanded ? 'sticky top-0 z-30' : ''
-          } flex  px-6 py-4 gap-4 md:flex-row md:items-center justify-between md:space-y-0 bg-stone-50 dark:bg-zinc-800 border-b border-stone-200 dark:border-zinc-700 ${
+          } w-full flex p-4 gap-4 md:flex-row md:items-center justify-between md:space-y-0 bg-stone-50 dark:bg-zinc-800 border-b border-stone-200 dark:border-zinc-700 ${
             isExpanded ? 'rounded-t-lg' : ''
           } flex-shrink-0`}
         >
-          <TableSearchButton
-            optionsForFilter={tableHeadersForSearch}
-            setFilter={setFilter}
-            filterValue={globalFilter}
-          />
-          <div className="flex gap-3">
+          <div className="w-1/2">
+            <TableSearchButton
+              optionsForFilter={tableHeadersForSearch}
+              setFilter={setFilter}
+              filterValue={globalFilter}
+            />
+          </div>
+          <div className="flex gap-3 w-1/2 justify-end">
             {children && children}
             <HideColumnsButton columns={allColumns} />
             <Button
