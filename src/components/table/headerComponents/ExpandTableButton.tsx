@@ -10,7 +10,12 @@ interface ExpandTableButtonProps {
 
 const ExpandTableButton = ({ isExpanded, toggleExpanded }: ExpandTableButtonProps) => {
   return (
-    <Button isIconOnly size="sm" onClick={() => toggleExpanded(isExpanded ? false : true)}>
+    <Button
+      variant="flat"
+      isIconOnly
+      size="sm"
+      onPress={() => toggleExpanded(isExpanded ? false : true)}
+    >
       {isExpanded ? (
         <ArrowsPointingInIcon className="w-5 h-5 " />
       ) : (
