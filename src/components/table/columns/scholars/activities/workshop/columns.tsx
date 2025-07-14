@@ -91,16 +91,19 @@ const WorkshopAdminColumns: Column<WorkshopDetails>[] = [
     Header: 'Estatus',
     Cell: ({ cell }) => <ActivityStatusIndicator status={cell.row.original.status} />,
     disableSortBy: true,
+    filter: 'equals',
   },
   {
     Header: 'Competencia',
     accessor: 'skill',
     disableSortBy: true,
+    filter: 'equals',
   },
   {
     Header: 'Modalidad',
     accessor: 'modality',
     disableSortBy: true,
+    filter: 'equals',
   },
   {
     Header: 'Plataforma/Lugar',

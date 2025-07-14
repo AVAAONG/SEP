@@ -42,6 +42,39 @@ const page = async ({
   const { barSeries, lineSeries } = await getActivityAttendancePerMonth(
     activitiesByStatus.ATTENDANCE_CHECKED
   );
+  // Prepare filter definitions using distinct property keys
+  const filters = [
+    {
+      id: 'skill',
+      label: 'Competencia',
+      options: [
+        { value: 'Liderazgo', label: 'Liderazgo' },
+        { value: 'Ejercicio Ciudadano', label: 'Ejercicio Ciudadano' },
+        { value: 'Gerencia de sí mismo', label: ' Gerencia de sí mismo' },
+        { value: 'TIC', label: 'TIC' },
+        { value: 'Emprendimiento', label: 'Emprendimiento' },
+        { value: 'Trabajo en equipo', label: 'Trabajo en equipo' },
+      ],
+    },
+    {
+      id: 'modality',
+      label: 'Modalidad',
+      options: [
+        { value: 'Presencial', label: 'Presencial' },
+        { value: 'Virtual', label: 'Virtual' },
+        { value: 'Híbrido', label: 'Híbrido' },
+      ],
+    },
+    {
+      id: 'parsedStatus',
+      label: 'Estado de la actividad',
+      options: [
+        { value: 'Programado', label: 'Programado' },
+        { value: 'Realizado', label: 'Realizado' },
+        { value: 'Suspendido', label: 'Suspendido' },
+      ],
+    },
+  ];
   return (
     <div className="w-full flex flex-col gap-6  items-center ">
       <DateSelector />
@@ -65,6 +98,7 @@ const page = async ({
       </div>
       <div className="w-full ">
         <Table
+          filters={filters}
           tableData={workshopObjectForTable}
           tableColumns={WorkshopAdminColumns}
           tableHeadersForSearch={[{ option: 'parsedStatus', label: 'Estatus' }]}
