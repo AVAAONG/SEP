@@ -1,4 +1,5 @@
 'use client';
+import useMobile from '@/hooks/use-mobile';
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 import { Button } from '@nextui-org/react';
 import * as ExcelJS from 'exceljs';
@@ -73,9 +74,13 @@ const ExportButton: React.FC<ExportButtonProps> = ({
   hour,
   attendeesData,
 }) => {
+  const { isMobile } = useMobile();
   return (
     <Button
-      onClick={() =>
+      size="sm"
+      isIconOnly={isMobile}
+      variant="flat"
+      onPress={() =>
         exportAttendanceData(
           activityTitle,
           competenceOrLevel,
@@ -87,11 +92,9 @@ const ExportButton: React.FC<ExportButtonProps> = ({
           attendeesData
         )
       }
-      className="w-auto flex gap-2 items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10  dark:focus:ring-gray-700 dark:bg-slate-950 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-      type="button"
-      startContent={<ArrowUpTrayIcon className="w-5 h-5 text-primary-1" />}
+      startContent={<ArrowUpTrayIcon className="w-4 h-4 " />}
     >
-      Exportar lista
+      <span className="hidden md:inline">Exportar lista</span>
     </Button>
   );
 };

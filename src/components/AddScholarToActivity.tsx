@@ -44,11 +44,12 @@ const AddScholarToActivity: React.FC<ActivityPanelInfoProps> = ({
         onPress={onOpen}
         color="success"
         radius="sm"
+        size="sm"
         className="text-white"
         startContent={<PlusIcon className="h-5 w-5" />}
         isDisabled={false}
       >
-        <span className="hidden md:block w-full">Agregar becario</span>
+        <span className="hidden md:block">Agregar becario</span>
       </Button>
       <BasicModal
         isOpen={isOpen}

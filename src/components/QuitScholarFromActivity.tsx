@@ -44,13 +44,12 @@ const QuitScholarFromActivity: React.FC<ActivityPanelInfoProps> = ({
         onPress={onOpen}
         color="danger"
         radius="sm"
+        size="sm"
         className="text-white"
         startContent={<XMarkIcon className="h-5 w-5" />}
         isDisabled={false}
       >
-        <span className='hidden md:block w-full'>
-          Eliminar becario
-        </span>
+        <span className="hidden md:block w-full">Eliminar becario</span>
       </Button>
       <BasicModal
         isOpen={isOpen}
@@ -71,8 +70,9 @@ const QuitScholarFromActivity: React.FC<ActivityPanelInfoProps> = ({
               {(scholar) => (
                 <AutocompleteItem
                   key={scholar.id}
-                  textValue={`${scholar.first_names.trim().split(' ')[0]} ${scholar.last_names.trim().split(' ')[0]
-                    }`}
+                  textValue={`${scholar.first_names.trim().split(' ')[0]} ${
+                    scholar.last_names.trim().split(' ')[0]
+                  }`}
                 >
                   <div className="flex gap-2 items-center">
                     <Avatar
@@ -82,8 +82,9 @@ const QuitScholarFromActivity: React.FC<ActivityPanelInfoProps> = ({
                       src={scholar.photo || ''}
                     />
                     <div className="flex flex-col">
-                      <span className="text-small">{`${scholar.first_names.trim().split(' ')[0]
-                        } ${scholar.last_names.trim().split(' ')[0]}`}</span>
+                      <span className="text-small">{`${
+                        scholar.first_names.trim().split(' ')[0]
+                      } ${scholar.last_names.trim().split(' ')[0]}`}</span>
                       <span className="text-tiny text-default-400">{scholar.email}</span>
                     </div>
                   </div>
