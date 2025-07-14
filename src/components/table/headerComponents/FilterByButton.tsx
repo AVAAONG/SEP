@@ -92,11 +92,12 @@ function FilterByButton({ filters, setFilter }: FilterByButtonProps) {
                       <Button
                         variant="bordered"
                         size="sm"
+                        fullWidth
                         className="justify-start"
                         endContent={
                           selectedFilters[filter.id] && selectedFilters[filter.id] !== '' ? (
                             <XMarkIcon
-                              className="w-3 h-3 opacity-50 hover:opacity-100 cursor-pointer"
+                              className="w-5 h-5 opacity-50 hover:opacity-100 cursor-pointer"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 removeFilter(filter.id);
