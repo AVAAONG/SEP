@@ -82,12 +82,14 @@ const scholarWorkshopAttendanceColumns: Column<IScholarWorkshopAttendanceColumns
     accessor: 'activityStatus',
     Cell: ({ value }) => <ActivityStatusWidgetSpanish value={value} />,
     disableSortBy: true,
+    filter: 'equals',
   },
   {
     Header: 'Asistencia',
     accessor: 'attendance',
     Cell: ({ value }) => <ScholarAttendanceWidgetSpanish value={value} />,
     disableSortBy: true,
+    filter: 'equals',
   },
   {
     Header: 'Competencia',

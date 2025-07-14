@@ -35,10 +35,12 @@ const page = async ({
       label: 'Competencia',
       options: [
         { value: 'Liderazgo', label: 'Liderazgo' },
+        { value: 'Ejercicio Ciudadano', label: 'Ejercicio Ciudadano' },
         { value: 'Gerencia de sí mismo', label: ' Gerencia de sí mismo' },
+        { value: 'TIC', label: 'TIC' },
+        { value: 'Emprendimiento', label: 'Emprendimiento' },
+        { value: 'Trabajo en equipo', label: 'Trabajo en equipo' },
       ],
-
-      placeholder: 'Seleccionar competencia',
     },
     {
       id: 'modality',
@@ -48,7 +50,27 @@ const page = async ({
         { value: 'Virtual', label: 'Virtual' },
         { value: 'Híbrido', label: 'Híbrido' },
       ],
-      placeholder: 'Seleccionar modalidad',
+    },
+    {
+      id: 'activityStatus',
+      label: 'Estado de la actividad',
+      options: [
+        { value: 'Programado', label: 'Programado' },
+        { value: 'Realizado', label: 'Realizado' },
+        { value: 'Suspendido', label: 'Suspendido' },
+      ],
+    },
+    {
+      id: 'attendance',
+      label: 'Asistencia',
+      options: [
+        { value: 'Inscrito', label: 'Inscrito' },
+        { value: 'Asistió', label: 'Asistió' },
+        { value: 'No asistió', label: 'No asistió' },
+        { value: 'Justificado', label: 'Justificado' },
+        { value: 'Cancelado', label: 'Cancelado' },
+        { value: 'Facilitador', label: 'Facilitador' },
+      ],
     },
   ];
 
