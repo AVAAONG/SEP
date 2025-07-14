@@ -261,7 +261,7 @@ function Table<T extends Record<string, unknown>>({
                                 i === 0 ? '' : ''
                               }`}
                             >
-                              <div className="flex items-center justify-center min-h-[1rem] max-w-sm">
+                              <div className="flex items-center justify-center min-h-[1rem] max-w-sm overflow-hidden text-ellipsis">
                                 {cell.render('Cell')}
                               </div>
                             </td>
