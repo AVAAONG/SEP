@@ -1,4 +1,5 @@
 'use client';
+import useMobile from '@/hooks/use-mobile';
 import { addScholarToChat, addScholarToWorkshop } from '@/lib/db/utils/Workshops';
 import { addScholarToVolunteerAdmin } from '@/lib/db/utils/volunteer';
 import { revalidateSpecificPath } from '@/lib/serverAction';
@@ -20,6 +21,8 @@ const AddScholarToActivity: React.FC<ActivityPanelInfoProps> = ({
   activityId,
   kindOfActivity,
 }) => {
+  const { isMobile } = useMobile();
+
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [selectedScholar, setSelectedScholar] = useState<Scholar | undefined>();
   const memoizedScholars = useMemo(() => scholars, [scholars]);
@@ -45,6 +48,7 @@ const AddScholarToActivity: React.FC<ActivityPanelInfoProps> = ({
         color="success"
         radius="sm"
         size="sm"
+        isIconOnly={isMobile}
         className="text-white"
         startContent={<PlusIcon className="h-5 w-5" />}
         isDisabled={false}

@@ -159,7 +159,7 @@ function Table<T extends Record<string, unknown>>({
             />
             {filters && !isMobile && <FilterByButton filters={filters} setFilter={setFilter} />}
           </div>
-          <div className="flex gap-3 w-1/2 justify-end flex-wrap">
+          <div className="flex gap-3 w-1/2 justify-end flex-wrap md:flex-nowrap">
             {children && children}
             <HideColumnsButton columns={allColumns} />
             <Button
