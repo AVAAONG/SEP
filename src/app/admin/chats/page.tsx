@@ -39,6 +39,37 @@ const page = async ({
     activitiesByStatus.ATTENDANCE_CHECKED
   );
 
+  // Prepare filter definitions using distinct property keys
+  const filters = [
+    {
+      id: 'Nivel',
+      label: 'Competencia',
+      options: [
+        { value: 'Avanzado', label: 'Avanzado' },
+        { value: 'Básico', label: 'Básico' },
+        { value: 'Intermedio', label: 'Intermedio' },
+      ],
+    },
+    {
+      id: 'modality',
+      label: 'Modalidad',
+      options: [
+        { value: 'Presencial', label: 'Presencial' },
+        { value: 'Virtual', label: 'Virtual' },
+        { value: 'Híbrido', label: 'Híbrido' },
+      ],
+    },
+    {
+      id: 'status',
+      label: 'Estado de la actividad',
+      options: [
+        { value: 'Programado', label: 'Programado' },
+        { value: 'Realizado', label: 'Realizado' },
+        { value: 'Suspendido', label: 'Suspendido' },
+      ],
+    },
+  ];
+
   return (
     <div className="w-full flex flex-col gap-6  items-center ">
       <DateSelector />
@@ -62,6 +93,7 @@ const page = async ({
       </div>
       <div className="w-full ">
         <Table
+          filters={filters}
           tableData={chatObjectForTable}
           tableColumns={AdminChatColumns}
           tableHeadersForSearch={[]}

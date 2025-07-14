@@ -74,14 +74,17 @@ const AdminChatColumns: Column<IAdminChatColumns>[] = [
     accessor: 'status',
     Header: 'Estatus',
     Cell: ({ value }) => <ActivityStatusWidgetSpanish value={value} />,
+    filter: 'equals',
   },
   {
     Header: 'Nivel',
     accessor: 'level',
+    filter: 'equals',
   },
   {
     Header: 'Modalidad',
     accessor: 'modality',
+    filter: 'equals',
   },
   {
     Header: 'Plataforma/Lugar',
