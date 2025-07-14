@@ -25,8 +25,11 @@ const ScholarActivityAttendance: Column<IScholarForAttendanceTable>[] = [
       const id = cell.row.original.id;
       const career = '';
       return (
-        <Link href={cell.row.original.id ? `/admin/becarios/${id}` : ''} className="w-67">
-          <div className="flex items-center  w-full">
+        <Link
+          href={cell.row.original.id ? `/admin/becarios/${id}` : ''}
+          className="flex !justify-start w-full"
+        >
+          <div className="flex items-center w-full">
             <div className="flex-shrink-0 w-8 h-8">
               <Avatar
                 className="w-full h-full rounded-full"
