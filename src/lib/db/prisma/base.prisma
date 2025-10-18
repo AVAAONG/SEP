@@ -6,6 +6,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+    ignoreEnums = true
+}
+
 /// This determines how Prisma connects your database.
 ///@see https://www.prisma.io/docs/concepts/components/prisma-schema/data-sources
 /// Ignore the warning, this is a bug from prisma-import

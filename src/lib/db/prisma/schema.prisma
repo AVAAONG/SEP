@@ -181,21 +181,38 @@ enum Gender {
 // volunteer.prisma
 //
 
-// /// Prisma schema model for `Volunteer` table in database.
-// /// Here we model all the necesary data and information wee need for the Volunteer activities, and related tables (tempData, attendance)
-// /// @author Kevin Bravo (kevinbravo.me)
-
+/// Categorizes whether a volunteer activity is run internally by AVAA  
+/// (or its partners) or contributed externally by the scholar.
 enum KindOfVolunteer {
+  /// Activity organized and managed by AVAA or its official partners.
   INTERNAL
+
+  /// Activity contributed by the scholar but not directly organized by AVAA.
   EXTERNAL
 }
 
+/// Tracks the review and scheduling state of a volunteer activity.
+/// In order of progression:
+/// 1. PENDING (External only): Scholar submits a proposal for an external activity.
+/// 2. SCHEDULED (Internal only): Admin schedules the internal activity.
+/// 3. SENT (Internal only): Scholar can enroll in an internal activity.
+/// 4. APPROVED: Staff approves the proposal or the internal activity is completed.
+/// 5. REJECTED: Staff rejects the proposal or the internal activity is cancelled.
 enum VolunteerStatus {
-  PENDING // status for external volunteers 
-  APPROVED // estatus for external volunteeers AKA=> DONE
-  REJECTED //estatus for external volunteers AKA => SUSPENDED
-  SENT // status for internal volunteers // ALLOW SCHOLARS TO ENROLLE IN THE VOLUNTEER ACTIVITY
-  SCHEDULED // status for internal volunteers // ALLOW ADMINS TO SCHEDULE THE VOLUNTEER ACTIVITY
+  /// Scholar has submitted an external-activity proposal, pending staff review.
+  PENDING
+
+  /// Submission approved (external) or activity completed (internal).
+  APPROVED
+
+  /// Submission rejected (external) or activity cancelled (internal).
+  REJECTED
+
+  /// Scholar can enroll in an internal volunteer activity.
+  SENT
+
+  /// Admin has scheduled the internal volunteer activity.
+  SCHEDULED
 }
 
 enum VolunteerProject {
@@ -415,6 +432,11 @@ model VerificationToken {
 ///@see https://www.prisma.io/docs/concepts/components/prisma-schema/generators
 generator client {
   provider = "prisma-client-js"
+}
+
+generator erd {
+  provider    = "prisma-erd-generator"
+  ignoreEnums = true
 }
 
 /// This determines how Prisma connects your database.

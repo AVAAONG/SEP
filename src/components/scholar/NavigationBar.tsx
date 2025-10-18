@@ -17,7 +17,7 @@ const NavigationBar = ({ email, scholarStatus }: NavigationBarProps) => {
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
   return (
-    <nav className="bg-gray-50  px-4 py-2 dark:bg-black  left-0 right-0 top-0 z-30">
+    <nav className=" px-4 py-2.5 dark:bg-black  left-0 right-0 top-0 z-30">
       <div
         className={`${isSidebarOpen ? 'md:ml-72' : ''} flex items-center justify-between gap-4 `}
       >
