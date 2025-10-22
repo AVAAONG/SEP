@@ -1,32 +1,25 @@
+
 'use client';
 import ChapterToggle from '@/components/layout/chapter-toggle';
 import { useSidebarContext } from '@/hooks/sidebar-context';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
-import { Button, cn, Image } from '@nextui-org/react';
-import { useSession } from 'next-auth/react';
+import { Button, cn } from '@nextui-org/react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { dashboardComponent, linkIcon, userIcon } from '../../../../../public/svgs/svgs';
 import DropdownButton from '../../../scholar/DropdownButton';
 import { PROGRAM_COMPONENTS, SCHOLARS } from '../data';
 import SidebarSeparator from './SidebarSeparator';
 
-const Sidebar = () => {
-  const { isOpen, toggle } = useSidebarContext();
-  const session = useSession();
-  let shouldShow = false;
+type SidebarProps = {
+  hasExtendedAccess: boolean;
+};
 
-  if (
-    session?.data?.email === 'angelrnievesp@gmail.com' ||
-    session?.data?.email === 'soniagarcial@hotmail.com' ||
-    session?.data?.email === 'mujicavicky26@gmail.com' ||
-    session?.data?.email === 'rjlozadam@gmail.com' ||
-    session?.data?.email === 'caneloneskarhil@gmail.com' ||
-    session?.data?.email === 'msolazzo25@gmail.com'
-  ) {
-    shouldShow = false;
-  } else {
-    shouldShow = true;
-  }
+const sidebarListClass = (isOpen: boolean) =>
+  cn('w-full flex flex-col gap-2 justify-between', !isOpen && 'items-center');
+
+const Sidebar = ({ hasExtendedAccess }: SidebarProps) => {
+  const { isOpen, toggle } = useSidebarContext();
 
   return (
     <aside
@@ -58,9 +51,10 @@ const Sidebar = () => {
               )}
               href="/panel/admin"
             >
-              <Image src="/logo-proexcelencia-cap-white.png" width={40} />
+              <Image src="/logo-proexcelencia-cap-white.png" alt="Logo proexcelencia" width={40} height={40} />
               <Image
                 src="/logo-proexcelencia-words-white.png"
+                alt="Proexcelencia"
                 width={140}
                 height={20}
                 className={cn(
@@ -71,14 +65,9 @@ const Sidebar = () => {
             </Link>
           </div>
 
-          {shouldShow && (
+          {hasExtendedAccess && (
             <>
-              <div
-                className={cn(
-                  'w-full flex flex-col gap-2 justify-between',
-                  !isOpen && 'items-center'
-                )}
-              >
+              <div className={sidebarListClass(isOpen)}>
                 <DropdownButton
                   buttonName="Panel general"
                   Icon={dashboardComponent()}
@@ -87,12 +76,7 @@ const Sidebar = () => {
                 />
               </div>
               <SidebarSeparator label="Componentes" />
-              <div
-                className={cn(
-                  'w-full flex flex-col gap-2 justify-between',
-                  !isOpen && 'items-center'
-                )}
-              >
+              <div className={sidebarListClass(isOpen)}>
                 {PROGRAM_COMPONENTS.map(({ buttonName, icon, itemList }) => {
                   return (
                     <DropdownButton
@@ -106,12 +90,7 @@ const Sidebar = () => {
                 })}
               </div>
               <SidebarSeparator label="Participantes" />
-              <div
-                className={cn(
-                  'w-full flex flex-col gap-2 justify-between',
-                  !isOpen && 'items-center'
-                )}
-              >
+              <div className={sidebarListClass(isOpen)}>
                 {SCHOLARS.map(({ buttonName, icon, itemList, link }) => {
                   return (
                     <DropdownButton
@@ -125,12 +104,7 @@ const Sidebar = () => {
                 })}
               </div>
               <SidebarSeparator label="Mentoria" />
-              <div
-                className={cn(
-                  'w-full flex flex-col gap-2 justify-between',
-                  !isOpen && 'items-center'
-                )}
-              >
+              <div className={sidebarListClass(isOpen)}>
                 <DropdownButton
                   buttonName="Mentores"
                   Icon={userIcon()}
@@ -151,12 +125,7 @@ const Sidebar = () => {
                 />
               </div>
               <SidebarSeparator label="Captacion" />
-              <div
-                className={cn(
-                  'w-full flex flex-col gap-2 justify-between',
-                  !isOpen && 'items-center'
-                )}
-              >
+              <div className={sidebarListClass(isOpen)}>
                 <DropdownButton
                   buttonName="Formulario de postulación"
                   Icon={linkIcon()}
