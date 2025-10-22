@@ -1,7 +1,7 @@
 'use client';
 import logo from '@/../public/proexcelencia-color.png';
 import { scholarSidebarAtom } from '@/lib/state/mainState';
-import { ArchiveBoxIcon, DocumentTextIcon, SparklesIcon } from '@heroicons/react/24/outline';
+import { ArchiveBoxIcon, ChartBarIcon, DocumentTextIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -134,6 +134,15 @@ const Sidebar = ({ isSpeaker }: { isSpeaker: boolean | undefined }) => {
           {SCHOLAR_SIDEBAR_ITEMS.map((item, index) => (
             <ScholarDropdownButton {...item} key={index} />
           ))}
+        </ul>
+        <SidebarSeparator label="Análisis" />
+        <ul className="space-y-2">
+          <ScholarDropdownButton
+            Icon={<ChartBarIcon />}
+            buttonName="Estadísticas"
+            itemList={[]}
+            link={`/${SCHOLAR_PREFIX}/estadisticas`}
+          />
         </ul>
         <SidebarSeparator label="Otros componentes" />
         <ul className="space-y-2">
