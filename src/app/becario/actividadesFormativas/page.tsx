@@ -25,7 +25,7 @@ const page = async ({
 }) => {
   const session = await getServerSession();
   if (!session) return null;
-  const workshopsDbList = (await getWorkhsopsByScholar('cls7iaimi00006xqr3qjxw9gt')) as WorkshopWithAllData[];
+  const workshopsDbList = (await getWorkhsopsByScholar(session.id)) as WorkshopWithAllData[];
   const workshops = (await filterActivitiesBySearchParams(
     workshopsDbList,
     searchParams
