@@ -29,7 +29,7 @@ export const getApprovedAndAttendedVolunteers = (volunteers: IVolunteer[]) => {
         internalVolunteerHours: number = 0,
         internalInPerson: number = 0,
         internalOnline: number = 0,
-        internalHynrid: number = 0,
+        internalHybrid: number = 0,
         totalVolunteerHours: number = 0;
     volunteers.forEach(volunteer => {
         const volunteerAttendance = volunteer.volunteer_attendance[0];
@@ -37,20 +37,21 @@ export const getApprovedAndAttendedVolunteers = (volunteers: IVolunteer[]) => {
             if (volunteer.kind_of_volunteer === 'INTERNAL') {
                 internalVolunteerHours += volunteerAttendance.asigned_hours;
                 if (volunteer.modality === 'IN_PERSON') internalInPerson += volunteerAttendance.asigned_hours;
-                if (volunteer.modality === 'HYBRID') internalHynrid += volunteerAttendance.asigned_hours;
+                if (volunteer.modality === 'HYBRID') internalHybrid += volunteerAttendance.asigned_hours;
                 if (volunteer.modality === 'ONLINE') internalOnline += volunteerAttendance.asigned_hours;
-
+                totalVolunteerHours += volunteerAttendance.asigned_hours;
             }
             else {
                 if (externalVolunteerHours < 40) {
                     const remainingHours = 40 - externalVolunteerHours;
-                    externalVolunteerHours += Math.min(volunteerAttendance.asigned_hours, remainingHours);
+                    const hoursToAdd = Math.min(volunteerAttendance.asigned_hours, remainingHours);
+                    externalVolunteerHours += hoursToAdd;
+                    totalVolunteerHours += hoursToAdd;
                 }
             };
         }
     })
-    totalVolunteerHours += externalVolunteerHours + internalVolunteerHours;
-    return { externalVolunteerHours, internalVolunteerHours, totalVolunteerHours, internalInPerson, internalOnline, internalHynrid };
+    return { externalVolunteerHours, internalVolunteerHours, totalVolunteerHours, internalInPerson, internalOnline, internalHybrid };
 }
 
 

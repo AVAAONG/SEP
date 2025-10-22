@@ -76,7 +76,7 @@ const scholarActivitiesInformationColumns: Column<ScholarActivitiesInformationCo
   },
   {
     Header: 'Horas de voluntariado internas hibridas',
-    accessor: 'internalHynrid',
+    accessor: 'internalHybrid',
   },
   {
     Header: 'Horas de voluntariado exteranas',
