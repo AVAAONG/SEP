@@ -37,6 +37,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const session = await getServerSession();
   return (
     <html lang="es" className="font-sans">
+      <head>
+        <meta name="apple-mobile-web-app-title" content="SEP" />
+      </head>
       <body className="min-h-full">
         <Providers session={session}>
           <ThemeProviderC>
