@@ -9,18 +9,25 @@ import { getServerSession } from '@/lib/auth/authOptions';
 import { VolunteerWithAllData } from '@/lib/db/types';
 import { getVolunteersByScholar } from '@/lib/db/utils/Workshops';
 import { countVolunteerProperties, formatCountsForCharts } from '@/lib/utils/activityFilters';
-import { filterActivitiesBySearchParamsPeriod } from '@/lib/utils/datePickerFilters';
+import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
 import { getApprovedAndAttendedVolunteers } from '@/lib/utils/getAttendedActivities';
 const page = async ({
   searchParams,
 }: {
-  searchParams?: { year: string; month: string; quarter: string };
+  searchParams?: {
+    year?: string;
+    month?: string;
+    quarter?: string;
+    startDate?: string;
+    endDate?: string;
+    preset?: string;
+  };
 }) => {
   const session = await getServerSession();
-  const volunteerDbList = await getVolunteersByScholar(session?.id!);
+  const volunteerDbList = (await getVolunteersByScholar(session?.id!)) as VolunteerWithAllData[];
   const { externalVolunteerHours, internalVolunteerHours, totalVolunteerHours } =
     getApprovedAndAttendedVolunteers(volunteerDbList);
-  const volunteers = (await filterActivitiesBySearchParamsPeriod(
+  const volunteers = (await filterActivitiesBySearchParams(
     volunteerDbList,
     searchParams
   )) as VolunteerWithAllData[];

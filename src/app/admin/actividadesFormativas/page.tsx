@@ -19,7 +19,14 @@ import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
 const page = async ({
   searchParams,
 }: {
-  searchParams?: { year: string; month: string; quarter: string };
+  searchParams?: {
+    year?: string;
+    month?: string;
+    quarter?: string;
+    startDate?: string;
+    endDate?: string;
+    preset?: string;
+  };
 }) => {
   const resultWorkshops = (await getWorkshops()) as WorkshopWithAllData[];
   const workshops = (await filterActivitiesBySearchParams(

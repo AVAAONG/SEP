@@ -17,7 +17,14 @@ import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
 const page = async ({
   searchParams,
 }: {
-  searchParams?: { year: string; month: string; quarter: string };
+  searchParams?: {
+    year?: string;
+    month?: string;
+    quarter?: string;
+    startDate?: string;
+    endDate?: string;
+    preset?: string;
+  };
 }) => {
   const volunteerDbList = await getVolunteers();
   const volunteers = (await filterActivitiesBySearchParams(

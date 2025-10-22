@@ -9,17 +9,24 @@ import { WorkshopWithAllData } from '@/components/table/columns/workshopColumns'
 import { getServerSession } from '@/lib/auth/authOptions';
 import { getWorkhsopsByScholar } from '@/lib/db/utils/Workshops';
 import { countWorkshopProperties, formatCountsForCharts } from '@/lib/utils/activityFilters';
-import { filterActivitiesBySearchParamsPeriod } from '@/lib/utils/datePickerFilters';
+import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
 import { getAttendedWorkshops } from '@/lib/utils/getAttendedActivities';
 const page = async ({
   searchParams,
 }: {
-  searchParams?: { year: string; month: string; quarter: string };
+  searchParams?: {
+    year?: string;
+    month?: string;
+    quarter?: string;
+    startDate?: string;
+    endDate?: string;
+    preset?: string;
+  };
 }) => {
   const session = await getServerSession();
   if (!session) return null;
-  const workshopsDbList = await getWorkhsopsByScholar(session?.id);
-  const workshops = (await filterActivitiesBySearchParamsPeriod(
+  const workshopsDbList = (await getWorkhsopsByScholar(session?.id)) as WorkshopWithAllData[];
+  const workshops = (await filterActivitiesBySearchParams(
     workshopsDbList,
     searchParams
   )) as WorkshopWithAllData[];
