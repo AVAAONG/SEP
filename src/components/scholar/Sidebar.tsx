@@ -41,15 +41,15 @@ const Sidebar = ({ isSpeaker }: { isSpeaker: boolean | undefined }) => {
       buttonName: 'Chats',
       itemList: isSpeaker
         ? [
-            {
-              name: 'Registro',
-              link: `/${SCHOLAR_PREFIX}/chats`,
-            },
-            {
-              name: 'Proponer chat',
-              link: `/${SCHOLAR_PREFIX}/chats/crear`,
-            },
-          ]
+          {
+            name: 'Registro',
+            link: `/${SCHOLAR_PREFIX}/chats`,
+          },
+          {
+            name: 'Proponer chat',
+            link: `/${SCHOLAR_PREFIX}/chats/crear`,
+          },
+        ]
         : [],
       link: isSpeaker ? '' : `/${SCHOLAR_PREFIX}/chats`,
     },
@@ -78,9 +78,8 @@ const Sidebar = ({ isSpeaker }: { isSpeaker: boolean | undefined }) => {
 
   return (
     <aside
-      className={`${
-        isSidebarOpen ? 'fixed  w-full md:w-72' : 'hidden'
-      } top-0 left-0 z-40 h-screen pt-4 bg-gray-50 md:translate-x-0 dark:bg-black`}
+      className={`${isSidebarOpen ? 'fixed  w-full md:w-72' : 'hidden'
+        } top-0 left-0 z-40 h-screen pt-4 bg-white md:translate-x-0 dark:bg-black`}
     >
       <div className={`flex items-center mt-2 px-5 ${isSidebarOpen ? 'justify-between' : ''} `}>
         <Link href="/becario/panel" className="flex justify-center w-full">
@@ -157,25 +156,6 @@ const Sidebar = ({ isSpeaker }: { isSpeaker: boolean | undefined }) => {
             link={`/${SCHOLAR_PREFIX}/dos`}
           />
         </ul>
-        {/* FEEDBACK FORM */}
-        {/* <div className="p-4 mt-4 rounded-lg bg-emerald-100 dark:bg-emerald-900 dark:border-emerald-950 border-green-600">
-          <div className="flex items-center mb-3">
-            <span className=" text-emerald-800 text-sm font-bold rounded  dark:text-emerald-200">
-              ¡Danos tu feedback!
-            </span>
-          </div>
-          <p className="mb-3 text-xs text-green-800 dark:text-green-400">
-            El SEP actualmente sigue en proceso de desarrollo, seria genial para nosotros escuchar
-            tus comentarios con respecto a mejoras, cambios o nuevas funcionalidades que te gustaria
-            ver en el sistema. 💚
-          </p>
-          <a
-            className="bg-orange-100 text-red-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-90"
-            href="https://docs.google.com/forms/d/e/1FAIpQLSfRhXSZ0CB5EY5GRJ6sg5crjLgNokge8t2XHvQoUqqGve0Vkg/viewform?usp=sf_link"
-          >
-            Dejar feedback
-          </a>
-        </div> */}
       </div>
     </aside>
   );
