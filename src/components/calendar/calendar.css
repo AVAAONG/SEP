@@ -43,12 +43,14 @@
 }
 
 .rbc-btn-group > button:active {
-  @apply transform scale-95;
+  @apply transform scale-95 dark:!bg-emerald-700 dark:!border-emerald-700 dark:!text-emerald-50;
 }
 
 .rbc-active {
+  /* Keep strong emerald background in light mode with white text */
   @apply !bg-emerald-600 !text-white !border-emerald-600
-    dark:!bg-emerald-700 dark:!border-emerald-700
+    /* In dark mode use a slightly darker emerald and an off-white text color for better contrast */
+    dark:!bg-emerald-700 dark:!border-emerald-700 dark:!text-emerald-50
     shadow-sm;
 }
 
@@ -105,13 +107,14 @@
 /* Today Highlight */
 .rbc-today {
   @apply !bg-gradient-to-br !from-emerald-50 !to-green-50 
-    dark:!from-emerald-950/40 dark:!to-green-950/40
+    /* Dark mode: make the today background noticeably darker/more opaque so it reads better against dark pages */
+    dark:!from-emerald-950 dark:!to-green-950
     relative;
 }
 
 .rbc-today::before {
   content: '';
-  @apply absolute inset-0 border border-emerald-400 dark:border-emerald-600 rounded pointer-events-none;
+  @apply absolute inset-0 border border-emerald-400 dark:border-emerald-700 rounded pointer-events-none;
 }
 
 /* Date Numbers */
@@ -247,10 +250,6 @@
    RESPONSIVE - Mobile Optimizations
    =========================================== */
 @media (max-width: 768px) {
-  .modern-calendar {
-    @apply p-2;
-  }
-
   .rbc-toolbar {
     @apply flex-col gap-3 mb-4;
   }
