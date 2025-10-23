@@ -91,13 +91,11 @@ const page = async () => {
       <div className="w-full flex flex-col md:flex-row gap-3 items-center">
         {cardContent.map((card) => <PanelCard key={card.link} {...card} />)}
       </div>
-      <div className="grid grid-cols-4 gap-2 ">
-        <div className="col-span-4 lg:col-span-3  h-full max-h-[680px] w-full overflow-x-clip rounded-md backdrop-filter backdrop-blur-3xl bg-white dark:bg-black shadow-md p-2">
-          <Calendar events={events} />
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-2 ">
+        <div className="md:col-span-3">
+          <Calendar events={events} height={650} />
         </div>
-        <div className='col-span-4 lg:col-span-1'>
-          <ActivityOverviewList activities={sentActivities as (Workshop | Chat)[]} height={680} />
-        </div>
+        <ActivityOverviewList activities={sentActivities as (Workshop | Chat)[]} height={650} />
       </div>
     </div>
   );
