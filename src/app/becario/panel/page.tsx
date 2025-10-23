@@ -60,7 +60,7 @@ const page = async () => {
           ))}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-2 ">
-          <div className="col-span-3">
+          <div className="md:col-span-3">
             <Calendar events={events} height={650} />
           </div>
           <ActivityOverviewList activities={enrolledActivities} height={650} />
