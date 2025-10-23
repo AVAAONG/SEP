@@ -87,7 +87,7 @@ const page = async () => {
     },
   ];
   return (
-    <div className="flex flex-col gap-4 h-full w-full">
+    <div className="flex flex-col gap-4" >
       <div className="w-full flex flex-col md:flex-row gap-3 items-center">
         {cardContent.map((card) => PanelCard(card))}
       </div>
