@@ -1,4 +1,4 @@
-import NextEventsList from '@/components/NextEventsList';
+import ActivityOverviewList from '@/components/ActivityOverviewList';
 import Calendar from '@/components/calendar/Calendar';
 import formatActivitiesForCalendarPanel from '@/components/calendar/utils';
 import PanelCard, { PanelCardProps } from '@/components/commons/PanelCard';
@@ -87,16 +87,16 @@ const page = async () => {
     },
   ];
   return (
-    <div className="flex flex-col gap-4" >
+    <div className="flex flex-col gap-4">
       <div className="w-full flex flex-col md:flex-row gap-3 items-center">
-        {cardContent.map((card) => PanelCard(card))}
+        {cardContent.map((card) => <PanelCard key={card.link} {...card} />)}
       </div>
-      <div className="grid grid-cols-12 gap-2 ">
-        <div className="col-span-12 lg:col-span-9  h-full max-h-[680px] w-full overflow-x-clip rounded-md backdrop-filter backdrop-blur-3xl bg-white dark:bg-black shadow-md p-2">
+      <div className="grid grid-cols-4 gap-2 ">
+        <div className="col-span-4 lg:col-span-3  h-full max-h-[680px] w-full overflow-x-clip rounded-md backdrop-filter backdrop-blur-3xl bg-white dark:bg-black shadow-md p-2">
           <Calendar events={events} />
         </div>
-        <div className="col-span-12 lg:col-span-3 w-full p-4 bg-white rounded-lg shadow-md backdrop-filter backdrop-blur-3xl dark:bg-black max-h-[680px] overflow-y-scroll">
-          <NextEventsList activities={sentActivities as (Workshop | Chat)[]} />
+        <div className='col-span-4 lg:col-span-1'>
+          <ActivityOverviewList activities={sentActivities as (Workshop | Chat)[]} height={680} />
         </div>
       </div>
     </div>

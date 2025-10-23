@@ -1,8 +1,8 @@
+import ActivityOverviewList from '@/components/ActivityOverviewList';
 import Calendar from '@/components/calendar/Calendar';
 import formatActivitiesForCalendarPanel from '@/components/calendar/utils';
 import PanelCard, { PanelCardProps } from '@/components/commons/PanelCard';
 import Greeting from '@/components/Greeting';
-import NextEventsList from '@/components/NextEventsList';
 import { getServerSession } from '@/lib/auth/authOptions';
 import {
   getActivitiesWhenScholarItsEnrolled,
@@ -63,8 +63,8 @@ const page = async () => {
           <div className="col-span-12 lg:col-span-9 gap-1 h-full max-h-[680px] text-gray-800 capitalize dark:text-gray-300 shadow-sm overflow-x-clip w-full bg-white border border-gray-200  shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 p-2">
             <Calendar events={events} />
           </div>
-          <div className="col-span-12 lg:col-span-3 p-4 bg-white border border-gray-200 rounded-lg shadow-sm shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950">
-            <NextEventsList activities={enrolledActivities} />{' '}
+          <div className='col-span-4 lg:col-span-1'>
+            <ActivityOverviewList activities={enrolledActivities} height={680} />
           </div>
         </div>
       </div>
