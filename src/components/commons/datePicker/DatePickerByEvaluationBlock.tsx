@@ -1,4 +1,5 @@
 'use client';
+import useMobile from '@/hooks/use-mobile';
 import { CalendarDaysIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Button, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -20,6 +21,7 @@ const DatePickerByEvaluationPeriod = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { isMobile } = useMobile();
 
   const currentYear = new Date().getFullYear();
 
@@ -183,6 +185,7 @@ const DatePickerByEvaluationPeriod = () => {
         <Button
           variant="bordered"
           startContent={<CalendarDaysIcon className="w-4 h-4" />}
+          isIconOnly={isMobile}
           endContent={
             hasSelection ? (
               <button
@@ -198,7 +201,7 @@ const DatePickerByEvaluationPeriod = () => {
           }
           className="text-sm font-medium"
         >
-          {getDisplayText()}
+          <span className="hidden md:inline"> {getDisplayText()}</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className=" p-4" >
