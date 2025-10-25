@@ -25,14 +25,6 @@ const ActivityOverviewList = ({ activities, height = 360 }: { activities: (Works
 
     const sections = [
         {
-            id: 'overdue',
-            title: 'Pendiente de asistencia',
-            description: 'Actividades ya ocurridas.',
-            badgeClass: 'bg-gray-100 text-gray-700 dark:bg-gray-900/60 dark:text-gray-200 border border-gray-200/60 dark:border-gray-800/60',
-            relativeClass: 'text-yellow-600 dark:text-yellow-400',
-            activities: overdue,
-        },
-        {
             id: 'upcomingSoon',
             title: 'Próximos 7 días',
             description: 'Actividades próximas',
@@ -48,6 +40,15 @@ const ActivityOverviewList = ({ activities, height = 360 }: { activities: (Works
             relativeClass: 'text-gray-500 dark:text-gray-400',
             activities: upcomingLater,
         },
+        {
+            id: 'overdue',
+            title: 'Pendiente de asistencia',
+            description: 'Actividades ya ocurridas.',
+            badgeClass: 'bg-gray-100 text-gray-700 dark:bg-gray-900/60 dark:text-gray-200 border border-gray-200/60 dark:border-gray-800/60',
+            relativeClass: 'text-yellow-600 dark:text-yellow-400',
+            activities: overdue,
+        },
+
     ];
 
     const formatRelativeToNow = (startDate: Date) => {
