@@ -54,6 +54,9 @@ export const ActivitySidebar = async ({
   } else if (kindOfActivity === 'chat') {
     notEnrolledScholars = await getNotEnrolledScholarsInChat(activity.id);
   }
+
+  const enrolledCount = getEnrolledScholarsCount(activity);
+
   return (
     <div className="space-y-8">
       {activity.speaker && (
@@ -85,14 +88,14 @@ export const ActivitySidebar = async ({
               <div className="flex justify-between items-center">
                 <span className="text-sm text-muted-foreground">Capacidad</span>
                 <span className="font-medium">
-                  {getEnrolledScholarsCount(activity)} / {activity.avalible_spots}
+                  {enrolledCount} / {activity.avalible_spots}
                 </span>
               </div>
               <Progress
                 className="max-w-md"
                 size="md"
                 color="success"
-                value={(getEnrolledScholarsCount(activity) / activity.avalible_spots) * 100}
+                value={(enrolledCount / activity.avalible_spots) * 100}
               />
             </div>
           </CardBody>
