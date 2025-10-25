@@ -25,7 +25,6 @@ export type IWorkshopAttendance = Prisma.WorkshopAttendanceGetPayload<{
 }>;
 export type IVolunteerAttendance = Prisma.VolunteerAttendanceGetPayload<{
     include: {
-        satisfaction_form: true;
         scholar: {
             include: {
                 scholar: true
