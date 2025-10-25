@@ -9,9 +9,9 @@ import {
 } from '@/lib/utils2';
 import {
     ArrowLeftIcon,
-    BriefcaseIcon,
     InformationCircleIcon,
-    UsersIcon,
+    UserPlusIcon,
+    UsersIcon
 } from '@heroicons/react/24/outline';
 import { Chip, Divider, Tooltip } from '@nextui-org/react';
 import { ScholarAttendance, VolunteerStatus } from '@prisma/client';
@@ -122,7 +122,7 @@ export const VolunteerBaseLayoutHeader = async ({
 
                     {volunteer.beneficiary && (
                         <div className="flex items-center">
-                            <BriefcaseIcon className="h-4 w-4 mr-2 text-emerald-600" />
+                            <UserPlusIcon className="h-4 w-4 mr-2 text-emerald-600" />
                             <span className="text-muted-foreground">Beneficiario:</span>
                             <span className="ml-1 font-medium">{volunteer.beneficiary}</span>
                         </div>
