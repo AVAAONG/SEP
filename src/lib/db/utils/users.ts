@@ -452,6 +452,11 @@ export const getScholarWithAllData = async (scholar_id: string) => {
               },
             },
           },
+          volunteerAttendance: {
+            include: {
+              volunteer: true,
+            },
+          },
           chapter: true,
         },
       },
