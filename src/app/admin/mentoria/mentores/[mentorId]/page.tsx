@@ -1,4 +1,3 @@
-import IconWithInfo from '@/components/commons/IconInWithInformation';
 import { getMentor } from '@/lib/db/utils/mentors';
 import { CalendarIcon } from '@heroicons/react/24/outline';
 import { Avatar, Tooltip } from '@nextui-org/react';
@@ -115,7 +114,12 @@ const page = async ({ params }: { params: { mentorId: string } }) => {
 
           <div className="flex flex-row gap-4">
             {scholarContactData.map(({ value, icon }, index) => {
-              return <IconWithInfo key={index} value={value!} icon={icon} />;
+              return (
+                <div key={index} className="flex gap-1 items-center text-sm text-primary-dark">
+                  <div className="w-5 h-5">{icon}</div>
+                  {value}
+                </div>
+              );
             })}
           </div>
         </div>

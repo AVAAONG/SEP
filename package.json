@@ -64,7 +64,6 @@
     "react": "18.2.0",
     "react-apexcharts": "^1.4.1",
     "react-big-calendar": "^1.11.2",
-    "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.51.2",
     "react-select": "^5.8.0",
