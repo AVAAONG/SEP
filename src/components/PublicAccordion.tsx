@@ -97,7 +97,7 @@ const WorkshopsAccordion: React.FC<WorkshopAccordionProps & { activityCount?: nu
             </div>
           }
         >
-          <div className="p-6 gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          <div className="p-6 gap-6 grid grid-cols-2 lg:grid-cols-3">
             {totalHoursBySkill.map((skill, index) => (
               <div key={index} className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 hover:bg-white/20 transition-all duration-300">
                 <h4 className="font-semibold text-white text-sm mb-2">
