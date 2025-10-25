@@ -52,7 +52,7 @@ const PanelCard: React.FC<PanelCardProps> = ({
         <div className="p-6">
           <div className="flex items-start justify-between mb-4">
             <div className="flex-1">
-              <p className={`text-sm font-medium ${colorVariants[kind]['titleColor']} dark:opacity-90 mb-1`}>
+              <p className={` hidden md:block text-sm font-medium ${colorVariants[kind]['titleColor']} dark:opacity-90 mb-1`}>
                 {title}
               </p>
               <p className="text-4xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">

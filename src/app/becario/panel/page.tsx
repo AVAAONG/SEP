@@ -9,7 +9,6 @@ import {
   getScholarDoneActivitiesCount,
 } from '@/lib/db/utils/users';
 import { chatIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs';
-import React from 'react';
 
 const page = async () => {
   const actualYear = new Date().getFullYear();
@@ -54,9 +53,9 @@ const page = async () => {
         <div className="flex gap-2 items-center">
           <Greeting name={name} />
         </div>
-        <div className="w-full flex flex-col md:flex-row gap-3 items-center">
+        <div className="w-full grid grid-cols-3 gap-3 items-center">
           {cardContent.map((card, index) => (
-            <React.Fragment key={index}>{PanelCard(card)}</React.Fragment>
+            <PanelCard key={index} {...card} />
           ))}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-2 ">
