@@ -393,6 +393,9 @@ const page = async ({
                 </div>
                 <DatePickerByEvaluationPeriod />
             </div>
+            <div className="mt-2 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-2 rounded-md text-sm">
+                <p><strong>Página experimental:</strong> la información y el diseño de esta página pueden cambiar en los próximos meses.</p>
+            </div>
 
             {/* =========================== GENERAL OVERVIEW =========================== */}
             <div className="space-y-4">
