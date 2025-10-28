@@ -1,12 +1,9 @@
 'use client';
 import logo from '@/../public/proexcelencia-color.png';
-import { scholarSidebarAtom } from '@/lib/state/mainState';
+import { useSidebarContext } from '@/hooks/sidebar-context';
 import { ArchiveBoxIcon, ChartBarIcon, DocumentTextIcon, SparklesIcon } from '@heroicons/react/24/outline';
-import { useAtom } from 'jotai';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
 import {
   chatIcon,
   dashboardComponent,
@@ -19,15 +16,7 @@ import ScholarDropdownButton from './ScholarDropdownButton';
 const SCHOLAR_PREFIX = 'becario';
 
 const Sidebar = ({ isSpeaker }: { isSpeaker: boolean | undefined }) => {
-  const [isSidebarOpen, setSidebarOpen] = useAtom(scholarSidebarAtom);
-  const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
-  const pathname = usePathname();
-  useEffect(() => {
-    // Function to handle route changes
-    if (window.innerWidth <= 768) {
-      setSidebarOpen(false);
-    }
-  }, [pathname]);
+  const { isOpen: isSidebarOpen, toggle } = useSidebarContext();
 
   const SCHOLAR_SIDEBAR_ITEMS = [
     {
@@ -78,8 +67,9 @@ const Sidebar = ({ isSpeaker }: { isSpeaker: boolean | undefined }) => {
 
   return (
     <aside
-      className={`${isSidebarOpen ? 'fixed  w-full md:w-72' : 'hidden'
-        } top-0 left-0 z-40 h-screen pt-4 bg-white md:translate-x-0 dark:bg-black`}
+      className={`fixed top-0 left-0 z-40 h-screen pt-4 bg-white dark:bg-black transform transition-transform duration-300 ease-in-out 
+      w-full md:w-72 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
+      aria-hidden={!isSidebarOpen}
     >
       <div className={`flex items-center mt-2 px-5 ${isSidebarOpen ? 'justify-between' : ''} `}>
         <Link href="/becario/panel" className="flex justify-center w-full">
@@ -87,7 +77,7 @@ const Sidebar = ({ isSpeaker }: { isSpeaker: boolean | undefined }) => {
         </Link>
         <div className="flex justify-start items-center md:hidden">
           <button
-            onClick={toggleSidebar}
+            onClick={toggle}
             className="p-2 mr-2 text-green-600 rounded-lg cursor-pointer  hover:text-green-900 hover:bg-green-100 focus:bg-green-100 dark:focus:bg-emerald-950  dark:focus:ring-green-700 dark:text-green-700 dark:hover:bg-green-700 dark:hover:text-emerald-950 dark:focus:text-emerald-700"
           >
             <svg

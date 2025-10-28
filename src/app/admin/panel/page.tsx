@@ -1,4 +1,4 @@
-import NextEventsList from '@/components/NextEventsList';
+import ActivityOverviewList from '@/components/ActivityOverviewList';
 import Calendar from '@/components/calendar/Calendar';
 import formatActivitiesForCalendarPanel from '@/components/calendar/utils';
 import PanelCard, { PanelCardProps } from '@/components/commons/PanelCard';
@@ -14,10 +14,17 @@ const page = async () => {
   const session = await getServerSession();
   if (!session) return redirect('/signin');
   const chapter = session?.chapterId;
-  const activeScholarsCount = await getScholarsCountByCondition('ACTIVE', chapter);
-  const [workshops, chats, volunteer] = await getActivitiesByYear(actualYear);
-  const events = formatActivitiesForCalendarPanel([...workshops, ...chats, ...volunteer], 'admin');
-  const volunteerMapped = volunteer.map((volunteer) => {
+  const [
+    activeScholarsCount,
+    activities
+  ] = await Promise.all([
+    getScholarsCountByCondition('ACTIVE', chapter),
+    getActivitiesByYear(actualYear)
+  ]);
+  const [workshops, chats, volunteer] = activities;
+
+  const events = formatActivitiesForCalendarPanel([...workshops, ...chats, ...volunteer] as any, 'admin');
+  const volunteerMapped = volunteer.map((volunteer: any) => {
     return {
       ...volunteer,
       activity_status: volunteer.status,
@@ -33,18 +40,18 @@ const page = async () => {
     .sort((a, b) => new Date(a.start_dates[0]).getTime() - new Date(b.start_dates[0]).getTime());
 
   const workshopDoneCount = workshops.filter(
-    (workshop) => workshop.activity_status === 'ATTENDANCE_CHECKED'
+    (workshop: any) => workshop.activity_status === 'ATTENDANCE_CHECKED'
   ).length;
   const chatsDoneCount = chats.filter(
-    (chat) => chat.activity_status === 'ATTENDANCE_CHECKED'
+    (chat: any) => chat.activity_status === 'ATTENDANCE_CHECKED'
   ).length;
 
-  const volunteerHours = volunteer.reduce((acc, volunteer) => {
+  const volunteerHours = volunteer.reduce((acc: any, volunteer: any) => {
     if (volunteer.status === 'APPROVED') {
       return (
         acc +
         volunteer.volunteer_attendance.reduce(
-          (acc, attendance) => acc + attendance.asigned_hours,
+          (acc: any, attendance: any) => acc + attendance.asigned_hours,
           0
         )
       );
@@ -78,7 +85,7 @@ const page = async () => {
       kind: 'volunteer',
     },
     {
-      title: 'Total de becarios activos',
+      title: 'Becarios activos',
       subtitle: 'Ver base de datos de becarios',
       data: activeScholarsCount,
       link: 'becarios',
@@ -86,18 +93,17 @@ const page = async () => {
       kind: 'scholar',
     },
   ];
+
   return (
-    <div className="flex flex-col gap-4 h-full w-full">
-      <div className="w-full flex flex-col md:flex-row gap-3 items-center">
-        {cardContent.map((card) => PanelCard(card))}
+    <div className="flex flex-col gap-4">
+      <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {cardContent.map((card) => <PanelCard key={card.link} {...card} />)}
       </div>
-      <div className="grid grid-cols-12 gap-2 ">
-        <div className="col-span-12 lg:col-span-9  h-full max-h-[680px] w-full overflow-x-clip rounded-md backdrop-filter backdrop-blur-3xl bg-white dark:bg-black shadow-md p-2">
-          <Calendar events={events} />
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-2 ">
+        <div className="md:col-span-3">
+          <Calendar events={events} height={650} />
         </div>
-        <div className="col-span-12 lg:col-span-3 w-full p-4 bg-white rounded-lg shadow-md backdrop-filter backdrop-blur-3xl dark:bg-black max-h-[680px] overflow-y-scroll">
-          <NextEventsList activities={sentActivities as (Workshop | Chat)[]} />
-        </div>
+        <ActivityOverviewList activities={sentActivities as (Workshop | Chat)[]} height={650} />
       </div>
     </div>
   );

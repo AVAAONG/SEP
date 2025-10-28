@@ -1,15 +1,14 @@
+import ActivityOverviewList from '@/components/ActivityOverviewList';
 import Calendar from '@/components/calendar/Calendar';
 import formatActivitiesForCalendarPanel from '@/components/calendar/utils';
 import PanelCard, { PanelCardProps } from '@/components/commons/PanelCard';
 import Greeting from '@/components/Greeting';
-import NextEventsList from '@/components/NextEventsList';
 import { getServerSession } from '@/lib/auth/authOptions';
 import {
   getActivitiesWhenScholarItsEnrolled,
   getScholarDoneActivitiesCount,
 } from '@/lib/db/utils/users';
 import { chatIcon, volunterIcon, workshopIcon } from 'public/svgs/svgs';
-import React from 'react';
 
 const page = async () => {
   const actualYear = new Date().getFullYear();
@@ -54,18 +53,16 @@ const page = async () => {
         <div className="flex gap-2 items-center">
           <Greeting name={name} />
         </div>
-        <div className="w-full flex flex-col md:flex-row gap-3 items-center">
+        <div className="w-full grid grid-cols-3 gap-3 items-center">
           {cardContent.map((card, index) => (
-            <React.Fragment key={index}>{PanelCard(card)}</React.Fragment>
+            <PanelCard showIconOnMobile={false} key={index} {...card} />
           ))}
         </div>
-        <div className="grid grid-cols-12 gap-2 ">
-          <div className="col-span-12 lg:col-span-9 gap-1 h-full max-h-[680px] text-gray-800 capitalize dark:text-gray-300 shadow-sm overflow-x-clip w-full bg-white border border-gray-200  shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950 rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-40 p-2">
-            <Calendar events={events} />
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 ">
+          <div className="md:col-span-3">
+            <Calendar events={events} height={650} />
           </div>
-          <div className="col-span-12 lg:col-span-3 p-4 bg-white border border-gray-200 rounded-lg shadow-sm shadow-emerald-600 dark:border-emerald-800  dark:bg-slate-950">
-            <NextEventsList activities={enrolledActivities} />{' '}
-          </div>
+          <ActivityOverviewList activities={enrolledActivities} height={650} />
         </div>
       </div>
     </div>

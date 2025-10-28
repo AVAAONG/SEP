@@ -13,12 +13,10 @@ export default async function RootLayout({
   if (!session) return null;
   const { email, scholarStatus, isSpeaker } = session;
   return (
-    <>
-      <div className="antialiased bg-white dark:bg-black">
-        <NavigationBar email={email} scholarStatus={scholarStatus} />
-        <Sidebar isSpeaker={isSpeaker} />
-        <MainLayout>{children}</MainLayout>
-      </div>
-    </>
+    <div className="antialiased bg-white dark:bg-black">
+      <NavigationBar email={email} scholarStatus={scholarStatus} />
+      <Sidebar isSpeaker={isSpeaker} />
+      <MainLayout>{children}</MainLayout>
+    </div>
   );
 }

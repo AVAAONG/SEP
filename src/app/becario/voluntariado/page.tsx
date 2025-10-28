@@ -24,7 +24,7 @@ const page = async ({
   };
 }) => {
   const session = await getServerSession();
-  const volunteerDbList = (await getVolunteersByScholar('cls7iaimi00006xqr3qjxw9gt')) as VolunteerWithAllData[];
+  const volunteerDbList = (await getVolunteersByScholar(session.id)) as VolunteerWithAllData[];
   const volunteers = (await filterActivitiesBySearchParams(
     volunteerDbList,
     searchParams
@@ -106,20 +106,20 @@ const page = async ({
       </div>
 
       <div className="h-full w-full flex flex-col gap-6">
-        {/* Main Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        {/* Main Stats Grid - improved mobile responsiveness */}
+        <div className="grid grid-cols-3 lg:grid-cols-5 gap-3">
           {/* Total Hours Card */}
-          <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 rounded-xl shadow-lg p-6 text-white">
+          <div className="col-span-3 lg:col-span-1 bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 rounded-xl shadow-lg p-4 md:p-6 text-white">
             <div className="flex items-start justify-between mb-4">
               <div>
-                <p className="text-sm font-medium text-emerald-100 uppercase tracking-wide">Horas Completadas</p>
+                <p className="text-xs md:text-sm font-medium text-emerald-100 uppercase tracking-wide">Horas Completadas</p>
                 <div className="flex items-baseline gap-2 mt-2">
-                  <p className="text-5xl font-bold">{totalVolunteerHours}</p>
-                  <p className="text-2xl font-semibold text-emerald-100">/ 100</p>
+                  <p className="text-3xl md:text-5xl font-bold">{totalVolunteerHours}</p>
+                  <p className="text-lg md:text-2xl font-semibold text-emerald-100">/ 100</p>
                 </div>
               </div>
-              <div className="w-14 h-14 bg-white/20 rounded-lg flex items-center justify-center">
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-10 h-10 md:w-14 md:h-14 bg-white/20 rounded-lg flex items-center justify-center">
+                <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
@@ -131,12 +131,12 @@ const page = async ({
                   style={{ width: `${Math.min((totalVolunteerHours / 100) * 100, 100)}%` }}
                 />
               </div>
-              <span className="text-sm font-semibold">{completionRate}%</span>
+              <span className="text-xs md:text-sm font-semibold">{completionRate}%</span>
             </div>
           </div>
 
           {/* Internal Hours Card */}
-          <div className="bg-white dark:bg-zinc-800 rounded-xl shadow-lg p-6 border-2 border-green-200 dark:border-green-900">
+          <div className="bg-white dark:bg-zinc-800 rounded-xl shadow-lg p-4 md:p-6 border-2 border-green-200 dark:border-green-900">
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
                 <svg className="w-7 h-7 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -144,15 +144,15 @@ const page = async ({
                 </svg>
               </div>
             </div>
-            <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Internas</p>
-            <p className="text-4xl font-bold text-gray-900 dark:text-white">{internalVolunteerHours}</p>
+            <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Internas</p>
+            <p className="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white">{internalVolunteerHours}</p>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
               {totalVolunteerHours > 0 ? `${((internalVolunteerHours / totalVolunteerHours) * 100).toFixed(0)}%` : '0%'} del total
             </p>
           </div>
 
           {/* External Hours Card */}
-          <div className="bg-white dark:bg-zinc-800 rounded-xl shadow-lg p-6 border-2 border-blue-200 dark:border-blue-900">
+          <div className="bg-white dark:bg-zinc-800 rounded-xl shadow-lg p-4 md:p-6 border-2 border-blue-200 dark:border-blue-900">
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
                 <svg className="w-7 h-7 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -160,15 +160,15 @@ const page = async ({
                 </svg>
               </div>
             </div>
-            <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Externas</p>
-            <p className="text-4xl font-bold text-gray-900 dark:text-white">{externalVolunteerHours}</p>
+            <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Externas</p>
+            <p className="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white">{externalVolunteerHours}</p>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
               Máximo 40 horas
             </p>
           </div>
 
           {/* Activities Count Card */}
-          <div className="bg-white dark:bg-zinc-800 rounded-xl shadow-lg p-6 border-2 border-indigo-200 dark:border-indigo-900">
+          <div className="bg-white dark:bg-zinc-800 rounded-xl shadow-lg p-4 md:p-6 border-2 border-indigo-200 dark:border-indigo-900">
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center">
                 <svg className="w-7 h-7 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -176,22 +176,22 @@ const page = async ({
                 </svg>
               </div>
             </div>
-            <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Actividades</p>
-            <p className="text-4xl font-bold text-gray-900 dark:text-white">{approvedVolunteers.length}</p>
+            <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Actividades</p>
+            <p className="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white">{approvedVolunteers.length}</p>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
               Completadas y aprobadas
             </p>
           </div>
 
           {/* Remaining Hours Card */}
-          <div className="bg-gradient-to-br from-amber-500 to-amber-600 dark:from-amber-600 dark:to-amber-700 rounded-xl shadow-lg p-6 text-white">
+          <div className="col-span-3 lg:col-span-1 bg-gradient-to-br from-amber-500 to-amber-600 dark:from-amber-600 dark:to-amber-700 rounded-xl shadow-lg p-4 md:p-6 text-white">
             <div className="flex items-start justify-between mb-4">
               <div>
-                <p className="text-sm font-medium text-amber-100 uppercase tracking-wide">Por Completar</p>
-                <p className="text-5xl font-bold mt-2">{remaining}h</p>
+                <p className="text-xs md:text-sm font-medium text-amber-100 uppercase tracking-wide">Por Completar</p>
+                <p className="text-3xl md:text-5xl font-bold mt-2">{remaining}h</p>
               </div>
-              <div className="w-14 h-14 bg-white/20 rounded-lg flex items-center justify-center">
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-10 h-10 md:w-14 md:h-14 bg-white/20 rounded-lg flex items-center justify-center">
+                <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                 </svg>
               </div>
@@ -203,18 +203,16 @@ const page = async ({
         </div>
 
         {/* Secondary Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3">
           {/* Total Registered Card */}
-          <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+          <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-4 md:p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total registradas</p>
-                <p className="text-3xl font-bold text-blue-600 dark:text-blue-400 mt-2">
-                  {totalRegistered}
-                </p>
+                <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400">Total registradas</p>
+                <p className="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400 mt-2">{totalRegistered}</p>
               </div>
-              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
-                <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                <svg className="w-5 h-5 md:w-6 md:h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
@@ -225,16 +223,14 @@ const page = async ({
           </div>
 
           {/* Pending Activities Card */}
-          <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+          <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-4 md:p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">En revisión</p>
-                <p className="text-3xl font-bold text-yellow-600 dark:text-yellow-400 mt-2">
-                  {pendingVolunteers}
-                </p>
+                <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400">En revisión</p>
+                <p className="text-2xl md:text-3xl font-bold text-yellow-600 dark:text-yellow-400 mt-2">{pendingVolunteers}</p>
               </div>
-              <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center">
-                <svg className="w-6 h-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center">
+                <svg className="w-5 h-5 md:w-6 md:h-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
@@ -245,16 +241,14 @@ const page = async ({
           </div>
 
           {/* Rejected Activities Card */}
-          <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+          <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-4 md:p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Rechazadas</p>
-                <p className="text-3xl font-bold text-red-600 dark:text-red-400 mt-2">
-                  {rejectedVolunteers}
-                </p>
+                <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400">Rechazadas</p>
+                <p className="text-2xl md:text-3xl font-bold text-red-600 dark:text-red-400 mt-2">{rejectedVolunteers}</p>
               </div>
-              <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
-                <svg className="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
+                <svg className="w-5 h-5 md:w-6 md:h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
@@ -265,13 +259,11 @@ const page = async ({
           </div>
 
           {/* Most Common Project Card */}
-          <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+          <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-4 md:p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Proyecto frecuente</p>
-                <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-2">
-                  {mostCommonProject !== 'N/A' ? parseVolunteerProject(mostCommonProject as any) : 'N/A'}
-                </p>
+                <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400">Proyecto frecuente</p>
+                <p className="text-xl md:text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-2">{mostCommonProject !== 'N/A' ? parseVolunteerProject(mostCommonProject as any) : 'N/A'}</p>
               </div>
               <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center">
                 <svg className="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

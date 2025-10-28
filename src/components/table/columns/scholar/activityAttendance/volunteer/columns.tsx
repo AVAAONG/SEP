@@ -8,7 +8,7 @@ import { ScholarAttendance } from '@prisma/client';
 import Link from 'next/link';
 import { CellProps, Column } from 'react-table';
 
-export interface IscholarVolunteerAttendanceColumns {
+export interface IscholarVolunteerAttendanceColumns extends Record<string, unknown> {
   id: string;
   title: string;
   kindOfVolunteer: string;

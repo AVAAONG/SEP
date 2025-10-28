@@ -13,7 +13,6 @@ import {
 import { User } from '@nextui-org/user';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { memo, useCallback } from 'react';
 
 const CHAPTERS = {
   CARACAS: 'Rokk6_XCAJAg45heOEzYb',
@@ -51,22 +50,19 @@ const getChapterInfo = (id: string) => {
   );
 };
 
-const ChapterToggle = memo(() => {
+const ChapterToggle = () => {
   const { data, update, status } = useSession();
   const { isOpen } = useSidebarContext();
-  const { isMobile, isMiddle, isDesktop } = useMobile();
+  const { isMobile, isMiddle } = useMobile();
   // When on mobile, always show full details regardless of sidebar open state.
   const displayFull = isMobile || isMiddle ? true : isOpen;
   const router = useRouter();
 
-  const handleChapterChange = useCallback(
-    async (key: React.Key) => {
-      await update({ chapterId: key as string });
-      router.refresh();
-      window.location.reload(); // Force reload the page
-    },
-    [update, router]
-  );
+  const handleChapterChange = async (key: React.Key) => {
+    await update({ chapterId: key as string });
+    router.refresh();
+    window.location.reload();
+  };
 
   if (status === 'loading' || data === null) return null;
 
@@ -161,8 +157,7 @@ const ChapterToggle = memo(() => {
       )}
     </>
   );
-});
+};
 
-ChapterToggle.displayName = 'ChapterToggle';
 
 export default ChapterToggle;

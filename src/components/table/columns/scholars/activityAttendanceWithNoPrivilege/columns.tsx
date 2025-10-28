@@ -6,7 +6,7 @@ import { Cell, CellValue, Column } from 'react-table';
 
 // NoPriv = No Privilege (This show data without allow scholars to pass attendance)
 
-export interface IScholarAttendanceInfoNoPriv {
+export interface IScholarAttendanceInfoNoPriv extends Record<string, unknown> {
   id: string;
   name: string;
   photo: string | null;

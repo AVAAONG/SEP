@@ -7,9 +7,10 @@
 
 import favicon from '@/../public/logo-proexcelencia-cap.png';
 import '@/app/globals.css';
+import Providers from '@/components/commons/Providerz';
 import { ThemeProviderC } from '@/components/commons/ThemeProvider';
+import { getServerSession } from '@/lib/auth/authOptions';
 import { ToastContainer } from 'react-toastify';
-import Providers from '../components/commons/Providerz';
 
 import 'react-toastify/dist/ReactToastify.css';
 /**
@@ -33,10 +34,14 @@ export const metadata = {
  */
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const session = await getServerSession();
   return (
     <html lang="es" className="font-sans">
+      <head>
+        <meta name="apple-mobile-web-app-title" content="SEP" />
+      </head>
       <body className="min-h-full">
-        <Providers>
+        <Providers session={session}>
           <ThemeProviderC>
             {children}
             <ToastContainer
