@@ -55,7 +55,7 @@ const page = async () => {
         </div>
         <div className="w-full grid grid-cols-3 gap-3 items-center">
           {cardContent.map((card, index) => (
-            <PanelCard key={index} {...card} />
+            <PanelCard showIconOnMobile={false} key={index} {...card} />
           ))}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-2 ">
