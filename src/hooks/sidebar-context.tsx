@@ -1,7 +1,6 @@
 // hooks/use-sidebar-context.tsx
 'use client';
-import { createContext, ReactNode, useContext } from 'react';
-import { useSidebar } from './use-sidebar';
+import { createContext, ReactNode, useContext, useState } from 'react';
 
 // Define the context type
 interface SidebarContextType {
@@ -22,7 +21,14 @@ export function SidebarProvider({
   children: ReactNode;
   defaultOpen?: boolean;
 }) {
-  const sidebarState = useSidebar(defaultOpen);
+  const [isOpen, setIsOpen] = useState<boolean>(defaultOpen);
+
+  // Control functions
+  const toggle = () => setIsOpen((prev) => !prev);
+  const open = () => setIsOpen(true);
+  const close = () => setIsOpen(false);
+
+  const sidebarState = { isOpen, toggle, open, close };
 
   return <SidebarContext.Provider value={sidebarState}>{children}</SidebarContext.Provider>;
 }
