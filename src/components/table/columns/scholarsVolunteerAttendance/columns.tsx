@@ -10,7 +10,7 @@ import ScholarColumnWidget from '../scholars/commons/ScholarWidget';
 
 // NoPriv = No Privilege (This show data without allow scholars to pass attendance)
 
-export interface IScholarVolunteerAtendance {
+export interface IScholarVolunteerAtendance extends Record<string, unknown> {
   id: string;
   names: string;
   photo: string | null;
@@ -84,15 +84,14 @@ const ScholarVolunteerAttendance: Column<IScholarVolunteerAtendance>[] = [
       } else {
         return (
           <select
-            className={`border-0 cursor-pointer rounded-full font-medium w-24 text-xs  p-0 outline-transparent ${
-              attendace === 'ATTENDED'
+            className={`border-0 cursor-pointer rounded-full font-medium w-24 text-xs  p-0 outline-transparent ${attendace === 'ATTENDED'
                 ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
                 : attendace === 'NOT_ATTENDED'
                   ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
                   : attendace === 'ENROLLED'
                     ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
                     : ''
-            }`}
+              }`}
             value={attendace}
             onChange={async (event) => {
               const attendance = event.target.value as ScholarAttendance;
