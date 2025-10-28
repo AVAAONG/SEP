@@ -1,6 +1,7 @@
 // hooks/use-sidebar-context.tsx
 'use client';
-import { createContext, ReactNode, useContext, useState } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { useMediaQuery } from './use-media-query';
 
 // Define the context type
 interface SidebarContextType {
@@ -22,6 +23,17 @@ export function SidebarProvider({
   defaultOpen?: boolean;
 }) {
   const [isOpen, setIsOpen] = useState<boolean>(defaultOpen);
+
+  // Close the sidebar by default on mobile devices
+  const isMobile = useMediaQuery('(max-width: 640px)');
+
+  useEffect(() => {
+    if (isMobile) {
+      setIsOpen(false);
+    }
+    // Intentionally do not open automatically when moving from mobile -> desktop.
+    // We only ensure mobile starts closed to avoid covering content.
+  }, [isMobile]);
 
   // Control functions
   const toggle = () => setIsOpen((prev) => !prev);
