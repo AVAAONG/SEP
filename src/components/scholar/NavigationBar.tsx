@@ -26,7 +26,6 @@ const NavigationBar = ({ email, scholarStatus }: NavigationBarProps) => {
             size="sm"
             startContent={<Bars3Icon className="w-6 h-6" />}
             onPress={toggle}
-            onClick={toggle}
           />
         </div>
         <div className="flex gap-4 md:gap-8 items-center justify-start">

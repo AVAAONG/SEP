@@ -4,8 +4,6 @@ import { useSidebarContext } from '@/hooks/sidebar-context';
 import { ArchiveBoxIcon, DocumentTextIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
 import {
   chatIcon,
   dashboardComponent,
@@ -18,14 +16,7 @@ import ScholarDropdownButton from './ScholarDropdownButton';
 const SCHOLAR_PREFIX = 'becario';
 
 const Sidebar = ({ isSpeaker }: { isSpeaker: boolean | undefined }) => {
-  const { isOpen: isSidebarOpen, toggle, close } = useSidebarContext();
-  const pathname = usePathname();
-  useEffect(() => {
-    // Function to handle route changes
-    if (window.innerWidth <= 768) {
-      close();
-    }
-  }, [pathname, close]);
+  const { isOpen: isSidebarOpen, toggle } = useSidebarContext();
 
   const SCHOLAR_SIDEBAR_ITEMS = [
     {
