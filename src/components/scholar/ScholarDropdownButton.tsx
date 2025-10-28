@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react';
 import { ChevronIcon } from '../../../public/svgs/svgs';
 import { DropdownButtonProps } from './DropdownButton';
 
-const ScholarDropdownButton = (props: DropdownButtonProps) => {
-  const { buttonName, itemList, Icon, link } = props;
+const ScholarDropdownButton = (props: DropdownButtonProps & { isNew?: boolean }) => {
+  const { buttonName, itemList, Icon, link, isNew = false } = props;
   const pathname = usePathname();
 
   const [isDropdownOpen, setDropdown] = useState(false);
@@ -22,16 +22,24 @@ const ScholarDropdownButton = (props: DropdownButtonProps) => {
   if (itemList.length === 0) {
     return (
       <ul>
-        <Button
-          href={link ? link : ''}
-          as={Link}
-          className=" flex items-center font-medium w-full"
-          radius="md"
-          variant="light"
-        >
-          <div className="w-6 h-6">{Icon}</div>
-          <span className="flex-1 ml-2 text-left whitespace-nowrap">{buttonName}</span>
-        </Button>
+        <div className={`relative ${isNew ? 'glow-button-container' : ''}`}>
+          <Button
+            href={link ? link : ''}
+            as={Link}
+            className={`flex items-center font-medium w-full transition-all duration-300 ${isNew ? 'new-button' : ''
+              }`}
+            radius="md"
+            variant="light"
+          >
+            <div className="w-6 h-6">{Icon}</div>
+            <span className="flex-1 ml-2 text-left whitespace-nowrap">{buttonName}</span>
+            {isNew && (
+              <span className="new-badge">
+                NEW
+              </span>
+            )}
+          </Button>
+        </div>
       </ul>
     );
   } else {

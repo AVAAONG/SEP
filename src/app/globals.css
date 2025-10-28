@@ -80,3 +80,110 @@ html::-webkit-scrollbar-thumb:active {
 div::-webkit-scrollbar {
   display: none;
 }
+
+/* Professional Glow Button Animation with Spark Effect */
+.glow-button-container {
+  position: relative;
+  border-radius: 0.5rem;
+}
+
+.glow-button-container::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 30%,
+    rgba(16, 185, 129, 0.3) 45%,
+    rgba(52, 211, 153, 0.6) 50%,
+    rgba(110, 231, 183, 0.9) 52%,
+    rgba(52, 211, 153, 0.6) 55%,
+    rgba(16, 185, 129, 0.3) 60%,
+    transparent 75%,
+    transparent 100%
+  );
+  background-size: 300%;
+  border-radius: 0.5rem;
+  z-index: 0;
+  animation: spark-travel 3s linear infinite;
+  opacity: 1;
+}
+
+.glow-button-container:hover::before {
+  animation: spark-travel 2s linear infinite;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 30%,
+    rgba(16, 185, 129, 0.5) 45%,
+    rgba(52, 211, 153, 0.8) 50%,
+    rgba(110, 231, 183, 1) 52%,
+    rgba(52, 211, 153, 0.8) 55%,
+    rgba(16, 185, 129, 0.5) 60%,
+    transparent 75%,
+    transparent 100%
+  );
+}
+
+.new-button {
+  position: relative;
+  z-index: 1;
+  overflow: visible !important;
+  background: white;
+}
+
+.dark .new-button {
+  background: black;
+}
+
+.new-button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 0.5rem;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(52, 211, 153, 0.12));
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+}
+
+.new-button:hover::after {
+  opacity: 1;
+}
+
+.new-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: white;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border-radius: 0.25rem;
+  box-shadow: 0 1px 3px rgba(16, 185, 129, 0.3);
+  animation: pulse-badge 2s ease-in-out infinite;
+}
+
+@keyframes spark-travel {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 300% 50%;
+  }
+}
+
+@keyframes pulse-badge {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(0.98);
+  }
+}

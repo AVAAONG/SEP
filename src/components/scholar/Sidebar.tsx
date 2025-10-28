@@ -132,6 +132,7 @@ const Sidebar = ({ isSpeaker }: { isSpeaker: boolean | undefined }) => {
             buttonName="Estadísticas"
             itemList={[]}
             link={`/${SCHOLAR_PREFIX}/estadisticas`}
+            isNew={true}
           />
         </ul>
         <SidebarSeparator label="Otros componentes" />
