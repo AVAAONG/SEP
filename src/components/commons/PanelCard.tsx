@@ -77,8 +77,8 @@ const PanelCard: React.FC<PanelCardProps> = ({
               ) : (
                 <>
                   {/* On small screens show the data inside the colored block */}
-                  <div className="md:hidden px-3">
-                    <p className="text-2xl font-bold text-white tracking-tight">
+                  <div className="md:hidden ">
+                    <p className="text-xl font-bold text-white">
                       {data}
                     </p>
                   </div>
