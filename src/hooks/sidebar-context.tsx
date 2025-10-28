@@ -17,7 +17,7 @@ const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 // Provider component
 export function SidebarProvider({
   children,
-  defaultOpen = true,
+  defaultOpen = false,
 }: {
   children: ReactNode;
   defaultOpen?: boolean;

@@ -1,9 +1,8 @@
 'use client';
-import { scholarSidebarAtom } from '@/lib/state/mainState';
+import { useSidebarContext } from '@/hooks/sidebar-context';
 import { Bars3Icon } from '@heroicons/react/24/outline';
 import { Button } from '@nextui-org/button';
 import { ScholarStatus } from '@prisma/client';
-import { useAtom } from 'jotai';
 import ScholarStatusIndicator from '../ScholarStatus';
 import { ScholarUserDropdown } from '../layout/ScholarUserDropdown';
 import { ThemeToggleButton } from '../layout/theme-toggle';
@@ -13,13 +12,12 @@ interface NavigationBarProps {
   scholarStatus: ScholarStatus;
 }
 const NavigationBar = ({ email, scholarStatus }: NavigationBarProps) => {
-  const [isSidebarOpen, setSidebarOpen] = useAtom(scholarSidebarAtom);
-  const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
+  const { isOpen: isSidebarOpen, toggle } = useSidebarContext();
 
   return (
-    <nav className=" px-4 py-2.5 dark:bg-black  left-0 right-0 top-0 z-30">
+    <nav className="px-4 py-2.5 dark:bg-black left-0 right-0 top-0 z-30">
       <div
-        className={`${isSidebarOpen ? 'md:ml-72' : ''} flex items-center justify-between gap-4 `}
+        className={`${isSidebarOpen ? 'md:ml-72' : ''} flex items-center justify-between gap-4 transition-all duration-300 ease-in-out`}
       >
         <div className="flex justify-start items-center">
           <Button
@@ -27,7 +25,8 @@ const NavigationBar = ({ email, scholarStatus }: NavigationBarProps) => {
             variant="light"
             size="sm"
             startContent={<Bars3Icon className="w-6 h-6" />}
-            onPress={toggleSidebar}
+            onPress={toggle}
+            onClick={toggle}
           />
         </div>
         <div className="flex gap-4 md:gap-8 items-center justify-start">
@@ -41,7 +40,7 @@ const NavigationBar = ({ email, scholarStatus }: NavigationBarProps) => {
             }}
             isAdmin={false}
           />
-          <LetterRequests email={email} />
+          <LetterRequests email={email ?? ''} />
           <ThemeToggleButton />
           <ScholarUserDropdown />
         </div>
