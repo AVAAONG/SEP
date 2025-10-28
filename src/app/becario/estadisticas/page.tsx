@@ -36,7 +36,7 @@ const page = async ({
     const volunteersFiltered = (await filterActivitiesBySearchParams(volunteersDbList, searchParams)) as VolunteerWithAllData[];
 
     // Get attended activities
-    const chatsAttended = getAttendedChats(chatsFiltered);
+    const chatsAttended = getAttendedChats(chatsFiltered, scholarId);
     const workshopsAttended = getAttendedWorkshops(workshopsFiltered);
     const volunteersApproved = getApprovedAndAttendedVolunteerActivities(volunteersFiltered);
     const { totalVolunteerHours, internalVolunteerHours, externalVolunteerHours } = getApprovedAndAttendedVolunteers(volunteersFiltered);
@@ -49,7 +49,12 @@ const page = async ({
     const chatGoalProgress = (chatsAttended.length / 10) * 100;
     const workshopGoalProgress = (workshopsAttended.length / 10) * 100;
     const volunteerGoalProgress = (totalVolunteerHours / 100) * 100;
-    const overallProgress = ((chatsAttended.length + workshopsAttended.length + totalVolunteerHours) / 120) * 100;
+    // Cap each metric at its goal before calculating overall progress
+    const overallProgress = ((Math.min(chatsAttended.length, 10) + Math.min(workshopsAttended.length, 10) + Math.min(totalVolunteerHours, 100)) / 120) * 100;
+
+    console.log('Chats Attended:', chatsAttended.length);
+    console.log('Workshops Attended:', workshopsAttended.length);
+    console.log('Volunteers Approved:', totalVolunteerHours);
 
     // Activity breakdown by year
     const currentYear = new Date().getFullYear();
@@ -320,7 +325,7 @@ const page = async ({
                         </div>
                         <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
                             <div
-                                className="bg-green-500 h-3 rounded-full transition-all duration-500"
+                                className="bg-red-500 h-3 rounded-full transition-all duration-500"
                                 style={{ width: `${Math.min(100, chatGoalProgress)}%` }}
                             />
                         </div>
