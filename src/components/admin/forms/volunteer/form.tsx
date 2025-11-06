@@ -17,7 +17,7 @@ import { useEffect } from 'react';
 import { FormProvider, useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
-import { ButtonGroupEventName } from '../commons/FormButtonGroup';
+import FormButtonGroup, { ButtonGroupEventName } from '../commons/FormButtonGroup';
 import { default as createVolunteerObject } from './createVolunteerObject';
 import formatVolunteer from './formatVolunteerToEdit';
 
@@ -167,14 +167,13 @@ const VolunteerForm: React.FC<IVolunteerForm> = ({
           className="col-span-2 "
         />
         <div className="flex gap-4 col-span-2">
-          <button type="submit">Reset</button>
-          {/* <FormButtonGroup
+          <FormButtonGroup
             isDisabled={!isValid || isSubmitting}
             showCreate={showCreate}
             showEdit={showEdit}
             showSend={showSend}
             showSchedule={showSchedule}
-          /> */}
+          />
         </div>
       </form>
     </FormProvider>
