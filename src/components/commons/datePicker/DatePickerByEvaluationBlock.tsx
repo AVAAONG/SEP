@@ -22,7 +22,6 @@ const DatePickerByEvaluationPeriod = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { isMobile } = useMobile();
-  console.log(customRange); 
 
   const currentYear = new Date().getFullYear();
 
