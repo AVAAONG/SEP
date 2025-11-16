@@ -19,7 +19,7 @@ const externalVolunteerSubmisionSchema = z
                 }
             },
         }),
-        description: z.string().min(1, { message: 'Debes especificar la descripción' }),
+        description: z.string().optional(),
         platform: z.string().min(1, { message: 'Debes especificar el lugar' }),
         beneficiary: z.string().min(1, { message: 'Debes especificar el beneficiario' }),
         supervisor: z.string().min(1, { message: 'Debes especificar el beneficiario' }),
