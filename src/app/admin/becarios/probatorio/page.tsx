@@ -1,4 +1,4 @@
-import DateSelector from '@/components/commons/datePicker';
+import DatePickerByEvaluationPeriod from '@/components/commons/DatePickerByEvaluationBlock';
 import Table from '@/components/table/Table';
 import probationScholarColumns from '@/components/table/columns/probationScholarColumns';
 import {
@@ -57,7 +57,7 @@ const page = async ({
   const scholarsInProbationTableData = formatScholarsProbationData(scholarsInProbation);
   return (
     <div className="flex flex-col items-center w-full gap-6">
-      <DateSelector />
+       <DatePickerByEvaluationPeriod />
       <div className="px-4 flex justify-center items-center  flex-col md:flex-row gap-4 w-full">
         <div className="w-full relative bg-white py-5 px-4  sm:px-6 shadow rounded-lg overflow-hidden h-fit">
           <dt>

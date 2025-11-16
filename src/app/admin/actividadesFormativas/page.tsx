@@ -1,7 +1,7 @@
 import ActivityByScheduleChart from '@/components/activityByScheduleChart';
 import AdminStats from '@/components/admin/AdminStats';
 import { DonutChartComponent, MixedAreaChartComponent } from '@/components/charts';
-import DateSelector from '@/components/commons/datePicker';
+import DatePickerByEvaluationPeriod from '@/components/commons/DatePickerByEvaluationBlock';
 import Table from '@/components/table/Table';
 import WorkshopAdminColumns from '@/components/table/columns/scholars/activities/workshop/columns';
 import createAdminWorkshopsObjectForTable from '@/components/table/columns/scholars/activities/workshop/formater';
@@ -84,7 +84,7 @@ const page = async ({
   ];
   return (
     <div className="w-full flex flex-col gap-6  items-center ">
-      <DateSelector />
+      <DatePickerByEvaluationPeriod />
       <div className="w-full">
         <AdminStats stats={stats} />
       </div>

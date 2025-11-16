@@ -1,5 +1,5 @@
 import { AreaChartComponent } from '@/components/charts';
-import DatePickerByEvaluationPeriod from '@/components/commons/datePicker/DatePickerByEvaluationBlock';
+import DatePickerByEvaluationPeriod from '@/components/commons/DatePickerByEvaluationBlock';
 import Table from '@/components/table/Table';
 import scholarWorkshopAttendanceColumns from '@/components/table/columns/scholar/activityAttendance/workshops/columns';
 import createScholarWorkshopAttendanceForTable from '@/components/table/columns/scholar/activityAttendance/workshops/formater';

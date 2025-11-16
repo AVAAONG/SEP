@@ -1,5 +1,5 @@
 import { DonutChartComponent, MixedAreaChartComponent } from '@/components/charts';
-import DateSelector from '@/components/commons/datePicker';
+import DatePickerByEvaluationPeriod from '@/components/commons/DatePickerByEvaluationBlock';
 import Table from '@/components/table/Table';
 import AdminVolunteerActivityColumns from '@/components/table/columns/scholars/activities/volunteer/columns';
 import createAdminVolunteerActivitiesForTable from '@/components/table/columns/scholars/activities/volunteer/formater';
@@ -38,7 +38,7 @@ const page = async ({
   const { barSeries } = await getActivityAttendancePerMonth(volunteersByStatus.APPROVED);
   return (
     <div className="min-h-screen">
-      <DateSelector />
+       <DatePickerByEvaluationPeriod />
       <div className="flex flex-col px-2 pt-6 xl:gap-4">
         <div className="mb-4 col-span-full xl:mb-2">
           <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">

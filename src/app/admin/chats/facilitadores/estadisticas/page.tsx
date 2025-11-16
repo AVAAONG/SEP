@@ -1,4 +1,4 @@
-import DateSelector from '@/components/commons/datePicker';
+import DatePickerByEvaluationPeriod from '@/components/commons/DatePickerByEvaluationBlock';
 import Table from '@/components/table/Table';
 import { ChatsWithAllData } from '@/components/table/columns/chatsColumns';
 import chatSpeakerStatsColumns from '@/components/table/columns/speakerStatsColumns/columns';
@@ -24,7 +24,7 @@ const page = async ({
   const aggregatedSpeakers = aggregateSpeakerMetrics(speakers);
   return (
     <div className="flex flex-col items-center w-full gap-6 min-h-screen">
-      <DateSelector />
+       <DatePickerByEvaluationPeriod />
       <div className="w-full h-fit">
         <Table
           tableColumns={chatSpeakerStatsColumns}

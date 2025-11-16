@@ -1,5 +1,5 @@
 import { AreaChartComponent, DonutChartComponent } from '@/components/charts';
-import DatePickerByEvaluationPeriod from '@/components/commons/datePicker/DatePickerByEvaluationBlock';
+import DatePickerByEvaluationPeriod from '@/components/commons/DatePickerByEvaluationBlock';
 import Table from '@/components/table/Table';
 import scholarChatAttendaceColumns from '@/components/table/columns/scholar/activityAttendance/chats/columns';
 import createScholarChatAttendanceForTable from '@/components/table/columns/scholar/activityAttendance/chats/formater';
