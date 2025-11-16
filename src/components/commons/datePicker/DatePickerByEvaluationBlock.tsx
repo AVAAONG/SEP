@@ -22,10 +22,24 @@ const DatePickerByEvaluationPeriod = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { isMobile } = useMobile();
+  console.log(customRange); 
 
   const currentYear = new Date().getFullYear();
 
   // Define quick presets for better UX
+  const formatLocalDate = (d: Date) => {
+    const y = d.getFullYear();
+    const m = `${d.getMonth() + 1}`.padStart(2, '0');
+    const day = `${d.getDate()}`.padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  };
+
+  const parseLocalDateString = (s: string | null) => {
+    if (!s) return null;
+    const [y, m, day] = s.split('-').map(Number);
+    return new Date(y, (m || 1) - 1, day || 1);
+  };
+
   const presets: Preset[] = [
     {
       label: 'Mes actual',
@@ -34,8 +48,8 @@ const DatePickerByEvaluationPeriod = () => {
         const year = now.getFullYear();
         const month = now.getMonth();
         return {
-          startDate: new Date(year, month, 1).toISOString().split('T')[0],
-          endDate: new Date(year, month + 1, 0).toISOString().split('T')[0],
+          startDate: formatLocalDate(new Date(year, month, 1)),
+          endDate: formatLocalDate(new Date(year, month + 1, 0)),
         };
       },
     },
@@ -46,8 +60,8 @@ const DatePickerByEvaluationPeriod = () => {
         const start = new Date();
         start.setMonth(start.getMonth() - 3);
         return {
-          startDate: start.toISOString().split('T')[0],
-          endDate: end.toISOString().split('T')[0],
+          startDate: formatLocalDate(start),
+          endDate: formatLocalDate(end),
         };
       },
     },
@@ -61,8 +75,8 @@ const DatePickerByEvaluationPeriod = () => {
         const startMonth = 0;
         const endMonth = startMonth + 6; // used as next month in Date(year, monthIndex, 0)
         return {
-          startDate: new Date(year, startMonth, 1).toISOString().split('T')[0],
-          endDate: new Date(year, endMonth, 0).toISOString().split('T')[0],
+          startDate: formatLocalDate(new Date(year, startMonth, 1)),
+          endDate: formatLocalDate(new Date(year, endMonth, 0)),
         };
       },
     },
@@ -77,8 +91,8 @@ const DatePickerByEvaluationPeriod = () => {
         const startMonth = periodIndex * 6;
         const endMonth = startMonth + 6; // used as next month in Date(year, monthIndex, 0)
         return {
-          startDate: new Date(year, startMonth, 1).toISOString().split('T')[0],
-          endDate: new Date(year, endMonth, 0).toISOString().split('T')[0],
+          startDate: formatLocalDate(new Date(year, startMonth, 1)),
+          endDate: formatLocalDate(new Date(year, endMonth, 0)),
         };
       },
     },
@@ -162,12 +176,14 @@ const DatePickerByEvaluationPeriod = () => {
   const getDisplayText = () => {
     if (selectedPreset) return selectedPreset;
     if (customRange.startDate && customRange.endDate) {
-      const start = new Date(customRange.startDate).toLocaleDateString('es-ES', {
+      const startDateObj = parseLocalDateString(customRange.startDate);
+      const endDateObj = parseLocalDateString(customRange.endDate);
+      const start = startDateObj?.toLocaleDateString('es-VE', {
         day: 'numeric',
         month: 'short',
         year: 'numeric',
       });
-      const end = new Date(customRange.endDate).toLocaleDateString('es-ES', {
+      const end = endDateObj?.toLocaleDateString('es-VE', {
         day: 'numeric',
         month: 'short',
         year: 'numeric',
