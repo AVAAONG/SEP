@@ -79,7 +79,7 @@ const page = async () => {
     {
       title: 'Horas de voluntariado realizadas',
       subtitle: 'Ver todas las actividades',
-      data: Number(volunteerHours.toFixed(1)),
+      data: volunteerHours.toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 }),
       link: 'voluntariado',
       icon: volunterIcon(),
       kind: 'volunteer',
