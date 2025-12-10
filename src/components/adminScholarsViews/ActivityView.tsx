@@ -1,6 +1,6 @@
 import { getScholarsWithActivities } from '@/lib/db/utils/Workshops';
 import { formatCountsForChartsActivityExpe } from '@/lib/utils/activityFilters';
-import { filterActivitiesBySearchParamsPeriod } from '@/lib/utils/datePickerFilters';
+import filterActivitiesBySearchParams from '@/lib/utils/datePickerFilters';
 import { countScholarActivitiesProperties } from '@/lib/utils/scholarCounter';
 import { DonutChartComponent } from '../charts';
 import DatePickerByEvaluationPeriod from '../commons/DatePickerByEvaluationBlock';
@@ -11,20 +11,20 @@ import { formatScholarsActivitiesForActivitiesTable } from '../table/columns/sch
 const ActivitiesInfo = async ({
   searchParams,
 }: {
-  searchParams?: { year: string; month: string; quarter: string };
+  searchParams?: { year: string; month: string; quarter: string; startDate: string; endDate: string; preset: string };
 }) => {
   const scholars = await getScholarsWithActivities();
   const df = await Promise.all(
     scholars.map(async (scholar) => {
-      const f = await filterActivitiesBySearchParamsPeriod(
+      const f = await filterActivitiesBySearchParams(
         scholar.program_information.attended_chats.map((chat) => chat.chat),
         searchParams
       );
-      const g = await filterActivitiesBySearchParamsPeriod(
+      const g = await filterActivitiesBySearchParams(
         scholar.program_information.attended_workshops?.map((workshop) => workshop.workshop),
         searchParams
       );
-      const tt = await filterActivitiesBySearchParamsPeriod(
+      const tt = await filterActivitiesBySearchParams(
         scholar.program_information.volunteerAttendance?.map((volunteer) => volunteer.volunteer),
         searchParams
       );
